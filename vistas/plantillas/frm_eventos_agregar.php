@@ -20,10 +20,21 @@
             <div class="col-xs-4">
               <label for="hora">Hora</label>
               <input type="time" class="form-control" id="hora" name="hora" value=<?php echo date("H:i:s", time());?>>
-            </div>
+            </div>         
             <div class="col-xs-4">
-              <label for="Evento">Tipo de Evento</label>
-              <input type="text" class="form-control" id="<?php echo $params[0]['ID_Tipo_Evento'];?>" name="Evento" value="<?php echo $params[0]['Evento'];?>">
+                <label for="tipo_evento">Tipo de Evento</label>
+                <select class="form-control" id="tipo_evento" name="tipo_evento" > 
+                <?php
+                    $tama = count($lista_tipos_de_eventos);
+
+                    for($i=0; $i<$tama;$i++)
+                    {                      
+                           ?> 
+                    <option value="<?php echo $lista_tipos_de_eventos[$i]['ID_Tipo_Evento']?>"><?php echo $lista_tipos_de_eventos[$i]['Evento']?></option>
+                    <?php
+
+                    } ?>  
+                </select>
             </div>
             <div class="col-xs-4">
               <label for="Nombre_Provincia">Provincia</label>

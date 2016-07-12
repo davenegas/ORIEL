@@ -555,16 +555,20 @@
                 $lista_tipos_de_eventos="";
                 
                 if ($_GET['id']==0){
-                    
-//                    $ide=0;
-//                    $params[0]['Fecha']="";
-//                    $params[0]['Hora']="";
-//                    $params[0]['Nombre_Provincia']="";
-//                    $params[0]['Tipo_Punto']="";
-//                    $params[0]['Nombre']="";
-//                    $params[0]['Evento']="";
-//                    $params[0]['Seguimiento']="1";
-
+                  
+                    $obj_eventos = new cls_eventos();
+                    $obj_eventos->obtener_todos_los_tipos_eventos();
+                    $lista_tipos_de_eventos=$obj_eventos->getArreglo();
+                    //print_r($lista_tipos_de_eventos);
+                    $ide=0;
+                    $params[0]['Fecha']="";
+                    $params[0]['Hora']="";
+                    $params[0]['Nombre_Provincia']="";
+                    $params[0]['Tipo_Punto']="";
+                    $params[0]['Nombre']="";
+                    $params[0]['Evento']="";
+                    $params[0]['Seguimiento']="1";
+                    require __DIR__ . '/../vistas/plantillas/frm_eventos_agregar.php';
                 }else{             
                     $ide=$_GET['id'];
                     $obj_eventos = new cls_eventos();
@@ -575,7 +579,7 @@
                     $detalleEvento= $obj_eventos->getArreglo();
     //              print_r($params);
                 }
-                require __DIR__ . '/../vistas/plantillas/frm_eventos_agregar.php';
+                
             }else
             {
                 $tipo_de_alerta="alert alert-warning";
