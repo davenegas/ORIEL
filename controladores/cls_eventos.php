@@ -213,5 +213,17 @@ class cls_eventos{
             echo $exc->getTraceAsString();
         }
     }
+    
+    public function obtener_todos_los_tipos_eventos(){
+        try{
+            $this->obj_data_provider->conectar();
+            $this->arreglo=$this->obj_data_provider->trae_datos("T_TipoEvento", "*", "");
+            $this->arreglo=$this->obj_data_provider->getArreglo();
+            $this->obj_data_provider->desconectar();
+            $this->resultado_operacion=true;
+        }  catch (Exception $exc){
+            echo $exc->getTraceAsString();
+        }
+    }
 }
 
