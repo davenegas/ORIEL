@@ -4,15 +4,17 @@
         <meta charset="utf-8"/>
         <title>Bitácora Digital</title>
         <?php require_once 'frm_librerias_head.html'; ?>  
-        
+       
     </head>
+    
     <body>
         <?php require_once 'encabezado.php'; ?>
         <div class="container">
-        <h2>Bitácora del Centro de Control</h2>
+        <h2>Agregar Evento para Bitácora</h2>
         <!--<p>Mediante esta pantalla, podrá agregar o editar Roles de seguridad:</p>-->
+        <hr/> 
         <div class="container">
-        <form class="form-horizontal" role="form" method="POST" action="index.php?ctl=guardar_evento&id=<?php echo trim($ide);?>">
+        <form class="form-horizontal" role="form" method="POST" action="index.php?ctl=guardar_evento">
             <div class="col-xs-4">
               <label for="fecha">Fecha</label>
               <input type="date" class="form-control" id="fecha" name="fecha" value="<?php echo date("Y-m-d");?>">
@@ -25,9 +27,9 @@
                 <label for="tipo_evento">Tipo de Evento</label>
                 <select class="form-control" id="tipo_evento" name="tipo_evento" > 
                 <?php
-                    $tama = count($lista_tipos_de_eventos);
+                    $tam_tipo_eventos = count($lista_tipos_de_eventos);
 
-                    for($i=0; $i<$tama;$i++)
+                    for($i=0; $i<$tam_tipo_eventos;$i++)
                     {                      
                            ?> 
                     <option value="<?php echo $lista_tipos_de_eventos[$i]['ID_Tipo_Evento']?>"><?php echo $lista_tipos_de_eventos[$i]['Evento']?></option>
@@ -36,42 +38,51 @@
                     } ?>  
                 </select>
             </div>
+            
             <div class="col-xs-4">
-              <label for="Nombre_Provincia">Provincia</label>
-              <input type="text" class="form-control" id="<?php echo $params[0]['ID_Provincia'];?>" name="Nombre_Provincia" value="<?php echo $params[0]['Nombre_Provincia'];?>">
-            </div>
-            <div class="col-xs-4">
-              <label for="Tipo_Punto">Tipo Punto</label>
-              <input type="text" class="form-control" id="<?php echo $params[0]['ID_Tipo_Punto'];?>" name="Tipo_Punto" value="<?php echo $params[0]['Tipo_Punto'];?>">
-            </div>
-            <div class="col-xs-4">
-              <label for="Nombre">Punto BCR</label>
-              <input type="text" class="form-control" id="<?php echo $params[0]['ID_PuntoBCR'];?>" name="Nombre" value="<?php echo $params[0]['Nombre'];?>">
-            </div>
-<!--            <div class="col-xs-4">
-                <label for="Seguimiento">Estado del Evento</label>
-                <select class="form-control" id="Seguimiento" name="Seguimiento" > 
+              <label for="nombre_provincia">Provincia</label>
+              <select class="form-control" id="nombre_provincia" name="nombre_provincia" > 
                 <?php
-                $tam = count($roles);
+                    $tam_provincias = count($lista_provincias);
 
-                for($i=0; $i<$tam;$i++)
-                {
-                    if($roles[$i]['ID_Seguimiento']==$params[0]['ID_Seguimiento']){
+                    for($i=0; $i<$tam_provincias;$i++)
+                    {                      
+                           ?> 
+                    <option value="<?php echo $lista_provincias[$i]['ID_Provincia']?>"><?php echo $lista_provincias[$i]['Nombre_Provincia']?></option>
+                    <?php
 
-                       ?> <option value="<?php echo $roles[$i]['ID_Seguimiento']?>" selected="selected"><?php echo $roles[$i]['Seguimiento']?></option><?php
-                    }
-                    else {?>
-                        <option value="<?php echo $roles[$i]['ID_Seguimiento']?>" ><?php echo $roles[$i]['Seguimiento']?></option>   
-                <?php }}  ?>
+                    } ?>  
                 </select>
-            </div>-->
+            </div>
+            <div class="col-xs-4">
+              <label for="tipo_punto">Tipo Punto</label>
+              <select class="form-control" id="tipo_punto" name="tipo_punto" > 
+                <?php
+                    $tam_tipo_punto_bcr = count($lista_tipos_de_puntos_bcr);
+
+                    for($i=0; $i<$tam_tipo_punto_bcr;$i++)
+                    {                      
+                           ?> 
+                    <option value="<?php echo $lista_tipos_de_puntos_bcr[$i]['ID_Tipo_Punto']?>"><?php echo $lista_tipos_de_puntos_bcr[$i]['Tipo_Punto']?></option>
+                    <?php
+
+                    } ?>  
+              </select>
+            </div>
+            
+            <div class="col-xs-4">
+              <label for="punto_bcr">Punto BCR</label>
+              <select class="form-control" id="punto_bcr" name="punto_bcr" ></select>
+            </div>
+            
             <div class="col-xs-4">
                     <label for="DetalleSeguimiento">Detalle del Evento</label>
                     <textarea type="text" required=”required” class="form-control" id="DetalleSeguimiento" name="DetalleSeguimiento" value=""></textarea>
-            </div>
-            </tbody>
-                <button type="submit" class="btn btn-default" >Guardar</button>
-            <td><a href="index.php?ctl=frm_eventos_listar" class="btn btn-default" role="button">Cancelar</a></td>
+            </div
+            <br/><br/><br/><br/>
+            <hr/> <hr/> <hr/> <hr/> 
+            <button type="submit" class="btn btn-default" >Guardar</button>
+            <a href="index.php?ctl=frm_eventos_listar" class="btn btn-default" role="button">Cancelar</a>
         </form> </br></br></br>
         </div>
    

@@ -589,21 +589,29 @@
                 $params="";
                 //Vector que almacena la lista completa de tipos de evento para cargarla en el dropdownlistbox correspondiente
                 $lista_tipos_de_eventos="";
+                //Vector que almacena la lista completa de provincias para cargarla en el dropdownlistbox correspondiente
+                $lista_provincias="";
+                //Vector que almacena la lista completa de tipos de puntos bcr para cargarla en el dropdownlistbox correspondiente
+                $lista_tipos_de_puntos_bcr="";
                 
                 if ($_GET['id']==0){
                   
+                    //Crea objeto de tipo eventos para cargar las listas correspondientes
                     $obj_eventos = new cls_eventos();
+                    
+                    //Obtiene todos los tipos de eventos que se encuentran activos en la base de datos
                     $obj_eventos->obtener_todos_los_tipos_eventos();
                     $lista_tipos_de_eventos=$obj_eventos->getArreglo();
-                    //print_r($lista_tipos_de_eventos);
-                    $ide=0;
-                    $params[0]['Fecha']="";
-                    $params[0]['Hora']="";
-                    $params[0]['Nombre_Provincia']="";
-                    $params[0]['Tipo_Punto']="";
-                    $params[0]['Nombre']="";
-                    $params[0]['Evento']="";
-                    $params[0]['Seguimiento']="1";
+                    
+                    
+                    //Obtiene todas las provincias que se encuentran activas en la base de datos
+                    $obj_eventos->obtener_todas_las_provincias();
+                    $lista_provincias=$obj_eventos->getArreglo();
+                    
+                    //Obtiene todos lps tipos de puntos BCR que se encuentran activos en la base de datos
+                    $obj_eventos->obtener_todos_los_tipos_de_puntos_BCR();
+                    $lista_tipos_de_puntos_bcr=$obj_eventos->getArreglo();
+                    
                     require __DIR__ . '/../vistas/plantillas/frm_eventos_agregar.php';
                 }else{             
                     $ide=$_GET['id'];

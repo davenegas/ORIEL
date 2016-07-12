@@ -217,7 +217,31 @@ class cls_eventos{
     public function obtener_todos_los_tipos_eventos(){
         try{
             $this->obj_data_provider->conectar();
-            $this->arreglo=$this->obj_data_provider->trae_datos("T_TipoEvento", "*", "");
+            $this->arreglo=$this->obj_data_provider->trae_datos("T_TipoEvento", "*", "Estado=1");
+            $this->arreglo=$this->obj_data_provider->getArreglo();
+            $this->obj_data_provider->desconectar();
+            $this->resultado_operacion=true;
+        }  catch (Exception $exc){
+            echo $exc->getTraceAsString();
+        }
+    }
+    
+     public function obtener_todas_las_provincias(){
+        try{
+            $this->obj_data_provider->conectar();
+            $this->arreglo=$this->obj_data_provider->trae_datos("T_Provincia", "*", "Estado=1");
+            $this->arreglo=$this->obj_data_provider->getArreglo();
+            $this->obj_data_provider->desconectar();
+            $this->resultado_operacion=true;
+        }  catch (Exception $exc){
+            echo $exc->getTraceAsString();
+        }
+    }
+    
+    public function obtener_todos_los_tipos_de_puntos_BCR(){
+        try{
+            $this->obj_data_provider->conectar();
+            $this->arreglo=$this->obj_data_provider->trae_datos("T_TipoPuntoBCR", "*", "Estado=1");
             $this->arreglo=$this->obj_data_provider->getArreglo();
             $this->obj_data_provider->desconectar();
             $this->resultado_operacion=true;
