@@ -3,7 +3,12 @@
     <head>
         <meta charset="utf-8"/>
         <title>Bitácora Digital</title>
+<<<<<<< HEAD
         <!--Librerias de la pagina-->
+=======
+        <!--<script></script>-->
+        <script></script>
+>>>>>>> 9fcd2ecbed7e2ed04de660ec7670812be5db1904
         <?php require_once 'frm_librerias_head.html'; ?>   
     </head>
     <body>
