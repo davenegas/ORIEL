@@ -610,15 +610,19 @@
         try {
             if(isset($_SESSION['nombre'])){
                 $params="";
+                //Vector que almacena la lista completa de tipos de evento para cargarla en el dropdownlistbox correspondiente
+                $lista_tipos_de_eventos="";
+                
                 if ($_GET['id']==0){
-                    $ide=0;
-                    $params[0]['Fecha']="";
-                    $params[0]['Hora']="";
-                    $params[0]['Nombre_Provincia']="";
-                    $params[0]['Tipo_Punto']="";
-                    $params[0]['Nombre']="";
-                    $params[0]['Evento']="";
-                    $params[0]['Seguimiento']="1";
+                    
+//                    $ide=0;
+//                    $params[0]['Fecha']="";
+//                    $params[0]['Hora']="";
+//                    $params[0]['Nombre_Provincia']="";
+//                    $params[0]['Tipo_Punto']="";
+//                    $params[0]['Nombre']="";
+//                    $params[0]['Evento']="";
+//                    $params[0]['Seguimiento']="1";
 
                 }else{             
                     $ide=$_GET['id'];
