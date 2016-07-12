@@ -3,15 +3,10 @@
     <head>
         <meta charset="utf-8"/>
         <title>Lista de Eventos</title>
-     <link href="../../../bootstrap-3.3.6/dist/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
-     <script src="vistas/js/jquery.min.js"></script>    
-  <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>-->      
-  <script src="../../../bootstrap-3.3.6/dist/js/bootstrap.min.js"></script>
-        
+        <?php require_once 'frm_librerias_head.html'; ?>     
     </head>
     <body>
         <?php require_once 'encabezado.php';?>
-        
         <div class="container">
         <h2>Listado de Eventos</h2>
         <!--<p>A continuación se detallan los diferentes roles que están registrados en el sistema:</p>-->            

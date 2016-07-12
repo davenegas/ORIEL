@@ -4,7 +4,6 @@
         <meta charset="utf-8"/>
         <title>Bitácora Digital</title>
         <?php require_once 'frm_librerias_head.html'; ?>   
-   
     </head>
     <body>
         <?php require_once 'encabezado.php'; ?>
