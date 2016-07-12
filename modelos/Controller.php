@@ -336,7 +336,7 @@
             $obj_roles->setCondicion("Estado=1");
             $obj_roles->obtiene_todos_los_roles();
             $roles = $obj_roles->getArreglo();
-
+            
             if ($_GET['id']==0){
                 $ide=0;
                 $params[0]['Nombre']="";
@@ -347,7 +347,18 @@
                 $params[0]['Observaciones']="";
                 $params[0]['Estado']="1";
 
-            }   else    {
+            }
+            if($_GET['id']==-1){
+                $ide=0;
+                $params[0]['Nombre']=$_POST['Nombre'];
+                $params[0]['Apellido']=$_POST['Apellido'];
+                $params[0]['Cedula']=$_POST['Cedula'];
+                $params[0]['Correo']=$_POST['Correo'];
+                $params[0]['Rol']="";
+                $params[0]['Observaciones']=$_POST['Observaciones'];
+                $params[0]['Estado']="1";
+            }
+            else    {
                 $ide=$_GET['id'];
                 $obj_usuario = new cls_usuarios();
                 $obj_usuario->setCondicion("ID_Usuario=$ide");
@@ -366,20 +377,45 @@
     public function guardar_usuario(){
         if(isset($_SESSION['nombre'])){
             $obj_usuarios= new cls_usuarios();
-            if ($_SERVER['REQUEST_METHOD'] == 'POST') {            
-                $obj_usuarios->setId($_GET['id']);
-                $obj_usuarios->setNombre($_POST['Nombre']);
-                $obj_usuarios->setApellido($_POST['Apellido']);
-                $obj_usuarios->setCedula($_POST['Cedula']);
-                $obj_usuarios->setCorreo($_POST['Correo']);
-                $obj_usuarios->setObservaciones($_POST['Observaciones']);
-                $obj_usuarios->setRol($_POST['Rol']);
-                $obj_usuarios->setEstado($_POST['Estado']);
-                $obj_usuarios->guardar_usuario();
+            if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+                //Validar información 
+                $obj_usuarios->obtiene_todos_los_usuarios();
+                $validacion = $obj_usuarios->getArreglo();
+                $tam = count($validacion);
+                $correcto=0;
+                for($i=0; $i<$tam;$i++){
+                    if($_POST['Cedula']==$validacion[$i]['Cedula']){
+                        $correcto=1;
+                        echo '<script>alert("Esta Cedula ya se encuentra registrada en el sistema");</script>';
+                        $_POST['Cedula']="";
+                        $_GET['id']=-1;
+                    }
+                    if($_POST['Correo']==$validacion[$i]['Correo']){
+                        $correcto=1;
+                        echo '<script>alert("Este correo ya se encuentra registrado en el sistema");</script>';
+                        $_POST['Correo']="";
+                        $_GET['id']=-1;
+                    }
+                }
+                if($correcto==0){
+                    $obj_usuarios->setId($_GET['id']);
+                    $obj_usuarios->setNombre($_POST['Nombre']);
+                    $obj_usuarios->setApellido($_POST['Apellido']);
+                    $obj_usuarios->setCedula($_POST['Cedula']);
+                    $obj_usuarios->setCorreo($_POST['Correo']);
+                    $obj_usuarios->setObservaciones($_POST['Observaciones']);
+                    $obj_usuarios->setRol($_POST['Rol']);
+                    $obj_usuarios->setEstado($_POST['Estado']);
+                    $obj_usuarios->guardar_usuario();
+                    $obj_usuarios->obtiene_todos_los_usuarios();
+                    $params = $obj_usuarios->getArreglo();
+                    require __DIR__ . '/../vistas/plantillas/lista_de_usuarios.php';
+                    
+                }   else    {
+                    $this->gestion_usuarios();
+                }
             }
-            $obj_usuarios->obtiene_todos_los_usuarios();
-            $params = $obj_usuarios->getArreglo();
-            require __DIR__ . '/../vistas/plantillas/lista_de_usuarios.php';
+            
         } else    {
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
@@ -653,5 +689,5 @@
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         } 
     }
- } 
+} 
      
