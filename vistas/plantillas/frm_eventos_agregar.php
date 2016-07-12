@@ -38,7 +38,7 @@
                     } ?>  
                 </select>
             </div>
-            
+            <br/><br/><br/><br/>
             <div class="col-xs-4">
               <label for="nombre_provincia">Provincia</label>
               <select class="form-control" id="nombre_provincia" name="nombre_provincia" > 
@@ -74,16 +74,16 @@
               <label for="punto_bcr">Punto BCR</label>
               <select class="form-control" id="punto_bcr" name="punto_bcr" ></select>
             </div>
-            
-            <div class="col-xs-4">
+            <br/><br/><br/><br/>
+            <div class="form-group">
                     <label for="DetalleSeguimiento">Detalle del Evento</label>
                     <textarea type="text" required=”required” class="form-control" id="DetalleSeguimiento" name="DetalleSeguimiento" value=""></textarea>
-            </div
-            <br/><br/><br/><br/>
-            <hr/> <hr/> <hr/> <hr/> 
+            </div>
+            <div>
             <button type="submit" class="btn btn-default" >Guardar</button>
             <a href="index.php?ctl=frm_eventos_listar" class="btn btn-default" role="button">Cancelar</a>
-        </form> </br></br></br>
+            </div>
+        </form> 
         </div>
    
       <?php require_once 'pie_de_pagina.php' ?>
