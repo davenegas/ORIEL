@@ -71,15 +71,15 @@
        
                 <!--Agregar nuevo detalle o seguimiento del evento-->
             <form class="form-horizontal" role="form" method="POST" action="index.php?ctl=guardar_seguimiento_evento&id=<?php echo trim($ide);?>">
-                <div class="form-group">
+                <div class="col-xs-6">
                     <label for="Fecha">Fecha Seguimiento</label>
                     <input type="date" required=”required” class="form-control" id="Fecha" name="Fecha" value="<?php echo date("Y-m-d");?>">
                 </div>
                 <?php date_default_timezone_set('America/Costa_Rica'); ?>
-                <div class="form-group">
+                <div class="col-xs-6">
                     <label for="Hora">Hora Seguimiento</label>
-                    <input type="time" required=”required” class="form-control" id="Hora" name="Hora" value="">
-                </div>
+                    <input type="time" required=”required” class="form-control" id="Hora" name="Hora" value="<?php echo date("H:i:s", time());?>">
+                </div> <br><br><br><br>
                 <div class="form-group">
                     <label for="DetalleSeguimiento">Detalle del Seguimiento</label>
                     <textarea type="text" required=”required” class="form-control" id="DetalleSeguimiento" name="DetalleSeguimiento" value=""></textarea>

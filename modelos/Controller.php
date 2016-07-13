@@ -152,7 +152,7 @@
 
     // Metodo que permite cerrar o destruir la sesión actual de usuario, para poder 
      //validar nuevamente el ingreso y validacion de usuario
-     public function cerrar_sesion(){
+    public function cerrar_sesion(){
        //Envia un tipo de alerta de información, indicando que el sistema cerró la sesion actual
        $tipo_de_alerta="alert alert-info";
        $validacion="Verificación de Identidad";
@@ -315,6 +315,7 @@
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }
     }
+    
     public function listar_usuarios(){
         if(isset($_SESSION['nombre'])){
             $obj_usuarios= new cls_usuarios();
@@ -329,7 +330,7 @@
         }
     }
      
-     public function gestion_usuarios(){
+    public function gestion_usuarios(){
         if(isset($_SESSION['nombre'])){
             $params="";
             $obj_roles= new cls_roles();
