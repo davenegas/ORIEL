@@ -10,7 +10,8 @@
         <?php require_once 'encabezado.php';?>
         
         <div class="container">
-        <h2>Detalle de Evento</h2>
+            <h1 align="center">Detalle de Evento</h1>
+            <h3><u>General</u></h3>
         <!--<p>A continuación se detallan los diferentes eventos que están registrados en el sistema:</p>-->            
         <table class="table">
           <thead>
@@ -47,7 +48,7 @@
         <!--Detalles de Evento--> 
 
         <div class="container">
-        <h4>Mediante esta pantalla, podrá agregar Seguimiento de eventos: </h4>
+            <h3><u>Seguimientos asociados </u></h3>
         <table class="table">
             <thead>
                 <tr>
@@ -68,7 +69,7 @@
                 <?php } ?>
                 </tbody>
         </table>   
-       
+            <h3><u>Agregar nuevo seguimiento</u></h3>
                 <!--Agregar nuevo detalle o seguimiento del evento-->
             <form class="form-horizontal" role="form" method="POST" action="index.php?ctl=guardar_seguimiento_evento&id=<?php echo trim($ide);?>">
                 <div class="col-xs-6">

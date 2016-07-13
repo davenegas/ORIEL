@@ -185,10 +185,24 @@
                 $obj_roles->setEstado($_POST['estado']);
               
                 if ($_GET['id']==0){
-                    $obj_roles->inserta_rol();
-                    $obj_roles->obtiene_id_ultimo_rol_ingresado();
-                    $id_ult_rol=$obj_roles->getId_ultimo_rol_ingresado();
-                    $this->guardar_modulo_rol($id_ult_rol);
+                    $obj_roles->obtiene_todos_los_roles();
+                    $validacion = $obj_usuarios->getArreglo();
+                    $tam = count($validacion);
+                    $correcto=0;
+                    for($i=0; $i<$tam;$i++){
+                        if($_POST['descripcion']==$validacion[$i]['Descripcion']){
+                        $correcto=1;
+                        echo '<script>alert("Este Rol ya se encuentra registrado en el sistema");</script>';
+                        }
+                    }
+                    if($correcto==0){
+                        $obj_roles->inserta_rol();
+                        $obj_roles->obtiene_id_ultimo_rol_ingresado();
+                        $id_ult_rol=$obj_roles->getId_ultimo_rol_ingresado();
+                        $this->guardar_modulo_rol($id_ult_rol);
+                    }   else    {
+                        $this->gestion_roles();
+                    }
                 }   else    {
                     $obj_roles->setId($_GET['id']);
                     $obj_roles->edita_rol();
@@ -258,7 +272,21 @@
                 $obj_modulos->setEstado($_POST['estado']);
               
                 if ($_GET['id']==0){
+                    $obj_modulos->obtiene_todos_los_modulos();
+                    $validacion= $obj_modulos->getArreglo();
+                    $tam = count($validacion);
+                    $correcto=0;
+                    for($i=0; $i<$tam;$i++){
+                        if($_POST['descripcion']==$validacion[$i]['Descripcion']){
+                        $correcto=1;
+                        echo '<script>alert("Este Modulo ya se encuentra registrado en el sistema");</script>';
+                        }
+                    }
+                    if($correcto==0){
                     $obj_modulos->inserta_modulo();
+                    }   else    {
+                        $this->gestion_modulos();
+                    }
                 }   else   {
                     $obj_modulos->setId($_GET['id']);
                     $obj_modulos->edita_modulo();
