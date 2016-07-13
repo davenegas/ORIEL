@@ -3,8 +3,9 @@
     <head>
         <meta charset="utf-8"/>
         <title>Bitácora Digital</title>
+        <script language="javascript" src="vistas/plantillas/jquery.js"></script>
+        <script language="javascript" src="vistas/plantillas/listas_dependientes_bitacora.js"></script>
         <?php require_once 'frm_librerias_head.html'; ?>  
-       
     </head>
     
     <body>

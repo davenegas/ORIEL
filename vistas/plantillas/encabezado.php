@@ -18,7 +18,6 @@
           return false;
       }
       
-      //<li class="active"><a href="index.php?ctl=principal">Módulo Administrativo</a></li>
       ?>
     
 

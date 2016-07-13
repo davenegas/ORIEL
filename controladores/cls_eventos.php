@@ -249,5 +249,17 @@ class cls_eventos{
             echo $exc->getTraceAsString();
         }
     }
+    
+    public function obtener_puntos_BCR_filtrados(){
+        try{
+            $this->obj_data_provider->conectar();
+            $this->arreglo=$this->obj_data_provider->trae_datos("T_PuntoBCR", "*", "Estado=1 AND ".$this->condicion);
+            $this->arreglo=$this->obj_data_provider->getArreglo();
+            $this->obj_data_provider->desconectar();
+            $this->resultado_operacion=true;
+        }  catch (Exception $exc){
+            echo $exc->getTraceAsString();
+        }
+    }
 }
 
