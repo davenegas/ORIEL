@@ -152,7 +152,7 @@
 
     // Metodo que permite cerrar o destruir la sesión actual de usuario, para poder 
      //validar nuevamente el ingreso y validacion de usuario
-     public function cerrar_sesion(){
+    public function cerrar_sesion(){
        //Envia un tipo de alerta de información, indicando que el sistema cerró la sesion actual
        $tipo_de_alerta="alert alert-info";
        $validacion="Verificación de Identidad";
@@ -185,10 +185,24 @@
                 $obj_roles->setEstado($_POST['estado']);
               
                 if ($_GET['id']==0){
-                    $obj_roles->inserta_rol();
-                    $obj_roles->obtiene_id_ultimo_rol_ingresado();
-                    $id_ult_rol=$obj_roles->getId_ultimo_rol_ingresado();
-                    $this->guardar_modulo_rol($id_ult_rol);
+                    $obj_roles->obtiene_todos_los_roles();
+                    $validacion = $obj_usuarios->getArreglo();
+                    $tam = count($validacion);
+                    $correcto=0;
+                    for($i=0; $i<$tam;$i++){
+                        if($_POST['descripcion']==$validacion[$i]['Descripcion']){
+                        $correcto=1;
+                        echo '<script>alert("Este Rol ya se encuentra registrado en el sistema");</script>';
+                        }
+                    }
+                    if($correcto==0){
+                        $obj_roles->inserta_rol();
+                        $obj_roles->obtiene_id_ultimo_rol_ingresado();
+                        $id_ult_rol=$obj_roles->getId_ultimo_rol_ingresado();
+                        $this->guardar_modulo_rol($id_ult_rol);
+                    }   else    {
+                        $this->gestion_roles();
+                    }
                 }   else    {
                     $obj_roles->setId($_GET['id']);
                     $obj_roles->edita_rol();
@@ -258,7 +272,21 @@
                 $obj_modulos->setEstado($_POST['estado']);
               
                 if ($_GET['id']==0){
+                    $obj_modulos->obtiene_todos_los_modulos();
+                    $validacion= $obj_modulos->getArreglo();
+                    $tam = count($validacion);
+                    $correcto=0;
+                    for($i=0; $i<$tam;$i++){
+                        if($_POST['descripcion']==$validacion[$i]['Descripcion']){
+                        $correcto=1;
+                        echo '<script>alert("Este Modulo ya se encuentra registrado en el sistema");</script>';
+                        }
+                    }
+                    if($correcto==0){
                     $obj_modulos->inserta_modulo();
+                    }   else    {
+                        $this->gestion_modulos();
+                    }
                 }   else   {
                     $obj_modulos->setId($_GET['id']);
                     $obj_modulos->edita_modulo();
@@ -315,6 +343,7 @@
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }
     }
+    
     public function listar_usuarios(){
         if(isset($_SESSION['nombre'])){
             $obj_usuarios= new cls_usuarios();
@@ -329,7 +358,7 @@
         }
     }
      
-     public function gestion_usuarios(){
+    public function gestion_usuarios(){
         if(isset($_SESSION['nombre'])){
             $params="";
             $obj_roles= new cls_roles();
@@ -379,24 +408,25 @@
             $obj_usuarios= new cls_usuarios();
             if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 //Validar información 
+                $obj_usuarios->setCondicion("ID_Usuario<>".$_GET['id']);
                 $obj_usuarios->obtiene_todos_los_usuarios();
                 $validacion = $obj_usuarios->getArreglo();
                 $tam = count($validacion);
                 $correcto=0;
-                for($i=0; $i<$tam;$i++){
-                    if($_POST['Cedula']==$validacion[$i]['Cedula']){
-                        $correcto=1;
-                        echo '<script>alert("Esta Cedula ya se encuentra registrada en el sistema");</script>';
-                        $_POST['Cedula']="";
-                        $_GET['id']=-1;
+                    for($i=0; $i<$tam;$i++){
+                        if($_POST['Cedula']==$validacion[$i]['Cedula']){
+                            $correcto=1;
+                            echo '<script>alert("Esta Cedula ya se encuentra registrada en el sistema");</script>';
+                            $_POST['Cedula']="";
+                            $_GET['id']=-1;
+                        }
+                        if($_POST['Correo']==$validacion[$i]['Correo']){
+                            $correcto=1;
+                            echo '<script>alert("Este correo ya se encuentra registrado en el sistema");</script>';
+                            $_POST['Correo']="";
+                            $_GET['id']=-1;
+                        }
                     }
-                    if($_POST['Correo']==$validacion[$i]['Correo']){
-                        $correcto=1;
-                        echo '<script>alert("Este correo ya se encuentra registrado en el sistema");</script>';
-                        $_POST['Correo']="";
-                        $_GET['id']=-1;
-                    }
-                }
                 if($correcto==0){
                     $obj_usuarios->setId($_GET['id']);
                     $obj_usuarios->setNombre($_POST['Nombre']);
@@ -409,9 +439,8 @@
                     $obj_usuarios->guardar_usuario();
                     $obj_usuarios->obtiene_todos_los_usuarios();
                     $params = $obj_usuarios->getArreglo();
-                    require __DIR__ . '/../vistas/plantillas/lista_de_usuarios.php';
-                    
-                }   else    {
+                    $this->listar_usuarios();
+                 }   else    {
                     $this->gestion_usuarios();
                 }
             }
