@@ -89,16 +89,16 @@
                     <label for="DetalleSeguimiento">Estado del Evento</label>
                     <select class="form-control" id="Rol" name="Rol" > 
                     <?php
-                    $tam = count($seguimiento);
+                    $tam = count($estadoEventos);
 
                     for($i=0; $i<$tam;$i++)
                     {
-                        if($seguimiento[$i]['Seguimiento']==$params[0]['Seguimiento']){
+                        if($estadoEventos[$i]['Estado_Evento']==$params[0]['Estado_Evento']){
 
-                           ?> <option value="<?php echo $seguimiento[$i]['ID_Seguimiento']?>" selected="selected"><?php echo $seguimiento[$i]['Seguimiento']?></option><?php
+                           ?> <option value="<?php echo $estadoEventos[$i]['ID_EstadoEvento']?>" selected="selected"><?php echo $estadoEventos[$i]['Estado_Evento']?></option><?php
                         }
                         else {?>
-                            <option value="<?php echo $seguimiento[$i]['ID_Seguimiento']?>" ><?php echo $seguimiento[$i]['Seguimiento']?></option>   
+                            <option value="<?php echo $estadoEventos[$i]['ID_EstadoEvento']?>" ><?php echo $estadoEventos[$i]['Estado_Evento']?></option>   
                     <?php }}  ?>
                     </select>
                 </div>

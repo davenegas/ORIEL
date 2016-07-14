@@ -39,7 +39,7 @@
             <td><?php echo $params[$i]['Tipo_Punto'];?></td>
             <td><?php echo $params[$i]['Nombre'];?></td>
             <td><?php echo $params[$i]['Evento'];?></td>
-            <td><?php echo $params[$i]['Seguimiento'];?></td>
+            <td><?php echo $params[$i]['Estado_Evento'];?></td>
             
             <td><a href="index.php?ctl=frm_eventos_editar&id=
                <?php echo $params[$i]['ID_Evento']?>">Agregar Seguimiento a este Evento</a></td>

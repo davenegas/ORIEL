@@ -697,7 +697,7 @@
                 $detalleEvento= $obj_eventos->getArreglo();
                 //Obtiene los diferentes seguimientos
                 $obj_eventos->obtener_seguimientos();
-                $seguimiento = $obj_eventos->getArreglo();
+                $estadoEventos = $obj_eventos->getArreglo();
                 
                 require __DIR__ . '/../vistas/plantillas/frm_eventos_editar.php';
             } catch (Exception $exc) {

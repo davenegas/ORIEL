@@ -144,13 +144,13 @@ class cls_eventos{
                         LEFT OUTER JOIN T_TipoPuntoBCR ON T_Evento.ID_Tipo_Punto = T_TipoPuntoBCR.ID_Tipo_Punto
                         LEFT OUTER JOIN T_PuntoBCR ON T_Evento.ID_PuntoBCR = T_PuntoBCR.ID_PuntoBCR
                         LEFT OUTER JOIN T_TipoEvento ON T_Evento.ID_Tipo_Evento = T_TipoEvento.ID_Tipo_Evento
-                        LEFT OUTER JOIN T_Seguimiento ON T_Evento.ID_Seguimiento = T_Seguimiento.ID_Seguimiento", 
+                        LEFT OUTER JOIN T_EstadoEvento ON T_Evento.ID_EstadoEvento = T_EstadoEvento.ID_EstadoEvento", 
                     "T_Evento.ID_Evento, T_Evento.Fecha, T_Evento.Hora, 
                         T_Provincia.Nombre_Provincia, T_Provincia.ID_Provincia,
                         T_TipoPuntoBCR.Tipo_Punto, T_TipoPuntoBCR.ID_Tipo_Punto ,
                         T_PuntoBCR.Nombre, T_PuntoBCR.ID_PuntoBCR,
                         T_TipoEvento.Evento, T_TipoEvento.ID_Tipo_Evento,
-                        T_Seguimiento.Seguimiento, T_Seguimiento.ID_Seguimiento",
+                        T_EstadoEvento.ID_EstadoEvento, T_EstadoEvento.Estado_Evento",
                     "");
             $this->arreglo=$this->obj_data_provider->getArreglo();
             $this->obj_data_provider->desconectar();
@@ -163,13 +163,13 @@ class cls_eventos{
                         LEFT OUTER JOIN T_TipoPuntoBCR ON T_Evento.ID_Tipo_Punto = T_TipoPuntoBCR.ID_Tipo_Punto
                         LEFT OUTER JOIN T_PuntoBCR ON T_Evento.ID_PuntoBCR = T_PuntoBCR.ID_PuntoBCR
                         LEFT OUTER JOIN T_TipoEvento ON T_Evento.ID_Tipo_Evento = T_TipoEvento.ID_Tipo_Evento
-                        LEFT OUTER JOIN T_Seguimiento ON T_Evento.ID_Seguimiento = T_Seguimiento.ID_Seguimiento", 
+                        LEFT OUTER JOIN T_EstadoEvento ON T_Evento.ID_EstadoEvento = T_EstadoEvento.ID_EstadoEvento", 
                     "T_Evento.ID_Evento, T_Evento.Fecha, T_Evento.Hora, 
                         T_Provincia.Nombre_Provincia, T_Provincia.ID_Provincia,
                         T_TipoPuntoBCR.Tipo_Punto, T_TipoPuntoBCR.ID_Tipo_Punto ,
                         T_PuntoBCR.Nombre, T_PuntoBCR.ID_PuntoBCR,
                         T_TipoEvento.Evento, T_TipoEvento.ID_Tipo_Evento,
-                        T_Seguimiento.Seguimiento, T_Seguimiento.ID_Seguimiento",
+                        T_EstadoEvento.ID_EstadoEvento, T_EstadoEvento.Estado_Evento",
                     $this->condicion);
             $this->arreglo=$this->obj_data_provider->getArreglo();
             $this->obj_data_provider->desconectar();
@@ -205,7 +205,7 @@ class cls_eventos{
     public function obtener_seguimientos(){
         try{
             $this->obj_data_provider->conectar();
-            $this->arreglo=$this->obj_data_provider->trae_datos("T_Seguimiento", "*", "");
+            $this->arreglo=$this->obj_data_provider->trae_datos("T_EstadoEvento", "*", "");
             $this->arreglo=$this->obj_data_provider->getArreglo();
             $this->obj_data_provider->desconectar();
             $this->resultado_operacion=true;
