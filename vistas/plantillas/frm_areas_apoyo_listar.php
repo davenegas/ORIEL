@@ -53,7 +53,7 @@
                    Activar/Desactivar</a></td>
            <td><a href="index.php?ctl=gestion_area_apoyo&id=
                <?php echo $params[$i]['ID_Area_Apoyo']?>&estado=<?php echo $params[$i]['Estado']?>&descripcion=<?php echo $params[$i]['Observaciones']?>">
-                   Editar Modulo</a></td>
+                   Editar</a></td>
             </tr>     
                     
             <?php }

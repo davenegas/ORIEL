@@ -50,7 +50,7 @@
                    Activar/Desactivar</a></td>
            <td><a href="index.php?ctl=gestion_tipo_evento&id=
                <?php echo $params[$i]['ID_Tipo_Evento']?>&estado=<?php echo $params[$i]['Estado']?>&descripcion=<?php echo $params[$i]['Observaciones']?>">
-                   Editar Modulo</a></td>
+                   Editar</a></td>
             </tr>     
                     
             <?php }
