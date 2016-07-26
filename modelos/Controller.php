@@ -758,5 +758,18 @@
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         } 
     }
+    
+    public function tipo_eventos_listar(){      
+        if(isset($_SESSION['nombre'])){
+            $obj_eventos=new cls_eventos();
+            $obj_eventos->obtener_los_tipos_de_eventos();
+            $params= $obj_eventos->getArreglo();
+            require __DIR__ . '/../vistas/plantillas/frm_tipo_eventos_listar.php';
+        }else{
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        } 
+    }
 } 
      

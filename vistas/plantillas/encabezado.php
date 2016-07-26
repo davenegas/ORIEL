@@ -121,6 +121,7 @@
        if ((encuentra_coincidencia("Catálogos-Empresas"))){
        ?>
            <li><a href="index.php?ctl=principal">Empresas</a></li> 
+           <li><a href="index.php?ctl=tipo_eventos_listar">Tipo Evento</a></li>
        <?php 
        };
        ?>   
