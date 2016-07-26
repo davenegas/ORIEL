@@ -23,7 +23,7 @@ class cls_eventos{
         $this->id2 = $id2;
     }
 
-        function getDetalle() {
+    function getDetalle() {
         return $this->detalle;
     }
 
@@ -31,7 +31,7 @@ class cls_eventos{
         $this->detalle = $detalle;
     }
 
-        function getTipo_punto() {
+    function getTipo_punto() {
         return $this->tipo_punto;
     }
 
@@ -87,7 +87,7 @@ class cls_eventos{
         $this->estado = $estado;
     }
 
-        function getCondicion() {
+    function getCondicion() {
         return $this->condicion;
     }
 
@@ -95,7 +95,7 @@ class cls_eventos{
         $this->condicion = $condicion;
     }
 
-        function getArreglo() {
+    function getArreglo() {
         return $this->arreglo;
     }
 
@@ -120,21 +120,21 @@ class cls_eventos{
     }
 
     public function __construct() {
-            $this->id="";
-            $this->condicion="";
-            $this->arreglo;
-            $this->obj_data_provider=new Data_Provider();
-            $this->fecha="";
-            $this->hora="";
-            $this->provincia="";
-            $this->tipo_punto="";
-            $this->punto_bcr="";
-            $this->tipo_evento="";
-            $this->estado="";
-            $this->detalle="";
+        $this->id="";
+        $this->condicion="";
+        $this->arreglo;
+        $this->obj_data_provider=new Data_Provider();
+        $this->fecha="";
+        $this->hora="";
+        $this->provincia="";
+        $this->tipo_punto="";
+        $this->punto_bcr="";
+        $this->tipo_evento="";
+        $this->estado="";
+        $this->detalle="";
         ;
     }
-    
+    //Eventos de Bitacora
     public function obtiene_todos_los_eventos(){
         $this->obj_data_provider->conectar();
         if($this->condicion==""){
@@ -176,14 +176,14 @@ class cls_eventos{
             $this->resultado_operacion=true;
         }
     }
-    
+    //Detalles de bitacora
     public function obtiene_detalle_evento(){
         try{
         $this->obj_data_provider->conectar();
             $this->arreglo=$this->obj_data_provider->trae_datos(
-                    "T_DetalleEvento", 
-                    "*",
-                    $this->condicion);
+                "T_DetalleEvento", 
+                "*",
+                $this->condicion);
             $this->arreglo=$this->obj_data_provider->getArreglo();
             $this->obj_data_provider->desconectar();
         $this->resultado_operacion=true;
@@ -193,8 +193,8 @@ class cls_eventos{
     
     public function ingresar_seguimiento_evento(){
         try{
-             $this->obj_data_provider->conectar();
-             $sql=("call sp_set_detalleEvento('".$this->id2."','".$this->id."','".$this->fecha."','".$this->hora."','".$this->detalle."')");
+            $this->obj_data_provider->conectar();
+            $sql=("call sp_set_detalleEvento('".$this->id2."','".$this->id."','".$this->fecha."','".$this->hora."','".$this->detalle."')");
             $this->obj_data_provider->insertar_datos_con_phpmyadmin($sql);
             echo $sql;
         }  catch (Exception $exc){
@@ -258,6 +258,18 @@ class cls_eventos{
             $this->obj_data_provider->desconectar();
             $this->resultado_operacion=true;
         }  catch (Exception $exc){
+            echo $exc->getTraceAsString();
+        }
+    }
+    
+    public function obtener_los_tipos_de_eventos(){
+        try{
+            $this->obj_data_provider->conectar();
+            $this->arreglo= $this->obj_data_provider->trae_datos("T_TipoEvento","*","");
+            $this->arreglo=$this->obj_data_provider->getArreglo();
+            $this->obj_data_provider->desconectar();
+            $this->resultado_operacion=true;
+        }catch(Exception $exc){
             echo $exc->getTraceAsString();
         }
     }
