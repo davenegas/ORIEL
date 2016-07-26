@@ -112,7 +112,6 @@ class cls_areasapoyo{
         $this->tipo_area="";
         $this->estado="";
         $this->detalle="";
-        ;
     }
     public function obtiene_todos_las_areas_apoyo(){
         $this->obj_data_provider->conectar();

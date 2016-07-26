@@ -786,5 +786,30 @@
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }
     }
+    public function puntos_bcr_listar(){
+        if(isset($_SESSION['nombre'])){
+            $obj_puntosbcr=new cls_puntosBCR();
+            $obj_puntosbcr->obtiene_todos_los_puntos_bcr();
+            $params= $obj_puntosbcr->getArreglo();
+            require __DIR__ . '/../vistas/plantillas/frm_puntos_bcr_listar.php';
+        }else{
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }
+    }
+    
+    public function empresas_listar(){
+        if(isset($_SESSION['nombre'])){
+            $obj_empresas=new cls_empresa();
+            $obj_empresas->obtiene_todas_las_empresas();
+            $params= $obj_empresas->getArreglo();
+            require __DIR__ . '/../vistas/plantillas/frm_empresas_listar.php';
+        }else{
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }
+    }
 } 
      

@@ -7,6 +7,8 @@ require_once __DIR__ . '/controladores/cls_roles.php';
 require_once __DIR__ . '/controladores/cls_modulos.php';
 require_once __DIR__ . '/controladores/cls_eventos.php';
 require_once __DIR__ . '/controladores/cls_areasapoyo.php';
+require_once __DIR__ . '/controladores/cls_puntosBCR.php';
+require_once __DIR__ . '/controladores/cls_empresa.php';
 require_once __DIR__ . '/modelos/Controller.php';
 require_once __DIR__ . '/modelos/Encrypter.php';
 require_once __DIR__ . '/modelos/PHPMailerAutoload.php';
@@ -47,6 +49,13 @@ $map = array(
 
     //Areas de apoyo
     'areas_apoyo_listar'=>array('controller'=>'Controller','action'=> 'areas_apoyo_listar'),
+    
+    //PuntosBCR
+    'puntos_bcr_listar'=>array('controller'=>'Controller','action'=> 'puntos_bcr_listar'),
+    
+    //Empresas
+    'empresas_listar'=>array('controller'=>'Controller','action'=> 'empresas_listar'),
+    
     //Controlador de Usuarios
     'listar_usuarios'=> array('controller'=>'Controller','action'=>'listar_usuarios'),
     'gestion_usuarios' => array('controller'=> 'Controller','action'=>'gestion_usuarios'),

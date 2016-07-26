@@ -96,7 +96,7 @@
        <?php 
        if ((encuentra_coincidencia("Catálogos-Sitios BCR"))){
        ?>
-            <li><a href="index.php?ctl=principal">Sitios BCR</a></li>
+            <li><a href="index.php?ctl=puntos_bcr_listar">Sitios BCR</a></li>
        <?php 
        };
        ?>
@@ -120,7 +120,7 @@
         <?php 
        if ((encuentra_coincidencia("Catálogos-Empresas"))){
        ?>
-           <li><a href="index.php?ctl=principal">Empresas</a></li> 
+           <li><a href="index.php?ctl=empresas_listar">Empresas</a></li> 
            <li><a href="index.php?ctl=tipo_eventos_listar">Tipo Evento</a></li>
        <?php 
        };
