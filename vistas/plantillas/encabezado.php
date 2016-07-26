@@ -24,6 +24,7 @@
 <html lang="en">
     <br>
      <center><img src="vistas/Imagenes/Banner_Centro_de_Control.jpg" alt=""/></center>
+    
 <nav class="navbar navbar-default">
   <div class="container-fluid">
     <div class="navbar-header">

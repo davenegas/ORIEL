@@ -20,15 +20,23 @@
                 <table style="margin: 0 auto;">
                     <tr>
                         <td><h4>Nombre de Usuario:</h4></td>
-                        <td><input type="text" name="nombre" class="form-control"><br></td>
+                        <td><input type="text" name="nombre" id="nombre" class="form-control"><br></td>
                     </tr>
                     <tr>
                         <td><h4>Contraseña:</h4></td>
-                        <td><input type="password" name="password" class="form-control"><br></td>
+                        <td><input type="password" name="password" id="password" class="form-control"><br></td>
                     </tr>
                      <tr>
                         <td><input type="submit" value="Validar" class="btn btn-primary"></td>
-                        <td><a href="index.php?ctl=cambiar_password">Cambio de Clave...</a></td>     
+                        <td><a href="index.php?ctl=cambiar_password">|Cambio de Clave|</a>
+                           <a   href="#" 
+                            title="Add To Cart" 
+                          onclick="this.href='index.php?ctl=recordar_password&nom='   
+                                              +document.getElementById('nombre').value;
+                                   somefunction(this, event); return true;">
+                         |Recordar Clave|
+                            </a></td>                
+                        </br>
                     </tr>
                  </table>
           </form>
@@ -37,6 +45,8 @@
          <div class="<?php echo $tipo_de_alerta;?>" align="center">
          <strong>Información!</strong>  <?php echo $validacion;?>
         </div>
+        
+        
       <?php require 'vistas/plantillas/pie_de_pagina.php'?>
        
     </body>

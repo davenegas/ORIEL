@@ -8,6 +8,10 @@ require_once __DIR__ . '/controladores/cls_modulos.php';
 require_once __DIR__ . '/controladores/cls_eventos.php';
 require_once __DIR__ . '/modelos/Controller.php';
 require_once __DIR__ . '/modelos/Encrypter.php';
+require_once __DIR__ . '/modelos/PHPMailerAutoload.php';
+require_once __DIR__ . '/modelos/class.phpmailer.php';
+require_once __DIR__ . '/modelos/class.smtp.php';
+require_once __DIR__ . '/modelos/Mail_Provider.php';
 
 // enrutamiento
 $map = array(
@@ -19,7 +23,7 @@ $map = array(
     'buscar' => array('controller' =>'Controller', 'action' =>'buscarPorNombre'),
     'ver' => array('controller' =>'Controller', 'action' =>'ver'),
     'principal' => array('controller' =>'Controller', 'action' =>'principal'),
-     
+         
     //Controlador de Modulos
     'listar_modulos' => array('controller' =>'Controller', 'action' =>'listar_modulos'),
     'gestion_modulos' => array('controller' =>'Controller', 'action' =>'gestion_modulos'),
@@ -46,6 +50,7 @@ $map = array(
     'cambiar_estado_usuario' => array('controller'=>'Controller','action'=>'cambiar_estado_usuario'),
     'reset_password'=>array('controller'=>'Controller', 'action'=>'reset_password'),
     'cambiar_password'=>array('controller'=>'Controller', 'action'=>'cambiar_password'),
+    'recordar_password'=>array('controller'=>'Controller', 'action'=>'recordar_password'),
     'iniciar_sistema_cambiando_clave'=>array('controller'=>'Controller', 'action'=>'iniciar_sistema_cambiando_clave'),
     'cambia_clave_usuario_post'=>array('controller'=>'Controller', 'action'=>'cambia_clave_usuario_post')
     

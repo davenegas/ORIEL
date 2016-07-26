@@ -270,4 +270,23 @@ class cls_usuarios{
           $this->setRol(0);
       }    
   }
+  
+   function obtiene_correo_y_password_de_usuario($usuario){
+      //Establece la conexión con la bd
+      $this->obj_data_provider->conectar();
+      
+      $this->obj_data_provider->trae_datos("T_Usuario","*","Cedula='".$usuario."'");
+      
+      $this->arreglo=$this->obj_data_provider->getArreglo();
+     
+      $this->obj_data_provider->desconectar();
+      
+      $this->resultado_operacion=true;
+      
+      if (count($this->arreglo)>0){
+          $this->setCorreo($this->arreglo[0]['Correo']);
+          $this->setClave(Encrypter::decrypt($this->arreglo[0]['Clave']));
+
+      }
+  }
 }

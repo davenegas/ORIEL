@@ -45,7 +45,8 @@
         $validacion="En proceso de cambio de clave";
         require __DIR__ . '/../vistas/plantillas/frm_Cambio_Clave.php';
     }
-     
+    
+        
     public function cambia_clave_usuario_post(){
         $usuario = "";       
         $clave = "";  
@@ -504,6 +505,35 @@
         }
     }
 
+    public function recordar_password(){
+        $validacion="";
+        $obj_usuarios= new cls_usuarios();
+        $obj_correo=new Mail_Provider();
+         
+        if ($_SERVER['REQUEST_METHOD'] == 'GET') {
+             $usuario = $_GET['nom'];
+                   
+             if ($obj_usuarios->existe_usuario($usuario)){
+                    $obj_usuarios->obtiene_correo_y_password_de_usuario($usuario);   
+                    $correo=$obj_usuarios->getCorreo();
+                    $pass=$obj_usuarios->getClave();
+                    
+                    $obj_correo->agregar_asunto_de_correo("Recordatorio Clave Sistema Oriel");
+                    $obj_correo->agregar_detalle_de_correo("Este es un mensaje automático, favor no responderlo.</br> Su clave del sistema Oriel es: ".$pass);
+                    $obj_correo->agregar_direccion_de_correo($correo, $usuario);
+                    $obj_correo->enviar_correo();
+                    $tipo_de_alerta="alert alert-info";
+                    $validacion="Se ha enviado un recordatorio de password a su correo electrónico";  
+                    require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+             }else
+                 {
+                    $tipo_de_alerta="alert alert-danger";
+                    $validacion="Debe digitar un nombre de usuario válido para recordar el password";  
+                    require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+                 }
+        }
+    }
+    
     public function listar(){
         $validacion="";
         $obj_usuarios= new cls_usuarios();

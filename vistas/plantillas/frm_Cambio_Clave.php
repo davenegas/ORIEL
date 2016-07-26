@@ -10,7 +10,7 @@
         <script src="../../../bootstrap-3.3.6/dist/js/bootstrap.min.js"></script>
     </head>
     <body>
-    <center><img src="vistas/Imagenes/Banner_Cabecera.jpg" alt=""/></center>
+    <center><img src="vistas/Imagenes/Banner_Centro_de_Control.jpg" alt=""/></center>
        <hr/>   
      <div class="alert alert-info" align="center">
         <strong>Gestión de Usuarios!  </strong>Cambio de Contraseña

@@ -8,7 +8,7 @@ requerida
 
 <html>
     <center><img src="vistas/Imagenes/Oriel.jpg" alt=""/></center>
-<footer class="col-lg-12" align="center">
+<footer class="container-fluid" align="center">
             <hr/>
             Jefatura de Seguridad Banco de Costa Rica -Centro de Control y Monitoreo &copy; <br>
                <?php 
