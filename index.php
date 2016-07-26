@@ -6,6 +6,7 @@ require_once __DIR__ . '/controladores/cls_usuarios.php';
 require_once __DIR__ . '/controladores/cls_roles.php';
 require_once __DIR__ . '/controladores/cls_modulos.php';
 require_once __DIR__ . '/controladores/cls_eventos.php';
+require_once __DIR__ . '/controladores/cls_areasapoyo.php';
 require_once __DIR__ . '/modelos/Controller.php';
 require_once __DIR__ . '/modelos/Encrypter.php';
 require_once __DIR__ . '/modelos/PHPMailerAutoload.php';
@@ -44,6 +45,8 @@ $map = array(
     'frm_eventos_editar'=>  array('controller'=>'Controller','action'=>  'frm_eventos_editar'),
     'tipo_eventos_listar'=>array('controller'=>'Controller','action'=> 'tipo_eventos_listar'),
 
+    //Areas de apoyo
+    'areas_apoyo_listar'=>array('controller'=>'Controller','action'=> 'areas_apoyo_listar'),
     //Controlador de Usuarios
     'listar_usuarios'=> array('controller'=>'Controller','action'=>'listar_usuarios'),
     'gestion_usuarios' => array('controller'=> 'Controller','action'=>'gestion_usuarios'),

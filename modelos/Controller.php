@@ -774,5 +774,17 @@
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         } 
     }
+    public function areas_apoyo_listar(){
+        if(isset($_SESSION['nombre'])){
+            $obj_areasApoyo=new cls_areasapoyo();
+            $obj_areasApoyo->obtiene_todos_las_areas_apoyo();
+            $params= $obj_areasApoyo->getArreglo();
+            require __DIR__ . '/../vistas/plantillas/frm_areas_apoyo_listar.php';
+        }else{
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }
+    }
 } 
      
