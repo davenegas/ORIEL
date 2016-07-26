@@ -238,6 +238,18 @@ class cls_eventos{
         }
     }
     
+    public function obtener_puntos_bcr_por_provincia_y_tipo_de_punto(){
+        try{
+            $this->obj_data_provider->conectar();
+            $this->arreglo=$this->obj_data_provider->trae_datos("T_PuntoBCR", "ID_PuntoBCR,Nombre", $this->condicion);
+            $this->arreglo=$this->obj_data_provider->getArreglo();
+            $this->obj_data_provider->desconectar();
+            $this->resultado_operacion=true;
+        }  catch (Exception $exc){
+            echo $exc->getTraceAsString();
+        }
+    }
+    
     public function obtener_todos_los_tipos_de_puntos_BCR(){
         try{
             $this->obj_data_provider->conectar();
