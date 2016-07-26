@@ -112,7 +112,7 @@
        <?php 
        if ((encuentra_coincidencia("Catálogos-Áreas de Apoyo"))){
        ?>
-            <li><a href="index.php?ctl=principal">Áreas de Apoyo</a></li>
+            <li><a href="index.php?ctl=areas_apoyo_listar">Áreas de Apoyo</a></li>
        <?php 
        };
        ?>   
