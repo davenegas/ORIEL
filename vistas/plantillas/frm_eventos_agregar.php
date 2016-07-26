@@ -70,16 +70,35 @@
                     } ?>  
               </select>
             </div>
-            
+           
             <div class="col-xs-4">
               <label for="punto_bcr">Punto BCR</label>
               <select class="form-control" id="punto_bcr" name="punto_bcr" ></select>
             </div>
             <br/><br/><br/><br/>
+               <div class="col-xs-4">
+                    <label for="DetalleSeguimiento">Estado del Evento</label>
+                    <select class="form-control" id="Rol" name="Rol" > 
+                    <?php
+                    $tam = count($estadoEventos);
+
+                    for($i=0; $i<$tam;$i++)
+                    {
+                        if($estadoEventos[$i]['Estado_Evento']==$params[0]['Estado_Evento']){
+
+                           ?> <option value="<?php echo $estadoEventos[$i]['ID_EstadoEvento']?>" selected="selected"><?php echo $estadoEventos[$i]['Estado_Evento']?></option><?php
+                        }
+                        else {?>
+                            <option value="<?php echo $estadoEventos[$i]['ID_EstadoEvento']?>" ><?php echo $estadoEventos[$i]['Estado_Evento']?></option>   
+                    <?php }}  ?>
+                    </select>
+             </div>
+             <br/><br/><br/><br/>
             <div class="form-group">
                     <label for="DetalleSeguimiento">Detalle del Evento</label>
                     <textarea type="text" required=”required” class="form-control" id="DetalleSeguimiento" name="DetalleSeguimiento" value=""></textarea>
             </div>
+           
             <div>
             <button type="submit" class="btn btn-default" >Guardar</button>
             <a href="index.php?ctl=frm_eventos_listar" class="btn btn-default" role="button">Cancelar</a>

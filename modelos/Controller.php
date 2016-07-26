@@ -671,9 +671,12 @@
                     $obj_eventos->obtener_todos_los_tipos_de_puntos_BCR();
                     $lista_tipos_de_puntos_bcr=$obj_eventos->getArreglo();
                     
+                    //Obtiene los diferentes seguimientos
+                    $obj_eventos->obtener_seguimientos();
+                    $estadoEventos = $obj_eventos->getArreglo();
+                    
                     require __DIR__ . '/../vistas/plantillas/frm_eventos_agregar.php';
                     
-                    //require __DIR__ . '/../vistas/plantillas/prueba.php';
                 }else{             
                     $ide=$_GET['id'];
                     $obj_eventos = new cls_eventos();
