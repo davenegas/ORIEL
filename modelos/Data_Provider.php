@@ -167,26 +167,20 @@ class Data_Provider{
        $this->resultado_operacion=true;
    }
 
-
    public function edita_datos($table,$campos_valores,$condicion){
-     
-
         $consulta=$this->conexion->query("update ".$table." set ".$campos_valores." where ".$condicion.";");
         $this->resultado_operacion=true;
         
    }
    
    public function eliminar_datos($table,$condicion){
-     
 
-        if ($condicion==""){
+       if ($condicion==""){
            $consulta=$this->conexion->query("delete from ".$table.";");
        }else{
            $consulta=$this->conexion->query("delete from ".$table." where ".$condicion.";");
-       }
-        
+       }   
    }
-   
 }
 
 
