@@ -6,13 +6,9 @@
         <group/>
 =======
         <group>
-            <file>file:/C:/wamp/www/ORIEL/vistas/plantillas/pie_de_pagina.php</file>
             <file>file:/C:/wamp/www/ORIEL/index.php</file>
-            <file>file:/C:/wamp/www/ORIEL/modelos/Data_Provider.php</file>
-            <file>file:/C:/wamp/www/ORIEL/vistas/plantillas/frm_personal_listar.php</file>
             <file>file:/C:/wamp/www/ORIEL/controladores/cls_personal.php</file>
             <file>file:/C:/wamp/www/ORIEL/modelos/Controller.php</file>
-            <file>file:/C:/wamp/www/ORIEL/vistas/plantillas/encabezado.php</file>
         </group>
 >>>>>>> origin/master
     </open-files>
