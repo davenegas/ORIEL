@@ -811,5 +811,18 @@
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }
     }
+    
+    public function personal_listar(){
+        if(isset($_SESSION['nombre'])){
+            $obj_personal=new cls_personal();
+            $obj_personal->obtiene_todo_el_personal();
+            $personas= $obj_personal->getArreglo();
+            require __DIR__ . '/../vistas/plantillas/frm_personal_listar.php';
+        }else{
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }
+    }    
 } 
      

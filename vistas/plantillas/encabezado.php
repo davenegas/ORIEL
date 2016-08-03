@@ -25,7 +25,7 @@
     <br>
      <center><img src="vistas/Imagenes/Banner_Centro_de_Control.jpg" alt=""/></center>
     
-<nav class="navbar navbar-default">
+<nav class="navbar navbar-default" >
   <div class="container-fluid">
     <div class="navbar-header">
         <a class="navbar-brand" href="index.php?ctl=principal">Jefatura Seguridad</a>
@@ -104,7 +104,7 @@
        <?php 
        if ((encuentra_coincidencia("Catálogos-Personal"))){
        ?>
-            <li><a href="index.php?ctl=principal">Personal</a></li>
+            <li><a href="index.php?ctl=personal_listar">Personal</a></li>
        <?php 
        };
        ?>
