@@ -33,7 +33,7 @@ class Mail_Provider{
 
             //indico un usuario / clave de un usuario de gmail
             $this->mail->Username = "orielinforma@gmail.com";
-            $this->mail->Password = "controlz1";
+            $this->mail->Password = "holaholabcr";
             $this->mail->SetFrom('orielinforma@gmail.com', 'Oriel Jefatura de Seguridad');
             $this->mail->addReplyTo('orielinforma@gmail.com', 'Oriel Jefatura de Seguridad');
           

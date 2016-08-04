@@ -1,0 +1,23 @@
+
+div#tabla_uno{
+    width:300px;
+    position:relative;
+    float: left;
+    height: auto;
+    margin-right: 10px;
+}
+div#tabla_dos{
+    width:300px;
+    position:relative;
+    float: left;
+    height: auto;
+}
+.espacio-arriba{
+    margin-top: 20px; 
+}
+.espacio-abajo{
+    margin-bottom: 20px;
+}
+.quitar-float{
+    float: none;
+}

@@ -188,7 +188,7 @@
               
                 if ($_GET['id']==0){
                     $obj_roles->obtiene_todos_los_roles();
-                    $validacion = $obj_usuarios->getArreglo();
+                    $validacion = $obj_roles->getArreglo();
                     $tam = count($validacion);
                     $correcto=0;
                     for($i=0; $i<$tam;$i++){
@@ -858,6 +858,42 @@
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }
-    }    
+    }
+    //Editar Punto BCR, información completa 
+    public function gestion_punto_bcr(){
+        if(isset($_SESSION['nombre'])){
+            $obj_Puntobcr = new cls_puntosBCR();
+            if ($_GET['id']==0){
+                
+            }   else   {
+                echo($_GET['id']." Prueba");
+                //Obtiene la informacion del PuntoBCR
+                $obj_Puntobcr->setCondicion("ID_PuntoBCR='".$_GET['id']."'");
+                $obj_Puntobcr->obtiene_todos_los_puntos_bcr();
+                $params= $obj_Puntobcr->getArreglo();
+                //Obtiene todos los tipos de puntos BCR para listarlos
+                $obj_Puntobcr->setCondicion("");
+                $obj_Puntobcr->obtiene_los_tipo_puntos();
+                $tipo_puntos = $obj_Puntobcr->getArreglo();
+                //Obtiene los telefonos del PuntoBCR
+                $obj_Puntobcr->setCondicion("T_Telefono.ID='".$_GET['id']."'");
+                $obj_Puntobcr->obtiene_telefonos_puntoBCR();
+                $telefonos= $obj_Puntobcr->getArreglo();
+                //Obtiene Unidades Ejecutoras asignadas al Punto BCR
+                $obj_Puntobcr->setCondicion("T_UE_PuntoBCR.ID_PuntoBCR='".$_GET['id']."'");
+                $obj_Puntobcr->obtiene_unidades_ejecutoras();
+                $unidad_ejecutora= $obj_Puntobcr->getArreglo();
+                //Obtiene Distrito->Cantón->Provincia
+                
+                //
+                
+            }
+            require __DIR__ . '/../vistas/plantillas/frm_puntos_bcr_editar.php';
+        }   else    {
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }
+    }
 } 
      
