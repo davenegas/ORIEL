@@ -13,8 +13,47 @@ class cls_eventos{
     public $punto_bcr;
     public $tipo_evento;
     public $estado;
+    public $estado_evento;
     public $detalle;
+    public $seguimiento;
+    public $id_ultimo_evento_ingresado;
+    public $id_usuario;
     
+    function getId_usuario() {
+        return $this->id_usuario;
+    }
+
+    function setId_usuario($id_usuario) {
+        $this->id_usuario = $id_usuario;
+    }
+
+        
+    function getId_ultimo_evento_ingresado() {
+        return $this->id_ultimo_evento_ingresado;
+    }
+
+    function setId_ultimo_evento_ingresado($id_ultimo_evento_ingresado) {
+        $this->id_ultimo_evento_ingresado = $id_ultimo_evento_ingresado;
+    }
+
+        
+    function getEstado_evento() {
+        return $this->estado_evento;
+    }
+
+    function getSeguimiento() {
+        return $this->seguimiento;
+    }
+
+    function setEstado_evento($estado_evento) {
+        $this->estado_evento = $estado_evento;
+    }
+
+    function setSeguimiento($seguimiento) {
+        $this->seguimiento = $seguimiento;
+    }
+
+        
     function getId2() {
         return $this->id2;
     }
@@ -134,6 +173,30 @@ class cls_eventos{
         $this->detalle="";
         ;
     }
+    
+    //Obtener el último id de evento para saber que se debe ingresar
+    
+    function obtiene_id_ultimo_evento_ingresado(){
+      //Establece la conexión con la bd
+      $this->obj_data_provider->conectar();
+      
+      $this->obj_data_provider->trae_datos("T_Evento","max(ID_Evento) ID_Evento","");
+      
+      $this->arreglo=$this->obj_data_provider->getArreglo();
+     
+      $this->obj_data_provider->desconectar();
+      
+      $this->resultado_operacion=true;
+      
+      if (count($this->arreglo)>0){
+          $this->setId_ultimo_evento_ingresado($this->arreglo[0]['ID_Evento']+1);
+         
+      }else
+      {
+          $this->setId_ultimo_evento_ingresado(1);
+      }    
+  }
+    
     //Eventos de Bitacora
     public function obtiene_todos_los_eventos(){
         $this->obj_data_provider->conectar();
@@ -195,6 +258,17 @@ class cls_eventos{
         try{
             $this->obj_data_provider->conectar();
             $sql=("call sp_set_detalleEvento('".$this->id2."','".$this->id."','".$this->fecha."','".$this->hora."','".$this->detalle."')");
+            $this->obj_data_provider->insertar_datos_con_phpmyadmin($sql);
+            echo $sql;
+        }  catch (Exception $exc){
+            echo $exc->getTraceAsString();
+        }
+    }
+    
+    public function ingresar_evento(){
+        try{
+            $this->obj_data_provider->conectar();
+            $sql=("call sp_set_Evento('"."0"."','".$this->fecha."','".$this->hora."','".$this->id_usuario."','".$this->provincia."','".$this->tipo_punto."','".$this->punto_bcr."','".$this->tipo_evento."','".$this->estado_evento."')");
             $this->obj_data_provider->insertar_datos_con_phpmyadmin($sql);
             echo $sql;
         }  catch (Exception $exc){

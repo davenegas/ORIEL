@@ -10,7 +10,7 @@
         <div class="container">
         <h2>Listado de Eventos</h2>
         <!--<p>A continuación se detallan los diferentes roles que están registrados en el sistema:</p>-->            
-        <table class="table">
+        <table id="tabla" class="display">
           <thead>
                
             <tr>
@@ -46,11 +46,9 @@
             </tr>
             <?php }
             ?>
-           <tr>
-               <td><a href="index.php?ctl=frm_eventos_agregar&id=0" class="btn btn-default" role="button">Agregar Nuevo Evento de Bitácora</a></td>
-            </tr>
             </tbody>
         </table>
+        <a href="index.php?ctl=frm_eventos_agregar&id=0" class="btn btn-default" role="button">Agregar Nuevo Evento de Bitácora</a>
         </div>
             <?php require 'vistas/plantillas/pie_de_pagina.php' ?>
     </body>

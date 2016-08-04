@@ -265,6 +265,7 @@ class cls_usuarios{
           $this->setRol($this->arreglo_roles[0]['ID_Rol']);
           $this->setNombre($this->arreglo_roles[0]['Nombre']);
           $this->setApellido($this->arreglo_roles[0]['Apellido']);
+          $this->setId($this->arreglo_roles[0]['ID_Usuario']);
       }else
       {
           $this->setRol(0);

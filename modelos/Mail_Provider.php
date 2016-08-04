@@ -24,10 +24,13 @@ class Mail_Provider{
             $this->mail->SMTPAuth = true;
             $this->mail->CharSet='UTF-8';
             $this->mail->SMTPSecure = "ssl";
+            //$this->mail->SMTPSecure = "tls";
             //indico el servidor de Gmail para SMTP
             $this->mail->Host = "smtp.gmail.com";
             //indico el puerto que usa Gmail
             $this->mail->Port = 465;
+            //$this->mail->Port = 25;
+
             //indico un usuario / clave de un usuario de gmail
             $this->mail->Username = "orielinforma@gmail.com";
             $this->mail->Password = "controlz1";

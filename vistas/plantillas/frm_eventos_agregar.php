@@ -18,15 +18,15 @@
         <form class="form-horizontal" role="form" method="POST" action="index.php?ctl=guardar_evento">
             <div class="col-xs-4">
               <label for="fecha">Fecha</label>
-              <input type="date" class="form-control" id="fecha" name="fecha" value="<?php echo date("Y-m-d");?>">
+              <input type="date" required=”required” class="form-control" id="fecha" name="fecha" value="<?php echo date("Y-m-d");?>">
             </div> 
             <div class="col-xs-4">
               <label for="hora">Hora</label>
-              <input type="time" class="form-control" id="hora" name="hora" value=<?php echo date("H:i:s", time());?>>
+              <input type="time" required=”required” class="form-control" id="hora" name="hora" value=<?php echo date("H:i", time());?>>
             </div>         
             <div class="col-xs-4">
                 <label for="tipo_evento">Tipo de Evento</label>
-                <select class="form-control" id="tipo_evento" name="tipo_evento" > 
+                <select class="form-control" required=”required” id="tipo_evento" name="tipo_evento" > 
                 <?php
                     $tam_tipo_eventos = count($lista_tipos_de_eventos);
 
@@ -42,7 +42,7 @@
             <br/><br/><br/><br/>
             <div class="col-xs-4">
               <label for="nombre_provincia">Provincia</label>
-              <select class="form-control" id="nombre_provincia" name="nombre_provincia" > 
+              <select class="form-control" required=”required” id="nombre_provincia" name="nombre_provincia" > 
                 <?php
                     $tam_provincias = count($lista_provincias);
 
@@ -57,7 +57,7 @@
             </div>
             <div class="col-xs-4">
               <label for="tipo_punto">Tipo Punto</label>
-              <select class="form-control" id="tipo_punto" name="tipo_punto" > 
+              <select class="form-control" required=”required” id="tipo_punto" name="tipo_punto" > 
                 <?php
                     $tam_tipo_punto_bcr = count($lista_tipos_de_puntos_bcr);
 
@@ -73,12 +73,12 @@
            
             <div class="col-xs-4">
               <label for="punto_bcr">Punto BCR</label>
-              <select class="form-control" id="punto_bcr" name="punto_bcr" ></select>
+              <select class="form-control" required=”required” id="punto_bcr" name="punto_bcr" ></select>
             </div>
             <br/><br/><br/><br/>
                <div class="col-xs-4">
-                    <label for="DetalleSeguimiento">Estado del Evento</label>
-                    <select class="form-control" id="Rol" name="Rol" > 
+                    <label for="estado_evento">Estado del Evento</label>
+                    <select class="form-control" required=”required” id="estado_evento" name="estado_evento" > 
                     <?php
                     $tam = count($estadoEventos);
 
@@ -95,8 +95,8 @@
              </div>
              <br/><br/><br/><br/>
             <div class="form-group">
-                    <label for="DetalleSeguimiento">Detalle del Evento</label>
-                    <textarea type="text" required=”required” class="form-control" id="DetalleSeguimiento" name="DetalleSeguimiento" value=""></textarea>
+                    <label for="seguimiento">Detalle del Evento</label>
+                    <textarea type="text" required=”required” class="form-control" id="seguimiento" name="seguimiento" value=""></textarea>
             </div>
            
             <div>
