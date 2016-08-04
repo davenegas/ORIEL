@@ -180,7 +180,7 @@ class cls_eventos{
       //Establece la conexión con la bd
       $this->obj_data_provider->conectar();
       
-      $this->obj_data_provider->trae_datos("T_Evento","max(ID_Evento) ID_Evento","");
+      $this->obj_data_provider->trae_datos("T_Evento","max(ID_Evento) ID_Evento","ID_Usuario=".$this->id_usuario);
       
       $this->arreglo=$this->obj_data_provider->getArreglo();
      
@@ -189,7 +189,7 @@ class cls_eventos{
       $this->resultado_operacion=true;
       
       if (count($this->arreglo)>0){
-          $this->setId_ultimo_evento_ingresado($this->arreglo[0]['ID_Evento']+1);
+          $this->setId_ultimo_evento_ingresado($this->arreglo[0]['ID_Evento']);
          
       }else
       {
@@ -259,7 +259,7 @@ class cls_eventos{
             $this->obj_data_provider->conectar();
             $sql=("call sp_set_detalleEvento('".$this->id2."','".$this->id."','".$this->fecha."','".$this->hora."','".$this->detalle."')");
             $this->obj_data_provider->insertar_datos_con_phpmyadmin($sql);
-            echo $sql;
+            //echo $sql;
         }  catch (Exception $exc){
             echo $exc->getTraceAsString();
         }
@@ -270,7 +270,7 @@ class cls_eventos{
             $this->obj_data_provider->conectar();
             $sql=("call sp_set_Evento('"."0"."','".$this->fecha."','".$this->hora."','".$this->id_usuario."','".$this->provincia."','".$this->tipo_punto."','".$this->punto_bcr."','".$this->tipo_evento."','".$this->estado_evento."')");
             $this->obj_data_provider->insertar_datos_con_phpmyadmin($sql);
-            echo $sql;
+            //echo $sql;
         }  catch (Exception $exc){
             echo $exc->getTraceAsString();
         }

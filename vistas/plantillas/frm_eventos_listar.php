@@ -16,6 +16,7 @@
             <tr>
               <th>Fecha</th>
               <th>Hora</th>
+              <th>Lapso</th>
               <th>Provincia</th>
               <th>Tipo Punto</th>
               <th>Punto BCR</th>
@@ -33,8 +34,14 @@
             for ($i = 0; $i <$tam; $i++) {
             ?>
             <tr>
-            <td><?php echo $params[$i]['Fecha'];?></td>
+            <?php
+            $fecha_evento = date_create($params[$i]['Fecha']);
+            $fecha_actual = date_create(date("d-m-Y"));
+            $dias_abierto= date_diff($fecha_evento, $fecha_actual);
+            ?>
+            <td><?php echo date_format($fecha_evento, 'd/m/Y');?></td>
             <td><?php echo $params[$i]['Hora'];?></td>
+            <td align="center"><?php echo $dias_abierto->format('%a');?></td>
             <td><?php echo $params[$i]['Nombre_Provincia'];?></td>
             <td><?php echo $params[$i]['Tipo_Punto'];?></td>
             <td><?php echo $params[$i]['Nombre'];?></td>
@@ -42,7 +49,7 @@
             <td><?php echo $params[$i]['Estado_Evento'];?></td>
             
             <td><a href="index.php?ctl=frm_eventos_editar&id=
-               <?php echo $params[$i]['ID_Evento']?>">Agregar Seguimiento a este Evento</a></td>
+               <?php echo $params[$i]['ID_Evento']?>">Agregar Seguimiento</a></td>
             </tr>
             <?php }
             ?>

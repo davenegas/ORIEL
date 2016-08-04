@@ -713,15 +713,25 @@
                 $obj_eventos->setTipo_punto($_POST['tipo_punto']); 
                 $obj_eventos->setPunto_bcr($_POST['punto_bcr']);
                 $obj_eventos->setEstado_evento($_POST['estado_evento']);
-                $obj_eventos->setSeguimiento($_POST['seguimiento']);
                 $obj_eventos->setId_usuario($_SESSION['id']);
                 $obj_eventos->setEstado(1);
                 $obj_eventos->ingresar_evento();
                 
+                if(isset($_POST['seguimiento'])){
+                    
+                   $obj_eventos->setDetalle($_POST['seguimiento']);
+                   $obj_eventos->setId2(0);
+                   $obj_eventos->obtiene_id_ultimo_evento_ingresado(); 
+                   $obj_eventos->setId($obj_eventos->getId_ultimo_evento_ingresado());
+                   $obj_eventos->ingresar_seguimiento_evento();  
+                   
+                }
+                
+                
                 //$obj_eventos=new cls_eventos();
                 $this->frm_eventos_listar();
                                 
-                $obj_eventos->obtiene_id_ultimo_evento_ingresado();
+                
                 
                 //echo $obj_eventos->getId_ultimo_evento_ingresado();
                 
