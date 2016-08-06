@@ -634,6 +634,7 @@
     public function frm_eventos_listar(){
         if(isset($_SESSION['nombre'])){
             $obj_eventos = new cls_eventos();
+            $obj_eventos->setCondicion("T_Evento.ID_EstadoEvento<>3");
             $obj_eventos ->obtiene_todos_los_eventos(); 
             $params= $obj_eventos->getArreglo();
             require __DIR__.'/../vistas/plantillas/frm_eventos_listar.php';
@@ -717,8 +718,8 @@
                 $obj_eventos->setEstado(1);
                 $obj_eventos->ingresar_evento();
                 
-                if(isset($_POST['seguimiento'])){
-                    
+            if(isset($_POST['seguimiento'])&&($_POST['seguimiento']!="")){
+                   echo 'alert("si entro")'; 
                    $obj_eventos->setDetalle($_POST['seguimiento']);
                    $obj_eventos->setId2(0);
                    $obj_eventos->obtiene_id_ultimo_evento_ingresado(); 
@@ -786,8 +787,10 @@
             $obj_eventos->setFecha(($_POST['Fecha']));
             $obj_eventos->setHora(($_POST['Hora']));
             $obj_eventos->setDetalle(($_POST['DetalleSeguimiento']));
+            $obj_eventos->setId_usuario($_SESSION['id']);
             $obj_eventos->ingresar_seguimiento_evento();
-            $this->frm_eventos_editar();
+            $obj_eventos->edita_estado_evento($_POST['estado_del_evento']);
+            $this->frm_eventos_listar();
             //actualiza Seguimiento PENDIENTE
             
         }else {

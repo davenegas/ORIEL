@@ -7,7 +7,7 @@
     </head>
     <body>
         <?php require_once 'encabezado.php';?>
-        <div class="container">
+        <div class="container animated fadeIn">
         <h2>Listado de Eventos</h2>
         <!--<p>A continuación se detallan los diferentes roles que están registrados en el sistema:</p>-->            
         <table id="tabla" class="display">
@@ -22,6 +22,7 @@
               <th>Punto BCR</th>
               <th>Tipo de Evento</th>
               <th>Estado del Evento</th>
+              <th>Ingresado Por</th>
               <th>Editar Evento</th>
             </tr>
           </thead>
@@ -47,9 +48,9 @@
             <td><?php echo $params[$i]['Nombre'];?></td>
             <td><?php echo $params[$i]['Evento'];?></td>
             <td><?php echo $params[$i]['Estado_Evento'];?></td>
-            
-            <td><a href="index.php?ctl=frm_eventos_editar&id=
-               <?php echo $params[$i]['ID_Evento']?>">Agregar Seguimiento</a></td>
+            <td><?php echo $params[$i]['Nombre_Usuario']." ".$params[$i]['Apellido'] ?></td>
+            <td align="center"><a href="index.php?ctl=frm_eventos_editar&id=
+               <?php echo $params[$i]['ID_Evento']?>">Gestionar Seguimiento</a></td>
             </tr>
             <?php }
             ?>

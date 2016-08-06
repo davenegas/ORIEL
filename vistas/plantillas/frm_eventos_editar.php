@@ -9,9 +9,10 @@
     <body>
         <?php require_once 'encabezado.php';?>
         
-        <div class="container">
+        <div class="container animated fadeIn">
             <h1 align="center">Detalle de Evento</h1>
-            <h3><u>General</u></h3>
+            <hr/>
+            <h3>General</h3>
         <!--<p>A continuación se detallan los diferentes eventos que están registrados en el sistema:</p>-->            
         <table class="table">
           <thead>
@@ -23,6 +24,7 @@
                 <th>Tipo Punto</th>
                 <th>Punto BCR</th>
                 <th>Tipo de Evento</th>
+                <th>Ingresado Por</th>
             </tr>
           </thead>
           <tbody>
@@ -38,23 +40,23 @@
                 <td><?php echo $params[$i]['Tipo_Punto'];?></td>
                 <td><?php echo $params[$i]['Nombre'];?></td>
                 <td><?php echo $params[$i]['Evento'];?></td>
+                 <td><?php echo $params[$i]['Nombre_Usuario']." ".$params[$i]['Apellido'] ?></td>
             </tr>
             <?php }
             ?>
             </tbody>
-        </table><br>
-        </div>
-             
+        </table>
+        
         <!--Detalles de Evento--> 
-
-        <div class="container">
-            <h3><u>Seguimientos asociados </u></h3>
+            <hr/>
+            <h3>Seguimientos asociados</h3>
         <table class="table">
             <thead>
                 <tr>
                   <th>Fecha de Seguimiento</th>
                   <th>Hora de Seguimiento</th>
                   <th>Detalle del Seguimiento</th>
+                  <th>Ingresado Por</th>
                 </tr>
             </thead>
                 <tbody>
@@ -66,10 +68,12 @@
                 <td><?php echo $detalleEvento[$i]['Fecha'];?></td>
                 <td><?php echo $detalleEvento[$i]['Hora'];?></td> 
                 <td><?php echo $detalleEvento[$i]['Detalle'];?></td>
+                <td><?php echo $detalleEvento[$i]['Nombre_Usuario']." ".$detalleEvento[$i]['Apellido'] ?></td>
                 <?php } ?>
                 </tbody>
         </table>   
-            <h3><u>Agregar nuevo seguimiento</u></h3>
+            <hr/>
+            <h3>Agregar nuevo seguimiento</h3>
                 <!--Agregar nuevo detalle o seguimiento del evento-->
             <form class="form-horizontal" role="form" method="POST" action="index.php?ctl=guardar_seguimiento_evento&id=<?php echo trim($ide);?>">
                 <div class="col-xs-6">
@@ -81,27 +85,29 @@
                     <label for="Hora">Hora Seguimiento</label>
                     <input type="time" required=”required” class="form-control" id="Hora" name="Hora" value="<?php echo date("H:i:s", time());?>">
                 </div> <br><br><br><br>
-                <div class="form-group">
+                <div class="col-xs-6">
                     <label for="DetalleSeguimiento">Detalle del Seguimiento</label>
                     <textarea type="text" required=”required” class="form-control" id="DetalleSeguimiento" name="DetalleSeguimiento" value=""></textarea>
                 </div>
-                <div class="form-group">
-                    <label for="DetalleSeguimiento">Estado del Evento</label>
-                    <select class="form-control" id="Rol" name="Rol" > 
+                <div class="col-xs-6">
+                    <label for="estado_del_evento">Estado del Evento</label>
+                    <select class="form-control" id="estado_del_evento" name="estado_del_evento" required=”required”> 
                     <?php
                     $tam = count($estadoEventos);
 
                     for($i=0; $i<$tam;$i++)
                     {
-                        if($estadoEventos[$i]['Estado_Evento']==$params[0]['Estado_Evento']){
-
-                           ?> <option value="<?php echo $estadoEventos[$i]['ID_EstadoEvento']?>" selected="selected"><?php echo $estadoEventos[$i]['Estado_Evento']?></option><?php
-                        }
-                        else {?>
+                        //if($estadoEventos[$i]['Estado_Evento']==$params[0]['Estado_Evento']){
+                            ?> 
+                           <!--<option value="<?php echo $estadoEventos[$i]['ID_EstadoEvento']?>" selected="selected"><?php echo $estadoEventos[$i]['Estado_Evento']?></option>-->
+                               <?php
+                        //}
+                        //else {?>
                             <option value="<?php echo $estadoEventos[$i]['ID_EstadoEvento']?>" ><?php echo $estadoEventos[$i]['Estado_Evento']?></option>   
-                    <?php }}  ?>
+                    <?php }//}  ?>
                     </select>
                 </div>
+                <br><br><br><br><br>
                 <button type="submit" class="btn btn-default">Guardar Seguimiento</button>
                 <td><a href="index.php?ctl=frm_eventos_listar" class="btn btn-default" role="button">Cancelar</a></td>
             </form>

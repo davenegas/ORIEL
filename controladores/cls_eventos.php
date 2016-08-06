@@ -174,6 +174,16 @@ class cls_eventos{
         ;
     }
     
+    //Este metodo realiza la modificación del estado del modulo, de activo a inactivo o viceversa en la bd
+  function edita_estado_evento($nuevo_estado){
+      $this->obj_data_provider->conectar();
+      //Llama al metodo para editar los datos correspondientes
+      $this->obj_data_provider->edita_datos("T_Evento","ID_EstadoEvento=".$nuevo_estado,"ID_Evento=".$this->id);
+      //Metodo de la clase data provider que desconecta la sesión con la base de datos
+      $this->obj_data_provider->desconectar();
+      $this->resultado_operacion=$this->obj_data_provider->getResultado_operacion();
+  }
+    
     //Obtener el último id de evento para saber que se debe ingresar
     
     function obtiene_id_ultimo_evento_ingresado(){
@@ -206,6 +216,7 @@ class cls_eventos{
                         LEFT OUTER JOIN T_Provincia ON T_Evento.ID_Provincia = T_Provincia.ID_Provincia
                         LEFT OUTER JOIN T_TipoPuntoBCR ON T_Evento.ID_Tipo_Punto = T_TipoPuntoBCR.ID_Tipo_Punto
                         LEFT OUTER JOIN T_PuntoBCR ON T_Evento.ID_PuntoBCR = T_PuntoBCR.ID_PuntoBCR
+                        LEFT OUTER JOIN T_Usuario ON T_Evento.ID_Usuario = T_Usuario.ID_Usuario
                         LEFT OUTER JOIN T_TipoEvento ON T_Evento.ID_Tipo_Evento = T_TipoEvento.ID_Tipo_Evento
                         LEFT OUTER JOIN T_EstadoEvento ON T_Evento.ID_EstadoEvento = T_EstadoEvento.ID_EstadoEvento", 
                     "T_Evento.ID_Evento, T_Evento.Fecha, T_Evento.Hora, 
@@ -213,7 +224,8 @@ class cls_eventos{
                         T_TipoPuntoBCR.Tipo_Punto, T_TipoPuntoBCR.ID_Tipo_Punto ,
                         T_PuntoBCR.Nombre, T_PuntoBCR.ID_PuntoBCR,
                         T_TipoEvento.Evento, T_TipoEvento.ID_Tipo_Evento,
-                        T_EstadoEvento.ID_EstadoEvento, T_EstadoEvento.Estado_Evento",
+                        T_EstadoEvento.ID_EstadoEvento, T_EstadoEvento.Estado_Evento, T_Usuario.ID_Usuario,
+                        T_Usuario.Nombre Nombre_Usuario,T_Usuario.Apellido",
                     "");
             $this->arreglo=$this->obj_data_provider->getArreglo();
             $this->obj_data_provider->desconectar();
@@ -225,6 +237,7 @@ class cls_eventos{
                         LEFT OUTER JOIN T_Provincia ON T_Evento.ID_Provincia = T_Provincia.ID_Provincia
                         LEFT OUTER JOIN T_TipoPuntoBCR ON T_Evento.ID_Tipo_Punto = T_TipoPuntoBCR.ID_Tipo_Punto
                         LEFT OUTER JOIN T_PuntoBCR ON T_Evento.ID_PuntoBCR = T_PuntoBCR.ID_PuntoBCR
+                        LEFT OUTER JOIN T_Usuario ON T_Evento.ID_Usuario = T_Usuario.ID_Usuario
                         LEFT OUTER JOIN T_TipoEvento ON T_Evento.ID_Tipo_Evento = T_TipoEvento.ID_Tipo_Evento
                         LEFT OUTER JOIN T_EstadoEvento ON T_Evento.ID_EstadoEvento = T_EstadoEvento.ID_EstadoEvento", 
                     "T_Evento.ID_Evento, T_Evento.Fecha, T_Evento.Hora, 
@@ -232,7 +245,8 @@ class cls_eventos{
                         T_TipoPuntoBCR.Tipo_Punto, T_TipoPuntoBCR.ID_Tipo_Punto ,
                         T_PuntoBCR.Nombre, T_PuntoBCR.ID_PuntoBCR,
                         T_TipoEvento.Evento, T_TipoEvento.ID_Tipo_Evento,
-                        T_EstadoEvento.ID_EstadoEvento, T_EstadoEvento.Estado_Evento",
+                        T_EstadoEvento.ID_EstadoEvento, T_EstadoEvento.Estado_Evento, T_Usuario.ID_Usuario,
+                        T_Usuario.Nombre Nombre_Usuario,T_Usuario.Apellido",
                     $this->condicion);
             $this->arreglo=$this->obj_data_provider->getArreglo();
             $this->obj_data_provider->desconectar();
@@ -244,8 +258,8 @@ class cls_eventos{
         try{
         $this->obj_data_provider->conectar();
             $this->arreglo=$this->obj_data_provider->trae_datos(
-                "T_DetalleEvento", 
-                "*",
+                "T_DetalleEvento left outer join T_Usuario on T_DetalleEvento.ID_Usuario=T_Usuario.ID_Usuario", 
+                "T_DetalleEvento.*,T_Usuario.Nombre Nombre_Usuario,T_Usuario.Apellido",
                 $this->condicion);
             $this->arreglo=$this->obj_data_provider->getArreglo();
             $this->obj_data_provider->desconectar();
@@ -257,7 +271,7 @@ class cls_eventos{
     public function ingresar_seguimiento_evento(){
         try{
             $this->obj_data_provider->conectar();
-            $sql=("call sp_set_detalleEvento('".$this->id2."','".$this->id."','".$this->fecha."','".$this->hora."','".$this->detalle."')");
+            $sql=("call sp_set_detalleEvento('".$this->id2."','".$this->id."','".$this->fecha."','".$this->hora."','".$this->detalle."','".$this->id_usuario."')");
             $this->obj_data_provider->insertar_datos_con_phpmyadmin($sql);
             //echo $sql;
         }  catch (Exception $exc){

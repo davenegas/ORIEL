@@ -10,11 +10,11 @@
     
     <body>
         <?php require_once 'encabezado.php'; ?>
-        <div class="container">
+        <div class="container animated fadeIn">
         <h2>Agregar Evento para Bitácora</h2>
         <!--<p>Mediante esta pantalla, podrá agregar o editar Roles de seguridad:</p>-->
         <hr/> 
-        <div class="container">
+        
         <form class="form-horizontal" role="form" method="POST" action="index.php?ctl=guardar_evento">
             <div class="col-xs-4">
               <label for="fecha">Fecha</label>
@@ -96,7 +96,7 @@
              <br/><br/><br/><br/>
             <div class="form-group">
                     <label for="seguimiento">Detalle del Evento</label>
-                    <textarea type="text" required=”required” class="form-control" id="seguimiento" name="seguimiento" value=""></textarea>
+                    <textarea type="text" class="form-control" id="seguimiento" name="seguimiento" value=""></textarea>
             </div>
            
             <div>
