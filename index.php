@@ -10,6 +10,8 @@ require_once __DIR__ . '/controladores/cls_areasapoyo.php';
 require_once __DIR__ . '/controladores/cls_puntosBCR.php';
 require_once __DIR__ . '/controladores/cls_empresa.php';
 require_once __DIR__ . '/controladores/cls_personal.php';
+require_once __DIR__ . '/controladores/cls_horario.php';
+require_once __DIR__ . '/controladores/cls_direccionIP.php';
 require_once __DIR__ . '/modelos/Controller.php';
 require_once __DIR__ . '/modelos/Encrypter.php';
 require_once __DIR__ . '/modelos/PHPMailerAutoload.php';
@@ -54,13 +56,13 @@ $map = array(
     //PuntosBCR
     'puntos_bcr_listar'=>array('controller'=>'Controller','action'=> 'puntos_bcr_listar'),
     'gestion_punto_bcr'=>array('controller'=>'Controller','action'=> 'gestion_punto_bcr'),
-    
+
     //Empresas
     'empresas_listar'=>array('controller'=>'Controller','action'=> 'empresas_listar'),
-    
+
     //Personal
     'personal_listar'=>array('controller'=>'Controller','action'=> 'personal_listar'),    
-    
+
     //Controlador de Usuarios
     'listar_usuarios'=> array('controller'=>'Controller','action'=>'listar_usuarios'),
     'gestion_usuarios' => array('controller'=> 'Controller','action'=>'gestion_usuarios'),
@@ -71,7 +73,7 @@ $map = array(
     'recordar_password'=>array('controller'=>'Controller', 'action'=>'recordar_password'),
     'iniciar_sistema_cambiando_clave'=>array('controller'=>'Controller', 'action'=>'iniciar_sistema_cambiando_clave'),
     'cambia_clave_usuario_post'=>array('controller'=>'Controller', 'action'=>'cambia_clave_usuario_post')
-    
+
     );
  
 

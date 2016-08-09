@@ -9,7 +9,7 @@
     <body>
         <?php require_once 'encabezado.php';?>
         
-        <div class="container">
+        <div class="container animated bounceInUp">
         <h2>Listado General de Usuarios</h2>
         <p>A continuación se detallan los diferentes usuarios que están registrados en el sistema:</p> <br>          
         <table id="tabla" class="display" cellspacing="0" width="100%">

@@ -80,4 +80,5 @@
       <?php require_once 'pie_de_pagina.php' ?>
     </body>
     </div>
+        </div>
 </html>

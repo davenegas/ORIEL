@@ -130,21 +130,20 @@ class Data_Provider{
        $this->resultado_operacion=true;
    }
    
-   public function trae_datos($table,$campos,$condicion){
+    public function trae_datos($table,$campos,$condicion){
        
-       unset($this->arreglo);
+        unset($this->arreglo);
        
-       if ($condicion==""){
-           $consulta=$this->conexion->query("select ".$campos." from ".$table.";");
-       }else{
-           //echo "select ".$campos." from ".$table." where ".$condicion.";";
-           $consulta=$this->conexion->query("select ".$campos." from ".$table." where ".$condicion.";");
-       } 
+        if ($condicion==""){
+            $consulta=$this->conexion->query("select ".$campos." from ".$table.";");
+            //echo ("select ".$campos." from ".$table.";");
+        }else{
+            $consulta=$this->conexion->query("select ".$campos." from ".$table." where ".$condicion.";");
+            //echo ("select ".$campos." from ".$table." where ".$condicion.";");
+        } 
         
         while($filas=$consulta->fetch_assoc()){
-            
-                $this->arreglo[]=$filas;
-           
+            $this->arreglo[]=$filas;   
         }
         
         if (!(isset($this->arreglo))){

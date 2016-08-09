@@ -866,30 +866,86 @@
     public function gestion_punto_bcr(){
         if(isset($_SESSION['nombre'])){
             $obj_Puntobcr = new cls_puntosBCR();
+            $obj_Personal = new cls_personal();
+            $obj_areasapoyo = new cls_areasapoyo();
+            $obj_empresa = new cls_empresa();
+            $obj_horario = new cls_horario();
+            $obj_direccionIP = new cls_direccionIP();
+            
             if ($_GET['id']==0){
                 
             }   else   {
-                echo($_GET['id']." Prueba");
+                //echo($_GET['id']." Prueba");
                 //Obtiene la informacion del PuntoBCR
                 $obj_Puntobcr->setCondicion("ID_PuntoBCR='".$_GET['id']."'");
                 $obj_Puntobcr->obtiene_todos_los_puntos_bcr();
                 $params= $obj_Puntobcr->getArreglo();
+                
                 //Obtiene todos los tipos de puntos BCR para listarlos
                 $obj_Puntobcr->setCondicion("");
                 $obj_Puntobcr->obtiene_los_tipo_puntos();
                 $tipo_puntos = $obj_Puntobcr->getArreglo();
+                
                 //Obtiene los telefonos del PuntoBCR
                 $obj_Puntobcr->setCondicion("T_Telefono.ID='".$_GET['id']."'");
                 $obj_Puntobcr->obtiene_telefonos_puntoBCR();
                 $telefonos= $obj_Puntobcr->getArreglo();
+                
                 //Obtiene Unidades Ejecutoras asignadas al Punto BCR
                 $obj_Puntobcr->setCondicion("T_UE_PuntoBCR.ID_PuntoBCR='".$_GET['id']."'");
                 $obj_Puntobcr->obtiene_unidades_ejecutoras();
                 $unidad_ejecutora= $obj_Puntobcr->getArreglo();
+                
                 //Obtiene Distrito->Cantón->Provincia
+                    //Distritos
+                $obj_Puntobcr->setCondicion("");
+                $obj_Puntobcr->obtiene_distritos();
+                $distritos = $obj_Puntobcr->getArreglo();
+                    //Cantones
+                $obj_Puntobcr->setCondicion("");
+                $obj_Puntobcr->obtiene_cantones();
+                $cantones = $obj_Puntobcr->getArreglo();
+                    //Provincias
+                $obj_Puntobcr->setCondicion("");
+                $obj_Puntobcr->obtiene_provincias();
+                $provincias = $obj_Puntobcr->getArreglo();
                 
-                //
+                //obtiene las areas de apoyo del sitio
+                $obj_areasapoyo->setCondicion("T_PuntoBCRAreaApoyo.ID_PuntoBCR='".$_GET['id']."'");
+                $obj_areasapoyo->obtiene_todos_las_areas_apoyo();
+                $areas_apoyo =$obj_areasapoyo->getArreglo();
                 
+                //Obtiene la informacion del personal
+                $obj_Personal->setCondicion("");
+                $condicion="";                
+                $tam=count($unidad_ejecutora);
+                if($tam>0){
+                    for ($i = 0; $i <$tam; $i++) {
+                        $condicion=$condicion."T_UnidadEjecutora.Numero_UE='".$unidad_ejecutora[$i]['Numero_UE']."'";
+                        if($tam<$i)
+                        {
+                            $condicion=$condicion." OR ";
+                        }
+                    }
+                    $obj_Personal->setCondicion($condicion);
+                    $obj_Personal->obtiene_todo_el_personal();
+                    $personal = $obj_Personal->getArreglo();
+                }
+                
+                //Obtiene empresa remesera
+                $obj_empresa->setCondicion("");
+                $obj_empresa->obtiene_todas_las_empresas();
+                $empresas= $obj_empresa->getArreglo();
+                
+                //Obtiene Horarios
+                $obj_horario->setCondicion("");
+                $obj_horario->obtiene_todos_los_horarios();
+                $horarios= $obj_horario->getArreglo();
+                
+                //Obtiene Direcciones IP del sitio
+                $obj_direccionIP->setCondicion("T_PuntoBCRDireccionIP.ID_PuntoBCR='".$_GET['id']."'");
+                $obj_direccionIP->obtiene_direccionesIP();
+                $direccionIP = $obj_direccionIP->getArreglo();
             }
             require __DIR__ . '/../vistas/plantillas/frm_puntos_bcr_editar.php';
         }   else    {

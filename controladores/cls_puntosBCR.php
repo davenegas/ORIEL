@@ -224,4 +224,36 @@ class cls_puntosBCR{
         $this->obj_data_provider->desconectar();
         $this->resultado_operacion=true;  
     }
+    
+    public function obtiene_distritos(){
+        $this->obj_data_provider->conectar();
+        $this->arreglo=$this->obj_data_provider->trae_datos(
+            "T_Distrito", 
+            "*",
+            $this->condicion);
+        $this->arreglo=$this->obj_data_provider->getArreglo();
+        $this->obj_data_provider->desconectar();
+        $this->resultado_operacion=true; 
+    }
+    
+    public function obtiene_cantones(){
+        $this->obj_data_provider->conectar();
+        $this->arreglo=$this->obj_data_provider->trae_datos(
+            "T_Canton", 
+            "*",
+            $this->condicion);
+        $this->arreglo=$this->obj_data_provider->getArreglo();
+        $this->obj_data_provider->desconectar();
+        $this->resultado_operacion=true; 
+    }
+    public function obtiene_provincias(){
+        $this->obj_data_provider->conectar();
+        $this->arreglo=$this->obj_data_provider->trae_datos(
+            "T_Provincia", 
+            "*",
+            $this->condicion);
+        $this->arreglo=$this->obj_data_provider->getArreglo();
+        $this->obj_data_provider->desconectar();
+        $this->resultado_operacion=true; 
+    }
 }?>

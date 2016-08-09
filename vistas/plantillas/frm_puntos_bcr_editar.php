@@ -99,7 +99,7 @@
 
                 for($i=0; $i<$tam;$i++)
                 {
-                    if($provincias[$i]['ID_Provincia']==$cantones[0]['ID_Provincia']){
+                    if($provincias[$i]['ID_Provincia']==$cantones[$distritos[$params[0]['ID_Distrito']]['ID_Canton']]['ID_Provincia']){
                         
                        ?> <option value="<?php echo $provincias[$i]['ID_Provincia']?>" selected="selected"><?php echo $provincias[$i]['Nombre_Provincia']?></option><?php
                     }
@@ -114,10 +114,10 @@
                 <select class="form-control" id="Canton" name="Canton" > 
                 <?php
                 $tam = count($cantones);
-
+                echo 'prueba';
                 for($i=0; $i<$tam;$i++)
                 {
-                    if($cantones[$i]['ID_Canton']==$distritos[0]['ID_Canton']){
+                    if($cantones[$i]['ID_Canton']==$distritos[$params[0]['ID_Distrito']]['ID_Canton']){
                         
                        ?> <option value="<?php echo $cantones[$i]['ID_Canton']?>" selected="selected"><?php echo $cantones[$i]['Nombre_Canton']?></option><?php
                     }
@@ -151,9 +151,9 @@
         </div>    
                 
         <br><br><br><br><br><br><br>
-        <h4>Información</h4>    
+        <h4>Información de Areas Apoyo</h4>    
         <div>
-            <table class="display col-md-12" id="areas_apoyo">
+            <table class="display col-md-12 table-striped quitar-float espacio-abajo" id="areas_apoyo">
                 <thead> 
                     <th>Area de Apoyo</th>
                     <th>Nombre de Area</th>
@@ -174,11 +174,13 @@
                     <?php } ?>
                 </tbody> 
             </table>
-            <table class="display col-md-12" id="personal">
+            <h4>Información de Personal del PuntoBCR</h4>
+            <table id="tabla" class="display" cellspacing="0" width="100%">
                 <thead> 
                     <th>Apellido y Nombre</th>
                     <th>Puesto</th>
                     <th>Numero telefono</th>
+                    <th>Puesto</th>
                     <th>Departamento</th>
                 </thead>
                 <tbody>
@@ -190,14 +192,16 @@
                         <td><?php echo $personal[$i]['Apellido_Nombre'];?></td>
                         <td><?php echo $personal[$i]['Puesto'];?></td>
                         <td><?php echo $personal[$i]['Numero'];?></td>
+                        <td><?php echo $personal[$i]['Puesto'];?></td>
                         <td><?php echo $personal[$i]['Departamento'];?></td>
                     </tr>
                     <?php } ?>
                 </tbody> 
             </table>
-            <div class="col-md-4">
+            <h4>Información Otra</h4>
+            <div class="col-md-4 espacio-abajo">
                 <label for="Empresa">Remesa</label>
-                <select class="form-control" id="Empresa" name="Empresa" > 
+                <select class="form-control" id="Empresa" name="Empresa"> 
                 <?php
                 $tam = count($empresas);
                 for($i=0; $i<$tam;$i++)
@@ -246,7 +250,7 @@
                 </select>
             </div>
             
-            <table class="display col-md-12" id="direccionIP">
+            <table class="display col-md-12  table-striped quitar-float espacio-abajo" id="direccionIP">
                 <thead> 
                     <th>Tipo Direccion</th>
                     <th>Direccion IP</th>
@@ -289,8 +293,8 @@
             </div>  
         </div>
         <br><br><br><br><br>
-            <button type="submit" class="btn btn-default" >Guardar</button>
-            <a href="index.php?ctl=listar_usuarios" class="btn btn-default" role="button">Cancelar</a>
+            <!--<button type="submit" class="btn btn-default" >Guardar</button>-->
+            <a href="index.php?ctl=puntos_bcr_listar" class="btn btn-default" role="button">Cancelar</a>
         </form>                               
         <?php require_once 'pie_de_pagina.php' ?>
     </body>

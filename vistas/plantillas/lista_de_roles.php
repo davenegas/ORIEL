@@ -9,7 +9,7 @@
     <body>
         <?php require_once 'encabezado.php';?>
         
-        <div class="container">
+        <div class="container animated bounceInUp">
         <h2>Listado General de Roles</h2>
         <p>A continuación se detallan los diferentes roles que están registrados en el sistema:</p>            
         <table id="tabla" class="display" cellspacing="0" width="100%">

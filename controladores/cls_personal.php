@@ -113,6 +113,7 @@ class cls_personal{
         $this->linkfoto;
         $this->observaciones="";
         $this->estado="";
+        $this->arreglo;
     }
     
     public function obtiene_todo_el_personal(){
@@ -123,28 +124,44 @@ class cls_personal{
 			LEFT OUTER JOIN	T_UnidadEjecutora ON T_Personal.ID_Unidad_Ejecutora = T_UnidadEjecutora.ID_Unidad_Ejecutora
 			LEFT OUTER JOIN T_Empresa ON T_Personal.ID_Empresa = T_Empresa.ID_Empresa
 			LEFT OUTER JOIN T_Telefono on T_Personal.ID_Persona = T_Telefono.ID
-			LEFT OUTER JOIN T_TipoTelefono ON T_Telefono.ID_Tipo_Telefono = T_TipoTelefono.ID_Tipo_Telefono", 
+			LEFT OUTER JOIN T_TipoTelefono ON T_Telefono.ID_Tipo_Telefono = T_TipoTelefono.ID_Tipo_Telefono
+			LEFT OUTER JOIN T_Puesto ON T_Personal.ID_Puesto = T_Puesto.ID_Puesto", 
                     "T_Personal.ID_Persona, T_Personal.Cedula, T_Personal.Apellido_Nombre, T_Personal.Direccion,
 			T_Personal.Link_Foto, T_Personal.Observaciones, T_Personal.Estado,
 			T_UnidadEjecutora.ID_Unidad_Ejecutora, T_UnidadEjecutora.Departamento,
 			T_Empresa.ID_Empresa, T_Empresa.Empresa,
 			T_TipoTelefono.Tipo_Telefono, 
-			T_Telefono.Numero",
-                    "T_TipoTelefono.Tipo_Telefono = 'Extensión Personas' OR 
-			T_TipoTelefono.Tipo_Telefono = 'Casa de Habitacion' OR 
-			T_TipoTelefono.Tipo_Telefono = 'Celular'");
+			T_Telefono.Numero,
+			T_Puesto.ID_Puesto, T_Puesto.Puesto",
+                    "(T_TipoTelefono.ID_Tipo_Telefono = '2' OR 
+			T_TipoTelefono.ID_Tipo_Telefono = '3' OR 
+			T_TipoTelefono.ID_Tipo_Telefono = '4')");
             $this->arreglo=$this->obj_data_provider->getArreglo();
             $this->obj_data_provider->desconectar();
             $this->resultado_operacion=true;
         }
         else{
             $this->arreglo=$this->obj_data_provider->trae_datos(
-                    "", 
-                    "",
-                    $this->condicion);
+                    "T_Personal
+			LEFT OUTER JOIN	T_UnidadEjecutora ON T_Personal.ID_Unidad_Ejecutora = T_UnidadEjecutora.ID_Unidad_Ejecutora
+			LEFT OUTER JOIN T_Empresa ON T_Personal.ID_Empresa = T_Empresa.ID_Empresa
+			LEFT OUTER JOIN T_Telefono on T_Personal.ID_Persona = T_Telefono.ID
+			LEFT OUTER JOIN T_TipoTelefono ON T_Telefono.ID_Tipo_Telefono = T_TipoTelefono.ID_Tipo_Telefono
+			LEFT OUTER JOIN T_Puesto ON T_Personal.ID_Puesto = T_Puesto.ID_Puesto", 
+                    "T_Personal.ID_Persona, T_Personal.Cedula, T_Personal.Apellido_Nombre, T_Personal.Direccion,
+			T_Personal.Link_Foto, T_Personal.Observaciones, T_Personal.Estado,
+			T_UnidadEjecutora.ID_Unidad_Ejecutora, T_UnidadEjecutora.Departamento,
+			T_Empresa.ID_Empresa, T_Empresa.Empresa,
+			T_TipoTelefono.Tipo_Telefono, 
+			T_Telefono.Numero,
+			T_Puesto.ID_Puesto, T_Puesto.Puesto",
+                    "(".$this->condicion.") AND (T_TipoTelefono.ID_Tipo_Telefono = '2' OR 
+			T_TipoTelefono.ID_Tipo_Telefono = '3' OR 
+			T_TipoTelefono.ID_Tipo_Telefono = '4') ORDER BY T_Personal.Apellido_Nombre");
             $this->arreglo=$this->obj_data_provider->getArreglo();
             $this->obj_data_provider->desconectar();
             $this->resultado_operacion=true;
         }
     }
+    
 }?>
