@@ -9,12 +9,12 @@
     </head>
     
     <body>
+     
         <?php require_once 'encabezado.php'; ?>
         <div class="container animated fadeIn">
         <h2>Agregar Evento para Bitácora</h2>
         <!--<p>Mediante esta pantalla, podrá agregar o editar Roles de seguridad:</p>-->
         <hr/> 
-        
         <form class="form-horizontal" role="form" method="POST" action="index.php?ctl=guardar_evento">
             <div class="col-xs-4">
               <label for="fecha">Fecha</label>
@@ -76,29 +76,17 @@
               <select class="form-control" required=”required” id="punto_bcr" name="punto_bcr" ></select>
             </div>
             <br/><br/><br/><br/>
-               <div class="col-xs-4">
-                    <label for="estado_evento">Estado del Evento</label>
-                    <select class="form-control" required=”required” id="estado_evento" name="estado_evento" > 
-                    <?php
-                    $tam = count($estadoEventos);
-
-                    for($i=0; $i<$tam;$i++)
-                    {
-                        if($estadoEventos[$i]['Estado_Evento']==$params[0]['Estado_Evento']){
-
-                           ?> <option value="<?php echo $estadoEventos[$i]['ID_EstadoEvento']?>" selected="selected"><?php echo $estadoEventos[$i]['Estado_Evento']?></option><?php
-                        }
-                        else {?>
-                            <option value="<?php echo $estadoEventos[$i]['ID_EstadoEvento']?>" ><?php echo $estadoEventos[$i]['Estado_Evento']?></option>   
-                    <?php }}  ?>
-                    </select>
-             </div>
-             <br/><br/><br/><br/>
-            <div class="form-group">
+            
+            <div class="col-xs-6">
                     <label for="seguimiento">Detalle del Evento</label>
                     <textarea type="text" class="form-control" id="seguimiento" name="seguimiento" value=""></textarea>
             </div>
-           
+           <div class="col-xs-6">
+              <label for="estado_evento">Estado Evento</label>
+              <select class="form-control" required=”required” id="estado_evento" name="estado_evento" ></select>
+            </div>
+            <br/><br/><br/>
+             <br/><br/>
             <div>
             <button type="submit" class="btn btn-default" >Guardar</button>
             <a href="index.php?ctl=frm_eventos_listar" class="btn btn-default" role="button">Cancelar</a>
