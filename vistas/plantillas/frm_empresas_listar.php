@@ -50,8 +50,7 @@
                     &observaciones=<?php echo $params[$i]['Observaciones']?>
                     &empresa=<?php echo $params[$i]['Empresa']?>">
                 Activar/Desactivar</a></td>
-           <td><a href="index.php?ctl=empresa_gestion
-                    &id=<?php echo $params[$i]['ID_Empresa']?>
+           <td><a href="index.php?ctl=empresa_gestion&id=<?php echo $params[$i]['ID_Empresa']?>
                     &estado=<?php echo $params[$i]['Estado']?>
                     &observaciones=<?php echo $params[$i]['Observaciones']?>
                     &empresa=<?php echo $params[$i]['Empresa']?>">
