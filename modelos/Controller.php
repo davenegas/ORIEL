@@ -800,6 +800,10 @@
         } 
     }
     
+    //////////////////////////
+    /*Metodos relacionados del area de Tipos de Evento de Seguridad del Sistema*/
+    //////////////////////////
+    
     public function tipo_eventos_listar(){      
         if(isset($_SESSION['nombre'])){
             $obj_eventos=new cls_eventos();
@@ -812,6 +816,48 @@
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         } 
     }
+    
+    public function tipo_eventos_gestion(){
+        if(isset($_SESSION['nombre'])){
+            if ($_GET['id']==0){
+                $observaciones="";
+                $estado=1;
+                $ide=$_GET['id'];
+                $evento="";
+            }   else   {
+                $ide=$_GET['id'];
+                $evento=$_GET['evento'];
+                $observaciones=$_GET['observaciones'];
+                $prioridad = $_GET['prioridad'];
+                $estado=$_GET['estado'];
+            }
+            require __DIR__ . '/../vistas/plantillas/frm_tipo_eventos_gestion.php';
+        }   else    {
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }
+    }
+    
+    public function tipo_eventos_guardar(){
+        if(isset($_SESSION['nombre'])){
+            $obj_eventos = new cls_eventos();
+            if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+                $obj_eventos->setId($_GET['id']);
+                $obj_eventos->setTipo_evento($_POST['evento']);
+                $obj_eventos->setObservaciones($_POST['observaciones']);
+                $obj_eventos->setEstado($_POST['estado']);
+                $obj_eventos->setPrioridad($_POST['prioridad']);
+                $obj_eventos->guardar_tipo_evento();
+                $this->tipo_eventos_listar();
+            }
+        } else    {
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }      
+    }
+    
     public function areas_apoyo_listar(){
         if(isset($_SESSION['nombre'])){
             $obj_areasApoyo=new cls_areasapoyo();
@@ -837,12 +883,81 @@
         }
     }
     
+    //////////////////////////
+    /*Metodos relacionados del area de Empresas de Seguridad del Sistema*/
+    //////////////////////////
+    
     public function empresas_listar(){
         if(isset($_SESSION['nombre'])){
             $obj_empresas=new cls_empresa();
             $obj_empresas->obtiene_todas_las_empresas();
             $params= $obj_empresas->getArreglo();
             require __DIR__ . '/../vistas/plantillas/frm_empresas_listar.php';
+        }else{
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }
+    }
+    
+    public function empresa_gestion(){
+        if(isset($_SESSION['nombre'])){
+            if ($_GET['id']==0){
+                $observaciones="";
+                $estado=1;
+                $ide=$_GET['id'];
+                $empresa="";
+            }   else   {
+                $ide=$_GET['id'];
+                $observaciones=$_GET['observaciones'];
+                $estado=$_GET['estado'];
+                $empresa=$_GET['empresa'];
+            }
+            require __DIR__ . '/../vistas/plantillas/frm_empresas_editar.php';
+        }   else    {
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }
+    }
+    
+    public function empresa_guardar(){
+        if(isset($_SESSION['nombre'])){
+            $obj_empresas = new cls_empresa();
+            if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+                $obj_empresas->setId($_GET['id']);
+                $obj_empresas->setEmpresa($_POST['empresa']);
+                $obj_empresas->setObservaciones($_POST['observaciones']);
+                $obj_empresas->setEstado($_POST['estado']);
+                $obj_empresas->guardar_empresa();
+                $this->empresas_listar();
+            }
+            
+        } else    {
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }      
+    }
+    
+    public function empresa_cambiar_estado() {
+        if(isset($_SESSION['nombre'])){
+            if (isset($_GET['id'])) {
+                if (isset($_GET['estado'])) { 
+                    $obj_empresas = new cls_empresa();
+                    $obj_empresas->setId($_GET['id']);
+                    $obj_empresas->setEmpresa($_GET['empresa']);
+                    $obj_empresas->setObservaciones($_GET['observaciones']);
+                    if($_GET['estado']==1){
+                        $obj_empresas->setEstado("0");
+                    }
+                    else {
+                        $obj_empresas->setEstado("1");
+                    }
+                    $obj_empresas->guardar_empresa();
+                    $this->empresas_listar();
+                }
+            }
         }else{
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";

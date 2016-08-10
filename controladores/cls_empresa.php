@@ -93,4 +93,10 @@ class cls_empresa{
             $this->resultado_operacion=true;
         }
     }
+    
+    public function guardar_empresa() {
+        $this->obj_data_provider->conectar();
+        $sql=("call sp_set_empresa('".$this->id."','".$this->empresa."','".$this->observaciones."','".$this->estado."')");
+        $this->obj_data_provider->insertar_datos_con_phpmyadmin($sql);
+    }
 } ?>

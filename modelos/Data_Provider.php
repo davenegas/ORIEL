@@ -164,6 +164,7 @@ class Data_Provider{
    public function insertar_datos_con_phpmyadmin($sql){
        $consulta=$this->conexion->query($sql);
        $this->resultado_operacion=true;
+       echo($sql);
    }
 
    public function edita_datos($table,$campos_valores,$condicion){

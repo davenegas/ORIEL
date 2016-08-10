@@ -18,6 +18,7 @@
               <th>ID Empresa</th>
               <th>Empresa</th>
               <th>Observaciones</th>
+              <th>Estado</th>
               <th>Cambiar Estado</th>
               <th>Mantenmiento</th>
             </tr>
@@ -43,19 +44,25 @@
             }
             ?>
                 
-           <td><a href="index.php?ctl=cambiar_estado_empresa&id=
-               <?php echo $params[$i]['ID_Empresa']?>&estado=<?php echo $params[$i]['Estado']?>">
-                   Activar/Desactivar</a></td>
-           <td><a href="index.php?ctl=gestion_empresa&id=
-               <?php echo $params[$i]['ID_Empresa']?>&estado=<?php echo $params[$i]['Estado']?>&descripcion=<?php echo $params[$i]['Observaciones']?>">
-                   Editar</a></td>
+           <td><a href="index.php?ctl=empresa_cambiar_estado
+                    &id=<?php echo $params[$i]['ID_Empresa']?>
+                    &estado=<?php echo $params[$i]['Estado']?>
+                    &observaciones=<?php echo $params[$i]['Observaciones']?>
+                    &empresa=<?php echo $params[$i]['Empresa']?>">
+                Activar/Desactivar</a></td>
+           <td><a href="index.php?ctl=empresa_gestion
+                    &id=<?php echo $params[$i]['ID_Empresa']?>
+                    &estado=<?php echo $params[$i]['Estado']?>
+                    &observaciones=<?php echo $params[$i]['Observaciones']?>
+                    &empresa=<?php echo $params[$i]['Empresa']?>">
+                Editar</a></td>
             </tr>     
                     
             <?php }
             ?>
             </tbody>
         </table>
-        <a href="index.php?ctl=frm_empresas_gestion&id=0" class="btn btn-default" role="button">Agregar Nueva Empresa</a>
+        <a href="index.php?ctl=empresa_gestion&id=0" class="btn btn-default" role="button">Agregar Nueva Empresa</a>
         </div>
             <?php require 'vistas/plantillas/pie_de_pagina.php' ?>
     </body>

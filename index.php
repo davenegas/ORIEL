@@ -48,8 +48,12 @@ $map = array(
     'guardar_evento' =>  array('controller'=>'Controller','action'=>'guardar_evento'),
     'guardar_seguimiento_evento'=>  array('controller'=>'Controller','action'=> 'guardar_seguimiento_evento'),
     'frm_eventos_editar'=>  array('controller'=>'Controller','action'=>  'frm_eventos_editar'),
+    
+    //Tipo de eventos
     'tipo_eventos_listar'=>array('controller'=>'Controller','action'=> 'tipo_eventos_listar'),
-
+    'tipo_eventos_guardar'=>array('controller'=>'Controller','action'=> 'tipo_eventos_guardar'),
+    'tipo_eventos_gestion'=>array('controller'=>'Controller','action'=> 'tipo_eventos_gestion'),
+    
     //Areas de apoyo
     'areas_apoyo_listar'=>array('controller'=>'Controller','action'=> 'areas_apoyo_listar'),
     
@@ -59,7 +63,10 @@ $map = array(
 
     //Empresas
     'empresas_listar'=>array('controller'=>'Controller','action'=> 'empresas_listar'),
-
+    'empresa_gestion'=>array('controller'=>'Controller','action'=> 'empresa_gestion'),
+    'empresa_guardar'=>array('controller'=>'Controller','action'=> 'empresa_guardar'),
+    'empresa_cambiar_estado'=>array('controller'=>'Controller','action'=> 'empresa_cambiar_estado'),
+    
     //Personal
     'personal_listar'=>array('controller'=>'Controller','action'=> 'personal_listar'),    
 

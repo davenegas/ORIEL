@@ -18,7 +18,25 @@ class cls_eventos{
     public $seguimiento;
     public $id_ultimo_evento_ingresado;
     public $id_usuario;
+    public $observaciones;
+    public $prioridad;
     
+    function getPrioridad() {
+        return $this->prioridad;
+    }
+
+    function setPrioridad($prioridad) {
+        $this->prioridad = $prioridad;
+    }
+
+    function getObservaciones() {
+        return $this->observaciones;
+    }
+
+    function setObservaciones($observaciones) {
+        $this->observaciones = $observaciones;
+    }
+
     function getId_usuario() {
         return $this->id_usuario;
     }
@@ -171,6 +189,8 @@ class cls_eventos{
         $this->tipo_evento="";
         $this->estado="";
         $this->detalle="";
+        $this->observaciones="";
+        $this->prioridad="";
         ;
     }
     
@@ -185,7 +205,6 @@ class cls_eventos{
   }
     
     //Obtener el último id de evento para saber que se debe ingresar
-    
     function obtiene_id_ultimo_evento_ingresado(){
       //Establece la conexión con la bd
       $this->obj_data_provider->conectar();
@@ -301,7 +320,7 @@ class cls_eventos{
             echo $exc->getTraceAsString();
         }
     }
-    
+    //Tipos de eventos
     public function obtener_todos_los_tipos_eventos(){
         try{
             $this->obj_data_provider->conectar();
@@ -314,7 +333,13 @@ class cls_eventos{
         }
     }
     
-     public function obtener_todas_las_provincias(){
+    public function guardar_tipo_evento() {
+        $this->obj_data_provider->conectar();
+        $sql=("call sp_set_tipoEvento('".$this->id."','".$this->tipo_evento."','".$this->prioridad."','".$this->observaciones."','".$this->estado."')");
+        $this->obj_data_provider->insertar_datos_con_phpmyadmin($sql);
+    }
+    
+    public function obtener_todas_las_provincias(){
         try{
             $this->obj_data_provider->conectar();
             $this->arreglo=$this->obj_data_provider->trae_datos("T_Provincia", "*", "Estado=1");

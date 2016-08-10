@@ -18,6 +18,7 @@
               <th>ID</th>
               <th>Evento</th>
               <th>Observaciones</th>
+              <th>Prioridad</th>
               <th>Gestión Estado</th>
               <th>Cambiar Estado</th>
               <th>Mantenmiento</th>
@@ -32,6 +33,7 @@
                 <td><?php echo $params[$i]['ID_Tipo_Evento'];?></td>
                 <td><?php echo $params[$i]['Evento'];?></td>
                 <td><?php echo $params[$i]['Observaciones'];?></td>
+                <td><?php echo $params[$i]['Prioridad'];?></td>
             
             <?php 
             if ($params[$i]['Estado']==1){
@@ -45,11 +47,17 @@
             }
             ?>
                 
-           <td><a href="index.php?ctl=cambiar_estado_tipo_evento&id=
-               <?php echo $params[$i]['ID_Tipo_Evento']?>&estado=<?php echo $params[$i]['Estado']?>">
+           <td><a href="index.php?ctl=cambiar_estado_tipo_evento
+                  &id=<?php echo $params[$i]['ID_Tipo_Evento']?>
+                  &evento=<?php echo $params[$i]['Evento']?>
+                  &estado=<?php echo $params[$i]['Estado']?>
+                  &observaciones=<?php echo $params[$i]['Observaciones']?>">
                    Activar/Desactivar</a></td>
-           <td><a href="index.php?ctl=gestion_tipo_evento&id=
-               <?php echo $params[$i]['ID_Tipo_Evento']?>&estado=<?php echo $params[$i]['Estado']?>&descripcion=<?php echo $params[$i]['Observaciones']?>">
+           <td><a href="index.php?ctl=tipo_eventos_gestion&id=<?php echo $params[$i]['ID_Tipo_Evento']?>
+                  &evento=<?php echo $params[$i]['Evento']?>
+                  &estado=<?php echo $params[$i]['Estado']?>
+                  &observaciones=<?php echo $params[$i]['Observaciones']?>
+                  &prioridad=<?php echo $params[$i]['Prioridad']?>">
                    Editar</a></td>
             </tr>     
                     
@@ -57,7 +65,7 @@
             ?>
             </tbody>
         </table>
-        <a href="index.php?ctl=frm_tipo_eventos_gestion&id=0" class="btn btn-default" role="button">Agregar un Nuevo Tipo Evento</a>
+        <a href="index.php?ctl=tipo_eventos_gestion&id=0" class="btn btn-default" role="button">Agregar un Nuevo Tipo Evento</a>
         </div>
             <?php require 'vistas/plantillas/pie_de_pagina.php' ?>
     </body>
