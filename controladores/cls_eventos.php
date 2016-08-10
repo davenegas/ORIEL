@@ -209,7 +209,7 @@ class cls_eventos{
       //Establece la conexión con la bd
       $this->obj_data_provider->conectar();
       
-      $this->obj_data_provider->trae_datos("T_Evento","max(ID_Evento) ID_Evento","ID_Usuario=".$this->id_usuario);
+      $this->obj_data_provider->trae_datos("T_Evento","max(ID_Evento) ID_Evento","ID_Usuario=".$this->id_usuario." AND ID_Tipo_Evento=".$this->tipo_evento." AND ID_PuntoBCR=".$this->punto_bcr);
       
       $this->arreglo=$this->obj_data_provider->getArreglo();
      
@@ -223,6 +223,54 @@ class cls_eventos{
       }else
       {
           $this->setId_ultimo_evento_ingresado(1);
+      }    
+  }
+  
+  
+  //Valida que no se ingrese el mismo tipo de evento en un sitio, si ya hay uno pendiente
+    
+    function existe_abierto_este_tipo_de_evento_en_este_sitio(){
+      //Establece la conexión con la bd
+      $this->obj_data_provider->conectar();
+      
+      $this->obj_data_provider->trae_datos("T_Evento","*","ID_Tipo_Evento=".$this->tipo_evento." AND ID_PuntoBCR=".$this->punto_bcr." AND ID_EstadoEvento<>3");
+      
+      $this->arreglo=$this->obj_data_provider->getArreglo();
+     
+      $this->obj_data_provider->desconectar();
+      
+      $this->resultado_operacion=true;
+      
+      if (count($this->arreglo)>0){
+          return true;
+         
+      }else
+      {
+          return false;
+      }    
+  }
+  
+  
+  //Valida que no se ingrese el mismo tipo de evento en un sitio, si ya hay uno pendiente
+    
+    function obtiene_prioridad_de_tipo_de_evento(){
+      //Establece la conexión con la bd
+      $this->obj_data_provider->conectar();
+      
+      $this->obj_data_provider->trae_datos("T_TipoEvento","*","ID_Tipo_Evento=".$this->tipo_evento);
+      
+      $this->arreglo=$this->obj_data_provider->getArreglo();
+     
+      $this->obj_data_provider->desconectar();
+      
+      $this->resultado_operacion=true;
+      
+      if (count($this->arreglo)>0){
+          return $this->arreglo[0]['Prioridad'];
+         
+      }else
+      {
+          return 0;
       }    
   }
     

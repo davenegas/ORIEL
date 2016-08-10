@@ -19,4 +19,14 @@ $(document).ready(function(){
                     });            
                 });
            });
+           $("#tipo_evento").change(function () {
+                   $("#tipo_evento option:selected").each(function () {
+                    id_tipo_evento = $(this).val();
+                    //id_tipo_punto_bcr=document.getElementById('tipo_punto').value;
+                    $.post("index.php?ctl=actualiza_en_vivo_estado_evento", { id_tipo_evento: id_tipo_evento}, function(data){
+                        $("#estado_evento").html(data);
+                        
+                    });            
+                });
+           });
         });

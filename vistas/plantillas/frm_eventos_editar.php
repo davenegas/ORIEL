@@ -13,13 +13,15 @@
             <h1 align="center">Detalle de Evento</h1>
             <hr/>
             <h3>General</h3>
+           
         <!--<p>A continuación se detallan los diferentes eventos que están registrados en el sistema:</p>-->            
         <table class="table">
-          <thead>
+          <thead> 
                
             <tr>
                 <th>Fecha</th>
                 <th>Hora</th>
+                <th>Lapso</th>
                 <th>Provincia</th>
                 <th>Tipo Punto</th>
                 <th>Punto BCR</th>
@@ -34,8 +36,14 @@
             for ($i = 0; $i <$tam; $i++) {
             ?>
             <tr>
-                <td><?php echo $params[$i]['Fecha'];?></td>
+                <?php
+                $fecha_evento = date_create($params[$i]['Fecha']);
+                $fecha_actual = date_create(date("d-m-Y"));
+                $dias_abierto= date_diff($fecha_evento, $fecha_actual);
+                ?>
+                <td><?php echo date_format($fecha_evento, 'd/m/Y');?></td>
                 <td><?php echo $params[$i]['Hora'];?></td>
+                <td align="center"><?php echo $dias_abierto->format('%a días');?></td>
                 <td><?php echo $params[$i]['Nombre_Provincia'];?></td>
                 <td><?php echo $params[$i]['Tipo_Punto'];?></td>
                 <td><?php echo $params[$i]['Nombre'];?></td>
@@ -50,6 +58,7 @@
         <!--Detalles de Evento--> 
             <hr/>
             <h3>Seguimientos asociados</h3>
+            
         <table class="table">
             <thead>
                 <tr>
@@ -65,7 +74,12 @@
                 for ($i = 0; $i <$tam; $i++) {
                 ?>
                 <tr>
-                <td><?php echo $detalleEvento[$i]['Fecha'];?></td>
+                <?php
+                $fecha_evento = date_create($detalleEvento[$i]['Fecha']);
+                $fecha_actual = date_create(date("d-m-Y"));
+                $dias_abierto= date_diff($fecha_evento, $fecha_actual);
+                ?>
+                <td><?php echo date_format($fecha_evento, 'd/m/Y');?></td>
                 <td><?php echo $detalleEvento[$i]['Hora'];?></td> 
                 <td><?php echo $detalleEvento[$i]['Detalle'];?></td>
                 <td><?php echo $detalleEvento[$i]['Nombre_Usuario']." ".$detalleEvento[$i]['Apellido'] ?></td>
@@ -74,12 +88,14 @@
         </table>   
             <hr/>
             <h3>Agregar nuevo seguimiento</h3>
+            
                 <!--Agregar nuevo detalle o seguimiento del evento-->
             <form class="form-horizontal" role="form" method="POST" action="index.php?ctl=guardar_seguimiento_evento&id=<?php echo trim($ide);?>">
                 <div class="col-xs-6">
                     <label for="Fecha">Fecha Seguimiento</label>
                     <input type="date" required=”required” class="form-control" id="Fecha" name="Fecha" value="<?php echo date("Y-m-d");?>">
                 </div>
+                
                 <?php date_default_timezone_set('America/Costa_Rica'); ?>
                 <div class="col-xs-6">
                     <label for="Hora">Hora Seguimiento</label>
@@ -89,22 +105,39 @@
                     <label for="DetalleSeguimiento">Detalle del Seguimiento</label>
                     <textarea type="text" required=”required” class="form-control" id="DetalleSeguimiento" name="DetalleSeguimiento" value=""></textarea>
                 </div>
+                
                 <div class="col-xs-6">
                     <label for="estado_del_evento">Estado del Evento</label>
                     <select class="form-control" id="estado_del_evento" name="estado_del_evento" required=”required”> 
                     <?php
                     $tam = count($estadoEventos);
-
                     for($i=0; $i<$tam;$i++)
                     {
-                        //if($estadoEventos[$i]['Estado_Evento']==$params[0]['Estado_Evento']){
+                        if ($_SESSION['rol']==2){
+                          if ($prioridad_evento!=1){ 
+                             if ($estadoEventos[$i]['Estado_Evento']!="Cerrado"){
                             ?> 
-                           <!--<option value="<?php echo $estadoEventos[$i]['ID_EstadoEvento']?>" selected="selected"><?php echo $estadoEventos[$i]['Estado_Evento']?></option>-->
+                             <option value="<?php echo $estadoEventos[$i]['ID_EstadoEvento']?>" ><?php echo $estadoEventos[$i]['Estado_Evento']?></option>   
                                <?php
-                        //}
-                        //else {?>
-                            <option value="<?php echo $estadoEventos[$i]['ID_EstadoEvento']?>" ><?php echo $estadoEventos[$i]['Estado_Evento']?></option>   
-                    <?php }//}  ?>
+                             }
+                          }else{
+                               if ($estadoEventos[$i]['Estado_Evento']!="Solicitar Cierre"){
+                                    ?>
+                                   <option value="<?php echo $estadoEventos[$i]['ID_EstadoEvento']?>" ><?php echo $estadoEventos[$i]['Estado_Evento']?></option>   
+                              <?php
+                                }
+                          
+                          }
+                        }else{
+                             if ($estadoEventos[$i]['Estado_Evento']!="Solicitar Cierre"){
+                               ?>    
+                               <option value="<?php echo $estadoEventos[$i]['ID_EstadoEvento']?>" ><?php echo $estadoEventos[$i]['Estado_Evento']?></option>   
+                               
+                               <?php
+                             }
+                          }
+                    }
+                               ?> 
                     </select>
                 </div>
                 <br><br><br><br><br>

@@ -716,34 +716,29 @@
                 $obj_eventos->setEstado_evento($_POST['estado_evento']);
                 $obj_eventos->setId_usuario($_SESSION['id']);
                 $obj_eventos->setEstado(1);
-                $obj_eventos->ingresar_evento();
                 
-            if(isset($_POST['seguimiento'])&&($_POST['seguimiento']!="")){
-                   echo 'alert("si entro")'; 
-                   $obj_eventos->setDetalle($_POST['seguimiento']);
-                   $obj_eventos->setId2(0);
-                   $obj_eventos->obtiene_id_ultimo_evento_ingresado(); 
-                   $obj_eventos->setId($obj_eventos->getId_ultimo_evento_ingresado());
-                   $obj_eventos->ingresar_seguimiento_evento();  
-                   
+                if (!$obj_eventos->existe_abierto_este_tipo_de_evento_en_este_sitio()){
+                    $obj_eventos->ingresar_evento();
+
+                    if(isset($_POST['seguimiento'])&&($_POST['seguimiento']!="")){
+                       //echo 'alert("si entro")'; 
+                       $obj_eventos->setDetalle($_POST['seguimiento']);
+                       $obj_eventos->setId2(0);
+                       $obj_eventos->obtiene_id_ultimo_evento_ingresado(); 
+                       $obj_eventos->setId($obj_eventos->getId_ultimo_evento_ingresado());
+                       $obj_eventos->ingresar_seguimiento_evento();  
+
+                    }
+                    $this->frm_eventos_listar();
+                }else{
+                    //echo '<script>alert("Ya existe este evento abierto para este punto BCR. Proceda a cerrarlo o agregue un seguimiento!!!")</script>';
+                    //require __DIR__ . '/../vistas/plantillas/frm_eventos_agregar.php';
+                    echo "<script type=\"text/javascript\">alert('Ya existe este evento abierto para este punto BCR. Proceda a cerrarlo o agregue un seguimiento!!!');history.go(-1);</script>";
+                    exit;
+                     /*$desde = $_SERVER['HTTP_REFERER'];
+                     header ("Location: ".$desde);*/
+                    //$this->frm_eventos_agregar();
                 }
-                
-                
-                //$obj_eventos=new cls_eventos();
-                $this->frm_eventos_listar();
-                                
-                
-                
-                //echo $obj_eventos->getId_ultimo_evento_ingresado();
-                
-               /* echo $_POST['fecha'];
-                echo $_POST['hora'];
-                echo $_POST['tipo_evento'];
-                echo $_POST['nombre_provincia'];
-                echo $_POST['tipo_punto'];
-                echo $_POST['punto_bcr'];
-                echo $_POST['estado_evento'];
-                echo $_POST['seguimiento'];*/
             }
         }else {
             $tipo_de_alerta="alert alert-warning";
@@ -761,6 +756,13 @@
                 $obj_eventos->setCondicion("ID_Evento=$ide");
                 $obj_eventos->obtiene_todos_los_eventos();
                 $params= $obj_eventos->getArreglo();
+                
+                if (count($params)>0){
+                     $obj_eventos->setTipo_evento($params[0]['ID_Tipo_Evento']);
+                     $prioridad_evento=$obj_eventos->obtiene_prioridad_de_tipo_de_evento();
+                     
+                }
+               
                 //Obtiene los detalles del evento seleccionado
                 $obj_eventos->obtiene_detalle_evento();
                 $detalleEvento= $obj_eventos->getArreglo();
@@ -883,9 +885,57 @@
         }
     }
     
+
     //////////////////////////
     /*Metodos relacionados del area de Empresas de Seguridad del Sistema*/
     //////////////////////////
+
+  // Metodo que permite actualizar en tiempo real la lista de estado de evento de bitacora dependiendo
+    // de la prioridad del tipo de evento y rol de usuario que esté manipulando la información
+    public function actualiza_en_vivo_estado_evento(){
+        
+        if(isset($_SESSION['nombre'])){
+        
+             $obj_even = new cls_eventos();
+        
+             $id_tipo_evento= $_POST['id_tipo_evento'];
+             
+             $obj_even->setTipo_evento($id_tipo_evento);
+             $prioridad_tipo_evento= $obj_even->obtiene_prioridad_de_tipo_de_evento();
+             
+             $obj_even->obtener_seguimientos();
+             $estadoEven = $obj_even->getArreglo(); 
+      
+             $tam = count($estadoEven);
+
+             for($i=0; $i<$tam;$i++)
+                    {
+                //if($estadoEventos[$i]['Estado_Evento']==$params[0]['Estado_Evento']){
+                 if ($_SESSION['rol']==2){
+                   if ($prioridad_tipo_evento!=1){ 
+                       if ($estadoEven[$i]['Estado_Evento']!="Cerrado"){
+                         $html .= '<option value="'.$estadoEven[$i]['ID_EstadoEvento'].'">'.$estadoEven[$i]['Estado_Evento'].'</option>';
+                       }
+                   }else{
+                       if ($estadoEven[$i]['Estado_Evento']!="Solicitar Cierre"){
+                         $html .= '<option value="'.$estadoEven[$i]['ID_EstadoEvento'].'">'.$estadoEven[$i]['Estado_Evento'].'</option>';
+                       }                       
+                   }
+                 }else{
+                     if ($estadoEven[$i]['Estado_Evento']!="Solicitar Cierre"){
+                         $html .= '<option value="'.$estadoEven[$i]['ID_EstadoEvento'].'">'.$estadoEven[$i]['Estado_Evento'].'</option>';
+                       }     
+                 }
+              }        
+             echo $html;
+             
+        }else{
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }
+       
+    }
     
     public function empresas_listar(){
         if(isset($_SESSION['nombre'])){
