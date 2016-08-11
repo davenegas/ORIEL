@@ -1124,38 +1124,43 @@
     
     // Metodo que permite actualizar en tiempo real la lista de cantones
     public function actualiza_en_vivo_canton(){
-        
-        echo 'hola';
-        
         if(isset($_SESSION['nombre'])){
-        
-             $obj_puntos_bcr = new cls_puntosBCR();
-        
-             $id_provincia= $_POST['id_provincia'];
-             
-             $obj_puntos_bcr->setCondicion("ID_Provincia=".$id_provincia);
-             
-             $obj_puntos_bcr->obtiene_cantones();
-             
-             $cantones=$obj_puntos_bcr->getArreglo();
-                              
-             $tam = count($cantones);
+            $obj_puntos_bcr = new cls_puntosBCR();
+            $id_provincia= $_POST['id_provincia'];
+            $obj_puntos_bcr->setCondicion("ID_Provincia=".$id_provincia);
+            $obj_puntos_bcr->obtiene_cantones();
+            $cantones=$obj_puntos_bcr->getArreglo(); 
+            $tam = count($cantones);
 
-             for($i=0; $i<$tam;$i++)
-             {
-                
-                $html .= '<option value="'.$cantones[$i]['ID_Canton'].'">'.$cantones[$i]['Nombre_Canton'].'</option>';
-                        
-              }        
-             echo $html;
-             
+            for($i=0; $i<$tam;$i++){
+                $html .= '<option value="'.$cantones[$i]['ID_Canton'].'">'.$cantones[$i]['Nombre_Canton'].'</option>';            
+            }        
+            echo $html;
         }else{
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }
-       
     }
     
+    public function actualiza_en_vivo_distrito(){
+        if(isset($_SESSION['nombre'])){
+            $obj_puntos_bcr = new cls_puntosBCR();
+            $id_canton= $_POST['id_canton'];
+            $obj_puntos_bcr->setCondicion("ID_Canton=".$id_canton);
+            $obj_puntos_bcr->obtiene_distritos();
+            $distritos=$obj_puntos_bcr->getArreglo(); 
+            $tam = count($distritos);
+
+            for($i=0; $i<$tam;$i++){
+                $html .= '<option value="'.$distritos[$i]['ID_Distrito'].'">'.$distritos[$i]['Nombre_Distrito'].'</option>';            
+            }        
+            echo $html;
+        }else{
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }
+    }
 } 
      

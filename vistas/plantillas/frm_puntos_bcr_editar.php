@@ -18,7 +18,7 @@
         <div class="rcorners2">    
             <div class="col-md-4">
               <label for="ID_PuntoBCR">ID Punto</label>
-              <input type="text" required="ID_PuntoBCR" class="form-control" id="ID_PuntoBCR" name="ID_PuntoBCR" value="<?php echo $params[0]['ID_PuntoBCR'];?>">
+              <input type="text" required="ID_PuntoBCR" readonly class="form-control" id="ID_PuntoBCR" name="ID_PuntoBCR" value="<?php echo $params[0]['ID_PuntoBCR'];?>">
             </div>
             <div class="col-md-4">
               <label for="Codigo">Codigo</label>
@@ -91,8 +91,11 @@
         </div>
             
         
-        <h3 class="espacio-arriba">Ubicación</h3>
+            <h3 class="espacio-arriba">Ubicación <input class="quitar-float" type="checkbox" id="chk_ubicacion" name="chk_ubicacion"></h3>
+        
         <div>
+             
+            
             <div class="col-md-4">
                 <label for="Provincia">Provincia</label>
                 <select class="form-control" id="Provincia" name="Provincia" > 
@@ -113,7 +116,7 @@
             
             <div class="col-md-4">
                 <label for="Canton">Cantón</label>
-                <select class="form-control" id="Canton" name="Canton" > 
+                <select class="form-control" disabled id="Canton" name="Canton" > 
                 <?php
                 $tam = count($cantones);
                 echo 'prueba';
@@ -146,6 +149,7 @@
                 <?php }}  ?>
                 </select>
             </div>
+            
             <div class="col-md-12">
               <label for="Direccion">Direccion</label>
               <input type="text" required="required" class="form-control" id="Direccion" name="Direccion" value="<?php echo $params[0]['Direccion'];?>">
