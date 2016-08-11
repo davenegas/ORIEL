@@ -29,4 +29,17 @@ $(document).ready(function(){
                     });            
                 });
            });
+            $("#Provincia").change(function () {
+                   $("#Provincia option:selected").each(function () {
+                    id_provincia = $(this).val();
+                    //id_tipo_punto_bcr=document.getElementById('tipo_punto').value;
+                    $.post("index.php?ctl=actualiza_en_vivo_canton", { id_provincia: id_provincia}, function(data){
+                        $("#Canton").html(data);
+                        
+                    });            
+                });
+           });
         });
+
+       
+

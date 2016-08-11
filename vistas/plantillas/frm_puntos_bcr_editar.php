@@ -3,6 +3,8 @@
     <head>
         <meta charset="utf-8"/>
         <title>Gestión de Puntos BCR</title>
+        <script language="javascript" src="vistas/js/jquery.js"></script>
+        <script language="javascript" src="vistas/js/listas_dependientes_bitacora.js"></script>
         <?php require_once 'frm_librerias_head.html'; ?>
 
     </head>

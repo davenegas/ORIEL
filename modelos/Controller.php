@@ -1040,7 +1040,7 @@
             if ($_GET['id']==0){
                 
             }   else   {
-                //echo($_GET['id']." Prueba");
+                $ide=$_GET['id'];
                 //Obtiene la informacion del PuntoBCR
                 $ide=$_GET['id'];
                 $obj_Puntobcr->setCondicion("ID_PuntoBCR='".$_GET['id']."'");
@@ -1120,5 +1120,42 @@
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }
     }
+    
+    
+    // Metodo que permite actualizar en tiempo real la lista de cantones
+    public function actualiza_en_vivo_canton(){
+        
+        echo 'hola';
+        
+        if(isset($_SESSION['nombre'])){
+        
+             $obj_puntos_bcr = new cls_puntosBCR();
+        
+             $id_provincia= $_POST['id_provincia'];
+             
+             $obj_puntos_bcr->setCondicion("ID_Provincia=".$id_provincia);
+             
+             $obj_puntos_bcr->obtiene_cantones();
+             
+             $cantones=$obj_puntos_bcr->getArreglo();
+                              
+             $tam = count($cantones);
+
+             for($i=0; $i<$tam;$i++)
+             {
+                
+                $html .= '<option value="'.$cantones[$i]['ID_Canton'].'">'.$cantones[$i]['Nombre_Canton'].'</option>';
+                        
+              }        
+             echo $html;
+             
+        }else{
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }
+       
+    }
+    
 } 
      
