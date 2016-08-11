@@ -1042,6 +1042,7 @@
             }   else   {
                 //echo($_GET['id']." Prueba");
                 //Obtiene la informacion del PuntoBCR
+                $ide=$_GET['id'];
                 $obj_Puntobcr->setCondicion("ID_PuntoBCR='".$_GET['id']."'");
                 $obj_Puntobcr->obtiene_todos_los_puntos_bcr();
                 $params= $obj_Puntobcr->getArreglo();

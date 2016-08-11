@@ -25,7 +25,7 @@
           </thead>
           <tbody>
             <?php 
-            $tam=count($params);
+            $tam=count($params);  
             for ($i = 0; $i <$tam; $i++) {
             ?>
             <tr>
@@ -55,7 +55,7 @@
                     &empresa=<?php echo $params[$i]['Empresa']?>">
                 Editar</a></td>
             </tr>     
-                    
+            
             <?php }
             ?>
             </tbody>
