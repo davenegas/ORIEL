@@ -75,10 +75,24 @@ $(document).ready(function(){
                 if (document.getElementById('Direccion').readOnly==true){
                     document.getElementById('Direccion').readOnly=false;
                     $("#Provincia").attr("disabled",false);
-
+                    $("#Canton").attr("disabled",false);
+                    $("#Distrito").attr("disabled",false);
+                    //Guarda Distrito en table  T_PuntoBCR
+                    
+                    
                 }else{
                     document.getElementById('Direccion').readOnly=true;
-                    $("#Provincia").attr("disable",true);
+                    $("#Provincia").attr("disabled",true);
+                    $("#Canton").attr("disabled",true);
+                    $("#Distrito").attr("disabled",true);
+                    
+                    id_distrito=document.getElementById('Distrito').value;
+                    id_puntobcr = document.getElementById('ID_PuntoBCR').value;
+                    direccion = document.getElementById('Direccion').value;
+                    
+                    $.post("index.php?ctl=distrito_PuntoBCR_guardar", { id_distrito: id_distrito, id_puntobcr:id_puntobcr, direccion:direccion}, function(data){
+                        //alert (data);
+                    });   
                 }
            });
         });

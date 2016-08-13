@@ -158,6 +158,7 @@ class Data_Provider{
    public function inserta_datos($table,$campos,$valores){
        
         $consulta=$this->conexion->query("insert into ".$table."(".$campos.") values(".$valores.");");
+        //echo ("insert into ".$table."(".$campos.") values(".$valores.");");
         $this->resultado_operacion=true;
         
    }    
@@ -169,6 +170,7 @@ class Data_Provider{
 
    public function edita_datos($table,$campos_valores,$condicion){
         $consulta=$this->conexion->query("update ".$table." set ".$campos_valores." where ".$condicion.";");
+        //echo("update ".$table." set ".$campos_valores." where ".$condicion.";");
         $this->resultado_operacion=true;
         
    }

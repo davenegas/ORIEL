@@ -9,10 +9,14 @@
 
     </head>
     <body>
-        <?php require_once 'encabezado.php'; ?>
+        <?php require_once 'encabezado.php';?>
         <div class="container">
         <h2>Gestión de Puntos BCR del Sistema</h2>
-        <h3>Información general del Punto BCR</h3>
+        <h3>Información general del Punto BCR               
+            <a href="index.php?ctl=gestion_punto_bcr&id=<?php echo $params[0]['ID_PuntoBCR']-1?>;"><img src='vistas/Imagenes/boton-antes.png' width="25"></a>
+            <a href="index.php?ctl=gestion_punto_bcr&id=<?php echo $params[0]['ID_PuntoBCR']+1?>;"><img src='vistas/Imagenes/boton-siguiente.png' width="25"></a>
+        </h3>
+        
         <div class="container">
         <form class="form-horizontal" role="form" method="POST" action="index.php?ctl=guardar_punto_bcr&id=<?php echo trim($ide);?>">
         <div class="rcorners2">    
@@ -22,20 +26,20 @@
             </div>
             <div class="col-md-4">
               <label for="Codigo">Codigo</label>
-              <input type="text" required="required" class="form-control" id="Codigo" name="Codigo" value="<?php echo $params[0]['Codigo'];?>">
+              <input type="text" required="required" readonly class="form-control" id="Codigo" name="Codigo" value="<?php echo $params[0]['Codigo'];?>">
             </div>
             <div class="col-md-4">
               <label for="Cuenta_SIS">Cuenta SIS</label>
-              <input type="text" required="required" class="form-control" id="Cuenta_SIS" name="Cuenta_SIS" value="<?php echo $params[0]['Cuenta_SIS'];?>">
+              <input type="text" required="required" readonly class="form-control" id="Cuenta_SIS" name="Cuenta_SIS" value="<?php echo $params[0]['Cuenta_SIS'];?>">
             </div>
             
             <div class="col-md-6 espacio-abajo">
               <label for="Nombre">Nombre</label>
-              <input type="text" required="required" class="form-control" id="Nombre" name="Nombre" value="<?php echo $params[0]['Nombre'];?>">
+              <input type="text" required="required" readonly class="form-control" id="Nombre" name="Nombre" value="<?php echo $params[0]['Nombre'];?>">
             </div>
             <div class="col-md-6 espacios">
                 <label for="Tipo_Punto">Tipo de Punto</label>
-                <select class="form-control" id="Tipo_Punto" name="Tipo_Punto" > 
+                <select class="form-control" id="Tipo_Punto" disabled name="Tipo_Punto" > 
                 <?php
                 $tam = count($tipo_puntos);
 
@@ -51,11 +55,11 @@
                 </select>
             </div>
             <div>
-            <table class="display col-md-8 table-striped quitar-float espacio-abajo" id="telefonos">
+            <table class="display col-md-12 table-striped quitar-float espacio-abajo" id="telefonos">
                 <thead> 
-                    <th>Tipo de Telefono</th>
-                    <th>Numero telefono</th>
-                    <th>Observaciones</th>
+                    <th style="text-align:center">Tipo de Telefono</th>
+                    <th style="text-align:center">Numero telefono</th>
+                    <th style="text-align:center">Observaciones</th>
                 </thead>
                 <tbody>
                     <?php 
@@ -63,18 +67,18 @@
                     for ($i = 0; $i <$tam; $i++) {
                     ?>
                     <tr>
-                        <td><?php echo $telefonos[$i]['Tipo_Telefono'];?></td>
-                        <td><?php echo $telefonos[$i]['Numero'];?></td>
-                        <td><?php echo $telefonos[$i]['Observaciones'];?></td>
+                        <td style="text-align:center"><?php echo $telefonos[$i]['Tipo_Telefono'];?></td>
+                        <td style="text-align:center"><?php echo $telefonos[$i]['Numero'];?></td>
+                        <td style="text-align:center"><?php echo $telefonos[$i]['Observaciones'];?></td>
                     </tr>
                     <?php } ?>
                 </tbody> 
             </table>
             </div>
-            <table class="display col-md-8  table-striped quitar-float" id="unidad_ejecutora">
+            <table class="display col-md-12  table-striped quitar-float" id="unidad_ejecutora">
                 <thead> 
-                    <th>Numero UE</th>
-                    <th>Departamento</th>
+                    <th style="text-align:center">Numero UE</th>
+                    <th style="text-align:center">Departamento</th>
                 </thead>
                 <tbody>
                     <?php 
@@ -82,8 +86,8 @@
                     for ($i = 0; $i <$tam; $i++) {
                     ?>
                     <tr>
-                        <td><?php echo $unidad_ejecutora[$i]['Numero_UE'];?></td>
-                        <td><?php echo $unidad_ejecutora[$i]['Departamento'];?></td>
+                        <td style="text-align:center"><?php echo $unidad_ejecutora[$i]['Numero_UE'];?></td>
+                        <td style="text-align:center"><?php echo $unidad_ejecutora[$i]['Departamento'];?></td>
                     </tr>
                     <?php } ?>
                 </tbody> 
@@ -98,7 +102,7 @@
             
             <div class="col-md-4">
                 <label for="Provincia">Provincia</label>
-                <select class="form-control" id="Provincia" name="Provincia" > 
+                <select class="form-control" disabled id="Provincia" name="Provincia" > 
                 <?php
                 $tam = count($provincias);
 
@@ -134,7 +138,7 @@
             
             <div class="col-md-4">
                 <label for="Distrito">Distrito</label>
-                <select class="form-control" id="Distrito" name="Distrito" > 
+                <select class="form-control" disabled id="Distrito" name="Distrito" > 
                 <?php
                 $tam = count($distritos);
 
@@ -152,7 +156,7 @@
             
             <div class="col-md-12">
               <label for="Direccion">Direccion</label>
-              <input type="text" required="required" class="form-control" id="Direccion" name="Direccion" value="<?php echo $params[0]['Direccion'];?>">
+              <input type="text" required="required" readonly class="form-control" id="Direccion" name="Direccion" value="<?php echo $params[0]['Direccion'];?>">
             </div>
         </div>    
                 
@@ -161,10 +165,10 @@
         <div>
             <table class="display col-md-12 table-striped quitar-float espacio-abajo" id="areas_apoyo">
                 <thead> 
-                    <th>Area de Apoyo</th>
-                    <th>Nombre de Area</th>
-                    <th>Numero telefono</th>
-                    <th>Direccion</th>
+                    <th style="text-align:center">Area de Apoyo</th>
+                    <th style="text-align:center">Nombre de Area</th>
+                    <th style="text-align:center">Numero telefono</th>
+                    <th style="text-align:center">Direccion</th>
                 </thead>
                 <tbody>
                     <?php 
@@ -172,10 +176,10 @@
                     for ($i = 0; $i <$tam; $i++) {
                     ?>
                     <tr>
-                        <td><?php echo $areas_apoyo[$i]['Nombre_Tipo_Area'];?></td>
-                        <td><?php echo $areas_apoyo[$i]['Nombre_Area'];?></td>
-                        <td><?php echo $areas_apoyo[$i]['Numero'];?></td>
-                        <td><?php echo $areas_apoyo[$i]['Direccion'];?></td>
+                        <td style="text-align:center"><?php echo $areas_apoyo[$i]['Nombre_Tipo_Area'];?></td>
+                        <td style="text-align:center"><?php echo $areas_apoyo[$i]['Nombre_Area'];?></td>
+                        <td style="text-align:center"><?php echo $areas_apoyo[$i]['Numero'];?></td>
+                        <td style="text-align:center"><?php echo $areas_apoyo[$i]['Direccion'];?></td>
                     </tr>
                     <?php } ?>
                 </tbody> 
@@ -183,11 +187,11 @@
             <h4>Información de Personal del PuntoBCR</h4>
             <table id="tabla" class="display" cellspacing="0" width="100%">
                 <thead> 
-                    <th>Apellido y Nombre</th>
-                    <th>Puesto</th>
-                    <th>Numero telefono</th>
-                    <th>Puesto</th>
-                    <th>Departamento</th>
+                    <th style="text-align:center">Apellido y Nombre</th>
+                    <th style="text-align:center">Puesto</th>
+                    <th style="text-align:center">Numero telefono</th>
+                    <th style="text-align:center">Puesto</th>
+                    <th style="text-align:center">Departamento</th>
                 </thead>
                 <tbody>
                     <?php 
@@ -195,11 +199,11 @@
                     for ($i = 0; $i <$tam; $i++) {
                     ?>
                     <tr>
-                        <td><?php echo $personal[$i]['Apellido_Nombre'];?></td>
-                        <td><?php echo $personal[$i]['Puesto'];?></td>
-                        <td><?php echo $personal[$i]['Numero'];?></td>
-                        <td><?php echo $personal[$i]['Puesto'];?></td>
-                        <td><?php echo $personal[$i]['Departamento'];?></td>
+                        <td style="text-align:center"><?php echo $personal[$i]['Apellido_Nombre'];?></td>
+                        <td style="text-align:center"><?php echo $personal[$i]['Puesto'];?></td>
+                        <td style="text-align:center"><?php echo $personal[$i]['Numero'];?></td>
+                        <td style="text-align:center"><?php echo $personal[$i]['Puesto'];?></td>
+                        <td style="text-align:center"><?php echo $personal[$i]['Departamento'];?></td>
                     </tr>
                     <?php } ?>
                 </tbody> 
@@ -207,7 +211,7 @@
             <h4>Información Otra</h4>
             <div class="col-md-4 espacio-abajo">
                 <label for="Empresa">Remesa</label>
-                <select class="form-control" id="Empresa" name="Empresa"> 
+                <select class="form-control" id="Empresa" disabled name="Empresa"> 
                 <?php
                 $tam = count($empresas);
                 for($i=0; $i<$tam;$i++)
@@ -222,7 +226,7 @@
             </div>
             <div class="col-md-4">
                 <label for="Horario">Horario Días</label>
-                <select class="form-control" id="Horario" name="Horario" > 
+                <select class="form-control" id="Horario" disabled name="Horario" > 
                 <?php
                 $tam = count($horarios);
 
@@ -240,7 +244,7 @@
             
             <div class="col-md-4">
                 <label for="Horario">Horario Horas</label>
-                <select class="form-control" id="Horario" name="Horario" > 
+                <select class="form-control" id="Horario" disabled name="Horario" > 
                 <?php
                 $tam = count($horarios);
 
@@ -258,9 +262,10 @@
             
             <table class="display col-md-12  table-striped quitar-float espacio-abajo" id="direccionIP">
                 <thead> 
-                    <th>Tipo Direccion</th>
-                    <th>Direccion IP</th>
-                    <th>Observaciones</th>
+                    <th style="text-align:center">Tipo Direccion</th>
+                    <th style="text-align:center">Direccion IP</th>
+                    <th style="text-align:center">Observaciones</th>
+                    <th style="text-align:center">Estado</th>
                 </thead>
                 <tbody>
                     <?php 
@@ -268,21 +273,22 @@
                     for ($i = 0; $i <$tam; $i++) {
                     ?>
                     <tr>
-                        <td><?php echo $direccionIP[$i]['Tipo_IP'];?></td>
-                        <td><?php echo $direccionIP[$i]['Direccion_IP'];?></td>
-                        <td><?php echo $direccionIP[$i]['Observaciones'];?></td>
+                        <td style="text-align:center"><?php echo $direccionIP[$i]['Tipo_IP'];?></td>
+                        <td style="text-align:center"><?php echo $direccionIP[$i]['Direccion_IP'];?></td>
+                        <td style="text-align:center"><?php echo $direccionIP[$i]['Observaciones'];?></td>
+                        <td style="text-align:center"><a href="">Link</a></td>
                     </tr>
                     <?php } ?>
                 </tbody> 
             </table>
             <div class="col-md-8">
               <label for="Observaciones">Observaciones</label>
-              <input type="text" required="required" class="form-control" id="Observaciones" name="Observaciones" value="<?php echo $params[0]['Observaciones'];?>">
+              <input type="text" disabled class="form-control" id="Observaciones" name="Observaciones" value="<?php echo $params[0]['Observaciones'];?>">
             </div>
             
             <div class="col-md-4">
                 <label for="Estado">Estado</label>
-                <select class="form-control" id="Estado" name="Estado" >
+                <select class="form-control" disabled id="Estado" name="Estado" >
                     <?php if ($params[0]['Estado']==1){
                     ?>
                         <option value="1" selected="selected">Activo</option>

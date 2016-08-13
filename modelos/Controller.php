@@ -1074,7 +1074,7 @@
                 $ide=$_GET['id'];
                 //Obtiene la informacion del PuntoBCR
                 $ide=$_GET['id'];
-                $obj_Puntobcr->setCondicion("ID_PuntoBCR='".$_GET['id']."'");
+                $obj_Puntobcr->setCondicion("T_PuntoBCR.ID_PuntoBCR='".$_GET['id']."'");
                 $obj_Puntobcr->obtiene_todos_los_puntos_bcr();
                 $params= $obj_Puntobcr->getArreglo();
                 
@@ -1213,6 +1213,20 @@
                 $html .= '<option value="'.$sitios[$i]['ID_PuntoBCR'].'">'.$sitios[$i]['Nombre'].'</option>';            
             }        
             echo $html;
+        }else{
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }
+    }
+    public function distrito_PuntoBCR_guardar(){
+        if(isset($_SESSION['nombre'])){
+            $obj_puntobcr = new cls_puntosBCR();
+            $obj_puntobcr->setCondicion("ID_PuntoBCR='".$_POST['id_puntobcr']."'");
+            $obj_puntobcr->setId($_POST['id_distrito']);
+            $obj_puntobcr->setDireccion($_POST['direccion']);
+            $obj_puntobcr->actualizar_ubicacion_puntobcr();
+            //echo 'Se actualizó la ubicacion del PuntoBCR';
         }else{
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
