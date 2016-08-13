@@ -702,6 +702,31 @@
             echo $exc->getTraceAsString();
         }  
     }
+       
+    
+    public function alerta_en_vivo_mismo_punto_bcr_y_evento(){
+                
+        if(isset($_SESSION['nombre'])){
+            
+            $obj_eventos= new cls_eventos();
+            $obj_eventos->setTipo_evento($_POST['id_tipo_evento']);
+            $obj_eventos->setPunto_bcr($_POST['id_punto_bcr']);
+            
+                if ($obj_eventos->existe_abierto_este_tipo_de_evento_en_este_sitio()){
+                     echo "Ya existe este evento abierto para este punto BCR. Proceda a cerrarlo o agregue un seguimiento!!!";
+                     exit;
+                }else
+                {
+                     echo "";
+                     exit;
+                }
+         }else {
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }
+    }
+    
     
     public function guardar_evento(){
         if(isset($_SESSION['nombre'])){
@@ -885,7 +910,6 @@
         }
     }
     
-
     //////////////////////////
     /*Metodos relacionados del area de Empresas de Seguridad del Sistema*/
     //////////////////////////
@@ -1154,6 +1178,32 @@
 
             for($i=0; $i<$tam;$i++){
                 $html .= '<option value="'.$distritos[$i]['ID_Distrito'].'">'.$distritos[$i]['Nombre_Distrito'].'</option>';            
+            }        
+            echo $html;
+        }else{
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }
+    }
+    
+    // Metodo que permite actualizar en tiempo real la lista de puntos bcr
+    public function actualiza_en_vivo_punto_bcr(){
+        if(isset($_SESSION['nombre'])){
+            
+            $obj_ev =new cls_eventos();
+            $id_tipo_punto_bcr= $_POST['id_tipo_punto_bcr'];
+            $id_provincia= $_POST['id_provincia'];
+            
+            $obj_ev->setTipo_punto($id_tipo_punto_bcr);
+            $obj_ev->setProvincia($id_provincia);
+            
+            $obj_ev->filtra_sitios_bcr_bitacora();
+            $sitios=$obj_ev->getArreglo(); 
+            $tam = count($sitios);
+
+            for($i=0; $i<$tam;$i++){
+                $html .= '<option value="'.$sitios[$i]['ID_PuntoBCR'].'">'.$sitios[$i]['Nombre'].'</option>';            
             }        
             echo $html;
         }else{

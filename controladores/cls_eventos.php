@@ -335,6 +335,21 @@ class cls_eventos{
         }
     }
     
+    //Metodo utilizado en el momento que escogen algun tipo de punto o provincia en específico (actualizacione en vivo, en pantalla)
+    public function filtra_sitios_bcr_bitacora(){
+        try{
+        $this->obj_data_provider->conectar();
+            $this->arreglo=$this->obj_data_provider->trae_datos(
+                "t_puntobcr INNER JOIN t_Distrito ON t_PuntoBCR.ID_Distrito=t_Distrito.ID_Distrito INNER JOIN t_Canton ON t_Distrito.ID_Canton=t_Canton.ID_Canton INNER JOIN t_Provincia ON t_Canton.ID_Provincia=t_Provincia.ID_Provincia", 
+                "t_PuntoBCR.ID_PuntoBCR, t_PuntoBCR.Nombre",
+                "ID_Tipo_Punto=".$this->tipo_punto." AND t_Provincia.ID_Provincia=".$this->provincia." ORDER BY t_PuntoBCR.Nombre ASC");
+            $this->arreglo=$this->obj_data_provider->getArreglo();
+            $this->obj_data_provider->desconectar();
+        $this->resultado_operacion=true;
+        }   catch (Exception $e){
+        }
+    }
+    
     public function ingresar_seguimiento_evento(){
         try{
             $this->obj_data_provider->conectar();

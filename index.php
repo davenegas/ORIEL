@@ -48,6 +48,8 @@ $map = array(
     'guardar_evento' =>  array('controller'=>'Controller','action'=>'guardar_evento'),
     'guardar_seguimiento_evento'=>  array('controller'=>'Controller','action'=> 'guardar_seguimiento_evento'),
     'frm_eventos_editar'=>  array('controller'=>'Controller','action'=>  'frm_eventos_editar'),
+    'actualiza_en_vivo_punto_bcr'=>  array('controller'=>'Controller','action'=>  'actualiza_en_vivo_punto_bcr'),
+    'alerta_en_vivo_mismo_punto_bcr_y_evento'=>  array('controller'=>'Controller','action'=>  'alerta_en_vivo_mismo_punto_bcr_y_evento'),
     
     //Tipo de eventos
     'tipo_eventos_listar'=>array('controller'=>'Controller','action'=> 'tipo_eventos_listar'),
