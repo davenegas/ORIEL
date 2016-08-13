@@ -115,13 +115,13 @@
                     {
                         if ($_SESSION['rol']==2){
                           if ($prioridad_evento!=1){ 
-                             if ($estadoEventos[$i]['Estado_Evento']!="Cerrado"){
+                             if (($estadoEventos[$i]['Estado_Evento']!="Cerrado")&&($estadoEventos[$i]['Estado_Evento']!="Abierto por Error")){
                             ?> 
                              <option value="<?php echo $estadoEventos[$i]['ID_EstadoEvento']?>" ><?php echo $estadoEventos[$i]['Estado_Evento']?></option>   
                                <?php
                              }
                           }else{
-                               if ($estadoEventos[$i]['Estado_Evento']!="Solicitar Cierre"){
+                               if (($estadoEventos[$i]['Estado_Evento']!="Solicitar Cierre")&&($estadoEventos[$i]['Estado_Evento']!="Abierto por Error")){
                                     ?>
                                    <option value="<?php echo $estadoEventos[$i]['ID_EstadoEvento']?>" ><?php echo $estadoEventos[$i]['Estado_Evento']?></option>   
                               <?php

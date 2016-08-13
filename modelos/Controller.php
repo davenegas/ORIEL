@@ -634,7 +634,7 @@
     public function frm_eventos_listar(){
         if(isset($_SESSION['nombre'])){
             $obj_eventos = new cls_eventos();
-            $obj_eventos->setCondicion("T_Evento.ID_EstadoEvento<>3");
+            $obj_eventos->setCondicion("T_Evento.ID_EstadoEvento<>3 AND T_Evento.ID_EstadoEvento<>5");
             $obj_eventos ->obtiene_todos_los_eventos(); 
             $params= $obj_eventos->getArreglo();
             require __DIR__.'/../vistas/plantillas/frm_eventos_listar.php';
@@ -938,25 +938,26 @@
       
              $tam = count($estadoEven);
 
-             for($i=0; $i<$tam;$i++)
-                    {
+             for($i=0; $i<$tam;$i++){
                 //if($estadoEventos[$i]['Estado_Evento']==$params[0]['Estado_Evento']){
-                 if ($_SESSION['rol']==2){
-                   if ($prioridad_tipo_evento!=1){ 
-                       if ($estadoEven[$i]['Estado_Evento']!="Cerrado"){
-                         $html .= '<option value="'.$estadoEven[$i]['ID_EstadoEvento'].'">'.$estadoEven[$i]['Estado_Evento'].'</option>';
-                       }
-                   }else{
-                       if ($estadoEven[$i]['Estado_Evento']!="Solicitar Cierre"){
-                         $html .= '<option value="'.$estadoEven[$i]['ID_EstadoEvento'].'">'.$estadoEven[$i]['Estado_Evento'].'</option>';
-                       }                       
-                   }
-                 }else{
-                     if ($estadoEven[$i]['Estado_Evento']!="Solicitar Cierre"){
-                         $html .= '<option value="'.$estadoEven[$i]['ID_EstadoEvento'].'">'.$estadoEven[$i]['Estado_Evento'].'</option>';
-                       }     
-                 }
-              }        
+                if ($estadoEven[$i]['Estado_Evento']!="Abierto por Error"){
+                    if ($_SESSION['rol']==2){
+                      if ($prioridad_tipo_evento!=1){ 
+                          if ($estadoEven[$i]['Estado_Evento']!="Cerrado"){
+                            $html .= '<option value="'.$estadoEven[$i]['ID_EstadoEvento'].'">'.$estadoEven[$i]['Estado_Evento'].'</option>';
+                          }
+                      }else{
+                          if ($estadoEven[$i]['Estado_Evento']!="Solicitar Cierre"){
+                            $html .= '<option value="'.$estadoEven[$i]['ID_EstadoEvento'].'">'.$estadoEven[$i]['Estado_Evento'].'</option>';
+                          }                       
+                      }
+                    }else{
+                        if ($estadoEven[$i]['Estado_Evento']!="Solicitar Cierre"){
+                            $html .= '<option value="'.$estadoEven[$i]['ID_EstadoEvento'].'">'.$estadoEven[$i]['Estado_Evento'].'</option>';
+                          }     
+                    }
+                 }      
+             }
              echo $html;
              
         }else{
