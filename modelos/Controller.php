@@ -706,8 +706,9 @@
     
     public function alerta_en_vivo_mismo_punto_bcr_y_evento(){
                 
-        if(isset($_SESSION['nombre'])){
+        if(isset($_POST['id_punto_bcr'])&& (isset($_POST['id_tipo_evento']))){
             
+            if(isset($_SESSION['nombre'])){
             $obj_eventos= new cls_eventos();
             $obj_eventos->setTipo_evento($_POST['id_tipo_evento']);
             $obj_eventos->setPunto_bcr($_POST['id_punto_bcr']);
@@ -720,10 +721,15 @@
                      echo "";
                      exit;
                 }
-         }else {
-            $tipo_de_alerta="alert alert-warning";
-            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
-            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+            }else {
+               $tipo_de_alerta="alert alert-warning";
+               $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+               require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+           }
+        }else
+        {
+            echo "";
+            exit;
         }
     }
     

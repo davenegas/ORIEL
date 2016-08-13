@@ -35,11 +35,20 @@ $(document).ready(function(){
            $("#tipo_evento").change(function () {
                    $("#tipo_evento option:selected").each(function () {
                     id_tipo_evento = $(this).val();
-                    //id_tipo_punto_bcr=document.getElementById('tipo_punto').value;
+                     if(document.getElementById('punto_bcr').value==""){
+                        id_punto_bcr=0;
+                    }else{
+                        id_punto_bcr=document.getElementById('punto_bcr').value;
+                    }          
+                    $.post("index.php?ctl=alerta_en_vivo_mismo_punto_bcr_y_evento", { id_punto_bcr: id_punto_bcr,id_tipo_evento:id_tipo_evento }, function(prueba){
+                        //$(document).html(data);
+                    if (prueba!=""){
+                         alert(prueba);
+                     }
+                    });    
                     $.post("index.php?ctl=actualiza_en_vivo_estado_evento", { id_tipo_evento: id_tipo_evento}, function(data){
                         $("#estado_evento").html(data);
-                        
-                    });            
+                    });     
                 });
            });
             $("#Provincia").change(function () {
