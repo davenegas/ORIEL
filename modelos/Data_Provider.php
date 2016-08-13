@@ -156,10 +156,20 @@ class Data_Provider{
    }
    
    public function inserta_datos($table,$campos,$valores){
-       
+            
+        // Gestión de insercion del metodo de la clase
         $consulta=$this->conexion->query("insert into ".$table."(".$campos.") values(".$valores.");");
         //echo ("insert into ".$table."(".$campos.") values(".$valores.");");
         $this->resultado_operacion=true;
+        
+        
+         //Registro de la trazabilidad del sistema
+        $cadena_sql=str_replace(","," - ","insert into ".$table."(".$campos.") values(".$valores.");");
+        $cadena_sql=str_replace("'"," ",$cadena_sql);
+        $cadena_sql = str_replace("(","[",$cadena_sql);
+        $cadena_sql = str_replace(")","]",$cadena_sql);
+        
+        $consulta=$this->conexion->query("insert into t_traza (ID_Traza,Fecha,Hora,ID_Usuario,Tabla_Afectada,Numero,Dato_Anterior,Dato_Actualizado) values(null,'".date("Y-m-d")."','".date("H:i:s", time())."',".$_SESSION['id'].",'".$table."',0,'Insercion - Ninguno','".$cadena_sql."');");
         
    }    
    public function insertar_datos_con_phpmyadmin($sql){
@@ -169,9 +179,25 @@ class Data_Provider{
    }
 
    public function edita_datos($table,$campos_valores,$condicion){
+       
+        $this->trae_datos($table, "*", $condicion);
+        $valores_iniciales="Edicion - ";
+        if (count($this->getArreglo())>0){
+            $valores_iniciales= $valores_iniciales ." ". implode(" - ",$this->getArreglo()[0]);
+        }
+                
         $consulta=$this->conexion->query("update ".$table." set ".$campos_valores." where ".$condicion.";");
         //echo("update ".$table." set ".$campos_valores." where ".$condicion.";");
         $this->resultado_operacion=true;
+        
+        
+         //Registro de la trazabilidad del sistema
+        $cadena_sql=str_replace(","," - ","update ".$table." set ".$campos_valores." where ".$condicion.";");
+        $cadena_sql=str_replace("'"," ",$cadena_sql);
+        $cadena_sql = str_replace("(","[",$cadena_sql);
+        $cadena_sql = str_replace(")","]",$cadena_sql);
+        
+        $consulta=$this->conexion->query("insert into t_traza (ID_Traza,Fecha,Hora,ID_Usuario,Tabla_Afectada,Numero,Dato_Anterior,Dato_Actualizado) values(null,'".date("Y-m-d")."','".date("H:i:s", time())."',".$_SESSION['id'].",'".$table."',0,'".$valores_iniciales. "','".$cadena_sql."');");       
         
    }
    
