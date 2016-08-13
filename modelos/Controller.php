@@ -661,7 +661,7 @@
                   
                     //Crea objeto de tipo eventos para cargar las listas correspondientes
                     $obj_eventos = new cls_eventos();
-                    
+                    $params[0]['Nombre']=null;
                     //Obtiene todos los tipos de eventos que se encuentran activos en la base de datos
                     $obj_eventos->obtener_todos_los_tipos_eventos();
                     $lista_tipos_de_eventos=$obj_eventos->getArreglo();
@@ -681,15 +681,39 @@
                     
                     require __DIR__ . '/../vistas/plantillas/frm_eventos_agregar.php';
                     
-                }else{             
+                }else{   
                     $ide=$_GET['id'];
+                    $obj_Puntobcr = new cls_puntosBCR();
                     $obj_eventos = new cls_eventos();
-                    $obj_eventos->setCondicion("ID_Evento=$ide");
-                    $obj_eventos->obtiene_todos_los_eventos();
-                    $params= $obj_eventos->getArreglo();
-                    $obj_eventos->obtiene_detalle_evento();
-                    $detalleEvento= $obj_eventos->getArreglo();
-    //              print_r($params);
+
+                    $obj_Puntobcr->setCondicion("T_PuntoBCR.ID_PuntoBCR=".$_GET['id']);
+                    $obj_Puntobcr->obtiene_todos_los_puntos_bcr();
+                    $params= $obj_Puntobcr->getArreglo();
+                    
+                    $obj_eventos->setCondicion("");
+                    $obj_eventos->obtener_todos_los_tipos_eventos();
+                    $lista_tipos_de_eventos=$obj_eventos->getArreglo();
+                    
+                    //Obtiene Distrito->Cantón->Provincia
+                        //Distritos
+                    $obj_Puntobcr->setCondicion("");
+                    $obj_Puntobcr->obtiene_distritos();
+                    $distritos = $obj_Puntobcr->getArreglo();
+                        //Cantones
+                    $obj_Puntobcr->setCondicion("");
+                    $obj_Puntobcr->obtiene_cantones();
+                    $cantones = $obj_Puntobcr->getArreglo();
+                        //Provincias
+                    $obj_Puntobcr->setCondicion("");
+                    $obj_Puntobcr->obtiene_provincias();
+                    $lista_provincias = $obj_Puntobcr->getArreglo();
+                    
+                    
+                    $obj_eventos->setCondicion("");
+                    $obj_eventos->obtener_todos_los_tipos_de_puntos_BCR();
+                    $lista_tipos_de_puntos_bcr=$obj_eventos->getArreglo();
+                    
+                    require __DIR__ . '/../vistas/plantillas/frm_eventos_agregar.php';
                 }
                 
             }else
@@ -747,10 +771,11 @@
                 $obj_eventos->setEstado_evento($_POST['estado_evento']);
                 $obj_eventos->setId_usuario($_SESSION['id']);
                 $obj_eventos->setEstado(1);
+                echo "1 ingresa";
                 
                 if (!$obj_eventos->existe_abierto_este_tipo_de_evento_en_este_sitio()){
                     $obj_eventos->ingresar_evento();
-
+                    echo "2 guarda evento";
                     if(isset($_POST['seguimiento'])&&($_POST['seguimiento']!="")){
                        //echo 'alert("si entro")'; 
                        $obj_eventos->setDetalle($_POST['seguimiento']);
@@ -758,7 +783,7 @@
                        $obj_eventos->obtiene_id_ultimo_evento_ingresado(); 
                        $obj_eventos->setId($obj_eventos->getId_ultimo_evento_ingresado());
                        $obj_eventos->ingresar_seguimiento_evento();  
-
+                       echo "3 guarda seguimiento";
                     }
                     $this->frm_eventos_listar();
                 }else{

@@ -159,7 +159,7 @@ class Data_Provider{
             
         // Gestión de insercion del metodo de la clase
         $consulta=$this->conexion->query("insert into ".$table."(".$campos.") values(".$valores.");");
-        //echo ("insert into ".$table."(".$campos.") values(".$valores.");");
+        echo ("insert into ".$table."(".$campos.") values(".$valores.");");
         $this->resultado_operacion=true;
         
         

@@ -14,7 +14,7 @@ $(document).ready(function(){
                     id_provincia = $(this).val();
                     id_tipo_punto_bcr=document.getElementById('tipo_punto').value;
                     $.post("index.php?ctl=actualiza_en_vivo_punto_bcr", { id_tipo_punto_bcr: id_tipo_punto_bcr,id_provincia:id_provincia }, function(data){
-                        $("#punto_bcr").html(data);
+                        $("#punto_bcr").html(data); 
                         
                     });            
                 });

@@ -47,12 +47,14 @@
                     $tam_provincias = count($lista_provincias);
 
                     for($i=0; $i<$tam_provincias;$i++)
-                    {                      
-                           ?> 
-                    <option value="<?php echo $lista_provincias[$i]['ID_Provincia']?>"><?php echo $lista_provincias[$i]['Nombre_Provincia']?></option>
-                    <?php
-
-                    } ?>  
+                    {
+                        if($lista_provincias[$i]['ID_Provincia']==$cantones[$distritos[$params[0]['ID_Distrito']]['ID_Canton']]['ID_Provincia']){
+                            ?> <option value="<?php echo $lista_provincias[$i]['ID_Provincia']?>" selected="selected"><?php echo $lista_provincias[$i]['Nombre_Provincia']?></option><?php
+                        }
+                        else {?>
+                            <option value="<?php echo $lista_provincias[$i]['ID_Provincia']?>" ><?php echo $lista_provincias[$i]['Nombre_Provincia']?></option>  
+                        <?php
+                    } } ?>  
                 </select>
             </div>
             <div class="col-xs-4">
@@ -61,19 +63,24 @@
                 <?php
                     $tam_tipo_punto_bcr = count($lista_tipos_de_puntos_bcr);
 
-                    for($i=0; $i<$tam_tipo_punto_bcr;$i++)
-                    {                      
+                    for($i=0; $i<$tam_tipo_punto_bcr;$i++){
+                        if($lista_tipos_de_puntos_bcr[$i]['ID_Tipo_Punto']==$params[0]['ID_Tipo_Punto']){
                            ?> 
-                    <option value="<?php echo $lista_tipos_de_puntos_bcr[$i]['ID_Tipo_Punto']?>"><?php echo $lista_tipos_de_puntos_bcr[$i]['Tipo_Punto']?></option>
-                    <?php
-
-                    } ?>  
+                            <option value="<?php echo $lista_tipos_de_puntos_bcr[$i]['ID_Tipo_Punto']?>" selected="selected"><?php echo $lista_tipos_de_puntos_bcr[$i]['Tipo_Punto']?></option>
+                    <?php }else {?>
+                            <option value="<?php echo $lista_tipos_de_puntos_bcr[$i]['ID_Tipo_Punto']?>"><?php echo $lista_tipos_de_puntos_bcr[$i]['Tipo_Punto']?></option> 
+                        <?php
+                    }} ?>  
               </select>
             </div>
            
             <div class="col-xs-4">
               <label for="punto_bcr">Punto BCR</label>
-              <select class="form-control" required=”required” id="punto_bcr" name="punto_bcr" ></select>
+              <select class="form-control" required=”required” id="punto_bcr" name="punto_bcr" >
+                  <?php  if($params[0]['ID_PuntoBCR']!=0){?>
+                    <option value="<?php echo $params[0]['ID_PuntoBCR']?>"><?php echo $params[0]['Nombre']?></option>
+                  <?php } ?>
+              </select>
             </div>
             <br/><br/><br/><br/>
             

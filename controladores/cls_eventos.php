@@ -366,7 +366,7 @@ class cls_eventos{
             $this->obj_data_provider->conectar();
             $sql=("call sp_set_Evento('"."0"."','".$this->fecha."','".$this->hora."','".$this->id_usuario."','".$this->provincia."','".$this->tipo_punto."','".$this->punto_bcr."','".$this->tipo_evento."','".$this->estado_evento."')");
             $this->obj_data_provider->insertar_datos_con_phpmyadmin($sql);
-            //echo $sql;
+            echo $sql;
         }  catch (Exception $exc){
             echo $exc->getTraceAsString();
         }

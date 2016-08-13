@@ -59,8 +59,7 @@
             <td style="text-align:center"><a href="index.php?ctl=gestion_punto_bcr&id=
                <?php echo $params[$i]['ID_PuntoBCR']?>&estado=<?php echo $params[$i]['Estado']?>&descripcion=<?php echo $params[$i]['Observaciones']?>">
                    Editar</a></td>
-            <td style="text-align:center"><a href="index.php?ctl=gestion_punto_bcr&id=
-               <?php echo $params[$i]['ID_PuntoBCR']?>&estado=<?php echo $params[$i]['Estado']?>&descripcion=<?php echo $params[$i]['Observaciones']?>">
+            <td style="text-align:center"><a href="index.php?ctl=frm_eventos_agregar&id=<?php echo $params[$i]['ID_PuntoBCR']?>">
                    Ingresar Evento</a></td>
             </tr>     
                     
