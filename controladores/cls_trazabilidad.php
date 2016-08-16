@@ -136,7 +136,7 @@ class cls_trazabilidad{
         $this->obj_data_provider->conectar();
         if($this->condicion==""){
             $this->arreglo=$this->obj_data_provider->trae_datos(
-                    "t_traza left outer join t_usuario on t_traza.ID_Usuario=t_usuario.ID_usuario", 
+                    "t_traza left outer join t_usuario on t_traza.ID_Usuario=t_usuario.ID_usuario order by Fecha desc", 
                     "t_traza.*,t_usuario.Nombre,t_usuario.Apellido",
                     "");
             $this->arreglo=$this->obj_data_provider->getArreglo();
@@ -145,7 +145,7 @@ class cls_trazabilidad{
         }
         else{
             $this->arreglo=$this->obj_data_provider->trae_datos(
-                    "t_traza left outer join t_usuario on t_traza.ID_Usuario=t_usuario.ID_usuario", 
+                    "t_traza left outer join t_usuario on t_traza.ID_Usuario=t_usuario.ID_usuario order by Fecha desc", 
                     "t_traza.*,t_usuario.Nombre,t_usuario.Apellido",
                     $this->condicion);
             $this->arreglo=$this->obj_data_provider->getArreglo();

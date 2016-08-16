@@ -7,7 +7,7 @@
     </head>
     <body>
         <?php require_once 'encabezado.php';?>
-        <div class="container animated fadeIn ">
+        <div class="container animated fadeIn">
         <h2>Listado de Trazabilidad del Sistema</h2>
         <!--<p>A continuación se detallan los diferentes roles que están registrados en el sistema:</p>-->            
         <table id="tabla" class="display col-md-12">
