@@ -177,6 +177,14 @@
        <?php 
        };
        ?>   
+           
+        <?php 
+       if ((encuentra_coincidencia("Reportes-Trazabilidad"))){
+       ?>
+           <li><a href="index.php?ctl=frm_trazabilidad_listar">Trazabilidad</a></li> 
+       <?php 
+       };
+       ?>   
             
         </ul>
         </li>

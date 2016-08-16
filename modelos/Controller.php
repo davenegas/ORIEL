@@ -1258,5 +1258,23 @@
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }
     }
+    
+    //Trazabilidad
+    
+     //FUNCIONES PARA EVENTOS
+    public function frm_trazabilidad_listar(){
+        if(isset($_SESSION['nombre'])){
+            $obj_traza = new cls_trazabilidad();
+            $obj_traza->setCondicion("");
+            $obj_traza ->obtiene_trazabilidad(); 
+            $params= $obj_traza->getArreglo();
+            require __DIR__.'/../vistas/plantillas/frm_trazabilidad_listar.php';
+        }
+        else {
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }
+    }
 } 
      

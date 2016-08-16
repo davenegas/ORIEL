@@ -12,6 +12,7 @@ require_once __DIR__ . '/controladores/cls_empresa.php';
 require_once __DIR__ . '/controladores/cls_personal.php';
 require_once __DIR__ . '/controladores/cls_horario.php';
 require_once __DIR__ . '/controladores/cls_direccionIP.php';
+require_once __DIR__ . '/controladores/cls_trazabilidad.php';
 require_once __DIR__ . '/modelos/Controller.php';
 require_once __DIR__ . '/modelos/Encrypter.php';
 require_once __DIR__ . '/modelos/PHPMailerAutoload.php';
@@ -59,6 +60,9 @@ $map = array(
 
     //Areas de apoyo
     'areas_apoyo_listar'=>array('controller'=>'Controller','action'=> 'areas_apoyo_listar'),
+    
+    //Trazabilidad
+    'frm_trazabilidad_listar'=>array('controller'=>'Controller','action'=> 'frm_trazabilidad_listar'),
     
     //PuntosBCR
     'puntos_bcr_listar'=>array('controller'=>'Controller','action'=> 'puntos_bcr_listar'),
