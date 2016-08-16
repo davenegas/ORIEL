@@ -48,7 +48,7 @@
            <td><a href="index.php?ctl=cambiar_estado_modulo&id=
                <?php echo $params[$i]['ID_Modulo']?>&estado=<?php echo $params[$i]['Estado']?>">
                    Activar/Desactivar</a></td>
-           <td><a href="index.php?ctl=gestion_modulos&id=
+           <td><a href="index.php?ctl=modulos_gestion&id=
                <?php echo $params[$i]['ID_Modulo']?>&estado=<?php echo $params[$i]['Estado']?>&descripcion=<?php echo $params[$i]['Descripcion']?>">
                    Editar Modulo</a></td>
             </tr>     
@@ -57,7 +57,7 @@
             ?>
                        </tbody>
         </table>
-        <a href="index.php?ctl=gestion_modulos&id=0" class="btn btn-default" role="button">Agregar un Nuevo Módulo</a>
+        <a href="index.php?ctl=modulos_gestion&id=0" class="btn btn-default" role="button">Agregar un Nuevo Módulo</a>
         </div>
             <?php require 'vistas/plantillas/pie_de_pagina.php' ?>
     </body>

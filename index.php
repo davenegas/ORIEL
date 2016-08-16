@@ -32,10 +32,10 @@ $map = array(
     'principal' => array('controller' =>'Controller', 'action' =>'principal'),
          
     //Controlador de Modulos
-    'listar_modulos' => array('controller' =>'Controller', 'action' =>'listar_modulos'),
-    'gestion_modulos' => array('controller' =>'Controller', 'action' =>'gestion_modulos'),
-    'cambiar_estado_modulo' => array('controller' =>'Controller', 'action' =>'cambiar_estado_modulo'),
-    'guardar_modulo' => array('controller' =>'Controller', 'action' =>'guardar_modulo'),
+    'modulos_listar' => array('controller' =>'Controller', 'action' =>'modulos_listar'),
+    'modulos_gestion' => array('controller' =>'Controller', 'action' =>'modulos_gestion'),
+    'modulos_cambiar_estado' => array('controller' =>'Controller', 'action' =>'modulos_cambiar_estado'),
+    'modulos_guardar' => array('controller' =>'Controller', 'action' =>'modulos_guardar'),
      
     //Controlador de roles
     'guardar_rol' =>  array('controller'=>'Controller','action'=>'guardar_rol'),

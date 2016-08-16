@@ -46,7 +46,7 @@
        <?php 
        if ((encuentra_coincidencia("Seguridad-Módulos"))){
        ?>
-            <li><a href="index.php?ctl=listar_modulos">Módulos</a></li>
+            <li><a href="index.php?ctl=modulos_listar">Módulos</a></li>
        <?php 
        };
        ?>

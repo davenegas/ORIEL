@@ -254,7 +254,7 @@
         }
     }     
      //Trae la lista completa de modulos del sistema
-    public function listar_modulos(){      
+    public function modulos_listar(){      
         if(isset($_SESSION['nombre'])){
             $obj_modulos=new cls_modulos();
             $obj_modulos->obtiene_todos_los_modulos();
@@ -268,7 +268,7 @@
     }
      
     //Ingresa un nuevo módulo de seguridad en la base de datos
-    public function guardar_modulo(){
+    public function modulos_guardar(){
         if(isset($_SESSION['nombre'])){   
             if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 $obj_modulos=new cls_modulos();
@@ -289,7 +289,7 @@
                     if($correcto==0){
                     $obj_modulos->inserta_modulo();
                     }   else    {
-                        $this->gestion_modulos();
+                        $this->modulos_gestion();
                     }
                 }   else   {
                     $obj_modulos->setId($_GET['id']);
@@ -306,7 +306,7 @@
         }
     }
      
-    public function cambiar_estado_modulo(){
+    public function modulos_cambiar_estado(){
         if(isset($_SESSION['nombre'])){
             if (isset($_GET['id'])) {
                 if (isset($_GET['estado'])) { 
@@ -329,7 +329,7 @@
         }
     }
 
-    public function gestion_modulos(){
+    public function modulos_gestion(){
         if(isset($_SESSION['nombre'])){
             if ($_GET['id']==0){
                 $desc="";
@@ -1258,6 +1258,7 @@
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }
     }
+<<<<<<< HEAD
     
     //Trazabilidad
     
@@ -1278,3 +1279,6 @@
     }
 } 
      
+=======
+}
+>>>>>>> origin/master
