@@ -159,7 +159,7 @@ class Data_Provider{
             
         // Gestión de insercion del metodo de la clase
         $consulta=$this->conexion->query("insert into ".$table."(".$campos.") values(".$valores.");");
-        echo ("insert into ".$table."(".$campos.") values(".$valores.");");
+        //echo ("insert into ".$table."(".$campos.") values(".$valores.");");
         $this->resultado_operacion=true;
         
         
@@ -169,8 +169,17 @@ class Data_Provider{
         $cadena_sql = str_replace("(","[",$cadena_sql);
         $cadena_sql = str_replace(")","]",$cadena_sql);
         
-        $consulta=$this->conexion->query("insert into t_traza (ID_Traza,Fecha,Hora,ID_Usuario,Tabla_Afectada,Numero,Dato_Anterior,Dato_Actualizado) values(null,'".date("Y-m-d")."','".date("H:i:s", time())."',".$_SESSION['id'].",'".$table."',0,'Insercion - Ninguno','".$cadena_sql."');");
+        $consulta=$this->conexion->query("insert into t_traza (ID_Traza,Fecha,Hora,ID_Usuario,Tabla_Afectada,Dato_Anterior,Dato_Actualizado) values(null,'".date("Y-m-d")."','".date("H:i:s", time())."',".$_SESSION['id'].",'".$table."','Insercion - Sin Valores Anteriores','".$cadena_sql."');");
         
+   }    
+   
+   public function inserta_datos_para_uso_de_trazabilidad($detalle_sql){
+            
+        // Gestión de insercion del metodo de la clase
+        $consulta=$this->conexion->query($detalle_sql);
+        //echo ("insert into ".$table."(".$campos.") values(".$valores.");");
+        $this->resultado_operacion=true;
+          
    }    
    public function insertar_datos_con_phpmyadmin($sql){
        $consulta=$this->conexion->query($sql);
@@ -181,11 +190,13 @@ class Data_Provider{
    public function edita_datos($table,$campos_valores,$condicion){
        
         $this->trae_datos($table, "*", $condicion);
-        $valores_iniciales="Edicion - ";
+        $valores_iniciales="Edicion - Valores anteriores de la tabla formato SELECT:\n ";
         if (count($this->getArreglo())>0){
             $valores_iniciales= $valores_iniciales ." ". implode(" - ",$this->getArreglo()[0]);
         }
-                
+        $valores_iniciales=$valores_iniciales . "\nA continuacion valores anteriores de la tabla formato arreglo:\n ";
+        $valores_iniciales=$valores_iniciales . serialize($this->getArreglo()[0]);
+        
         $consulta=$this->conexion->query("update ".$table." set ".$campos_valores." where ".$condicion.";");
         //echo("update ".$table." set ".$campos_valores." where ".$condicion.";");
         $this->resultado_operacion=true;
@@ -197,17 +208,35 @@ class Data_Provider{
         $cadena_sql = str_replace("(","[",$cadena_sql);
         $cadena_sql = str_replace(")","]",$cadena_sql);
         
-        $consulta=$this->conexion->query("insert into t_traza (ID_Traza,Fecha,Hora,ID_Usuario,Tabla_Afectada,Numero,Dato_Anterior,Dato_Actualizado) values(null,'".date("Y-m-d")."','".date("H:i:s", time())."',".$_SESSION['id'].",'".$table."',0,'".$valores_iniciales. "','".$cadena_sql."');");       
+        $consulta=$this->conexion->query("insert into t_traza (ID_Traza,Fecha,Hora,ID_Usuario,Tabla_Afectada,Dato_Anterior,Dato_Actualizado) values(null,'".date("Y-m-d")."','".date("H:i:s", time())."',".$_SESSION['id'].",'".$table."','".$valores_iniciales. "','".$cadena_sql."');");       
         
    }
    
    public function eliminar_datos($table,$condicion){
 
+       $this->trae_datos($table, "*", $condicion);
+        $valores_iniciales="Eliminacion - Valores anteriores de la tabla formato SELECT:\n ";
+        if (count($this->getArreglo())>0){
+            $valores_iniciales= $valores_iniciales ." ". implode(" - ",$this->getArreglo()[0]);
+        }
+        $valores_iniciales=$valores_iniciales . "\nA continuacion valores anteriores de la tabla formato arreglo:\n ";
+        $valores_iniciales=$valores_iniciales . serialize($this->getArreglo()[0]);
+       
        if ($condicion==""){
            $consulta=$this->conexion->query("delete from ".$table.";");
+           $cadena_sql=str_replace(","," - ","delete from ".$table.";");
        }else{
            $consulta=$this->conexion->query("delete from ".$table." where ".$condicion.";");
+           $cadena_sql=str_replace(","," - ","delete from ".$table." where ".$condicion.";");
        }   
+       
+        //Registro de la trazabilidad del sistema
+        
+        $cadena_sql=str_replace("'"," ",$cadena_sql);
+        $cadena_sql = str_replace("(","[",$cadena_sql);
+        $cadena_sql = str_replace(")","]",$cadena_sql);
+        
+        $consulta=$this->conexion->query("insert into t_traza (ID_Traza,Fecha,Hora,ID_Usuario,Tabla_Afectada,Dato_Anterior,Dato_Actualizado) values(null,'".date("Y-m-d")."','".date("H:i:s", time())."',".$_SESSION['id'].",'".$table."','".$valores_iniciales. "','".$cadena_sql."');");       
    }
 }
 

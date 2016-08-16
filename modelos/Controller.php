@@ -67,15 +67,16 @@
                             if ((strlen($clave_nueva)>0) && (strlen($confirmacion_clave)>0)){
                                 if ($clave_nueva===$confirmacion_clave){
                                     if ($clave_nueva!=$clave){
-                                        $obj_usuarios->setNombre($usuario);
-                                        $obj_usuarios->setClave($clave_nueva);
-                                        $obj_usuarios->edita_passsword();
                                         $_SESSION['nombre']=$usuario;
                                         $obj_usuarios->obtiene_rol_nombre_apellido_de_usuario($usuario);
                                         $_SESSION['rol']=$obj_usuarios->getRol();
                                         $_SESSION['name']=$obj_usuarios->getNombre();
                                         $_SESSION['apellido']=$obj_usuarios->getApellido();
                                         $_SESSION['id']=$obj_usuarios->getId();
+                                        $obj_usuarios->setNombre($usuario);
+                                        $obj_usuarios->setClave($clave_nueva);
+                                        $obj_usuarios->edita_passsword();
+                                        
                                         require __DIR__ . '/../vistas/plantillas/frm_principal.php';
 
                                     }else{
@@ -169,9 +170,10 @@
                 $obj_roles = new cls_roles();
                 if($id_Rol!=0){
                     $obj_roles->insertar_rolesModulo($id_Rol,$listaModulos);
-                }   else
+                }   else{
                     echo ($id_Rol).'No se ingresaron los modulos';
-                }
+                    }
+            }
         }else{
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
@@ -771,11 +773,11 @@
                 $obj_eventos->setEstado_evento($_POST['estado_evento']);
                 $obj_eventos->setId_usuario($_SESSION['id']);
                 $obj_eventos->setEstado(1);
-                echo "1 ingresa";
+                //echo "1 ingresa";
                 
                 if (!$obj_eventos->existe_abierto_este_tipo_de_evento_en_este_sitio()){
                     $obj_eventos->ingresar_evento();
-                    echo "2 guarda evento";
+                    //echo "2 guarda evento";
                     if(isset($_POST['seguimiento'])&&($_POST['seguimiento']!="")){
                        //echo 'alert("si entro")'; 
                        $obj_eventos->setDetalle($_POST['seguimiento']);
@@ -783,7 +785,7 @@
                        $obj_eventos->obtiene_id_ultimo_evento_ingresado(); 
                        $obj_eventos->setId($obj_eventos->getId_ultimo_evento_ingresado());
                        $obj_eventos->ingresar_seguimiento_evento();  
-                       echo "3 guarda seguimiento";
+                       //echo "3 guarda seguimiento";
                     }
                     $this->frm_eventos_listar();
                 }else{
@@ -791,9 +793,7 @@
                     //require __DIR__ . '/../vistas/plantillas/frm_eventos_agregar.php';
                     echo "<script type=\"text/javascript\">alert('Ya existe este evento abierto para este punto BCR. Proceda a cerrarlo o agregue un seguimiento!!!');history.go(-1);</script>";
                     exit;
-                     /*$desde = $_SERVER['HTTP_REFERER'];
-                     header ("Location: ".$desde);*/
-                    //$this->frm_eventos_agregar();
+                     
                 }
             }
         }else {

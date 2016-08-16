@@ -353,6 +353,37 @@ class cls_eventos{
     public function ingresar_seguimiento_evento(){
         try{
             $this->obj_data_provider->conectar();
+            
+            if ($this->id2==0){
+                //Registro de la trazabilidad del sistema
+               $cadena_sql=str_replace(","," - ","call sp_set_detalleEvento(Inserta datos en T_detalleEvento ID_Seguimiento='".$this->id2."',ID_Evento='".$this->id."',Fecha='".$this->fecha."',Hora='".$this->hora."',Detalle='".$this->detalle."',Usuario='".$this->id_usuario."')");
+               $cadena_sql=str_replace("'"," ",$cadena_sql);
+               $cadena_sql = str_replace("(","[",$cadena_sql);
+               $cadena_sql = str_replace(")","]",$cadena_sql);
+
+               $detalle_sql="insert into t_traza (ID_Traza,Fecha,Hora,ID_Usuario,Tabla_Afectada,Dato_Anterior,Dato_Actualizado) values(null,'".date("Y-m-d")."','".date("H:i:s", time())."',".$_SESSION['id'].",'"."T_detalleEvento"."','Insercion - Sin Valores Anteriores','".$cadena_sql."');";
+               $this->obj_data_provider->inserta_datos_para_uso_de_trazabilidad($detalle_sql);
+            }else{
+                $this->obj_data_provider->trae_datos("T_detalleEvento", "*", "ID_Detalle_Evento=".$this->id2);
+                $valores_iniciales="Edicion - Valores anteriores de la tabla formato SELECT:\n ";
+                if (count($this->obj_data_provider->getArreglo())>0){
+                    $valores_iniciales= $valores_iniciales ." ". implode(" - ",$this->obj_data_provider->getArreglo()[0]);
+                }
+            $valores_iniciales=$valores_iniciales . "\nA continuacion valores anteriores de la tabla formato arreglo:\n ";
+            $valores_iniciales=$valores_iniciales . serialize($this->obj_data_provider->getArreglo());
+
+             //Registro de la trazabilidad del sistema
+            $cadena_sql=str_replace(","," - ","call sp_set_detalleEvento(Modifica datos en T_detalleEvento ID_Seguimiento='".$this->id2."',ID_Evento='".$this->id."',Fecha='".$this->fecha."',Hora='".$this->hora."',Detalle='".$this->detalle."',Usuario='".$this->id_usuario."')");
+            $cadena_sql=str_replace("'"," ",$cadena_sql);
+            $cadena_sql = str_replace("(","[",$cadena_sql);
+            $cadena_sql = str_replace(")","]",$cadena_sql);
+            
+            $detalle_sql="insert into t_traza (ID_Traza,Fecha,Hora,ID_Usuario,Tabla_Afectada,Dato_Anterior,Dato_Actualizado) values(null,'".date("Y-m-d")."','".date("H:i:s", time())."',".$_SESSION['id'].",'"."T_detalleEvento"."','".$valores_iniciales. "','".$cadena_sql."');";       
+            $this->obj_data_provider->inserta_datos_para_uso_de_trazabilidad($detalle_sql);
+            }
+      
+             // Llamada al procedimiento almacenado de mysql para gestión de seguimiento de evento
+      
             $sql=("call sp_set_detalleEvento('".$this->id2."','".$this->id."','".$this->fecha."','".$this->hora."','".$this->detalle."','".$this->id_usuario."')");
             $this->obj_data_provider->insertar_datos_con_phpmyadmin($sql);
             //echo $sql;
@@ -364,9 +395,22 @@ class cls_eventos{
     public function ingresar_evento(){
         try{
             $this->obj_data_provider->conectar();
+            
+            //Registro de la trazabilidad del sistema
+           $cadena_sql=str_replace(","," - ","call sp_set_Evento(Inserta datos en T_Evento ID_Evento='"."0"."',Fecha='".$this->fecha."',Hora='".$this->hora."',Usuario='".$this->id_usuario."',Provincia='".$this->provincia."',Tipo de Punto='".$this->tipo_punto."',Punto BCR='".$this->punto_bcr."',Tipo de Evento='".$this->tipo_evento."',Estado del Evento='".$this->estado_evento."')");
+           $cadena_sql=str_replace("'"," ",$cadena_sql);
+           $cadena_sql = str_replace("(","[",$cadena_sql);
+           $cadena_sql = str_replace(")","]",$cadena_sql);
+
+           $detalle_sql="insert into t_traza (ID_Traza,Fecha,Hora,ID_Usuario,Tabla_Afectada,Dato_Anterior,Dato_Actualizado) values(null,'".date("Y-m-d")."','".date("H:i:s", time())."',".$_SESSION['id'].",'"."T_Evento"."','Insercion - Sin Valores Anteriores','".$cadena_sql."');";
+           $this->obj_data_provider->inserta_datos_para_uso_de_trazabilidad($detalle_sql);
+      
+             // Llamada al procedimiento almacenado de mysql para gestión de eventos
+            
+            
             $sql=("call sp_set_Evento('"."0"."','".$this->fecha."','".$this->hora."','".$this->id_usuario."','".$this->provincia."','".$this->tipo_punto."','".$this->punto_bcr."','".$this->tipo_evento."','".$this->estado_evento."')");
             $this->obj_data_provider->insertar_datos_con_phpmyadmin($sql);
-            echo $sql;
+            //echo $sql;
         }  catch (Exception $exc){
             echo $exc->getTraceAsString();
         }
@@ -398,6 +442,44 @@ class cls_eventos{
     
     public function guardar_tipo_evento() {
         $this->obj_data_provider->conectar();
+        
+        if ($this->id==0){
+                //Registro de la trazabilidad del sistema
+               $cadena_sql=str_replace(","," - ","call sp_set_tipoEvento(Inserta datos en T_tipoevento Id_tipo_evento='".$this->id."',Evento='".$this->tipo_evento."',Prioridad='".$this->prioridad."',Observaciones='".$this->observaciones."',Estado='".$this->estado."')");
+               $cadena_sql=str_replace("'"," ",$cadena_sql);
+               $cadena_sql = str_replace("(","[",$cadena_sql);
+               $cadena_sql = str_replace(")","]",$cadena_sql);
+
+               $detalle_sql="insert into t_traza (ID_Traza,Fecha,Hora,ID_Usuario,Tabla_Afectada,Dato_Anterior,Dato_Actualizado) values(null,'".date("Y-m-d")."','".date("H:i:s", time())."',".$_SESSION['id'].",'"."T_tipoevento"."','Insercion - Sin Valores Anteriores','".$cadena_sql."');";
+               $this->obj_data_provider->inserta_datos_para_uso_de_trazabilidad($detalle_sql);
+        }else{
+                $this->obj_data_provider->trae_datos("T_tipoevento", "*", "ID_Tipo_Evento=".$this->id);
+                $valores_iniciales="Edicion - Valores anteriores de la tabla formato SELECT:\n ";
+                if (count($this->obj_data_provider->getArreglo())>0){
+                    $valores_iniciales= $valores_iniciales ." ". implode(" - ",$this->obj_data_provider->getArreglo()[0]);
+                }
+                $valores_iniciales=$valores_iniciales . "\nA continuacion valores anteriores de la tabla formato arreglo:\n ";
+                $valores_iniciales=$valores_iniciales . serialize($this->obj_data_provider->getArreglo());
+
+                 //Registro de la trazabilidad del sistema
+                $cadena_sql=str_replace(","," - ","call sp_set_tipoEvento(Modifica datos en T_tipoevento Id_tipo_evento='".$this->id."',Evento='".$this->tipo_evento."',Prioridad='".$this->prioridad."',Observaciones='".$this->observaciones."',Estado='".$this->estado."')");
+                $cadena_sql=str_replace("'"," ",$cadena_sql);
+                $cadena_sql = str_replace("(","[",$cadena_sql);
+                $cadena_sql = str_replace(")","]",$cadena_sql);
+
+                $detalle_sql="insert into t_traza (ID_Traza,Fecha,Hora,ID_Usuario,Tabla_Afectada,Dato_Anterior,Dato_Actualizado) values(null,'".date("Y-m-d")."','".date("H:i:s", time())."',".$_SESSION['id'].",'"."T_tipoevento"."','".$valores_iniciales. "','".$cadena_sql."');";       
+                $this->obj_data_provider->inserta_datos_para_uso_de_trazabilidad($detalle_sql);
+        }
+      
+        // Llamada al procedimiento almacenado de mysql para gestión de seguimiento de evento
+        
+        //Verifica el valor de estado, para ingresarlo en el sistema
+        if ($this->estado=="Activo"){
+            $this->estado="1";
+        }  else {
+             $this->estado="0";
+        }
+        
         $sql=("call sp_set_tipoEvento('".$this->id."','".$this->tipo_evento."','".$this->prioridad."','".$this->observaciones."','".$this->estado."')");
         $this->obj_data_provider->insertar_datos_con_phpmyadmin($sql);
     }
