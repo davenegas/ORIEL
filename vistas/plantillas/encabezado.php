@@ -6,8 +6,9 @@
       $obj_mod->obtiene_lista_de_modulos_por_rol($_SESSION['rol']);
       $lista_modulos_por_usuario=$obj_mod->getArreglo();
           
+      //echo "<pre>";
       //print_r($lista_modulos_por_usuario);
-      
+      //echo "</pre>";
          
           for ($index = 0; $index < count($lista_modulos_por_usuario); $index++) {
               if ($lista_modulos_por_usuario[$index]["Descripcion"]===$modulo){
@@ -224,24 +225,33 @@
        if ((encuentra_coincidencia("Módulos-Controles de Video"))){
        ?>
            <li><a href="#">Controles de Video</a></li> 
-       <?php 
+      <?php 
        };
-      }
-       ?>  
-         </ul>
+       ?>   
+            
+        </ul>
+        </li>
+      
+      <?php 
+      };
+      ?>
            <?php 
       //************************************************Pinta Menu de Ayuda***************************************************************
        if ((encuentra_coincidencia("Ayuda"))){
        ?>
-      
-          <li><a href="#">Ayuda</a></li> 
-      
+          <li class="dropdown">
+            <a class="dropdown-toggle" data-toggle="dropdown" href="#">Ayuda
+            <span class="caret"></span></a>
+            <ul class="dropdown-menu">
+          <!--<li><a href="#">Ayuda</a></li>--> 
+      </ul>
+        </li>
        <?php 
        };
        ?>       
-          
+        </ul>  
     
-      </ul>
+      
       
       <ul class="nav navbar-nav navbar-right">
               <?php 
@@ -291,6 +301,7 @@
          
       <li><a href="index.php?ctl=cerrar_sesion"><span class="glyphicon glyphicon-log-in"></span>Cerrar Sesión</a></li>    
     </ul>
+        
   </div>
 </nav>
 

@@ -205,8 +205,39 @@ class cls_usuarios{
   
   public function guardar_usuario(){
       $this->obj_data_provider->conectar();
-      $sql=("call sp_set_usuario('".$this->id."','".$this->nombre."','".$this->apellido."','".$this->cedula."','".$this->correo."','".$this->rol."','".$this->observaciones."','".$this->estado."','".Encrypter::encrypt($this->cedula)."')");
-      $this->obj_data_provider->insertar_datos_con_phpmyadmin($sql);
+      
+      if ($this->id==0){
+             //Registro de la trazabilidad del sistema
+            $cadena_sql=str_replace(","," - ","call sp_set_usuario(Inserta datos en T_Usuario ID='".$this->id."',Nombre='".$this->nombre."',Apellido='".$this->apellido."',Cedula='".$this->cedula."',Correo='".$this->correo."',Rol='".$this->rol."',Onservaciones='".$this->observaciones."',Estado='".$this->estado."',Clave='".Encrypter::encrypt($this->cedula)."')");
+            $cadena_sql=str_replace("'"," ",$cadena_sql);
+            $cadena_sql = str_replace("(","[",$cadena_sql);
+            $cadena_sql = str_replace(")","]",$cadena_sql);
+
+            $detalle_sql="insert into t_traza (ID_Traza,Fecha,Hora,ID_Usuario,Tabla_Afectada,Dato_Anterior,Dato_Actualizado) values(null,'".date("Y-m-d")."','".date("H:i:s", time())."',".$_SESSION['id'].",'"."T_Usuario"."','Insercion - Sin Valores Anteriores','".$cadena_sql."');";
+            $this->obj_data_provider->inserta_datos_para_uso_de_trazabilidad($detalle_sql);
+      }else{
+            $this->obj_data_provider->trae_datos("T_Usuario", "*", "ID_Usuario=".$this->id);
+            $valores_iniciales="Edicion - Valores anteriores de la tabla formato SELECT:\n ";
+            if (count($this->obj_data_provider->getArreglo())>0){
+                $valores_iniciales= $valores_iniciales ." ". implode(" - ",$this->obj_data_provider->getArreglo()[0]);
+            }
+            $valores_iniciales=$valores_iniciales . "\nA continuacion valores anteriores de la tabla formato arreglo:\n ";
+            $valores_iniciales=$valores_iniciales . serialize($this->obj_data_provider->getArreglo());
+
+             //Registro de la trazabilidad del sistema
+            $cadena_sql=str_replace(","," - ","call sp_set_usuario(Modifica datos en T_Usuario ID='".$this->id."',Nombre='".$this->nombre."',Apellido='".$this->apellido."',Cedula='".$this->cedula."',Correo='".$this->correo."',Rol='".$this->rol."',Onservaciones='".$this->observaciones."',Estado='".$this->estado."',Clave='".Encrypter::encrypt($this->cedula)."')");
+            $cadena_sql=str_replace("'"," ",$cadena_sql);
+            $cadena_sql = str_replace("(","[",$cadena_sql);
+            $cadena_sql = str_replace(")","]",$cadena_sql);
+            
+            $detalle_sql="insert into t_traza (ID_Traza,Fecha,Hora,ID_Usuario,Tabla_Afectada,Dato_Anterior,Dato_Actualizado) values(null,'".date("Y-m-d")."','".date("H:i:s", time())."',".$_SESSION['id'].",'"."T_Usuario"."','".$valores_iniciales. "','".$cadena_sql."');";       
+            $this->obj_data_provider->inserta_datos_para_uso_de_trazabilidad($detalle_sql);
+       }
+      
+      // Llamada al procedimiento almacenado de mysql para gestión de usuarios
+      
+       $sql=("call sp_set_usuario('".$this->id."','".$this->nombre."','".$this->apellido."','".$this->cedula."','".$this->correo."','".$this->rol."','".$this->observaciones."','".$this->estado."','".Encrypter::encrypt($this->cedula)."')");
+       $this->obj_data_provider->insertar_datos_con_phpmyadmin($sql);
   }
   //Este metodo realiza la tarea de actualizar la información de un módulo de seguridad en específico en la bd
   function edita_passsword(){
