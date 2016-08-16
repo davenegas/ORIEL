@@ -15,7 +15,7 @@
         <h2>Gestión de Módulos de Seguridad</h2>
         <p>Mediante esta pantalla, podrá agregar o editar módulos de seguridad:</p>
         <div class="container">
-        <form class="form-horizontal" role="form" method="POST" action="index.php?ctl=guardar_modulo&id=<?php echo trim($ide);?>">
+        <form class="form-horizontal" role="form" method="POST" action="index.php?ctl=modulos_guardar&id=<?php echo trim($ide);?>">
         <div class="form-group">
           <label for="email">Descripción/Nombre de Módulo</label>
           <input type="text" required="required" class="form-control" id="descripcion" name="descripcion" value="<?php echo $desc;?>">
@@ -38,7 +38,7 @@
         </select>
       </div>
         <button type="submit" class="btn btn-default">Guardar</button>
-        <td><a href="index.php?ctl=listar_modulos" class="btn btn-default" role="button">Cancelar</a></td>
+        <td><a href="index.php?ctl=modulos_listar" class="btn btn-default" role="button">Cancelar</a></td>
       </form>     
       <?php require_once 'pie_de_pagina.php' ?>
     </body>
