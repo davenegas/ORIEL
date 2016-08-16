@@ -306,7 +306,7 @@
         </div>
         <br><br><br><br><br>
             <!--<button type="submit" class="btn btn-default" >Guardar</button>-->
-            <a href="index.php?ctl=puntos_bcr_listar" class="btn btn-default" role="button">Cancelar</a>
+            <a href="index.php?ctl=puntos_bcr_listar" class="btn btn-default" role="button">Volver</a>
         </form>                               
         <?php require_once 'pie_de_pagina.php' ?>
     </body>
