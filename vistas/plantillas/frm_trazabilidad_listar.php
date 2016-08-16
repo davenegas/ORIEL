@@ -15,12 +15,12 @@
             <tr>
               <th>Fecha</th>
               <th>Hora</th>
-              <!--<th>Antiguedad Dias</th>-->
-              <th width="10%">Usuario</th>
+              <th>ID_Traza</th>
+              <th>Antiguedad Dias</th>
+              <th>Usuario</th>
               <th>Tabla Afectada</th>
               <th>Dato Actualizado</th>
               <th>Dato Anterior</th>
-              <th>ID_Traza</th>
             </tr>
           </thead>
           <tbody>
@@ -39,12 +39,12 @@
             ?>
             <td><?php echo date_format($fecha_evento, 'd/m/Y');?></td>
             <td><?php echo $params[$i]['Hora'];?></td>
-            <!--<td align="center"><?php echo $dias_abierto->format('%a');?></td>-->
+            <td><?php echo $params[$i]['ID_Traza'];?></td>
+            <td align="center"><?php echo $dias_abierto->format('%a');?></td>
             <td><?php echo $params[$i]['Nombre']." ".$params[$i]['Apellido'] ?></td>
             <td><?php echo $params[$i]['Tabla_Afectada'];?></td>
             <td><?php echo $params[$i]['Dato_Actualizado'];?></td>
             <td><?php echo $params[$i]['Dato_Anterior'];?></td>
-            <td><?php echo $params[$i]['ID_Traza'];?></td>
             </tr>
             <?php }
             ?>

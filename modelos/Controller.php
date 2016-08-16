@@ -1258,7 +1258,6 @@
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }
     }
-<<<<<<< HEAD
     
     //Trazabilidad
     
@@ -1279,6 +1278,5 @@
     }
 } 
      
-=======
-}
->>>>>>> origin/master
+
+
