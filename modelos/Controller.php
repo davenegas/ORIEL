@@ -1055,6 +1055,23 @@
         }      
     }
     
+    public function tipo_eventos_cambiar_estado() {
+      if(isset($_SESSION['nombre'])){
+            $obj_eventos = new cls_eventos();
+            $obj_eventos->setId($_GET['id']);
+            $obj_eventos->setTipo_evento($_GET['evento']);
+            $obj_eventos->setObservaciones($_GET['observaciones']);
+            $obj_eventos->setEstado($_GET['estado']);
+            $obj_eventos->setPrioridad($_GET['prioridad']);
+            $obj_eventos->guardar_tipo_evento();
+            $this->tipo_eventos_listar();
+        } else    {
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }  
+    }
+    
     public function areas_apoyo_listar(){
         if(isset($_SESSION['nombre'])){
             $obj_areasApoyo=new cls_areasapoyo();
@@ -1316,7 +1333,6 @@
         }
     }
     
-    
     // Metodo que permite actualizar en tiempo real la lista de cantones
     public function actualiza_en_vivo_canton(){
         if(isset($_SESSION['nombre'])){
@@ -1326,7 +1342,7 @@
             $obj_puntos_bcr->obtiene_cantones();
             $cantones=$obj_puntos_bcr->getArreglo(); 
             $tam = count($cantones);
-
+            $html .= '<option value="0"></option>';   
             for($i=0; $i<$tam;$i++){
                 $html .= '<option value="'.$cantones[$i]['ID_Canton'].'">'.$cantones[$i]['Nombre_Canton'].'</option>';            
             }        
@@ -1346,7 +1362,8 @@
             $obj_puntos_bcr->obtiene_distritos();
             $distritos=$obj_puntos_bcr->getArreglo(); 
             $tam = count($distritos);
-
+            
+            //$html .= '<option value="0"></option>';
             for($i=0; $i<$tam;$i++){
                 $html .= '<option value="'.$distritos[$i]['ID_Distrito'].'">'.$distritos[$i]['Nombre_Distrito'].'</option>';            
             }        
@@ -1357,7 +1374,6 @@
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }
     }
-    
     // Metodo que permite actualizar en tiempo real la lista de puntos bcr
     public function actualiza_en_vivo_punto_bcr(){
         if(isset($_SESSION['nombre'])){
@@ -1372,7 +1388,7 @@
             $obj_ev->filtra_sitios_bcr_bitacora();
             $sitios=$obj_ev->getArreglo(); 
             $tam = count($sitios);
-
+            
             for($i=0; $i<$tam;$i++){
                 $html .= '<option value="'.$sitios[$i]['ID_PuntoBCR'].'">'.$sitios[$i]['Nombre'].'</option>';            
             }        
@@ -1383,13 +1399,31 @@
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }
     }
-    public function distrito_PuntoBCR_guardar(){
+    
+    public function puntobcr_desligar_telefono(){
+        if(isset($_SESSION['nombre'])){
+            $obj_puntosbcr = new cls_puntosBCR();
+            $obj_puntosbcr->setId($_GET['id']);
+            $obj_puntosbcr->setCondicion("ID_Telefono='".$_GET['id']);
+            
+            require __DIR__ . '/../vistas/plantillas/frm_personal_listar.php';
+        }else{
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        } 
+    }
+    
+    public function puntoBCR_guardar_informacion_general(){
         if(isset($_SESSION['nombre'])){
             $obj_puntobcr = new cls_puntosBCR();
             $obj_puntobcr->setCondicion("ID_PuntoBCR='".$_POST['id_puntobcr']."'");
-            $obj_puntobcr->setId($_POST['id_distrito']);
-            $obj_puntobcr->setDireccion($_POST['direccion']);
-            $obj_puntobcr->actualizar_ubicacion_puntobcr();
+            
+            $obj_puntobcr->setCodigo($_POST['codigo']);
+            $obj_puntobcr->setCuentasis($_POST['cuenta']);
+            $obj_puntobcr->setNombre($_POST['nombre']);
+            $obj_puntobcr->setId($_POST['tipo_punto']);
+            $obj_puntobcr->actualizar_informacion_general_puntobcr();
             //echo 'Se actualizó la ubicacion del PuntoBCR';
         }else{
             $tipo_de_alerta="alert alert-warning";
@@ -1398,8 +1432,25 @@
         }
     }
     
-    //Trazabilidad
+    public function distrito_PuntoBCR_guardar(){
+        if(isset($_SESSION['nombre'])){
+            $obj_puntobcr = new cls_puntosBCR();
+            $obj_puntobcr->setCondicion("ID_PuntoBCR='".$_POST['id_puntobcr']."'");
+            $obj_puntobcr->setId($_POST['id_distrito']);
+            $obj_puntobcr->setDireccion($_POST['direccion']);
+            $obj_puntobcr->actualizar_ubicacion_puntobcr();
+            //echo 'Se actualizó la informacion general del PuntoBCR';
+        }else{
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }
+    }
     
+    //Trazabilidad
+
+     //FUNCIONES PARA EVENTOS
+
     public function frm_trazabilidad_listar(){
         if(isset($_SESSION['nombre'])){
             $obj_traza = new cls_trazabilidad();
@@ -1414,7 +1465,6 @@
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }
     }
+    
 } 
-     
-
 
