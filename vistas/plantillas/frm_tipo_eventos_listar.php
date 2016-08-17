@@ -47,11 +47,11 @@
             }
             ?>
                 
-           <td><a href="index.php?ctl=cambiar_estado_tipo_evento
-                  &id=<?php echo $params[$i]['ID_Tipo_Evento']?>
+           <td><a href="index.php?ctl=tipo_eventos_cambiar_estado&id=<?php echo $params[$i]['ID_Tipo_Evento']?>
                   &evento=<?php echo $params[$i]['Evento']?>
                   &estado=<?php echo $params[$i]['Estado']?>
-                  &observaciones=<?php echo $params[$i]['Observaciones']?>">
+                  &observaciones=<?php echo $params[$i]['Observaciones']?>
+                  &prioridad=<?php echo $params[$i]['Prioridad']?>">
                    Activar/Desactivar</a></td>
            <td><a href="index.php?ctl=tipo_eventos_gestion&id=<?php echo $params[$i]['ID_Tipo_Evento']?>
                   &evento=<?php echo $params[$i]['Evento']?>

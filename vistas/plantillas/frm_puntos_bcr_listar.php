@@ -67,8 +67,9 @@
             ?>
             </tbody>
         </table>
-         </div> 
+        
         <a href="index.php?ctl=frm_punto_bcr_gestion&id=0" class="btn btn-default" role="button">Agregar Nueva Area de Apoyo</a>
+         </div> 
 <!--        </div>-->
             <?php require 'vistas/plantillas/pie_de_pagina.php' ?>
     </body>

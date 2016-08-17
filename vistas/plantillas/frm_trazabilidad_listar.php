@@ -9,8 +9,9 @@
         <?php require_once 'encabezado.php';?>
         <div class="container animated fadeIn ">
         <h2>Listado de Trazabilidad del Sistema</h2>
-        <!--<p>A continuación se detallan los diferentes roles que están registrados en el sistema:</p>-->            
-        <table id="tabla" class="display col-md-12">
+        <!--<p>A continuación se detallan los diferentes roles que están registrados en el sistema:</p>-->  
+        <section class="full-height">
+        <table id="tabla" class="display2">
           <thead>
             <tr>
               <th>Fecha</th>
@@ -50,6 +51,7 @@
             ?>
             </tbody>
         </table>
+        </section>
         </div>
             <?php require 'vistas/plantillas/pie_de_pagina.php' ?>
     </body>

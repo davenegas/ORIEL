@@ -4,17 +4,19 @@
         <meta charset="utf-8"/>
         <title>Gestión de Puntos BCR</title>
         <script language="javascript" src="vistas/js/jquery.js"></script>
-        <script language="javascript" src="vistas/js/listas_dependientes_bitacora.js"></script>
+        <script language="javascript" src="vistas/js/listas_dependientes_puntobcr.js"></script>
         <?php require_once 'frm_librerias_head.html'; ?>
 
     </head>
     <body>
         <?php require_once 'encabezado.php';?>
         <div class="container">
-        <h2>Gestión de Puntos BCR del Sistema</h2>
-        <h3>Información general del Punto BCR               
+        <h2>Gestión de Puntos BCR del Sistema
             <a href="index.php?ctl=gestion_punto_bcr&id=<?php echo $params[0]['ID_PuntoBCR']-1?>;"><img src='vistas/Imagenes/boton-antes.png' width="25"></a>
             <a href="index.php?ctl=gestion_punto_bcr&id=<?php echo $params[0]['ID_PuntoBCR']+1?>;"><img src='vistas/Imagenes/boton-siguiente.png' width="25"></a>
+        </h2>
+        <h3>Información General del Punto BCR 
+            <input class="quitar-float" type="checkbox" id="chk_informacion_general" name="chk_ubicacion">
         </h3>
         
         <div class="container">
@@ -57,9 +59,11 @@
             <div>
             <table class="display col-md-12 table-striped quitar-float espacio-abajo" id="telefonos">
                 <thead> 
-                    <th style="text-align:center">Tipo de Telefono</th>
-                    <th style="text-align:center">Numero telefono</th>
+                    <th>ID_Telefono</th>
+                    <th style="text-align:center">Tipo de Teléfono</th>
+                    <th style="text-align:center">Número teléfono</th>
                     <th style="text-align:center">Observaciones</th>
+                    <th style="text-align:center">Quitar número</th>
                 </thead>
                 <tbody>
                     <?php 
@@ -67,9 +71,12 @@
                     for ($i = 0; $i <$tam; $i++) {
                     ?>
                     <tr>
+                        <td><?php echo $telefonos[$i]['ID_Telefono'];?></td>
                         <td style="text-align:center"><?php echo $telefonos[$i]['Tipo_Telefono'];?></td>
                         <td style="text-align:center"><?php echo $telefonos[$i]['Numero'];?></td>
                         <td style="text-align:center"><?php echo $telefonos[$i]['Observaciones'];?></td>
+                        <td style="text-align:center"><a href="index.php?ctl=puntobcr_desligar_telefono&id=
+                            <?php echo $params[$i]['ID_Telefono']?>"><img src='vistas/Imagenes/menos.png' width="20"></a></td>
                     </tr>
                     <?php } ?>
                 </tbody> 
@@ -92,14 +99,11 @@
                     <?php } ?>
                 </tbody> 
             </table>
-        </div>
-            
-        
-            <h3 class="espacio-arriba">Ubicación <input class="quitar-float" type="checkbox" id="chk_ubicacion" name="chk_ubicacion"></h3>
-        
+        </div> 
+
+        <h3 class="espacio-arriba">Ubicación <input class="quitar-float" type="checkbox" id="chk_ubicacion" name="chk_ubicacion"></h3>
+
         <div>
-             
-            
             <div class="col-md-4">
                 <label for="Provincia">Provincia</label>
                 <select class="form-control" disabled id="Provincia" name="Provincia" > 
@@ -108,7 +112,7 @@
 
                 for($i=0; $i<$tam;$i++)
                 {
-                    if($provincias[$i]['ID_Provincia']==$cantones[$distritos[$params[0]['ID_Distrito']]['ID_Canton']]['ID_Provincia']){
+                    if($provincias[$i]['ID_Provincia']==($cantones[$distritos[$params[0]['ID_Distrito']]['ID_Canton']]['ID_Provincia']-1)){
                         
                        ?> <option value="<?php echo $provincias[$i]['ID_Provincia']?>" selected="selected"><?php echo $provincias[$i]['Nombre_Provincia']?></option><?php
                     }
@@ -123,11 +127,9 @@
                 <select class="form-control" disabled id="Canton" name="Canton" > 
                 <?php
                 $tam = count($cantones);
-                echo 'prueba';
                 for($i=0; $i<$tam;$i++)
                 {
-                    if($cantones[$i]['ID_Canton']==$distritos[$params[0]['ID_Distrito']]['ID_Canton']){
-                        
+                    if($cantones[$i]['ID_Canton']==($distritos[$params[0]['ID_Distrito']]['ID_Canton']-1)){
                        ?> <option value="<?php echo $cantones[$i]['ID_Canton']?>" selected="selected"><?php echo $cantones[$i]['Nombre_Canton']?></option><?php
                     }
                     else {?>
@@ -141,7 +143,6 @@
                 <select class="form-control" disabled id="Distrito" name="Distrito" > 
                 <?php
                 $tam = count($distritos);
-
                 for($i=0; $i<$tam;$i++)
                 {
                     if($distritos[$i]['ID_Distrito']==$params[0]['ID_Distrito']){
