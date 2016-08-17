@@ -7,7 +7,6 @@
         <script language="javascript" src="vistas/js/listas_dependientes_bitacora.js"></script>
         <?php require_once 'frm_librerias_head.html'; ?>  
     </head>
-    
     <body>
      
         <?php require_once 'encabezado.php'; ?>
@@ -99,8 +98,57 @@
             <a href="index.php?ctl=frm_eventos_listar" class="btn btn-default" role="button">Cancelar</a>
             </div>
         </form> 
+        <h2>Histórico de Eventos Relacionados a este Punto BCR:</h2>
+        <table id='tabla' class='display'>
+        <?php if ($ide!=0){ ?>
+             <thead>
+               
+            <tr>
+              <th>Fecha</th>
+              <th>Hora</th>
+              <th>Lapso</th>
+              <th>Provincia</th>
+              <th>Tipo Punto</th>
+              <th>Punto BCR</th>
+              <th>Tipo de Evento</th>
+              <th>Estado del Evento</th>
+              <th>Ingresado Por</th>
+              <th>Consulta</th>
+            </tr>
+          </thead>
+          <tbody>
+        
+            <?php 
+
+            $tam=count($eventos_relacionados);
+
+            for ($i = 0; $i <$tam; $i++) {
+            ?>
+            <tr>
+            <?php
+            $fecha_evento = date_create($eventos_relacionados[$i]['Fecha']);
+            $fecha_actual = date_create(date("d-m-Y"));
+            $dias_abierto= date_diff($fecha_evento, $fecha_actual);
+            ?>
+            <td><?php echo date_format($fecha_evento, 'd/m/Y');?></td>
+            <td><?php echo $eventos_relacionados[$i]['Hora'];?></td>
+            <td align="center"><?php echo $dias_abierto->format('%a');?></td>
+            <td><?php echo $eventos_relacionados[$i]['Nombre_Provincia'];?></td>
+            <td><?php echo $eventos_relacionados[$i]['Tipo_Punto'];?></td>
+            <td><?php echo $eventos_relacionados[$i]['Nombre'];?></td>
+            <td><?php echo $eventos_relacionados[$i]['Evento'];?></td>
+            <td><?php echo $eventos_relacionados[$i]['Estado_Evento'];?></td>
+            <td><?php echo $eventos_relacionados[$i]['Nombre_Usuario']." ".$eventos_relacionados[$i]['Apellido'] ?></td>
+            <td align="center"><a href="index.php?ctl=frm_eventos_editar&accion=consulta_relacionados&id=
+               <?php echo $eventos_relacionados[$i]['ID_Evento']?>">Ver detalle</a></td>
+            </tr>
+            <?php }
+            ?>
+            </tbody>
+            <?php }  ?>
+        </table>
         </div>
-   
+        
       <?php require_once 'pie_de_pagina.php' ?>
     </body>
 </html>

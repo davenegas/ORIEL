@@ -44,8 +44,12 @@ $map = array(
     'gestion_roles'=>array('controller'=>'Controller', 'action'=>'gestion_roles'),
      
      //Controlador de Eventos (Bitacora Digital)
+    
     'frm_eventos_listar' =>  array('controller'=>'Controller','action'=>'frm_eventos_listar'),
     'frm_eventos_agregar' =>  array('controller'=>'Controller','action'=>'frm_eventos_agregar'),
+    'dibuja_tabla_eventos_relacionados_a_punto_bcr' =>  array('controller'=>'Controller','action'=>'dibuja_tabla_eventos_relacionados_a_punto_bcr'),
+    'frm_eventos_lista_cerrados'=>  array('controller'=>'Controller','action'=>'frm_eventos_lista_cerrados'),
+    'frm_eventos_recuperar' =>  array('controller'=>'Controller','action'=>'frm_eventos_recuperar'),
     'guardar_evento' =>  array('controller'=>'Controller','action'=>'guardar_evento'),
     'guardar_seguimiento_evento'=>  array('controller'=>'Controller','action'=> 'guardar_seguimiento_evento'),
     'frm_eventos_editar'=>  array('controller'=>'Controller','action'=>  'frm_eventos_editar'),
