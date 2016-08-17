@@ -2,14 +2,13 @@
 <html lang="es">
     <head>
         <meta charset="utf-8"/>
-        <title>Lista de Eventos</title>
+        <title>Lista de Eventos Cerrados</title>
         <?php require_once 'frm_librerias_head.html'; ?>     
     </head>
     <body>
         <?php require_once 'encabezado.php';?>
         <div class="container animated fadeIn">
-        <h2>Listado de Eventos</h2>
-        <!--<p>A continuación se detallan los diferentes roles que están registrados en el sistema:</p>-->            
+        <h2>Listado de Eventos Cerrados</h2>
         <table id="tabla" class="display">
           <thead>
                
@@ -23,7 +22,8 @@
               <th>Tipo de Evento</th>
               <th>Estado del Evento</th>
               <th>Ingresado Por</th>
-              <th>Editar Evento</th>
+              <th>Consulta</th>
+              <th>Gestión</th>
             </tr>
           </thead>
           <tbody>
@@ -49,22 +49,18 @@
             <td><?php echo $params[$i]['Evento'];?></td>
             <td><?php echo $params[$i]['Estado_Evento'];?></td>
             <td><?php echo $params[$i]['Nombre_Usuario']." ".$params[$i]['Apellido'] ?></td>
-            <td align="center"><a href="index.php?ctl=frm_eventos_editar&accion=editar_abiertos&id=
-               <?php echo $params[$i]['ID_Evento']?>">Gestionar Seguimiento</a></td>
+            <td align="center"><a href="index.php?ctl=frm_eventos_editar&accion=consulta_cerrados&id=
+               <?php echo $params[$i]['ID_Evento']?>">Ver detalle</a></td>
+            <td align="center"><a href="index.php?ctl=frm_eventos_recuperar&id_evento=
+               <?php echo $params[$i]['ID_Evento']?>&id_puntobcr=
+               <?php echo $params[$i]['ID_PuntoBCR']?>&id_tipo_evento=
+               <?php echo $params[$i]['ID_Tipo_Evento']?>">Recuperar Evento</a></td>
             </tr>
             <?php }
             ?>
             </tbody>
         </table>
-        <a href="index.php?ctl=frm_eventos_agregar&id=0" class="btn btn-default" role="button">Agregar Nuevo Evento de Bitácora</a>
-        
-        <?php
-        if ($_SESSION['rol']!=2){
-        ?>  
-        <a href="index.php?ctl=frm_eventos_lista_cerrados" class="btn btn-default" role="button">Recuperar Eventos</a>
-        
-        <?php }
-        ?>
+        <a href="index.php?ctl=frm_eventos_listar" class="btn btn-default" role="button">Volver a Eventos Abiertos</a>
         </div>
             <?php require 'vistas/plantillas/pie_de_pagina.php' ?>
     </body>

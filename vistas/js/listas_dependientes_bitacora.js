@@ -29,7 +29,11 @@ $(document).ready(function(){
                     if (data!=""){
                          alert(data);
                      }
-                    });            
+                    }); 
+                    $.post("index.php?ctl=dibuja_tabla_eventos_relacionados_a_punto_bcr", { id_punto_bcr: id_punto_bcr}, function(data){
+                        $("#tabla").html(data); 
+                        
+                    });    
                 });
            });
            $("#tipo_evento").change(function () {

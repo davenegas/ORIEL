@@ -648,6 +648,21 @@
         }
     }
     
+    public function frm_eventos_lista_cerrados(){
+        if(isset($_SESSION['nombre'])){
+            $obj_eventos = new cls_eventos();
+            $obj_eventos->setCondicion("T_Evento.ID_EstadoEvento=3 OR T_Evento.ID_EstadoEvento=5");
+            $obj_eventos ->obtiene_todos_los_eventos(); 
+            $params= $obj_eventos->getArreglo();
+            require __DIR__.'/../vistas/plantillas/frm_eventos_lista_cerrados.php';
+        }
+        else {
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }
+    }
+    
     public function frm_eventos_agregar(){
         try {
             if(isset($_SESSION['nombre'])){
@@ -661,13 +676,14 @@
                 
                 if ($_GET['id']==0){
                   
+                    $ide=0;
+                    
                     //Crea objeto de tipo eventos para cargar las listas correspondientes
                     $obj_eventos = new cls_eventos();
                     $params[0]['Nombre']=null;
                     //Obtiene todos los tipos de eventos que se encuentran activos en la base de datos
                     $obj_eventos->obtener_todos_los_tipos_eventos();
                     $lista_tipos_de_eventos=$obj_eventos->getArreglo();
-                    
                     
                     //Obtiene todas las provincias que se encuentran activas en la base de datos
                     $obj_eventos->obtener_todas_las_provincias();
@@ -710,10 +726,13 @@
                     $obj_Puntobcr->obtiene_provincias();
                     $lista_provincias = $obj_Puntobcr->getArreglo();
                     
-                    
                     $obj_eventos->setCondicion("");
                     $obj_eventos->obtener_todos_los_tipos_de_puntos_BCR();
                     $lista_tipos_de_puntos_bcr=$obj_eventos->getArreglo();
+                    
+                    $obj_eventos->setCondicion("T_Evento.ID_PuntoBCR=".$ide);
+                    $obj_eventos->obtiene_todos_los_eventos();
+                    $eventos_relacionados=$obj_eventos->getArreglo();
                     
                     require __DIR__ . '/../vistas/plantillas/frm_eventos_agregar.php';
                 }
@@ -759,6 +778,126 @@
         }
     }
     
+    
+    public function dibuja_tabla_eventos_relacionados_a_punto_bcr(){
+                
+       if(isset($_POST['id_punto_bcr'])){
+            
+            if(isset($_SESSION['nombre'])){
+                $obj_eventos= new cls_eventos();
+                $obj_eventos->setCondicion("T_Evento.ID_PuntoBCR=".$_POST['id_punto_bcr']);
+                $obj_eventos->obtiene_todos_los_eventos();
+                $params=$obj_eventos->getArreglo();
+
+                if (count($params)>0){
+                    
+                    //$html="<h2>Listado de Eventos Relacionados a este Punto BCR</h2>";
+                    $html="<thead>";   
+                    $html.="<tr>";
+                    $html.="<th align='center'>Fecha</th>";
+                    $html.="<th>Hora</th>";
+                    $html.="<th>Lapso</th>";
+                    $html.="<th>Provincia</th>";
+                    $html.="<th>Tipo Punto</th>";
+                    $html.="<th>Punto BCR</th>";
+                    $html.="<th>Tipo de Evento</th>";
+                    $html.="<th>Estado del Evento</th>";
+                    $html.="<th>Ingresado Por</th>";
+                    $html.="<th>Consulta</th>";
+                    $html.="</tr>";
+                    $html.="</thead>";
+                    
+                    $html.="<tbody>";
+                    $tam=count($params);
+
+                    for ($i = 0; $i <$tam; $i++) {
+           
+                        $html.="<tr>";
+           
+                        $fecha_evento = date_create($params[$i]['Fecha']);
+                        $fecha_actual = date_create(date("d-m-Y"));
+                        $dias_abierto= date_diff($fecha_evento, $fecha_actual);
+            
+                        $html.="<td align='center'>".date_format($fecha_evento, 'd/m/Y')."</td>";
+                        $html.="<td>".$params[$i]['Hora']."</td>";
+                        $html.="<td align='center'>".$dias_abierto->format('%a')."</td>";
+                        $html.="<td>".$params[$i]['Nombre_Provincia']."</td>";
+                        $html.="<td>".$params[$i]['Tipo_Punto']."</td>";
+                        $html.="<td>".$params[$i]['Nombre']."</td>";
+                        $html.="<td>".$params[$i]['Evento']."</td>";
+                        $html.="<td>".$params[$i]['Estado_Evento']."</td>";
+                        $html.="<td>".$params[$i]['Nombre_Usuario']." ".$params[$i]['Apellido']."</td>";
+                        $html.="<td align='center'><a href='index.php?ctl=frm_eventos_editar&accion=consulta_relacionados&id=".$params[$i]['ID_Evento']."'>Ver detalle</a></td>";
+                        $html.="</tr>";
+                         }
+            
+                    $html.="</tbody>";
+
+                    //$html.=" </table>";
+                    
+                    echo $html;
+                    exit;
+                }else{
+                     $html="<h4>No se encontraron eventos para este sitio.</h4>";
+                     echo $html;
+                     exit;
+                }    
+
+            }else {
+               $tipo_de_alerta="alert alert-warning";
+               $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+               require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+            }
+        }else
+        {
+            echo "";
+            exit;
+        }
+       
+        
+    }
+    
+    public function frm_eventos_recuperar(){
+        if(isset($_SESSION['nombre'])){
+            $obj_eventos= new cls_eventos();
+            if ($_SERVER['REQUEST_METHOD'] == 'GET') {
+                
+                $obj_eventos->setFecha(date("Y-m-d")); 
+                $obj_eventos->setHora(date("H:i", time()));
+                $obj_eventos->setTipo_evento($_GET['id_tipo_evento']);
+                $obj_eventos->setPunto_bcr($_GET['id_puntobcr']);
+                $obj_eventos->setEstado_evento("1");
+                $obj_eventos->setId_usuario($_SESSION['id']);
+                $obj_eventos->setEstado(1);
+                //echo "1 ingresa";
+                
+                if (!$obj_eventos->existe_abierto_este_tipo_de_evento_en_este_sitio()){
+                    //$obj_eventos->ingresar_evento();
+                    //echo "2 guarda evento";
+                    
+                    //echo 'alert("si entro")'; 
+                    $obj_eventos->setDetalle("Evento re-abierto (recuperado) por ".$_SESSION['name']." ".$_SESSION['apellido']);
+                    $obj_eventos->setId2(0);
+                    $obj_eventos->setId($_GET['id_evento']);
+                    $obj_eventos->edita_estado_evento("1");
+                    $obj_eventos->ingresar_seguimiento_evento();  
+                    //echo "3 guarda seguimiento";
+                    echo "<script type=\"text/javascript\">alert('Evento recuperado con Éxito!!!');history.go(-1);</script>";
+                    $this->frm_eventos_lista_cerrados();
+                }else{
+                    //echo '<script>alert("Ya existe este evento abierto para este punto BCR. Proceda a cerrarlo o agregue un seguimiento!!!")</script>';
+                    //require __DIR__ . '/../vistas/plantillas/frm_eventos_agregar.php';
+                    echo "<script type=\"text/javascript\">alert('No es posible recuperar este evento, ya existe otro evento del mismo tipo abierto para este punto BCR. Proceda a cerrarlo o agregue un seguimiento!!!');history.go(-1);</script>";
+                    exit;
+                     
+                }
+            }
+        }else {
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }
+    }
     
     public function guardar_evento(){
         if(isset($_SESSION['nombre'])){

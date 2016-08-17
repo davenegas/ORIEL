@@ -26,6 +26,7 @@
                 <th>Tipo Punto</th>
                 <th>Punto BCR</th>
                 <th>Tipo de Evento</th>
+                <th>Estado Actual</th>
                 <th>Ingresado Por</th>
             </tr>
           </thead>
@@ -48,7 +49,8 @@
                 <td><?php echo $params[$i]['Tipo_Punto'];?></td>
                 <td><?php echo $params[$i]['Nombre'];?></td>
                 <td><?php echo $params[$i]['Evento'];?></td>
-                 <td><?php echo $params[$i]['Nombre_Usuario']." ".$params[$i]['Apellido'] ?></td>
+                <td><?php echo $params[$i]['Estado_Evento'];?></td>
+                <td><?php echo $params[$i]['Nombre_Usuario']." ".$params[$i]['Apellido'] ?></td>
             </tr>
             <?php }
             ?>
@@ -85,7 +87,8 @@
                 <td><?php echo $detalleEvento[$i]['Nombre_Usuario']." ".$detalleEvento[$i]['Apellido'] ?></td>
                 <?php } ?>
                 </tbody>
-        </table>   
+        </table>  
+        <?php if ($_GET['accion']=="editar_abiertos") { ?>    
             <hr/>
             <h3>Agregar nuevo seguimiento</h3>
             
@@ -144,6 +147,15 @@
                 <button type="submit" class="btn btn-default">Guardar Seguimiento</button>
                 <td><a href="index.php?ctl=frm_eventos_listar" class="btn btn-default" role="button">Cancelar</a></td>
             </form>
+        <?php }
+        if ($_GET['accion']=="consulta_cerrados") {  
+        ?>  
+        <td><a href="index.php?ctl=frm_eventos_lista_cerrados" class="btn btn-default" role="button">Volver</a></td>
+        <?php }
+        if ($_GET['accion']=="consulta_relacionados") {  
+        ?>  
+        <td><a href="index.php?ctl=frm_eventos_agregar&id=<?php echo $params[0]['ID_PuntoBCR'];?>" class="btn btn-default" role="button">Volver</a></td>
+        <?php }?>  
         </div>
             <?php require 'vistas/plantillas/pie_de_pagina.php'?>
     </body>

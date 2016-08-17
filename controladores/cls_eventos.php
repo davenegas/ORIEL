@@ -233,7 +233,7 @@ class cls_eventos{
       //Establece la conexión con la bd
       $this->obj_data_provider->conectar();
       
-      $this->obj_data_provider->trae_datos("T_Evento","*","ID_Tipo_Evento=".$this->tipo_evento." AND ID_PuntoBCR=".$this->punto_bcr." AND ID_EstadoEvento<>3");
+      $this->obj_data_provider->trae_datos("T_Evento","*","ID_Tipo_Evento=".$this->tipo_evento." AND ID_PuntoBCR=".$this->punto_bcr." AND ID_EstadoEvento<>3"." AND ID_EstadoEvento<>5");
       
       $this->arreglo=$this->obj_data_provider->getArreglo();
      

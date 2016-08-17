@@ -12,7 +12,7 @@
         <div class="container">
         <h2>Listado General de Empresas</h2>
         <p>A continuación se detallan las diferentes empresas que están registrados en el sistema:</p>            
-        <table id="tabla" class="display" cellspacing="0" width="100%">
+        <table id="tabla" class="display" cellspacing="0">
           <thead>
             <tr>
               <th>ID Empresa</th>
