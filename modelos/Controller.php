@@ -1400,7 +1400,6 @@
     
     //Trazabilidad
     
-     //FUNCIONES PARA EVENTOS
     public function frm_trazabilidad_listar(){
         if(isset($_SESSION['nombre'])){
             $obj_traza = new cls_trazabilidad();
