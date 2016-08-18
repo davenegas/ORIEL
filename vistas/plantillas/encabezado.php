@@ -138,7 +138,7 @@
        <?php 
        
        //************************************************Pinta Menu de Reportes***************************************************************
-       if ((encuentra_coincidencia("Reportes-Eventos"))||(encuentra_coincidencia("Reportes-Oficinas"))||(encuentra_coincidencia("Reportes-Personal"))||(encuentra_coincidencia("Reportes-Alertas"))){
+       if ((encuentra_coincidencia("Reportes-Eventos"))||(encuentra_coincidencia("Reportes-Oficinas"))||(encuentra_coincidencia("Reportes-Personal"))||(encuentra_coincidencia("Reportes-Alertas"))||(encuentra_coincidencia("Reportes-Trazabilidad"))){
       ?>
            
             <li class="dropdown">
