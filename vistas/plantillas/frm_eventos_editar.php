@@ -88,7 +88,7 @@
                 <?php } ?>
                 </tbody>
         </table>  
-        <?php if ($_GET['accion']=="editar_abiertos") { ?>    
+        <?php if (($_GET['accion']=="editar_abiertos") || ($params[0]['ID_EstadoEvento']==1)) { ?>    
             <hr/>
             <h3>Agregar nuevo seguimiento</h3>
             
@@ -106,7 +106,7 @@
                 </div> <br><br><br><br>
                 <div class="col-xs-6">
                     <label for="DetalleSeguimiento">Detalle del Seguimiento</label>
-                    <textarea type="text" required=”required” class="form-control" id="DetalleSeguimiento" name="DetalleSeguimiento" value=""></textarea>
+                    <textarea type="text" required=”required” class="form-control" id="DetalleSeguimiento" name="DetalleSeguimiento" value="" maxlength="250" placeholder="Máximo 250 caracteres por seguimiento"></textarea>
                 </div>
                 
                 <div class="col-xs-6">
@@ -145,15 +145,18 @@
                 </div>
                 <br><br><br><br><br>
                 <button type="submit" class="btn btn-default">Guardar Seguimiento</button>
+                <?php if ($_GET['accion']=="consulta_relacionados") {?>  
+                <td><a href="index.php?ctl=frm_eventos_agregar&id=<?php echo $params[0]['ID_PuntoBCR'];?>" class="btn btn-default" role="button">Volver</a></td>
+                <?php }else{?>  
                 <td><a href="index.php?ctl=frm_eventos_listar" class="btn btn-default" role="button">Cancelar</a></td>
+                <?php }?>
             </form>
         <?php }
         if ($_GET['accion']=="consulta_cerrados") {  
         ?>  
         <td><a href="index.php?ctl=frm_eventos_lista_cerrados" class="btn btn-default" role="button">Volver</a></td>
-        <?php }
-        if ($_GET['accion']=="consulta_relacionados") {  
-        ?>  
+        <?php }?>  
+         <?php if (($_GET['accion']=="consulta_relacionados") && ($params[0]['ID_EstadoEvento']!=1)) { ?>
         <td><a href="index.php?ctl=frm_eventos_agregar&id=<?php echo $params[0]['ID_PuntoBCR'];?>" class="btn btn-default" role="button">Volver</a></td>
         <?php }?>  
         </div>

@@ -12,7 +12,6 @@
         <!--<p>A continuación se detallan los diferentes roles que están registrados en el sistema:</p>-->            
         <table id="tabla" class="display">
           <thead>
-               
             <tr>
               <th>Fecha</th>
               <th>Hora</th>
@@ -57,14 +56,7 @@
             </tbody>
         </table>
         <a href="index.php?ctl=frm_eventos_agregar&id=0" class="btn btn-default" role="button">Agregar Nuevo Evento de Bitácora</a>
-        
-        <?php
-        if ($_SESSION['rol']!=2){
-        ?>  
-        <a href="index.php?ctl=frm_eventos_lista_cerrados" class="btn btn-default" role="button">Recuperar Eventos</a>
-        
-        <?php }
-        ?>
+        <a href="index.php?ctl=frm_eventos_lista_cerrados" class="btn btn-default" role="button">Eventos Cerrados</a> 
         </div>
             <?php require 'vistas/plantillas/pie_de_pagina.php' ?>
     </body>

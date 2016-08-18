@@ -29,13 +29,13 @@
                      <tr>
                         <td><input type="submit" value="Validar" class="btn btn-primary"></td>
                         <td><a href="index.php?ctl=cambiar_password">|Cambio de Clave|</a>
-                           <a   href="#" 
+<!--                           <a   href="#" 
                             title="Add To Cart" 
                           onclick="this.href='index.php?ctl=recordar_password&nom='   
                                               +document.getElementById('nombre').value;
                                    somefunction(this, event); return true;">
                          |Recordar Clave|
-                            </a></td>                
+                            </a></td>                -->
                         </br>
                     </tr>
                  </table>

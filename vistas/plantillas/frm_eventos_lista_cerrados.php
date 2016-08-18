@@ -23,7 +23,12 @@
               <th>Estado del Evento</th>
               <th>Ingresado Por</th>
               <th>Consulta</th>
-              <th>Gestión</th>
+              <?php
+              if ($_SESSION['rol']!=2){
+              ?>  
+               <th>Gestión</th>
+               <?php }
+               ?>            
             </tr>
           </thead>
           <tbody>
@@ -51,11 +56,17 @@
             <td><?php echo $params[$i]['Nombre_Usuario']." ".$params[$i]['Apellido'] ?></td>
             <td align="center"><a href="index.php?ctl=frm_eventos_editar&accion=consulta_cerrados&id=
                <?php echo $params[$i]['ID_Evento']?>">Ver detalle</a></td>
+            <?php
+            if ($_SESSION['rol']!=2){
+            ?>  
             <td align="center"><a href="index.php?ctl=frm_eventos_recuperar&id_evento=
                <?php echo $params[$i]['ID_Evento']?>&id_puntobcr=
                <?php echo $params[$i]['ID_PuntoBCR']?>&id_tipo_evento=
                <?php echo $params[$i]['ID_Tipo_Evento']?>">Recuperar Evento</a></td>
             </tr>
+            <?php }
+            ?>
+            
             <?php }
             ?>
             </tbody>
