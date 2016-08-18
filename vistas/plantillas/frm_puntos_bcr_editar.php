@@ -112,9 +112,9 @@
 
                 for($i=0; $i<$tam;$i++)
                 {
-                    if($provincias[$i]['ID_Provincia']==($cantones[$distritos[$params[0]['ID_Distrito']]['ID_Canton']]['ID_Provincia']-1)){
+                    if($provincias[$i]['ID_Provincia']==($cantones[$distritos[$params[0]['ID_Distrito']]['ID_Canton']]['ID_Provincia'])){
                         
-                       ?> <option value="<?php echo $provincias[$i]['ID_Provincia']?>" selected="selected"><?php echo $provincias[$i]['Nombre_Provincia']?></option><?php
+                       ?> <option value="<?php echo $provincias[$i-1]['ID_Provincia']?>" selected="selected"><?php echo $provincias[$i]['Nombre_Provincia']?></option><?php
                     }
                     else {?>
                         <option value="<?php echo $provincias[$i]['ID_Provincia']?>" ><?php echo $provincias[$i]['Nombre_Provincia']?></option>   
@@ -129,8 +129,8 @@
                 $tam = count($cantones);
                 for($i=0; $i<$tam;$i++)
                 {
-                    if($cantones[$i]['ID_Canton']==($distritos[$params[0]['ID_Distrito']]['ID_Canton']-1)){
-                       ?> <option value="<?php echo $cantones[$i]['ID_Canton']?>" selected="selected"><?php echo $cantones[$i]['Nombre_Canton']?></option><?php
+                    if($cantones[$i]['ID_Canton']==($distritos[$params[0]['ID_Distrito']]['ID_Canton'])){
+                       ?> <option value="<?php echo $cantones[$i-1]['ID_Canton']?>" selected="selected"><?php echo $cantones[$i]['Nombre_Canton']?></option><?php
                     }
                     else {?>
                         <option value="<?php echo $cantones[$i]['ID_Canton']?>" ><?php echo $cantones[$i]['Nombre_Canton']?></option>   

@@ -632,7 +632,7 @@
         }
 
     }
-     //FUNCIONES PARA EVENTOS
+    //FUNCIONES PARA EVENTOS
     public function frm_eventos_listar(){
         if(isset($_SESSION['nombre'])){
             $obj_eventos = new cls_eventos();
@@ -748,7 +748,6 @@
         }  
     }
        
-    
     public function alerta_en_vivo_mismo_punto_bcr_y_evento(){
                 
         if(isset($_POST['id_punto_bcr'])&& (isset($_POST['id_tipo_evento']))){
@@ -777,7 +776,6 @@
             exit;
         }
     }
-    
     
     public function dibuja_tabla_eventos_relacionados_a_punto_bcr(){
                 
@@ -1084,6 +1082,7 @@
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }
     }
+    
     public function puntos_bcr_listar(){
         if(isset($_SESSION['nombre'])){
             $obj_puntosbcr=new cls_puntosBCR();
@@ -1097,6 +1096,10 @@
         }
     }
     
+    public function punto_bcr_agregar() {
+        
+        
+    }
     //////////////////////////
     /*Metodos relacionados del area de Empresas de Seguridad del Sistema*/
     //////////////////////////
@@ -1448,8 +1451,7 @@
     }
     
     //Trazabilidad
-
-     //FUNCIONES PARA EVENTOS
+    //FUNCIONES PARA EVENTOS
 
     public function frm_trazabilidad_listar(){
         if(isset($_SESSION['nombre'])){

@@ -4,14 +4,13 @@
         <meta charset="utf-8"/>
         <title>Lista de Puntos BCR</title>
         <?php require_once 'frm_librerias_head.html';?>
-        
     </head>
     <body>
         <?php require_once 'encabezado.php';?>
         <div class="container">
         <h2>Listado General de Puntos BCR</h2>
         <p>A continuación se detallan los Puntos BCR que están registrados en el sistema:</p>   
-        
+
         <table id="tabla" class="display" cellspacing="0" width="100%">
           <thead>
             <tr>
@@ -41,36 +40,35 @@
                 <td style="text-align:center"><?php echo $params[$i]['Cuenta_SIS'];?></td>
                 <td style="text-align:center"><?php echo $params[$i]['Tipo_Punto'];?></td>
                 <td style="text-align:center"><?php echo $params[$i]['Observaciones'];?></td>
-            <?php 
-            if ($params[$i]['Estado']==1){
-              ?>  
-                <td style="text-align:center">Activo</td>
-               <?php 
-            }else
-            {?>  
-                <td style="text-align:center">Inactivo</td>
-            <?php 
-            }
-            ?>
-                
-            <td style="text-align:center"><a href="index.php?ctl=cambiar_estado_punto_bcr&id=
-               <?php echo $params[$i]['ID_PuntoBCR']?>&estado=<?php echo $params[$i]['Estado']?>">
-                   Activar/Desactivar</a></td>
-            <td style="text-align:center"><a href="index.php?ctl=gestion_punto_bcr&id=
-               <?php echo $params[$i]['ID_PuntoBCR']?>&estado=<?php echo $params[$i]['Estado']?>&descripcion=<?php echo $params[$i]['Observaciones']?>">
-                   Editar</a></td>
-            <td style="text-align:center"><a href="index.php?ctl=frm_eventos_agregar&id=<?php echo $params[$i]['ID_PuntoBCR']?>">
-                   Ingresar Evento</a></td>
+                <?php 
+                if ($params[$i]['Estado']==1){  ?>  
+                    <td style="text-align:center">Activo</td>
+                    <?php 
+                }   else   {?>  
+                    <td style="text-align:center">Inactivo</td>
+                    <?php 
+                }?>
+
+                <td style="text-align:center"><a href="index.php?ctl=cambiar_estado_punto_bcr&id=
+                    <?php echo $params[$i]['ID_PuntoBCR']?>&estado=<?php echo $params[$i]['Estado']?>">
+                    Activar/Desactivar</a></td>
+                <td style="text-align:center"><a href="index.php?ctl=gestion_punto_bcr&id=
+                    <?php echo $params[$i]['ID_PuntoBCR']?>&estado=<?php echo $params[$i]['Estado']?>
+                    &descripcion=<?php echo $params[$i]['Observaciones']?>">
+                    Gestion</a></td>
+                <td style="text-align:center"><a href="index.php?ctl=frm_eventos_agregar&id=<?php echo $params[$i]['ID_PuntoBCR']?>">
+                    Ingresar Evento</a></td>
             </tr>     
-                    
+
             <?php }
             ?>
             </tbody>
         </table>
         
-        <a href="index.php?ctl=frm_punto_bcr_gestion&id=0" class="btn btn-default" role="button">Agregar Nueva Area de Apoyo</a>
-         </div> 
-<!--        </div>-->
-            <?php require 'vistas/plantillas/pie_de_pagina.php' ?>
+        <a href="index.php?ctl=punto_bcr_agregar&id=0" class="btn btn-default" role="button">Agregar Nuevo Punto BCR</a>
+        </div> 
+        
+        <?php require 'vistas/plantillas/pie_de_pagina.php' ?>
+        
     </body>
 </html>
