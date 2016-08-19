@@ -13,6 +13,33 @@ class cls_puntosBCR{
     public $horaslaborales;
     public $observaciones;
     public $estado;
+    public $tipo_punto;
+    public $distrito;
+    public $empresa;
+    
+    function getEmpresa() {
+        return $this->empresa;
+    }
+
+    function setEmpresa($empresa) {
+        $this->empresa = $empresa;
+    }
+
+    function getTipo_punto() {
+        return $this->tipo_punto;
+    }
+
+    function getDistrito() {
+        return $this->distrito;
+    }
+
+    function setTipo_punto($tipo_punto) {
+        $this->tipo_punto = $tipo_punto;
+    }
+
+    function setDistrito($distrito) {
+        $this->distrito = $distrito;
+    }
     
     function getId() {
         return $this->id;
@@ -132,6 +159,9 @@ class cls_puntosBCR{
         $this->horaslaborales="";
         $this->observaciones="";
         $this->estado="";
+        $this->tipo_punto="";
+        $this->distrito="";
+        $this->empresa="";
     }
     
     public function obtiene_todos_los_puntos_bcr(){
@@ -252,6 +282,7 @@ class cls_puntosBCR{
         $this->obj_data_provider->desconectar();
         $this->resultado_operacion=true; 
     }
+    
     public function obtiene_provincias(){
         $this->obj_data_provider->conectar();
         $this->arreglo=$this->obj_data_provider->trae_datos(
@@ -262,6 +293,7 @@ class cls_puntosBCR{
         $this->obj_data_provider->desconectar();
         $this->resultado_operacion=true; 
     }
+    
     public function actualizar_ubicacion_puntobcr(){
         $this->obj_data_provider->conectar();
         $this->arreglo=$this->obj_data_provider->edita_datos("T_PuntoBCR", "ID_Distrito='".$this->id."', ". "Direccion='".$this->direccion."'",$this->condicion);
@@ -281,6 +313,14 @@ class cls_puntosBCR{
     public function eliminar_telefono_puntobcr() {
         $this->obj_data_provider->conectar();
         $this->arreglo=$this->obj_data_provider->eliminar_datos("T_PuntoBCR", $this->condicion);
+        $this->obj_data_provider->desconectar();
+        $this->resultado_operacion=true;
+    }
+    
+    public function guardar_punto_bcr(){
+        $this->obj_data_provider->conectar();
+        $this->obj_data_provider->inserta_datos("T_PuntoBCR", "`ID_PuntoBCR`, `Nombre`, `Direccion`, `Codigo`, `Cuenta_SIS`, `ID_Horario`, `ID_Tipo_Punto`, `ID_Empresa`, `ID_Gerente_Zona`, `ID_Supervisor_Zona`, `ID_Distrito`, `Observaciones`, `Estado`", "'".$this->id."','".$this->nombre."','".$this->direccion."','".$this->codigo."','".$this->cuentasis."','".$this->horaslaborales."','".$this->tipo_punto."','".$this->empresa."','"."1"."','"."1"."','".$this->distrito."','".$this->observaciones."','".$this->estado."'");
+        $this->arreglo=$this->obj_data_provider->getArreglo();
         $this->obj_data_provider->desconectar();
         $this->resultado_operacion=true;
     }

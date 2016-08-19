@@ -71,6 +71,7 @@ class cls_usuarios{
   function setCondicion($condicion) {
       $this->condicion = $condicion;
   }
+  
   function getCedula() {
       return $this->cedula;
   }
@@ -136,8 +137,6 @@ class cls_usuarios{
         $this->resultado_operacion=true;
       }
   }  
-  
-   
   
   public function existe_usuario($nombre_de_usuario){
       
