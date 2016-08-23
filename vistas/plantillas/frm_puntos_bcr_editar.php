@@ -59,9 +59,11 @@
             <div>
             <table class="display col-md-12 table-striped quitar-float espacio-abajo" id="telefonos">
                 <thead> 
+                    <th>ID_Telefono</th>
                     <th style="text-align:center">Tipo de Teléfono</th>
                     <th style="text-align:center">Número teléfono</th>
                     <th style="text-align:center">Observaciones</th>
+                    <th style="text-align:center">Quitar número</th>
                 </thead>
                 <tbody>
                     <?php 
@@ -69,9 +71,12 @@
                     for ($i = 0; $i <$tam; $i++) {
                     ?>
                     <tr>
+                        <td><?php echo $telefonos[$i]['ID_Telefono'];?></td>
                         <td style="text-align:center"><?php echo $telefonos[$i]['Tipo_Telefono'];?></td>
                         <td style="text-align:center"><?php echo $telefonos[$i]['Numero'];?></td>
                         <td style="text-align:center"><?php echo $telefonos[$i]['Observaciones'];?></td>
+                        <td style="text-align:center"><a href="index.php?ctl=puntobcr_desligar_telefono&id=
+                            <?php echo $params[$i]['ID_Telefono']?>"><img src='vistas/Imagenes/menos.png' width="20"></a></td>
                     </tr>
                     <?php } ?>
                 </tbody> 
@@ -105,15 +110,11 @@
                 <?php
                 $tam = count($provincias);
 
-                for($i=1; $i<=$tam;$i++)
+                for($i=0; $i<$tam;$i++)
                 {
                     if($provincias[$i]['ID_Provincia']==$cantones[$distritos[$params[0]['ID_Distrito']]['ID_Canton']]['ID_Provincia']){
                         
-
-                       ?> <option value="<?php echo $provincias[$i]['ID_Provincia']?>" selected="selected"><?php echo $provincias[$i]['Nombre_Provincia']?></option><?php
-
                         ?><option value="<?php echo $provincias[$i]['ID_Provincia']?>" selected="selected"><?php echo $provincias[$i]['Nombre_Provincia']?></option><?php
-
                     }
                     else {?>
                         <option value="<?php echo $provincias[$i]['ID_Provincia']?>" ><?php echo $provincias[$i]['Nombre_Provincia']?></option>   
@@ -126,13 +127,6 @@
                 <select class="form-control" disabled id="Canton" name="Canton" > 
                 <?php
                 $tam = count($cantones);
-
-                for($i=1; $i<=$tam;$i++)
-                {
-                    if($cantones[$i]['ID_Canton']==($distritos[$params[0]['ID_Distrito']]['ID_Canton'])){
-                       ?> <option value="<?php echo $cantones[$i]['ID_Canton']?>" selected="selected"><?php echo $cantones[$i]['Nombre_Canton']?></option><?php
-                    }   
-
                 
                 for($i=0; $i<$tam;$i++)
                 {
@@ -143,7 +137,7 @@
                         <option value="<?php echo $cantones[$i]['ID_Canton']?>" ><?php echo $cantones[$i]['Nombre_Canton']?></option>   
                 <?php }}  ?>
                 </select>
-            </div> 
+            </div>
             
             <div class="col-md-4">
                 <label for="Distrito">Distrito</label>
@@ -317,7 +311,6 @@
             <a href="index.php?ctl=puntos_bcr_listar" class="btn btn-default" role="button">Volver</a>
         </form>                               
         <?php require_once 'pie_de_pagina.php' ?>
-        </div>
-       </div>
     </body>
+    </div>
 </html>
