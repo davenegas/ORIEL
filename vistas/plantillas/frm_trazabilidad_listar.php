@@ -3,12 +3,67 @@
     <head>
         <meta charset="utf-8"/>
         <title>Lista de Traza del Sistema</title>
+        <script language="javascript" src="vistas/js/jquery.js"></script>
+        <script language="javascript" src="vistas/js/listas_dependientes_trazabilidad.js"></script>
         <?php require_once 'frm_librerias_head.html'; ?>     
     </head>
     <body>
         <?php require_once 'encabezado.php';?>
         <div class="container animated fadeIn">
+        <h2>Generar Reporte de Trazabilidad del Sistema</h2>    
+        <h4>Escoger parámetros del filtro:</h4>
+        <hr/> 
+        <div class="col-xs-3">
+              <label for="fecha_inicial">Fecha Inicial:</label>
+              <input type="date" required=”required” class="form-control" id="fecha_inicial" name="fecha_inicial" value="<?php echo date("Y-m-d");?>">
+        </div> 
+         <div class="col-xs-3">
+              <label for="fecha_final">Fecha Final:</label>
+              <input type="date" required=”required” class="form-control" id="fecha_final" name="fecha_final" value="<?php echo date("Y-m-d");?>">
+        </div> 
+        
+         <div class="col-xs-3">
+                <label for="lista_usuarios">Usuario:</label>
+                <select class="form-control" required=”required” id="lista_usuarios" name="lista_usuarios" > 
+                    <option value="0" selected="true">Todos los Usuarios</option>
+                <?php
+                    $tam_lista_usuarios = count($lista_de_usuarios);
+
+                    for($i=0; $i<$tam_lista_usuarios;$i++)
+                    {                      
+                           ?> 
+                    <option value="<?php echo  $lista_de_usuarios[$i]['ID_Usuario']?>"><?php echo  $lista_de_usuarios[$i]['Nombre_Completo']?></option>
+                    <?php
+
+                    } ?>  
+                </select>
+            </div>
+        
+        <div class="col-xs-3">
+                <label for="tabla_afectada">Tabla Afectada:</label>
+                <select class="form-control" required=”required” id="tabla_afectada" name="tabla_afectada" > 
+                     <option value="todas" selected="true">Todas las Tablas</option>
+                <?php
+                    $tam_tabla_afectadas = count($lista_tablas_afectadas);
+
+                    for($i=0; $i<$tam_tabla_afectadas;$i++)
+                    {                      
+                           ?> 
+                    <option value="<?php echo $lista_tablas_afectadas[$i]['Tabla_Afectada']?>"><?php echo $lista_tablas_afectadas[$i]['Tabla_Afectada']?></option>
+                    <?php
+
+                    } ?>  
+                </select>
+                
+        </div>
+        
+        <hr/> <hr/> <hr/> <hr/> 
+                <!--<button value="esto es un boton" onclick="mi_funcion()"/>-->
+                <a class="btn btn-default" role="button" id="prueba" name="prueba" onclick="hacer_click()">Generar Reporte</a>
+                <a href="index.php?ctl=principal" class="btn btn-default" role="button">Cancelar</a>
+          
         <h2>Listado de Trazabilidad del Sistema</h2>
+        
         <!--<p>A continuación se detallan los diferentes roles que están registrados en el sistema:</p>-->  
         <section class="full-height">
         <table id="tabla" class="display2">

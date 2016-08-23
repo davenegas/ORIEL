@@ -142,17 +142,23 @@ class Data_Provider{
             //echo ("select ".$campos." from ".$table." where ".$condicion.";");
         } 
         
-        while($filas=$consulta->fetch_assoc()){
-            $this->arreglo[]=$filas;   
-        }
+        //echo "select ".$campos." from ".$table." where ".$condicion.";";
         
-        if (!(isset($this->arreglo))){
-            $this->arreglo=null;
-            $this->resultado_operacion=false;
+        if ($consulta!=null){
+            while($filas=$consulta->fetch_assoc()){
+                $this->arreglo[]=$filas;   
+            }
+
+            if (!(isset($this->arreglo))){
+                $this->arreglo=null;
+                $this->resultado_operacion=false;
+            }else{
+                $this->resultado_operacion=true;
+            }
         }else{
-            $this->resultado_operacion=true;
+              $arreglo=null;
+        
         }
-       
    }
    
    public function inserta_datos($table,$campos,$valores){

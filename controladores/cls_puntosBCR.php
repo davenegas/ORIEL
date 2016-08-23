@@ -240,6 +240,7 @@ class cls_puntosBCR{
         $this->arreglo=$this->obj_data_provider->getArreglo();
         $this->obj_data_provider->desconectar();
         $this->resultado_operacion=true; 
+        //echo "distrito x2";
     }
     
     public function obtiene_cantones(){
@@ -251,6 +252,7 @@ class cls_puntosBCR{
         $this->arreglo=$this->obj_data_provider->getArreglo();
         $this->obj_data_provider->desconectar();
         $this->resultado_operacion=true; 
+        //echo "canton x2";
     }
     public function obtiene_provincias(){
         $this->obj_data_provider->conectar();
@@ -261,6 +263,7 @@ class cls_puntosBCR{
         $this->arreglo=$this->obj_data_provider->getArreglo();
         $this->obj_data_provider->desconectar();
         $this->resultado_operacion=true; 
+        //echo "provincia x2";
     }
     public function actualizar_ubicacion_puntobcr(){
         $this->obj_data_provider->conectar();

@@ -776,6 +776,92 @@
             exit;
         }
     }
+   
+    public function  actualiza_en_vivo_reporte_trazabilidad(){
+                            
+            if(isset($_SESSION['nombre'])){
+                
+                $fecha_inicial=$_POST['fecha_inicial'];
+                $fecha_final=$_POST['fecha_final'];
+                $usuario=$_POST['usuario'];
+                $tabla_afectada=$_POST['tabla'];
+                
+                $condicion="t_traza.Fecha between '".$fecha_inicial."' AND '".$fecha_final."' ";
+                
+                if (!$usuario=="0"){
+                    $condicion.="AND t_traza.ID_Usuario=".$usuario." ";
+                }
+                
+                if ($tabla_afectada!="todas"){
+                    $condicion.="AND t_traza.Tabla_Afectada='".$tabla_afectada."'";
+                }
+                  
+                $obj_trazabilidad= new cls_trazabilidad();
+                $obj_trazabilidad->setCondicion($condicion);
+                $obj_trazabilidad->obtiene_trazabilidad();
+                $params=$obj_trazabilidad->getArreglo();
+
+                if (count($params)>0){
+                    
+                    //$html="<h2>Listado de Eventos Relacionados a este Punto BCR</h2>";
+                    $html="<thead>";   
+                    $html.="<tr>";
+                    $html.="<th>Fecha</th>";
+                    $html.="<th>Hora</th>";
+                    $html.="<th>ID_Traza</th>";
+                    $html.="<th>Antiguedad Dias</th>";
+                    $html.="<th>Usuario</th>";
+                    $html.="<th>Tabla Afectada</th>";
+                    $html.="<th>Dato Actualizado</th>";
+                    $html.="<th>Dato Anterior</th>";
+                    $html.="</tr>";
+                    $html.="</thead>";
+                    
+                    $html.="<tbody>";
+                    $tam=count($params);
+
+                    for ($i = 0; $i <$tam; $i++) {
+           
+                        $html.="<tr>";
+           
+                        $fecha_evento = date_create($params[$i]['Fecha']);
+                        $fecha_actual = date_create(date("d-m-Y"));
+                        $dias_abierto= date_diff($fecha_evento, $fecha_actual);
+            
+                        $html.="<td>".date_format($fecha_evento, 'd/m/Y')."</td>";
+                        $html.="<td>".$params[$i]['Hora']."</td>";
+                        $html.="<td>".$params[$i]['ID_Traza']."</td>";
+                        $html.="<td align='center'>".$dias_abierto->format('%a')."</td>";
+                        $html.="<td>".$params[$i]['Nombre']." ".$params[$i]['Apellido']."</td>";
+                        $html.="<td>".$params[$i]['Tabla_Afectada']."</td>";
+                        $html.="<td>".$params[$i]['Dato_Actualizado']."</td>";
+                        $html.="<td>".$params[$i]['Dato_Anterior']."</td>";
+                        
+                        $html.="</tr>";
+                         }
+            
+                    $html.="</tbody>";
+
+                    //$html.=" </table>";
+                    
+                    echo $html;
+                    exit;
+                }else{
+                     $html="<h4>No se encontraron eventos para este filtro.</h4>";
+                     echo $html;
+                     exit;
+                }    
+
+            }else {
+               $tipo_de_alerta="alert alert-warning";
+               $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+               require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+            }
+       
+       
+        
+    }
+    
     
     public function dibuja_tabla_eventos_relacionados_a_punto_bcr(){
                 
@@ -783,7 +869,7 @@
             
             if(isset($_SESSION['nombre'])){
                 $obj_eventos= new cls_eventos();
-                $obj_eventos->setCondicion("T_Evento.ID_PuntoBCR=".$_POST['id_punto_bcr']);
+                $obj_eventos->setCondicion("T_Evento.ID_PuntoBCR=".$_POST['id_punto_bcr']." Limit 0,5");
                 $obj_eventos->obtiene_todos_los_eventos();
                 $params=$obj_eventos->getArreglo();
 
@@ -1456,9 +1542,15 @@
     public function frm_trazabilidad_listar(){
         if(isset($_SESSION['nombre'])){
             $obj_traza = new cls_trazabilidad();
-            $obj_traza->setCondicion("");
+            $obj_traza->setCondicion("Fecha='".date("Y-m-d")."'");
             $obj_traza ->obtiene_trazabilidad(); 
             $params= $obj_traza->getArreglo();
+            $obj_traza->setCondicion("");
+            $obj_traza->obtiene_lista_usuarios_que_han_modificado_base_de_datos();
+            $lista_de_usuarios=$obj_traza->getArreglo();
+            $obj_traza->setCondicion("");
+            $obj_traza->obtiene_lista_tablas_afectadas_en_el_sistema();
+            $lista_tablas_afectadas=$obj_traza->getArreglo();
             require __DIR__.'/../vistas/plantillas/frm_trazabilidad_listar.php';
         }
         else {
