@@ -716,15 +716,15 @@
                         //Distritos
                     $obj_Puntobcr->setCondicion("");
                     $obj_Puntobcr->obtiene_distritos();
-                    $distritos = $obj_Puntobcr->getArreglo();
+                    $distritos = array_merge(array(['ID_Distrito'=>0]+['Nombre_Distrito'=>""]),$obj_Puntobcr->getArreglo());
                         //Cantones
                     $obj_Puntobcr->setCondicion("");
                     $obj_Puntobcr->obtiene_cantones();
-                    $cantones = $obj_Puntobcr->getArreglo();
+                    $cantones   = array_merge(array(['ID_Canton'=>0]+['Nombre_Canton'=>""]),$obj_Puntobcr->getArreglo());
                         //Provincias
                     $obj_Puntobcr->setCondicion("");
                     $obj_Puntobcr->obtiene_provincias();
-                    $lista_provincias = $obj_Puntobcr->getArreglo();
+                    $lista_provincias = array_merge(array(['ID_Provincia'=>0]+['Nombre_Provincia'=>""]),$obj_Puntobcr->getArreglo());
                     
                     $obj_eventos->setCondicion("");
                     $obj_eventos->obtener_todos_los_tipos_de_puntos_BCR();
@@ -1312,15 +1312,15 @@
                     //Distritos
                 $obj_Puntobcr->setCondicion("");
                 $obj_Puntobcr->obtiene_distritos();
-                $distritos = $obj_Puntobcr->getArreglo();
+                $distritos = array_merge(array(['ID_Distrito'=>0]+['Nombre_Distrito'=>""]),$obj_Puntobcr->getArreglo());
                     //Cantones
                 $obj_Puntobcr->setCondicion("");
                 $obj_Puntobcr->obtiene_cantones();
-                $cantones = $obj_Puntobcr->getArreglo();
+                $cantones   = array_merge(array(['ID_Canton'=>0]+['Nombre_Canton'=>""]),$obj_Puntobcr->getArreglo());
                     //Provincias
                 $obj_Puntobcr->setCondicion("");
                 $obj_Puntobcr->obtiene_provincias();
-                $provincias = $obj_Puntobcr->getArreglo();
+                $provincias = array_merge(array(['ID_Provincia'=>"0"]+['Nombre_Provincia'=>""]),$obj_Puntobcr->getArreglo());
                 
                 //obtiene las areas de apoyo del sitio
                 $obj_areasapoyo->setCondicion("T_PuntoBCRAreaApoyo.ID_PuntoBCR='".$_GET['id']."'");
