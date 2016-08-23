@@ -107,9 +107,13 @@
 
                 for($i=1; $i<=$tam;$i++)
                 {
-                    if($provincias[$i]['ID_Provincia']==($cantones[$distritos[$params[0]['ID_Distrito']]['ID_Canton']]['ID_Provincia'])){
+                    if($provincias[$i]['ID_Provincia']==$cantones[$distritos[$params[0]['ID_Distrito']]['ID_Canton']]['ID_Provincia']){
                         
+
                        ?> <option value="<?php echo $provincias[$i]['ID_Provincia']?>" selected="selected"><?php echo $provincias[$i]['Nombre_Provincia']?></option><?php
+
+                        ?><option value="<?php echo $provincias[$i]['ID_Provincia']?>" selected="selected"><?php echo $provincias[$i]['Nombre_Provincia']?></option><?php
+
                     }
                     else {?>
                         <option value="<?php echo $provincias[$i]['ID_Provincia']?>" ><?php echo $provincias[$i]['Nombre_Provincia']?></option>   
@@ -122,11 +126,19 @@
                 <select class="form-control" disabled id="Canton" name="Canton" > 
                 <?php
                 $tam = count($cantones);
+
                 for($i=1; $i<=$tam;$i++)
                 {
                     if($cantones[$i]['ID_Canton']==($distritos[$params[0]['ID_Distrito']]['ID_Canton'])){
                        ?> <option value="<?php echo $cantones[$i]['ID_Canton']?>" selected="selected"><?php echo $cantones[$i]['Nombre_Canton']?></option><?php
                     }   
+
+                
+                for($i=0; $i<$tam;$i++)
+                {
+                    if($cantones[$i]['ID_Canton']==$distritos[$params[0]['ID_Distrito']]['ID_Canton']){
+                       ?> <option value="<?php echo $cantones[$i]['ID_Canton']?>" selected="selected"><?php echo $cantones[$i]['Nombre_Canton']?></option><?php
+                    }
                     else {?>
                         <option value="<?php echo $cantones[$i]['ID_Canton']?>" ><?php echo $cantones[$i]['Nombre_Canton']?></option>   
                 <?php }}  ?>
@@ -305,6 +317,7 @@
             <a href="index.php?ctl=puntos_bcr_listar" class="btn btn-default" role="button">Volver</a>
         </form>                               
         <?php require_once 'pie_de_pagina.php' ?>
+        </div>
+       </div>
     </body>
-    </div>
 </html>

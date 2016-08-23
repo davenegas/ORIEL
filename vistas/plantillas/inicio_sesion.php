@@ -11,7 +11,7 @@
     <body>
         <br>
     <center><img src="vistas/Imagenes/Banner_Centro_de_Control.jpg" alt=""/></center>
-      <hr/>   
+      <hr/>
       <table style="margin: 0 auto;">
                <tr><h3 class="text-primary" align="center">Inicio de Sesión</h3></tr>
       </table>

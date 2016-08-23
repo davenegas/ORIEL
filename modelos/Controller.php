@@ -716,15 +716,15 @@
                         //Distritos
                     $obj_Puntobcr->setCondicion("");
                     $obj_Puntobcr->obtiene_distritos();
-                    $distritos = $obj_Puntobcr->getArreglo();
+                    $distritos = array_merge(array(['ID_Distrito'=>0]+['Nombre_Distrito'=>""]),$obj_Puntobcr->getArreglo());
                         //Cantones
                     $obj_Puntobcr->setCondicion("");
                     $obj_Puntobcr->obtiene_cantones();
-                    $cantones = $obj_Puntobcr->getArreglo();
+                    $cantones   = array_merge(array(['ID_Canton'=>0]+['Nombre_Canton'=>""]),$obj_Puntobcr->getArreglo());
                         //Provincias
                     $obj_Puntobcr->setCondicion("");
                     $obj_Puntobcr->obtiene_provincias();
-                    $lista_provincias = $obj_Puntobcr->getArreglo();
+                    $lista_provincias = array_merge(array(['ID_Provincia'=>0]+['Nombre_Provincia'=>""]),$obj_Puntobcr->getArreglo());
                     
                     $obj_eventos->setCondicion("");
                     $obj_eventos->obtener_todos_los_tipos_de_puntos_BCR();
@@ -1181,11 +1181,7 @@
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }
     }
-    
-    public function punto_bcr_agregar() {
-        
-        
-    }
+
     //////////////////////////
     /*Metodos relacionados del area de Empresas de Seguridad del Sistema*/
     //////////////////////////
@@ -1340,7 +1336,42 @@
             
             if ($_GET['id']==0){
                 
+                $ide=0;
+                $params[0]['Codigo']="";
+                $params[0]['Cuenta_SIS']="BCR-";
+                $params[0]['Nombre']="";
+                $params[0]['Direccion']="";
+                $params[0]['Observaciones']="";
+                $params[0]['Estado']=1;
+                
+                //Obtiene todos los tipos de puntos BCR para listarlos
+                $obj_Puntobcr->setCondicion("");
+                $obj_Puntobcr->obtiene_los_tipo_puntos();
+                $tipo_puntos = $obj_Puntobcr->getArreglo();
+                
+                //Obtiene Distrito->Cantón->Provincia
+                    //Distritos
+                $obj_Puntobcr->setCondicion("");
+                $obj_Puntobcr->obtiene_distritos();
+                $distritos = $obj_Puntobcr->getArreglo();
+                    //Cantones
+                $obj_Puntobcr->setCondicion("");
+                $obj_Puntobcr->obtiene_cantones();
+                $cantones = $obj_Puntobcr->getArreglo();
+                    //Provincias
+                $obj_Puntobcr->setCondicion("");
+                $obj_Puntobcr->obtiene_provincias();
+                $provincias = $obj_Puntobcr->getArreglo();
+                
+                //Obtiene empresa remesera
+                $obj_empresa->setCondicion("");
+                $obj_empresa->obtiene_todas_las_empresas();
+                $empresas= $obj_empresa->getArreglo();
+                
+                
+                require __DIR__ . '/../vistas/plantillas/frm_puntos_bcr_nuevo.php';
             }   else   {
+                
                 $ide=$_GET['id'];
                 //Obtiene la informacion del PuntoBCR
                 $ide=$_GET['id'];
@@ -1367,15 +1398,15 @@
                     //Distritos
                 $obj_Puntobcr->setCondicion("");
                 $obj_Puntobcr->obtiene_distritos();
-                $distritos = $obj_Puntobcr->getArreglo();
+                $distritos = array_merge(array(['ID_Distrito'=>0]+['Nombre_Distrito'=>""]),$obj_Puntobcr->getArreglo());
                     //Cantones
                 $obj_Puntobcr->setCondicion("");
                 $obj_Puntobcr->obtiene_cantones();
-                $cantones = $obj_Puntobcr->getArreglo();
+                $cantones   = array_merge(array(['ID_Canton'=>0]+['Nombre_Canton'=>""]),$obj_Puntobcr->getArreglo());
                     //Provincias
                 $obj_Puntobcr->setCondicion("");
                 $obj_Puntobcr->obtiene_provincias();
-                $provincias = $obj_Puntobcr->getArreglo();
+                $provincias = array_merge(array(['ID_Provincia'=>"0"]+['Nombre_Provincia'=>""]),$obj_Puntobcr->getArreglo());
                 
                 //obtiene las areas de apoyo del sitio
                 $obj_areasapoyo->setCondicion("T_PuntoBCRAreaApoyo.ID_PuntoBCR='".$_GET['id']."'");
@@ -1413,8 +1444,9 @@
                 $obj_direccionIP->setCondicion("T_PuntoBCRDireccionIP.ID_PuntoBCR='".$_GET['id']."'");
                 $obj_direccionIP->obtiene_direccionesIP();
                 $direccionIP = $obj_direccionIP->getArreglo();
+                require __DIR__ . '/../vistas/plantillas/frm_puntos_bcr_editar.php';
             }
-            require __DIR__ . '/../vistas/plantillas/frm_puntos_bcr_editar.php';
+            
         }   else    {
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
@@ -1487,6 +1519,35 @@
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }
+    }
+    
+    public function punto_bcr_guardar() {
+        if(isset($_SESSION['nombre'])){
+            $obj_Puntobcr = new cls_puntosBCR();
+            if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+                
+                echo ($_GET['id']);
+                $obj_Puntobcr->setId($_GET['id']);
+                $obj_Puntobcr->setCodigo($_POST['Codigo']);
+                $obj_Puntobcr->setCuentasis($_POST['Cuenta_SIS']);
+                $obj_Puntobcr->setNombre($_POST['Nombre']);
+                $obj_Puntobcr->setDireccion($_POST['Direccion']);
+                $obj_Puntobcr->setObservaciones($_POST['Observaciones']);
+                $obj_Puntobcr->setEstado($_POST['Estado']);
+                $obj_Puntobcr->setTipo_punto($_POST['Tipo_Punto']);
+                $obj_Puntobcr->setDistrito($_POST['Distrito']);
+                $obj_Puntobcr->setEmpresa($_POST['Empresa']);
+                $obj_Puntobcr->horaslaborales="1";
+                
+                $obj_Puntobcr->guardar_punto_bcr();
+
+            }
+           $this->puntos_bcr_listar();
+        }else{
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }  
     }
     
     public function puntobcr_desligar_telefono(){

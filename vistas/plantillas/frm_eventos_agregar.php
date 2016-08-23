@@ -14,7 +14,7 @@
         <h2>Agregar Evento para Bitácora</h2>
         <!--<p>Mediante esta pantalla, podrá agregar o editar Roles de seguridad:</p>-->
         <hr/> 
-        <form class="form-horizontal" role="form" method="POST" action="index.php?ctl=guardar_evento">
+        <form class="form-horizontal" role="form" method="POST" action="index.php?ctl=guardar_evento&id=<?php echo trim($ide);?>">
             <div class="col-xs-4">
               <label for="fecha">Fecha</label>
               <input type="date" required=”required” class="form-control" id="fecha" name="fecha" value="<?php echo date("Y-m-d");?>">

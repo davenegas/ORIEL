@@ -65,7 +65,7 @@
             </tbody>
         </table>
         
-        <a href="index.php?ctl=punto_bcr_agregar&id=0" class="btn btn-default" role="button">Agregar Nuevo Punto BCR</a>
+        <a href="index.php?ctl=gestion_punto_bcr&id=0" class="btn btn-default" role="button">Agregar Nuevo Punto BCR</a>
         </div> 
         
         <?php require 'vistas/plantillas/pie_de_pagina.php' ?>
