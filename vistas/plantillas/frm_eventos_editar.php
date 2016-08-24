@@ -4,7 +4,7 @@
         <meta charset="utf-8"/>
         <title>Detalle de Evento</title>
         <?php require_once 'frm_librerias_head.html';?>
-
+        <script language="javascript" src="vistas/js/valida_un_solo_click_en_formulario.js"></script>
     </head>
     <body>
         <?php require_once 'encabezado.php';?>
@@ -93,7 +93,7 @@
             <h3>Agregar nuevo seguimiento</h3>
             
                 <!--Agregar nuevo detalle o seguimiento del evento-->
-            <form class="form-horizontal" role="form" method="POST" action="index.php?ctl=guardar_seguimiento_evento&id=<?php echo trim($ide);?>">
+            <form class="form-horizontal" role="form" onSubmit="return enviado()" method="POST" action="index.php?ctl=guardar_seguimiento_evento&id=<?php echo trim($ide);?>">
                 <div class="col-xs-6">
                     <label for="Fecha">Fecha Seguimiento</label>
                     <input type="date" required=”required” class="form-control" id="Fecha" name="Fecha" value="<?php echo date("Y-m-d");?>">
@@ -106,7 +106,7 @@
                 </div> <br><br><br><br>
                 <div class="col-xs-6">
                     <label for="DetalleSeguimiento">Detalle del Seguimiento</label>
-                    <textarea type="text" required=”required” class="form-control" id="DetalleSeguimiento" name="DetalleSeguimiento" value="" maxlength="250" placeholder="Máximo 250 caracteres por seguimiento"></textarea>
+                    <textarea type="text" required=”required” class="form-control" id="DetalleSeguimiento" name="DetalleSeguimiento" value="" maxlength="250" minlength="5" placeholder="Máximo 250 caracteres por seguimiento"></textarea>
                 </div>
                 
                 <div class="col-xs-6">
@@ -156,7 +156,7 @@
         ?>  
         <td><a href="index.php?ctl=frm_eventos_lista_cerrados" class="btn btn-default" role="button">Volver</a></td>
         <?php }?>  
-         <?php if (($_GET['accion']=="consulta_relacionados") && ($params[0]['ID_EstadoEvento']!=1)) { ?>
+        <?php if (($_GET['accion']=="consulta_relacionados") && ($params[0]['ID_EstadoEvento']!=1)) { ?>
         <td><a href="index.php?ctl=frm_eventos_agregar&id=<?php echo $params[0]['ID_PuntoBCR'];?>" class="btn btn-default" role="button">Volver</a></td>
         <?php }?>  
         </div>
