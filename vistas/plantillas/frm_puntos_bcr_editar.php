@@ -71,12 +71,12 @@
                     for ($i = 0; $i <$tam; $i++) {
                     ?>
                     <tr>
-                        <td><?php echo $telefonos[$i]['ID_Telefono'];?></td>
+                        <td style="text-align:center"><?php echo $telefonos[$i]['ID_Telefono'];?></td>
                         <td style="text-align:center"><?php echo $telefonos[$i]['Tipo_Telefono'];?></td>
                         <td style="text-align:center"><?php echo $telefonos[$i]['Numero'];?></td>
                         <td style="text-align:center"><?php echo $telefonos[$i]['Observaciones'];?></td>
-                        <td style="text-align:center"><a href="index.php?ctl=puntobcr_desligar_telefono&id=
-                            <?php echo $params[$i]['ID_Telefono']?>"><img src='vistas/Imagenes/menos.png' width="20"></a></td>
+                        <td style="text-align:center"><a class="btn btn-default" role="button" id="prueba" name="prueba" onclick="eliminar_telefono(<?php echo $telefonos[$i]['ID_Telefono'];?>)">
+                                <img src='vistas/Imagenes/menos.png' width="20"></a></td>
                     </tr>
                     <?php } ?>
                 </tbody> 

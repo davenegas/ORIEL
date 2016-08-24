@@ -21,3 +21,6 @@ div#tabla_dos{
 .quitar-float{
     float: none;
 }
+.pacifico{
+	font-family: 'Pacifico', cursive;
+}

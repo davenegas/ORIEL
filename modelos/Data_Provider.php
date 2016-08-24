@@ -231,10 +231,12 @@ class Data_Provider{
        if ($condicion==""){
            $consulta=$this->conexion->query("delete from ".$table.";");
            $cadena_sql=str_replace(","," - ","delete from ".$table.";");
+           //echo("delete from ".$table.";");
        }else{
            $consulta=$this->conexion->query("delete from ".$table." where ".$condicion.";");
            $cadena_sql=str_replace(","," - ","delete from ".$table." where ".$condicion.";");
-       }   
+           //echo("delete from ".$table." where ".$condicion.";");
+       }    
        
         //Registro de la trazabilidad del sistema
         

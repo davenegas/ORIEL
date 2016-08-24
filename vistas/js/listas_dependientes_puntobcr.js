@@ -66,4 +66,11 @@ $(document).ready(function(){
             });   
         }
     });
-});
+});   
+
+function eliminar_telefono(ide){
+        id_telefono= ide;
+        //$.post("index.php?ctl=puntobcr_desligar_telefono", { id_telefono: id_telefono}, function(data){
+          //      alert (data);
+           // });
+    };

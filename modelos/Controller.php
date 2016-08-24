@@ -1553,10 +1553,10 @@
     public function puntobcr_desligar_telefono(){
         if(isset($_SESSION['nombre'])){
             $obj_puntosbcr = new cls_puntosBCR();
-            $obj_puntosbcr->setId($_GET['id']);
-            $obj_puntosbcr->setCondicion("ID_Telefono='".$_GET['id']);
+            $obj_puntosbcr->setId($_POST['id_telefono']);
+            $obj_puntosbcr->setCondicion("ID='".$_POST['id_telefono']);
+            $obj_puntosbcr->eliminar_telefono_puntobcr();
             
-            require __DIR__ . '/../vistas/plantillas/frm_personal_listar.php';
         }else{
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
