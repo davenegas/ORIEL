@@ -3,19 +3,22 @@
     <head>
         <meta charset="utf-8"/>
         <title>Lista de Eventos</title>
-        <?php require_once 'frm_librerias_head.html'; ?>     
+        <?php require_once 'frm_librerias_head.html'; ?>          
+        <script language="javascript" src="vistas/js/refresca_pagina_automaticamente.js"></script>
     </head>
     <body>
         <?php require_once 'encabezado.php';?>
         <div class="container animated fadeIn">
         <h2>Listado de Eventos</h2>
         <!--<p>A continuación se detallan los diferentes roles que están registrados en el sistema:</p>-->            
+        <a href="index.php?ctl=frm_eventos_agregar&id=0" class="btn btn-default" role="button">Agregar Nuevo Evento de Bitácora</a>
+        <a href="index.php?ctl=frm_eventos_lista_cerrados" class="btn btn-default" role="button">Eventos Cerrados</a> 
         <table id="tabla" class="display">
           <thead>
             <tr>
+              <th>Lapso</th>
               <th>Fecha</th>
               <th>Hora</th>
-              <th>Lapso</th>
               <th>Provincia</th>
               <th>Tipo Punto</th>
               <th>Punto BCR</th>
@@ -39,9 +42,9 @@
             $fecha_actual = date_create(date("d-m-Y"));
             $dias_abierto= date_diff($fecha_evento, $fecha_actual);
             ?>
+            <td align="center"><?php echo $dias_abierto->format('%a');?></td>
             <td><?php echo date_format($fecha_evento, 'd/m/Y');?></td>
             <td><?php echo $params[$i]['Hora'];?></td>
-            <td align="center"><?php echo $dias_abierto->format('%a');?></td>
             <td><?php echo $params[$i]['Nombre_Provincia'];?></td>
             <td><?php echo $params[$i]['Tipo_Punto'];?></td>
             <td><?php echo $params[$i]['Nombre'];?></td>
@@ -54,9 +57,7 @@
             <?php }
             ?>
             </tbody>
-        </table>
-        <a href="index.php?ctl=frm_eventos_agregar&id=0" class="btn btn-default" role="button">Agregar Nuevo Evento de Bitácora</a>
-        <a href="index.php?ctl=frm_eventos_lista_cerrados" class="btn btn-default" role="button">Eventos Cerrados</a> 
+        </table> 
         </div>
             <?php require 'vistas/plantillas/pie_de_pagina.php' ?>
     </body>
