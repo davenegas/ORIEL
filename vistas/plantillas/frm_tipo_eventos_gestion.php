@@ -12,7 +12,7 @@
         <h2>Gestión de Tipo de Eventos</h2>
         <p>Mediante esta pantalla, podrá agregar o editar lod tipos de evento:</p>
         <div class="container">
-        <form class="form-horizontal" role="form" method="GET" action="index.php?ctl=tipo_eventos_guardar&id=<?php echo trim($ide);?>">
+        <form class="form-horizontal" role="form" method="POST" action="index.php?ctl=tipo_eventos_guardar&id=<?php echo trim($ide);?>">
         <div class="form-group">
           <label for="evento">Nombre del Evento</label>
           <input type="text" required="required" class="form-control" id="evento" name="evento" value="<?php echo $evento;?>">
