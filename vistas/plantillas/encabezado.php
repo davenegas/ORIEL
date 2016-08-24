@@ -306,7 +306,7 @@
        <?php 
        };
        ?>       
-         
+         <li><a><?php echo $_SESSION['nombre'];?></a></li>
       <li><a href="index.php?ctl=cerrar_sesion"><span class="glyphicon glyphicon-log-in"></span>Cerrar Sesión</a></li>    
     </ul>
         

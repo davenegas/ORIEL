@@ -29,11 +29,8 @@
             </tr>
           </thead>
           <tbody>
-        
             <?php 
-
             $tam=count($params);
-
             for ($i = 0; $i <$tam; $i++) {
             ?>
             <tr>
@@ -57,8 +54,8 @@
             <?php }
             ?>
             </tbody>
-        </table> 
+        </table>
         </div>
-            <?php require 'vistas/plantillas/pie_de_pagina.php' ?>
+        <?php require 'vistas/plantillas/pie_de_pagina.php' ?>
     </body>
 </html>
