@@ -10,11 +10,21 @@ requerida
     <!--<center><img src="vistas/Imagenes/Oriel.jpg" alt=""/></center>-->
 <footer class="container-fluid" align="center">
             <hr/>
-            Jefatura de Seguridad Banco de Costa Rica -Centro de Control y Monitoreo &copy; <br>
+            Jefatura de Seguridad Banco de Costa Rica - Centro de Control y Monitoreo &copy; <br>
                <?php 
                $hoy = date("F j, Y, g:i a"); 
-               echo  $hoy; 
+               //echo  $hoy; 
                ?>
            
+          <?php
+ 
+          $dias = array("Domingo","Lunes","Martes","Miercoles","Jueves","Viernes","Sábado");
+          $meses = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
+ 
+          echo $dias[date('w')]." ".date('d')." de ".$meses[date('n')-1]. " del ".date('Y') ;
+          echo ", ".date("H:i", time());
+ 
+?>
+                
         </footer>
 </html> 

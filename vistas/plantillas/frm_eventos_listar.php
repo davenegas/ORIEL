@@ -11,8 +11,6 @@
         <div class="container animated fadeIn">
         <h2>Listado de Eventos</h2>
         <!--<p>A continuación se detallan los diferentes roles que están registrados en el sistema:</p>-->            
-        <a href="index.php?ctl=frm_eventos_agregar&id=0" class="btn btn-default" role="button">Agregar Nuevo Evento de Bitácora</a>
-        <a href="index.php?ctl=frm_eventos_lista_cerrados" class="btn btn-default" role="button">Eventos Cerrados</a> 
         <table id="tabla" class="display">
           <thead>
             <tr>
@@ -55,6 +53,8 @@
             ?>
             </tbody>
         </table>
+        <a href="index.php?ctl=frm_eventos_agregar&id=0" class="btn btn-default espacio-abajo" role="button" align="right">Agregar Nuevo Evento de Bitácora</a>
+        <a href="index.php?ctl=frm_eventos_lista_cerrados" class="btn btn-default espacio-abajo" role="button" align="right" data-toggle="tooltip" title="Hooray!">Eventos Cerrados</a> 
         </div>
         <?php require 'vistas/plantillas/pie_de_pagina.php' ?>
     </body>
