@@ -967,7 +967,9 @@
                     $obj_eventos->ingresar_seguimiento_evento();  
                     //echo "3 guarda seguimiento";
                     echo "<script type=\"text/javascript\">alert('Evento recuperado con Éxito!!!');history.go(-1);</script>";
-                    $this->frm_eventos_lista_cerrados();
+                    
+                    header ("location:/ORIEL/index.php?ctl=frm_eventos_lista_cerrados");
+                    //$this->frm_eventos_lista_cerrados();
                 }else{
                     //echo '<script>alert("Ya existe este evento abierto para este punto BCR. Proceda a cerrarlo o agregue un seguimiento!!!")</script>';
                     //require __DIR__ . '/../vistas/plantillas/frm_eventos_agregar.php';
@@ -1010,7 +1012,8 @@
                        $obj_eventos->ingresar_seguimiento_evento();  
                        //echo "3 guarda seguimiento";
                     }
-                    $this->frm_eventos_listar();
+                    //$this->frm_eventos_listar();
+                    header ("location:/ORIEL/index.php?ctl=frm_eventos_listar");
                 }else{
                     //echo '<script>alert("Ya existe este evento abierto para este punto BCR. Proceda a cerrarlo o agregue un seguimiento!!!")</script>';
                     //require __DIR__ . '/../vistas/plantillas/frm_eventos_agregar.php';
@@ -1071,7 +1074,8 @@
             $obj_eventos->setId_usuario($_SESSION['id']);
             $obj_eventos->ingresar_seguimiento_evento();
             $obj_eventos->edita_estado_evento($_POST['estado_del_evento']);
-            $this->frm_eventos_listar();
+            //$this->frm_eventos_listar();
+            header ("location:/ORIEL/index.php?ctl=frm_eventos_listar");
             //actualiza Seguimiento PENDIENTE
             
         }else {
