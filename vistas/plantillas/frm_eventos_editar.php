@@ -88,7 +88,7 @@
                 <?php } ?>
                 </tbody>
         </table>  
-        <?php if (($_GET['accion']=="editar_abiertos") || ($params[0]['ID_EstadoEvento']==1)) { ?>    
+        <?php if ((($_GET['accion']=="editar_abiertos") || ($params[0]['ID_EstadoEvento']==1))||(($_GET['accion']=="consulta_relacionados") && ($params[0]['ID_EstadoEvento']==4))||(($_GET['accion']=="consulta_relacionados") && ($params[0]['ID_EstadoEvento']==2))) { ?>    
             <hr/>
             <h3>Agregar nuevo seguimiento</h3>
             
@@ -156,7 +156,7 @@
         ?>  
         <td><a href="index.php?ctl=frm_eventos_lista_cerrados" class="btn btn-default" role="button">Volver</a></td>
         <?php }?>  
-        <?php if (($_GET['accion']=="consulta_relacionados") && ($params[0]['ID_EstadoEvento']!=1)) { ?>
+        <?php if (($_GET['accion']=="consulta_relacionados") && ($params[0]['ID_EstadoEvento']!=1)&& ($params[0]['ID_EstadoEvento']!=2)&& ($params[0]['ID_EstadoEvento']!=4)){ ?>
         <td><a href="index.php?ctl=frm_eventos_agregar&id=<?php echo $params[0]['ID_PuntoBCR'];?>" class="btn btn-default" role="button">Volver</a></td>
         <?php }?>  
         </div>
