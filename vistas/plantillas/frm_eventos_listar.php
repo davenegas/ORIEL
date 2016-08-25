@@ -4,7 +4,7 @@
         <meta charset="utf-8"/>
         <title>Lista de Eventos</title>
         <?php require_once 'frm_librerias_head.html'; ?>          
-        <script language="javascript" src="vistas/js/refresca_pagina_automaticamente.js"></script>
+        <!--<script language="javascript" src="vistas/js/refresca_pagina_automaticamente.js"></script>-->
     </head>
     <body>
         <?php require_once 'encabezado.php';?>

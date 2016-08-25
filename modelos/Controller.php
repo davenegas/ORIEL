@@ -1537,7 +1537,7 @@
                 $obj_Puntobcr->setTipo_punto($_POST['Tipo_Punto']);
                 $obj_Puntobcr->setDistrito($_POST['Distrito']);
                 $obj_Puntobcr->setEmpresa($_POST['Empresa']);
-                $obj_Puntobcr->horaslaborales="1";
+                $obj_Puntobcr->sethoraslaborales="1";
                 
                 $obj_Puntobcr->guardar_punto_bcr();
 
@@ -1619,7 +1619,5 @@
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }
-    }
-    
+    } 
 } 
-

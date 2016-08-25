@@ -20,8 +20,8 @@
         </h3>
         
         <div class="container">
-        <form class="form-horizontal" role="form" method="POST" action="index.php?ctl=guardar_punto_bcr&id=<?php echo trim($ide);?>">
-        <div class="rcorners2">    
+        <!--<form class="form-horizontal" role="form" method="POST" action="index.php?ctl=guardar_punto_bcr&id=<?php echo trim($ide);?>">-->
+        <div >    
             <div class="col-md-4">
               <label for="ID_PuntoBCR">ID Punto</label>
               <input type="text" required="ID_PuntoBCR" readonly class="form-control" id="ID_PuntoBCR" name="ID_PuntoBCR" value="<?php echo $params[0]['ID_PuntoBCR'];?>">
@@ -39,7 +39,7 @@
               <label for="Nombre">Nombre</label>
               <input type="text" required="required" readonly class="form-control" id="Nombre" name="Nombre" value="<?php echo $params[0]['Nombre'];?>">
             </div>
-            <div class="col-md-6 espacios">
+            <div class="col-md-6 espacio-abajo">
                 <label for="Tipo_Punto">Tipo de Punto</label>
                 <select class="form-control" id="Tipo_Punto" disabled name="Tipo_Punto" > 
                 <?php
@@ -56,6 +56,7 @@
                 <?php }}  ?>
                 </select>
             </div>
+            <h5 class="quitar-float">Información de telefonos del Punto BCR: <a>Agregar número</a></h5> 
             <div>
             <table class="display col-md-12 table-striped quitar-float espacio-abajo" id="telefonos">
                 <thead> 
@@ -75,7 +76,7 @@
                         <td style="text-align:center"><?php echo $telefonos[$i]['Tipo_Telefono'];?></td>
                         <td style="text-align:center"><?php echo $telefonos[$i]['Numero'];?></td>
                         <td style="text-align:center"><?php echo $telefonos[$i]['Observaciones'];?></td>
-                        <td style="text-align:center"><a class="btn btn-default" role="button" id="prueba" name="prueba" onclick="eliminar_telefono(<?php echo $telefonos[$i]['ID_Telefono'];?>)">
+                        <td style="text-align:center"><a class="btn" role="button" id="prueba" name="prueba" onclick="eliminar_telefono(<?php echo $telefonos[$i]['ID_Telefono'];?>)">
                                 <img src='vistas/Imagenes/menos.png' width="20"></a></td>
                     </tr>
                     <?php } ?>
@@ -101,7 +102,7 @@
             </table>
         </div> 
 
-        <h3 class="espacio-arriba">Ubicación <input class="quitar-float" type="checkbox" id="chk_ubicacion" name="chk_ubicacion"></h3>
+        <h3 class="espacio-arriba quitar-float">Ubicación <input class="quitar-float" type="checkbox" id="chk_ubicacion" name="chk_ubicacion"></h3>
 
         <div>
             <div class="col-md-4">
@@ -309,7 +310,7 @@
         <br><br><br><br><br>
             <!--<button type="submit" class="btn btn-default" >Guardar</button>-->
             <a href="index.php?ctl=puntos_bcr_listar" class="btn btn-default" role="button">Volver</a>
-        </form>                               
+<!--        </form>                               -->
         <?php require_once 'pie_de_pagina.php' ?>
     </body>
     </div>
