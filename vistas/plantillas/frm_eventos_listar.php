@@ -16,12 +16,14 @@
         <table id="tabla" class="display">
           <thead>
             <tr>
+              <th hidden="true">ID_Evento</th>
               <th>Fecha</th>
               <th>Hora</th>
               <th>Lapso</th>
               <th>Provincia</th>
               <th>Tipo Punto</th>
               <th>Punto BCR</th>
+              <th>Codigo</th>
               <th>Tipo de Evento</th>
               <th>Estado del Evento</th>
               <th>Ingresado Por</th>
@@ -39,12 +41,14 @@
             $fecha_actual = date_create(date("d-m-Y"));
             $dias_abierto= date_diff($fecha_evento, $fecha_actual);
             ?>
+                <td hidden="true"><?php echo $params[$i]['ID_Evento'];?></td>
             <td><?php echo date_format($fecha_evento, 'd/m/Y');?></td>
             <td><?php echo $params[$i]['Hora'];?></td>
             <td align="center"><?php echo $dias_abierto->format('%a');?></td>
             <td><?php echo $params[$i]['Nombre_Provincia'];?></td>
             <td><?php echo $params[$i]['Tipo_Punto'];?></td>
             <td><?php echo $params[$i]['Nombre'];?></td>
+            <td><?php echo $params[$i]['Codigo'];?></td>
             <td><?php echo $params[$i]['Evento'];?></td>
             <td><?php echo $params[$i]['Estado_Evento'];?></td>
             <td><?php echo $params[$i]['Nombre_Usuario']." ".$params[$i]['Apellido'] ?></td>

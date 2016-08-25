@@ -56,38 +56,9 @@
             ?>
             </tbody>
         </table>
-        
-        <!--Detalles de Evento--> 
-            <hr/>
-            <h3>Seguimientos asociados</h3>
             
-        <table class="table">
-            <thead>
-                <tr>
-                  <th>Fecha de Seguimiento</th>
-                  <th>Hora de Seguimiento</th>
-                  <th>Detalle del Seguimiento</th>
-                  <th>Ingresado Por</th>
-                </tr>
-            </thead>
-                <tbody>
-                <?php 
-                $tam=count($detalleEvento);
-                for ($i = 0; $i <$tam; $i++) {
-                ?>
-                <tr>
-                <?php
-                $fecha_evento = date_create($detalleEvento[$i]['Fecha']);
-                $fecha_actual = date_create(date("d-m-Y"));
-                $dias_abierto= date_diff($fecha_evento, $fecha_actual);
-                ?>
-                <td><?php echo date_format($fecha_evento, 'd/m/Y');?></td>
-                <td><?php echo $detalleEvento[$i]['Hora'];?></td> 
-                <td><?php echo $detalleEvento[$i]['Detalle'];?></td>
-                <td><?php echo $detalleEvento[$i]['Nombre_Usuario']." ".$detalleEvento[$i]['Apellido'] ?></td>
-                <?php } ?>
-                </tbody>
-        </table>  
+            
+            
         <?php if ((($_GET['accion']=="editar_abiertos") || ($params[0]['ID_EstadoEvento']==1))||(($_GET['accion']=="consulta_relacionados") && ($params[0]['ID_EstadoEvento']==4))||(($_GET['accion']=="consulta_relacionados") && ($params[0]['ID_EstadoEvento']==2))) { ?>    
             <hr/>
             <h3>Agregar nuevo seguimiento</h3>
@@ -151,8 +122,41 @@
                 <td><a href="index.php?ctl=frm_eventos_listar" class="btn btn-default" role="button">Cancelar</a></td>
                 <?php }?>
             </form>
-        <?php }
-        if ($_GET['accion']=="consulta_cerrados") {  
+        <?php } ?> 
+       
+        
+        <!--Detalles de Evento--> 
+            <hr/>
+            <h3>Seguimientos asociados</h3>
+            
+        <table class="table">
+            <thead>
+                <tr>
+                  <th>Fecha de Seguimiento</th>
+                  <th>Hora de Seguimiento</th>
+                  <th>Detalle del Seguimiento</th>
+                  <th>Ingresado Por</th>
+                </tr>
+            </thead>
+                <tbody>
+                <?php 
+                $tam=count($detalleEvento);
+                for ($i = 0; $i <$tam; $i++) {
+                ?>
+                <tr>
+                <?php
+                $fecha_evento = date_create($detalleEvento[$i]['Fecha']);
+                $fecha_actual = date_create(date("d-m-Y"));
+                $dias_abierto= date_diff($fecha_evento, $fecha_actual);
+                ?>
+                <td><?php echo date_format($fecha_evento, 'd/m/Y');?></td>
+                <td><?php echo $detalleEvento[$i]['Hora'];?></td> 
+                <td><?php echo $detalleEvento[$i]['Detalle'];?></td>
+                <td><?php echo $detalleEvento[$i]['Nombre_Usuario']." ".$detalleEvento[$i]['Apellido'] ?></td>
+                <?php } ?>
+                </tbody>
+        </table>  
+         <?php if ($_GET['accion']=="consulta_cerrados") {  
         ?>  
         <td><a href="index.php?ctl=frm_eventos_lista_cerrados" class="btn btn-default" role="button">Volver</a></td>
         <?php }?>  
