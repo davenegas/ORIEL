@@ -162,7 +162,30 @@
        require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
        session_destroy();
      }
-     
+    
+    public function nota_obtener() {
+        if(isset($_SESSION['nombre'])){
+            $obj_general = new cls_general();
+            $obj_general->obtener_notas();
+            $notas= $obj_general->getArreglo(); 
+        }else{
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }  
+    }
+    public function nota_guardar() {
+        if(isset($_SESSION['nombre'])){
+            $obj_general = new cls_general();
+            $obj_general->setId($_POST['id']);
+            $obj_general->setNota($_POST['nota']);
+            $obj_general->guardar_nota();            
+        }else{
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }    
+    }
     public function guardar_modulo_rol($id_Rol){
         if(isset($_SESSION['nombre'])){
             if (isset($_POST["lista"])){

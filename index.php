@@ -13,6 +13,7 @@ require_once __DIR__ . '/controladores/cls_personal.php';
 require_once __DIR__ . '/controladores/cls_horario.php';
 require_once __DIR__ . '/controladores/cls_direccionIP.php';
 require_once __DIR__ . '/controladores/cls_trazabilidad.php';
+require_once __DIR__ . '/controladores/cls_general.php';
 require_once __DIR__ . '/modelos/Controller.php';
 require_once __DIR__ . '/modelos/Encrypter.php';
 require_once __DIR__ . '/modelos/PHPMailerAutoload.php';
@@ -31,7 +32,9 @@ $map = array(
     'buscar' => array('controller' =>'Controller', 'action' =>'buscarPorNombre'),
     'ver' => array('controller' =>'Controller', 'action' =>'ver'),
     'principal' => array('controller' =>'Controller', 'action' =>'principal'),
-         
+    'nota_guardar' => array('controller' =>'Controller', 'action' =>'nota_guardar'),
+    'nota_obtener' => array('controller' =>'Controller', 'action' =>'nota_obtener'),
+    
     //Controlador de Modulos
     'modulos_listar' => array('controller' =>'Controller', 'action' =>'modulos_listar'),
     'modulos_gestion' => array('controller' =>'Controller', 'action' =>'modulos_gestion'),

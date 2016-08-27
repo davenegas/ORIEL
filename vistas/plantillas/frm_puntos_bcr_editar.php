@@ -56,7 +56,7 @@
                 <?php }}  ?>
                 </select>
             </div>
-            <h5 class="quitar-float">Información de telefonos del Punto BCR: <a>Agregar número</a></h5> 
+            <h5 class="quitar-float">Información de telefonos del Punto BCR: <a class="btn" role="button" id="prueba" name="prueba" onclick="agregar_telefono();">Agregar número</a></h5> 
             <div>
             <table class="display col-md-12 table-striped quitar-float espacio-abajo" id="telefonos">
                 <thead> 
@@ -76,8 +76,8 @@
                         <td style="text-align:center"><?php echo $telefonos[$i]['Tipo_Telefono'];?></td>
                         <td style="text-align:center"><?php echo $telefonos[$i]['Numero'];?></td>
                         <td style="text-align:center"><?php echo $telefonos[$i]['Observaciones'];?></td>
-                        <td style="text-align:center"><a class="btn" role="button" id="prueba" name="prueba" onclick="eliminar_telefono(<?php echo $telefonos[$i]['ID_Telefono'];?>)">
-                                <img src='vistas/Imagenes/menos.png' width="20"></a></td>
+                        <td style="text-align:center"><a class="btn" role="button" id="prueba" name="prueba" onclick="eliminar_telefono(<?php echo $telefonos[$i]['ID_Telefono'];?>);">
+                                Quitar número</a></td>
                     </tr>
                     <?php } ?>
                 </tbody> 

@@ -5,7 +5,7 @@
       $obj_mod= new cls_modulos();
       $obj_mod->obtiene_lista_de_modulos_por_rol($_SESSION['rol']);
       $lista_modulos_por_usuario=$obj_mod->getArreglo();
-          
+     
       //echo "<pre>";
       //print_r($lista_modulos_por_usuario);
       //echo "</pre>";
@@ -19,13 +19,41 @@
           return false;
       }
       
+    function nota_obtener() {
+        $obj_general = new cls_general();
+        $obj_general->obtener_notas();
+        $notas= $obj_general->getArreglo(); 
+        
+//        echo "<pre>";
+//        print_r($notas);
+//        echo "</pre>";
+        return $notas;
+    }
       ?>
     
 
 <html lang="en">
+    <head>
+        <link rel="stylesheet" href="vistas/css/main.css">
+        <script src="vistas/js/jquery-1-4-2-min.js"></script>
+        <script language="javascript" src="vistas/js/listas_dependientes_encabezado.js"></script>
+    </head>
     <br>
      <center><img src="vistas/Imagenes/Banner_Centro_de_Control.jpg" alt=""/></center>
-    
+     <?php
+     if($_SESSION['rol']==1 || $_SESSION['rol']==11){
+     ?>
+        <div class="esthela" style="right: -400px;">
+        <div style="color: rgb(255, 255, 255); padding: 8px 5px 0pt 50px;">
+            <div class="">
+                <?php $notas=nota_obtener();?>
+                <label for="notas">Pendientes</label>
+                <textarea class="form-control" rows="10" id="notas" name="notas" placeholder="Notas importantes para seguimientos" onchange="guardar_informacion();"><?php echo $notas[0]['Nota'];?> </textarea>
+            </div>
+        </div>
+        </div>
+     <?php } ?>
+     
     <nav class="navbar navbar-default" >
       <div class="container-fluid">
         <div class="navbar-header">
