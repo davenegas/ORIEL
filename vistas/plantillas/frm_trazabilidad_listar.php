@@ -69,9 +69,9 @@
         <table id="tabla" class="display2">
           <thead>
             <tr>
+              <th>ID_Traza</th>
               <th>Fecha</th>
               <th>Hora</th>
-              <th>ID_Traza</th>
               <th>Antiguedad Dias</th>
               <th>Usuario</th>
               <th>Tabla Afectada</th>
@@ -93,9 +93,9 @@
             $fecha_actual = date_create(date("d-m-Y"));
             $dias_abierto= date_diff($fecha_evento, $fecha_actual);
             ?>
+            <td><?php echo $params[$i]['ID_Traza'];?></td>
             <td><?php echo date_format($fecha_evento, 'd/m/Y');?></td>
             <td><?php echo $params[$i]['Hora'];?></td>
-            <td><?php echo $params[$i]['ID_Traza'];?></td>
             <td align="center"><?php echo $dias_abierto->format('%a');?></td>
             <td><?php echo $params[$i]['Nombre']." ".$params[$i]['Apellido'] ?></td>
             <td><?php echo $params[$i]['Tabla_Afectada'];?></td>

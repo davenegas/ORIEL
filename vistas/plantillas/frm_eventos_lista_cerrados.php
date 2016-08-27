@@ -9,10 +9,12 @@
         <?php require_once 'encabezado.php';?>
         <div class="container animated fadeIn">
         <h2>Listado de Eventos Cerrados</h2>
+        <a href="index.php?ctl=frm_eventos_listar" class="btn btn-default espacio-abajo" role="button">Volver a Eventos Abiertos</a>
         <table id="tabla" class="display">
           <thead>
                
             <tr>
+              <th hidden="true">ID_Evento</th>
               <th>Fecha</th>
               <th>Hora</th>
               <th>Provincia</th>
@@ -46,6 +48,7 @@
             $fecha_actual = date_create(date("d-m-Y"));
             $dias_abierto= date_diff($fecha_evento, $fecha_actual);
             ?>
+                <td hidden="true"><?php echo $params[$i]['ID_Evento'];?></td>
             <td><?php echo date_format($fecha_evento, 'd/m/Y');?></td>
             <td><?php echo $params[$i]['Hora'];?></td>
             <!--<td align="center"><?php echo $dias_abierto->format('%a');?></td>-->
@@ -75,7 +78,7 @@
             
             </tbody>
         </table>
-        <a href="index.php?ctl=frm_eventos_listar" class="btn btn-default" role="button">Volver a Eventos Abiertos</a>
+        
         </div>
             <?php require 'vistas/plantillas/pie_de_pagina.php' ?>
     </body>

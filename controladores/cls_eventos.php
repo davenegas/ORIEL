@@ -327,7 +327,7 @@ class cls_eventos{
             $this->arreglo=$this->obj_data_provider->trae_datos(
                 "T_DetalleEvento left outer join T_Usuario on T_DetalleEvento.ID_Usuario=T_Usuario.ID_Usuario", 
                 "T_DetalleEvento.*,T_Usuario.Nombre Nombre_Usuario,T_Usuario.Apellido",
-                $this->condicion." "."order by T_DetalleEvento.Fecha desc,T_DetalleEvento.Hora desc");
+                $this->condicion);
             $this->arreglo=$this->obj_data_provider->getArreglo();
             $this->obj_data_provider->desconectar();
         $this->resultado_operacion=true;

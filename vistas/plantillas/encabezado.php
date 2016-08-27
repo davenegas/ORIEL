@@ -243,6 +243,8 @@
           <?php 
           };
           ?>
+            
+            
                <?php 
           //************************************************Pinta Menu de Ayuda***************************************************************
            if ((encuentra_coincidencia("Ayuda"))){
@@ -262,6 +264,59 @@
 
 
           <ul class="nav navbar-nav navbar-right">
+              
+           <?php 
+          //************************************************Pinta Menu de Otros enlaces***************************************************************
+           if ((encuentra_coincidencia("Controles de Video"))||(encuentra_coincidencia("Oficiales"))||(encuentra_coincidencia("Padrón Fotográfico"))||(encuentra_coincidencia("Personal Externo"))){
+          ?>
+
+                <li class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#">Otros Enlaces
+                <span class="caret"></span></a>
+                <ul class="dropdown-menu">
+
+           <?php 
+           if ((encuentra_coincidencia("Controles de Video"))){
+           ?>
+                <li><a href="http://10.170.5.80/Operaciones_de_Seguridad/ctrlvideo/consulta.html">Controles de Video</a></li>
+           <?php 
+           };
+           ?>
+
+           <?php 
+           if ((encuentra_coincidencia("Oficiales"))){
+           ?>
+                <li><a href="http://10.170.5.80/Operaciones_de_Seguridad">Oficiales</a></li>
+           <?php 
+           };
+           ?>
+
+           <?php 
+           if ((encuentra_coincidencia("Padrón Fotográfico"))){
+           ?>
+                <li><a href="http://10.170.5.80/Operaciones_de_Seguridad/oficinas/consultaofic.htm">Padrón Fotográfico</a></li>
+           <?php 
+           };
+           ?>   
+
+            <?php 
+           if ((encuentra_coincidencia("Personal Externo"))){
+           ?>
+               <li><a href="http://10.170.5.80/Operaciones_de_Seguridad/externos/index.php">Personal Externo</a></li> 
+           <?php 
+           };
+           ?>   
+
+            </ul>
+            </li>
+
+          <?php 
+          };
+          ?>
+      
+              
+              
+              <!--
                   <?php 
           //************************************************Pinta Menu de Módulo de Controles de Video***************************************************************
            if ((encuentra_coincidencia("Controles de Video"))){
@@ -305,7 +360,7 @@
 
            <?php 
            };
-           ?>       
+           ?>       -->
              <li><a href="index.php?ctl=principal"><span class="glyphicon glyphicon-th-large"></span><?php echo $_SESSION['name']." ".$_SESSION['apellido'];?></a></li>
           <li><a href="index.php?ctl=cerrar_sesion"><span class="glyphicon glyphicon-log-in"></span>Cerrar Sesión</a></li>    
         </ul>
