@@ -11,11 +11,15 @@
             <file>file:/C:/xampp/htdocs/ORIEL/modelos/Data_Provider.php</file>
         </group>
         <group/>
+<<<<<<< HEAD
         <group>
             <file>file:/C:/xampp/htdocs/ORIEL/vistas/plantillas/frm_eventos_editar.php</file>
             <file>file:/C:/xampp/htdocs/ORIEL/modelos/Controller.php</file>
             <file>file:/C:/xampp/htdocs/ORIEL/vistas/plantillas/frm_puntos_bcr_listar.php</file>
             <file>file:/C:/xampp/htdocs/ORIEL/vistas/plantillas/frm_puntos_bcr_editar.php</file>
         </group>
+=======
+        <group/>
+>>>>>>> origin/master
     </open-files>
 </project-private>

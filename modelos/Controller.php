@@ -639,7 +639,43 @@
             $obj_eventos->setCondicion("T_Evento.ID_EstadoEvento<>3 AND T_Evento.ID_EstadoEvento<>5");
             $obj_eventos ->obtiene_todos_los_eventos(); 
             $params= $obj_eventos->getArreglo();
-            require __DIR__.'/../vistas/plantillas/frm_eventos_listar.php';
+            
+            //Implementación para obtener el último seguimiento de cada evento, además del último usuario que lo agregó
+            
+        $tam=count($params);
+        if (count($params)>0){
+                        
+            for ($i = 0; $i <$tam; $i++) {
+                $obj_eventos->setCondicion("T_DetalleEvento.ID_Evento=".$params[$i]['ID_Evento']." order by T_DetalleEvento.Fecha desc,T_DetalleEvento.Hora desc limit 0,1");
+                //Obtiene los seguimientos del evento seleccionado, si los hubiere
+                $obj_eventos->obtiene_detalle_evento();
+                $ultimo_seguimiento_asociado= $obj_eventos->getArreglo();
+                
+                
+                //Verifica si existen seguimientos asociados al evento actual
+                if(count($ultimo_seguimiento_asociado)>0){
+                    if ($i==0){
+                        $detalle_y_ultimo_usuario= array(['Detalle'=>"Fecha: ".date_format(date_create($ultimo_seguimiento_asociado[0]['Fecha']), 'd/m/Y').".Hora: ".$ultimo_seguimiento_asociado[0]['Hora'].". ".$ultimo_seguimiento_asociado[0]['Detalle']]+['Usuario'=>$ultimo_seguimiento_asociado[0]['Nombre_Usuario']." ".$ultimo_seguimiento_asociado[0]['Apellido']]);
+//                     
+                    }else{
+                        $detalle_y_ultimo_usuario = array_merge($detalle_y_ultimo_usuario,array(['Detalle'=>"Fecha: ".date_format(date_create($ultimo_seguimiento_asociado[0]['Fecha']), 'd/m/Y').".Hora: ".$ultimo_seguimiento_asociado[0]['Hora'].". ".$ultimo_seguimiento_asociado[0]['Detalle']]+['Usuario'=>$ultimo_seguimiento_asociado[0]['Nombre_Usuario']." ".$ultimo_seguimiento_asociado[0]['Apellido']]));
+//                      
+                    }
+                }else{
+                    if ($i==0){
+                        $detalle_y_ultimo_usuario= array(['Detalle'=>"No hay seguimientos asociados a este evento. Para agregar uno oprima el link:'Gestionar Seguimiento de la fila respectiva.'"]+['Usuario'=>$params[$i]['Nombre_Usuario']." ".$params[$i]['Apellido']]);
+                    }else{
+                        $detalle_y_ultimo_usuario = array_merge($detalle_y_ultimo_usuario,array(['Detalle'=>"No hay seguimientos asociados a este evento. Para agregar uno oprima el link:'Gestionar Seguimiento de la fila respectiva.'"]+['Usuario'=>$params[$i]['Nombre_Usuario']." ".$params[$i]['Apellido']]));
+                    }
+                }
+            }
+//            echo '<pre>';
+//            print_r($detalle_y_ultimo_usuario);
+//            echo '</pre>';
+        } 
+       
+        require __DIR__.'/../vistas/plantillas/frm_eventos_listar.php';
+        
         }
         else {
             $tipo_de_alerta="alert alert-warning";
@@ -806,9 +842,9 @@
                     //$html="<h2>Listado de Eventos Relacionados a este Punto BCR</h2>";
                     $html="<thead>";   
                     $html.="<tr>";
+                    $html.="<th>ID_Traza</th>";
                     $html.="<th>Fecha</th>";
                     $html.="<th>Hora</th>";
-                    $html.="<th>ID_Traza</th>";
                     $html.="<th>Antiguedad Dias</th>";
                     $html.="<th>Usuario</th>";
                     $html.="<th>Tabla Afectada</th>";
@@ -828,9 +864,9 @@
                         $fecha_actual = date_create(date("d-m-Y"));
                         $dias_abierto= date_diff($fecha_evento, $fecha_actual);
             
+                        $html.="<td>".$params[$i]['ID_Traza']."</td>";
                         $html.="<td>".date_format($fecha_evento, 'd/m/Y')."</td>";
                         $html.="<td>".$params[$i]['Hora']."</td>";
-                        $html.="<td>".$params[$i]['ID_Traza']."</td>";
                         $html.="<td align='center'>".$dias_abierto->format('%a')."</td>";
                         $html.="<td>".$params[$i]['Nombre']." ".$params[$i]['Apellido']."</td>";
                         $html.="<td>".$params[$i]['Tabla_Afectada']."</td>";
@@ -1045,6 +1081,7 @@
                      
                 }
                
+                $obj_eventos->setCondicion("ID_Evento=$ide"." "."order by T_DetalleEvento.Fecha desc,T_DetalleEvento.Hora desc");
                 //Obtiene los detalles del evento seleccionado
                 $obj_eventos->obtiene_detalle_evento();
                 $detalleEvento= $obj_eventos->getArreglo();

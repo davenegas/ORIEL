@@ -289,7 +289,7 @@ class cls_eventos{
                     "T_Evento.ID_Evento, T_Evento.Fecha, T_Evento.Hora, 
                         T_Provincia.Nombre_Provincia, T_Provincia.ID_Provincia,
                         T_TipoPuntoBCR.Tipo_Punto, T_TipoPuntoBCR.ID_Tipo_Punto ,
-                        T_PuntoBCR.Nombre, T_PuntoBCR.ID_PuntoBCR,
+                        T_PuntoBCR.Nombre, T_PuntoBCR.ID_PuntoBCR,T_PuntoBCR.Codigo,
                         T_TipoEvento.Evento, T_TipoEvento.ID_Tipo_Evento,
                         T_EstadoEvento.ID_EstadoEvento, T_EstadoEvento.Estado_Evento, T_Usuario.ID_Usuario,
                         T_Usuario.Nombre Nombre_Usuario,T_Usuario.Apellido",
@@ -310,7 +310,7 @@ class cls_eventos{
                     "T_Evento.ID_Evento, T_Evento.Fecha, T_Evento.Hora, 
                         T_Provincia.Nombre_Provincia, T_Provincia.ID_Provincia,
                         T_TipoPuntoBCR.Tipo_Punto, T_TipoPuntoBCR.ID_Tipo_Punto ,
-                        T_PuntoBCR.Nombre, T_PuntoBCR.ID_PuntoBCR,
+                        T_PuntoBCR.Nombre, T_PuntoBCR.ID_PuntoBCR,T_PuntoBCR.Codigo,
                         T_TipoEvento.Evento, T_TipoEvento.ID_Tipo_Evento,
                         T_EstadoEvento.ID_EstadoEvento, T_EstadoEvento.Estado_Evento, T_Usuario.ID_Usuario,
                         T_Usuario.Nombre Nombre_Usuario,T_Usuario.Apellido",
@@ -327,7 +327,7 @@ class cls_eventos{
             $this->arreglo=$this->obj_data_provider->trae_datos(
                 "T_DetalleEvento left outer join T_Usuario on T_DetalleEvento.ID_Usuario=T_Usuario.ID_Usuario", 
                 "T_DetalleEvento.*,T_Usuario.Nombre Nombre_Usuario,T_Usuario.Apellido",
-                $this->condicion." "."order by T_DetalleEvento.Fecha desc,T_DetalleEvento.Hora desc");
+                $this->condicion);
             $this->arreglo=$this->obj_data_provider->getArreglo();
             $this->obj_data_provider->desconectar();
         $this->resultado_operacion=true;
@@ -431,7 +431,7 @@ class cls_eventos{
     public function obtener_todos_los_tipos_eventos(){
         try{
             $this->obj_data_provider->conectar();
-            $this->arreglo=$this->obj_data_provider->trae_datos("T_TipoEvento", "*", "Estado=1");
+            $this->arreglo=$this->obj_data_provider->trae_datos("T_TipoEvento", "*", "Estado=1 order by Evento");
             $this->arreglo=$this->obj_data_provider->getArreglo();
             $this->obj_data_provider->desconectar();
             $this->resultado_operacion=true;
