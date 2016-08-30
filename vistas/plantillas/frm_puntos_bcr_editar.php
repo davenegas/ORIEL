@@ -21,7 +21,7 @@
         
         <div class="container">
         <!--<form class="form-horizontal" role="form" method="POST" action="index.php?ctl=guardar_punto_bcr&id=<?php echo trim($ide);?>">-->
-        <div >    
+        <div>  
             <div class="col-md-4">
               <label for="ID_PuntoBCR">ID Punto</label>
               <input type="text" required="ID_PuntoBCR" readonly class="form-control" id="ID_PuntoBCR" name="ID_PuntoBCR" value="<?php echo $params[0]['ID_PuntoBCR'];?>">
@@ -312,6 +312,7 @@
             <a href="index.php?ctl=puntos_bcr_listar" class="btn btn-default" role="button">Volver</a>
 <!--        </form>                               -->
         <?php require_once 'pie_de_pagina.php' ?>
+        </div>
     </body>
     </div>
 </html>
