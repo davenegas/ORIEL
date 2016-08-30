@@ -62,9 +62,16 @@
         <?php if ((($_GET['accion']=="editar_abiertos") || ($params[0]['ID_EstadoEvento']==1))||(($_GET['accion']=="consulta_relacionados") && ($params[0]['ID_EstadoEvento']==4))||(($_GET['accion']=="consulta_relacionados") && ($params[0]['ID_EstadoEvento']==2))) { ?>    
             <hr/>
             <h3>Agregar nuevo seguimiento</h3>
-            
+                
                 <!--Agregar nuevo detalle o seguimiento del evento-->
-            <form class="form-horizontal" role="form" onSubmit="return enviado()" method="POST" action="index.php?ctl=guardar_seguimiento_evento&id=<?php echo trim($ide);?>">
+                <form class="form-horizontal" role="form" enctype="multipart/form-data" onSubmit="return enviado()" method="POST" action="index.php?ctl=guardar_seguimiento_evento&id=<?php echo trim($ide);?>">
+                 <?php if ($_SESSION['rol']!=2){ ?>
+                <div class="col-xs-12 quitar-float espacio-abajo">
+                    <label for="archivo_adjunto">Adjuntar Archivo: </label>
+                    <input type="hidden" name="MAX_FILE_SIZE" value="1000000">
+                    <input type="file" name="archivo_adjunto" id="seleccionar_archivo" class="btn btn-default">
+                </div>   
+                 <?php } ?>   
                 <div class="col-xs-6">
                     <label for="Fecha">Fecha Seguimiento</label>
                     <input type="date" required=”required” class="form-control" id="Fecha" name="Fecha" value="<?php echo date("Y-m-d");?>">
@@ -73,16 +80,16 @@
                 <?php date_default_timezone_set('America/Costa_Rica'); ?>
                 <div class="col-xs-6">
                     <label for="Hora">Hora Seguimiento</label>
-                    <input type="time" required=”required” class="form-control" id="Hora" name="Hora" value="<?php echo date("H:i:s", time());?>">
+                    <input type="time" required=”required” class="form-control" id="Hora" name="Hora" value="<?php echo date("H:i", time());?>">
                 </div> <br><br><br><br>
                 <div class="col-xs-6">
                     <label for="DetalleSeguimiento">Detalle del Seguimiento</label>
                     <textarea type="text" required=”required” class="form-control" id="DetalleSeguimiento" name="DetalleSeguimiento" value="" maxlength="250" minlength="5" placeholder="Máximo 250 caracteres por seguimiento"></textarea>
                 </div>
                 
-                <div class="col-xs-6">
+                <div class="col-xs-6 espacio-abajo">
                     <label for="estado_del_evento">Estado del Evento</label>
-                    <select class="form-control" id="estado_del_evento" name="estado_del_evento" required=”required”> 
+                    <select class="form-control espacio-abajo" id="estado_del_evento" name="estado_del_evento" required=”required”> 
                     <?php
                     $tam = count($estadoEventos);
                     for($i=0; $i<$tam;$i++)
@@ -114,8 +121,9 @@
                                ?> 
                     </select>
                 </div>
-                <br><br><br><br><br>
+                    
                 <button type="submit" class="btn btn-default">Guardar Seguimiento</button>
+                <!--<button type="submit" class="btn btn-default">Guardar Seguimiento</button>-->
                 <?php if ($_GET['accion']=="consulta_relacionados") {?>  
                 <td><a href="index.php?ctl=frm_eventos_agregar&id=<?php echo $params[0]['ID_PuntoBCR'];?>" class="btn btn-default" role="button">Volver</a></td>
                 <?php }else{?>  
@@ -136,6 +144,7 @@
                   <th>Hora de Seguimiento</th>
                   <th>Detalle del Seguimiento</th>
                   <th>Ingresado Por</th>
+                  <th>Adjunto</th>
                 </tr>
             </thead>
                 <tbody>
@@ -153,6 +162,17 @@
                 <td><?php echo $detalleEvento[$i]['Hora'];?></td> 
                 <td><?php echo $detalleEvento[$i]['Detalle'];?></td>
                 <td><?php echo $detalleEvento[$i]['Nombre_Usuario']." ".$detalleEvento[$i]['Apellido'] ?></td>
+                <?php
+                //echo strlen($detalleEvento[$i]['Adjunto']);
+                if (strlen($detalleEvento[$i]['Adjunto'])==3){
+
+                ?>
+                <td><?php echo $detalleEvento[$i]['Adjunto'];?></td>
+                <?php }else{ ?>
+                
+                <td><a href="../../../Adjuntos_Bitacora/<?php echo $detalleEvento[$i]['Adjunto'];?>" download="<?php echo $detalleEvento[$i]['Adjunto'];?>"><img src="vistas/Imagenes/Descargar.png" class="img-rounded" alt="Cinque Terre" width="15" height="15"></a></td>
+                <!--<td><a href="../../../Adjuntos_Bitacora/<?php echo $detalleEvento[$i]['Adjunto'];?>" download="Adjunto_Seguimiento"><img src="vistas/Imagenes/Descargar.png" class="img-rounded" alt="Cinque Terre" width="15" height="15"></a></td>-->
+                <?php } ?>
                 <?php } ?>
                 </tbody>
         </table>  

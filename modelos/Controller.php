@@ -646,6 +646,22 @@
         if (count($params)>0){
                         
             for ($i = 0; $i <$tam; $i++) {
+                
+                $obj_eventos->setCondicion("T_DetalleEvento.ID_Evento=".$params[$i]['ID_Evento']." order by T_DetalleEvento.Fecha desc,T_DetalleEvento.Hora desc");
+                //Obtiene los seguimientos del evento seleccionado, si los hubiere
+                $obj_eventos->obtiene_detalle_evento();
+                
+                
+                if(count($obj_eventos->getArreglo())>0){
+                    if ($i==0){
+                        $todos_los_seguimientos_juntos=$obj_eventos->getArreglo();
+//                     
+                    }else{
+                        $todos_los_seguimientos_juntos = array_merge($todos_los_seguimientos_juntos,$obj_eventos->getArreglo());
+//                      
+                    }
+                }
+                
                 $obj_eventos->setCondicion("T_DetalleEvento.ID_Evento=".$params[$i]['ID_Evento']." order by T_DetalleEvento.Fecha desc,T_DetalleEvento.Hora desc limit 0,1");
                 //Obtiene los seguimientos del evento seleccionado, si los hubiere
                 $obj_eventos->obtiene_detalle_evento();
@@ -685,11 +701,34 @@
     }
     
     public function frm_eventos_lista_cerrados(){
+        
         if(isset($_SESSION['nombre'])){
             $obj_eventos = new cls_eventos();
             $obj_eventos->setCondicion("T_Evento.ID_EstadoEvento=3 OR T_Evento.ID_EstadoEvento=5");
             $obj_eventos ->obtiene_todos_los_eventos(); 
             $params= $obj_eventos->getArreglo();
+            
+//            $tamano=count($params);
+//            if (count($params)>0){
+//                        
+//                for ($x = 0; $x <$tamano; $x++) {
+//
+//                    $obj_eventos->setCondicion("T_DetalleEvento.ID_Evento=".$params[$x]['ID_Evento']." order by T_DetalleEvento.Fecha desc,T_DetalleEvento.Hora desc");
+//                    //Obtiene los seguimientos del evento seleccionado, si los hubiere
+//                    $obj_eventos->obtiene_detalle_evento();
+//
+//
+//                    if(count($obj_eventos->getArreglo())>0){
+//                        if ($x==0){
+//                            $todos_los_seguimientos_juntos=$obj_eventos->getArreglo();
+//    //                     
+//                        }else{
+//                            $todos_los_seguimientos_juntos = array_merge($todos_los_seguimientos_juntos,$obj_eventos->getArreglo());
+//    //                      
+//                        }
+//                    }
+//                }
+//            }
             require __DIR__.'/../vistas/plantillas/frm_eventos_lista_cerrados.php';
         }
         else {
@@ -1045,6 +1084,7 @@
                        $obj_eventos->setId2(0);
                        $obj_eventos->obtiene_id_ultimo_evento_ingresado(); 
                        $obj_eventos->setId($obj_eventos->getId_ultimo_evento_ingresado());
+                       $obj_eventos->setAdjunto("N/A");
                        $obj_eventos->ingresar_seguimiento_evento();  
                        //echo "3 guarda seguimiento";
                     }
@@ -1109,12 +1149,70 @@
             $obj_eventos->setHora(($_POST['Hora']));
             $obj_eventos->setDetalle(($_POST['DetalleSeguimiento']));
             $obj_eventos->setId_usuario($_SESSION['id']);
-            $obj_eventos->ingresar_seguimiento_evento();
-            $obj_eventos->edita_estado_evento($_POST['estado_del_evento']);
-            //$this->frm_eventos_listar();
-            header ("location:/ORIEL/index.php?ctl=frm_eventos_listar");
-            //actualiza Seguimiento PENDIENTE
             
+            //$this->frm_eventos_listar();
+            
+            $recepcion_archivo=$_FILES['archivo_adjunto']['error'];
+            
+            //echo basename($_FILES['archivo_adjunto']['tmp_name']);
+            //echo basename($_FILES['archivo_adjunto']['type']);
+            $date=new DateTime(); //this returns the current date time
+            $result = $date->format('Y-m-d-H-i-s');
+            //echo $result;
+            $krr = explode('-',$result);
+            $result = implode("",$krr);
+            
+            $ruta= "C:/wamp/www/Adjuntos_Bitacora/".$result.$_FILES['archivo_adjunto']['name'];
+            //echo ;
+            switch ($recepcion_archivo) {
+                case 0:{
+                    //echo $_FILES['archivo_adjunto']['tmp_name'];
+                    //$ruta=$_FILES['archivo_adjunto']['tmp_name'].$_FILES['archivo_adjunto']['name'];
+                    //echo $ruta;
+                    if (move_uploaded_file($_FILES['archivo_adjunto']['tmp_name'], $ruta)){
+                        $obj_eventos->setAdjunto($result.$_FILES['archivo_adjunto']['name']); 
+                        $obj_eventos->ingresar_seguimiento_evento();
+                        $obj_eventos->edita_estado_evento($_POST['estado_del_evento']);
+                        header ("location:/ORIEL/index.php?ctl=frm_eventos_listar");
+                    }  else {
+                        //echo "<script type=\"text/javascript\">alert('Hubo un problema al subir el archivo al servidor!!!');history.go(-1);</script>";;
+                        $obj_eventos->setAdjunto("N/A");
+                        $obj_eventos->ingresar_seguimiento_evento();
+                        $obj_eventos->edita_estado_evento($_POST['estado_del_evento']);
+                        header ("location:/ORIEL/index.php?ctl=frm_eventos_listar");
+                        //echo "<script type=\"text/javascript\">alert('No fue seleccionado ningun archivo!!!!');history.go(-1);</script>";;
+                        //break;
+                    }
+                    break;
+                }
+                    
+                case 2:{
+                    echo "<script type=\"text/javascript\">alert('El archivo consume mayor espacio del permitido (1 mb) !!!!');history.go(-1);</script>";;
+                    break;
+                }
+                case 4:{ 
+                    $obj_eventos->setAdjunto("N/A");
+                    $obj_eventos->ingresar_seguimiento_evento();
+                    $obj_eventos->edita_estado_evento($_POST['estado_del_evento']);
+                    header ("location:/ORIEL/index.php?ctl=frm_eventos_listar");
+                    //echo "<script type=\"text/javascript\">alert('No fue seleccionado ningun archivo!!!!');history.go(-1);</script>";;
+                    break;
+                }
+                 case 6:{
+                    echo "<script type=\"text/javascript\">alert('El servidor no tiene acceso a la carpeta temporal de almacenamiento!!!!');history.go(-1);</script>";
+                    break;
+                 } 
+                case 7:{
+                    echo "<script type=\"text/javascript\">alert('No es posible escribir en el disco duro del servidor!!!!');history.go(-1);</script>";;
+                    break;
+                }  
+                case 8:{
+                    echo "<script type=\"text/javascript\">alert('Fue detenida la carga del archivo debido a una extension de PHP!!!!');history.go(-1);</script>";;
+                    break;
+                }   
+            }
+            
+                   
         }else {
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
