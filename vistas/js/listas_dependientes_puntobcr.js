@@ -67,10 +67,14 @@ $(document).ready(function(){
         }
     });
 });   
-
+//Función para eliminar telefono de Punto BCR
 function eliminar_telefono(ide){
         id_telefono= ide;
         //$.post("index.php?ctl=puntobcr_desligar_telefono", { id_telefono: id_telefono}, function(data){
           //      alert (data);
            // });
     };
+    
+function agregar_telefono(){
+    
+}
