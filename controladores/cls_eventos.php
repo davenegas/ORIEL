@@ -20,8 +20,17 @@ class cls_eventos{
     public $id_usuario;
     public $observaciones;
     public $prioridad;
+    public $adjunto;
     
-    function getPrioridad() {
+    function getAdjunto() {
+        return $this->adjunto;
+    }
+
+    function setAdjunto($adjunto) {
+        $this->adjunto = $adjunto;
+    }
+
+        function getPrioridad() {
         return $this->prioridad;
     }
 
@@ -191,6 +200,7 @@ class cls_eventos{
         $this->detalle="";
         $this->observaciones="";
         $this->prioridad="";
+        $this->adjunto="";
         ;
     }
     
@@ -356,7 +366,7 @@ class cls_eventos{
             
             if ($this->id2==0){
                 //Registro de la trazabilidad del sistema
-               $cadena_sql=str_replace(","," - ","call sp_set_detalleEvento(Inserta datos en T_detalleEvento ID_Seguimiento='".$this->id2."',ID_Evento='".$this->id."',Fecha='".$this->fecha."',Hora='".$this->hora."',Detalle='".$this->detalle."',Usuario='".$this->id_usuario."')");
+               $cadena_sql=str_replace(","," - ","call sp_set_detalleEvento(Inserta datos en T_detalleEvento ID_Seguimiento='".$this->id2."',ID_Evento='".$this->id."',Fecha='".$this->fecha."',Hora='".$this->hora."',Detalle='".$this->detalle."',Usuario='".$this->id_usuario."',Adjunto='".$this->adjunto."')");
                $cadena_sql=str_replace("'"," ",$cadena_sql);
                $cadena_sql = str_replace("(","[",$cadena_sql);
                $cadena_sql = str_replace(")","]",$cadena_sql);
@@ -373,7 +383,7 @@ class cls_eventos{
             $valores_iniciales=$valores_iniciales . serialize($this->obj_data_provider->getArreglo());
 
              //Registro de la trazabilidad del sistema
-            $cadena_sql=str_replace(","," - ","call sp_set_detalleEvento(Modifica datos en T_detalleEvento ID_Seguimiento='".$this->id2."',ID_Evento='".$this->id."',Fecha='".$this->fecha."',Hora='".$this->hora."',Detalle='".$this->detalle."',Usuario='".$this->id_usuario."')");
+            $cadena_sql=str_replace(","," - ","call sp_set_detalleEvento(Modifica datos en T_detalleEvento ID_Seguimiento='".$this->id2."',ID_Evento='".$this->id."',Fecha='".$this->fecha."',Hora='".$this->hora."',Detalle='".$this->detalle."',Usuario='".$this->id_usuario."',Adjunto='".$this->adjunto."')");
             $cadena_sql=str_replace("'"," ",$cadena_sql);
             $cadena_sql = str_replace("(","[",$cadena_sql);
             $cadena_sql = str_replace(")","]",$cadena_sql);
@@ -384,7 +394,7 @@ class cls_eventos{
       
              // Llamada al procedimiento almacenado de mysql para gestión de seguimiento de evento
       
-            $sql=("call sp_set_detalleEvento('".$this->id2."','".$this->id."','".$this->fecha."','".$this->hora."','".$this->detalle."','".$this->id_usuario."')");
+            $sql=("call sp_set_detalleEvento('".$this->id2."','".$this->id."','".$this->fecha."','".$this->hora."','".$this->detalle."','".$this->id_usuario."','".$this->adjunto."')");
             $this->obj_data_provider->insertar_datos_con_phpmyadmin($sql);
             //echo $sql;
         }  catch (Exception $exc){

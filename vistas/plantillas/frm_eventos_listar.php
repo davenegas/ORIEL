@@ -28,6 +28,7 @@
               <th>Estado del Evento</th>
               <th>Último Seguimiento</th>
               <th>Editar Evento</th>
+              <th hidden="true">Seguimientos</th>
             </tr>
           </thead>
           <tbody>
@@ -55,12 +56,42 @@
             <td><?php echo $detalle_y_ultimo_usuario[$i]['Usuario'] ?></td>
             <td align="center"><a href="index.php?ctl=frm_eventos_editar&accion=editar_abiertos&id=
                <?php echo $params[$i]['ID_Evento']?>">Gestionar Seguimiento</a></td>
+            <td hidden="true">
+                <table>
+            <thead>
+                <tr>
+                  <th>Fecha de Seguimiento</th>
+                  <th>Detalle del Seguimiento</th>
+               </tr>
+            </thead>
+                <tbody>
+                <?php 
+                $tama=count($todos_los_seguimientos_juntos);
+                for ($j = 0; $j <$tama; $j++) {
+                ?>
+                <tr>
+                <?php
+                $fecha_evento = date_create($todos_los_seguimientos_juntos[$j]['Fecha']);
+                $fecha_actual = date_create(date("d-m-Y"));
+                $dias_abierto= date_diff($fecha_evento, $fecha_actual);
+                if ($params[$i]['ID_Evento']==$todos_los_seguimientos_juntos[$j]['ID_Evento']){
+                ?>
+                
+                <td><?php echo date_format($fecha_evento, 'd/m/Y');?></td>
+                <td><?php echo $todos_los_seguimientos_juntos[$j]['Detalle'];?></td>
+                               
+                <?php }} ?>
+                </tbody>
+            </table>  
+            </td>
             </tr>
+            
             <?php }
             ?>
             </tbody>
+            
         </table>
-
+        
         </div>
         <?php require 'vistas/plantillas/pie_de_pagina.php' ?>
     </body>
