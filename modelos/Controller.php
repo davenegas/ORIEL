@@ -6,6 +6,7 @@
         $tipo_de_alerta="alert alert-info";
         $validacion="Verificación de Identidad";
         require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        
     }
 
     //////////////////////////
@@ -29,7 +30,7 @@
     // Obtiene lista completa de roles del sistema
     public function principal(){
         if(isset($_SESSION['nombre'])){
-            require __DIR__ . '/../vistas/plantillas/frm_principal.php';
+           require __DIR__ . '/../vistas/plantillas/frm_principal.php';
         }else{
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
@@ -1062,6 +1063,7 @@
                     $obj_eventos->setId2(0);
                     $obj_eventos->setId($_GET['id_evento']);
                     $obj_eventos->edita_estado_evento("1");
+                    $obj_eventos->setAdjunto("N/A");
                     $obj_eventos->ingresar_seguimiento_evento();  
                     //echo "3 guarda seguimiento";
                     echo "<script type=\"text/javascript\">alert('Evento recuperado con Éxito!!!');history.go(-1);</script>";
@@ -1184,14 +1186,19 @@
             //echo $result;
             $krr = explode('-',$result);
             $result = implode("",$krr);
+                       
+            $raiz=$_SERVER['DOCUMENT_ROOT'];
+                       
+            if (substr($raiz,-1)!="/"){
+                $raiz.="/";
+            }
             
-            $ruta= "C:/wamp/www/Adjuntos_Bitacora/".$result.$_FILES['archivo_adjunto']['name'];
-            //echo ;
+            $ruta=  $raiz."Adjuntos_Bitacora/".$result.$_FILES['archivo_adjunto']['name'];
+            //$ruta=  $_SERVER['DOCUMENT_ROOT']."Adjuntos_Bitacora/".$result.$_FILES['archivo_adjunto']['name'];
+          
             switch ($recepcion_archivo) {
                 case 0:{
-                    //echo $_FILES['archivo_adjunto']['tmp_name'];
-                    //$ruta=$_FILES['archivo_adjunto']['tmp_name'].$_FILES['archivo_adjunto']['name'];
-                    //echo $ruta;
+                    
                     if (move_uploaded_file($_FILES['archivo_adjunto']['tmp_name'], $ruta)){
                         $obj_eventos->setAdjunto($result.$_FILES['archivo_adjunto']['name']); 
                         $obj_eventos->ingresar_seguimiento_evento();
@@ -1204,7 +1211,6 @@
                         $obj_eventos->edita_estado_evento($_POST['estado_del_evento']);
                         header ("location:/ORIEL/index.php?ctl=frm_eventos_listar");
                         //echo "<script type=\"text/javascript\">alert('No fue seleccionado ningun archivo!!!!');history.go(-1);</script>";;
-                        //break;
                     }
                     break;
                 }

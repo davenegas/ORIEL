@@ -84,7 +84,7 @@
                 </div> <br><br><br><br>
                 <div class="col-xs-6">
                     <label for="DetalleSeguimiento">Detalle del Seguimiento</label>
-                    <textarea type="text" required=”required” class="form-control" id="DetalleSeguimiento" name="DetalleSeguimiento" value="" maxlength="250" minlength="5" placeholder="Máximo 250 caracteres por seguimiento"></textarea>
+                    <textarea type="text" required=”required” class="form-control" id="DetalleSeguimiento" name="DetalleSeguimiento" value="" maxlength="500" minlength="5" placeholder="Máximo 500 caracteres por seguimiento"></textarea>
                 </div>
                 
                 <div class="col-xs-6 espacio-abajo">

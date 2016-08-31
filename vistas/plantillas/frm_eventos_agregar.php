@@ -85,7 +85,7 @@
             
             <div class="col-xs-6">
                     <label for="seguimiento">Detalle del Evento</label>
-                    <textarea type="text" class="form-control" id="seguimiento" name="seguimiento" value="" maxlength="250" placeholder="Máximo 250 caracteres por seguimiento"></textarea>
+                    <textarea type="text" class="form-control" id="seguimiento" name="seguimiento" value="" maxlength="500" placeholder="Máximo 500 caracteres por seguimiento"></textarea>
             </div>
            <div class="col-xs-6">
               <label for="estado_evento">Estado Evento</label>
