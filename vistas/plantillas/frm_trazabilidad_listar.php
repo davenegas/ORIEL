@@ -64,10 +64,11 @@
                 <a class="btn btn-default" role="button" id="prueba" name="prueba" onclick="hacer_click()">Generar Reporte</a>
                 <a href="index.php?ctl=principal" class="btn btn-default" role="button">Cancelar</a>
           
-        <h2>Listado de Trazabilidad del Sistema</h2>
+       
         
         <!--<p>A continuación se detallan los diferentes roles que están registrados en el sistema:</p>-->  
         <section class="full-height">
+        <h2 id="titulo">Movimientos del día de hoy:</h2>
         <table id="tabla" class="display2">
           <thead>
             <tr>

@@ -79,6 +79,18 @@
                   <?php  if($params[0]['ID_PuntoBCR']!=0){?>
                     <option value="<?php echo $params[0]['ID_PuntoBCR']?>"><?php echo $params[0]['Nombre']?></option>
                   <?php } ?>
+                    
+                    <?php 
+                    if($ide==0){
+                        $tam_puntos_bcr=count($lista_puntos_bcr_oficinas_sj);
+                        for($i=0; $i<$tam_puntos_bcr;$i++){
+                            if ($i==0){?>
+                                <option value="<?php echo $lista_puntos_bcr_oficinas_sj[$i]['ID_PuntoBCR']?>" selected="selected"><?php echo $lista_puntos_bcr_oficinas_sj[$i]['Nombre']?></option>                           
+                            <?php }else{?>
+                                <option value="<?php echo $lista_puntos_bcr_oficinas_sj[$i]['ID_PuntoBCR']?>"><?php echo $lista_puntos_bcr_oficinas_sj[$i]['Nombre']?></option>                           
+                            <?php }} ?>  
+                    <?php } ?>
+                    
               </select>
             </div>
             <br/><br/><br/><br/>

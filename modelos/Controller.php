@@ -773,6 +773,9 @@
                 //Vector que almacena la lista completa de tipos de puntos bcr para cargarla en el dropdownlistbox correspondiente
                 $lista_tipos_de_puntos_bcr="";
                 
+                //Vector que almacena la lista completa de puntos bcr con tipo oficina y de san josé (cuando se agrega un nuevo evento) para cargarla en el dropdownlistbox correspondiente
+                $lista_puntos_bcr_oficinas_sj="";
+                
                 if ($_GET['id']==0){
                   
                     $ide=0;
@@ -795,6 +798,20 @@
                     //Obtiene los diferentes seguimientos
                     $obj_eventos->obtener_seguimientos();
                     $estadoEventos = $obj_eventos->getArreglo();
+                    
+                    //Obtiene las oficinas de san jose
+                    
+                    $obj_eventos->setTipo_punto("1");
+                    $obj_eventos->setProvincia("1");
+
+                    $obj_eventos->filtra_sitios_bcr_bitacora();
+                    $lista_puntos_bcr_oficinas_sj=$obj_eventos->getArreglo(); 
+                    
+                    /*echo "<pre>";
+                    
+                    print_r($lista_puntos_bcr_oficinas_sj);
+                    
+                    echo "</pre>";*/
                     
                     require __DIR__ . '/../vistas/plantillas/frm_eventos_agregar.php';
                     
@@ -903,7 +920,9 @@
                 if (count($params)>0){
                     
                     //$html="<h2>Listado de Eventos Relacionados a este Punto BCR</h2>";
-                    /*$html="<thead>";   
+                    $html="<table id='tabla' class='display2'>";
+                    //$html.="<h2 id='titulo'>Movimientos de acuerdo a parámetros:</h2>";
+                    $html.="<thead>";   
                     $html.="<tr>";
                     $html.="<th>ID_Traza</th>";
                     $html.="<th>Fecha</th>";
@@ -916,10 +935,10 @@
                     $html.="</tr>";
                     $html.="</thead>";
                     
-                    $html.="<tbody>";*/
+                    $html.="<tbody id='cuerpo'>";
                     $tam=count($params);
 
-                    $html="";
+                    //$html="";
                     
                     for ($i = 0; $i <$tam; $i++) {
            
@@ -941,9 +960,9 @@
                         $html.="</tr>";
                          }
             
-                    //$html.="</tbody>";
+                    $html.="</tbody>";
 
-                    //$html.=" </table>";
+                    $html.=" </table>";
                     
                     echo $html;
                     exit;
@@ -971,7 +990,8 @@
             
             if(isset($_SESSION['nombre'])){
                 $obj_eventos= new cls_eventos();
-                $obj_eventos->setCondicion("T_Evento.ID_PuntoBCR=".$_POST['id_punto_bcr']." Limit 0,5");
+                //$obj_eventos->setCondicion("T_Evento.ID_PuntoBCR=".$_POST['id_punto_bcr']." Limit 0,5");
+                $obj_eventos->setCondicion("T_Evento.ID_PuntoBCR=".$_POST['id_punto_bcr']);
                 $obj_eventos->obtiene_todos_los_eventos();
                 $params=$obj_eventos->getArreglo();
 

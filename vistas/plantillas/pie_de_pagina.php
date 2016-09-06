@@ -22,7 +22,7 @@ requerida
           $meses = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
  
           echo $dias[date('w')]." ".date('d')." de ".$meses[date('n')-1]. " del ".date('Y') ;
-          echo ", ".date("H:i", time());
+          echo ", ".date("H:i", time()) . " hrs";
  
 ?>
                 
