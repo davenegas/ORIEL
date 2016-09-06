@@ -313,12 +313,7 @@ class cls_puntosBCR{
         $this->resultado_operacion=true;
     }
     
-    public function eliminar_telefono_puntobcr() {
-        $this->obj_data_provider->conectar();
-        $this->arreglo=$this->obj_data_provider->eliminar_datos("T_Telefono", $this->condicion);
-        $this->obj_data_provider->desconectar();
-        $this->resultado_operacion=true;
-    }
+    
     
     public function guardar_punto_bcr(){
         $this->obj_data_provider->conectar();

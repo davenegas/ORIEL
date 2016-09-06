@@ -231,12 +231,12 @@ class cls_usuarios{
             
             $detalle_sql="insert into t_traza (ID_Traza,Fecha,Hora,ID_Usuario,Tabla_Afectada,Dato_Anterior,Dato_Actualizado) values(null,'".date("Y-m-d")."','".date("H:i:s", time())."',".$_SESSION['id'].",'"."T_Usuario"."','".$valores_iniciales. "','".$cadena_sql."');";       
             $this->obj_data_provider->inserta_datos_para_uso_de_trazabilidad($detalle_sql);
-       }
+        }
       
       // Llamada al procedimiento almacenado de mysql para gestión de usuarios
       
-       $sql=("call sp_set_usuario('".$this->id."','".$this->nombre."','".$this->apellido."','".$this->cedula."','".$this->correo."','".$this->rol."','".$this->observaciones."','".$this->estado."','".Encrypter::encrypt($this->cedula)."')");
-       $this->obj_data_provider->insertar_datos_con_phpmyadmin($sql);
+        $sql=("call sp_set_usuario('".$this->id."','".$this->nombre."','".$this->apellido."','".$this->cedula."','".$this->correo."','".$this->rol."','".$this->observaciones."','".$this->estado."','".Encrypter::encrypt($this->cedula)."')");
+        $this->obj_data_provider->insertar_datos_con_phpmyadmin($sql);
   }
   //Este metodo realiza la tarea de actualizar la información de un módulo de seguridad en específico en la bd
   function edita_passsword(){

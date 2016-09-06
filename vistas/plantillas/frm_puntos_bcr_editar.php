@@ -5,6 +5,7 @@
         <title>Gestión de Puntos BCR</title>
         <script language="javascript" src="vistas/js/jquery.js"></script>
         <script language="javascript" src="vistas/js/listas_dependientes_puntobcr.js"></script>
+        <link rel="stylesheet" href="vistas/css/ventanaoculta.css">
         <?php require_once 'frm_librerias_head.html'; ?>
 
     </head>
@@ -56,7 +57,7 @@
                 <?php }}  ?>
                 </select>
             </div>
-            <h5 class="quitar-float">Información de telefonos del Punto BCR: <a class="btn" role="button" id="prueba" name="prueba" onclick="agregar_telefono();">Agregar número</a></h5> 
+            <h5 class="quitar-float">Información de telefonos del Punto BCR: <a id="popup" onclick="div_show()"class="btn" role="button" name="prueba">Agregar número</a></h5> 
             <div>
             <table class="display col-md-12 table-striped quitar-float espacio-abajo" id="telefonos">
                 <thead> 
@@ -83,6 +84,7 @@
                 </tbody> 
             </table>
             </div>
+            <div>
             <table class="display col-md-12  table-striped quitar-float" id="unidad_ejecutora">
                 <thead> 
                     <th style="text-align:center">Numero UE</th>
@@ -100,7 +102,7 @@
                     <?php } ?>
                 </tbody> 
             </table>
-        </div> 
+            </div> 
 
         <h3 class="espacio-arriba quitar-float">Ubicación <input class="quitar-float" type="checkbox" id="chk_ubicacion" name="chk_ubicacion"></h3>
 
@@ -313,6 +315,37 @@
 <!--        </form>                               -->
         <?php require_once 'pie_de_pagina.php' ?>
         </div>
+        </div>
+            <div id="agregar_telefono">
+                
+            <div id="popupContact">
+                
+                <form id="ventana" method="post" name="form" action="index.php?ctl=puntobcr_numero_telefono_guardar">
+                    <img id="close" src='vistas/Imagenes/cerrar.png' width="25" onclick ="div_hide()">
+                    <h2>Agregar número de Punto BCR</h2>
+                    <hr>
+                    <input hidden id="ID_Tipo_Telefono" name="ID_Tipo_Telefono" type="text" value="0">
+                    <input hidden id="ID_PuntoBCR" name="ID_PuntoBCR" type="text" value="<?php echo $params[0]['ID_PuntoBCR']; ?>">
+                    <label for="Tipo_Telefono">Tipo de Telefono</label>
+                        <select class="form-control espacio-abajo" id="Tipo_Telefono" name="Tipo_Telefono"> 
+                        <?php
+                        $tam = count($tipo_telefono);
+                        for($i=0; $i<$tam;$i++)
+                        {  
+                            if($tipo_telefono[$i]['ID_Tipo_Telefono']==1||$tipo_telefono[$i]['ID_Tipo_Telefono']==5||$tipo_telefono[$i]['ID_Tipo_Telefono']==6||
+                                $tipo_telefono[$i]['ID_Tipo_Telefono']==7||$tipo_telefono[$i]['ID_Tipo_Telefono']==8||$tipo_telefono[$i]['ID_Tipo_Telefono']==9||
+                                    $tipo_telefono[$i]['ID_Tipo_Telefono']==10){?>
+                                <option value="<?php echo $tipo_telefono[$i]['ID_Tipo_Telefono']?>" ><?php echo $tipo_telefono[$i]['Tipo_Telefono']?></option>   
+                        <?php }}  ?>
+                        </select>
+                    <label for="numero">Número de Teléfono</label>
+                    <input class="form-control espacio-abajo" maxlength="8" required id="numero" name="numero" placeholder="Número de teléfono - 8 digitos" type="text">
+                    <label for="numero">Observaciones</label>
+                    <textarea class="form-control espacio-abajo" id="observaciones" name="observaciones" placeholder="Observaciones del número"></textarea>
+                    <button><a href="javascript:%20check_empty()" id="submit">Guardar</a></button>
+                    </form>
+                </div>
+            </div>
     </body>
-    </div>
+    
 </html>

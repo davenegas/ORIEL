@@ -14,6 +14,7 @@ require_once __DIR__ . '/controladores/cls_horario.php';
 require_once __DIR__ . '/controladores/cls_direccionIP.php';
 require_once __DIR__ . '/controladores/cls_trazabilidad.php';
 require_once __DIR__ . '/controladores/cls_general.php';
+require_once __DIR__ . '/controladores/cls_telefono.php';
 require_once __DIR__ . '/modelos/Controller.php';
 require_once __DIR__ . '/modelos/Encrypter.php';
 require_once __DIR__ . '/modelos/PHPMailerAutoload.php';
@@ -83,7 +84,8 @@ $map = array(
     'puntoBCR_guardar_informacion_general'=>array('controller'=>'Controller','action'=> 'puntoBCR_guardar_informacion_general'),
     'puntobcr_desligar_telefono'=>array('controller'=>'Controller','action'=> 'puntobcr_desligar_telefono'),
     'punto_bcr_guardar'=>array('controller'=>'Controller','action'=> 'punto_bcr_guardar'),
-
+    'puntobcr_numero_telefono_guardar'=>array('controller'=>'Controller','action'=> 'puntobcr_numero_telefono_guardar'),
+    
     //Empresas
     'empresas_listar'=>array('controller'=>'Controller','action'=> 'empresas_listar'),
     'empresa_gestion'=>array('controller'=>'Controller','action'=> 'empresa_gestion'),

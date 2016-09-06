@@ -1501,6 +1501,7 @@
             $obj_empresa = new cls_empresa();
             $obj_horario = new cls_horario();
             $obj_direccionIP = new cls_direccionIP();
+            $obj_telefono = new cls_telefono();
             
             if ($_GET['id']==0){
                 
@@ -1534,11 +1535,10 @@
                 //Obtiene empresa remesera
                 $obj_empresa->setCondicion("");
                 $obj_empresa->obtiene_todas_las_empresas();
-                $empresas= $obj_empresa->getArreglo();
-                
+                $empresas= $obj_empresa->getArreglo();           
                 
                 require __DIR__ . '/../vistas/plantillas/frm_puntos_bcr_nuevo.php';
-            }   else   {
+            }   else    {
                 
                 $ide=$_GET['id'];
                 //Obtiene la informacion del PuntoBCR
@@ -1612,6 +1612,13 @@
                 $obj_direccionIP->setCondicion("T_PuntoBCRDireccionIP.ID_PuntoBCR='".$_GET['id']."'");
                 $obj_direccionIP->obtiene_direccionesIP();
                 $direccionIP = $obj_direccionIP->getArreglo();
+                
+                //Obtiene los tipos de telefono
+                $obj_telefono->setCondicion("");
+                $obj_telefono->obtiene_tipo_telefonos();
+                $tipo_telefono= $obj_telefono->getArreglo();
+
+                
                 require __DIR__ . '/../vistas/plantillas/frm_puntos_bcr_editar.php';
             }
             
@@ -1720,11 +1727,11 @@
     
     public function puntobcr_desligar_telefono(){
         if(isset($_SESSION['nombre'])){
-            $obj_puntosbcr = new cls_puntosBCR();
-            $obj_puntosbcr->setId($_POST['id_telefono']);
-            $obj_puntosbcr->setCondicion("ID='".$_POST['id_telefono']);
-            $obj_puntosbcr->eliminar_telefono_puntobcr();
-            
+            $obj_telefono = new cls_telefono();
+            $obj_telefono->setId($_POST['id_telefono']);
+            $obj_telefono->setCondicion("ID_Telefono='".$_POST['id_telefono']."'");
+            $obj_telefono->eliminar_telefono_puntobcr();
+
         }else{
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
@@ -1765,6 +1772,25 @@
         }
     }
     
+    public function puntobcr_numero_telefono_guardar(){
+        if(isset($_SESSION['nombre'])){   
+            if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+                echo "<script> alert ('ingresa correcto')</script>";
+                $obj_telefono = new cls_telefono();
+                $obj_telefono->setId($_POST['ID_Tipo_Telefono']);
+                $obj_telefono->setId2($_POST['ID_PuntoBCR']);
+                $obj_telefono->setTipo_telefono($_POST['Tipo_Telefono']);
+                $obj_telefono->setNumero($_POST['numero']);
+                $obj_telefono->setObservaciones($_POST['observaciones']);
+                $obj_telefono->guardar_telefono();
+                header("location:/ORIEL/index.php?ctl=gestion_punto_bcr&id=".$_POST['ID_PuntoBCR']);
+            }
+        }   else    {
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }
+    }
     //Trazabilidad
     //FUNCIONES PARA EVENTOS
 

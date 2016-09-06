@@ -70,11 +70,24 @@ $(document).ready(function(){
 //Función para eliminar telefono de Punto BCR
 function eliminar_telefono(ide){
         id_telefono= ide;
-        //$.post("index.php?ctl=puntobcr_desligar_telefono", { id_telefono: id_telefono}, function(data){
-          //      alert (data);
-           // });
+        $.post("index.php?ctl=puntobcr_desligar_telefono", { id_telefono: id_telefono}, function(data){
+            location.reload();
+            //alert (data);
+          });
     };
     
-function agregar_telefono(){
-    
+function check_empty() {
+    if (document.getElementById('numero').value == "") {
+        alert("Fill All Fields !");
+    } else {
+        //alert("Form Submitted Successfully...");
+        document.getElementById('ventana').submit();
+        document.getElementById('agregar_telefono').style.display = "none";
+    }
+}
+function div_show() {
+    document.getElementById('agregar_telefono').style.display = "block";
+}
+function div_hide(){
+    document.getElementById('agregar_telefono').style.display = "none";
 }
