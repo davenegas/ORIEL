@@ -158,7 +158,7 @@ class cls_trazabilidad{
         $this->obj_data_provider->conectar();
         if($this->condicion==""){
             $this->arreglo=$this->obj_data_provider->trae_datos(
-                    "t_traza left outer join t_usuario on t_traza.ID_Usuario=t_usuario.ID_usuario", 
+                    "t_traza left outer join t_usuario on t_traza.ID_Usuario=t_usuario.ID_usuario order by Nombre_Completo", 
                     "distinct(t_traza.ID_Usuario),concat(t_usuario.Nombre,' ',t_usuario.Apellido) as Nombre_Completo",
                     "");
             $this->arreglo=$this->obj_data_provider->getArreglo();
@@ -180,7 +180,7 @@ class cls_trazabilidad{
         $this->obj_data_provider->conectar();
         if($this->condicion==""){
             $this->arreglo=$this->obj_data_provider->trae_datos(
-                    "t_traza", 
+                    "t_traza order by t_traza.Tabla_Afectada", 
                     "distinct(t_traza.Tabla_Afectada)",
                     "");
             $this->arreglo=$this->obj_data_provider->getArreglo();

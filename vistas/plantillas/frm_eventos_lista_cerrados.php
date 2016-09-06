@@ -4,6 +4,48 @@
         <meta charset="utf-8"/>
         <title>Lista de Eventos Cerrados</title>
         <?php require_once 'frm_librerias_head.html'; ?>     
+        <script>
+        
+        function recuperar_evento(id_e,id_pbcr,id_tevento){
+            
+            prueba=id_e;
+            prueba2=id_pbcr;
+            prueba3=id_tevento;
+            
+            $.confirm({
+            title: 'Confirmación!',
+            content: 'Desea recuperar este evento?',
+            confirm: function(){
+                //alert (prueba+" "+ prueba2 + " " + prueba3 );
+                $.post("index.php?ctl=frm_eventos_recuperar", { id_evento: prueba,id_puntobcr:prueba2,id_tipo_evento:prueba3 },function(data){
+                    
+                     if (data=="1"){
+                         $.alert({
+                            title: 'Información!',
+                            content: 'Ya existe este evento abierto para este punto BCR. Proceda a cerrarlo o agregue un seguimiento!!!',
+                            
+                        });
+                     }else{
+                          $.alert({
+                            title: 'Información!',
+                            content: 'Evento recuperado con éxito!!!',
+                            
+                        });
+                         location.reload();  
+                     }
+                    
+                });  
+               
+                //location.reload();  
+            },
+            cancel: function(){
+                //$.alert('Canceled!')
+            }
+            });
+            
+        }
+        
+        </script>
     </head>
     <body>
         <?php require_once 'encabezado.php';?>
@@ -62,10 +104,7 @@
             <?php
             if ($_SESSION['rol']!=2){
             ?>  
-            <td align="center"><a href="index.php?ctl=frm_eventos_recuperar&id_evento=
-               <?php echo $params[$i]['ID_Evento']?>&id_puntobcr=
-               <?php echo $params[$i]['ID_PuntoBCR']?>&id_tipo_evento=
-               <?php echo $params[$i]['ID_Tipo_Evento']?>">Recuperar Evento</a></td>
+            <td align="center"><a onclick="recuperar_evento(<?php echo $params[$i]['ID_Evento'];?>,<?php echo $params[$i]['ID_PuntoBCR'];?>,<?php echo $params[$i]['ID_Tipo_Evento'];?>);">Recuperar Evento</a></td>
             
             <?php }
             ?>

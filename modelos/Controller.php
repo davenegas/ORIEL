@@ -877,7 +877,7 @@
     }
    
     public function  actualiza_en_vivo_reporte_trazabilidad(){
-                            
+            sleep(2);       
             if(isset($_SESSION['nombre'])){
                 
                 $fecha_inicial=$_POST['fecha_inicial'];
@@ -903,7 +903,7 @@
                 if (count($params)>0){
                     
                     //$html="<h2>Listado de Eventos Relacionados a este Punto BCR</h2>";
-                    $html="<thead>";   
+                    /*$html="<thead>";   
                     $html.="<tr>";
                     $html.="<th>ID_Traza</th>";
                     $html.="<th>Fecha</th>";
@@ -916,9 +916,11 @@
                     $html.="</tr>";
                     $html.="</thead>";
                     
-                    $html.="<tbody>";
+                    $html.="<tbody>";*/
                     $tam=count($params);
 
+                    $html="";
+                    
                     for ($i = 0; $i <$tam; $i++) {
            
                         $html.="<tr>";
@@ -939,7 +941,7 @@
                         $html.="</tr>";
                          }
             
-                    $html.="</tbody>";
+                    //$html.="</tbody>";
 
                     //$html.=" </table>";
                     
@@ -950,7 +952,8 @@
                      echo $html;
                      exit;
                 }    
-
+                //require __DIR__.'/../vistas/plantillas/frm_trazabilidad_listar.php';
+                echo $html;
             }else {
                $tipo_de_alerta="alert alert-warning";
                $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
@@ -1041,14 +1044,15 @@
     }
     
     public function frm_eventos_recuperar(){
+        //echo "<script type=\"text/javascript\">alert('Evento recuperado con Éxito!!!');</script>";
         if(isset($_SESSION['nombre'])){
             $obj_eventos= new cls_eventos();
-            if ($_SERVER['REQUEST_METHOD'] == 'GET') {
+            if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 
                 $obj_eventos->setFecha(date("Y-m-d")); 
                 $obj_eventos->setHora(date("H:i", time()));
-                $obj_eventos->setTipo_evento($_GET['id_tipo_evento']);
-                $obj_eventos->setPunto_bcr($_GET['id_puntobcr']);
+                $obj_eventos->setTipo_evento($_POST['id_tipo_evento']);
+                $obj_eventos->setPunto_bcr($_POST['id_puntobcr']);
                 $obj_eventos->setEstado_evento("1");
                 $obj_eventos->setId_usuario($_SESSION['id']);
                 $obj_eventos->setEstado(1);
@@ -1061,19 +1065,20 @@
                     //echo 'alert("si entro")'; 
                     $obj_eventos->setDetalle("Evento re-abierto (recuperado) por ".$_SESSION['name']." ".$_SESSION['apellido']);
                     $obj_eventos->setId2(0);
-                    $obj_eventos->setId($_GET['id_evento']);
+                    $obj_eventos->setId($_POST['id_evento']);
                     $obj_eventos->edita_estado_evento("1");
                     $obj_eventos->setAdjunto("N/A");
                     $obj_eventos->ingresar_seguimiento_evento();  
-                    //echo "3 guarda seguimiento";
-                    echo "<script type=\"text/javascript\">alert('Evento recuperado con Éxito!!!');history.go(-1);</script>";
+                    
+                    //echo "<script type=\"text/javascript\">alert('Evento recuperado con Éxito!!!');history.go(-1);</script>";
                     
                     header ("location:/ORIEL/index.php?ctl=frm_eventos_lista_cerrados");
+                    echo "0";
                     //$this->frm_eventos_lista_cerrados();
                 }else{
                     //echo '<script>alert("Ya existe este evento abierto para este punto BCR. Proceda a cerrarlo o agregue un seguimiento!!!")</script>';
                     //require __DIR__ . '/../vistas/plantillas/frm_eventos_agregar.php';
-                    echo "<script type=\"text/javascript\">alert('No es posible recuperar este evento, ya existe otro evento del mismo tipo abierto para este punto BCR. Proceda a cerrarlo o agregue un seguimiento!!!');history.go(-1);</script>";
+                    echo "1";
                     exit;
                      
                 }

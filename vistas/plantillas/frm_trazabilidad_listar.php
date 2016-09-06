@@ -9,6 +9,9 @@
     </head>
     <body>
         <?php require_once 'encabezado.php';?>
+    
+        <!--<center><img src="vistas/Imagenes/loading.gif" alt=""/></center>-->
+        <!--<img src="../Imagenes/notas.png" alt=""/>-->
         <div class="container animated fadeIn">
         <h2>Generar Reporte de Trazabilidad del Sistema</h2>    
         <h4>Escoger parámetros del filtro:</h4>
@@ -38,7 +41,6 @@
                     } ?>  
                 </select>
             </div>
-        
         <div class="col-xs-3">
                 <label for="tabla_afectada">Tabla Afectada:</label>
                 <select class="form-control" required=”required” id="tabla_afectada" name="tabla_afectada" > 
@@ -79,8 +81,8 @@
               <th>Dato Anterior</th>
             </tr>
           </thead>
-          <tbody>
-        
+          <tbody id="cuerpo">
+      
             <?php 
 
             $tam=count($params);
@@ -102,7 +104,7 @@
             <td><?php echo $params[$i]['Dato_Actualizado'];?></td>
             <td><?php echo $params[$i]['Dato_Anterior'];?></td>
             </tr>
-            <?php }
+            <?php  }
             ?>
             </tbody>
         </table>
