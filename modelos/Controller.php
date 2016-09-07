@@ -734,27 +734,63 @@
             
             $obj_eventos->obtener_todas_las_provincias();
             $lista_provincias=$obj_eventos->getArreglo();
-//            $tamano=count($params);
-//            if (count($params)>0){
-//                        
-//                for ($x = 0; $x <$tamano; $x++) {
-//
-//                    $obj_eventos->setCondicion("T_DetalleEvento.ID_Evento=".$params[$x]['ID_Evento']." order by T_DetalleEvento.Fecha desc,T_DetalleEvento.Hora desc");
-//                    //Obtiene los seguimientos del evento seleccionado, si los hubiere
-//                    $obj_eventos->obtiene_detalle_evento();
-//
-//
-//                    if(count($obj_eventos->getArreglo())>0){
-//                        if ($x==0){
-//                            $todos_los_seguimientos_juntos=$obj_eventos->getArreglo();
-//    //                     
-//                        }else{
-//                            $todos_los_seguimientos_juntos = array_merge($todos_los_seguimientos_juntos,$obj_eventos->getArreglo());
-//    //                      
-//                        }
-//                    }
-//                }
-//            }
+            
+            //Obtiene todos lps tipos de puntos BCR que se encuentran activos en la base de datos
+            $obj_eventos->obtener_todos_los_tipos_de_puntos_BCR();
+            $lista_tipos_de_puntos_bcr=$obj_eventos->getArreglo();
+            
+            //Obtiene las oficinas de san jose
+                    
+            $obj_eventos->setTipo_punto("1");
+            $obj_eventos->setProvincia("1");
+            
+            $obj_eventos->filtra_sitios_bcr_bitacora();
+            $lista_puntos_bcr_oficinas_sj=$obj_eventos->getArreglo(); 
+            
+            $tamano=count($params);
+            if (count($params)>0){
+                        
+                for ($x = 0; $x <$tamano; $x++) {
+
+                    $obj_eventos->setCondicion("T_DetalleEvento.ID_Evento=".$params[$x]['ID_Evento']." order by T_DetalleEvento.Fecha desc,T_DetalleEvento.Hora desc");
+                    //Obtiene los seguimientos del evento seleccionado, si los hubiere
+                    $obj_eventos->obtiene_detalle_evento();
+
+
+                    if(count($obj_eventos->getArreglo())>0){
+                        if ($x==0){
+                            $todos_los_seguimientos_juntos=$obj_eventos->getArreglo();
+    //                     
+                        }else{
+                            $todos_los_seguimientos_juntos = array_merge($todos_los_seguimientos_juntos,$obj_eventos->getArreglo());
+    //                      
+                        }
+                    }
+                    
+                $obj_eventos->setCondicion("T_DetalleEvento.ID_Evento=".$params[$x]['ID_Evento']." order by T_DetalleEvento.Fecha desc,T_DetalleEvento.Hora desc limit 0,1");
+                //Obtiene los seguimientos del evento seleccionado, si los hubiere
+                $obj_eventos->obtiene_detalle_evento();
+                $ultimo_seguimiento_asociado= $obj_eventos->getArreglo();
+                
+                
+                //Verifica si existen seguimientos asociados al evento actual
+                if(count($ultimo_seguimiento_asociado)>0){
+                    if ($x==0){
+                        $detalle_y_ultimo_usuario= array(['Detalle'=>"Fecha: ".date_format(date_create($ultimo_seguimiento_asociado[0]['Fecha']), 'd/m/Y').".Hora: ".$ultimo_seguimiento_asociado[0]['Hora'].". ".$ultimo_seguimiento_asociado[0]['Detalle']]+['Usuario'=>$ultimo_seguimiento_asociado[0]['Nombre_Usuario']." ".$ultimo_seguimiento_asociado[0]['Apellido']]);
+//                     
+                    }else{
+                        $detalle_y_ultimo_usuario = array_merge($detalle_y_ultimo_usuario,array(['Detalle'=>"Fecha: ".date_format(date_create($ultimo_seguimiento_asociado[0]['Fecha']), 'd/m/Y').".Hora: ".$ultimo_seguimiento_asociado[0]['Hora'].". ".$ultimo_seguimiento_asociado[0]['Detalle']]+['Usuario'=>$ultimo_seguimiento_asociado[0]['Nombre_Usuario']." ".$ultimo_seguimiento_asociado[0]['Apellido']]));
+//                      
+                    }
+                }else{
+                    if ($x==0){
+                        $detalle_y_ultimo_usuario= array(['Detalle'=>"No hay seguimientos asociados a este evento. Para agregar uno oprima el link:'Gestionar Seguimiento de la fila respectiva.'"]+['Usuario'=>$params[$x]['Nombre_Usuario']." ".$params[$x]['Apellido']]);
+                    }else{
+                        $detalle_y_ultimo_usuario = array_merge($detalle_y_ultimo_usuario,array(['Detalle'=>"No hay seguimientos asociados a este evento. Para agregar uno oprima el link:'Gestionar Seguimiento de la fila respectiva.'"]+['Usuario'=>$params[$x]['Nombre_Usuario']." ".$params[$x]['Apellido']]));
+                    }
+                }
+                }
+            }
             require __DIR__.'/../vistas/plantillas/frm_eventos_lista_cerrados.php';
         }
         else {
@@ -983,6 +1019,174 @@
        
        
         
+    }
+    
+    
+    public function  actualiza_en_vivo_reporte_cerrados(){
+            sleep(2);       
+            if(isset($_SESSION['nombre'])){
+                
+                $obj_eventos = new cls_eventos();
+                
+                $fecha_inicial=$_POST['fecha_inicial'];
+                $fecha_final=$_POST['fecha_final'];
+                $id_punto_bcr=$_POST['id_punto_bcr'];
+                               
+                $condicion="(T_Evento.Fecha between '".$fecha_inicial."' AND '".$fecha_final."') AND (T_Evento.ID_EstadoEvento=3 OR T_Evento.ID_EstadoEvento=5) AND T_Evento.ID_PuntoBCR=".$id_punto_bcr;
+                            
+                $obj_eventos->setCondicion($condicion);
+                $obj_eventos ->obtiene_todos_los_eventos(); 
+                $params= $obj_eventos->getArreglo();
+                $todos_los_seguimientos_juntos="";
+                
+                $tamano=count($params);
+                
+                if (count($params)>0){
+
+                    for ($x = 0; $x <$tamano; $x++) {
+
+                        $obj_eventos->setCondicion("T_DetalleEvento.ID_Evento=".$params[$x]['ID_Evento']." order by T_DetalleEvento.Fecha desc,T_DetalleEvento.Hora desc");
+                        //Obtiene los seguimientos del evento seleccionado, si los hubiere
+                        $obj_eventos->obtiene_detalle_evento();
+
+                        if(count($obj_eventos->getArreglo())>0){
+                            if ($x==0){
+                                $todos_los_seguimientos_juntos=$obj_eventos->getArreglo();
+        //                     
+                            }else{
+                                $todos_los_seguimientos_juntos = array_merge($todos_los_seguimientos_juntos,$obj_eventos->getArreglo());
+        //                      
+                            }
+                        }
+                        
+                        $obj_eventos->setCondicion("T_DetalleEvento.ID_Evento=".$params[$x]['ID_Evento']." order by T_DetalleEvento.Fecha desc,T_DetalleEvento.Hora desc limit 0,1");
+                        //Obtiene los seguimientos del evento seleccionado, si los hubiere
+                        $obj_eventos->obtiene_detalle_evento();
+                        $ultimo_seguimiento_asociado= $obj_eventos->getArreglo();
+
+
+                        //Verifica si existen seguimientos asociados al evento actual
+                        if(count($ultimo_seguimiento_asociado)>0){
+                            if ($x==0){
+                                $detalle_y_ultimo_usuario= array(['Detalle'=>"Fecha: ".date_format(date_create($ultimo_seguimiento_asociado[0]['Fecha']), 'd/m/Y').".Hora: ".$ultimo_seguimiento_asociado[0]['Hora'].". ".$ultimo_seguimiento_asociado[0]['Detalle']]+['Usuario'=>$ultimo_seguimiento_asociado[0]['Nombre_Usuario']." ".$ultimo_seguimiento_asociado[0]['Apellido']]);
+        //                     
+                            }else{
+                                $detalle_y_ultimo_usuario = array_merge($detalle_y_ultimo_usuario,array(['Detalle'=>"Fecha: ".date_format(date_create($ultimo_seguimiento_asociado[0]['Fecha']), 'd/m/Y').".Hora: ".$ultimo_seguimiento_asociado[0]['Hora'].". ".$ultimo_seguimiento_asociado[0]['Detalle']]+['Usuario'=>$ultimo_seguimiento_asociado[0]['Nombre_Usuario']." ".$ultimo_seguimiento_asociado[0]['Apellido']]));
+        //                      
+                            }
+                        }else{
+                            if ($x==0){
+                                $detalle_y_ultimo_usuario= array(['Detalle'=>"No hay seguimientos asociados a este evento. Para agregar uno oprima el link:'Gestionar Seguimiento de la fila respectiva.'"]+['Usuario'=>$params[$x]['Nombre_Usuario']." ".$params[$x]['Apellido']]);
+                            }else{
+                                $detalle_y_ultimo_usuario = array_merge($detalle_y_ultimo_usuario,array(['Detalle'=>"No hay seguimientos asociados a este evento. Para agregar uno oprima el link:'Gestionar Seguimiento de la fila respectiva.'"]+['Usuario'=>$params[$x]['Nombre_Usuario']." ".$params[$x]['Apellido']]));
+                            }
+                        }   
+                        
+                    }
+                }
+
+                if (count($params)>0){
+                    
+                    //$html="<h2>Listado de Eventos Relacionados a este Punto BCR</h2>";
+                    $html="<table id='tabla' class='display2'>";
+                    //$html.="<h2 id='titulo'>Movimientos de acuerdo a parámetros:</h2>";
+                    $html.="<thead>";   
+                    $html.="<tr>";
+                    $html.="<th hidden='true'>ID_Evento</th>";
+                    $html.="<th>Fecha</th>";
+                    $html.="<th>Hora</th>";
+                    $html.="<th>Provincia</th>";
+                    $html.="<th>Tipo Punto</th>";
+                    $html.="<th>Punto BCR</th>";
+                    $html.="<th>Codigo</th>";
+                    $html.="<th>Tipo de Evento</th>";
+                    $html.="<th>Estado del Evento</th>";
+                    $html.="<th>Cerrado Por</th>";
+                    if ($_SESSION['rol']!=2){  
+                        $html.="<th>Gestión</th>";
+                    }
+                    $html.="<th>Consulta</th>";
+                    $html.="<th hidden='true'>Seguimientos</th> ";
+                    $html.="</tr>";
+                    $html.="</thead>";
+                    
+                    $html.="<tbody id='cuerpo'>";
+                    $tam=count($params);
+
+                    //$html="";
+                    
+                    for ($i = 0; $i <$tam; $i++) {
+           
+                        $html.="<tr data-toggle='tooltip' title='".$detalle_y_ultimo_usuario[$i]['Detalle']."'>";
+           
+                        $fecha_evento = date_create($params[$i]['Fecha']);
+                        $fecha_actual = date_create(date("d-m-Y"));
+                        $dias_abierto= date_diff($fecha_evento, $fecha_actual);
+            
+                        
+                        $html.="<td hidden='true'>".$params[$i]['ID_Evento']."</td>";
+                        $html.="<td>".date_format($fecha_evento, 'd/m/Y')."</td>";   
+                        $html.="<td>".$params[$i]['Hora']."</td>";
+                        $html.="<td>".$params[$i]['Nombre_Provincia']."</td>";
+                        $html.="<td>".$params[$i]['Tipo_Punto']."</td>";
+                        $html.="<td>".$params[$i]['Nombre']."</td>";
+                        $html.="<td>".$params[$i]['Codigo']."</td>";
+                        $html.="<td>".$params[$i]['Evento']."</td>";
+                        $html.="<td>".$params[$i]['Estado_Evento']."</td>";                
+                        $html.="<td>".$detalle_y_ultimo_usuario[$i]['Usuario']."</td>";
+                        //$html.="<td>".$params[$i]['Nombre_Usuario']." ".$params[$i]['Apellido']."</td>";
+                        
+                        if ($_SESSION['rol']!=2){  
+                            $html.="<td align='center'><a onclick='recuperar_evento(".$params[$i]['ID_Evento'].",".$params[$i]['ID_PuntoBCR'].",".$params[$i]['ID_Tipo_Evento'].")'>Recuperar Evento</a></td>";
+                        }   
+                        $html.="<td align='center'><a href='index.php?ctl=frm_eventos_editar&accion=consulta_cerrados&id=".$params[$i]['ID_Evento']."'>Ver detalle</a></td>";
+                        
+//                        $html.="<table id='segunda'>";
+//                        $html.="<thead>";
+//                        $html.="<tr>";
+//                        $html.="<th>Fecha de Seguimiento</th>";
+//                        $html.="<th>Detalle del Seguimiento</th>";
+//                        $html.="</tr>";
+//                        $html.="</thead>";
+//                        $html.="<tbody>";
+//                        
+                        $tama=count($todos_los_seguimientos_juntos);
+                        $cadena="";
+                        for ($j = 0; $j <$tama; $j++) {
+                        
+                            //$html.="<tr>";
+                            $fecha_evento = date_create($todos_los_seguimientos_juntos[$j]['Fecha']);
+                            $fecha_actual = date_create(date("d-m-Y"));
+                            $dias_abierto= date_diff($fecha_evento, $fecha_actual);
+                            if ($params[$i]['ID_Evento']==$todos_los_seguimientos_juntos[$j]['ID_Evento']){
+                               $cadena.=date_format($fecha_evento, 'd/m/Y')." ".$todos_los_seguimientos_juntos[$j]['Detalle']."\n";
+                            }
+                        }
+                        $html.="<td hidden='true'>".$cadena."</td>";
+//                        $html.="</tbody>";
+//                        $html.="</table>";
+//                        $html.="</td>";
+                        $html.="</tr>";
+                    }
+
+                    $html.="</tbody>";
+
+                    $html.=" </table>";
+                    
+                    echo $html;
+                    exit;
+                }else{
+                     $html="<h4>No se encontraron eventos para este filtro.</h4>";
+                     echo $html;
+                     exit;
+                }    
+                //require __DIR__.'/../vistas/plantillas/frm_trazabilidad_listar.php';
+                echo $html;
+            }else {
+               $tipo_de_alerta="alert alert-warning";
+               $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+               require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+            }
     }
     
     

@@ -14,8 +14,7 @@
         <!--<img src="../Imagenes/notas.png" alt=""/>-->
         <div class="container animated fadeIn">
         <h2>Generar Reporte de Trazabilidad del Sistema</h2>    
-        <h4>Escoger parámetros del filtro:</h4>
-        <hr/> 
+        <h4 class="espacio-abajo">Escoger parámetros del filtro:</h4>
         <div class="col-xs-3">
               <label for="fecha_inicial">Fecha Inicial:</label>
               <input type="date" required=”required” class="form-control" id="fecha_inicial" name="fecha_inicial" value="<?php echo date("Y-m-d");?>">
@@ -40,7 +39,7 @@
 
                     } ?>  
                 </select>
-            </div>
+         </div>
         <div class="col-xs-3">
                 <label for="tabla_afectada">Tabla Afectada:</label>
                 <select class="form-control" required=”required” id="tabla_afectada" name="tabla_afectada" > 
@@ -55,14 +54,12 @@
                     <?php
 
                     } ?>  
-                </select>
-                
+                </select> 
         </div>
-        
-        <hr/> <hr/> <hr/> <hr/> 
-                <!--<button value="esto es un boton" onclick="mi_funcion()"/>-->
-                <a class="btn btn-default" role="button" id="prueba" name="prueba" onclick="hacer_click()">Generar Reporte</a>
-                <a href="index.php?ctl=principal" class="btn btn-default" role="button">Cancelar</a>
+
+        <!--<button value="esto es un boton" onclick="mi_funcion()"/>-->
+        <a class="btn btn-default espacio-arriba" role="button" id="prueba" name="prueba" onclick="hacer_click()">Generar Reporte</a>
+        <a href="index.php?ctl=principal" class="btn btn-default espacio-arriba" role="button">Cancelar</a>
 
         <!--<p>A continuación se detallan los diferentes roles que están registrados en el sistema:</p>-->  
         <section class="full-height">
