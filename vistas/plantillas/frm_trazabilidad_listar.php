@@ -63,9 +63,7 @@
                 <!--<button value="esto es un boton" onclick="mi_funcion()"/>-->
                 <a class="btn btn-default" role="button" id="prueba" name="prueba" onclick="hacer_click()">Generar Reporte</a>
                 <a href="index.php?ctl=principal" class="btn btn-default" role="button">Cancelar</a>
-          
-       
-        
+
         <!--<p>A continuación se detallan los diferentes roles que están registrados en el sistema:</p>-->  
         <section class="full-height">
         <h2 id="titulo">Movimientos del día de hoy:</h2>

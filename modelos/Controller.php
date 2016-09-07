@@ -728,10 +728,12 @@
         
         if(isset($_SESSION['nombre'])){
             $obj_eventos = new cls_eventos();
-            $obj_eventos->setCondicion("T_Evento.ID_EstadoEvento=3 OR T_Evento.ID_EstadoEvento=5");
+            $obj_eventos->setCondicion("(T_Evento.ID_EstadoEvento=3 OR T_Evento.ID_EstadoEvento=5) AND T_Evento.Fecha='".date("Y-m-d")."'");
             $obj_eventos ->obtiene_todos_los_eventos(); 
             $params= $obj_eventos->getArreglo();
             
+            $obj_eventos->obtener_todas_las_provincias();
+            $lista_provincias=$obj_eventos->getArreglo();
 //            $tamano=count($params);
 //            if (count($params)>0){
 //                        

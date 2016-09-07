@@ -38,3 +38,7 @@ div#tabla_dos{
         top: 280px;
         z-index:1002;
 }
+
+.derecha{
+    float: right;
+}

@@ -3,7 +3,9 @@
     <head>
         <meta charset="utf-8"/>
         <title>Lista de Eventos Cerrados</title>
-        <?php require_once 'frm_librerias_head.html'; ?>     
+        <script language="javascript" src="vistas/js/jquery.js"></script>
+        <script language="javascript" src="vistas/js/listas_dependientes_eventos_cerrados.js"></script>
+        <?php require_once 'frm_librerias_head.html'; ?>    
         <script>
         
         function recuperar_evento(id_e,id_pbcr,id_tevento){
@@ -43,18 +45,57 @@
             }
             });
             
-        }
-        
+        }  
         </script>
     </head>
     <body>
         <?php require_once 'encabezado.php';?>
+        
+        
+                <!--<center><img src="vistas/Imagenes/loading.gif" alt=""/></center>-->
+        <!--<img src="../Imagenes/notas.png" alt=""/>-->
+        <div class="container animated fadeIn quitar-float">
+        <h2>Generar Reporte de Eventos Cerrados del Sistema <a href="index.php?ctl=frm_eventos_listar" class="btn btn-default espacio-abajo derecha" role="button">Volver a Eventos Abiertos</a></h2> 
+        
+        <h4>Escoger parámetros del filtro:</h4>
+        <hr/> 
+        <div class="col-xs-2">
+              <label for="fecha_inicial">Fecha Inicial:</label>
+              <input type="date" required=”required” class="form-control" id="fecha_inicial" name="fecha_inicial" value="<?php echo date("Y-m-d");?>">
+        </div> 
+         <div class="col-xs-2">
+              <label for="fecha_final">Fecha Final:</label>
+              <input type="date" required=”required” class="form-control" id="fecha_final" name="fecha_final" value="<?php echo date("Y-m-d");?>">
+        </div> 
+        <div class="col-xs-2">
+              <label for="nombre_provincia">Provincia</label>
+              <select class="form-control" required=”required” id="nombre_provincia" name="nombre_provincia" > 
+                <?php
+                    $tam_provincias = count($lista_provincias);
+
+                    for($i=0; $i<$tam_provincias;$i++)
+                    {
+                        if($lista_provincias[$i]['ID_Provincia']==$cantones[$distritos[$params[0]['ID_Distrito']]['ID_Canton']]['ID_Provincia']){
+                            ?> <option value="<?php echo $lista_provincias[$i]['ID_Provincia']?>" selected="selected"><?php echo $lista_provincias[$i]['Nombre_Provincia']?></option><?php
+                        }
+                        else {?>
+                            <option value="<?php echo $lista_provincias[$i]['ID_Provincia']?>" ><?php echo $lista_provincias[$i]['Nombre_Provincia']?></option>  
+                        <?php
+                    } } ?>  
+                </select>
+        </div>
+         
+        
+        <hr/> <hr/> <hr/> <hr/> 
+                <!--<button value="esto es un boton" onclick="mi_funcion()"/>-->
+                <a class="btn btn-default" role="button" id="prueba" name="prueba" onclick="hacer_click()">Generar Reporte</a>
+                <a href="index.php?ctl=frm_eventos_listar" class="btn btn-default" role="button">Cancelar</a>
+        
         <div class="container animated fadeIn">
-        <h2>Listado de Eventos Cerrados</h2>
-        <a href="index.php?ctl=frm_eventos_listar" class="btn btn-default espacio-abajo" role="button">Volver a Eventos Abiertos</a>
+        <h2 id="titulo">Listado de Eventos Cerrados del día de hoy:</h2>
+        
         <table id="tabla" class="display">
-          <thead>
-               
+          <thead>   
             <tr>
               <th hidden="true">ID_Evento</th>
               <th>Fecha</th>
