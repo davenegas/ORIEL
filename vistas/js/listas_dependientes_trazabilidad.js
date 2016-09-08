@@ -24,16 +24,21 @@
           /*$("#tabla").dataTable().empty();
           $("#tabla").dataTable().reload();
           $("#tabla").dataTable().reset();
-          $("#tabla").dataTable().clear();
-         //$("#tabla").dataTable().fnDestroy();*/
+          $("#tabla").dataTable().clear();*/
+         //$("#tabla").dataTable().fnDestroy();
+         //$("#cuerpo").dataTable().fnPageChange('first');
          
         $.post("index.php?ctl=actualiza_en_vivo_reporte_trazabilidad", {fecha_inicial: fecha_inicial,fecha_final:fecha_final,usuario:usuario,tabla:tabla }, function(data){
            // $("#cuerpo").empty();
-           //$("#cuerpo").dataTable().fnDestroy();
+           //$("#tabla").dataTable().fnDestroy();
+           //$("#tabla").dataTable().fnPageChange('first');
            //$("#tabla").dataTable().fnClear();
            //location.reload();
-           //$("#cuerpo").html().empty();
-            $("#cuerpo").html(data);   
+           //$("#tabla").html().empty();
+            $("#titulo").html("Movimientos de acuerdo a parámetros:");  
+            $("#tabla").html(data);   
+            $("#tabla").dataTable().fnDestroy();
+            $("#tabla").dataTable().draw();
             
             //$("#tabla").dataTable().fnReloadAjax();
         });    

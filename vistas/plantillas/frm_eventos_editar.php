@@ -97,24 +97,38 @@
                         if ($_SESSION['rol']==2){
                           if ($prioridad_evento!=1){ 
                              if (($estadoEventos[$i]['Estado_Evento']!="Cerrado")&&($estadoEventos[$i]['Estado_Evento']!="Abierto por Error")){
+                                 if ($estadoEventos[$i]['Estado_Evento']==$estado_evento){
                             ?> 
-                             <option value="<?php echo $estadoEventos[$i]['ID_EstadoEvento']?>" ><?php echo $estadoEventos[$i]['Estado_Evento']?></option>   
-                               <?php
-                             }
+                                     <option selected="selected" value="<?php echo $estadoEventos[$i]['ID_EstadoEvento']?>" ><?php echo $estadoEventos[$i]['Estado_Evento']?></option>   
+                            <?php}else{?>
+                                     <option value="<?php echo $estadoEventos[$i]['ID_EstadoEvento']?>" ><?php echo $estadoEventos[$i]['Estado_Evento']?></option>   
+                       <?php 
+                                 }      
+                            }
                           }else{
                                if (($estadoEventos[$i]['Estado_Evento']!="Solicitar Cierre")&&($estadoEventos[$i]['Estado_Evento']!="Abierto por Error")){
-                                    ?>
-                                   <option value="<?php echo $estadoEventos[$i]['ID_EstadoEvento']?>" ><?php echo $estadoEventos[$i]['Estado_Evento']?></option>   
-                              <?php
+                                    if ($estadoEventos[$i]['Estado_Evento']==$estado_evento){
+                                   ?>
+                                     <option selected="selected" value="<?php echo $estadoEventos[$i]['ID_EstadoEvento']?>" ><?php echo $estadoEventos[$i]['Estado_Evento']?></option>   
+                                    <?php }else{ ?>
+                                     <option value="<?php echo $estadoEventos[$i]['ID_EstadoEvento']?>" ><?php echo $estadoEventos[$i]['Estado_Evento']?></option>   
+                                   <?php
+                                    }
                                 }
                           
                           }
                         }else{
+                             if ($estado_evento=="Solicitar Cierre"){
+                                 $estado_evento="Cerrado";
+                             }
                              if ($estadoEventos[$i]['Estado_Evento']!="Solicitar Cierre"){
-                               ?>    
-                               <option value="<?php echo $estadoEventos[$i]['ID_EstadoEvento']?>" ><?php echo $estadoEventos[$i]['Estado_Evento']?></option>   
-                               
+                                 if ($estadoEventos[$i]['Estado_Evento']==$estado_evento){
+                               ?>  
+                                   <option value="<?php echo $estadoEventos[$i]['ID_EstadoEvento']?>" selected="selected" ><?php echo $estadoEventos[$i]['Estado_Evento']?></option>   
+                                 <?php }else{?> 
+                                   <option value="<?php echo $estadoEventos[$i]['ID_EstadoEvento']?>" ><?php echo $estadoEventos[$i]['Estado_Evento']?></option>   
                                <?php
+                                 }
                              }
                           }
                     }
