@@ -63,7 +63,7 @@
             </div>
                 <div class="bordegris"  >
             <?php if($_SESSION['rol']==1||$_SESSION['rol']==11){ ?>
-                <h3 class="quitar-float">Información de telefonos del Punto BCR: <a id="popup" onclick="mostrar_agregar_telefono()" class="btn azul" role="button">Agregar número</a></h3> 
+                <h3 class="quitar-float">Información de telefonos del Punto BCR <a id="popup" onclick="mostrar_agregar_telefono()" class="btn azul" role="button">Agregar número</a></h3> 
             <?php } else {?>
                 <h3 class="quitar-float">Información de telefonos del Punto BCR</h3>
             <?php } ?>

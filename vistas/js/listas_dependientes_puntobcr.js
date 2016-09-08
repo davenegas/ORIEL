@@ -111,12 +111,19 @@ function mostrar_agregar_telefono() {
     document.getElementById('agregar_telefono').style.display = "block";
 }
 function eliminar_telefono(ide){
-        id_telefono= ide;
-        $.post("index.php?ctl=puntobcr_desligar_telefono", { id_telefono: id_telefono}, function(data){
-            location.reload();
-            //alert (data);
-          });
-    };
+    $.confirm({title: 'Confirmación!', content: 'Desea recuperar este evento?', 
+        confirm: function(){
+            id_telefono= ide;
+            $.post("index.php?ctl=puntobcr_desligar_telefono", { id_telefono: id_telefono}, function(data){
+                location.reload();
+                //alert (data);
+              });
+        },
+        cancel: function(){
+                //$.alert('Canceled!')
+        }
+    });
+};
 
 ////////////////////////////////////////////////////
 //Funciones para UE
@@ -133,13 +140,20 @@ function agregar_ue(id_ue){
           });
 }
 function eliminar_ue(ide){
-        id_unidad_ejecutora= ide;
-        id_puntobcr = document.getElementById('ID_PuntoBCR').value;
-        $.post("index.php?ctl=puntobcr_desligar_ue", { id_unidad_ejecutora: id_unidad_ejecutora,id_puntobcr:id_puntobcr }, function(data){
-            location.reload();
-            alert (data);
-          });
-    }
+    $.confirm({title: 'Confirmación!', content: 'Desea recuperar este evento?', 
+        confirm: function(){
+            id_unidad_ejecutora= ide;
+            id_puntobcr = document.getElementById('ID_PuntoBCR').value;
+            $.post("index.php?ctl=puntobcr_desligar_ue", { id_unidad_ejecutora: id_unidad_ejecutora,id_puntobcr:id_puntobcr }, function(data){
+                location.reload();
+                //alert (data);
+              });
+        },
+        cancel: function(){
+                //$.alert('Canceled!')
+        }
+    });
+}
     
 ////////////////////////////////////////////////////
 //Funcion para agregar o asignar Area de Apoyo
