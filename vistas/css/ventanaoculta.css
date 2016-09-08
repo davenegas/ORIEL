@@ -14,13 +14,38 @@ CSS settings for HTML div Exact Center
     background-color:#313131;
     overflow:auto
 }
+
+#asignar_ue {
+    width:100%;
+    height:100%;
+    opacity:.95;
+    top:0;
+    left:0;
+    display:none;
+    position:fixed;
+    background-color:#313131;
+    overflow:auto
+}
+
+#asignar_area {
+    width:100%;
+    height:100%;
+    opacity:.95;
+    top:0;
+    left:0;
+    display:none;
+    position:fixed;
+    background-color:#313131;
+    overflow:auto
+}
+
 #close {
     position:absolute;
     right:-14px;
     top:-14px;
     cursor:pointer
 }
-#popupContact {
+#popupventana{
     position:absolute;
     left:50%;
     top:17%;
@@ -36,6 +61,24 @@ CSS settings for HTML div Exact Center
     font-family:raleway;
     background-color:#fff
 }
+
+#popupventana2{
+    position:absolute;
+    left:35%;
+    top:15%;
+    margin-left:-202px;
+    font-family:'Raleway',sans-serif
+}
+#ventana2 {
+    max-width:800px;
+    min-width:600px;
+    padding:20px 30px;
+    border:2px solid gray;
+    border-radius:10px;
+    font-family:raleway;
+    background-color:#fff
+}
+
 /*p {
 margin-top:30px
 }

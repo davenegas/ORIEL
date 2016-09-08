@@ -1507,6 +1507,7 @@
             $obj_horario = new cls_horario();
             $obj_direccionIP = new cls_direccionIP();
             $obj_telefono = new cls_telefono();
+            $obj_unidad_ejecutora = new cls_unidad_ejecutora();
             
             if ($_GET['id']==0){
                 
@@ -1558,9 +1559,9 @@
                 $tipo_puntos = $obj_Puntobcr->getArreglo();
                 
                 //Obtiene los telefonos del PuntoBCR
-                $obj_Puntobcr->setCondicion("T_Telefono.ID='".$_GET['id']."'");
-                $obj_Puntobcr->obtiene_telefonos_puntoBCR();
-                $telefonos= $obj_Puntobcr->getArreglo();
+                $obj_telefono->setCondicion("T_Telefono.ID='".$_GET['id']."'");
+                $obj_telefono->obtiene_telefonos_puntoBCR();
+                $telefonos= $obj_telefono->getArreglo();
                 
                 //Obtiene Unidades Ejecutoras asignadas al Punto BCR
                 $obj_Puntobcr->setCondicion("T_UE_PuntoBCR.ID_PuntoBCR='".$_GET['id']."'");
@@ -1593,7 +1594,7 @@
                 if($tam>0){
                     for ($i = 0; $i <$tam; $i++) {
                         $condicion=$condicion."T_UnidadEjecutora.Numero_UE='".$unidad_ejecutora[$i]['Numero_UE']."'";
-                        if($tam<$i)
+                        if($tam>$i && $tam-1<>$i)
                         {
                             $condicion=$condicion." OR ";
                         }
@@ -1622,7 +1623,21 @@
                 $obj_telefono->setCondicion("");
                 $obj_telefono->obtiene_tipo_telefonos();
                 $tipo_telefono= $obj_telefono->getArreglo();
+                
+                //Obtiene Unidades Ejecutoras
+                $obj_unidad_ejecutora->setCondicion("");
+                $obj_unidad_ejecutora->obtener_unidades_ejecutoras();
+                $todas_ue = $obj_unidad_ejecutora->getArreglo();
 
+                //Obtiene los tipos de area de apoyo
+                $obj_areasapoyo->setCondicion("");
+                $obj_areasapoyo->obtiene_tipo_area_apoyo();
+                $tipos_areas_apoyo= $obj_areasapoyo->getArreglo();
+                
+                //Obtiene todas las areas de apoyo
+                $obj_areasapoyo->setCondicion("");
+                $obj_areasapoyo->obtiene_todos_las_areas_apoyo();
+                $todas_areas_apoyo =$obj_areasapoyo->getArreglo();
                 
                 require __DIR__ . '/../vistas/plantillas/frm_puntos_bcr_editar.php';
             }
@@ -1717,8 +1732,8 @@
                 $obj_Puntobcr->setTipo_punto($_POST['Tipo_Punto']);
                 $obj_Puntobcr->setDistrito($_POST['Distrito']);
                 $obj_Puntobcr->setEmpresa($_POST['Empresa']);
-                $obj_Puntobcr->sethoraslaborales="1";
-                
+                $obj_Puntobcr->sethoraslaborales("1");
+
                 $obj_Puntobcr->guardar_punto_bcr();
 
             }
@@ -1737,6 +1752,34 @@
             $obj_telefono->setCondicion("ID_Telefono='".$_POST['id_telefono']."'");
             $obj_telefono->eliminar_telefono_puntobcr();
 
+        }else{
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        } 
+    }
+    
+    public function puntobcr_desligar_ue(){
+        if(isset($_SESSION['nombre'])){
+            $obj_unidad_ejecutora = new cls_unidad_ejecutora();
+            $obj_unidad_ejecutora->setId($_POST['id_unidad_ejecutora']);
+            $obj_unidad_ejecutora->setId2($_POST['id_puntobcr']);
+            $obj_unidad_ejecutora->eliminar_relacion_puntobcr_ue();
+
+        }else{
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }
+    }
+    
+    public function puntobcr_agregar_ue(){
+        if(isset($_SESSION['nombre'])){
+            $obj_unidad_ejecutora = new cls_unidad_ejecutora();
+            $obj_unidad_ejecutora->setId($_POST['id_unidad_ejecutora']);
+            $obj_unidad_ejecutora->setId2($_POST['id_puntobcr']);
+            $obj_unidad_ejecutora->agregar_puntobcr_ue();
+            
         }else{
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
@@ -1780,7 +1823,6 @@
     public function puntobcr_numero_telefono_guardar(){
         if(isset($_SESSION['nombre'])){   
             if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-                echo "<script> alert ('ingresa correcto')</script>";
                 $obj_telefono = new cls_telefono();
                 $obj_telefono->setId($_POST['ID_Tipo_Telefono']);
                 $obj_telefono->setId2($_POST['ID_PuntoBCR']);
@@ -1796,9 +1838,56 @@
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }
     }
+    
+    public function puntobcr_asignar_area_apoyo(){
+        if(isset($_SESSION['nombre'])){
+            $obj_area_apoyo = new cls_areasapoyo();
+            $obj_area_apoyo->setId($_POST['id_area_apoyo']);
+            $obj_area_apoyo->setId2($_POST['id_puntobcr']);
+            $obj_areasapoyo->setCondicion("T_PuntoBCRAreaApoyo.ID_PuntoBCR='".$_POST['id_puntobcr']."' AND T_PuntoBCRAreaApoyo.ID_Area_Apoyo='".$_POST['id_area_apoyo']."'");
+            $obj_areasapoyo->obtiene_todos_las_areas_apoyo();
+            $areas_apoyo =$obj_areasapoyo->getArreglo();
+            if($areas_apoyo==""){
+                $obj_area_apoyo->agregar_PuntoBCR_AreaApoyo();
+            }   else    {
+                echo "El Area de Apoyo ya se encuntra asignada al PuntoBCR";
+            }
+        }else{
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }
+    }
+    
+    public function Area_apoyo_agregar(){
+        if(isset($_SESSION['nombre'])){
+            $obj_area_apoyo= new cls_areasapoyo();
+            $obj_telefono = new cls_telefono();
+            
+            $obj_area_apoyo->setId("0");
+            $obj_area_apoyo->setNombre_area($_POST['nombre']);
+            $obj_area_apoyo->setTipo_area($_POST['Tipo_Area_Apoyo']);
+            $obj_area_apoyo->setDistrito($_POST['distrito']);
+            $obj_area_apoyo->setObservaciones($_POST['observaciones']);
+            $obj_area_apoyo->setDireccion($_POST['direccion']);
+            $obj_area_apoyo->setCondicion("");
+            $obj_area_apoyo->agregar_area_apoyo();
+            $area_apoyo = $obj_area_apoyo->getArreglo();
+            if($area_apoyo==""){
+                echo 'Error al traer area de apoyo nueva';
+            }   else    {
+                $obj_telefono->setId(null);
+            }
+            
+        }else{
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }
+    }
+    ////////////////////////////////////////////////////////////////////////////
     //Trazabilidad
     //FUNCIONES PARA EVENTOS
-
     public function frm_trazabilidad_listar(){
         if(isset($_SESSION['nombre'])){
             $obj_traza = new cls_trazabilidad();

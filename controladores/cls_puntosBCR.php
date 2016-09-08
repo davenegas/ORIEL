@@ -232,22 +232,7 @@ class cls_puntosBCR{
         } 
     }
     
-    public function obtiene_telefonos_puntoBCR(){
-        $this->obj_data_provider->conectar();
-        $this->arreglo=$this->obj_data_provider->trae_datos(
-            "T_Telefono
-		LEFT OUTER JOIN T_TipoTelefono ON T_Telefono.ID_Tipo_Telefono = T_TipoTelefono.ID_Tipo_Telefono", 
-            "*",
-            $this->condicion. "AND (T_TipoTelefono.ID_Tipo_Telefono = '1' OR 
-		T_TipoTelefono.ID_Tipo_Telefono = '5' OR 
-		T_TipoTelefono.ID_Tipo_Telefono = '6' OR
-		T_TipoTelefono.ID_Tipo_Telefono = '7' OR 
-		T_TipoTelefono.ID_Tipo_Telefono = '8' OR 
-		T_TipoTelefono.ID_Tipo_Telefono = '9')");
-        $this->arreglo=$this->obj_data_provider->getArreglo();
-        $this->obj_data_provider->desconectar();
-        $this->resultado_operacion=true;  
-    }
+    
     
     public function obtiene_unidades_ejecutoras(){
         $this->obj_data_provider->conectar();

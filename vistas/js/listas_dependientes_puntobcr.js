@@ -1,4 +1,5 @@
 $(document).ready(function(){
+    
     //Buscar Distritos al seleccionar cantón
     $("#Provincia").change(function () {
         $("#Provincia option:selected").each(function () {
@@ -17,6 +18,26 @@ $(document).ready(function(){
             //id_tipo_punto_bcr=document.getElementById('tipo_punto').value;
             $.post("index.php?ctl=actualiza_en_vivo_distrito", { id_canton: id_canton}, function(data){
                 $("#Distrito").html(data);  
+            });            
+        });
+    });
+    
+    //Control cambio en provincia y canton al agregar Area de apoyo
+    $("#provincia").change(function () {
+        $("#provincia option:selected").each(function () {
+            id_provincia = $(this).val();
+            //id_tipo_punto_bcr=document.getElementById('tipo_punto').value;
+            $.post("index.php?ctl=actualiza_en_vivo_canton", { id_provincia: id_provincia}, function(data){
+                $("#canton").html(data);
+            });            
+        });
+    });
+    $("#canton").change(function () {
+        $("#canton option:selected").each(function () {
+            id_canton = $(this).val();
+            //id_tipo_punto_bcr=document.getElementById('tipo_punto').value;
+            $.post("index.php?ctl=actualiza_en_vivo_distrito", { id_canton: id_canton}, function(data){
+                $("#distrito").html(data);  
             });            
         });
     });
@@ -66,8 +87,29 @@ $(document).ready(function(){
             });   
         }
     });
-});   
-//Función para eliminar telefono de Punto BCR
+});  
+//////////////////////////////////////////////////////////
+//Función para Ocultas ventanas
+function ocultar_elemento(){
+    document.getElementById('agregar_telefono').style.display = "none";
+    document.getElementById('asignar_ue').style.display = "none";
+    document.getElementById('asignar_area').style.display = "none";
+}
+
+///////////////////////////////////////////////////////
+//Funciones para ventana oculta de Agregar Número PuntoBCR
+function check_empty() {
+    if (document.getElementById('numero').value == "") {
+        alert("Digita un número de teléfono !");
+    } else {
+        //alert("Form Submitted Successfully...");
+        document.getElementById('ventana').submit();
+        document.getElementById('agregar_telefono').style.display = "none";
+    }
+}
+function mostrar_agregar_telefono() {
+    document.getElementById('agregar_telefono').style.display = "block";
+}
 function eliminar_telefono(ide){
         id_telefono= ide;
         $.post("index.php?ctl=puntobcr_desligar_telefono", { id_telefono: id_telefono}, function(data){
@@ -75,19 +117,53 @@ function eliminar_telefono(ide){
             //alert (data);
           });
     };
+
+////////////////////////////////////////////////////
+//Funciones para UE
+function mostrar_lista_ue(){
+    document.getElementById('asignar_ue').style.display = "block";
+}
+function agregar_ue(id_ue){
+    id_unidad_ejecutora = id_ue;
+    id_puntobcr = document.getElementById('ID_PuntoBCR').value;
+    document.getElementById('asignar_ue').style.display = "none";
+    $.post("index.php?ctl=puntobcr_agregar_ue", { id_unidad_ejecutora: id_unidad_ejecutora, id_puntobcr:id_puntobcr}, function(data){
+            location.reload();
+            //alert (data);
+          });
+}
+function eliminar_ue(ide){
+        id_unidad_ejecutora= ide;
+        id_puntobcr = document.getElementById('ID_PuntoBCR').value;
+        $.post("index.php?ctl=puntobcr_desligar_ue", { id_unidad_ejecutora: id_unidad_ejecutora,id_puntobcr:id_puntobcr }, function(data){
+            location.reload();
+            alert (data);
+          });
+    }
     
-function check_empty() {
-    if (document.getElementById('numero').value == "") {
-        alert("Fill All Fields !");
+////////////////////////////////////////////////////
+//Funcion para agregar o asignar Area de Apoyo
+function mostrar_area_apoyo(){
+    document.getElementById('asignar_area').style.display = "block";
+}
+function validar_area(){
+     if (document.getElementById('nombre').value == "") {
+        alert("Digita el nombre del Area de Apoyo !");
     } else {
         //alert("Form Submitted Successfully...");
-        document.getElementById('ventana').submit();
-        document.getElementById('agregar_telefono').style.display = "none";
+        document.getElementById('nueva_area_apoyo').submit();
+        document.getElementById('asignar_area').style.display = "none";
     }
+ }
+function agregar_area(id){
+    id_area_apoyo = id;
+    id_puntobcr = document.getElementById('ID_PuntoBCR').value;
+    document.getElementById('asignar_area').style.display = "none";
+    $.post("index.php?ctl=puntobcr_asignar_area_apoyo", { id_area_apoyo: id_area_apoyo, id_puntobcr:id_puntobcr}, function(data){
+            location.reload();
+            //alert (data);
+          });
 }
-function div_show() {
-    document.getElementById('agregar_telefono').style.display = "block";
-}
-function div_hide(){
-    document.getElementById('agregar_telefono').style.display = "none";
+function crear_nueva_area(){
+    
 }

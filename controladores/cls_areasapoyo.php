@@ -11,7 +11,16 @@ class cls_areasapoyo{
     public $tipo_area;
     public $estado;
     public $detalle;
+    public $distrito;
     
+    function getDistrito() {
+        return $this->distrito;
+    }
+
+    function setDistrito($distrito) {
+        $this->distrito = $distrito;
+    }
+
     function getId() {
         return $this->id;
     }
@@ -112,6 +121,7 @@ class cls_areasapoyo{
         $this->tipo_area="";
         $this->estado="";
         $this->detalle="";
+        $this->distrito="";
     }
     public function obtiene_todos_las_areas_apoyo(){
         $this->obj_data_provider->conectar();
@@ -123,7 +133,7 @@ class cls_areasapoyo{
 			LEFT OUTER JOIN T_Telefono ON T_AreasApoyo.ID_Area_Apoyo = T_Telefono.ID
 			LEFT OUTER JOIN T_TipoTelefono ON T_Telefono.ID_Tipo_Telefono = T_TipoTelefono.ID_Tipo_Telefono
 			LEFT OUTER JOIN T_PuntoBCRAreaApoyo ON T_AreasApoyo.ID_Area_Apoyo = T_PuntoBCRAreaApoyo.ID_Area_Apoyo", 
-                    "T_AreasApoyo.ID_Area_Apoyo, T_AreasApoyo.Nombre_Area, T_AreasApoyo.Direccion,
+                    "DISTINCT T_AreasApoyo.ID_Area_Apoyo, T_AreasApoyo.Nombre_Area, T_AreasApoyo.Direccion,
 			T_AreasApoyo.Observaciones, T_AreasApoyo.Estado,
 			T_TipoAreaApoyo.ID_Tipo_Area_Apoyo, T_TipoAreaApoyo.Nombre_Tipo_Area,
 			T_Distrito.ID_Distrito,T_Distrito.Nombre_Distrito,
@@ -136,7 +146,9 @@ class cls_areasapoyo{
 			  T_TipoTelefono.ID_Tipo_Telefono = '16' OR 
 			  T_TipoTelefono.ID_Tipo_Telefono = '17' OR 
 			  T_TipoTelefono.ID_Tipo_Telefono = '18' OR 
-			  T_TipoTelefono.ID_Tipo_Telefono = '19' )");
+			  T_TipoTelefono.ID_Tipo_Telefono = '19' OR 
+			  T_TipoTelefono.ID_Tipo_Telefono = '25' OR 
+			  T_TipoTelefono.ID_Tipo_Telefono = '26')");
             $this->arreglo=$this->obj_data_provider->getArreglo();
             $this->obj_data_provider->desconectar();
             $this->resultado_operacion=true;
@@ -169,5 +181,30 @@ class cls_areasapoyo{
             $this->obj_data_provider->desconectar();
             $this->resultado_operacion=true;
         }
+    }
+    
+    public function obtiene_tipo_area_apoyo(){
+        $this->obj_data_provider->conectar();
+        $this->arreglo= $this->obj_data_provider->trae_datos("T_TipoAreaApoyo", "*", "");
+        $this->arreglo=$this->obj_data_provider->getArreglo();
+        $this->obj_data_provider->desconectar();
+        $this->resultado_operacion=true;
+    }
+    
+    public function agregar_PuntoBCR_AreaApoyo(){
+        $this->obj_data_provider->conectar();
+        $this->obj_data_provider->inserta_datos("T_PuntoBRCAreaApoyo", "ID_Area_Apoyo, ID_PuntoBCR","'"-$this->id."','".$this->id2."'");
+        $this->obj_data_provider->desconectar();
+    }
+    
+    public function agregar_area_apoyo(){
+        $this->obj_data_provider->conectar();
+        $this->obj_data_provider->inserta_datos("T_AreasApoyo", "ID_Area_Apoyo, ID_Tipo_Area_Apoyo, ID_Distrito, Nombre_Area, Direccion, Observaciones, Estado",
+                "'".null."','".$this->tipo_area."','".$this->distrito."','".$this->nombre_area."','".$this->direccion."','".$this->observaciones."','1'");
+        
+        $this->arreglo= $this->obj_data_provider->trae_datos("t_areasapoyo ORDER BY `ID_Area_Apoyo` DESC LIMIT 1", "*", $this->condicion);
+        $this->arreglo=$this->obj_data_provider->getArreglo();
+        $this->obj_data_provider->desconectar();
+        $this->resultado_operacion=true;
     }
 }?>

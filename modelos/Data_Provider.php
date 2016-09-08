@@ -102,7 +102,7 @@ class Data_Provider{
             $this->mvc_bd_usuario  = "root";
             $this->mvc_bd_clave    = "";
             $this->consulta="SET NAMES 'utf8'";
-          
+
             
             //Acapara los errores que se puedan presentar y muestra en pantalla lo correspondiente
        }catch (Exception $e){
