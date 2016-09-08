@@ -1372,6 +1372,7 @@
                 $params= $obj_eventos->getArreglo();
                 
                 if (count($params)>0){
+                     $estado_evento=$params[0]['Estado_Evento']; 
                      $obj_eventos->setTipo_evento($params[0]['ID_Tipo_Evento']);
                      $prioridad_evento=$obj_eventos->obtiene_prioridad_de_tipo_de_evento();
                      
