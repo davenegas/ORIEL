@@ -1831,6 +1831,9 @@
                     $obj_Personal->obtiene_todo_el_personal();
                     $personal = $obj_Personal->getArreglo();
                 }
+                else{
+                    $personal=null;
+                }
                 
                 //Obtiene empresa remesera
                 $obj_empresa->setCondicion("");

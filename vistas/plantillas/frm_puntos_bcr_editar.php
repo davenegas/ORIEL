@@ -248,7 +248,8 @@
                         <td style="text-align:center"><?php echo $personal[$i]['Puesto'];?></td>
                         <td style="text-align:center"><?php echo $personal[$i]['Departamento'];?></td>
                     </tr>
-                    <?php } ?>
+                    <?php }?>
+
                 </tbody> 
             </table>
             </div>
