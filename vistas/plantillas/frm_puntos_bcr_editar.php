@@ -75,7 +75,7 @@
                     <th style="text-align:center">Número teléfono</th>
                     <th style="text-align:center">Observaciones</th>
                     <?php if($_SESSION['rol']==1||$_SESSION['rol']==11){ ?>
-                        <th style="text-align:center">Quitar número</th>
+                        <th style="text-align:center">Eliminar número</th>
                     <?php } ?>
                 </thead>
                 <tbody>
@@ -209,6 +209,9 @@
                     <th style="text-align:center">Nombre de Area</th>
                     <th style="text-align:center">Numero telefono</th>
                     <th style="text-align:center">Direccion</th>
+                    <?php if($_SESSION['rol']==1||$_SESSION['rol']==11){ ?> 
+                    <th style="text-align:center">Quitar area de apoyo</th>
+                    <?php } ?>
                 </thead>
                 <tbody>
                     <?php 
@@ -220,13 +223,17 @@
                         <td style="text-align:center"><?php echo $areas_apoyo[$i]['Nombre_Area'];?></td>
                         <td style="text-align:center"><?php echo $areas_apoyo[$i]['Numero'];?></td>
                         <td style="text-align:center"><?php echo $areas_apoyo[$i]['Direccion'];?></td>
+                        <?php if($_SESSION['rol']==1||$_SESSION['rol']==11){ ?> 
+                        <td style="text-align:center"><a class="btn rojo" role="button" id="eliminar_area" name="eliminar_area" onclick="eliminar_area(<?php echo $areas_apoyo[$i]['ID_Area_Apoyo'];?>);">
+                                Eliminar</a></td>
+                        <?php } ?>
                     </tr>
                     <?php } ?>
                 </tbody> 
             </table>
             </div>
-
-            <h3>Información de Personal del PuntoBCR</h3>
+            
+                <h3>Información de Personal del PuntoBCR</h3>
             <div>
             <table id="tabla" class="display" cellspacing="0" width="100%">
                 <thead> 
@@ -258,7 +265,13 @@
         
         <div class="bordegris espacio-arriba"></div>
         <div>
-            <h3>Información adicional</h3>
+            
+            <h3>Información adicional
+                <?php if($_SESSION['rol']==1||$_SESSION['rol']==11){ ?>
+                    <input class="quitar-float" type="checkbox" id="chk_ubicacion" name="chk_info_adicional">
+                 <?php } ?>
+            </h3>
+            
             <div class="col-md-4 espacio-abajo">
                 <label for="Empresa">Remesa</label>
                 <select class="form-control" id="Empresa" disabled name="Empresa"> 
@@ -276,8 +289,8 @@
             </div>
             
             <div class="col-md-4">
-                <label for="Horario">Horario Días</label>
-                <select class="form-control" id="Horario" disabled name="Horario" > 
+                <label for="Horario_dias">Horario Días</label>
+                <select class="form-control" id="Horario_dias" disabled name="Horario_dias" > 
                 <?php
                 $tam = count($horarios);
 
@@ -285,7 +298,7 @@
                 {
                     if($horarios[$i]['ID_Horario']==$params[0]['ID_Horario']){
                         
-                       ?> <option value="<?php echo $horarios[$i]['ID_Horario']?>" selected="selected"><?php echo $horarios[$i]['Dia_Laboral']?></option><?php
+                       ?> <option value="<?php echo $horarios[$i]['ID_Horario']?>" selected="selected"><?php echo $horarios[$i]['Dia_Laboral']." - ".$horarios[$i]['Hora_Laboral'];?></option><?php
                     }
                     else {?>
                         <option value="<?php echo $horarios[$i]['ID_Horario']?>" ><?php echo $horarios[$i]['Dia_Laboral']?></option>   
@@ -294,21 +307,8 @@
             </div>
 
             <div class="col-md-4">
-                <label for="Horario">Horario Horas</label>
-                <select class="form-control" id="Horario" disabled name="Horario" > 
-                <?php
-                $tam = count($horarios);
-
-                for($i=0; $i<$tam;$i++)
-                {
-                    if($horarios[$i]['ID_Horario']==$params[0]['ID_Horario']){
-                        
-                       ?> <option value="<?php echo $horarios[$i]['ID_Horario']?>" selected="selected"><?php echo $horarios[$i]['Hora_Laboral']?></option><?php
-                    }
-                    else {?>
-                        <option value="<?php echo $horarios[$i]['ID_Horario']?>" ><?php echo $horarios[$i]['Hora_Laboral']?></option>   
-                <?php }}  ?>
-                </select>
+              <label for="Observaciones">Observaciones</label>
+              <input type="text" disabled class="form-control" id="Observaciones" name="Observaciones" value="<?php echo $params[0]['Observaciones'];?>">
             </div>
             
             <div>
@@ -317,7 +317,7 @@
                     <th style="text-align:center">Tipo Direccion</th>
                     <th style="text-align:center">Direccion IP</th>
                     <th style="text-align:center">Observaciones</th>
-                    <th style="text-align:center">Estado</th>
+                    <th style="text-align:center" colspan="2">Funciones</th>
                 </thead>
                 <tbody>
                     <?php 
@@ -329,34 +329,14 @@
                         <td style="text-align:center"><?php echo $direccionIP[$i]['Direccion_IP'];?></td>
                         <td style="text-align:center"><?php echo $direccionIP[$i]['Observaciones'];?></td>
                         <td style="text-align:center"><a href="">Link</a></td>
+                        <td style="text-align:center"><a class="btn rojo" role="button" id="eliminar_ip" name="eliminar_ip" onclick="eliminar_ip(<?php echo $direccionIP[$i]['ID_Direccion_IP'];?>);">
+                                Eliminar</a></td>
                     </tr>
                     <?php } ?>
                 </tbody> 
             </table>
             </div>
-            
-            <div class="col-md-8">
-              <label for="Observaciones">Observaciones</label>
-              <input type="text" disabled class="form-control" id="Observaciones" name="Observaciones" value="<?php echo $params[0]['Observaciones'];?>">
-            </div>
-            
-            <div class="col-md-4">
-                <label for="Estado">Estado</label>
-                <select class="form-control" disabled id="Estado" name="Estado" >
-                    <?php if ($params[0]['Estado']==1){
-                    ?>
-                        <option value="1" selected="selected">Activo</option>
-                        <option value="0">Inactivo</option>  
-                    <?php
-                    }  else {
-                    ?>
-                       <option value="1">Activo</option>
-                       <option value="0" selected="selected">Inactivo</option>   
-                    <?php
-                    }
-                    ?>  
-                </select>
-            </div>  
+
         </div>
             
         <a href="index.php?ctl=puntos_bcr_listar" class="btn btn-default espacio-arriba" role="button">Volver</a>
@@ -437,6 +417,7 @@
                     <h2>Areas de Apoyo</h2>
                     <h4>Agregar nueva area de apoyo</h4>
                     <form class="bordegris" id="nueva_area_apoyo" method="post" name="form" action="index.php?ctl=Area_apoyo_agregar">
+                        <input hidden id="ID_PuntoBCR" name="ID_PuntoBCR" type="text" value="<?php echo $params[0]['ID_PuntoBCR']; ?>">
                         <div class="col-md-4 espacio-abajo-5">
                             <label for="nombre">Nombre de Area Apoyo</label>
                             <input type="text" required="nombre" class="form-control" id="nombre" name="nombre" placeholder="Nombre del area de apoyo">
@@ -514,9 +495,10 @@
                             $tam = count($tipo_telefono);
                             for($i=0; $i<$tam;$i++)
                             {  
-                                if($tipo_telefono[$i]['ID_Tipo_Telefono']==1||$tipo_telefono[$i]['ID_Tipo_Telefono']==5||$tipo_telefono[$i]['ID_Tipo_Telefono']==6||
-                                    $tipo_telefono[$i]['ID_Tipo_Telefono']==7||$tipo_telefono[$i]['ID_Tipo_Telefono']==8||$tipo_telefono[$i]['ID_Tipo_Telefono']==9||
-                                        $tipo_telefono[$i]['ID_Tipo_Telefono']==10){?>
+                                if($tipo_telefono[$i]['ID_Tipo_Telefono']==12||$tipo_telefono[$i]['ID_Tipo_Telefono']==13||$tipo_telefono[$i]['ID_Tipo_Telefono']==14||
+                                    $tipo_telefono[$i]['ID_Tipo_Telefono']==15||$tipo_telefono[$i]['ID_Tipo_Telefono']==16||$tipo_telefono[$i]['ID_Tipo_Telefono']==17||
+                                        $tipo_telefono[$i]['ID_Tipo_Telefono']==18||$tipo_telefono[$i]['ID_Tipo_Telefono']==19||$tipo_telefono[$i]['ID_Tipo_Telefono']==25
+                                        ||$tipo_telefono[$i]['ID_Tipo_Telefono']==26){?>
                                     <option value="<?php echo $tipo_telefono[$i]['ID_Tipo_Telefono']?>" ><?php echo $tipo_telefono[$i]['Tipo_Telefono']?></option>   
                             <?php }}  ?>
                             </select>

@@ -2075,13 +2075,13 @@
             $obj_area_apoyo = new cls_areasapoyo();
             $obj_area_apoyo->setId($_POST['id_area_apoyo']);
             $obj_area_apoyo->setId2($_POST['id_puntobcr']);
-            $obj_areasapoyo->setCondicion("T_PuntoBCRAreaApoyo.ID_PuntoBCR='".$_POST['id_puntobcr']."' AND T_PuntoBCRAreaApoyo.ID_Area_Apoyo='".$_POST['id_area_apoyo']."'");
-            $obj_areasapoyo->obtiene_todos_las_areas_apoyo();
-            $areas_apoyo =$obj_areasapoyo->getArreglo();
+            $obj_area_apoyo->setCondicion("T_PuntoBCRAreaApoyo.ID_PuntoBCR='".$_POST['id_puntobcr']."' AND T_PuntoBCRAreaApoyo.ID_Area_Apoyo='".$_POST['id_area_apoyo']."'");
+            $obj_area_apoyo->obtiene_todos_las_areas_apoyo();
+            $areas_apoyo =$obj_area_apoyo->getArreglo();
             if($areas_apoyo==""){
                 $obj_area_apoyo->agregar_PuntoBCR_AreaApoyo();
             }   else    {
-                echo "El Area de Apoyo ya se encuntra asignada al PuntoBCR";
+                echo "El Area de Apoyo ya se encuentra asignada al PuntoBCR";
             }
         }else{
             $tipo_de_alerta="alert alert-warning";
@@ -2094,21 +2094,55 @@
         if(isset($_SESSION['nombre'])){
             $obj_area_apoyo= new cls_areasapoyo();
             $obj_telefono = new cls_telefono();
-            
-            $obj_area_apoyo->setId("0");
-            $obj_area_apoyo->setNombre_area($_POST['nombre']);
+            //Crea nueva area de apoyo
+            $obj_area_apoyo->setId(null);
             $obj_area_apoyo->setTipo_area($_POST['Tipo_Area_Apoyo']);
             $obj_area_apoyo->setDistrito($_POST['distrito']);
-            $obj_area_apoyo->setObservaciones($_POST['observaciones']);
+            $obj_area_apoyo->setNombre_area($_POST['nombre']);
             $obj_area_apoyo->setDireccion($_POST['direccion']);
+            $obj_area_apoyo->setObservaciones($_POST['observaciones']);
             $obj_area_apoyo->setCondicion("");
             $obj_area_apoyo->agregar_area_apoyo();
             $area_apoyo = $obj_area_apoyo->getArreglo();
             if($area_apoyo==""){
                 echo 'Error al traer area de apoyo nueva';
             }   else    {
+                //Crea el número del area de apoyo nueva
                 $obj_telefono->setId(null);
+                $obj_telefono->setNumero($_POST['numero']);
+                $obj_telefono->setTipo_telefono($_POST['Tipo_Telefono']);
+                $obj_telefono->setId2($area_apoyo[0]['ID_Area_Apoyo']); 
+                $obj_telefono->setObservaciones("");
+                $obj_telefono->guardar_telefono();
             }
+            //Asigna el area de apoyo al puntoBCR
+            $obj_area_apoyo = new cls_areasapoyo();
+            $obj_area_apoyo->setId($area_apoyo[0]['ID_Area_Apoyo']);
+            $obj_area_apoyo->setId2($_POST['ID_PuntoBCR']);
+            $obj_area_apoyo->setCondicion("T_PuntoBCRAreaApoyo.ID_PuntoBCR='".$_POST['id_puntobcr']."' AND T_PuntoBCRAreaApoyo.ID_Area_Apoyo='".$_POST['id_area_apoyo']."'");
+            $obj_area_apoyo->obtiene_todos_las_areas_apoyo();
+            $areas_apoyo =$obj_area_apoyo->getArreglo();
+            if($areas_apoyo==""){
+                $obj_area_apoyo->agregar_PuntoBCR_AreaApoyo();
+            }   else    {
+                echo "El Area de Apoyo ya se encuentra asignada al PuntoBCR";
+            }
+            
+            header("location:/ORIEL/index.php?ctl=gestion_punto_bcr&id=".$_POST['ID_PuntoBCR']);
+        }else{
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }
+    }
+    
+    public function puntobcr_desligar_area_apoyo(){
+        if(isset($_SESSION['nombre'])){
+            $obj_area_apoyo = new cls_areasapoyo();
+            $obj_area_apoyo->setId($_POST['id_area_apoyo']);
+            $obj_area_apoyo->setId2($_POST['id_puntobcr']);
+            $obj_area_apoyo->setCondicion("");
+            $obj_area_apoyo->eliminar_puntobcr_area_apoyo();
             
         }else{
             $tipo_de_alerta="alert alert-warning";

@@ -193,8 +193,9 @@ class cls_areasapoyo{
     
     public function agregar_PuntoBCR_AreaApoyo(){
         $this->obj_data_provider->conectar();
-        $this->obj_data_provider->inserta_datos("T_PuntoBRCAreaApoyo", "ID_Area_Apoyo, ID_PuntoBCR","'"-$this->id."','".$this->id2."'");
+        $this->obj_data_provider->inserta_datos("T_PuntoBCRAreaApoyo", "ID_Area_Apoyo, ID_PuntoBCR","'".$this->id."','".$this->id2."'");
         $this->obj_data_provider->desconectar();
+        $this->resultado_operacion=true;
     }
     
     public function agregar_area_apoyo(){
@@ -206,5 +207,11 @@ class cls_areasapoyo{
         $this->arreglo=$this->obj_data_provider->getArreglo();
         $this->obj_data_provider->desconectar();
         $this->resultado_operacion=true;
+    }
+    
+    public function eliminar_puntobcr_area_apoyo(){
+        $this->obj_data_provider->conectar();
+        $this->obj_data_provider->eliminar_datos("T_PuntoBCRAreaApoyo", "ID_PuntoBCR='".$this->id2."' AND ID_Area_Apoyo='".$this->id."'");
+        $this->obj_data_provider->desconectar();
     }
 }?>

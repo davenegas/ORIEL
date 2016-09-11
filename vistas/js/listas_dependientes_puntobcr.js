@@ -87,6 +87,28 @@ $(document).ready(function(){
             });   
         }
     });
+    
+    //Check para habilitar edicion de Información adicional
+    $("#chk_info_adicional").change(function(){
+        if (document.getElementById('Observaciones').readOnly==true){
+            document.getElementById('Observaciones').readOnly=false;
+            $("#Empresa").attr("disabled",false);
+            $("#Canton").attr("disabled",false);
+            $("#Distrito").attr("disabled",false);
+        }else{
+            document.getElementById('Observaciones').readOnly=true;
+            $("#Provincia").attr("disabled",true);
+            $("#Canton").attr("disabled",true);
+            $("#Distrito").attr("disabled",true);
+            //Guarda Distrito y dirección en tabla  T_PuntoBCR
+            id_distrito=document.getElementById('Distrito').value;
+            id_puntobcr = document.getElementById('ID_PuntoBCR').value;
+            direccion = document.getElementById('Direccion').value;
+            $.post("index.php?ctl=distrito_PuntoBCR_guardar", { id_distrito: id_distrito, id_puntobcr:id_puntobcr, direccion:direccion}, function(data){
+                //alert (data);
+            });   
+        }
+    });
 });  
 //////////////////////////////////////////////////////////
 //Función para Ocultas ventanas
@@ -111,7 +133,7 @@ function mostrar_agregar_telefono() {
     document.getElementById('agregar_telefono').style.display = "block";
 }
 function eliminar_telefono(ide){
-    $.confirm({title: 'Confirmación!', content: 'Desea recuperar este evento?', 
+    $.confirm({title: 'Confirmación!', content: 'Desea eliminar este teléfono?', 
         confirm: function(){
             id_telefono= ide;
             $.post("index.php?ctl=puntobcr_desligar_telefono", { id_telefono: id_telefono}, function(data){
@@ -140,7 +162,7 @@ function agregar_ue(id_ue){
           });
 }
 function eliminar_ue(ide){
-    $.confirm({title: 'Confirmación!', content: 'Desea recuperar este evento?', 
+    $.confirm({title: 'Confirmación!', content: 'Desea eliminar la UE?', 
         confirm: function(){
             id_unidad_ejecutora= ide;
             id_puntobcr = document.getElementById('ID_PuntoBCR').value;
@@ -172,12 +194,23 @@ function validar_area(){
 function agregar_area(id){
     id_area_apoyo = id;
     id_puntobcr = document.getElementById('ID_PuntoBCR').value;
-    document.getElementById('asignar_area').style.display = "none";
     $.post("index.php?ctl=puntobcr_asignar_area_apoyo", { id_area_apoyo: id_area_apoyo, id_puntobcr:id_puntobcr}, function(data){
-            location.reload();
             //alert (data);
+            location.reload();
           });
 }
-function crear_nueva_area(){
-    
+function eliminar_area(ide){
+    id_area_apoyo= ide;
+    $.confirm({title: 'Confirmación!', content: 'Desea eliminar el area de apoyo?', 
+        confirm: function(){
+            id_puntobcr = document.getElementById('ID_PuntoBCR').value;
+            $.post("index.php?ctl=puntobcr_desligar_area_apoyo", { id_area_apoyo: id_area_apoyo, id_puntobcr:id_puntobcr }, function(data){
+                location.reload();
+                //alert (data);
+              });
+        },
+        cancel: function(){
+                //$.alert('Canceled!')
+        }
+    });
 }
