@@ -18,15 +18,15 @@ ob_start();
         <table id="tabla" class="display" cellspacing="0" width="100%">
           <thead>
             <tr>
-              <th>ID Persona</th>
+              <!--<th>ID Persona</th>-->
               <th>Apellido y Nombre</th>
               <th>Cedula</th>
               <!--<th>Direccion</th>-->
               <th>Departamento</th>
               <th>Empresa</th>
-              <th>Tipo Telefono</th>
-              <th>Numero Telefono</th>
-              <th>Observaciones</th>
+              <!--<th>Tipo Telefono</th>-->
+              <th>Telefonos</th>
+              <!--<th>Observaciones</th>-->
               <th>Estado</th>              
               <th>Cambiar Estado</th>
               <th>Mantenmiento</th>
@@ -38,15 +38,15 @@ ob_start();
             for ($i = 0; $i <$tam; $i++) {
             ?>
             <tr>
-                <td><?php echo $personas[$i]['ID_Persona'];?></td>
+                <!--<td><?php echo $personas[$i]['ID_Persona'];?></td>-->
                 <td><?php echo $personas[$i]['Apellido_Nombre'];?></td>
                 <td><?php echo $personas[$i]['Cedula'];?></td>
                 <!--<td>//<?php echo $personas[$i]['Direccion'];?></td>-->
                 <td><?php echo $personas[$i]['Departamento'];?></td>
                 <td><?php echo $personas[$i]['Empresa'];?></td>
-                <td><?php echo $personas[$i]['Tipo_Telefono'];?></td>
+                <!--<td><?php echo $personas[$i]['Tipo_Telefono'];?></td>-->
                 <td><?php echo $personas[$i]['Numero'];?></td>
-                <td><?php echo $personas[$i]['Observaciones'];?></td>
+                <!--<td><?php echo $personas[$i]['Observaciones'];?></td>-->
             <?php 
             if ($personas[$i]['Estado']==1){
               ?>  
