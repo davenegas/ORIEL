@@ -190,6 +190,7 @@ class Data_Provider{
    }
    
    //Método que permite traer información de la base de datos mediante consultas SQL
+   //Este metodo recibe el nombre de la tabla, campos de la misma y la condición de búsqueda en caso de que exista
     public function trae_datos($table,$campos,$condicion){
        
         // Elimina la instancia del arreglo
@@ -197,115 +198,170 @@ class Data_Provider{
        
         // Verifica si la consulta SQL tiene una condición de búsqueda
         if ($condicion==""){
+            //En caso de no tener condición, agrega campos y nombre de la tabla solamente
             $consulta=$this->conexion->query("select ".$campos." from ".$table.";");
             //echo ("select ".$campos." from ".$table.";");
         }else{
+            //De lo contrario asigna la condición a la consulta SQL
             $consulta=$this->conexion->query("select ".$campos." from ".$table." where ".$condicion.";");
             //echo ("select ".$campos." from ".$table." where ".$condicion.";");
         } 
         
         //echo "select ".$campos." from ".$table." where ".$condicion.";";
         
+        // Una vez ejecutada la consulta verifica si trae resultados,
         if ($consulta!=null){
+            // De tener resultados, agrega cada registro dentro del vector arreglo
             while($filas=$consulta->fetch_assoc()){
+                //Crea una nueva fila por cada registro encontrado en la consulta
                 $this->arreglo[]=$filas;   
             }
 
+            // Si el arreglo no está establecido, lo inicializa en null
             if (!(isset($this->arreglo))){
+                //Inicializa en null
                 $this->arreglo=null;
+                //Establece la variable de control en falso
                 $this->resultado_operacion=false;
             }else{
+                // De lo contrario establece la variable de control a true
                 $this->resultado_operacion=true;
             }
         }else{
+            //Establece el arreglo a null, para que pueda ser validado cuando hay cero resultados en la consulta
               $arreglo=null;
         
         }
    }
    
+   // Método ABC SQL que permite ingresar información en las tablas de la bd
    public function inserta_datos($table,$campos,$valores){
             
         // Gestión de insercion del metodo de la clase
+       //Arma el insert SQL, de acuerdo a los parámetros recibidos por usuario
         $consulta=$this->conexion->query("insert into ".$table."(".$campos.") values(".$valores.");");
         //echo ("insert into ".$table."(".$campos.") values(".$valores.");");
+        //Establece a true el resultado de operación
         $this->resultado_operacion=true;
         
         
          //Registro de la trazabilidad del sistema
+        // Define una variable cadena que almacenará la consulta SQL, Quita mediante la función replace las comas (coloca guiones en su lugar), para no tener conflictos en el momeno de insertar la variable al campo de la tabla traza
         $cadena_sql=str_replace(","," - ","insert into ".$table."(".$campos.") values(".$valores.");");
+        //Reemplaza las comillas con espacios en blanco
         $cadena_sql=str_replace("'"," ",$cadena_sql);
+        // Reemplaza los paréntesis redondos con cuadrados
         $cadena_sql = str_replace("(","[",$cadena_sql);
+        //Reemplaza los paréntesis redondos con cuadradps
         $cadena_sql = str_replace(")","]",$cadena_sql);
         
+        //Inserta el registro de traza en la tabla con los datos correspondientes, de usuario, consulta, etc. En este caso no hay valor antiguo, debido a que es una inserción de datos.
         $consulta=$this->conexion->query("insert into t_traza (ID_Traza,Fecha,Hora,ID_Usuario,Tabla_Afectada,Dato_Anterior,Dato_Actualizado) values(null,'".date("Y-m-d")."','".date("H:i:s", time())."',".$_SESSION['id'].",'".$table."','Insercion - Sin Valores Anteriores','".$cadena_sql."');");
         
    }    
    
+   //Método utilizado para insertar datos en la tabla traza, para consultas ABC mediante procedimientos almacenados
    public function inserta_datos_para_uso_de_trazabilidad($detalle_sql){
             
-        // Gestión de insercion del metodo de la clase
+        // Gestión de insercion del metodo de la clase, recibe el string SQL completo a ejecutar
         $consulta=$this->conexion->query($detalle_sql);
         //echo ("insert into ".$table."(".$campos.") values(".$valores.");");
+        //estable la variable de control a true
         $this->resultado_operacion=true;
           
    }    
+   //Método utilizado para ejecutar procedimiento almacenado que inserta datos en la BD
    public function insertar_datos_con_phpmyadmin($sql){
+       //Ejecuta la sentencia SQL
        $consulta=$this->conexion->query($sql);
+       //estable la variable de control a true
        $this->resultado_operacion=true;
        //echo($sql);
    }
 
+   //Metodo de la clase que permite editar datos en la bd, administrado también por trazabilidad
+   // Recibe información de la tabla, los campos y la condición para encontrar el registro
    public function edita_datos($table,$campos_valores,$condicion){
        
+        //Primero trae los datos actuales del registro a modificar para guardarlos en la tabla traza como valor antiguo o anterior
         $this->trae_datos($table, "*", $condicion);
+        //Define una variable que se llama valores iniciales para armar el campo de la tabla traza
         $valores_iniciales="Edicion - Valores anteriores de la tabla formato SELECT:\n ";
+        //Valida que la consulta haya traido algún dato
         if (count($this->getArreglo())>0){
+            //Mediante la función implode, convierte a string el valor del registro traido por la consulta
+            // Implode tambien muesta la estructura del vector, con los nombres de los campos
             $valores_iniciales= $valores_iniciales ." ". implode(" - ",$this->getArreglo()[0]);
         }
+        // Agrega también los valores del vector sin los nombres de los campos
         $valores_iniciales=$valores_iniciales . "\nA continuacion valores anteriores de la tabla formato arreglo:\n ";
+        // la función serialize trae los valores del vector
         $valores_iniciales=$valores_iniciales . serialize($this->getArreglo()[0]);
         
+        // Ejecuta la edición de datos en la tabla correspondiente.
         $consulta=$this->conexion->query("update ".$table." set ".$campos_valores." where ".$condicion.";");
         //echo("update ".$table." set ".$campos_valores." where ".$condicion.";");
+        //Estable a true la variable de control
         $this->resultado_operacion=true;
         
         
          //Registro de la trazabilidad del sistema
+        // Define una variable cadena que almacenará la consulta SQL, Quita mediante la función replace las comas (coloca guiones en su lugar), para no tener conflictos en el momeno de insertar la variable al campo de la tabla traza
         $cadena_sql=str_replace(","," - ","update ".$table." set ".$campos_valores." where ".$condicion.";");
+        //Reemplaza las comillas con espacios en blanco
         $cadena_sql=str_replace("'"," ",$cadena_sql);
+        // Reemplaza los paréntesis redondos con cuadrados
         $cadena_sql = str_replace("(","[",$cadena_sql);
+        // Reemplaza los paréntesis redondos con cuadrados
         $cadena_sql = str_replace(")","]",$cadena_sql);
         
+        //Inserta el registro de trazabilidad del sistema con el id de usuario, fecha, hora, valores nuevos y antiguos, etc.
         $consulta=$this->conexion->query("insert into t_traza (ID_Traza,Fecha,Hora,ID_Usuario,Tabla_Afectada,Dato_Anterior,Dato_Actualizado) values(null,'".date("Y-m-d")."','".date("H:i:s", time())."',".$_SESSION['id'].",'".$table."','".$valores_iniciales. "','".$cadena_sql."');");       
         
    }
    
+   //Método que permite eliminar registros de la BD
    public function eliminar_datos($table,$condicion){
 
+       // Trae los datos de la bd que se van a eliminar, mediante la condición, nombre de la tabla, y todos los registros
        $this->trae_datos($table, "*", $condicion);
+       //Establece una variable cadena para armar los datos iniciales que se encuentran en la base de datos
         $valores_iniciales="Eliminacion - Valores anteriores de la tabla formato SELECT:\n ";
+        //Verifica que haya sido encontrado el registro a eliminar
         if (count($this->getArreglo())>0){
+            // Agrega a la varaible valores iniciales la estructura completa del vector convertida a string
             $valores_iniciales= $valores_iniciales ." ". implode(" - ",$this->getArreglo()[0]);
         }
+        // Agrega parte de la presentación para el campo correspondiente de la traza
         $valores_iniciales=$valores_iniciales . "\nA continuacion valores anteriores de la tabla formato arreglo:\n ";
+        //Agrega a la variable los valores de cada uno de los campos del registro en cuestión
         $valores_iniciales=$valores_iniciales . serialize($this->getArreglo()[0]);
        
+        //Verifica si existe alguna condición de búsqueda
        if ($condicion==""){
+           //En caso de no haber condición realiza el borrado completo de la tabla
             $consulta=$this->conexion->query("delete from ".$table.";");
+            //Reemplaza en la consulta SQL las comillas con guiones para efecto de insertar la consulta en la tabla traza
             $cadena_sql=str_replace(","," - ","delete from ".$table.";");
             //echo("delete from ".$table.";");
        }else{
+           //Caso contrario asigna la condiciónd de búsqueda al SQL y procede a eliminar en la tabla
             $consulta=$this->conexion->query("delete from ".$table." where ".$condicion.";");
+            //Reemplaza en la consulta SQL, las comillas con guiones para efecto de insertar la consulta en la tabla traza
             $cadena_sql=str_replace(","," - ","delete from ".$table." where ".$condicion.";");
             //echo("delete from ".$table." where ".$condicion.";");
        }    
        
         //Registro de la trazabilidad del sistema
         
+       //Reemplaza las comillas con espacios en blanco
         $cadena_sql=str_replace("'"," ",$cadena_sql);
+        //Remplaza los paréntesis con paréntesis cuadrados
         $cadena_sql = str_replace("(","[",$cadena_sql);
+        //Remplaza los paréntesis con paréntesis cuadrados
         $cadena_sql = str_replace(")","]",$cadena_sql);
         
+        //Inserta el registro en la tabla traza con los datos requeridos, usuario, fecha, hora, datos anteriores, etc.
         $consulta=$this->conexion->query("insert into t_traza (ID_Traza,Fecha,Hora,ID_Usuario,Tabla_Afectada,Dato_Anterior,Dato_Actualizado) values(null,'".date("Y-m-d")."','".date("H:i:s", time())."',".$_SESSION['id'].",'".$table."','".$valores_iniciales. "','".$cadena_sql."');");       
    }
 }
