@@ -2,92 +2,137 @@
 
 /*
  * Clase DataProvider, parte de la capa modelo de acceso a los datos
+ * Clase principal para interactuar con la base de datos BD_Gerencia_Seguridad de MySQL
  */
 class Data_Provider{
     /*
      * Variables publicas, que determinan los parametros de conexión a la base de datos,
      * así como el uso de variables propias de la clase para gestión de la información
      */
+   //Nombre del hospedaje de la base de datos
    private $mvc_bd_hostname="";
+   //Nombre de la base de datos a usar
    private $mvc_bd_nombre="";
+   //Nombre de usuario del motor de base de datos
    private $mvc_bd_usuario;
+   //Clave del usuario
    private $mvc_bd_clave;
+   //Variable contenedora de los parámetros de la conexión con la bd
    private $conexion;
+   //Variable contenedora de resultados de tipo SELECT en SQL, almacenadora de registros de datos
    private $arreglo;
+   //Variable que almacena el string SQL que se va a utilizar
    private $consulta;
+   // Variable controladora del resultado de la operación, si se ejecutó con éxito o no
    private $resultado_operacion;
+   // Variable que almacena el ID de la última inserción realizada en una tabla en específico
    private $ultimo_id_ingresado;
    
+   //Método que retorna el valor del último ID ingresado
    function getUltimo_id_ingresado() {
+       //Referencia al atributo propio de la clase
        return $this->ultimo_id_ingresado;
    }
 
+   // Metodo que inicializa el último valor ingresado
    function setUltimo_id_ingresado($ultimo_id_ingresado) {
+       //Referencia al atributo propio de la clase
        $this->ultimo_id_ingresado = $ultimo_id_ingresado;
    }
 
-      
+   // Metodo que retorna el valor de la variable resultado operación   
    function getResultado_operacion() {
+       //Referencia al atributo propio de la clase
        return $this->resultado_operacion;
    }
 
+   // Método que establece un valor a la variable resultado operación
    function setResultado_operacion($resultado_operacion) {
+       //Referencia al atributo propio de la clase
        $this->resultado_operacion = $resultado_operacion;
    }
     
+   // Método que retorna el nombre del servidor que hospeda la bd
    function getMvc_bd_hostname() {
+       //Referencia al atributo propio de la clase
        return $this->mvc_bd_hostname;
    }
 
+   //Método que retorna el nombre de la base de datos
    function getMvc_bd_nombre() {
+       //Referencia al atributo propio de la clase
        return $this->mvc_bd_nombre;
    }
 
+   // Método que retorna el nombre del usuario con acceso a la base de datos
    function getMvc_bd_usuario() {
+       //Referencia al atributo propio de la clase
        return $this->mvc_bd_usuario;
    }
 
+   //Método que retorna la clae del usuario
    function getMvc_bd_clave() {
+       //Referencia al atributo propio de la clase
        return $this->mvc_bd_clave;
    }
 
+   //Método que retorna el objeto conexión a la base de datos
    function getConexion() {
+       //Referencia al atributo propio de la clase
        return $this->conexion;
    }
 
+   // Método que devuelve el arreglo de resultados propios de la consulta a la base de datos
    function getArreglo() {
+       //Referencia al atributo propio de la clase
        return $this->arreglo;
    }
 
+   //Método que retorna el string SQL que se ejecuta en la base de datos
    function getConsulta() {
+       //Referencia al atributo propio de la clase
        return $this->consulta;
    }
 
+   // Método que establece el nombre del servidor que hospeda la base de datos
    function setMvc_bd_hostname($mvc_bd_hostname) {
+       //Referencia al atributo propio de la clase
        $this->mvc_bd_hostname = $mvc_bd_hostname;
    }
 
+   //Método que estable el nombre de la base de datos a utilizar
    function setMvc_bd_nombre($mvc_bd_nombre) {
+       //Referencia al atributo propio de la clase
        $this->mvc_bd_nombre = $mvc_bd_nombre;
    }
 
+   //Métod que establece el nombre del usuario que se conectará a la base de datos
    function setMvc_bd_usuario($mvc_bd_usuario) {
+       //Referencia al atributo propio de la clase
        $this->mvc_bd_usuario = $mvc_bd_usuario;
    }
 
+   //Método que establece la clave del usuario que se conecta con la base de datos
    function setMvc_bd_clave($mvc_bd_clave) {
+       //Referencia al atributo propio de la clase
        $this->mvc_bd_clave = $mvc_bd_clave;
    }
 
+   // Metodo que establece el objeto conexión con la base de datos
    function setConexion($conexion) {
+       //Referencia al atributo propio de la clase
        $this->conexion = $conexion;
    }
 
+   // Método que establece e inicializa la estructura que almacena los resultados de consulta a la base de datos
    function setArreglo($arreglo) {
+       //Referencia al atributo propio de la clase
        $this->arreglo = $arreglo;
    }
 
+   //Establece el string SQL que se ejecutará sobre la base de datos.
    function setConsulta($consulta) {
+       //Referencia al atributo propio de la clase
        $this->consulta = $consulta;
    }
 
@@ -97,16 +142,23 @@ class Data_Provider{
        //Controlador de excepciones
        try{
            
+            //Inicializa el nombre del servidor contenedor de la base de datos
             $this->mvc_bd_hostname = "localhost";
+            //Inicializa el nombre de la base de datos
             $this->mvc_bd_nombre   = "bd_Gerencia_Seguridad";
+            //Inicializa el nombre del usuario que puede acceder la base de datos
             $this->mvc_bd_usuario  = "root";
+            //Inicializa la clave de acceso a la base de datos
             $this->mvc_bd_clave    = "";
+            //Es capaz de representar cualquier carácter Unicode a nivel de base de datos
             $this->consulta="SET NAMES 'utf8'";
 
             
             //Acapara los errores que se puedan presentar y muestra en pantalla lo correspondiente
        }catch (Exception $e){
+           //Muestra en pantalla un mensaje de error
            echo 'Hubo un problema al inicializar las variables de conexión';
+           //Asigna a falso el valor de la variable resultado de la operación.
            $this->resultado_operacion=false;
        }
        
@@ -115,25 +167,35 @@ class Data_Provider{
    //Metodo de conexión a la base de datos, 
    public function conectar(){
     try{
+       // Crea un objeto conexión con los parámetros necesarios de enlace a la base de datos Gerencia_Seguridad 
        $this->conexion=new mysqli($this->mvc_bd_hostname,$this->mvc_bd_usuario,$this->mvc_bd_clave, $this->mvc_bd_nombre);
+       //Permite ejecutar una consulta debntro de la base de datos
        $this->conexion->query($this->consulta);
+       // Lleva el control del resultado de la operación ejecuta en la bd
        $this->resultado_operacion=true;
     }catch (Exception $e){
+           //Notifica de un error al conectarse a la base de datos
            echo 'Hubo un problema al realizar la conexión a la base de datos';
+           //Asigna a falso el valor de la variable resultado de la operación.
             $this->resultado_operacion=false;
        }
    }
    
+   // Método que permite destruir la conexión establecida con la base de datos
    public function desconectar(){
-       
+       //Cierra la conexión
        mysqli_close($this->conexion);
+       // Asigna verdadero al resultado de la operación
        $this->resultado_operacion=true;
    }
    
+   //Método que permite traer información de la base de datos mediante consultas SQL
     public function trae_datos($table,$campos,$condicion){
        
+        // Elimina la instancia del arreglo
         unset($this->arreglo);
        
+        // Verifica si la consulta SQL tiene una condición de búsqueda
         if ($condicion==""){
             $consulta=$this->conexion->query("select ".$campos." from ".$table.";");
             //echo ("select ".$campos." from ".$table.";");
