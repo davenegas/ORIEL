@@ -1373,6 +1373,7 @@
                 
                 if (count($params)>0){
                      $estado_evento=$params[0]['Estado_Evento']; 
+                     //echo $estado_evento;
                      $obj_eventos->setTipo_evento($params[0]['ID_Tipo_Evento']);
                      $prioridad_evento=$obj_eventos->obtiene_prioridad_de_tipo_de_evento();
                      
@@ -1425,14 +1426,14 @@
                 $raiz.="/";
             }
             
-            $ruta=  $raiz."Adjuntos_Bitacora/".$result.$_FILES['archivo_adjunto']['name'];
+            $ruta=  $raiz."Adjuntos_Bitacora/".Encrypter::quitar_tildes($result.$_FILES['archivo_adjunto']['name']);
             //$ruta=  $_SERVER['DOCUMENT_ROOT']."Adjuntos_Bitacora/".$result.$_FILES['archivo_adjunto']['name'];
           
             switch ($recepcion_archivo) {
                 case 0:{
                     
                     if (move_uploaded_file($_FILES['archivo_adjunto']['tmp_name'], $ruta)){
-                        $obj_eventos->setAdjunto($result.$_FILES['archivo_adjunto']['name']); 
+                        $obj_eventos->setAdjunto(Encrypter::quitar_tildes($result.$_FILES['archivo_adjunto']['name'])); 
                         $obj_eventos->ingresar_seguimiento_evento();
                         $obj_eventos->edita_estado_evento($_POST['estado_del_evento']);
                         header ("location:/ORIEL/index.php?ctl=frm_eventos_listar");

@@ -2,19 +2,6 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group>
-<<<<<<< HEAD
-            <file>file:/C:/xampp/htdocs/ORIEL/modelos/Controller.php</file>
-            <file>file:/C:/xampp/htdocs/ORIEL/vistas/js/listas_dependientes_puntobcr.js</file>
-            <file>file:/C:/xampp/htdocs/ORIEL/vistas/css/ventanaoculta.css</file>
-            <file>file:/C:/xampp/htdocs/ORIEL/vistas/css/main.css</file>
-            <file>file:/C:/xampp/htdocs/ORIEL/controladores/cls_unidad_ejecutora.php</file>
-            <file>file:/C:/xampp/htdocs/ORIEL/vistas/plantillas/frm_puntos_bcr_editar.php</file>
-=======
-            <file>file:/C:/wamp/www/ORIEL/controladores/cls_eventos.php</file>
-            <file>file:/C:/wamp/www/ORIEL/vistas/plantillas/frm_eventos_editar.php</file>
-            <file>file:/C:/wamp/www/ORIEL/modelos/Controller.php</file>
->>>>>>> origin/master
-        </group>
+        <group/>
     </open-files>
 </project-private>
