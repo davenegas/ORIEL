@@ -92,8 +92,10 @@ $map = array(
     'puntobcr_asignar_area_apoyo'=>array('controller'=>'Controller','action'=> 'puntobcr_asignar_area_apoyo'),
     'Area_apoyo_agregar'=>array('controller'=>'Controller','action'=> 'Area_apoyo_agregar'),
     'puntobcr_desligar_area_apoyo'=>array('controller'=>'Controller','action'=> 'puntobcr_desligar_area_apoyo'),
-    
-    
+    'direccionIP_agregar'=>array('controller'=>'Controller','action'=> 'direccionIP_agregar'),
+    'puntobcr_asignar_direccion_ip'=>array('controller'=>'Controller','action'=> 'puntobcr_asignar_direccion_ip'),
+    'puntobcr_desligar_direccion_ip'=>array('controller'=>'Controller','action'=> 'puntobcr_desligar_direccion_ip'),
+        
     //Empresas
     'empresas_listar'=>array('controller'=>'Controller','action'=> 'empresas_listar'),
     'empresa_gestion'=>array('controller'=>'Controller','action'=> 'empresa_gestion'),

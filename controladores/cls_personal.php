@@ -164,4 +164,71 @@ class cls_personal{
         }
     }
     
+    public function obtener_gerentes_zona_bcr(){
+        $this->obj_data_provider->conectar();
+        if($this->condicion==""){
+            $this->arreglo=$this->obj_data_provider->trae_datos(
+                    "T_GerenteZonaBCR
+			LEFT OUTER JOIN T_Personal ON T_GerenteZonaBCR.ID_Persona = T_Personal.ID_Persona
+			LEFT OUTER JOIN T_Telefono ON T_GerenteZonaBCR.ID_Persona = T_Telefono.ID
+			LEFT OUTER JOIN T_TipoTelefono ON T_Telefono.ID_Tipo_Telefono = T_TipoTelefono.ID_Tipo_Telefono", 
+                    " T_GerenteZonaBCR.*, 
+			T_Personal.Apellido_Nombre,
+			T_Telefono.Numero, T_TipoTelefono.Tipo_Telefono",
+                    "(T_TipoTelefono.ID_Tipo_Telefono = '3' OR 
+			  T_TipoTelefono.ID_Tipo_Telefono = '4')");
+            $this->arreglo=$this->obj_data_provider->getArreglo();
+            $this->obj_data_provider->desconectar();
+            $this->resultado_operacion=true;
+        }
+        else{
+            $this->arreglo=$this->obj_data_provider->trae_datos(
+                    "T_GerenteZonaBCR
+			LEFT OUTER JOIN T_Personal ON T_GerenteZonaBCR.ID_Persona = T_Personal.ID_Persona
+			LEFT OUTER JOIN T_Telefono ON T_GerenteZonaBCR.ID_Persona = T_Telefono.ID
+			LEFT OUTER JOIN T_TipoTelefono ON T_Telefono.ID_Tipo_Telefono = T_TipoTelefono.ID_Tipo_Telefono", 
+                    "T_GerenteZonaBCR.*, 
+			T_Personal.Apellido_Nombre,
+			T_Telefono.Numero, T_TipoTelefono.Tipo_Telefono",
+                    "(".$this->condicion.") AND (T_TipoTelefono.ID_Tipo_Telefono = '3' OR 
+			  T_TipoTelefono.ID_Tipo_Telefono = '4')");
+            $this->arreglo=$this->obj_data_provider->getArreglo();
+            $this->obj_data_provider->desconectar();
+            $this->resultado_operacion=true;
+        }
+    }
+    
+    public function obtener_supervisor_zona(){
+        $this->obj_data_provider->conectar();
+        if($this->condicion==""){
+            $this->arreglo=$this->obj_data_provider->trae_datos(
+                    "T_SupervisorZona
+			LEFT OUTER JOIN T_Personal ON T_SupervisorZona.ID_Supervisor_zona = T_Personal.ID_Persona
+			LEFT OUTER JOIN T_Telefono ON T_SupervisorZona.ID_Supervisor_zona = T_Telefono.ID
+			LEFT OUTER JOIN T_TipoTelefono ON T_Telefono.ID_Tipo_Telefono = T_TipoTelefono.ID_Tipo_Telefono", 
+                    "T_SupervisorZona.*, 
+			T_Personal.Apellido_Nombre,
+			T_Telefono.Numero, T_TipoTelefono.Tipo_Telefono",
+                    "(T_TipoTelefono.ID_Tipo_Telefono = '3')");
+            $this->arreglo=$this->obj_data_provider->getArreglo();
+            $this->obj_data_provider->desconectar();
+            $this->resultado_operacion=true;
+        }
+        else{
+            $this->arreglo=$this->obj_data_provider->trae_datos(
+                    "T_SupervisorZona
+			LEFT OUTER JOIN T_Personal ON T_SupervisorZona.ID_Supervisor_zona = T_Personal.ID_Persona
+			LEFT OUTER JOIN T_Telefono ON T_SupervisorZona.ID_Supervisor_zona = T_Telefono.ID
+			LEFT OUTER JOIN T_TipoTelefono ON T_Telefono.ID_Tipo_Telefono = T_TipoTelefono.ID_Tipo_Telefono", 
+                    "T_SupervisorZona.*, 
+			T_Personal.Apellido_Nombre,
+			T_Telefono.Numero, T_TipoTelefono.Tipo_Telefono",
+                    "(".$this->condicion.") AND (T_TipoTelefono.ID_Tipo_Telefono = '2' OR 
+			T_TipoTelefono.ID_Tipo_Telefono = '3' OR 
+			T_TipoTelefono.ID_Tipo_Telefono = '4') ORDER BY T_Personal.Apellido_Nombre");
+            $this->arreglo=$this->obj_data_provider->getArreglo();
+            $this->obj_data_provider->desconectar();
+            $this->resultado_operacion=true;
+        }
+    }
 }?>

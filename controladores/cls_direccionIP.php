@@ -4,6 +4,7 @@ class cls_direccionIP{
         
   // Definicion de atributos de la clase
     private $id;
+    private $id2;
     private $direccionIP;
     private $tipo_IP;
     private $observaciones;
@@ -13,8 +14,16 @@ class cls_direccionIP{
     private $obj_data_provider;
     private $condicion;
     private $resultado_operacion;
-  
-    function getId() {
+    
+    function getId2() {
+        return $this->id2;
+    }
+
+    function setId2($id2) {
+        $this->id2 = $id2;
+    }
+
+        function getId() {
         return $this->id;
     }
 
@@ -96,6 +105,7 @@ class cls_direccionIP{
 
     public function __construct(){
         $this->id="";
+        $this->id2="";
         $this->direccionIP="";
         $this->tipo_IP="";
         $this->observaciones="";
@@ -112,9 +122,8 @@ class cls_direccionIP{
         if($this->condicion==""){
             $this->arreglo=$this->obj_data_provider->trae_datos(
                     "T_DireccionIP
-			LEFT OUTER JOIN T_TipoIP ON T_DireccionIP.ID_Tipo_IP = T_TipoIP.ID_Tipo_IP
-			LEFT OUTER JOIN T_PuntoBCRDireccionIP ON T_DireccionIP.ID_Direccion_IP = T_PuntoBCRDireccionIP.ID_Direccion_IP", 
-                    "*",
+			LEFT OUTER JOIN T_TipoIP ON T_DireccionIP.ID_Tipo_IP = T_TipoIP.ID_Tipo_IP", 
+                    "DISTINCT T_DireccionIP.*, T_TipoIP.ID_Tipo_IP, T_TipoIP.Tipo_IP ",
                     "");
             $this->arreglo=$this->obj_data_provider->getArreglo();
             $this->obj_data_provider->desconectar();
@@ -125,12 +134,56 @@ class cls_direccionIP{
                     "T_DireccionIP
 			LEFT OUTER JOIN T_TipoIP ON T_DireccionIP.ID_Tipo_IP = T_TipoIP.ID_Tipo_IP
 			LEFT OUTER JOIN T_PuntoBCRDireccionIP ON T_DireccionIP.ID_Direccion_IP = T_PuntoBCRDireccionIP.ID_Direccion_IP", 
-                    "*",
+                    "DISTINCT T_DireccionIP.*, T_PuntoBCRDireccionIP.*, T_TipoIP.ID_Tipo_IP, T_TipoIP.Tipo_IP ",
                     $this->condicion);
             $this->arreglo=$this->obj_data_provider->getArreglo();
             $this->obj_data_provider->desconectar();
             $this->resultado_operacion=true;
         }  
+    }
+    
+    public function eliminar_puntobcr_direccion_ip(){
+        $this->obj_data_provider->conectar();
+        $this->obj_data_provider->eliminar_datos("T_puntoBCRDireccionIP","ID_PuntoBCR='".$this->id2."' AND ID_Direccion_IP='".$this->id."'");
+        $this->obj_data_provider->desconectar();
+    }
+    
+    public function agregar_PuntoBCR_direccionIP(){
+        $this->obj_data_provider->conectar();
+        $this->obj_data_provider->inserta_datos("T_puntoBCRDireccionIP", "ID_Direccion_IP, ID_PuntoBCR","'".$this->id."','".$this->id2."'");
+        $this->obj_data_provider->desconectar();
+        $this->resultado_operacion=true;
+    }
+    
+    public function agregar_direccion_ip(){
+        $this->obj_data_provider->conectar();
+        $this->obj_data_provider->inserta_datos("T_DireccionIP", "ID_Tipo_IP, Direccion_IP, Observaciones","'".$this->tipo_IP."','".$this->direccionIP."','".$this->observaciones."'");
+        $this->arreglo= $this->obj_data_provider->trae_datos("T_DireccionIP ORDER BY `ID_Direccion_IP` DESC LIMIT 1", "*", $this->condicion);
+        $this->arreglo=$this->obj_data_provider->getArreglo();
+        $this->obj_data_provider->desconectar();
+        $this->resultado_operacion=true;
+    }
+    
+    public function obtiene_tipo_direcciones_ip(){
+        $this->obj_data_provider->conectar();
+        if($this->condicion==""){
+            $this->arreglo=$this->obj_data_provider->trae_datos(
+                    "T_TipoIP", 
+                    "*",
+                    "");
+            $this->arreglo=$this->obj_data_provider->getArreglo();
+            $this->obj_data_provider->desconectar();
+            $this->resultado_operacion=true;
+        }
+        else{
+            $this->arreglo=$this->obj_data_provider->trae_datos(
+                    "T_TipoIP", 
+                    "*",
+                    $this->condicion);
+            $this->arreglo=$this->obj_data_provider->getArreglo();
+            $this->obj_data_provider->desconectar();
+            $this->resultado_operacion=true;
+        } 
     }
 }
   

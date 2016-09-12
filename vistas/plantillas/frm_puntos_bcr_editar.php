@@ -7,6 +7,7 @@
         <script language="javascript" src="vistas/js/listas_dependientes_puntobcr.js"></script>
         <link rel="stylesheet" href="vistas/css/ventanaoculta.css">
         <?php require_once 'frm_librerias_head.html'; ?>
+        
 
     </head>
     <body>
@@ -264,11 +265,10 @@
         </div>
         
         <div class="bordegris espacio-arriba"></div>
-        <div>
-            
+        <div class="bordegris espacio-abajo-5">
             <h3>Información adicional
                 <?php if($_SESSION['rol']==1||$_SESSION['rol']==11){ ?>
-                    <input class="quitar-float" type="checkbox" id="chk_ubicacion" name="chk_info_adicional">
+                    <input class="quitar-float" type="checkbox" id="chk_info_adicional" name="chk_info_adicional">
                  <?php } ?>
             </h3>
             
@@ -288,9 +288,9 @@
                 </select>
             </div>
             
-            <div class="col-md-4">
-                <label for="Horario_dias">Horario Días</label>
-                <select class="form-control" id="Horario_dias" disabled name="Horario_dias" > 
+            <div class="col-md-4 espacio-abajo">
+                <label for="Horario">Horario Días</label>
+                <select class="form-control" id="Horario" disabled name="Horario" > 
                 <?php
                 $tam = count($horarios);
 
@@ -306,12 +306,18 @@
                 </select>
             </div>
 
-            <div class="col-md-4">
-              <label for="Observaciones">Observaciones</label>
-              <input type="text" disabled class="form-control" id="Observaciones" name="Observaciones" value="<?php echo $params[0]['Observaciones'];?>">
+            <div class="col-md-4 espacio-abajo">
+              <label for="Observaciones_generales">Observaciones</label>
+              <input type="text" readonly class="form-control" id="Observaciones_generales" name="Observaciones_generales" value="<?php echo $params[0]['Observaciones'];?>">
             </div>
             
+            
             <div>
+            <?php if($_SESSION['rol']==1||$_SESSION['rol']==11){ ?> 
+                <h3>Información de Direcciones IP<a id="popup" onclick="mostrar_direccion_IP()" class="btn azul" role="button">Agregar Dirección IP</a></h3>    
+            <?php } else {?>
+                <h3>Información de Direcciones IP</h3>
+            <?php } ?> 
             <table class="display col-md-12  table-striped quitar-float espacio-abajo" id="direccionIP">
                 <thead> 
                     <th style="text-align:center">Tipo Direccion</th>
@@ -338,10 +344,64 @@
             </div>
 
         </div>
+        
+        <div>
+            <div class="col-md-4 espacio-abajo">
+              <label for="zonas_gerente">Gerente de Zona BCR</label>
+              <select class="form-control" id="zonas_gerente" disabled name="zonas_gerente" > 
+                <?php
+                $tam = count($gerente_zona_bcr);
+                $ubicacionpersona="";
+                for($i=0; $i<$tam;$i++){
+                    if($gerente_zona_bcr[$i]['ID_Gerente_zona']==$params[0]['ID_Gerente_zona']){
+                        $ubicacionpersona=$i;
+                       ?> <option value="<?php echo $gerente_zona_bcr[$i]['ID_Gerente_zona']?>" selected="selected"><?php echo $gerente_zona_bcr[$i]['Zona_Gerencia_BCR'];?></option><?php
+                    }
+                    else {?>
+                        <option value="<?php echo $gerente_zona_bcr[$i]['ID_Gerente_zona']?>" ><?php echo $gerente_zona_bcr[$i]['Zona_Gerencia_BCR']?></option>   
+                <?php }}  ?>
+                </select>
+            </div>
+            <div class="col-md-4 espacio-abajo">
+              <label for="nombre_gerente">Nombre Gerente de Zona</label>
+              <input type="text" readonly class="form-control" id="nombre_gerente" name="nombre_gerente" value="<?php echo $gerente_zona_bcr[$ubicacionpersona]['Apellido_Nombre'];?>">
+            </div>
+            <div class="col-md-4 espacio-abajo">
+              <label for="tel_gerente">Teléfono</label>
+              <input type="text" readonly class="form-control" id="tel_gerente" name="tel_gerente" value="<?php echo $gerente_zona_bcr[$ubicacionpersona]['Numero'];?>">
+            </div>
             
+            <div class="col-md-4 espacio-abajo">
+              <label for="zonas_supervisores">Supervisor de Zona</label>
+              <select class="form-control" id="zonas_supervisores" disabled name="zonas_supervisores" > 
+                <?php
+                $tam = count($supervisor_zona_externo);
+
+                for($i=0; $i<$tam;$i++)
+                {
+                    if($supervisor_zona_externo[$i]['ID_Supervisor_Zona']==$params[0]['ID_Supervisor_Zona']){
+                        $ubicacionpersona=$i;
+                       ?> <option value="<?php echo $supervisor_zona_externo[$i]['ID_Supervisor_Zona']?>" selected="selected"><?php echo $supervisor_zona_externo[$i]['Zona_Supervisor'];?></option><?php
+                    }
+                    else {?>
+                        <option value="<?php echo $supervisor_zona_externo[$i]['ID_Supervisor_Zona']?>" ><?php echo $supervisor_zona_externo[$i]['Zona_Supervisor']?></option>   
+                <?php }}  ?>
+                </select>
+            </div>
+            <div class="col-md-4 espacio-abajo">
+              <label for="nombre_supervisor">Nombre del Supervisor</label>
+              <input type="text" readonly class="form-control" id="nombre_supervisor" name="nombre_supervisor" value="<?php echo $supervisor_zona_externo[$ubicacionpersona]['Apellido_Nombre'];?>">
+            </div>
+            <div class="col-md-4 espacio-abajo">
+              <label for="tel_supervisor">Teléfono</label>
+              <input type="text" readonly class="form-control" id="tel_supervisor" name="tel_supervisor" value="<?php echo $supervisor_zona_externo[$ubicacionpersona]['Numero'];?>">
+            </div>
+        </div>   
+        
         <a href="index.php?ctl=puntos_bcr_listar" class="btn btn-default espacio-arriba" role="button">Volver</a>
         <?php require_once 'pie_de_pagina.php' ?>
         </div>
+        
         
         <!--agregar teléfono a Punto BCR-->
         <div id="agregar_telefono"> 
@@ -536,6 +596,70 @@
                                 <td style="text-align:center"><?php echo $todas_areas_apoyo[$i]['Direccion'];?></td>
                                 <td style="text-align:center"><a class="btn" role="button" onclick="agregar_area(<?php echo $todas_areas_apoyo[$i]['ID_Area_Apoyo'];?>);">
                                     Asignar al PuntoBCR</a></td>
+                            </tr>
+                            <?php } ?>
+                        </tbody> 
+                    </table>                  
+                </div>
+            </div>
+        </div>
+        
+        <!--Agregar o asignar direccion IP-->
+        <div id="asignar_direccion_IP">
+            <div id="popupventana2">
+                <div id="ventana2">
+                <img id="close" src='vistas/Imagenes/cerrar.png' width="25" onclick ="ocultar_elemento()">
+                    <h2>Direcciones IP del PuntoBCR</h2>
+                    <h4>Agregar nueva direccion IP</h4>
+                    <form class="bordegris" id="nueva_direccion_ip" method="post" name="form" action="index.php?ctl=direccionIP_agregar">
+                        <input hidden id="ID_PuntoBCR" name="ID_PuntoBCR" type="text" value="<?php echo $params[0]['ID_PuntoBCR']; ?>">
+                        
+                        <div class="col-md-4 espacio-abajo-5">
+                        <label for="tipo_ip">Tipo de dirección IP</label>
+                            <select class="form-control" id="tipo_ip" name="tipo_ip"> 
+                            <?php
+                            $tam = count($tipos_direccion_ip);
+                            for($i=0; $i<$tam;$i++)
+                            {  ?>
+                                <option value="<?php echo $tipos_direccion_ip[$i]['ID_Tipo_IP']?>" ><?php echo $tipos_direccion_ip[$i]['Tipo_IP']?></option>   
+                            <?php }  ?>
+                            </select>
+                        </div>
+                        <div class="col-md-4 espacio-abajo-5">
+                            <label for="direccion_ip">Dirección IP</label>
+                            <input type="text" class="form-control" id="direccion_ip" name="direccion_ip" placeholder="Dirección IP. Ej: 192.168.1.1 ">
+                        </div>
+                        <div class="col-md-4 espacio-abajo-5">
+                            <label for="observaciones">Observaciones</label>
+                            <input type="text" class="form-control" id="observaciones" name="observaciones" placeholder="Observaciones de la dirección IP">
+                        </div>
+                        <button class="quitar-float espacio-abajo espacio-arriba"><a href="javascript:%20validar_direccion_ip()" id="submit">Guardar</a></button>
+                    </form>
+                    
+                    <!--lista de areas de apoyo registradas-->
+                    <h4>Direcciones IP registradas en el sistema</h4>
+                    <table id="tabla4" class="display" cellspacing="0" width="100%">
+                        <thead> 
+                            <tr>
+                                <th>ID</th>
+                                <th style="text-align:center">Tipo Direccion</th>
+                                <th style="text-align:center">Direccion IP</th>
+                                <th style="text-align:center">Observaciones</th>
+                                <th style="text-align:center">Funciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php 
+                            $tam=count($todas_direccionIP);
+                            for ($i = 0; $i <$tam; $i++) {
+                            ?>
+                            <tr>
+                                <td><?php echo $todas_direccionIP[$i]['ID_Direccion_IP'];?></td>
+                                <td style="text-align:center"><?php echo $todas_direccionIP[$i]['Tipo_IP'];?></td>
+                                <td style="text-align:center"><?php echo $todas_direccionIP[$i]['Direccion_IP'];?></td>
+                                <td style="text-align:center"><?php echo $todas_direccionIP[$i]['Observaciones'];?></td>
+                                <td style="text-align:center"><a class="btn" role="button" id="asignar_ip" name="asignar_ip" onclick="asignar_ip(<?php echo $todas_direccionIP[$i]['ID_Direccion_IP'];?>);">
+                                        Asignar al PuntoBCr</a></td>
                             </tr>
                             <?php } ?>
                         </tbody> 

@@ -90,23 +90,21 @@ $(document).ready(function(){
     
     //Check para habilitar edicion de Información adicional
     $("#chk_info_adicional").change(function(){
-        if (document.getElementById('Observaciones').readOnly==true){
-            document.getElementById('Observaciones').readOnly=false;
+        if (document.getElementById('Observaciones_generales').readOnly==true){
+            document.getElementById('Observaciones_generales').readOnly=false;
             $("#Empresa").attr("disabled",false);
-            $("#Canton").attr("disabled",false);
-            $("#Distrito").attr("disabled",false);
+            $("#Horario").attr("disabled",false);
         }else{
-            document.getElementById('Observaciones').readOnly=true;
-            $("#Provincia").attr("disabled",true);
-            $("#Canton").attr("disabled",true);
-            $("#Distrito").attr("disabled",true);
+            document.getElementById('Observaciones_generales').readOnly=true;
+            $("#Empresa").attr("disabled",true);
+            $("#Horario").attr("disabled",true);
             //Guarda Distrito y dirección en tabla  T_PuntoBCR
             id_distrito=document.getElementById('Distrito').value;
             id_puntobcr = document.getElementById('ID_PuntoBCR').value;
             direccion = document.getElementById('Direccion').value;
-            $.post("index.php?ctl=distrito_PuntoBCR_guardar", { id_distrito: id_distrito, id_puntobcr:id_puntobcr, direccion:direccion}, function(data){
-                //alert (data);
-            });   
+//            $.post("index.php?ctl=distrito_PuntoBCR_guardar", { id_distrito: id_distrito, id_puntobcr:id_puntobcr, direccion:direccion}, function(data){
+//                //alert (data);
+//            });   
         }
     });
 });  
@@ -116,6 +114,7 @@ function ocultar_elemento(){
     document.getElementById('agregar_telefono').style.display = "none";
     document.getElementById('asignar_ue').style.display = "none";
     document.getElementById('asignar_area').style.display = "none";
+    document.getElementById('asignar_direccion_IP').style.display = "none";
 }
 
 ///////////////////////////////////////////////////////
@@ -213,4 +212,42 @@ function eliminar_area(ide){
                 //$.alert('Canceled!')
         }
     });
+}
+
+///////////////////////////////////////////////
+//Funciones para agregar o asignar Direccion IP
+function mostrar_direccion_IP(){
+    document.getElementById('asignar_direccion_IP').style.display = "block";
+}
+function asignar_ip(id){
+    id_direccion_ip = id;
+    id_puntobcr = document.getElementById('ID_PuntoBCR').value;
+    $.post("index.php?ctl=puntobcr_asignar_direccion_ip", { id_direccion_ip: id_direccion_ip, id_puntobcr:id_puntobcr}, function(data){
+            //alert (data);
+            location.reload();
+          });
+}
+function eliminar_ip(ide){
+    id_direccion_ip= ide;
+    $.confirm({title: 'Confirmación!', content: 'Desea eliminar la dirección IP?', 
+        confirm: function(){
+            id_puntobcr = document.getElementById('ID_PuntoBCR').value;
+            $.post("index.php?ctl=puntobcr_desligar_direccion_ip", { id_direccion_ip: id_direccion_ip, id_puntobcr:id_puntobcr }, function(data){
+                location.reload();
+                //alert (data);
+              });
+        },
+        cancel: function(){
+                //$.alert('Canceled!')
+        }
+    });
+}
+function validar_direccion_ip(){
+   if (document.getElementById('direccion_ip').value == "") {
+        alert("Digita la dirección IP !");
+    } else {
+        //alert("Form Submitted Successfully...");
+        document.getElementById('nueva_direccion_ip').submit();
+        document.getElementById('asignar_direccion_IP').style.display = "none";
+    } 
 }

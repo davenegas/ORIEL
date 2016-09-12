@@ -176,7 +176,8 @@ class cls_puntosBCR{
 			LEFT OUTER JOIN T_UE_PuntoBCR ON T_PuntoBCR.ID_PuntoBCR= T_UE_PuntoBCR.ID_PuntoBCR
 			LEFT OUTER JOIN T_UnidadEjecutora ON T_UE_PuntoBCR.ID_Unidad_Ejecutora = T_UnidadEjecutora.ID_Unidad_Ejecutora", 
                     "T_PuntoBCR.ID_PuntoBCR, T_PuntoBCR.Nombre, T_PuntoBCR.Direccion, T_PuntoBCR.Codigo, 
-			T_PuntoBCR.Cuenta_SIS, T_PuntoBCR.Observaciones, T_PuntoBCR.Estado,
+			T_PuntoBCR.Cuenta_SIS, T_PuntoBCR.Observaciones, T_PuntoBCR.Estado, 
+                        T_PuntoBCR.ID_Gerente_Zona, T_PuntoBCR.ID_Supervisor_Zona,
 			T_Horario.ID_Horario, T_Horario.Dia_Laboral, T_Horario.Hora_Laboral,
 			T_TipoPuntoBCR.ID_Tipo_Punto, T_TipoPuntoBCR.Tipo_Punto,
 			T_Empresa.ID_Empresa, T_Empresa.Empresa,
@@ -198,6 +199,7 @@ class cls_puntosBCR{
 			LEFT OUTER JOIN T_UnidadEjecutora ON T_UE_PuntoBCR.ID_Unidad_Ejecutora = T_UnidadEjecutora.ID_Unidad_Ejecutora", 
                     "T_PuntoBCR.ID_PuntoBCR, T_PuntoBCR.Nombre, T_PuntoBCR.Direccion, T_PuntoBCR.Codigo, 
 			T_PuntoBCR.Cuenta_SIS, T_PuntoBCR.Observaciones, T_PuntoBCR.Estado,
+                        T_PuntoBCR.ID_Gerente_Zona, T_PuntoBCR.ID_Supervisor_Zona,
 			T_Horario.ID_Horario, T_Horario.Dia_Laboral, T_Horario.Hora_Laboral,
 			T_TipoPuntoBCR.ID_Tipo_Punto, T_TipoPuntoBCR.Tipo_Punto,
 			T_Empresa.ID_Empresa, T_Empresa.Empresa,

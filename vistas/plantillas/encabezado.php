@@ -125,7 +125,7 @@
            <?php 
            if ((encuentra_coincidencia("Catálogos-Sitios BCR"))){
            ?>
-                <li><a href="index.php?ctl=puntos_bcr_listar">Sitios BCR</a></li>
+                <li><a href="index.php?ctl=puntos_bcr_listar">Puntos BCR</a></li>
            <?php 
            };
            ?>

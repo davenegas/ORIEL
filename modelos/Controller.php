@@ -1870,6 +1870,26 @@
                 $obj_areasapoyo->obtiene_todos_las_areas_apoyo();
                 $todas_areas_apoyo =$obj_areasapoyo->getArreglo();
                 
+                //Obtiene todas las direcciones IP
+                $obj_direccionIP->setCondicion("");
+                $obj_direccionIP->obtiene_direccionesIP();
+                $todas_direccionIP=$obj_direccionIP->getArreglo();
+                
+                //Obtiene todos los tipos de Direcciones IP
+                $obj_direccionIP->setCondicion("");
+                $obj_direccionIP->obtiene_tipo_direcciones_ip();
+                $tipos_direccion_ip= $obj_direccionIP->getArreglo();
+                
+                //Obtiene todos los gerente de zona del BCR
+                $obj_Personal->setCondicion("");
+                $obj_Personal->obtener_gerentes_zona_bcr();
+                $gerente_zona_bcr= $obj_Personal->getArreglo();
+                
+                //Obtiene todos los supervisores
+                $obj_Personal->setCondicion("");
+                $obj_Personal->obtener_supervisor_zona();
+                $supervisor_zona_externo = $obj_Personal->getArreglo();
+                
                 require __DIR__ . '/../vistas/plantillas/frm_puntos_bcr_editar.php';
             }
             
@@ -2144,6 +2164,77 @@
             $obj_area_apoyo->setCondicion("");
             $obj_area_apoyo->eliminar_puntobcr_area_apoyo();
             
+        }else{
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }
+    }
+    
+    public function puntobcr_desligar_direccion_ip(){
+        if(isset($_SESSION['nombre'])){
+            $obj_direccion = new cls_direccionIP();
+            $obj_direccion->setId($_POST['id_direccion_ip']);
+            $obj_direccion->setId2($_POST['id_puntobcr']);
+            $obj_direccion->setCondicion("");
+            $obj_direccion->eliminar_puntobcr_direccion_ip();
+            
+        }else{
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }
+    }
+    
+    public function puntobcr_asignar_direccion_ip(){
+        if(isset($_SESSION['nombre'])){
+            $obj_direccion = new cls_direccionIP();
+            $obj_direccion->setId($_POST['id_direccion_ip']);
+            $obj_direccion->setId2($_POST['id_puntobcr']);
+            $obj_direccion->setCondicion("T_puntoBCRDireccionIP.ID_PuntoBCR='".$_POST['id_puntobcr']."' AND T_puntoBCRDireccionIP.ID_Direccion_IP='".$_POST['id_direccion_ip']."'");
+            
+            $obj_direccion->obtiene_direccionesIP();
+            $direcciones_ip =$obj_direccion->getArreglo();
+            if($direcciones_ip==""){
+                $obj_direccion->agregar_PuntoBCR_direccionIP();
+            }   else    {
+                echo "La dirección IP ya se encuentra asignada al PuntoBCR";
+            }
+        }else{
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }
+    }
+    
+    public function direccionIP_agregar(){
+        if(isset($_SESSION['nombre'])){
+            echo "<script>alert('test msgbox')</script>";
+            $obj_direccion_ip = new cls_direccionIP();
+            //Crea nueva area de apoyo
+            $obj_direccion_ip->setId(null);
+            $obj_direccion_ip->setTipo_IP($_POST['tipo_ip']);
+            $obj_direccion_ip->setDireccionIP($_POST['direccion_ip']);
+            $obj_direccion_ip->setObservaciones($_POST['observaciones']);
+            $obj_direccion_ip->setCondicion("");
+            $obj_direccion_ip->agregar_direccion_ip();
+            
+            $nueva_ip= $obj_direccion_ip->getArreglo();
+            
+            //Asigna el area de apoyo al puntoBCR
+            $obj_direccion_ip->setId($nueva_ip[0]['ID_Direccion_IP']);
+            $obj_direccion_ip->setId2($_POST['ID_PuntoBCR']);
+            $obj_direccion_ip->setCondicion("T_puntoBCRDireccionIP.ID_PuntoBCR='".$_POST['ID_PuntoBCR']."' AND T_puntoBCRDireccionIP.ID_Direccion_IP='".$nueva_ip[0]['ID_Direccion_IP']."'");
+            
+            $obj_direccion_ip->obtiene_direccionesIP();
+            $direcciones_ip =$obj_direccion_ip->getArreglo();
+            if($direcciones_ip==""){
+                $obj_direccion_ip->agregar_PuntoBCR_direccionIP();
+            }   else    {
+                echo "La dirección IP ya se encuentra asignada al PuntoBCR";
+            }
+            
+            header("location:/ORIEL/index.php?ctl=gestion_punto_bcr&id=".$_POST['ID_PuntoBCR']);
         }else{
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
