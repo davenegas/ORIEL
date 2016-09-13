@@ -94,17 +94,27 @@ $(document).ready(function(){
             document.getElementById('Observaciones_generales').readOnly=false;
             $("#Empresa").attr("disabled",false);
             $("#Horario").attr("disabled",false);
+            $("#zonas_gerente").attr("disabled",false);
+            $("#zonas_supervisores").attr("disabled",false);
         }else{
             document.getElementById('Observaciones_generales').readOnly=true;
             $("#Empresa").attr("disabled",true);
             $("#Horario").attr("disabled",true);
+            $("#zonas_gerente").attr("disabled",true);
+            $("#zonas_supervisores").attr("disabled",true);
             //Guarda Distrito y dirección en tabla  T_PuntoBCR
-            id_distrito=document.getElementById('Distrito').value;
             id_puntobcr = document.getElementById('ID_PuntoBCR').value;
-            direccion = document.getElementById('Direccion').value;
-//            $.post("index.php?ctl=distrito_PuntoBCR_guardar", { id_distrito: id_distrito, id_puntobcr:id_puntobcr, direccion:direccion}, function(data){
-//                //alert (data);
-//            });   
+            id_empresa = document.getElementById('Empresa').value;
+            id_horario = document.getElementById('Horario').value;
+            observaciones = document.getElementById('Observaciones_generales').value;
+            id_gerente = document.getElementById('zonas_gerente').value;
+            id_supervisor = document.getElementById('zonas_supervisores').value;
+            
+            $.post("index.php?ctl=PuntoBCR_actualiza_informacion_adicional", {id_puntobcr:id_puntobcr, id_empresa:id_empresa,id_horario:id_horario, 
+                observaciones:observaciones, id_gerente:id_gerente,id_supervisor:id_supervisor }, function(data){
+                    location.reload();    
+                    //alert (data);
+           });   
         }
     });
 });  
@@ -132,7 +142,7 @@ function mostrar_agregar_telefono() {
     document.getElementById('agregar_telefono').style.display = "block";
 }
 function eliminar_telefono(ide){
-    $.confirm({title: 'Confirmación!', content: 'Desea eliminar este teléfono?', 
+    $.confirm({title: 'Confirmación!', content: 'Desea eliminar este número de teléfono?', 
         confirm: function(){
             id_telefono= ide;
             $.post("index.php?ctl=puntobcr_desligar_telefono", { id_telefono: id_telefono}, function(data){
@@ -161,7 +171,7 @@ function agregar_ue(id_ue){
           });
 }
 function eliminar_ue(ide){
-    $.confirm({title: 'Confirmación!', content: 'Desea eliminar la UE?', 
+    $.confirm({title: 'Confirmación!', content: 'Desea eliminar la Unidad Ejecutora?', 
         confirm: function(){
             id_unidad_ejecutora= ide;
             id_puntobcr = document.getElementById('ID_PuntoBCR').value;

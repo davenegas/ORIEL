@@ -16,7 +16,34 @@ class cls_puntosBCR{
     public $tipo_punto;
     public $distrito;
     public $empresa;
+    public $gerente;
+    public $supervisor;
+    public $horario;
     
+    function getHorario() {
+        return $this->horario;
+    }
+
+    function setHorario($horario) {
+        $this->horario = $horario;
+    }
+
+    function getGerente() {
+        return $this->gerente;
+    }
+
+    function getSupervisor() {
+        return $this->supervisor;
+    }
+
+    function setGerente($gerente) {
+        $this->gerente = $gerente;
+    }
+
+    function setSupervisor($supervisor) {
+        $this->supervisor = $supervisor;
+    }
+
     function getEmpresa() {
         return $this->empresa;
     }
@@ -162,6 +189,9 @@ class cls_puntosBCR{
         $this->tipo_punto="";
         $this->distrito="";
         $this->empresa="";
+        $this->gerente="";
+        $this->supervisor="";
+        $this->horario="";
     }
     
     public function obtiene_todos_los_puntos_bcr(){
@@ -234,8 +264,6 @@ class cls_puntosBCR{
         } 
     }
     
-    
-    
     public function obtiene_unidades_ejecutoras(){
         $this->obj_data_provider->conectar();
         $this->arreglo=$this->obj_data_provider->trae_datos(
@@ -305,6 +333,14 @@ class cls_puntosBCR{
     public function guardar_punto_bcr(){
         $this->obj_data_provider->conectar();
         $this->obj_data_provider->inserta_datos("T_PuntoBCR", "`ID_PuntoBCR`, `Nombre`, `Direccion`, `Codigo`, `Cuenta_SIS`, `ID_Horario`, `ID_Tipo_Punto`, `ID_Empresa`, `ID_Gerente_Zona`, `ID_Supervisor_Zona`, `ID_Distrito`, `Observaciones`, `Estado`", "'".$this->id."','".$this->nombre."','".$this->direccion."','".$this->codigo."','".$this->cuentasis."','".$this->horaslaborales."','".$this->tipo_punto."','".$this->empresa."','"."1"."','"."1"."','".$this->distrito."','".$this->observaciones."','".$this->estado."'");
+        $this->arreglo=$this->obj_data_provider->getArreglo();
+        $this->obj_data_provider->desconectar();
+        $this->resultado_operacion=true;
+    }
+    
+    public function actualizar_informacion_adicional_puntobcr(){
+        $this->obj_data_provider->conectar();///////////////////////////////////--->
+        $this->arreglo=$this->obj_data_provider->edita_datos("T_PuntoBCR", "ID_Empresa='".$this->empresa."', ". "ID_Horario='".$this->horario."', "."Observaciones='".$this->observaciones."', "."ID_Gerente_Zona='".$this->gerente."', "."ID_Supervisor_Zona='".$this->supervisor."'",$this->condicion);
         $this->arreglo=$this->obj_data_provider->getArreglo();
         $this->obj_data_provider->desconectar();
         $this->resultado_operacion=true;

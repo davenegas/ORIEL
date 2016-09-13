@@ -57,7 +57,7 @@
     <nav class="navbar navbar-default" >
       <div class="container-fluid">
         <div class="navbar-header">
-            <a class="navbar-brand" href="index.php?ctl=principal">Jefatura Seguridad</a>
+            <a class="navbar-brand" href="index.php?ctl=principal"><b>Jefatura Seguridad</b></a>
         </div>
           <ul class="nav navbar-nav">
 

@@ -2241,6 +2241,25 @@
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }
     }
+    
+    public function PuntoBCR_actualiza_informacion_adicional(){
+        if(isset($_SESSION['nombre'])){
+            $obj_puntobcr = new cls_puntosBCR();
+            $obj_puntobcr->setCondicion("ID_PuntoBCR='".$_POST['id_puntobcr']."'");
+            
+            $obj_puntobcr->setEmpresa($_POST['id_empresa']);
+            $obj_puntobcr->setHorario($_POST['id_horario']);
+            $obj_puntobcr->setObservaciones($_POST['observaciones']);
+            $obj_puntobcr->setGerente($_POST['id_gerente']);
+            $obj_puntobcr->setSupervisor($_POST['id_supervisor']);
+            $obj_puntobcr->actualizar_informacion_adicional_puntobcr();
+            //echo 'Se actualizó la ubicacion del PuntoBCR';
+        }else{
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }
+    }
     ////////////////////////////////////////////////////////////////////////////
     //Trazabilidad
     //FUNCIONES PARA EVENTOS

@@ -21,7 +21,6 @@
             <?php }?>
                     </h2>
         </header>
-
             <div class="bordegris"> 
             <h3>Información General del Punto BCR
             <?php if($_SESSION['rol']==1||$_SESSION['rol']==11){ ?>
@@ -71,7 +70,6 @@
             
             <table class="display col-md-12 table-striped quitar-float espacio-abajo" id="telefonos">
                 <thead> 
-                    <th>ID_Telefono</th>
                     <th style="text-align:center">Tipo de Teléfono</th>
                     <th style="text-align:center">Número teléfono</th>
                     <th style="text-align:center">Observaciones</th>
@@ -85,7 +83,6 @@
                     for ($i = 0; $i <$tam; $i++) {
                     ?>
                     <tr>
-                        <td style="text-align:center"><?php echo $telefonos[$i]['ID_Telefono'];?></td>
                         <td style="text-align:center"><?php echo $telefonos[$i]['Tipo_Telefono'];?></td>
                         <td style="text-align:center"><?php echo $telefonos[$i]['Numero'];?></td>
                         <td style="text-align:center"><?php echo $telefonos[$i]['Observaciones'];?></td>
@@ -266,6 +263,44 @@
         
         <div class="bordegris espacio-arriba"></div>
         <div class="bordegris espacio-abajo-5">
+            <div>
+            <?php if($_SESSION['rol']==1||$_SESSION['rol']==11){ ?> 
+                <h3>Información de Direcciones IP<a id="popup" onclick="mostrar_direccion_IP()" class="btn azul" role="button">Agregar Dirección IP</a></h3>    
+            <?php } else {?>
+                <h3>Información de Direcciones IP</h3>
+            <?php } ?> 
+            <table class="display col-md-12  table-striped quitar-float espacio-abajo" id="direccionIP">
+                <thead> 
+                    <th style="text-align:center">Tipo Direccion</th>
+                    <th style="text-align:center">Direccion IP</th>
+                    <th style="text-align:center">Observaciones</th>
+                    <?php if($_SESSION['rol']==1||$_SESSION['rol']==11){ ?> 
+                        <th style="text-align:center" colspan="2">Funciones</th>
+                    <?php } ?>
+                </thead>
+                <tbody>
+                    <?php 
+                    $tam=count($direccionIP);
+                    for ($i = 0; $i <$tam; $i++) {
+                    ?>
+
+                    <tr>
+                        <td style="text-align:center"><?php echo $direccionIP[$i]['Tipo_IP'];?></td>
+                        <td style="text-align:center"><?php echo $direccionIP[$i]['Direccion_IP'];?></td>
+                        <td style="text-align:center"><?php echo $direccionIP[$i]['Observaciones'];?></td>
+                        <?php if($_SESSION['rol']==1||$_SESSION['rol']==11){ ?> 
+                            <td style="text-align:center"><a href="">Link</a></td>
+                            <td style="text-align:center"><a class="btn rojo" role="button" id="eliminar_ip" name="eliminar_ip" onclick="eliminar_ip(<?php echo $direccionIP[$i]['ID_Direccion_IP'];?>);">
+                                    Eliminar</a></td>
+                         <?php } ?>
+                    </tr>
+                    <?php } ?>
+                </tbody> 
+            </table>
+            </div>
+        </div>
+        
+        <div>
             <h3>Información adicional
                 <?php if($_SESSION['rol']==1||$_SESSION['rol']==11){ ?>
                     <input class="quitar-float" type="checkbox" id="chk_info_adicional" name="chk_info_adicional">
@@ -311,41 +346,7 @@
               <input type="text" readonly class="form-control" id="Observaciones_generales" name="Observaciones_generales" value="<?php echo $params[0]['Observaciones'];?>">
             </div>
             
-            
-            <div>
-            <?php if($_SESSION['rol']==1||$_SESSION['rol']==11){ ?> 
-                <h3>Información de Direcciones IP<a id="popup" onclick="mostrar_direccion_IP()" class="btn azul" role="button">Agregar Dirección IP</a></h3>    
-            <?php } else {?>
-                <h3>Información de Direcciones IP</h3>
-            <?php } ?> 
-            <table class="display col-md-12  table-striped quitar-float espacio-abajo" id="direccionIP">
-                <thead> 
-                    <th style="text-align:center">Tipo Direccion</th>
-                    <th style="text-align:center">Direccion IP</th>
-                    <th style="text-align:center">Observaciones</th>
-                    <th style="text-align:center" colspan="2">Funciones</th>
-                </thead>
-                <tbody>
-                    <?php 
-                    $tam=count($direccionIP);
-                    for ($i = 0; $i <$tam; $i++) {
-                    ?>
-                    <tr>
-                        <td style="text-align:center"><?php echo $direccionIP[$i]['Tipo_IP'];?></td>
-                        <td style="text-align:center"><?php echo $direccionIP[$i]['Direccion_IP'];?></td>
-                        <td style="text-align:center"><?php echo $direccionIP[$i]['Observaciones'];?></td>
-                        <td style="text-align:center"><a href="">Link</a></td>
-                        <td style="text-align:center"><a class="btn rojo" role="button" id="eliminar_ip" name="eliminar_ip" onclick="eliminar_ip(<?php echo $direccionIP[$i]['ID_Direccion_IP'];?>);">
-                                Eliminar</a></td>
-                    </tr>
-                    <?php } ?>
-                </tbody> 
-            </table>
-            </div>
-
-        </div>
-        
-        <div>
+            <!--Información del Gerente de Zona del BCR-->
             <div class="col-md-4 espacio-abajo">
               <label for="zonas_gerente">Gerente de Zona BCR</label>
               <select class="form-control" id="zonas_gerente" disabled name="zonas_gerente" > 
@@ -353,13 +354,13 @@
                 $tam = count($gerente_zona_bcr);
                 $ubicacionpersona="";
                 for($i=0; $i<$tam;$i++){
-                    if($gerente_zona_bcr[$i]['ID_Gerente_zona']==$params[0]['ID_Gerente_zona']){
+                    if($gerente_zona_bcr[$i]['ID_Gerente_Zona']==$params[0]['ID_Gerente_Zona']){
                         $ubicacionpersona=$i;
-                       ?> <option value="<?php echo $gerente_zona_bcr[$i]['ID_Gerente_zona']?>" selected="selected"><?php echo $gerente_zona_bcr[$i]['Zona_Gerencia_BCR'];?></option><?php
+                       ?> <option value="<?php echo $gerente_zona_bcr[$i]['ID_Gerente_Zona']?>" selected="selected" ><?php echo $gerente_zona_bcr[$i]['Zona_Gerencia_BCR'];?></option><?php
                     }
                     else {?>
-                        <option value="<?php echo $gerente_zona_bcr[$i]['ID_Gerente_zona']?>" ><?php echo $gerente_zona_bcr[$i]['Zona_Gerencia_BCR']?></option>   
-                <?php }}  ?>
+                        <option value="<?php echo $gerente_zona_bcr[$i]['ID_Gerente_Zona']?>"><?php echo $gerente_zona_bcr[$i]['Zona_Gerencia_BCR']?></option>   
+                <?php }} ?>
                 </select>
             </div>
             <div class="col-md-4 espacio-abajo">
@@ -371,6 +372,7 @@
               <input type="text" readonly class="form-control" id="tel_gerente" name="tel_gerente" value="<?php echo $gerente_zona_bcr[$ubicacionpersona]['Numero'];?>">
             </div>
             
+            <!--Información del Supervisor de Zona privado-->
             <div class="col-md-4 espacio-abajo">
               <label for="zonas_supervisores">Supervisor de Zona</label>
               <select class="form-control" id="zonas_supervisores" disabled name="zonas_supervisores" > 
