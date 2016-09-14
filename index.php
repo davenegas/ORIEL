@@ -106,6 +106,12 @@ $map = array(
     //Personal
     'personal_listar'=>array('controller'=>'Controller','action'=> 'personal_listar'),    
 
+    //Importación de Prontuario
+    'frm_importar_prontuario_paso_1'=>array('controller'=>'Controller','action'=> 'frm_importar_prontuario_paso_1'),
+    'frm_importar_prontuario_paso_2'=>array('controller'=>'Controller','action'=> 'frm_importar_prontuario_paso_2'),
+    'frm_importar_prontuario_paso_3'=>array('controller'=>'Controller','action'=> 'frm_importar_prontuario_paso_3'),
+    'subir_archivo_prontuario'=>array('controller'=>'Controller','action'=> 'subir_archivo_prontuario'),
+  
     //Controlador de Usuarios
     'listar_usuarios'=> array('controller'=>'Controller','action'=>'listar_usuarios'),
     'gestion_usuarios' => array('controller'=> 'Controller','action'=>'gestion_usuarios'),

@@ -98,7 +98,7 @@
             <?php 
            if ((encuentra_coincidencia("Seguridad-Trazabilidad"))){
            ?>
-               <li><a href="index.php?ctl=principal">Trazabilidad</a></li> 
+               <li><a href="index.php?ctl=frm_importar_prontuario_paso_1">Trazabilidad</a></li> 
            <?php 
            };
            ?>   

@@ -38,6 +38,163 @@
         }
     }    
      
+     // Obtiene lista completa de roles del sistema
+    public function frm_importar_prontuario_paso_1(){
+        if(isset($_SESSION['nombre'])){
+           require __DIR__ . '/../vistas/plantillas/frm_importar_prontuario_paso_1.php';
+        }else{
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }
+    }    
+    
+    public function frm_importar_prontuario_paso_3(){
+        if(isset($_SESSION['nombre'])){
+            /*$obj_eventos = new cls_eventos();
+            $obj_eventos->setId($_GET['id']);
+            $obj_eventos->setId2(0);
+            $obj_eventos->setFecha(($_POST['Fecha']));
+            $obj_eventos->setHora(($_POST['Hora']));
+            $obj_eventos->setDetalle(($_POST['DetalleSeguimiento']));
+            $obj_eventos->setId_usuario($_SESSION['id']);*/
+                    
+            print_r($_SESSION['prontuario']);
+            
+            //print_r($prontuario);
+            
+            //$this->frm_eventos_listar();
+            
+            /*$recepcion_archivo=$_FILES['seleccionar_archivo']['error'];
+            
+            if (!($_FILES['seleccionar_archivo']['type']==="application/vnd.ms-excel")){
+                echo "<script type=\"text/javascript\">alert('Debe Importar un archivo tipo CSV!!!!');history.go(-1);</script>";;
+                //echo 'Prueba';
+                exit();
+            }
+
+            //echo basename($_FILES['seleccionar_archivo']['tmp_name']);
+            $handle= fopen ($_FILES['seleccionar_archivo']['tmp_name'],"r");
+            
+            $params=$record = fgetcsv($handle);
+                    
+            $prontuario =array();
+            
+            $i=0;
+            while ($record = fgetcsv($handle,0,";")){
+                $prontuario[]=$record;
+                $i++;
+            }
+            */
+           $mensaje="Fue recibida la información correspondiente a 0 personas."; 
+            
+           require __DIR__ . '/../vistas/plantillas/frm_importar_prontuario_paso_3.php';
+                   
+            //echo basename($_FILES['seleccionar_archivo']['type']);
+            /*$date=new DateTime(); //this returns the current date time
+            $result = $date->format('Y-m-d-H-i-s');
+            //echo $result;
+            $krr = explode('-',$result);
+            $result = implode("",$krr);
+                       
+            $raiz=$_SERVER['DOCUMENT_ROOT'];
+                       
+            if (substr($raiz,-1)!="/"){
+                $raiz.="/";
+            }
+            
+            $ruta=  $raiz."Adjuntos_Bitacora/".Encrypter::quitar_tildes($result.$_FILES['archivo_adjunto']['name']);
+            //$ruta=  $_SERVER['DOCUMENT_ROOT']."Adjuntos_Bitacora/".$result.$_FILES['archivo_adjunto']['name'];
+          
+            switch ($recepcion_archivo) {
+                case 0:{
+                    
+                    if (move_uploaded_file($_FILES['archivo_adjunto']['tmp_name'], $ruta)){
+                        $obj_eventos->setAdjunto(Encrypter::quitar_tildes($result.$_FILES['archivo_adjunto']['name'])); 
+                        $obj_eventos->ingresar_seguimiento_evento();
+                        $obj_eventos->edita_estado_evento($_POST['estado_del_evento']);
+                        header ("location:/ORIEL/index.php?ctl=frm_eventos_listar");
+                    }  else {
+                        //echo "<script type=\"text/javascript\">alert('Hubo un problema al subir el archivo al servidor!!!');history.go(-1);</script>";;
+                        $obj_eventos->setAdjunto("N/A");
+                        $obj_eventos->ingresar_seguimiento_evento();
+                        $obj_eventos->edita_estado_evento($_POST['estado_del_evento']);
+                        header ("location:/ORIEL/index.php?ctl=frm_eventos_listar");
+                        //echo "<script type=\"text/javascript\">alert('No fue seleccionado ningun archivo!!!!');history.go(-1);</script>";;
+                    }
+                    break;
+                }
+                    
+                case 2:{
+                    echo "<script type=\"text/javascript\">alert('El archivo consume mayor espacio del permitido (1 mb) !!!!');history.go(-1);</script>";;
+                    break;
+                }
+                case 4:{ 
+                    $obj_eventos->setAdjunto("N/A");
+                    $obj_eventos->ingresar_seguimiento_evento();
+                    $obj_eventos->edita_estado_evento($_POST['estado_del_evento']);
+                    header ("location:/ORIEL/index.php?ctl=frm_eventos_listar");
+                    //echo "<script type=\"text/javascript\">alert('No fue seleccionado ningun archivo!!!!');history.go(-1);</script>";;
+                    break;
+                }
+                 case 6:{
+                    echo "<script type=\"text/javascript\">alert('El servidor no tiene acceso a la carpeta temporal de almacenamiento!!!!');history.go(-1);</script>";
+                    break;
+                 } 
+                case 7:{
+                    echo "<script type=\"text/javascript\">alert('No es posible escribir en el disco duro del servidor!!!!');history.go(-1);</script>";;
+                    break;
+                }  
+                case 8:{
+                    echo "<script type=\"text/javascript\">alert('Fue detenida la carga del archivo debido a una extension de PHP!!!!');history.go(-1);</script>";;
+                    break;
+                }   
+            }*/
+            
+                   
+        }else {
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        } 
+    }
+    
+    
+    public function subir_archivo_prontuario(){
+        if(isset($_SESSION['nombre'])){
+           
+            $recepcion_archivo=$_FILES['seleccionar_archivo']['error'];
+            
+            if (!($_FILES['seleccionar_archivo']['type']==="application/vnd.ms-excel")){
+                echo "<script type=\"text/javascript\">alert('Debe Importar un archivo tipo CSV!!!!');history.go(-1);</script>";;
+                //echo 'Prueba';
+                exit();
+            }
+
+            $handle= fopen ($_FILES['seleccionar_archivo']['tmp_name'],"r");
+            
+            $params=$record = fgetcsv($handle);
+                    
+            $prontuario =array();
+            
+            $i=0;
+            while ($record = fgetcsv($handle,0,";")){
+                $prontuario[]=$record;
+                $i++;
+            }
+            
+           $_SESSION['prontuario']=$prontuario;    
+           $mensaje="Fue recibida la información correspondiente a ".$i." personas."; 
+            
+           require __DIR__ . '/../vistas/plantillas/frm_importar_prontuario_paso_2.php';
+                          
+        }else {
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        } 
+    }
+    
     // Prepara las variables y el formulario respectivo para cambio de clave
     public function cambiar_password(){   
         $usuario = "";       
@@ -1320,6 +1477,21 @@
         if(isset($_SESSION['nombre'])){
             $obj_eventos= new cls_eventos();
             if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+                $fecha_seguimiento = strtotime($_POST['fecha']);
+                $fecha_seguimiento = date("Y-m-d", $fecha_seguimiento);
+
+                if ($fecha_seguimiento >  date("Y-m-d")){
+                    echo "<script type=\"text/javascript\">alert('No es posible ingresar eventos futuros!!!!');history.go(-1);</script>";;
+                    exit();
+                }else{
+                     $hora_seguimiento = strtotime($_POST['hora']);
+                     $hora_seguimiento = date("H:i", $hora_seguimiento);
+
+                     if ($hora_seguimiento >  date("H:i", time())){
+                        echo "<script type=\"text/javascript\">alert('No es posible ingresar eventos futuros!!!!');history.go(-1);</script>";;
+                        exit();
+                     }
+                }
                 $obj_eventos->setFecha($_POST['fecha']); 
                 $obj_eventos->setHora($_POST['hora']);
                 $obj_eventos->setTipo_evento($_POST['tipo_evento']);
@@ -1403,6 +1575,23 @@
             $obj_eventos = new cls_eventos();
             $obj_eventos->setId($_GET['id']);
             $obj_eventos->setId2(0);
+            
+            $fecha_seguimiento = strtotime($_POST['Fecha']);
+	    $fecha_seguimiento = date("Y-m-d", $fecha_seguimiento);
+            
+            if ($fecha_seguimiento >  date("Y-m-d")){
+                echo "<script type=\"text/javascript\">alert('No es posible ingresar eventos futuros!!!!');history.go(-1);</script>";;
+                exit();
+            }else{
+                 $hora_seguimiento = strtotime($_POST['Hora']);
+                 $hora_seguimiento = date("H:i", $hora_seguimiento);
+            
+                 if ($hora_seguimiento >  date("H:i", time())){
+                    echo "<script type=\"text/javascript\">alert('No es posible ingresar eventos futuros!!!!');history.go(-1);</script>";;
+                    exit();
+                 }
+            }
+             
             $obj_eventos->setFecha(($_POST['Fecha']));
             $obj_eventos->setHora(($_POST['Hora']));
             $obj_eventos->setDetalle(($_POST['DetalleSeguimiento']));
