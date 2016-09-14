@@ -408,6 +408,7 @@
         <!--agregar teléfono a Punto BCR-->
         <div id="agregar_telefono"> 
             <div id="popupventana">
+                <!--Formulario para ingresar nuevos números de teléfono-->
                 <form id="ventana" method="post" name="form" action="index.php?ctl=puntobcr_numero_telefono_guardar">
                     <img id="close" src='vistas/Imagenes/cerrar.png' width="25" onclick ="ocultar_elemento()">
                     <h2>Agregar número de Punto BCR</h2>
@@ -440,7 +441,8 @@
         <div id="asignar_ue">
             <div id="popupventana2">
                 <div id="ventana2">
-                <img id="close" src='vistas/Imagenes/cerrar.png' width="25" onclick ="ocultar_elemento()">  
+                <img id="close" src='vistas/Imagenes/cerrar.png' width="25" onclick ="ocultar_elemento()"> 
+                    <!--Tabla con la lista de Unidades Ejecutoras-->
                     <table id="tabla2" class="display" cellspacing="0" width="100%">
                     <thead>
                       <tr>
@@ -478,6 +480,7 @@
                 <img id="close" src='vistas/Imagenes/cerrar.png' width="25" onclick ="ocultar_elemento()">
                     <h2>Areas de Apoyo</h2>
                     <h4>Agregar nueva area de apoyo</h4>
+                    <!--Formulario para ingresar areas de apoyo-->
                     <form class="bordegris" id="nueva_area_apoyo" method="post" name="form" action="index.php?ctl=Area_apoyo_agregar">
                         <input hidden id="ID_PuntoBCR" name="ID_PuntoBCR" type="text" value="<?php echo $params[0]['ID_PuntoBCR']; ?>">
                         <div class="col-md-4 espacio-abajo-5">
@@ -613,6 +616,7 @@
                 <img id="close" src='vistas/Imagenes/cerrar.png' width="25" onclick ="ocultar_elemento()">
                     <h2>Direcciones IP del PuntoBCR</h2>
                     <h4>Agregar nueva direccion IP</h4>
+                    <!--Formulario para ingresar areas de apoyo-->
                     <form class="bordegris" id="nueva_direccion_ip" method="post" name="form" action="index.php?ctl=direccionIP_agregar">
                         <input hidden id="ID_PuntoBCR" name="ID_PuntoBCR" type="text" value="<?php echo $params[0]['ID_PuntoBCR']; ?>">
                         
