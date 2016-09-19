@@ -15,15 +15,15 @@
         <div class="container">
         <header class="bordegris espacio-abajo">
             <h2>Gestión de Puntos BCR del Sistema
-            <?php if($_SESSION['rol']==1||$_SESSION['rol']==11){ ?>
-            <a href="index.php?ctl=gestion_punto_bcr&id=<?php echo $params[0]['ID_PuntoBCR']-1?>;"><img src='vistas/Imagenes/boton-antes.png' width="25"></a>
-            <a href="index.php?ctl=gestion_punto_bcr&id=<?php echo $params[0]['ID_PuntoBCR']+1?>;"><img src='vistas/Imagenes/boton-siguiente.png' width="25"></a>
-            <?php }?>
-                    </h2>
+                <?php if($_SESSION['modulos']['Editar- Puntos BCR']==1){ ?>
+                <a href="index.php?ctl=gestion_punto_bcr&id=<?php echo $params[0]['ID_PuntoBCR']-1?>;"><img src='vistas/Imagenes/boton-antes.png' width="25"></a>
+                <a href="index.php?ctl=gestion_punto_bcr&id=<?php echo $params[0]['ID_PuntoBCR']+1?>;"><img src='vistas/Imagenes/boton-siguiente.png' width="25"></a>
+                <?php }?>
+            </h2>
         </header>
             <div class="bordegris"> 
             <h3>Información General del Punto BCR
-            <?php if($_SESSION['rol']==1||$_SESSION['rol']==11){ ?>
+            <?php if($_SESSION['modulos']['Editar- Puntos BCR']==1){ ?>
                 <input class="quitar-float" type="checkbox" id="chk_informacion_general" name="chk_ubicacion">
             <?php }?>
             </h3>
@@ -62,7 +62,7 @@
                 </select>
             </div>
                 <div class="bordegris"  >
-            <?php if($_SESSION['rol']==1||$_SESSION['rol']==11){ ?>
+            <?php if($_SESSION['modulos']['Editar- Puntos BCR']==1){ ?>
                 <h3 class="quitar-float">Información de telefonos del Punto BCR <a id="popup" onclick="mostrar_agregar_telefono()" class="btn azul" role="button">Agregar número</a></h3> 
             <?php } else {?>
                 <h3 class="quitar-float">Información de telefonos del Punto BCR</h3>
@@ -73,7 +73,7 @@
                     <th style="text-align:center">Tipo de Teléfono</th>
                     <th style="text-align:center">Número teléfono</th>
                     <th style="text-align:center">Observaciones</th>
-                    <?php if($_SESSION['rol']==1||$_SESSION['rol']==11){ ?>
+                    <?php if($_SESSION['modulos']['Editar- Puntos BCR']==1){ ?>
                         <th style="text-align:center">Eliminar número</th>
                     <?php } ?>
                 </thead>
@@ -86,7 +86,7 @@
                         <td style="text-align:center"><?php echo $telefonos[$i]['Tipo_Telefono'];?></td>
                         <td style="text-align:center"><?php echo $telefonos[$i]['Numero'];?></td>
                         <td style="text-align:center"><?php echo $telefonos[$i]['Observaciones'];?></td>
-                        <?php if($_SESSION['rol']==1||$_SESSION['rol']==11){ ?>
+                        <?php if($_SESSION['modulos']['Editar- Puntos BCR']==1){ ?>
                             <td style="text-align:center"><a class="btn rojo" role="button" id="prueba" name="prueba" onclick="eliminar_telefono(<?php echo $telefonos[$i]['ID_Telefono'];?>);">
                                 Eliminar</a></td>
                         <?php } ?>
@@ -95,7 +95,7 @@
                 </tbody> 
             </table>
             </div>
-            <?php if($_SESSION['rol']==1||$_SESSION['rol']==11){ ?>   
+            <?php if($_SESSION['modulos']['Editar- Puntos BCR']==1){ ?>   
             <h3 class="quitar-float">Unidades Ejecutoras asociadas al PuntoBCR <a id="popup" onclick="mostrar_lista_ue()" class="btn azul" role="button">Agregar UE</a></h3> 
             <?php } else {?>
             <h3 class="quitar-float">Unidades Ejecutoras asociadas al PuntoBCR</h3>
@@ -105,7 +105,7 @@
                 <thead> 
                     <th style="text-align:center">Numero UE</th>
                     <th style="text-align:center">Departamento</th>
-                    <?php if($_SESSION['rol']==1||$_SESSION['rol']==11){ ?> 
+                    <?php if($_SESSION['modulos']['Editar- Puntos BCR']==1){ ?> 
                         <th style="text-align:center">Eliminar UE</th>
                      <?php } ?>    
                 </thead>
@@ -117,7 +117,7 @@
                     <tr>
                         <td style="text-align:center"><?php echo $unidad_ejecutora[$i]['Numero_UE'];?></td>
                         <td style="text-align:center"><?php echo $unidad_ejecutora[$i]['Departamento'];?></td>
-                        <?php if($_SESSION['rol']==1||$_SESSION['rol']==11){ ?> 
+                        <?php if($_SESSION['modulos']['Editar- Puntos BCR']==1){ ?> 
                         <td style="text-align:center"><a class="btn rojo" role="button" id="prueba" name="prueba" onclick="eliminar_ue(<?php echo $unidad_ejecutora[$i]['ID_Unidad_Ejecutora'];?>);">
                                 Eliminar</a></td>
                          <?php } ?>
@@ -131,7 +131,7 @@
         <div> 
             <header>
                 <h3 class="espacio-arriba quitar-float">Ubicación
-                <?php if($_SESSION['rol']==1||$_SESSION['rol']==11){ ?> 
+                <?php if($_SESSION['modulos']['Editar- Puntos BCR']==1){ ?> 
                     <input class="quitar-float" type="checkbox" id="chk_ubicacion" name="chk_ubicacion">
                 <?php } ?>
                 </h3>
@@ -188,14 +188,14 @@
                 </select>
             </div>
             
-            <div class="col-md-12 espacio-abajo quitar-float">
+            <div class="col-md-12 espacio-abajo">
               <label for="Direccion">Direccion</label>
               <input type="text" required="required" readonly class="form-control" id="Direccion" name="Direccion" value="<?php echo $params[0]['Direccion'];?>">
             </div>
         </div>
-          <div class="bordegris espacio-arriba"></div>  
+          
         <div>
-            <?php if($_SESSION['rol']==1||$_SESSION['rol']==11){ ?> 
+            <?php if($_SESSION['modulos']['Editar- Puntos BCR']==1){ ?> 
                 <h3>Información de Areas Apoyo<a id="popup" onclick="mostrar_area_apoyo()" class="btn azul" role="button">Agregar Area Apoyo</a></h3>    
             <?php } else {?>
                 <h3>Información de Areas Apoyo</h3>
@@ -207,7 +207,7 @@
                     <th style="text-align:center">Nombre de Area</th>
                     <th style="text-align:center">Numero telefono</th>
                     <th style="text-align:center">Direccion</th>
-                    <?php if($_SESSION['rol']==1||$_SESSION['rol']==11){ ?> 
+                    <?php if($_SESSION['modulos']['Editar- Puntos BCR']==1){ ?> 
                     <th style="text-align:center">Quitar area de apoyo</th>
                     <?php } ?>
                 </thead>
@@ -221,7 +221,7 @@
                         <td style="text-align:center"><?php echo $areas_apoyo[$i]['Nombre_Area'];?></td>
                         <td style="text-align:center"><?php echo $areas_apoyo[$i]['Numero'];?></td>
                         <td style="text-align:center"><?php echo $areas_apoyo[$i]['Direccion'];?></td>
-                        <?php if($_SESSION['rol']==1||$_SESSION['rol']==11){ ?> 
+                        <?php if($_SESSION['modulos']['Editar- Puntos BCR']==1){ ?> 
                         <td style="text-align:center"><a class="btn rojo" role="button" id="eliminar_area" name="eliminar_area" onclick="eliminar_area(<?php echo $areas_apoyo[$i]['ID_Area_Apoyo'];?>);">
                                 Eliminar</a></td>
                         <?php } ?>
@@ -264,7 +264,7 @@
         <div class="bordegris espacio-arriba"></div>
         <div class="bordegris espacio-abajo-5">
             <div>
-            <?php if($_SESSION['rol']==1||$_SESSION['rol']==11){ ?> 
+            <?php if($_SESSION['modulos']['Editar- Puntos BCR']==1){ ?> 
                 <h3>Información de Direcciones IP<a id="popup" onclick="mostrar_direccion_IP()" class="btn azul" role="button">Agregar Dirección IP</a></h3>    
             <?php } else {?>
                 <h3>Información de Direcciones IP</h3>
@@ -274,7 +274,7 @@
                     <th style="text-align:center">Tipo Direccion</th>
                     <th style="text-align:center">Direccion IP</th>
                     <th style="text-align:center">Observaciones</th>
-                    <?php if($_SESSION['rol']==1||$_SESSION['rol']==11){ ?> 
+                    <?php if($_SESSION['modulos']['Editar- Puntos BCR']==1){ ?> 
                         <th style="text-align:center" colspan="2">Funciones</th>
                     <?php } ?>
                 </thead>
@@ -288,7 +288,7 @@
                         <td style="text-align:center"><?php echo $direccionIP[$i]['Tipo_IP'];?></td>
                         <td style="text-align:center"><?php echo $direccionIP[$i]['Direccion_IP'];?></td>
                         <td style="text-align:center"><?php echo $direccionIP[$i]['Observaciones'];?></td>
-                        <?php if($_SESSION['rol']==1||$_SESSION['rol']==11){ ?> 
+                        <?php if($_SESSION['modulos']['Editar- Puntos BCR']==1){ ?> 
                             <td style="text-align:center"><a href="">Link</a></td>
                             <td style="text-align:center"><a class="btn rojo" role="button" id="eliminar_ip" name="eliminar_ip" onclick="eliminar_ip(<?php echo $direccionIP[$i]['ID_Direccion_IP'];?>);">
                                     Eliminar</a></td>
@@ -302,7 +302,7 @@
         
         <div>
             <h3>Información adicional
-                <?php if($_SESSION['rol']==1||$_SESSION['rol']==11){ ?>
+                <?php if($_SESSION['modulos']['Editar- Puntos BCR']==1){ ?>
                     <input class="quitar-float" type="checkbox" id="chk_info_adicional" name="chk_info_adicional">
                  <?php } ?>
             </h3>
@@ -520,8 +520,8 @@
                             </select>
                         </div>
                         <div class="col-md-4 espacio-abajo-5">
-                            <label for="canton">Cantón</label>
-                            <select class="form-control" id="canton" name="canton" > 
+                            <label for="canton2">Cantón</label>
+                            <select class="form-control" id="canton2" name="canton2" > 
                             <?php
                             $tam = count($cantones);
 
@@ -536,8 +536,8 @@
                             </select>
                         </div>
                         <div class="col-md-4 espacio-abajo-5">
-                            <label for="distrito">Distrito</label>
-                            <select class="form-control" id="distrito" name="distrito"> 
+                            <label for="distrito2">Distrito</label>
+                            <select class="form-control" id="distrito2" name="distrito2"> 
                             <?php
                             $tam = count($distritos);
                             for($i=0; $i<$tam;$i++) {

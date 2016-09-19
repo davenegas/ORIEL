@@ -138,7 +138,8 @@ class cls_areasapoyo{
 			T_TipoAreaApoyo.ID_Tipo_Area_Apoyo, T_TipoAreaApoyo.Nombre_Tipo_Area,
 			T_Distrito.ID_Distrito,T_Distrito.Nombre_Distrito,
 			T_Telefono.Numero",
-                    "(T_TipoTelefono.ID_Tipo_Telefono = '11' OR 
+                    "(T_TipoTelefono.ID_Tipo_Telefono = '10' OR
+                          T_TipoTelefono.ID_Tipo_Telefono = '11' OR 
 			  T_TipoTelefono.ID_Tipo_Telefono = '12' OR 
 			  T_TipoTelefono.ID_Tipo_Telefono = '13' OR
 			  T_TipoTelefono.ID_Tipo_Telefono = '14' OR 
@@ -146,7 +147,12 @@ class cls_areasapoyo{
 			  T_TipoTelefono.ID_Tipo_Telefono = '16' OR 
 			  T_TipoTelefono.ID_Tipo_Telefono = '17' OR 
 			  T_TipoTelefono.ID_Tipo_Telefono = '18' OR 
-			  T_TipoTelefono.ID_Tipo_Telefono = '19' OR 
+			  T_TipoTelefono.ID_Tipo_Telefono = '19' OR
+			  T_TipoTelefono.ID_Tipo_Telefono = '20' OR
+                          T_TipoTelefono.ID_Tipo_Telefono = '21' OR
+                          T_TipoTelefono.ID_Tipo_Telefono = '22' OR
+                          T_TipoTelefono.ID_Tipo_Telefono = '23' OR
+                          T_TipoTelefono.ID_Tipo_Telefono = '24' OR
 			  T_TipoTelefono.ID_Tipo_Telefono = '25' OR 
 			  T_TipoTelefono.ID_Tipo_Telefono = '26')");
             $this->arreglo=$this->obj_data_provider->getArreglo();
@@ -166,7 +172,8 @@ class cls_areasapoyo{
 			T_TipoAreaApoyo.ID_Tipo_Area_Apoyo, T_TipoAreaApoyo.Nombre_Tipo_Area,
 			T_Distrito.ID_Distrito,T_Distrito.Nombre_Distrito,
 			T_Telefono.Numero",
-                    $this->condicion." AND (T_TipoTelefono.ID_Tipo_Telefono = '11' OR 
+                    $this->condicion." AND (T_TipoTelefono.ID_Tipo_Telefono = '10' OR
+                          T_TipoTelefono.ID_Tipo_Telefono = '11' OR 
 			  T_TipoTelefono.ID_Tipo_Telefono = '12' OR 
 			  T_TipoTelefono.ID_Tipo_Telefono = '13' OR
 			  T_TipoTelefono.ID_Tipo_Telefono = '14' OR 
@@ -175,6 +182,11 @@ class cls_areasapoyo{
 			  T_TipoTelefono.ID_Tipo_Telefono = '17' OR 
 			  T_TipoTelefono.ID_Tipo_Telefono = '18' OR 
 			  T_TipoTelefono.ID_Tipo_Telefono = '19' OR
+                          T_TipoTelefono.ID_Tipo_Telefono = '20' OR
+                          T_TipoTelefono.ID_Tipo_Telefono = '21' OR
+                          T_TipoTelefono.ID_Tipo_Telefono = '22' OR
+                          T_TipoTelefono.ID_Tipo_Telefono = '23' OR
+                          T_TipoTelefono.ID_Tipo_Telefono = '24' OR
 			  T_TipoTelefono.ID_Tipo_Telefono = '25' OR 
 			  T_TipoTelefono.ID_Tipo_Telefono = '26')");
             $this->arreglo=$this->obj_data_provider->getArreglo();
@@ -182,7 +194,7 @@ class cls_areasapoyo{
             $this->resultado_operacion=true;
         }
     }
-    
+
     public function obtiene_tipo_area_apoyo(){
         $this->obj_data_provider->conectar();
         $this->arreglo= $this->obj_data_provider->trae_datos("T_TipoAreaApoyo", "*", "");

@@ -126,7 +126,7 @@ class cls_telefono{
         $this->resultado_operacion=$this->obj_data_provider->getResultado_operacion();  
     }
     
-    public function eliminar_telefono_puntobcr() {
+    public function eliminar_telefono() {
         $this->obj_data_provider->conectar();
         $this->arreglo=$this->obj_data_provider->eliminar_datos("T_Telefono", $this->condicion);
         $this->obj_data_provider->desconectar();
@@ -148,5 +148,12 @@ class cls_telefono{
         $this->arreglo=$this->obj_data_provider->getArreglo();
         $this->obj_data_provider->desconectar();
         $this->resultado_operacion=true;  
+    }
+    
+    public function actualizar_telefono(){
+        $this->obj_data_provider->conectar();
+        $this->obj_data_provider->edita_datos("T_Telefono", "Numero='".$this->numero."', ID_Tipo_Telefono='".$this->tipo_telefono."', Observaciones='".$this->observaciones."'",$this->condicion);
+        $this->obj_data_provider->desconectar();
+        $this->resultado_operacion=true;
     }
 }?>

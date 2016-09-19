@@ -19,17 +19,17 @@ ob_start();
           <thead>
             <tr>
               <!--<th>ID Persona</th>-->
-              <th>Apellido y Nombre</th>
-              <th>Cedula</th>
+              <th style="text-align:center">Apellido y Nombre</th>
+              <th style="text-align:center">Cedula</th>
               <!--<th>Direccion</th>-->
-              <th>Departamento</th>
-              <th>Empresa</th>
+              <th style="text-align:center">Departamento</th>
+              <th style="text-align:center">Empresa</th>
               <!--<th>Tipo Telefono</th>-->
-              <th>Telefonos</th>
+              <th style="text-align:center">Telefonos</th>
               <!--<th>Observaciones</th>-->
-              <th>Estado</th>              
-              <th>Cambiar Estado</th>
-              <th>Mantenmiento</th>
+              <th style="text-align:center">Estado</th>              
+              <th style="text-align:center">Cambiar Estado</th>
+              <th style="text-align:center">Mantenmiento</th>
             </tr>
           </thead>
           <tbody>
@@ -39,32 +39,32 @@ ob_start();
             ?>
             <tr>
                 <!--<td><?php echo $personas[$i]['ID_Persona'];?></td>-->
-                <td><?php echo $personas[$i]['Apellido_Nombre'];?></td>
-                <td><?php echo $personas[$i]['Cedula'];?></td>
+                <td style="text-align:center"><?php echo $personas[$i]['Apellido_Nombre'];?></td>
+                <td style="text-align:center"><?php echo $personas[$i]['Cedula'];?></td>
                 <!--<td>//<?php echo $personas[$i]['Direccion'];?></td>-->
-                <td><?php echo $personas[$i]['Departamento'];?></td>
-                <td><?php echo $personas[$i]['Empresa'];?></td>
+                <td style="text-align:center"><?php echo $personas[$i]['Departamento'];?></td>
+                <td style="text-align:center"><?php echo $personas[$i]['Empresa'];?></td>
                 <!--<td><?php echo $personas[$i]['Tipo_Telefono'];?></td>-->
-                <td><?php echo $personas[$i]['Numero'];?></td>
+                <td style="text-align:center"><?php echo $personas[$i]['Numero'];?></td>
                 <!--<td><?php echo $personas[$i]['Observaciones'];?></td>-->
-            <?php 
-            if ($personas[$i]['Estado']==1){
-              ?>  
-                <td>Activo</td>
-               <?php 
-            }else
-            {?>  
-                <td>Inactivo</td>
-            <?php 
-            }
-            ?>
-                
-           <td><a href="index.php?ctl=cambiar_estado_persona&id=
-               <?php echo $personas[$i]['ID_Persona']?>&estado=<?php echo $personas[$i]['Estado']?>">
-                   Activar/Desactivar</a></td>
-           <td><a href="index.php?ctl=gestion_persona&id=
-               <?php echo $personas[$i]['ID_Persona']?>&estado=<?php echo $personas[$i]['Estado']?>&descripcion=<?php echo $personas[$i]['Observaciones']?>">
-                   Editar</a></td>
+                <?php 
+                if ($personas[$i]['Estado']==1){
+                  ?>  
+                    <td style="text-align:center">Activo</td>
+                   <?php 
+                }else
+                {?>  
+                    <td style="text-align:center">Inactivo</td>
+                <?php 
+                }
+                ?>
+
+               <td style="text-align:center"><a href="index.php?ctl=personal_cambiar_estado&id=
+                   <?php echo $personas[$i]['ID_Persona']?>&estado=<?php echo $personas[$i]['Estado']?>">
+                       Activar/Desactivar</a></td>
+               <td style="text-align:center"><a href="index.php?ctl=personal_gestion&id=
+                   <?php echo $personas[$i]['ID_Persona']?>&estado=<?php echo $personas[$i]['Estado']?>&descripcion=<?php echo $personas[$i]['Observaciones']?>">
+                       Detalle</a></td>
             </tr>     
                     
             <?php }

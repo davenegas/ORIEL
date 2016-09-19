@@ -1,24 +1,4 @@
-      <?php 
-
-      function encuentra_coincidencia($modulo){
-          
-      $obj_mod= new cls_modulos();
-      $obj_mod->obtiene_lista_de_modulos_por_rol($_SESSION['rol']);
-      $lista_modulos_por_usuario=$obj_mod->getArreglo();
-     
-      //echo "<pre>";
-      //print_r($lista_modulos_por_usuario);
-      //echo "</pre>";
-         
-          for ($index = 0; $index < count($lista_modulos_por_usuario); $index++) {
-              if ($lista_modulos_por_usuario[$index]["Descripcion"]===$modulo){
-                 
-                  return true;
-              }
-          }
-          return false;
-      }
-      
+    <?php       
     function nota_obtener() {
         $obj_general = new cls_general();
         $obj_general->obtener_notas();
@@ -29,10 +9,10 @@
 //        echo "</pre>";
         return $notas;
     }
-      ?>
+    ?>
     
 
-<html lang="en">
+<html lang="en"> 
     <head>
         <link rel="stylesheet" href="vistas/css/main.css">
         <script src="vistas/js/jquery-1-4-2-min.js"></script>
@@ -41,7 +21,7 @@
     <br>
      <center><img src="vistas/Imagenes/Banner_Centro_de_Control.jpg" alt=""/></center>
      <?php
-     if($_SESSION['rol']==1 || $_SESSION['rol']==11){
+     if($_SESSION['modulos']['Notas Importantes']==1){
      ?>
         <div class="esthela" style="right: -400px;">
         <div style="color: rgb(255, 255, 255); padding: 8px 5px 0pt 50px;">
@@ -63,58 +43,46 @@
 
           <?php 
           //************************************************Pinta Menu de Seguridad***************************************************************
-           if ((encuentra_coincidencia("Seguridad-Módulos"))||(encuentra_coincidencia("Seguridad-Roles"))||(encuentra_coincidencia("Seguridad-Usuarios"))||(encuentra_coincidencia("Seguridad-Trazabilidad"))){
+           if (($_SESSION['modulos']['Seguridad-Módulos']==1)||($_SESSION['modulos']['Seguridad-Roles']==1)||
+                   ($_SESSION['modulos']['Seguridad-Usuarios']==1)||($_SESSION['modulos']['Seguridad-Trazabilidad']==1)){
           ?>
-
                 <li class="dropdown">
                 <a class="dropdown-toggle" data-toggle="dropdown" href="#">Seguridad
                 <span class="caret"></span></a>
                 <ul class="dropdown-menu">
 
-           <?php 
-           if ((encuentra_coincidencia("Seguridad-Módulos"))){
-           ?>
+           <?php if ($_SESSION['modulos']['Seguridad-Módulos']==1){ ?>
                 <li><a href="index.php?ctl=modulos_listar">Módulos</a></li>
-           <?php 
-           };
-           ?>
+           <?php  };  ?>
 
-           <?php 
-           if ((encuentra_coincidencia("Seguridad-Roles"))){
-           ?>
+                
+           <?php   if ($_SESSION['modulos']['Seguridad-Roles']==1){ ?>
                 <li><a href="index.php?ctl=listar_roles">Roles</a></li>
-           <?php 
-           };
-           ?>
+           <?php  }; ?>
 
-           <?php 
-           if ((encuentra_coincidencia("Seguridad-Usuarios"))){
-           ?>
+                
+           <?php  if ($_SESSION['modulos']['Seguridad-Usuarios']==1){?>
                 <li><a href="index.php?ctl=listar_usuarios">Usuarios</a></li>
-           <?php 
-           };
-           ?>   
+           <?php    }; ?>   
 
-            <?php 
-           if ((encuentra_coincidencia("Seguridad-Trazabilidad"))){
-           ?>
+            <?php if ($_SESSION['modulos']['Seguridad-Trazabilidad']==1){ ?>
                <li><a href="index.php?ctl=principal">Trazabilidad</a></li> 
-           <?php 
-           };
-           ?>   
+           <?php    }; ?>
+               
+           <?php  if ($_SESSION['modulos']['Importar- Prontuario']==1){?>
+               <li><a href="index.php?ctl=principal">Importar Prontuario</a></li> 
+           <?php  }; ?>
 
             </ul>
             </li>
 
-          <?php 
-          };
-          ?>
+          <?php  };    ?>
 
 
 
            <?php 
            //************************************************Pinta Menu de Catalogos***************************************************************
-           if ((encuentra_coincidencia("Catálogos-Sitios BCR"))||(encuentra_coincidencia("Catálogos-Personal"))||(encuentra_coincidencia("Catálogos-Áreas de Apoyo"))||(encuentra_coincidencia("Catálogos-Empresas"))){
+           if (($_SESSION['modulos']['Catálogos-Empresas']==1||$_SESSION['modulos']['Catálogos-Tipo Evento']==1)){
           ?>
 
                 <li class="dropdown">
@@ -122,39 +90,22 @@
                 <span class="caret"></span></a>
                 <ul class="dropdown-menu">
 
-           <?php 
-           if ((encuentra_coincidencia("Catálogos-Sitios BCR"))){
-           ?>
-                <li><a href="index.php?ctl=puntos_bcr_listar">Puntos BCR</a></li>
-           <?php 
-           };
-           ?>
-
-           <?php 
-           if ((encuentra_coincidencia("Catálogos-Personal"))){
-           ?>
-                <li><a href="index.php?ctl=personal_listar">Personal</a></li>
-           <?php 
-           };
-           ?>
-
-           <?php 
-           if ((encuentra_coincidencia("Catálogos-Áreas de Apoyo"))){
-           ?>
-                <li><a href="index.php?ctl=areas_apoyo_listar">Áreas de Apoyo</a></li>
-           <?php 
-           };
-           ?>   
+            
 
             <?php 
-           if ((encuentra_coincidencia("Catálogos-Empresas"))){
-           ?>
-               <li><a href="index.php?ctl=empresas_listar">Empresas</a></li> 
-               <li><a href="index.php?ctl=tipo_eventos_listar">Tipo Evento</a></li>
-           <?php 
-           };
-           ?>   
-
+            if ($_SESSION['modulos']['Catálogos-Empresas']==1){
+            ?>
+                <li><a href="index.php?ctl=empresas_listar">Empresas</a></li>
+            <?php 
+            };
+            ?>   
+            <?php 
+            if ($_SESSION['modulos']['Catálogos-Tipo Evento']==1){
+            ?>
+                <li><a href="index.php?ctl=tipo_eventos_listar">Tipo Evento</a></li>
+            <?php 
+            };
+            ?>
             </ul>
             </li>
 
@@ -166,7 +117,9 @@
            <?php 
 
            //************************************************Pinta Menu de Reportes***************************************************************
-           if ((encuentra_coincidencia("Reportes-Eventos"))||(encuentra_coincidencia("Reportes-Oficinas"))||(encuentra_coincidencia("Reportes-Personal"))||(encuentra_coincidencia("Reportes-Alertas"))||(encuentra_coincidencia("Reportes-Trazabilidad"))){
+           if (($_SESSION['modulos']['Reportes-Eventos']==1)||($_SESSION['modulos']['Reportes-Oficinas']==1)||
+                   ($_SESSION['modulos']['Reportes-Personal']==1)||($_SESSION['modulos']['Reportes-Alertas']==1)||
+                   ($_SESSION['modulos']['Reportes-Trazabilidad']==1)){
           ?>
 
                 <li class="dropdown">
@@ -175,7 +128,7 @@
                 <ul class="dropdown-menu">
 
            <?php 
-           if ((encuentra_coincidencia("Reportes-Eventos"))){
+           if ($_SESSION['modulos']['Reportes-Eventos']==1){
            ?>
                 <li><a href="index.php?ctl=principal">Eventos</a></li>
            <?php 
@@ -183,7 +136,7 @@
            ?>
 
            <?php 
-           if ((encuentra_coincidencia("Reportes-Oficinas"))){
+           if ($_SESSION['modulos']['Reportes-Oficinas']==1){
            ?>
                 <li><a href="index.php?ctl=principal">Oficinas</a></li>
            <?php 
@@ -191,7 +144,7 @@
            ?>
 
            <?php 
-           if ((encuentra_coincidencia("Reportes-Personal"))){
+           if ($_SESSION['modulos']['Reportes-Personal']==1){
            ?>
                 <li><a href="index.php?ctl=principal">Personal</a></li>
            <?php 
@@ -199,7 +152,7 @@
            ?>   
 
             <?php 
-           if ((encuentra_coincidencia("Reportes-Alertas"))){
+           if ($_SESSION['modulos']['Reportes-Alertas']==1){
            ?>
                <li><a href="index.php?ctl=principal">Alertas</a></li> 
            <?php 
@@ -207,7 +160,7 @@
            ?>   
 
             <?php 
-           if ((encuentra_coincidencia("Reportes-Trazabilidad"))){
+           if ($_SESSION['modulos']['Reportes-Trazabilidad']==1){
            ?>
                <li><a href="index.php?ctl=frm_trazabilidad_listar">Trazabilidad</a></li> 
            <?php 
@@ -225,7 +178,9 @@
             <?php 
 
            //************************************************Pinta Menu de Módulos***************************************************************
-          if ((encuentra_coincidencia("Módulos-Bitácora Digital"))||(encuentra_coincidencia("Módulos-MPI BCR"))||(encuentra_coincidencia("Módulos-Guía de Monitoreo"))||(encuentra_coincidencia("Módulos-Controles de Video"))){
+          if (($_SESSION['modulos']['Módulo-Bitácora Digital']==1)||($_SESSION['modulos']['Módulo-MRI BCR']==1)||
+                  ($_SESSION['modulos']['Módulo-Controles de Video']==1)||($_SESSION['modulos']['Módulo-PuntosBCR']==1)||
+                  ($_SESSION['modulos']['Módulo-Personal']==1)||($_SESSION['modulos']['Módulo-Áreas de Apoyo']==1)){
           ?>
 
                 <li class="dropdown">
@@ -234,7 +189,7 @@
                 <ul class="dropdown-menu">
 
            <?php 
-           if ((encuentra_coincidencia("Módulos-Bitácora Digital"))){
+           if ($_SESSION['modulos']['Módulo-Bitácora Digital']==1){
            ?>
                 <li><a href="index.php?ctl=frm_eventos_listar">Bitácora Digital</a></li>
            <?php 
@@ -242,25 +197,41 @@
            ?>
 
            <?php 
-           if ((encuentra_coincidencia("Módulos-MRI BCR"))){
+           if ($_SESSION['modulos']['Módulo-MRI BCR']==1){
            ?>
-                <li><a href="#">MRI-BCR</a></li>
+                <!--<li><a href="#">MRI-BCR</a></li>-->
+           <?php 
+           };
+           ?>
+                
+           <?php 
+           if ($_SESSION['modulos']['Módulo-PuntosBCR']==1){
+           ?>
+                <li><a href="index.php?ctl=puntos_bcr_listar">Puntos BCR</a></li>
            <?php 
            };
            ?>
 
            <?php 
-           if ((encuentra_coincidencia("Módulos-Guía de Monitoreo"))){
+           if ($_SESSION['modulos']['Módulo-Personal']==1){
            ?>
-                <li><a href="#">Guía de Monitoreo</a></li>
+                <li><a href="index.php?ctl=personal_listar">Personal</a></li>
            <?php 
            };
-           ?>   
+           ?>
 
+           <?php 
+           if ($_SESSION['modulos']['Módulo-Áreas de Apoyo']==1){
+           ?>
+                <li><a href="index.php?ctl=areas_apoyo_listar">Áreas de Apoyo</a></li>
+           <?php 
+           };
+           ?>  
+                
             <?php 
-           if ((encuentra_coincidencia("Módulos-Controles de Video"))){
+           if ($_SESSION['modulos']['Módulo-Control de Video']==1){
            ?>
-               <li><a href="#">Controles de Video</a></li> 
+               <!--<li><a href="#">Controles de Video</a></li>--> 
           <?php 
            };
            ?>   
@@ -275,7 +246,7 @@
             
                <?php 
           //************************************************Pinta Menu de Ayuda***************************************************************
-           if ((encuentra_coincidencia("Ayuda"))){
+           if (($_SESSION['modulos']['Ayuda']==1)){
            ?>
               <li class="dropdown">
                 <a class="dropdown-toggle" data-toggle="dropdown" href="#">Ayuda
@@ -295,7 +266,8 @@
               
            <?php 
           //************************************************Pinta Menu de Otros enlaces***************************************************************
-           if ((encuentra_coincidencia("Controles de Video"))||(encuentra_coincidencia("Oficiales"))||(encuentra_coincidencia("Padrón Fotográfico"))||(encuentra_coincidencia("Personal Externo"))){
+           if (($_SESSION['modulos']['Controles de Video']==1)||($_SESSION['modulos']['Oficiales']==1)||
+                   ($_SESSION['modulos']['Padrón Fotográfico']==1)||($_SESSION['modulos']['Personal Externo']==1)){
           ?>
 
                 <li class="dropdown">
@@ -304,7 +276,7 @@
                 <ul class="dropdown-menu">
 
            <?php 
-           if ((encuentra_coincidencia("Controles de Video"))){
+           if ($_SESSION['modulos']['Controles de Video']==1){
            ?>
                 <li><a href="http://10.170.5.80/Operaciones_de_Seguridad/ctrlvideo/consulta.html">Controles de Video</a></li>
            <?php 
@@ -312,7 +284,7 @@
            ?>
 
            <?php 
-           if ((encuentra_coincidencia("Oficiales"))){
+           if ($_SESSION['modulos']['Oficiales']==1){
            ?>
                 <li><a href="http://10.170.5.80/Operaciones_de_Seguridad">Oficiales</a></li>
            <?php 
@@ -320,7 +292,7 @@
            ?>
 
            <?php 
-           if ((encuentra_coincidencia("Padrón Fotográfico"))){
+           if ($_SESSION['modulos']['Padrón Fotográfico']==1){
            ?>
                 <li><a href="http://10.170.5.80/Operaciones_de_Seguridad/oficinas/consultaofic.htm">Padrón Fotográfico</a></li>
            <?php 
@@ -328,7 +300,7 @@
            ?>   
 
             <?php 
-           if ((encuentra_coincidencia("Personal Externo"))){
+           if ($_SESSION['modulos']['Personal Externo']==1){
            ?>
                <li><a href="http://10.170.5.80/Operaciones_de_Seguridad/externos/index.php">Personal Externo</a></li> 
            <?php 
@@ -341,61 +313,12 @@
           <?php 
           };
           ?>
-      
-              
-              
-              <!--
-                  <?php 
-          //************************************************Pinta Menu de Módulo de Controles de Video***************************************************************
-           if ((encuentra_coincidencia("Controles de Video"))){
-           ?>
-
-             <li><a href="http://10.170.5.80/Operaciones_de_Seguridad/ctrlvideo/consulta.html"><span class="glyphicon glyphicon-eye-open"></span> Controles de Video</a></li>
-
-           <?php 
-           };
-           ?>       
-
-                  <?php 
-          //************************************************Pinta Menu de Oficiales***************************************************************
-           if ((encuentra_coincidencia("Oficiales"))){
-           ?>
-
-             <li><a href="http://10.170.5.80/Operaciones_de_Seguridad"><span class="glyphicon glyphicon-user"></span> Oficiales</a></li>
-
-           <?php 
-           };
-           ?>       
-
-
-                   <?php 
-          //************************************************Pinta Menu de Padrón Fotográfico***************************************************************
-           if ((encuentra_coincidencia("Padrón Fotográfico"))){
-           ?>
-
-             <li><a href="http://10.170.5.80/Operaciones_de_Seguridad/oficinas/consultaofic.htm"><span class="glyphicon glyphicon-picture"></span> Padrón</a></li>
-
-           <?php 
-           };
-           ?>       
-
-                     <?php 
-          //************************************************Pinta Menu de Personal Externo***************************************************************
-           if ((encuentra_coincidencia("Personal Externo"))){
-           ?>
-
-             <li><a href="http://10.170.5.80/Operaciones_de_Seguridad/externos/index.php"><span class="glyphicon glyphicon-user"></span> Personal Externo</a></li>
-
-           <?php 
-           };
-           ?>       -->
+            
              <li><a href="index.php?ctl=principal"><span class="glyphicon glyphicon-th-large"></span><?php echo $_SESSION['name']." ".$_SESSION['apellido'];?></a></li>
           <li><a href="index.php?ctl=cerrar_sesion"><span class="glyphicon glyphicon-log-in"></span>Cerrar Sesión</a></li>    
         </ul>
 
       </div>
     </nav>
-
-
 </html>
 

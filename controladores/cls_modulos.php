@@ -96,7 +96,7 @@ class cls_modulos{
       if ($this->condicion==""){
         $this->obj_data_provider->conectar();
         //Llama al metodo que realiza la consulta a la bd
-        $this->obj_data_provider->trae_datos("T_Modulo", "*", "");
+        $this->obj_data_provider->trae_datos("T_Modulo ORDER BY Descripcion", "*", "");
         $this->arreglo_modulos=$this->obj_data_provider->getArreglo();
         $this->obj_data_provider->desconectar();
         $this->resultado_operacion=true;
@@ -105,7 +105,7 @@ class cls_modulos{
       {
         $this->obj_data_provider->conectar();
         //Llama al metodo que realiza la consulta a la bd
-        $this->obj_data_provider->trae_datos("T_Modulo", "*", $this->condicion);
+        $this->obj_data_provider->trae_datos("T_Modulo", "*", $this->condicion." ORDER BY Descripcion");
         $this->arreglo_modulos=$this->obj_data_provider->getArreglo();
         $this->obj_data_provider->desconectar();
         $this->resultado_operacion=true;
@@ -120,13 +120,12 @@ class cls_modulos{
         $this->arreglo_modulos=$this->obj_data_provider->getArreglo();
         $this->obj_data_provider->desconectar();
         $this->resultado_operacion=true;
-    
+        
   }  
   
   //Metodo que inserta un nuevo modulo del sistema en la bd mediante el objeto data provider
   function inserta_modulo(){
       $this->obj_data_provider->conectar();
-      
       //Verifica el valor de estado, para ingresarlo en el sistema
       if ($this->estado=="Activo"){
           $this->estado="1";
@@ -135,6 +134,8 @@ class cls_modulos{
       }
       //Llama al metodo que inserta la información
       $this->obj_data_provider->inserta_datos("T_Modulo","Descripcion,Estado","'".$this->descripcion."',".$this->estado);
+      $this->arreglo_modulos= $this->obj_data_provider->trae_datos("T_Modulo ORDER BY `ID_Modulo` DESC LIMIT 1", "*", $this->condicion);
+      $this->arreglo_modulos=$this->obj_data_provider->getArreglo();
       $this->obj_data_provider->desconectar();
       //Esta variable registra y valida el resultado de la ejecución de la consulta, para ver si fue valida
       $this->resultado_operacion=$this->obj_data_provider->getResultado_operacion();
@@ -208,4 +209,11 @@ class cls_modulos{
         $this->obj_data_provider->desconectar();
         $this->resultado_operacion=$this->obj_data_provider->getResultado_operacion();
     }
+    
+    function insertar_rolesModulo($id_Rol,$modulo){
+        $this->obj_data_provider->conectar();
+        $this->obj_data_provider->inserta_datos("T_RolSubModulo", "ID_Rol,ID_Modulo", $id_Rol.",".$modulo);
+        $this->obj_data_provider->desconectar();
+        $this->resultado_operacion=$this->obj_data_provider->getResultado_operacion();
+    } 
 }

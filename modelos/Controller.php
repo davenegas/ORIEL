@@ -26,7 +26,7 @@
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }
     }    
-     
+
     // Obtiene lista completa de roles del sistema
     public function principal(){
         if(isset($_SESSION['nombre'])){
@@ -37,7 +37,7 @@
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }
     }    
-     
+
     // Prepara las variables y el formulario respectivo para cambio de clave
     public function cambiar_password(){   
         $usuario = "";       
@@ -46,8 +46,7 @@
         $validacion="En proceso de cambio de clave";
         require __DIR__ . '/../vistas/plantillas/frm_Cambio_Clave.php';
     }
-    
-        
+ 
     public function cambia_clave_usuario_post(){
         $usuario = "";       
         $clave = "";  
@@ -60,7 +59,8 @@
             $clave= $_POST['password_antiguo'];
             $clave_nueva=$_POST['password_nuevo'];
             $confirmacion_clave=$_POST['confirmacion_password'];
-           
+            $obj_modulos = new cls_modulos();
+            
             if (strlen($usuario)>0){
                 if ($obj_usuarios->existe_usuario($usuario)){
                     if ($obj_usuarios->valida_password_de_usuario($usuario, $clave)){
@@ -77,6 +77,25 @@
                                         $obj_usuarios->setNombre($usuario);
                                         $obj_usuarios->setClave($clave_nueva);
                                         $obj_usuarios->edita_passsword();
+                                        $_SESSION['modulos']=array();
+                                        
+                                        $obj_modulos->obtiene_todos_los_modulos();
+                                        $modulos= $obj_modulos->getArreglo();
+                                        $obj_modulos->obtiene_lista_de_modulos_por_rol($obj_usuarios->getRol());
+                                        $roles = $obj_modulos->getArreglo();
+                                        $tam = count($modulos);
+                                        $tam2 = count($roles);
+                                        $estado=0;
+                                        for($i=0; $i<$tam;$i++){
+                                            for($c=0;$c<$tam2;$c++){
+                                                if($modulos[$i]['Descripcion']==$roles[$c]['Descripcion']){
+                                                    $estado = 1;
+                                                    break;
+                                                }
+                                            }
+                                            $_SESSION['modulos']= array_merge($_SESSION['modulos'],[($modulos[$i]['Descripcion'])=>($estado)]);
+                                            $estado= 0;
+                                        }
                                         
                                         require __DIR__ . '/../vistas/plantillas/frm_principal.php';
 
@@ -127,8 +146,8 @@
                 require __DIR__ . '/../vistas/plantillas/frm_Cambio_Clave.php';
             }
     }  
-     
-     // Cambia estado del rol (activo/inactivo)
+
+    // Cambia estado del rol (activo/inactivo)
     public function cambiar_estado_rol(){
         if(isset($_SESSION['nombre'])){
             if (isset($_GET['id'])) {
@@ -162,7 +181,7 @@
        $validacion="Verificación de Identidad";
        require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
        session_destroy();
-     }
+    }
     
     public function nota_obtener() {
         if(isset($_SESSION['nombre'])){
@@ -175,6 +194,7 @@
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }  
     }
+    
     public function nota_guardar() {
         if(isset($_SESSION['nombre'])){
             $obj_general = new cls_general();
@@ -187,6 +207,7 @@
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }    
     }
+    
     public function guardar_modulo_rol($id_Rol){
         if(isset($_SESSION['nombre'])){
             if (isset($_POST["lista"])){
@@ -227,9 +248,11 @@
                         $obj_roles->inserta_rol();
                         $obj_roles->obtiene_id_ultimo_rol_ingresado();
                         $id_ult_rol=$obj_roles->getId_ultimo_rol_ingresado();
-                        $this->guardar_modulo_rol($id_ult_rol);
+                        header ("location:/ORIEL/index.php?ctl=guardar_modulo_rol($id_ult_rol)");
+                        //$this->guardar_modulo_rol($id_ult_rol);
                     }   else    {
-                        $this->gestion_roles();
+                         header ("location:/ORIEL/index.php?ctl=gestion_roles");
+                        //$this->gestion_roles();
                     }
                 }   else    {
                     $obj_roles->setId($_GET['id']);
@@ -239,7 +262,6 @@
                 $obj_roles->obtiene_todos_los_roles();
                 $params = $obj_roles->getArreglo();
         }
-       
         require __DIR__ . '/../vistas/plantillas/lista_de_roles.php';
                
         }else{
@@ -311,9 +333,12 @@
                         }
                     }
                     if($correcto==0){
-                    $obj_modulos->inserta_modulo();
+                        $obj_modulos->inserta_modulo();
+                        $ultimo_modulo = $obj_modulos->getArreglo();
+                        $obj_modulos->insertar_rolesModulo("1", $ultimo_modulo[0]['ID_Modulo']);
                     }   else    {
-                        $this->modulos_gestion();
+                        header ("location:/ORIEL/index.php?ctl=modulos_gestion");
+                        //$this->modulos_gestion();
                     }
                 }   else   {
                     $obj_modulos->setId($_GET['id']);
@@ -329,7 +354,7 @@
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }
     }
-     
+    
     public function modulos_cambiar_estado(){
         if(isset($_SESSION['nombre'])){
             if (isset($_GET['id'])) {
@@ -467,9 +492,11 @@
                     $obj_usuarios->guardar_usuario();
                     $obj_usuarios->obtiene_todos_los_usuarios();
                     $params = $obj_usuarios->getArreglo();
-                    $this->listar_usuarios();
+                    header ("location:/ORIEL/index.php?ctl=listar_usuarios");
+                    //$this->listar_usuarios();
                  }   else    {
-                    $this->gestion_usuarios();
+                    header ("location:/ORIEL/index.php?ctl=gestion_usuarios");
+                    //$this->gestion_usuarios();
                 }
             }
             
@@ -564,7 +591,8 @@
     public function listar(){
         $validacion="";
         $obj_usuarios= new cls_usuarios();
-         
+        $obj_modulos = new cls_modulos();
+
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $usuario = $_POST['nombre'];
             $clave= $_POST['password'];
@@ -581,8 +609,31 @@
                             $_SESSION['name']=$obj_usuarios->getNombre();
                             $_SESSION['apellido']=$obj_usuarios->getApellido();
                             $_SESSION['id']=$obj_usuarios->getId();
+                            
+                            $_SESSION['modulos']=array();
+                            $obj_modulos->obtiene_todos_los_modulos();
+                            $modulos= $obj_modulos->getArreglo();
+                            $obj_modulos->obtiene_lista_de_modulos_por_rol($obj_usuarios->getRol());
+                            $roles = $obj_modulos->getArreglo();
+                            $tam = count($modulos);
+                            $tam2 = count($roles);
+                            $estado=0;
+                            for($i=0; $i<$tam;$i++){
+                                for($c=0;$c<$tam2;$c++){
+                                    if($modulos[$i]['Descripcion']==$roles[$c]['Descripcion']){
+                                        $estado = 1;
+                                        break;
+                                    }
+                                }
+                                $_SESSION['modulos']= array_merge($_SESSION['modulos'],[($modulos[$i]['Descripcion'])=>($estado)]);
+                                $estado= 0;
+                            }
+//                            echo "<pre>";
+//                            print_r($_SESSION['modulos']);
+//                            echo "</pre>";
+                            
                             require __DIR__ . '/../vistas/plantillas/frm_principal.php';
-   
+
                         }else{
                             $tipo_de_alerta="alert alert-info";
                             $validacion="Es necesario cambiar su clave para poder ingresar al sistema";   
@@ -620,6 +671,7 @@
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $usuario = $_POST['nombre'];
             $clave= $_POST['password'];
+            $obj_modulos =  new cls_modulos();
             if ($obj_usuarios->existe_usuario($usuario)){
                 if ($obj_usuarios->valida_password_de_usuario($usuario, $clave)){
                     if ($obj_usuarios->el_usuario_esta_activo($usuario, $clave)){
@@ -631,6 +683,24 @@
                         $_SESSION['name']=$obj_usuarios->getNombre();
                         $_SESSION['apellido']=$obj_usuarios->getApellido();
                         $_SESSION['id']=$obj_usuarios->getId();
+                        $_SESSION['modulos']=array();
+                        $obj_modulos->obtiene_todos_los_modulos();
+                        $modulos= $obj_modulos->getArreglo();
+                        $obj_modulos->obtiene_lista_de_modulos_por_rol($obj_usuarios->getRol());
+                        $roles = $obj_modulos->getArreglo();
+                        $tam = count($modulos);
+                        $tam2 = count($roles);
+                        $estado=0;
+                        for($i=0; $i<$tam;$i++){
+                            for($c=0;$c<$tam2;$c++){
+                                if($modulos[$i]['Descripcion']==$roles[$c]['Descripcion']){
+                                    $estado = 1;
+                                    break;
+                                }
+                            }
+                            $_SESSION['modulos']= array_merge($_SESSION['modulos'],[($modulos[$i]['Descripcion'])=>($estado)]);
+                            $estado= 0;
+                        }    
                         require __DIR__ . '/../vistas/plantillas/frm_principal.php';
                     }   else{
                         $validacion="Usuario Inactivo, contacte al administrador del sistema!!!";
@@ -668,21 +738,16 @@
             
         $tam=count($params);
         if (count($params)>0){
-                        
             for ($i = 0; $i <$tam; $i++) {
-                
                 $obj_eventos->setCondicion("T_DetalleEvento.ID_Evento=".$params[$i]['ID_Evento']." order by T_DetalleEvento.Fecha desc,T_DetalleEvento.Hora desc");
                 //Obtiene los seguimientos del evento seleccionado, si los hubiere
                 $obj_eventos->obtiene_detalle_evento();
-                
-                
+
                 if(count($obj_eventos->getArreglo())>0){
                     if ($i==0){
                         $todos_los_seguimientos_juntos=$obj_eventos->getArreglo();
-//                     
                     }else{
-                        $todos_los_seguimientos_juntos = array_merge($todos_los_seguimientos_juntos,$obj_eventos->getArreglo());
-//                      
+                        $todos_los_seguimientos_juntos = array_merge($todos_los_seguimientos_juntos,$obj_eventos->getArreglo());                 
                     }
                 }
                 
@@ -690,16 +755,13 @@
                 //Obtiene los seguimientos del evento seleccionado, si los hubiere
                 $obj_eventos->obtiene_detalle_evento();
                 $ultimo_seguimiento_asociado= $obj_eventos->getArreglo();
-                
-                
+
                 //Verifica si existen seguimientos asociados al evento actual
                 if(count($ultimo_seguimiento_asociado)>0){
                     if ($i==0){
                         $detalle_y_ultimo_usuario= array(['Detalle'=>"Fecha: ".date_format(date_create($ultimo_seguimiento_asociado[0]['Fecha']), 'd/m/Y').".Hora: ".$ultimo_seguimiento_asociado[0]['Hora'].". ".$ultimo_seguimiento_asociado[0]['Detalle']]+['Usuario'=>$ultimo_seguimiento_asociado[0]['Nombre_Usuario']." ".$ultimo_seguimiento_asociado[0]['Apellido']]);
-//                     
                     }else{
-                        $detalle_y_ultimo_usuario = array_merge($detalle_y_ultimo_usuario,array(['Detalle'=>"Fecha: ".date_format(date_create($ultimo_seguimiento_asociado[0]['Fecha']), 'd/m/Y').".Hora: ".$ultimo_seguimiento_asociado[0]['Hora'].". ".$ultimo_seguimiento_asociado[0]['Detalle']]+['Usuario'=>$ultimo_seguimiento_asociado[0]['Nombre_Usuario']." ".$ultimo_seguimiento_asociado[0]['Apellido']]));
-//                      
+                        $detalle_y_ultimo_usuario = array_merge($detalle_y_ultimo_usuario,array(['Detalle'=>"Fecha: ".date_format(date_create($ultimo_seguimiento_asociado[0]['Fecha']), 'd/m/Y').".Hora: ".$ultimo_seguimiento_asociado[0]['Hora'].". ".$ultimo_seguimiento_asociado[0]['Detalle']]+['Usuario'=>$ultimo_seguimiento_asociado[0]['Nombre_Usuario']." ".$ultimo_seguimiento_asociado[0]['Apellido']]));  
                     }
                 }else{
                     if ($i==0){
@@ -715,7 +777,6 @@
         } 
        
         require __DIR__.'/../vistas/plantillas/frm_eventos_listar.php';
-        
         }
         else {
             $tipo_de_alerta="alert alert-warning";
@@ -931,7 +992,7 @@
         }
     }
    
-    public function  actualiza_en_vivo_reporte_trazabilidad(){
+    public function actualiza_en_vivo_reporte_trazabilidad(){
             sleep(2);       
             if(isset($_SESSION['nombre'])){
                 
@@ -1021,8 +1082,7 @@
         
     }
     
-    
-    public function  actualiza_en_vivo_reporte_cerrados(){
+    public function actualiza_en_vivo_reporte_cerrados(){
             sleep(2);       
             if(isset($_SESSION['nombre'])){
                 
@@ -1188,7 +1248,6 @@
                require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
             }
     }
-    
     
     public function dibuja_tabla_eventos_relacionados_a_punto_bcr(){
                 
@@ -1531,7 +1590,8 @@
                 $obj_eventos->setEstado($_POST['estado']);
                 $obj_eventos->setPrioridad($_POST['prioridad']);
                 $obj_eventos->guardar_tipo_evento();
-                $this->tipo_eventos_listar();
+                header ("location:/ORIEL/index.php?ctl=tipo_eventos_listar");
+                //$this->tipo_eventos_listar();
             }
         } else    {
             $tipo_de_alerta="alert alert-warning";
@@ -1549,7 +1609,8 @@
             $obj_eventos->setEstado($_GET['estado']);
             $obj_eventos->setPrioridad($_GET['prioridad']);
             $obj_eventos->guardar_tipo_evento();
-            $this->tipo_eventos_listar();
+            header ("location:/ORIEL/index.php?ctl=tipo_eventos_listar");
+            //$this->tipo_eventos_listar();
         } else    {
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
@@ -1560,8 +1621,10 @@
     public function areas_apoyo_listar(){
         if(isset($_SESSION['nombre'])){
             $obj_areasApoyo=new cls_areasapoyo();
+            $obj_areasApoyo->setCondicion("");
             $obj_areasApoyo->obtiene_todos_las_areas_apoyo();
             $params= $obj_areasApoyo->getArreglo();
+            
             require __DIR__ . '/../vistas/plantillas/frm_areas_apoyo_listar.php';
         }else{
             $tipo_de_alerta="alert alert-warning";
@@ -1678,7 +1741,8 @@
                 $obj_empresas->setObservaciones($_POST['observaciones']);
                 $obj_empresas->setEstado($_POST['estado']);
                 $obj_empresas->guardar_empresa();
-                $this->empresas_listar();
+                header ("location:/ORIEL/index.php?ctl=empresas_listar");
+                //$this->empresas_listar();
             }
             
         } else    {
@@ -1703,7 +1767,8 @@
                         $obj_empresas->setEstado("1");
                     }
                     $obj_empresas->guardar_empresa();
-                    $this->empresas_listar();
+                    header ("location:/ORIEL/index.php?ctl=empresas_listar");
+                    //$this->empresas_listar();
                 }
             }
         }else{
@@ -1713,18 +1778,7 @@
         }
     }
     
-    public function personal_listar(){
-        if(isset($_SESSION['nombre'])){
-            $obj_personal=new cls_personal();
-            $obj_personal->obtiene_todo_el_personal();
-            $personas= $obj_personal->getArreglo();
-            require __DIR__ . '/../vistas/plantillas/frm_personal_listar.php';
-        }else{
-            $tipo_de_alerta="alert alert-warning";
-            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
-            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
-        }
-    }
+    
     //Editar Punto BCR, información completa 
     public function gestion_punto_bcr(){
         if(isset($_SESSION['nombre'])){
@@ -1988,7 +2042,8 @@
                 $obj_Puntobcr->guardar_punto_bcr();
 
             }
-           $this->puntos_bcr_listar();
+            header ("location:/ORIEL/index.php?ctl=puntos_bcr_listar");
+            //$this->puntos_bcr_listar();
         }else{
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
@@ -2001,7 +2056,7 @@
             $obj_telefono = new cls_telefono();
             $obj_telefono->setId($_POST['id_telefono']);
             $obj_telefono->setCondicion("ID_Telefono='".$_POST['id_telefono']."'");
-            $obj_telefono->eliminar_telefono_puntobcr();
+            $obj_telefono->eliminar_telefono();
 
         }else{
             $tipo_de_alerta="alert alert-warning";
@@ -2260,6 +2315,206 @@
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }
     }
+    
+    public function punto_bcr_cambiar_estado(){
+        if(isset($_SESSION['nombre'])){
+            if (isset($_GET['id'])) {
+                if (isset($_GET['estado'])) { 
+                    $obj_puntobcr = new cls_puntosBCR();
+                    
+                    if($_GET['estado']==1){
+                        $obj_puntobcr->setEstado("0");
+                    }
+                    else {
+                        $obj_puntobcr->setEstado("1");
+                    }
+                    $obj_puntobcr->setCondicion("ID_PuntoBCR='".$_GET['id']."'");
+                    $obj_puntobcr->actualizar_estado_puntobcr();
+                    header ("location:/ORIEL/index.php?ctl=puntos_bcr_listar");
+                }
+            }
+        }else{
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }
+    }
+    ////////////////////////////////////////////////////////////////////////////
+    //MANTENIMIENTO DE PERSONAL
+    //
+    public function personal_listar(){
+        if(isset($_SESSION['nombre'])){
+            $obj_personal=new cls_personal();
+            $obj_personal->obtiene_todo_el_personal();
+            $personas= $obj_personal->getArreglo();
+            require __DIR__ . '/../vistas/plantillas/frm_personal_listar.php';
+        }else{
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }
+    }
+    
+    public function personal_cambiar_estado(){
+        if(isset($_SESSION['nombre'])){
+            if (isset($_GET['id'])) {
+                if (isset($_GET['estado'])) { 
+                    $obj_personal = new cls_personal();
+                    
+                    if($_GET['estado']==1){
+                        $obj_personal->setEstado("0");
+                    }
+                    else {
+                        $obj_personal->setEstado("1");
+                    }
+                    $obj_personal->setCondicion("ID_Persona='".$_GET['id']."'");
+                    $obj_personal->actualizar_estado_persona();
+                    header ("location:/ORIEL/index.php?ctl=personal_listar");
+                }
+            }
+        }else{
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }
+    }
+    
+    public function personal_gestion(){
+        if(isset($_SESSION['nombre'])){
+            $obj_personal=new cls_personal();
+            $obj_empresa = new cls_empresa();
+            $obj_unidad_ejecutora = new cls_unidad_ejecutora();
+            $obj_telefono = new cls_telefono();
+            
+            
+            $ide=$_GET['id'];
+            $obj_personal->setCondicion("T_Personal.ID_Persona='".$_GET['id']."'");
+            $obj_personal->obtiene_todo_el_personal();
+            $params= $obj_personal->getArreglo();
+            
+            //Obtiene empresa remesera
+            $obj_empresa->setCondicion("");
+            $obj_empresa->obtiene_todas_las_empresas();
+            $empresas= $obj_empresa->getArreglo();
+				
+            //Obtiene Unidades Ejecutoras
+            $obj_unidad_ejecutora->setCondicion("");
+            $obj_unidad_ejecutora->obtener_unidades_ejecutoras();
+            $todas_ue = $obj_unidad_ejecutora->getArreglo();
+            
+            //Obtiene todos los Puestos
+            $obj_personal->setCondicion("");
+            $obj_personal->obtener_todos_puestos();
+            $puestos= $obj_personal->getArreglo();
+            
+            //Obtiene los tipos de telefono
+            $obj_telefono->setCondicion("");
+            $obj_telefono->obtiene_tipo_telefonos();
+            $tipo_telefono = $obj_telefono->getArreglo();
+            
+                
+            require __DIR__ . '/../vistas/plantillas/frm_personal_detalle.php';
+        }else{
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }
+    }
+    
+    public function personal_eliminar_telefono(){
+       if(isset($_SESSION['nombre'])){
+            $obj_telefono = new cls_telefono();
+            $obj_telefono->setId($_POST['id_telefono']);
+            $obj_telefono->setCondicion("ID_Telefono='".$_POST['id_telefono']."'");
+            $obj_telefono->eliminar_telefono();
+
+        }else{
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }  
+    }
+    
+    public function personal_numero_telefono_guardar(){
+        if(isset($_SESSION['nombre'])){   
+            if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+                $obj_telefono = new cls_telefono();
+                echo '<script>alert("Ingresa");</script>';
+                $obj_telefono->setId($_POST['ID_Telefono']);
+                $obj_telefono->setId2($_POST['ID_Persona']);
+                $obj_telefono->setTipo_telefono($_POST['Tipo_Telefono']);
+                $obj_telefono->setNumero($_POST['numero']);
+                $obj_telefono->setObservaciones($_POST['observaciones']);
+                if($_POST['ID_Telefono']==0){
+                    echo '<script>alert("Nuevo Numero");</script>';
+                    $obj_telefono->guardar_telefono();
+                }
+                else{
+                    echo '<script>alert("Actualiza Numero");</script>';
+                    $obj_telefono->setCondicion("ID_Telefono='".$_POST['ID_Telefono']."'");
+                    $obj_telefono->actualizar_telefono();
+                }
+                header("location:/ORIEL/index.php?ctl=personal_gestion&id=".$_POST['ID_Persona']);
+            }
+        }   else    {
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }
+    }
+    
+    public function personal_cambiar_ue(){
+        if(isset($_SESSION['nombre'])){
+            $obj_persona = new cls_personal();
+            
+            $obj_persona->setId2($_POST['id_unidad_ejecutora']);
+            $obj_persona->setCondicion("ID_Persona='".$_POST['id_persona']."'");
+            $obj_persona->cambiar_ue_persona();
+            
+        }else{
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }
+    }
+    
+    public function personal_cambiar_puesto() {
+        if(isset($_SESSION['nombre'])){
+            $obj_persona = new cls_personal();
+            
+            $obj_persona->setId2($_POST['id_puesto']);
+            $obj_persona->setCondicion("ID_Persona='".$_POST['id_persona']."'");
+            $obj_persona->cambiar_puesto_persona();
+            
+        }else{
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }
+    }
+    
+    public function persona_guardar_informacion_general(){
+        if(isset($_SESSION['nombre'])){
+            $obj_persona = new cls_personal();
+            
+            $obj_persona->setCedula($_POST['cedula']);
+            $obj_persona->setApellidonombre($_POST['nombre']);
+            $obj_persona->setEmpresa($_POST['empresa']);
+            $obj_persona->setObservaciones($_POST['observaciones']);
+            $obj_persona->setGafete($_POST['numero_gafete']);
+            $obj_persona->setCorreo($_POST['correo']);
+            $obj_persona->setDireccion($_POST['direccion']);
+            
+            $obj_persona->setCondicion("ID_Persona='".$_POST['id_persona']."'");
+            $obj_persona->actualizar_informacion_general_persona();
+            
+        }else{
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }
+    }
+    
     ////////////////////////////////////////////////////////////////////////////
     //Trazabilidad
     //FUNCIONES PARA EVENTOS
