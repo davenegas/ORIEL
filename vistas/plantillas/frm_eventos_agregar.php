@@ -21,7 +21,7 @@
             </div> 
             <div class="col-xs-4">
               <label for="hora">Hora</label>
-              <input type="time" required=”required” class="form-control" id="hora" name="hora" value=<?php echo date("H:i", time());?>>
+              <input type="time" required=”required” class="form-control" id="hora" name="hora" value="<?php echo date("H:i", time());?>">
             </div>         
             <div class="col-xs-4">
                 <label for="tipo_evento">Tipo de Evento</label>

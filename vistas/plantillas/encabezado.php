@@ -70,8 +70,9 @@
            <?php    }; ?>
                
            <?php  if ($_SESSION['modulos']['Importar- Prontuario']==1){?>
-               <li><a href="index.php?ctl=principal">Importar Prontuario</a></li> 
+               <li><a href="index.php?ctl=frm_importar_prontuario_paso_1">Importar Prontuario</a></li> 
            <?php  }; ?>
+
 
             </ul>
             </li>

@@ -113,7 +113,13 @@ $map = array(
     'personal_cambiar_ue'=>array('controller'=>'Controller','action'=> 'personal_cambiar_ue'),
     'personal_cambiar_puesto'=>array('controller'=>'Controller','action'=> 'personal_cambiar_puesto'),
     'persona_guardar_informacion_general'=>array('controller'=>'Controller','action'=> 'persona_guardar_informacion_general'),
-      
+    
+    //Importación de Prontuario
+    'frm_importar_prontuario_paso_1'=>array('controller'=>'Controller','action'=> 'frm_importar_prontuario_paso_1'),
+    'frm_importar_prontuario_paso_2'=>array('controller'=>'Controller','action'=> 'frm_importar_prontuario_paso_2'),
+    'frm_importar_prontuario_paso_3'=>array('controller'=>'Controller','action'=> 'frm_importar_prontuario_paso_3'),
+    'subir_archivo_prontuario'=>array('controller'=>'Controller','action'=> 'subir_archivo_prontuario'),
+
     //Controlador de Usuarios
     'listar_usuarios'=> array('controller'=>'Controller','action'=>'listar_usuarios'),
     'gestion_usuarios' => array('controller'=> 'Controller','action'=>'gestion_usuarios'),
