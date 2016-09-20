@@ -144,7 +144,7 @@
               <th>Estado del Evento</th>
               <th>Cerrado Por</th>
               <?php
-              if ($_SESSION['rol']!=2){
+              if ($_SESSION['modulos']['Recuperar Eventos Cerrados']==1){
               ?>  
                <th>Gestión</th>
                <?php }
@@ -180,7 +180,7 @@
             <td><?php echo $detalle_y_ultimo_usuario[$i]['Usuario'] ?></td>
             <!--<td><?php echo $params[$i]['Nombre_Usuario']." ".$params[$i]['Apellido'] ?></td>-->
             <?php
-            if ($_SESSION['rol']!=2){
+            if ($_SESSION['modulos']['Recuperar Eventos Cerrados']==1){
             ?>  
             <td align="center"><a onclick="recuperar_evento(<?php echo $params[$i]['ID_Evento'];?>,<?php echo $params[$i]['ID_PuntoBCR'];?>,<?php echo $params[$i]['ID_Tipo_Evento'];?>);">Recuperar Evento</a></td>
             

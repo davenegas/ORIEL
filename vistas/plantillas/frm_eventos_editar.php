@@ -65,7 +65,7 @@
                 
                 <!--Agregar nuevo detalle o seguimiento del evento-->
                 <form class="form-horizontal" role="form" enctype="multipart/form-data" onSubmit="return enviado()" method="POST" action="index.php?ctl=guardar_seguimiento_evento&id=<?php echo trim($ide);?>">
-                 <?php if ($_SESSION['rol']!=2){ ?>
+                 <?php if ($_SESSION['modulos']['Adjuntar archivos- Seguimientos Bitácora']==1){ ?>
                 <div class="col-xs-12 quitar-float espacio-abajo">
                     <label for="archivo_adjunto">Adjuntar Archivo: </label>
                     <input type="hidden" name="MAX_FILE_SIZE" value="1000000">
@@ -95,7 +95,7 @@
                     
                     for($i=0; $i<$tam;$i++)
                     {
-                        if ($_SESSION['rol']==2){
+                        if ($_SESSION['modulos']['Cerrar eventos con prioridad Alta']==0){
                           if ($prioridad_evento!=1){ 
                              if (($estadoEventos[$i]['Estado_Evento']!="Cerrado")&&($estadoEventos[$i]['Estado_Evento']!="Abierto por Error")){
                                  if ($estadoEventos[$i]['Estado_Evento']!=$estado_evento){

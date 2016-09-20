@@ -23,6 +23,9 @@ div#tabla_dos{
 .espacio-abajo-5{
     margin-bottom: 5px;
 }
+.espacio-arriba-15{
+    margin-top: 15px; 
+}
 .quitar-float{
     float: none;
 }
@@ -55,4 +58,12 @@ div#tabla_dos{
 }
 .derecha{
     float: right;
+}
+
+#foto_personal{
+        width:340px;
+        height:300px;
+        right: 20px;
+        position: absolute; 
+        top: 25px;
 }
