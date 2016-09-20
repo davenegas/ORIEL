@@ -20,9 +20,9 @@ class cls_personal{
     public $unidad_ejecutora;
     public $puesto;
     public $id_puesto;
-    public $empresa;
     public $id_empresa;
     public $id_ultima_persona_ingresada;
+    
     
     function getArreglo3() {
         return $this->arreglo3;
