@@ -68,10 +68,7 @@
             <?php if ($_SESSION['modulos']['Seguridad-Trazabilidad']==1){ ?>
                <li><a href="index.php?ctl=principal">Trazabilidad</a></li> 
            <?php    }; ?>
-               
-           <?php  if ($_SESSION['modulos']['Importar- Prontuario']==1){?>
-               <li><a href="index.php?ctl=frm_importar_prontuario_paso_1">Importar Prontuario</a></li> 
-           <?php  }; ?>
+           
 
 
             </ul>
@@ -83,7 +80,8 @@
 
            <?php 
            //************************************************Pinta Menu de Catalogos***************************************************************
-           if (($_SESSION['modulos']['Catálogos-Empresas']==1||$_SESSION['modulos']['Catálogos-Tipo Evento']==1)){
+           if (($_SESSION['modulos']['Catálogos-Empresas']==1||$_SESSION['modulos']['Catálogos-Tipo Evento']==1||
+                   $_SESSION['modulos']['Importar- Prontuario']==1)){
           ?>
 
                 <li class="dropdown">
@@ -107,6 +105,11 @@
             <?php 
             };
             ?>
+                
+           <?php  if ($_SESSION['modulos']['Importar- Prontuario']==1){?>
+               <li><a href="index.php?ctl=frm_importar_prontuario_paso_1">Importar Prontuario</a></li> 
+           <?php  }; ?>  
+               
             </ul>
             </li>
 

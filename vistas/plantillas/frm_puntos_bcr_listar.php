@@ -70,8 +70,9 @@
             ?>
             </tbody>
         </table>
-        
+        <?php if($_SESSION['modulos']['Editar- Puntos BCR']==1){ ?>
         <a href="index.php?ctl=gestion_punto_bcr&id=0" class="btn btn-default" role="button">Agregar Nuevo Punto BCR</a>
+        <?php }?>
         </div> 
         
         <?php require 'vistas/plantillas/pie_de_pagina.php' ?>
