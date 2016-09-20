@@ -29,13 +29,13 @@
                      <tr>
                         <td><input type="submit" value="Validar" class="btn btn-primary"></td>
                         <td><a href="index.php?ctl=cambiar_password">|Cambio de Clave|</a>
-                           <a   href="#" 
+<!--                           <a   href="#" 
                             title="Add To Cart" 
                           onclick="this.href='index.php?ctl=recordar_password&nom='   
                                               +document.getElementById('nombre').value;
                                    somefunction(this, event); return true;">
                          |Recordar Clave|
-                            </a></td>                
+                            </a></td>                -->
                         </br>
                     </tr>
                  </table>
@@ -46,6 +46,19 @@
          <strong>Información!</strong>  <?php echo $validacion;?>
         </div>
         
+        <div>
+        <table style="margin: 0 auto;">
+        <tr>
+        <td> 
+        <div class="btn-group">
+        <a href="index.php?ctl=frm_eventos_lista_cerrados" class="btn btn-default" role="button">Puntos BCR</a> 
+        <a href="index.php?ctl=frm_eventos_lista_cerrados" class="btn btn-default" role="button">Personal BCR</a>     
+        <a href="index.php?ctl=frm_eventos_lista_cerrados" class="btn btn-default" role="button">Padrones</a> 
+        </div>
+        </td>
+        </tr>
+        </table>
+        </div>
         
       <?php require 'vistas/plantillas/pie_de_pagina.php'?>
        

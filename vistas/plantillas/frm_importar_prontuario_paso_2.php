@@ -2,11 +2,20 @@
 <html lang="es">
     <head>
         <meta charset="utf-8"/>
-        <title>Importar Prontuario Paso 2</title>
-        <?php require_once 'frm_librerias_head.html'; ?>          
+        <title>Importar Prontuario Paso 2 (Listado de Personas)</title>
+        <?php require_once 'frm_librerias_head.html'; ?>  
+        <script>
+          $(document).ready(function () {
+            // Una vez se cargue al completo la página desaparecerá el div "cargando"
+            $('#cargando').hide();
+          });
+        </script>        
     </head>
     <body>
         <?php require_once 'encabezado.php';?>
+         <div id="cargando">
+            <center><img align="center" src="vistas/Imagenes/cargando (2).gif"/></center>
+        </div>
         <div class="container animated fadeIn">
         <h2>Listado de Personal Recibido (2/10):</h2>
         <h4><?php echo $mensaje;?></h4>

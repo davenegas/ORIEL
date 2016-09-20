@@ -16,6 +16,7 @@ require_once __DIR__ . '/controladores/cls_trazabilidad.php';
 require_once __DIR__ . '/controladores/cls_general.php';
 require_once __DIR__ . '/controladores/cls_telefono.php';
 require_once __DIR__ . '/controladores/cls_unidad_ejecutora.php';
+require_once __DIR__ . '/controladores/cls_puestos.php';
 require_once __DIR__ . '/modelos/Controller.php';
 require_once __DIR__ . '/modelos/Encrypter.php';
 require_once __DIR__ . '/modelos/PHPMailerAutoload.php';
@@ -110,8 +111,10 @@ $map = array(
     'frm_importar_prontuario_paso_1'=>array('controller'=>'Controller','action'=> 'frm_importar_prontuario_paso_1'),
     'frm_importar_prontuario_paso_2'=>array('controller'=>'Controller','action'=> 'frm_importar_prontuario_paso_2'),
     'frm_importar_prontuario_paso_3'=>array('controller'=>'Controller','action'=> 'frm_importar_prontuario_paso_3'),
-    'subir_archivo_prontuario'=>array('controller'=>'Controller','action'=> 'subir_archivo_prontuario'),
-  
+    'frm_importar_prontuario_paso_4'=>array('controller'=>'Controller','action'=> 'frm_importar_prontuario_paso_4'),
+    'frm_importar_prontuario_paso_5'=>array('controller'=>'Controller','action'=> 'frm_importar_prontuario_paso_5'),
+    'frm_importar_prontuario_paso_6'=>array('controller'=>'Controller','action'=> 'frm_importar_prontuario_paso_6'),
+    
     //Controlador de Usuarios
     'listar_usuarios'=> array('controller'=>'Controller','action'=>'listar_usuarios'),
     'gestion_usuarios' => array('controller'=> 'Controller','action'=>'gestion_usuarios'),
