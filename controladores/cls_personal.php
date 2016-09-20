@@ -2,6 +2,8 @@
 class cls_personal{
     public $obj_data_provider;
     public $arreglo;
+    public $arreglo2;
+    public $arreglo3;
     private $condicion;
     public $id;
     public $id2;
@@ -14,7 +16,43 @@ class cls_personal{
     public $linkfoto;
     public $observaciones;
     public $estado;
+    public $id_unidad_ejecutora;
+    public $unidad_ejecutora;
+    public $puesto;
+    public $id_puesto;
+    public $empresa;
+    public $id_empresa;
+    public $id_ultima_persona_ingresada;
     
+    function getArreglo3() {
+        return $this->arreglo3;
+    }
+
+    function setArreglo3($arreglo3) {
+        $this->arreglo3 = $arreglo3;
+    }
+
+        
+    function getArreglo2() {
+        return $this->arreglo2;
+    }
+
+    function getId_unidad_ejecutora() {
+        return $this->id_unidad_ejecutora;
+    }
+
+    function getUnidad_ejecutora() {
+        return $this->unidad_ejecutora;
+    }
+
+    function getPuesto() {
+        return $this->puesto;
+    }
+
+    function getId_puesto() {
+        return $this->id_puesto;
+    }
+
     function getGafete() {
         return $this->gafete;
     }
@@ -35,8 +73,44 @@ class cls_personal{
         return $this->empresa;
     }
 
+    function getId_empresa() {
+        return $this->id_empresa;
+    }
+
+    function getId_ultima_persona_ingresada() {
+        return $this->id_ultima_persona_ingresada;
+    }
+
+    function setArreglo2($arreglo2) {
+        $this->arreglo2 = $arreglo2;
+    }
+
+    function setId_unidad_ejecutora($id_unidad_ejecutora) {
+        $this->id_unidad_ejecutora = $id_unidad_ejecutora;
+    }
+
+    function setUnidad_ejecutora($unidad_ejecutora) {
+        $this->unidad_ejecutora = $unidad_ejecutora;
+    }
+
+    function setPuesto($puesto) {
+        $this->puesto = $puesto;
+    }
+
+    function setId_puesto($id_puesto) {
+        $this->id_puesto = $id_puesto;
+    }
+
     function setEmpresa($empresa) {
         $this->empresa = $empresa;
+    }
+
+    function setId_empresa($id_empresa) {
+        $this->id_empresa = $id_empresa;
+    }
+
+    function setId_ultima_persona_ingresada($id_ultima_persona_ingresada) {
+        $this->id_ultima_persona_ingresada = $id_ultima_persona_ingresada;
     }
 
     function getObj_data_provider() {
@@ -144,6 +218,14 @@ class cls_personal{
         $this->gafete="";
         $this->correo="";
         $this->arreglo;
+        $this->arreglo2;
+        $this->arreglo3;
+        $this->unidad_ejecutora="";
+        $this->id_unidad_ejecutora="";
+        $this->empresa="";
+        $this->id_empresa="";
+        $this->puesto="";
+        $this->id_puesto="";
     }
     
     public function obtiene_todo_el_personal(){
@@ -263,6 +345,191 @@ class cls_personal{
             $this->obj_data_provider->desconectar();
             $this->resultado_operacion=true;
         }
+    }
+    
+    public function obtener_personas_prontuario() {
+        $this->obj_data_provider->conectar();
+        if($this->condicion==""){
+            $this->arreglo=$this->obj_data_provider->trae_datos(
+                    "T_personal", 
+                    "*",
+                    "");
+            $this->arreglo=$this->obj_data_provider->getArreglo();
+            $this->obj_data_provider->desconectar();
+        }
+        else{
+            $this->arreglo=$this->obj_data_provider->trae_datos(
+                    "T_personal", 
+                    "*",
+                    $this->condicion);
+            $this->arreglo=$this->obj_data_provider->getArreglo();
+            $this->obj_data_provider->desconectar();
+            $this->resultado_operacion=true;
+        }
+    }
+    
+    public function agregar_nueva_persona(){
+        $this->obj_data_provider->conectar();
+        $this->obj_data_provider->inserta_datos("t_personal", "Cedula,Apellido_Nombre,ID_Unidad_Ejecutora,ID_Puesto,Direccion,Link_Foto,ID_Empresa,Observaciones,Estado", "'".$this->cedula."','".$this->apellidonombre."',".$this->id_unidad_ejecutora.",".$this->id_puesto.",'".$this->direccion."','".$this->linkfoto."',".$this->id_empresa.",'".$this->observaciones."','".$this->estado."'");
+        $this->obj_data_provider->desconectar();
+    }
+    
+     public function agregar_nueva_persona_para_prontuario(){
+        $this->obj_data_provider->conectar();
+        $this->obj_data_provider->inserta_datos_para_prontuario("t_personal", "Cedula,Apellido_Nombre,ID_Unidad_Ejecutora,ID_Puesto,Direccion,Link_Foto,ID_Empresa,Observaciones,Estado", "'".$this->cedula."','".$this->apellidonombre."',".$this->id_unidad_ejecutora.",".$this->id_puesto.",'".$this->direccion."','".$this->linkfoto."',".$this->id_empresa.",'".$this->observaciones."','".$this->estado."'");
+        $this->obj_data_provider->desconectar();
+    }
+    function edita_persona(){
+        $this->obj_data_provider->conectar();
+        
+        //Llama al metodo para editar los datos correspondientes
+        $this->obj_data_provider->edita_datos("t_personal","Cedula='".$this->cedula."',Apellido_Nombre='".$this->apellidonombre."',ID_Unidad_Ejecutora=".$this->id_unidad_ejecutora.",ID_Puesto=".$this->id_puesto.",Direccion='".$this->direccion."',Link_Foto='".$this->linkfoto."',ID_Empresa=".$this->id_empresa.",Observaciones='".$this->observaciones."',Estado='".$this->estado."'",$this->condicion);
+       
+        //Metodo de la clase data provider que desconecta la sesión con la base de datos
+        $this->obj_data_provider->desconectar();
+       
+    }
+    
+    function edita_persona_para_prontuario(){
+        $this->obj_data_provider->conectar();
+        
+        //Llama al metodo para editar los datos correspondientes
+        $this->obj_data_provider->edita_datos_para_prontuario("t_personal","Cedula='".$this->cedula."',Apellido_Nombre='".$this->apellidonombre."',ID_Unidad_Ejecutora=".$this->id_unidad_ejecutora.",ID_Puesto=".$this->id_puesto.",Direccion='".$this->direccion."',Link_Foto='".$this->linkfoto."',ID_Empresa=".$this->id_empresa.",Observaciones='".$this->observaciones."',Estado='".$this->estado."'",$this->condicion);
+       
+        //Metodo de la clase data provider que desconecta la sesión con la base de datos
+        $this->obj_data_provider->desconectar();
+       
+    }
+ 
+ 
+    //Obtener el último id de evento para saber que se debe ingresar
+    function obtiene_id_ultima_persona_ingresada(){
+      //Establece la conexión con la bd
+      $this->obj_data_provider->conectar();
+      
+      $this->obj_data_provider->trae_datos("t_personal","max(ID_Persona) ID_Persona","");
+      
+      $this->arreglo2=$this->obj_data_provider->getArreglo();
+     
+      $this->obj_data_provider->desconectar();
+      
+      if (count($this->arreglo2)>0){
+          $this->setId_ultima_persona_ingresada($this->arreglo2[0]['ID_Persona']);
+         
+      }else
+      {
+          $this->setId_ultima_persona_ingresada(0);
+      }   
+  }
+   //Este metodo realiza la modificación del estado del modulo, de activo a inactivo o viceversa en la bd
+    function edita_id_persona_en_tabla_telefonos(){
+        $this->obj_data_provider->conectar();
+        
+        //Llama al metodo para editar los datos correspondientes
+        $this->obj_data_provider->edita_datos("t_telefono","ID=".$this->id_ultima_persona_ingresada,$this->condicion);
+        //Metodo de la clase data provider que desconecta la sesión con la base de datos
+        $this->obj_data_provider->desconectar();
+       
+    }
+    
+    //Este metodo realiza la modificación del estado del modulo, de activo a inactivo o viceversa en la bd
+    function edita_id_persona_en_tabla_telefonos_para_prontuario(){
+        $this->obj_data_provider->conectar();
+        
+        //Llama al metodo para editar los datos correspondientes
+        $this->obj_data_provider->edita_datos_para_prontuario("t_telefono","ID=".$this->id_ultima_persona_ingresada,$this->condicion);
+        //Metodo de la clase data provider que desconecta la sesión con la base de datos
+        $this->obj_data_provider->desconectar();
+       
+    }
+    
+    //Este metodo realiza la modificación del estado del modulo, de activo a inactivo o viceversa en la bd
+    function edita_id_persona_en_tabla_gerente_zona_bcr(){
+        $this->obj_data_provider->conectar();
+        
+        //Llama al metodo para editar los datos correspondientes
+        $this->obj_data_provider->edita_datos("t_gerentezonabcr","ID_Persona=".$this->id_ultima_persona_ingresada,$this->condicion);
+        //Metodo de la clase data provider que desconecta la sesión con la base de datos
+        $this->obj_data_provider->desconectar();
+       
+    }
+    
+    //Este metodo realiza la modificación del estado del modulo, de activo a inactivo o viceversa en la bd
+    function edita_id_persona_en_tabla_gerente_zona_bcr_para_prontuario(){
+        $this->obj_data_provider->conectar();
+        
+        //Llama al metodo para editar los datos correspondientes
+        $this->obj_data_provider->edita_datos_para_prontuario("t_gerentezonabcr","ID_Persona=".$this->id_ultima_persona_ingresada,$this->condicion);
+        //Metodo de la clase data provider que desconecta la sesión con la base de datos
+        $this->obj_data_provider->desconectar();
+       
+    }
+        
+     function eliminar_telefonos_personas_bcr_fuera_de_prontuario_para_prontuario(){
+          
+        $this->obj_data_provider->conectar();
+        $this->obj_data_provider->eliminar_datos_para_prontuario("t_telefono", "(".$this->condicion.") AND (ID_Tipo_Telefono=2 OR ID_Tipo_Telefono=3 OR ID_Tipo_Telefono=4 OR ID_Tipo_Telefono=27)");
+        $this->obj_data_provider->desconectar();
+  
+    }
+    
+    function eliminar_personas_bcr_fuera_de_prontuario_para_prontuario(){
+          
+        $this->obj_data_provider->conectar();
+        $this->obj_data_provider->eliminar_datos_para_prontuario("t_personal", $this->condicion);
+        $this->obj_data_provider->desconectar();
+  
+    }
+    
+    function eliminar_telefonos_personas_bcr_fuera_de_prontuario(){
+          
+        $this->obj_data_provider->conectar();
+        $this->obj_data_provider->eliminar_datos("t_telefono", "(".$this->condicion.") AND (ID_Tipo_Telefono=2 OR ID_Tipo_Telefono=3 OR ID_Tipo_Telefono=4 OR ID_Tipo_Telefono=27)");
+        $this->obj_data_provider->desconectar();
+  
+    }
+    
+    function eliminar_personas_bcr_fuera_de_prontuario(){
+          
+        $this->obj_data_provider->conectar();
+        $this->obj_data_provider->eliminar_datos("t_personal", $this->condicion);
+        $this->obj_data_provider->desconectar();
+  
+    }
+    
+     //Obtener el último id de evento para saber que se debe ingresar
+    function verifica_si_la_persona_es_gerente_zona_bcr(){
+      //Establece la conexión con la bd
+      $this->obj_data_provider->conectar();
+      
+      $this->obj_data_provider->trae_datos("t_gerentezonabcr","*",$this->condicion);
+      
+      $this->arreglo3=$this->obj_data_provider->getArreglo();
+     
+      $this->obj_data_provider->desconectar();
+      
+      if (count($this->arreglo3)>0){
+          return true;
+      }else
+      {
+          return false;
+      }   
+  }
+  
+  function eliminar_personas_sobrantes(){
+          
+        $this->obj_data_provider->conectar();
+        $this->obj_data_provider->eliminar_datos("t_personal", $this->condicion);
+        $this->obj_data_provider->desconectar();
+  
+    }
+    
+    function eliminar_personas_sobrantes_para_prontuario(){
+          
+        $this->obj_data_provider->conectar();
+        $this->obj_data_provider->eliminar_datos_para_prontuario("t_personal", $this->condicion);
+        $this->obj_data_provider->desconectar();
+  
     }
     
     public function actualizar_estado_persona(){

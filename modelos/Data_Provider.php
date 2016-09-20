@@ -193,6 +193,7 @@ class Data_Provider{
    //Este metodo recibe el nombre de la tabla, campos de la misma y la condición de búsqueda en caso de que exista
     public function trae_datos($table,$campos,$condicion){
        
+        //echo "select ".$campos." from ".$table." where ".$condicion.";";
         // Elimina la instancia del arreglo
         unset($this->arreglo);
        
@@ -239,6 +240,7 @@ class Data_Provider{
             
         // Gestión de insercion del metodo de la clase
        //Arma el insert SQL, de acuerdo a los parámetros recibidos por usuario
+       
         $consulta=$this->conexion->query("insert into ".$table."(".$campos.") values(".$valores.");");
         //echo ("insert into ".$table."(".$campos.") values(".$valores.");");
         //Establece a true el resultado de operación
@@ -258,6 +260,19 @@ class Data_Provider{
         //Inserta el registro de traza en la tabla con los datos correspondientes, de usuario, consulta, etc. En este caso no hay valor antiguo, debido a que es una inserción de datos.
         $consulta=$this->conexion->query("insert into t_traza (ID_Traza,Fecha,Hora,ID_Usuario,Tabla_Afectada,Dato_Anterior,Dato_Actualizado) values(null,'".date("Y-m-d")."','".date("H:i:s", time())."',".$_SESSION['id'].",'".$table."','Insercion - Sin Valores Anteriores','".$cadena_sql."');");
         
+   }    
+   
+   // Método ABC SQL que permite ingresar información en las tablas de la bd
+   public function inserta_datos_para_prontuario($table,$campos,$valores){
+            
+        // Gestión de insercion del metodo de la clase
+       //Arma el insert SQL, de acuerdo a los parámetros recibidos por usuario
+       
+        $consulta=$this->conexion->query("insert into ".$table."(".$campos.") values(".$valores.");");
+        //echo ("insert into ".$table."(".$campos.") values(".$valores.");");
+        //Establece a true el resultado de operación
+        $this->resultado_operacion=true;
+  
    }    
    
    //Método utilizado para insertar datos en la tabla traza, para consultas ABC mediante procedimientos almacenados
@@ -320,6 +335,18 @@ class Data_Provider{
         
    }
    
+    //Metodo de la clase que permite editar datos en la bd, administrado también por trazabilidad
+   // Recibe información de la tabla, los campos y la condición para encontrar el registro
+   public function edita_datos_para_prontuario($table,$campos_valores,$condicion){
+       
+        // Ejecuta la edición de datos en la tabla correspondiente.
+        $consulta=$this->conexion->query("update ".$table." set ".$campos_valores." where ".$condicion.";");
+        //echo("update ".$table." set ".$campos_valores." where ".$condicion.";");
+        //Estable a true la variable de control
+        $this->resultado_operacion=true;
+
+   }
+   
    //Método que permite eliminar registros de la BD
    public function eliminar_datos($table,$condicion){
 
@@ -351,7 +378,7 @@ class Data_Provider{
             $cadena_sql=str_replace(","," - ","delete from ".$table." where ".$condicion.";");
             //echo("delete from ".$table." where ".$condicion.";");
        }    
-       
+       //echo $consulta;
         //Registro de la trazabilidad del sistema
         
        //Reemplaza las comillas con espacios en blanco
@@ -363,6 +390,27 @@ class Data_Provider{
         
         //Inserta el registro en la tabla traza con los datos requeridos, usuario, fecha, hora, datos anteriores, etc.
         $consulta=$this->conexion->query("insert into t_traza (ID_Traza,Fecha,Hora,ID_Usuario,Tabla_Afectada,Dato_Anterior,Dato_Actualizado) values(null,'".date("Y-m-d")."','".date("H:i:s", time())."',".$_SESSION['id'].",'".$table."','".$valores_iniciales. "','".$cadena_sql."');");       
+   }
+   
+   //Método que permite eliminar registros de la BD
+   public function eliminar_datos_para_prontuario($table,$condicion){
+
+       // Trae los datos de la bd que se van a eliminar, mediante la condición, nombre de la tabla, y todos los registros
+       $this->trae_datos($table, "*", $condicion);
+              
+        //Verifica si existe alguna condición de búsqueda
+       if ($condicion==""){
+           //En caso de no haber condición realiza el borrado completo de la tabla
+            $consulta=$this->conexion->query("delete from ".$table.";");
+            //Reemplaza en la consulta SQL las comillas con guiones para efecto de insertar la consulta en la tabla traza
+           
+       }else{
+           //Caso contrario asigna la condiciónd de búsqueda al SQL y procede a eliminar en la tabla
+            $consulta=$this->conexion->query("delete from ".$table." where ".$condicion.";");
+            //Reemplaza en la consulta SQL, las comillas con guiones para efecto de insertar la consulta en la tabla traza
+           
+       }    
+      
    }
 }
 

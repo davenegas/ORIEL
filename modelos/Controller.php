@@ -49,120 +49,9 @@
         }
     }    
     
-    public function frm_importar_prontuario_paso_3(){
+    public function frm_importar_prontuario_paso_2(){
         if(isset($_SESSION['nombre'])){
-            /*$obj_eventos = new cls_eventos();
-            $obj_eventos->setId($_GET['id']);
-            $obj_eventos->setId2(0);
-            $obj_eventos->setFecha(($_POST['Fecha']));
-            $obj_eventos->setHora(($_POST['Hora']));
-            $obj_eventos->setDetalle(($_POST['DetalleSeguimiento']));
-            $obj_eventos->setId_usuario($_SESSION['id']);*/
-                    
-            print_r($_SESSION['prontuario']);
-            
-            //print_r($prontuario);
-            
-            //$this->frm_eventos_listar();
-            
-            /*$recepcion_archivo=$_FILES['seleccionar_archivo']['error'];
-            
-            if (!($_FILES['seleccionar_archivo']['type']==="application/vnd.ms-excel")){
-                echo "<script type=\"text/javascript\">alert('Debe Importar un archivo tipo CSV!!!!');history.go(-1);</script>";;
-                //echo 'Prueba';
-                exit();
-            }
-
-            //echo basename($_FILES['seleccionar_archivo']['tmp_name']);
-            $handle= fopen ($_FILES['seleccionar_archivo']['tmp_name'],"r");
-            
-            $params=$record = fgetcsv($handle);
-                    
-            $prontuario =array();
-            
-            $i=0;
-            while ($record = fgetcsv($handle,0,";")){
-                $prontuario[]=$record;
-                $i++;
-            }
-            */
-           $mensaje="Fue recibida la información correspondiente a 0 personas."; 
-            
-           require __DIR__ . '/../vistas/plantillas/frm_importar_prontuario_paso_3.php';
-                   
-            //echo basename($_FILES['seleccionar_archivo']['type']);
-            /*$date=new DateTime(); //this returns the current date time
-            $result = $date->format('Y-m-d-H-i-s');
-            //echo $result;
-            $krr = explode('-',$result);
-            $result = implode("",$krr);
-                       
-            $raiz=$_SERVER['DOCUMENT_ROOT'];
-                       
-            if (substr($raiz,-1)!="/"){
-                $raiz.="/";
-            }
-            
-            $ruta=  $raiz."Adjuntos_Bitacora/".Encrypter::quitar_tildes($result.$_FILES['archivo_adjunto']['name']);
-            //$ruta=  $_SERVER['DOCUMENT_ROOT']."Adjuntos_Bitacora/".$result.$_FILES['archivo_adjunto']['name'];
-          
-            switch ($recepcion_archivo) {
-                case 0:{
-                    
-                    if (move_uploaded_file($_FILES['archivo_adjunto']['tmp_name'], $ruta)){
-                        $obj_eventos->setAdjunto(Encrypter::quitar_tildes($result.$_FILES['archivo_adjunto']['name'])); 
-                        $obj_eventos->ingresar_seguimiento_evento();
-                        $obj_eventos->edita_estado_evento($_POST['estado_del_evento']);
-                        header ("location:/ORIEL/index.php?ctl=frm_eventos_listar");
-                    }  else {
-                        //echo "<script type=\"text/javascript\">alert('Hubo un problema al subir el archivo al servidor!!!');history.go(-1);</script>";;
-                        $obj_eventos->setAdjunto("N/A");
-                        $obj_eventos->ingresar_seguimiento_evento();
-                        $obj_eventos->edita_estado_evento($_POST['estado_del_evento']);
-                        header ("location:/ORIEL/index.php?ctl=frm_eventos_listar");
-                        //echo "<script type=\"text/javascript\">alert('No fue seleccionado ningun archivo!!!!');history.go(-1);</script>";;
-                    }
-                    break;
-                }
-                    
-                case 2:{
-                    echo "<script type=\"text/javascript\">alert('El archivo consume mayor espacio del permitido (1 mb) !!!!');history.go(-1);</script>";;
-                    break;
-                }
-                case 4:{ 
-                    $obj_eventos->setAdjunto("N/A");
-                    $obj_eventos->ingresar_seguimiento_evento();
-                    $obj_eventos->edita_estado_evento($_POST['estado_del_evento']);
-                    header ("location:/ORIEL/index.php?ctl=frm_eventos_listar");
-                    //echo "<script type=\"text/javascript\">alert('No fue seleccionado ningun archivo!!!!');history.go(-1);</script>";;
-                    break;
-                }
-                 case 6:{
-                    echo "<script type=\"text/javascript\">alert('El servidor no tiene acceso a la carpeta temporal de almacenamiento!!!!');history.go(-1);</script>";
-                    break;
-                 } 
-                case 7:{
-                    echo "<script type=\"text/javascript\">alert('No es posible escribir en el disco duro del servidor!!!!');history.go(-1);</script>";;
-                    break;
-                }  
-                case 8:{
-                    echo "<script type=\"text/javascript\">alert('Fue detenida la carga del archivo debido a una extension de PHP!!!!');history.go(-1);</script>";;
-                    break;
-                }   
-            }*/
-            
-                   
-        }else {
-            $tipo_de_alerta="alert alert-warning";
-            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
-            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
-        } 
-    }
-    
-    
-    public function subir_archivo_prontuario(){
-        if(isset($_SESSION['nombre'])){
-           
+               
             $recepcion_archivo=$_FILES['seleccionar_archivo']['error'];
             
             if (!($_FILES['seleccionar_archivo']['type']==="application/vnd.ms-excel")){
@@ -188,6 +77,343 @@
             
            require __DIR__ . '/../vistas/plantillas/frm_importar_prontuario_paso_2.php';
                           
+        }else {
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        } 
+    }
+    
+    
+    // Paso de importación del prontuario que permite actualizar la tabla de unidades ejecutoras en el sistema
+    public function frm_importar_prontuario_paso_3(){
+        if(isset($_SESSION['nombre'])){
+            
+            //Crea objeto de tipo unidad ejecutora para administración de la tabla
+            $obj_unidades_ejecutoras = new cls_unidad_ejecutora();
+ 
+            // Crea vector para almacenar las unidades ejecutoras que vienen en el prontuario pero en modo disctinct
+            $unidades_ejecutoras=array();
+            
+            // Lee las unidades ejecutoras que se encuentran en el prontuario y las pasa a un vector separado en modo distinct
+            for ($i = 0; $i < count($_SESSION['prontuario']); $i++) {
+                if (count($unidades_ejecutoras)>0){
+                    $bandera=0;
+                    for ($x = 0; $x < count($unidades_ejecutoras); $x++) {
+                        if ($_SESSION['prontuario'][$i][6]==$unidades_ejecutoras[$x]){
+                            $bandera=1;
+                        }
+                    }
+                    if ($bandera==0){
+                        $unidades_ejecutoras[]=$_SESSION['prontuario'][$i][6];
+                    }else{
+                        $bandera=0;
+                    }
+                }else{
+                    $unidades_ejecutoras[]=$_SESSION['prontuario'][$i][6];
+                }
+            }
+            
+            // Mediante este ciclo se edita la tabla de unidades ejecutoras completamente, nuevas, duplicadas, modificadas
+            
+            $nuevas=0;
+            $editadas=0;
+            
+            for ($i = 0; $i < count($unidades_ejecutoras); $i++){
+                $obj_unidades_ejecutoras->setCondicion("Departamento Like '".substr($unidades_ejecutoras[$i],0,strpos($unidades_ejecutoras[$i],"-")+1)."%'");
+                $obj_unidades_ejecutoras->obtener_unidades_ejecutoras();
+            
+                if (count($obj_unidades_ejecutoras->getArreglo())>1){
+                    $obj_unidades_ejecutoras->setNumero_ue(substr($unidades_ejecutoras[$i],0,strpos($unidades_ejecutoras[$i],"-")-1));
+                    $obj_unidades_ejecutoras->setDepartamento($unidades_ejecutoras[$i]);
+                    $obj_unidades_ejecutoras->setObservaciones("");
+                    $obj_unidades_ejecutoras->setEstado("1");
+                    $obj_unidades_ejecutoras->agregar_nueva_ue_para_prontuario();
+                    $obj_unidades_ejecutoras->obtiene_id_ultima_ue_ingresada();
+                    
+                    for ($x = 0; $x < count($obj_unidades_ejecutoras->getArreglo()); $x++) {
+                        $obj_unidades_ejecutoras->setCondicion("ID_Unidad_Ejecutora=".$obj_unidades_ejecutoras->getArreglo()[$x]['ID_Unidad_Ejecutora']);
+                        $obj_unidades_ejecutoras->edita_ue_de_personas_para_prontuario();
+                        $obj_unidades_ejecutoras->edita_ue_de_sitios_bcr_para_prontuario();
+                        $obj_unidades_ejecutoras->eliminar_ue_sobrantes_para_prontuario();
+                    }
+                    $editadas++;
+                }
+                if (count($obj_unidades_ejecutoras->getArreglo())==1){
+                    if (!($obj_unidades_ejecutoras->getArreglo()[0]['Departamento']==$unidades_ejecutoras[$i])){
+                        $obj_unidades_ejecutoras->setNumero_ue(substr($unidades_ejecutoras[$i],0,strpos($unidades_ejecutoras[$i],"-")-1));
+                        $obj_unidades_ejecutoras->setDepartamento($unidades_ejecutoras[$i]);
+                        $obj_unidades_ejecutoras->setObservaciones("");
+                        $obj_unidades_ejecutoras->setEstado("1");
+                        $obj_unidades_ejecutoras->setCondicion("ID_Unidad_Ejecutora=".$obj_unidades_ejecutoras->getArreglo()[0]['ID_Unidad_Ejecutora']);
+                        $obj_unidades_ejecutoras->edita_ue_para_prontuario();
+                        $editadas++;
+                    }
+                }
+                if ($obj_unidades_ejecutoras->getArreglo()==null){
+                    $obj_unidades_ejecutoras->setNumero_ue(substr($unidades_ejecutoras[$i],0,strpos($unidades_ejecutoras[$i],"-")-1));
+                    $obj_unidades_ejecutoras->setDepartamento($unidades_ejecutoras[$i]);
+                    $obj_unidades_ejecutoras->setObservaciones("");
+                    $obj_unidades_ejecutoras->setEstado("1");
+                    $obj_unidades_ejecutoras->agregar_nueva_ue_para_prontuario();
+                    $nuevas++;
+                }
+                
+            }
+            $obj_unidades_ejecutoras->setCondicion("Not ID_Unidad_Ejecutora In (Select ID_Unidad_Ejecutora From t_personal)and not ID_Unidad_Ejecutora In (Select ID_Unidad_Ejecutora From t_ue_puntobcr)");
+            $obj_unidades_ejecutoras->obtener_unidades_ejecutoras();
+            
+            if (count($obj_unidades_ejecutoras->getArreglo())==null){
+                $cuenta_ue_inactivas=0;
+            }else{
+                $cuenta_ue_inactivas=count($obj_unidades_ejecutoras->getArreglo());
+            }
+            $total_unidades_ejecutoras="Se identificaron un total de ".count($unidades_ejecutoras)." unidades ejecutoras en el prontuario adjunto.";
+            $nuevas_unidades_ejecutoras="Se agregaron un total de ".$nuevas." unidades ejecutoras nuevas al sistema.";
+            $unidades_inactivas="Se identificaron un total de ".$cuenta_ue_inactivas." unidades ejecutoras no ligadas a ninguna persona ni punto BCR (probablemente están en desuso o inactivas).";
+            $unidades_editadas="Se editaron un total de ".$editadas." unidades ejecutoras";
+            
+           require __DIR__ . '/../vistas/plantillas/frm_importar_prontuario_paso_3.php';
+     
+        }else {
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        } 
+    }
+    
+    // Paso de importación del prontuario que permite actualizar la tabla de puestos en el sistema
+    public function frm_importar_prontuario_paso_4(){
+        if(isset($_SESSION['nombre'])){
+            
+            //Crea objeto de tipo puestos para administración de la tabla
+            $obj_puestos = new cls_puestos();
+ 
+            // Crea vector para almacenar los puestos que vienen en el prontuario pero en modo disctinct
+            $arreglo_puestos=array();
+            
+            // Lee los puestos que se encuentran en el prontuario y los pasa a un vector separado en modo distinct
+            for ($i = 0; $i < count($_SESSION['prontuario']); $i++) {
+                if (count($arreglo_puestos)>0){
+                    $bandera=0;
+                    for ($x = 0; $x < count($arreglo_puestos); $x++) {
+                        if ($_SESSION['prontuario'][$i][3]==$arreglo_puestos[$x]){
+                            $bandera=1;
+                        }
+                    }
+                    if ($bandera==0){
+                        $arreglo_puestos[]=$_SESSION['prontuario'][$i][3];
+                    }else{
+                        $bandera=0;
+                    }
+                }else{
+                    $arreglo_puestos[]=$_SESSION['prontuario'][$i][3];
+                }
+            }
+            
+            // Mediante este ciclo se edita la tabla puestos completamente, nuevos, duplicados, modificados
+            
+            $nuevos=0;
+            $editados=0;
+            
+            for ($i = 0; $i < count($arreglo_puestos); $i++){
+                $obj_puestos->setCondicion("Puesto='".$arreglo_puestos[$i]."'");
+                $obj_puestos->obtener_puestos();
+            
+                 $obj_puestos->setPuesto($arreglo_puestos[$i]);
+                 $obj_puestos->setObservaciones("");
+                 $obj_puestos->setEstado("1");
+                    
+                if (count($obj_puestos->getArreglo())>1){
+                   
+                    $obj_puestos->agregar_nuevo_puesto_para_prontuario();
+                    $obj_puestos->obtiene_id_ultimo_puesto_ingresado();
+                    
+                    for ($x = 0; $x < count($obj_puestos->getArreglo()); $x++) {
+                        $obj_puestos->setCondicion("ID_Puesto=".$obj_puestos->getArreglo()[$x]['ID_Puesto']);
+                        $obj_puestos->edita_puesto_de_personas_para_prontuario();
+                        $obj_puestos->eliminar_puestos_sobrantes_para_prontuario();
+                    }
+                    $editados++;
+                }
+                if (count($obj_puestos->getArreglo())==1){
+                    if (!($obj_puestos->getArreglo()[0]['Puesto']==$arreglo_puestos[$i])){
+                        
+                        $obj_puestos->setCondicion("ID_Puesto=".$obj_puestos->getArreglo()[0]['ID_Puesto']);
+                        $obj_puestos->edita_puesto_para_prontuario();
+                        $editados++;
+                    }
+                }
+                if ($obj_puestos->getArreglo()==null){
+                    
+                    $obj_puestos->agregar_nuevo_puesto_para_prontuario();
+                    $nuevos++;
+                }
+                
+            }
+            $obj_puestos->setCondicion("Not ID_Puesto In (Select ID_Puesto From t_personal)");
+            $obj_puestos->obtener_puestos();
+            
+            if (count($obj_puestos->getArreglo())==null){
+                $cuenta_puestos_inactivos=0;
+            }else{
+                $cuenta_puestos_inactivos=count($obj_puestos->getArreglo());
+            }
+            $total_puestos="Se identificaron un total de ".count($arreglo_puestos)." puestos en el prontuario adjunto.";
+            $nuevos_puestos="Se agregaron un total de ".$nuevos." puestos nuevos al sistema.";
+            $puestos_inactivos="Se identificaron un total de ".$cuenta_puestos_inactivos." puestos no ligados a ninguna persona.";
+            $puestos_editados="Se editaron un total de ".$editados." puestos.";
+            
+           require __DIR__ . '/../vistas/plantillas/frm_importar_prontuario_paso_4.php';
+     
+        }else {
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        } 
+    }
+    
+    
+    // Paso de importación del prontuario que permite actualizar la tabla de personas en el sistema
+    public function frm_importar_prontuario_paso_5(){
+        
+        if(isset($_SESSION['nombre'])){
+
+            //Crea objeto de tipo puestos para administración de la tabla
+            $obj_personal = new cls_personal();
+            $obj_puesto = new cls_puestos();
+            $obj_ue = new cls_unidad_ejecutora();
+ 
+            // Crea vector para almacenar los puestos que vienen en el prontuario pero en modo disctinct
+            $arreglo_personal=array();
+            
+            // Lee los puestos que se encuentran en el prontuario y los pasa a un vector separado en modo distinct
+            for ($i = 0; $i < count($_SESSION['prontuario']); $i++) {
+                
+                    $arreglo_personal[]=array($_SESSION['prontuario'][$i][0],$_SESSION['prontuario'][$i][1],$_SESSION['prontuario'][$i][3],$_SESSION['prontuario'][$i][6],$_SESSION['prontuario'][$i][7]);
+               
+            }
+            
+            // Mediante este ciclo se edita la tabla puestos completamente, nuevos, duplicados, modificados
+            
+            $nuevos=0;
+            $editados=0;
+            $eliminadas=0;
+            
+            for ($i = 0; $i < count($arreglo_personal); $i++){
+
+                $obj_personal->setCondicion("Cedula='".$arreglo_personal[$i][1]."' and ID_Empresa=1");
+                $obj_personal->obtener_personas_prontuario();
+            
+                $obj_personal->setApellidonombre($arreglo_personal[$i][0]);
+                    
+                $obj_puesto->setPuesto($arreglo_personal[$i][2]);
+                $obj_puesto->obtiene_id_puesto_por_nombre();
+                $obj_personal->setId_puesto($obj_puesto->getId());
+
+                $obj_personal->setCedula($arreglo_personal[$i][1]);
+
+                $obj_ue->setDepartamento($arreglo_personal[$i][3]);
+                $obj_ue->obtiene_id_ue_por_nombre();
+                $obj_personal->setId_unidad_ejecutora($obj_ue->getId());
+
+                $obj_personal->setDireccion($arreglo_personal[$i][4]);
+
+                $obj_personal->setLinkfoto("http://bcr0157uco01/foto/".$arreglo_personal[$i][1].".jpg?rnd=7055");
+                $obj_personal->setId_empresa("1");
+
+                $obj_personal->setObservaciones("");
+                $obj_personal->setEstado("1");
+                
+                if (count($obj_personal->getArreglo())>1){
+                   
+                    $obj_personal->agregar_nueva_persona_para_prontuario();
+                    $obj_personal->obtiene_id_ultima_persona_ingresada();
+                    
+                    for ($x = 0; $x < count($obj_personal->getArreglo()); $x++) {
+                        $obj_personal->setCondicion("(ID=".$obj_personal->getArreglo()[$x]['ID_Persona'].") AND (ID_Tipo_Telefono=2 or ID_Tipo_Telefono=3 or ID_Tipo_Telefono=4 or ID_Tipo_Telefono=27)");
+                        $obj_personal->edita_id_persona_en_tabla_telefonos_para_prontuario();
+                        $obj_personal->setCondicion("ID_Persona=".$obj_personal->getArreglo()[$x]['ID_Persona']);
+                        $obj_personal->edita_id_persona_en_tabla_gerente_zona_bcr_para_prontuario();
+                        $obj_personal->eliminar_personas_sobrantes_para_prontuario();
+                    }
+                    $editados++;
+                }
+                if (count($obj_personal->getArreglo())==1){
+
+                    $obj_personal->edita_persona_para_prontuario();
+                    $editados++;
+                    
+                }
+                if ($obj_personal->getArreglo()==null){
+                    
+                    $obj_personal->agregar_nueva_persona_para_prontuario();
+                    $nuevos++;
+                }
+                
+            }
+          
+            $total_personas="Se identificaron un total de ".count($arreglo_personal)." personas en el prontuario adjunto.";
+            $nuevas_personas="Se agregaron un total de ".$nuevos." personas nuevas al sistema.";
+            $personas_editadas="Se editaron un total de ".$editados." personas.";
+            
+           require __DIR__ . '/../vistas/plantillas/frm_importar_prontuario_paso_5.php';
+     
+        }else {
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        } 
+    }
+     // Paso de importación del prontuario que permite actualizar la tabla de personas en el sistema
+    public function frm_importar_prontuario_paso_6(){
+        
+        if(isset($_SESSION['nombre'])){
+            
+            //Crea objeto de tipo puestos para administración de la tabla
+            $obj_personal = new cls_personal();
+             
+            // Crea vector para almacenar los puestos que vienen en el prontuario pero en modo disctinct
+            $arreglo_personal=array();
+            
+            // Lee los puestos que se encuentran en el prontuario y los pasa a un vector separado en modo distinct
+            for ($i = 0; $i < count($_SESSION['prontuario']); $i++) {
+                
+                    $arreglo_personal[]=array($_SESSION['prontuario'][$i][0],$_SESSION['prontuario'][$i][1],$_SESSION['prontuario'][$i][3],$_SESSION['prontuario'][$i][6],$_SESSION['prontuario'][$i][7]);
+               
+            }
+            
+            $personas_eliminadas=0;
+            $excepciones="";
+            
+            $obj_personal->setCondicion("ID_Empresa=1");
+            $obj_personal->obtener_personas_prontuario();
+            $params=$obj_personal->getArreglo();
+
+            for ($i = 0; $i < count($params); $i++){
+                    
+                $bandera=0;
+                for ($x = 0; $x < count($arreglo_personal); $x++) {
+                    
+                    if ($params[$i]['Cedula']==$arreglo_personal[$x][1]){
+                       $bandera=1;
+                    }   
+                }
+                if ($bandera==0){
+                    $personas_eliminadas++;
+                    $obj_personal->setCondicion("ID=".$params[$i]['ID_Persona']);
+                    $obj_personal->eliminar_telefonos_personas_bcr_fuera_de_prontuario_para_prontuario();
+                    $obj_personal->setCondicion("ID_Persona=".$params[$i]['ID_Persona']);
+                    $obj_personal->eliminar_personas_bcr_fuera_de_prontuario_para_prontuario();
+                }
+                
+            }   
+
+            $personas_fuera="Se eliminaron un total de ".$personas_eliminadas." personas de la base de datos.";
+            $excepciones="Prueba";
+                        
+           require __DIR__ . '/../vistas/plantillas/frm_importar_prontuario_paso_6.php';
+     
         }else {
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
