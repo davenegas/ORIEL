@@ -399,18 +399,21 @@
                        $bandera=1;
                     }   
                 }
-                if ($bandera==0){
-                    $personas_eliminadas++;
-                    $obj_personal->setCondicion("ID=".$params[$i]['ID_Persona']);
-                    $obj_personal->eliminar_telefonos_personas_bcr_fuera_de_prontuario_para_prontuario();
+                if ($bandera==0){                   
                     $obj_personal->setCondicion("ID_Persona=".$params[$i]['ID_Persona']);
-                    $obj_personal->eliminar_personas_bcr_fuera_de_prontuario_para_prontuario();
+                    if ($obj_personal->verifica_si_la_persona_es_gerente_zona_bcr()) {
+                       $excepciones.="La persona con nombre:". $params[$i]['Apellido_Nombre']." y número de cédula: ".$params[$i]['Cedula']." no pudo ser borrada de la base de datos, ya que está asignada como Gerente de Zona BCR. Proceda antes a actualizar este cargo con otro miembro del personal. <br>";
+                    }else{
+                        $personas_eliminadas++;
+                        $obj_personal->setCondicion("ID=".$params[$i]['ID_Persona']);
+                        $obj_personal->eliminar_telefonos_personas_bcr_fuera_de_prontuario_para_prontuario();
+                        $obj_personal->setCondicion("ID_Persona=".$params[$i]['ID_Persona']);
+                        $obj_personal->eliminar_personas_bcr_fuera_de_prontuario_para_prontuario();
+                    }
                 }
                 
-            }   
-
+            }                    
             $personas_fuera="Se eliminaron un total de ".$personas_eliminadas." personas de la base de datos.";
-            $excepciones="Prueba";
                         
            require __DIR__ . '/../vistas/plantillas/frm_importar_prontuario_paso_6.php';
      
@@ -421,6 +424,73 @@
         } 
     }
 
+     // Paso de importación del prontuario que permite actualizar la tabla de personas en el sistema
+    public function frm_importar_prontuario_paso_7(){
+        
+        if(isset($_SESSION['nombre'])){
+            
+            //Crea objeto de tipo puestos para administración de la tabla
+            $obj_personal = new cls_personal();
+            $obj_telefono= new cls_telefono();
+             
+            // Crea vector para almacenar los puestos que vienen en el prontuario pero en modo disctinct
+            $arreglo_telefonos_celulares=array();
+            
+            $numeros_actualizados=0;
+            
+            // Lee los puestos que se encuentran en el prontuario y los pasa a un vector separado en modo distinct
+            for ($i = 0; $i < count($_SESSION['prontuario']); $i++) {
+                    $arreglo_telefonos_celulares[]=array($_SESSION['prontuario'][$i][1],str_replace (" ","",str_replace ("-","",$_SESSION['prontuario'][$i][8])));
+                    
+                    $obj_personal->setCondicion("Cedula='".$arreglo_telefonos_celulares[$i][0]."'");
+                    $obj_personal->obtiene_id_de_persona_para_prontuario();
+                    $obj_telefono->setCondicion("(ID=".$obj_personal->getId().") AND (ID_Tipo_Telefono=2 or ID_Tipo_Telefono=3 or ID_Tipo_Telefono=4 or ID_Tipo_Telefono=27 or ID_Tipo_Telefono=28) AND (Numero='0')");
+                    $obj_telefono->eliminar_telefonos_para_prontuario();
+                    $obj_telefono->setCondicion("(ID=".$obj_personal->getId().") AND (ID_Tipo_Telefono=2 or ID_Tipo_Telefono=3 or ID_Tipo_Telefono=4 or ID_Tipo_Telefono=27 or ID_Tipo_Telefono=28) ");
+                    $obj_telefono->obtiene_telefonos_por_criterio_para_prontuario();
+                    
+                    $obj_telefono->setid2($obj_personal->getId());
+                    $obj_telefono->setTipo_telefono("3");
+                    $obj_telefono->setObservaciones("");
+                    $obj_telefono->setEstado("1");
+                                        
+                    if (count($obj_telefono->getArreglo())>0){
+                        $obj_telefono->setCondicion("(ID=".$obj_personal->getId().") AND (ID_Tipo_Telefono=2 or ID_Tipo_Telefono=3 or ID_Tipo_Telefono=4 or ID_Tipo_Telefono=27 or ID_Tipo_Telefono=28) AND Numero='".$arreglo_telefonos_celulares[$i][1]."'");
+                        $obj_telefono->obtiene_telefonos_por_criterio_para_prontuario();
+                        if (count($obj_telefono->getArreglo())==0){
+                            if (strlen($arreglo_telefonos_celulares[$i][1])==8){
+                                $obj_telefono->setNumero($arreglo_telefonos_celulares[$i][1]);
+                                $obj_telefono->guardar_telefono_para_prontuario();
+                                $numeros_actualizados++;
+                            }
+                        }
+                    }else{
+                       if (strlen($arreglo_telefonos_celulares[$i][1])==8){
+                           $obj_telefono->setNumero($arreglo_telefonos_celulares[$i][1]);
+                           $obj_telefono->guardar_telefono_para_prontuario();
+                           $numeros_actualizados++;
+                       }else{
+                           $obj_telefono->setNumero("0");
+                           $obj_telefono->setTipo_telefono("4");
+                           $obj_telefono->guardar_telefono_para_prontuario();
+                           $numeros_actualizados++;
+                       }
+                    }
+            }
+            
+            $resultados= "Fueron actualizados un total de: ".$numeros_actualizados." números de celular.";
+                                
+           require __DIR__ . '/../vistas/plantillas/frm_importar_prontuario_paso_7.php';
+     
+        }else {
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        } 
+    }
+    
+    
+    
     // Prepara las variables y el formulario respectivo para cambio de clave
     public function cambiar_password(){   
         $usuario = "";       

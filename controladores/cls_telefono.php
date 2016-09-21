@@ -117,6 +117,16 @@ class cls_telefono{
         }
     }
     
+    public function obtiene_telefonos_por_criterio_para_prontuario(){
+        $this->obj_data_provider->conectar();
+        $this->arreglo=$this->obj_data_provider->trae_datos(
+                "T_Telefono", 
+                "Numero",
+                $this->condicion);
+        $this->arreglo=$this->obj_data_provider->getArreglo();
+        $this->obj_data_provider->desconectar();
+    }
+    
     public function guardar_telefono(){
         
         $this->obj_data_provider->conectar();
@@ -126,11 +136,27 @@ class cls_telefono{
         $this->resultado_operacion=$this->obj_data_provider->getResultado_operacion();  
     }
     
+    
+     public function guardar_telefono_para_prontuario(){
+        
+        $this->obj_data_provider->conectar();
+        $this->estado="1";
+         $this->obj_data_provider->inserta_datos_para_prontuario("T_Telefono","Numero,ID_Tipo_Telefono, ID, Observaciones, Estado","'".$this->numero."','".$this->tipo_telefono."','".$this->id2."','".$this->observaciones."','".$this->estado."'");
+        $this->obj_data_provider->desconectar();
+        $this->resultado_operacion=$this->obj_data_provider->getResultado_operacion();  
+    }
+    
     public function eliminar_telefono() {
         $this->obj_data_provider->conectar();
         $this->arreglo=$this->obj_data_provider->eliminar_datos("T_Telefono", $this->condicion);
         $this->obj_data_provider->desconectar();
         $this->resultado_operacion=true;
+    }
+    
+    public function eliminar_telefonos_para_prontuario() {
+        $this->obj_data_provider->conectar();
+        $this->arreglo=$this->obj_data_provider->eliminar_datos_para_prontuario("T_Telefono", $this->condicion);
+        $this->obj_data_provider->desconectar();
     }
     
     public function obtiene_telefonos_puntoBCR(){

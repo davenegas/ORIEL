@@ -17,7 +17,7 @@ ob_start();
     <body>
         <?php require_once 'encabezado.php';?>
         <div id="cargando">
-            <center><img align="center" src="vistas/Imagenes/cargando (2).gif"/></center>
+            <center><img align="center" src="vistas/Imagenes/cargando1.gif"/></center>
         </div>
         <div class="container">
         <h2>Listado General de Personal</h2>

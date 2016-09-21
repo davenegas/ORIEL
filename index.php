@@ -122,6 +122,7 @@ $map = array(
     'frm_importar_prontuario_paso_4'=>array('controller'=>'Controller','action'=> 'frm_importar_prontuario_paso_4'),
     'frm_importar_prontuario_paso_5'=>array('controller'=>'Controller','action'=> 'frm_importar_prontuario_paso_5'),
     'frm_importar_prontuario_paso_6'=>array('controller'=>'Controller','action'=> 'frm_importar_prontuario_paso_6'),
+    'frm_importar_prontuario_paso_7'=>array('controller'=>'Controller','action'=> 'frm_importar_prontuario_paso_7'),
 
     //Controlador de Usuarios
     'listar_usuarios'=> array('controller'=>'Controller','action'=>'listar_usuarios'),

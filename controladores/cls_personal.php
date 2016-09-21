@@ -421,6 +421,28 @@ class cls_personal{
           $this->setId_ultima_persona_ingresada(0);
       }   
   }
+  
+  
+  //Obtener el último id de evento para saber que se debe ingresar
+    function obtiene_id_de_persona_para_prontuario(){
+      //Establece la conexión con la bd
+      $this->obj_data_provider->conectar();
+      
+      $this->obj_data_provider->trae_datos("t_personal","ID_Persona",$this->condicion);
+      
+      $this->arreglo=$this->obj_data_provider->getArreglo();
+     
+      $this->obj_data_provider->desconectar();
+      
+      if (count($this->arreglo)>0){
+          $this->setId($this->arreglo[0]['ID_Persona']);
+         
+      }else
+      {
+          $this->setId(0);
+      }   
+  }
+  
    //Este metodo realiza la modificación del estado del modulo, de activo a inactivo o viceversa en la bd
     function edita_id_persona_en_tabla_telefonos(){
         $this->obj_data_provider->conectar();
