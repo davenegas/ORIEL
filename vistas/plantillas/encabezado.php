@@ -21,8 +21,8 @@
     <br>
      <center><img src="vistas/Imagenes/Banner_Centro_de_Control.jpg" alt=""/></center>
      <?php
-     if($_SESSION['modulos']['Notas Importantes']==1){
-     ?>
+     if($_SESSION['modulos']['Notas Importantes']==1){ ?>
+        <!--Ventana de Notas Pendientes, deslizable-->
         <div class="esthela" style="right: -400px;">
         <div style="color: rgb(255, 255, 255); padding: 8px 5px 0pt 50px;">
             <div class="">

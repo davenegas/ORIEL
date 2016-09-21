@@ -5,14 +5,36 @@
     public function inicio(){
         $tipo_de_alerta="alert alert-info";
         $validacion="Verificación de Identidad";
-        require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
-        
+        require __DIR__ . '/../vistas/plantillas/frm_principal_publica.php';
+        //require __DIR__ . '/../vistas/plantillas/inicio_sesion.php'; 
     }
 
+    ////////////////////////////////////////////////////////////////////////////
+    //Metodos de Acceso publico
+    //
+    public function personal_listar_publico(){
+        $obj_personal=new cls_personal();
+        $obj_personal->obtiene_todo_el_personal_filtrado();
+        $personas= $obj_personal->getArreglo();
+        require __DIR__ . '/../vistas/plantillas/frm_personal_listar_publico.php';
+    }
+    
+    public function puntobcr_listar_publico(){
+        $obj_puntobcr= new cls_puntosBCR();
+        $obj_puntobcr->obtiene_todos_los_puntos_bcr_publico();
+        $puntosbcr = $obj_puntobcr->getArreglo();
+        require __DIR__ . '/../vistas/plantillas/frm_puntobcr_listar_publico.php';
+    }
+    
     //////////////////////////
     /*Metodos relacionados del area de Modulos de Seguridad del Sistema*/
     //////////////////////////
      
+    public function iniciar_sesion(){
+        $tipo_de_alerta="alert alert-info";
+        $validacion="Verificación de Identidad";
+        require __DIR__ . '/../vistas/plantillas/inicio_sesion.php'; 
+    }
     // Obtiene lista completa de roles del sistema
     public function listar_roles(){
         if(isset($_SESSION['nombre'])){
@@ -83,7 +105,6 @@
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         } 
     }
-    
     
     // Paso de importación del prontuario que permite actualizar la tabla de unidades ejecutoras en el sistema
     public function frm_importar_prontuario_paso_3(){
@@ -272,8 +293,7 @@
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         } 
     }
-    
-    
+        
     // Paso de importación del prontuario que permite actualizar la tabla de personas en el sistema
     public function frm_importar_prontuario_paso_5(){
         
@@ -365,7 +385,8 @@
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         } 
     }
-     // Paso de importación del prontuario que permite actualizar la tabla de personas en el sistema
+    
+    // Paso de importación del prontuario que permite actualizar la tabla de personas en el sistema
     public function frm_importar_prontuario_paso_6(){
         
         if(isset($_SESSION['nombre'])){
@@ -752,7 +773,8 @@
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }
     }     
-     //Trae la lista completa de modulos del sistema
+    
+    //Trae la lista completa de modulos del sistema
     public function modulos_listar(){      
         if(isset($_SESSION['nombre'])){
             $obj_modulos=new cls_modulos();
@@ -1179,7 +1201,8 @@
         }
 
     }
-    //FUNCIONES PARA EVENTOS
+    
+//FUNCIONES PARA EVENTOS
     public function frm_eventos_listar(){
         if(isset($_SESSION['nombre'])){
             $obj_eventos = new cls_eventos();
@@ -2263,8 +2286,9 @@
         }
     }
     
-    
+    ////////////////////////////////////////////////////////////////////////////
     //Editar Punto BCR, información completa 
+    ////////////////////////////////////////////////////////////////////////////
     public function gestion_punto_bcr(){
         if(isset($_SESSION['nombre'])){
             $obj_Puntobcr = new cls_puntosBCR();
