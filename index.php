@@ -37,6 +37,11 @@ $map = array(
     'principal' => array('controller' =>'Controller', 'action' =>'principal'),
     'nota_guardar' => array('controller' =>'Controller', 'action' =>'nota_guardar'),
     'nota_obtener' => array('controller' =>'Controller', 'action' =>'nota_obtener'),
+    'iniciar_sesion' => array('controller' =>'Controller', 'action' =>'iniciar_sesion'),
+     
+    //Información pública
+    'personal_listar_publico'=>array('controller'=>'Controller', 'action'=>'personal_listar_publico'),
+    'puntobcr_listar_publico'=>array('controller'=>'Controller', 'action'=>'puntobcr_listar_publico'),
     
     //Controlador de Modulos
     'modulos_listar' => array('controller' =>'Controller', 'action' =>'modulos_listar'),
@@ -133,6 +138,8 @@ $map = array(
     'recordar_password'=>array('controller'=>'Controller', 'action'=>'recordar_password'),
     'iniciar_sistema_cambiando_clave'=>array('controller'=>'Controller', 'action'=>'iniciar_sistema_cambiando_clave'),
     'cambia_clave_usuario_post'=>array('controller'=>'Controller', 'action'=>'cambia_clave_usuario_post')
+    
+    
 
     );
  

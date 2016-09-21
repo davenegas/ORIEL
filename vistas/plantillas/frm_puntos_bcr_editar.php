@@ -289,7 +289,7 @@
                         <td style="text-align:center"><?php echo $direccionIP[$i]['Direccion_IP'];?></td>
                         <td style="text-align:center"><?php echo $direccionIP[$i]['Observaciones'];?></td>
                         <?php if($_SESSION['modulos']['Editar- Puntos BCR']==1){ ?> 
-                            <td style="text-align:center"><a href="">Link</a></td>
+                            <td style="text-align:center"><a href="">Editar</a></td>
                             <td style="text-align:center"><a class="btn rojo" role="button" id="eliminar_ip" name="eliminar_ip" onclick="eliminar_ip(<?php echo $direccionIP[$i]['ID_Direccion_IP'];?>);">
                                     Eliminar</a></td>
                          <?php } ?>

@@ -1,6 +1,3 @@
-<?php
-ob_start();
-?>
 <!DOCTYPE HTML>
 <html lang="es">
     <head>
@@ -34,8 +31,10 @@ ob_start();
               <!--<th>Tipo Telefono</th>-->
               <th style="text-align:center">Telefonos</th>
               <!--<th>Observaciones</th>-->
-              <th style="text-align:center">Estado</th>              
-              <th style="text-align:center">Cambiar Estado</th>
+              <?php if($_SESSION['modulos']['Editar- Personal']==1){ ?>
+                <th style="text-align:center">Estado</th>              
+                <th style="text-align:center">Cambiar Estado</th>
+              <?php }?>
               <th style="text-align:center">Mantenmiento</th>
             </tr>
           </thead>
@@ -54,7 +53,7 @@ ob_start();
                 <!--<td><?php echo $personas[$i]['Tipo_Telefono'];?></td>-->
                 <td style="text-align:center"><?php echo $personas[$i]['Numero'];?></td>
                 <!--<td><?php echo $personas[$i]['Observaciones'];?></td>-->
-                <?php 
+                <?php if($_SESSION['modulos']['Editar- Personal']==1){
                 if ($personas[$i]['Estado']==1){
                   ?>  
                     <td style="text-align:center">Activo</td>
@@ -68,7 +67,7 @@ ob_start();
 
                <td style="text-align:center"><a href="index.php?ctl=personal_cambiar_estado&id=
                    <?php echo $personas[$i]['ID_Persona']?>&estado=<?php echo $personas[$i]['Estado']?>">
-                       Activar/Desactivar</a></td>
+                Activar/Desactivar</a></td> <?php }?>
                <td style="text-align:center"><a href="index.php?ctl=personal_gestion&id=
                    <?php echo $personas[$i]['ID_Persona']?>&estado=<?php echo $personas[$i]['Estado']?>&descripcion=<?php echo $personas[$i]['Observaciones']?>">
                        Detalle</a></td>
@@ -83,11 +82,3 @@ ob_start();
             <?php require 'vistas/plantillas/pie_de_pagina.php' ?>
     </body>
 </html>
-
-<?php
-// Recuperación en una variable del código HTML generado
-$html = ob_get_contents();
- 
-// Envío al cliente del código HTML
-ob_end_flush();
-?>

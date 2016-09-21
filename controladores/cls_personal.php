@@ -32,7 +32,6 @@ class cls_personal{
         $this->arreglo3 = $arreglo3;
     }
 
-        
     function getArreglo2() {
         return $this->arreglo2;
     }
@@ -374,11 +373,12 @@ class cls_personal{
         $this->obj_data_provider->desconectar();
     }
     
-     public function agregar_nueva_persona_para_prontuario(){
+    public function agregar_nueva_persona_para_prontuario(){
         $this->obj_data_provider->conectar();
         $this->obj_data_provider->inserta_datos_para_prontuario("t_personal", "Cedula,Apellido_Nombre,ID_Unidad_Ejecutora,ID_Puesto,Direccion,Link_Foto,ID_Empresa,Observaciones,Estado", "'".$this->cedula."','".$this->apellidonombre."',".$this->id_unidad_ejecutora.",".$this->id_puesto.",'".$this->direccion."','".$this->linkfoto."',".$this->id_empresa.",'".$this->observaciones."','".$this->estado."'");
         $this->obj_data_provider->desconectar();
     }
+    
     function edita_persona(){
         $this->obj_data_provider->conectar();
         
@@ -400,8 +400,7 @@ class cls_personal{
         $this->obj_data_provider->desconectar();
        
     }
- 
- 
+  
     //Obtener el último id de evento para saber que se debe ingresar
     function obtiene_id_ultima_persona_ingresada(){
       //Establece la conexión con la bd
@@ -421,6 +420,7 @@ class cls_personal{
           $this->setId_ultima_persona_ingresada(0);
       }   
   }
+  
    //Este metodo realiza la modificación del estado del modulo, de activo a inactivo o viceversa en la bd
     function edita_id_persona_en_tabla_telefonos(){
         $this->obj_data_provider->conectar();
@@ -516,7 +516,7 @@ class cls_personal{
       }   
   }
   
-  function eliminar_personas_sobrantes(){
+    function eliminar_personas_sobrantes(){
           
         $this->obj_data_provider->conectar();
         $this->obj_data_provider->eliminar_datos("t_personal", $this->condicion);
@@ -567,4 +567,30 @@ class cls_personal{
         $this->obj_data_provider->desconectar();
         $this->resultado_operacion=true;
     }
+    
+    public function obtiene_todo_el_personal_filtrado(){
+        $this->obj_data_provider->conectar();
+        if($this->condicion==""){                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
+            $this->arreglo=$this->obj_data_provider->trae_datos(
+                    "T_Personal
+			LEFT OUTER JOIN	T_UnidadEjecutora ON T_Personal.ID_Unidad_Ejecutora = T_UnidadEjecutora.ID_Unidad_Ejecutora
+			LEFT OUTER JOIN T_Empresa ON T_Personal.ID_Empresa = T_Empresa.ID_Empresa
+			LEFT OUTER JOIN T_Telefono on T_Personal.ID_Persona = T_Telefono.ID
+			LEFT OUTER JOIN T_TipoTelefono ON T_Telefono.ID_Tipo_Telefono = T_TipoTelefono.ID_Tipo_Telefono
+			LEFT OUTER JOIN T_Puesto ON T_Personal.ID_Puesto = T_Puesto.ID_Puesto", 
+                    " T_Personal.*,
+			T_UnidadEjecutora.ID_Unidad_Ejecutora, T_UnidadEjecutora.Departamento,
+			T_Empresa.ID_Empresa, T_Empresa.Empresa,
+			T_TipoTelefono.Tipo_Telefono, T_TipoTelefono.ID_Tipo_Telefono,
+			GROUP_CONCAT(char(10),T_TipoTelefono.Tipo_Telefono,': ',T_Telefono.Numero) as Numero,
+                        T_Telefono.ID_Telefono,T_Telefono.Observaciones as Observaciones_Tel,
+			T_Puesto.ID_Puesto, T_Puesto.Puesto",
+                    "(T_TipoTelefono.ID_Tipo_Telefono = '4'OR 
+			T_TipoTelefono.ID_Tipo_Telefono = '27') AND (T_Empresa.ID_Empresa='1') AND (T_Personal.Estado='1') group by T_Personal.ID_Persona");
+            $this->arreglo=$this->obj_data_provider->getArreglo();
+            $this->obj_data_provider->desconectar();
+            $this->resultado_operacion=true;
+        }
+    }
+    
 }?>

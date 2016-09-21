@@ -69,7 +69,7 @@
                             <a id="popup" onclick="mostrar_lista_ue()" class="btn azul" role="button">- Editar</a>
                         <?php } ?>
                     </label>
-                    <input type="text" required readonly class="form-control" id="nombre" name="nombre" value="<?php echo $params[0]['Departamento'];?>">
+                    <input  type="text" required readonly class="form-control" id="nombre" name="nombre" value="<?php echo $params[0]['Departamento'];?>">
                 </div>
                 <div class="col-md-8 espacio-abajo">
                     <label for="puesto">Puesto

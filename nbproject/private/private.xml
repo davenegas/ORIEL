@@ -1,30 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
-    <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group>
-<<<<<<< HEAD
-            <file>file:/C:/xampp/htdocs/ORIEL/vistas/plantillas/encabezado.php</file>
-=======
-            <file>file:/C:/wamp/www/ORIEL/controladores/cls_personal.php</file>
-            <file>file:/C:/wamp/www/ORIEL/modelos/Controller.php</file>
-        </group>
-=======
-<<<<<<< HEAD
-        <group>
-            <file>file:/C:/xampp/htdocs/ORIEL/modelos/Controller.php</file>
-            <file>file:/C:/xampp/htdocs/ORIEL/index.php</file>
-            <file>file:/C:/xampp/htdocs/ORIEL/vistas/js/listas_dependientes_puntobcr.js</file>
-            <file>file:/C:/xampp/htdocs/ORIEL/vistas/js/listas_dependientes_personal.js</file>
->>>>>>> origin/master
-            <file>file:/C:/xampp/htdocs/ORIEL/vistas/plantillas/frm_personal_detalle.php</file>
-        </group>
-<<<<<<< HEAD
-=======
-=======
-        <group/>
->>>>>>> origin/master
->>>>>>> origin/master
->>>>>>> origin/master
-    </open-files>
 </project-private>
