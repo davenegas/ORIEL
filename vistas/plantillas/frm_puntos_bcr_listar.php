@@ -14,7 +14,7 @@
     <body>
         <?php require_once 'encabezado.php';?>
          <div id="cargando">
-            <center><img align="center" src="vistas/Imagenes/cargando1.gif"/></center>
+            <center><img align="center" src="vistas/Imagenes/Espere.gif"/></center>
         </div>
         <div class="container">
         <h2>Listado General de Puntos BCR</h2>
