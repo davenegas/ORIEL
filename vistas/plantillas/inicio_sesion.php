@@ -48,15 +48,13 @@
         
         <div>
         <table style="margin: 0 auto;">
-        <tr>
-        <td> 
-        <div class="btn-group">
-        <a href="index.php?ctl=frm_eventos_lista_cerrados" class="btn btn-default" role="button">Puntos BCR</a> 
-        <a href="index.php?ctl=frm_eventos_lista_cerrados" class="btn btn-default" role="button">Personal BCR</a>     
-        <a href="index.php?ctl=frm_eventos_lista_cerrados" class="btn btn-default" role="button">Padrones</a> 
-        </div>
-        </td>
-        </tr>
+            <tr>
+                <td> 
+                    <div class="btn-group">
+                        <a href="index.php?ctl=inicio" class="btn" role="button">Volver Menú Principal</a> 
+                    </div>
+                </td>
+            </tr>
         </table>
         </div>
         
