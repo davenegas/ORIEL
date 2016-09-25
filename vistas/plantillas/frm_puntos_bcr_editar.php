@@ -236,7 +236,7 @@
             <table id="tabla" class="display" cellspacing="0" width="100%">
                 <thead> 
                     <th style="text-align:center">Apellido y Nombre</th>
-                    <th style="text-align:center">Puesto</th>
+                    <th style="text-align:center">Cedula</th>
                     <th style="text-align:center">Numero telefono</th>
                     <th style="text-align:center">Puesto</th>
                     <th style="text-align:center">Departamento</th>
@@ -248,7 +248,7 @@
                     ?>
                     <tr>
                         <td style="text-align:center"><?php echo $personal[$i]['Apellido_Nombre'];?></td>
-                        <td style="text-align:center"><?php echo $personal[$i]['Puesto'];?></td>
+                        <td style="text-align:center"><?php echo $personal[$i]['Cedula'];?></td>
                         <td style="text-align:center"><?php echo $personal[$i]['Numero'];?></td>
                         <td style="text-align:center"><?php echo $personal[$i]['Puesto'];?></td>
                         <td style="text-align:center"><?php echo $personal[$i]['Departamento'];?></td>

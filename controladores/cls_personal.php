@@ -247,7 +247,7 @@ class cls_personal{
                     "(T_TipoTelefono.ID_Tipo_Telefono = '2' OR 
 			T_TipoTelefono.ID_Tipo_Telefono = '3' OR 
 			T_TipoTelefono.ID_Tipo_Telefono = '4'OR 
-			T_TipoTelefono.ID_Tipo_Telefono = '27') group by T_Personal.ID_Persona");
+			T_TipoTelefono.ID_Tipo_Telefono = '27') GROUP by T_Personal.ID_Persona");
             $this->arreglo=$this->obj_data_provider->getArreglo();
             $this->obj_data_provider->desconectar();
             $this->resultado_operacion=true;
@@ -264,12 +264,13 @@ class cls_personal{
 			T_UnidadEjecutora.ID_Unidad_Ejecutora, T_UnidadEjecutora.Departamento,
 			T_Empresa.ID_Empresa, T_Empresa.Empresa,
 			T_TipoTelefono.Tipo_Telefono, T_TipoTelefono.ID_Tipo_Telefono,
-			T_Telefono.Numero,T_Telefono.ID_Telefono,T_Telefono.Observaciones as Observaciones_Tel,
+			GROUP_CONCAT(char(10),T_TipoTelefono.Tipo_Telefono,': ',T_Telefono.Numero) as Numero,
+                        T_Telefono.ID_Telefono,T_Telefono.Observaciones as Observaciones_Tel,
 			T_Puesto.ID_Puesto, T_Puesto.Puesto",
                     "(".$this->condicion.") AND (T_TipoTelefono.ID_Tipo_Telefono = '2' OR 
 			T_TipoTelefono.ID_Tipo_Telefono = '3' OR 
 			T_TipoTelefono.ID_Tipo_Telefono = '4' OR 
-			T_TipoTelefono.ID_Tipo_Telefono = '27') ORDER BY T_Personal.Apellido_Nombre");
+			T_TipoTelefono.ID_Tipo_Telefono = '27') GROUP by T_Personal.ID_Persona");
             $this->arreglo=$this->obj_data_provider->getArreglo();
             $this->obj_data_provider->desconectar();
             $this->resultado_operacion=true;
@@ -613,4 +614,52 @@ class cls_personal{
         }
     }
     
+    public function obtiene_todo_el_personal_modulo_personas(){
+        $this->obj_data_provider->conectar();
+        if($this->condicion==""){
+            $this->arreglo=$this->obj_data_provider->trae_datos(
+                    "T_Personal
+			LEFT OUTER JOIN	T_UnidadEjecutora ON T_Personal.ID_Unidad_Ejecutora = T_UnidadEjecutora.ID_Unidad_Ejecutora
+			LEFT OUTER JOIN T_Empresa ON T_Personal.ID_Empresa = T_Empresa.ID_Empresa
+			LEFT OUTER JOIN T_Telefono on T_Personal.ID_Persona = T_Telefono.ID
+			LEFT OUTER JOIN T_TipoTelefono ON T_Telefono.ID_Tipo_Telefono = T_TipoTelefono.ID_Tipo_Telefono
+			LEFT OUTER JOIN T_Puesto ON T_Personal.ID_Puesto = T_Puesto.ID_Puesto", 
+                    " T_Personal.ID_Persona, T_Personal.Cedula, T_Personal.Apellido_Nombre,T_Personal.Estado,
+			T_UnidadEjecutora.ID_Unidad_Ejecutora, T_UnidadEjecutora.Departamento,
+			T_Empresa.ID_Empresa, T_Empresa.Empresa,
+			T_TipoTelefono.Tipo_Telefono, T_TipoTelefono.ID_Tipo_Telefono,
+			GROUP_CONCAT(char(10),T_TipoTelefono.Tipo_Telefono,': ',T_Telefono.Numero) as Numero,
+                        T_Telefono.ID_Telefono,T_Telefono.Observaciones as Observaciones_Tel,
+			T_Puesto.ID_Puesto, T_Puesto.Puesto",
+                    "(T_TipoTelefono.ID_Tipo_Telefono = '2' OR 
+			T_TipoTelefono.ID_Tipo_Telefono = '3' OR 
+			T_TipoTelefono.ID_Tipo_Telefono = '4'OR 
+			T_TipoTelefono.ID_Tipo_Telefono = '27') group by T_Personal.ID_Persona");
+            $this->arreglo=$this->obj_data_provider->getArreglo();
+            $this->obj_data_provider->desconectar();
+            $this->resultado_operacion=true;
+        }
+        else{
+            $this->arreglo=$this->obj_data_provider->trae_datos(
+                    "T_Personal
+			LEFT OUTER JOIN	T_UnidadEjecutora ON T_Personal.ID_Unidad_Ejecutora = T_UnidadEjecutora.ID_Unidad_Ejecutora
+			LEFT OUTER JOIN T_Empresa ON T_Personal.ID_Empresa = T_Empresa.ID_Empresa
+			LEFT OUTER JOIN T_Telefono on T_Personal.ID_Persona = T_Telefono.ID
+			LEFT OUTER JOIN T_TipoTelefono ON T_Telefono.ID_Tipo_Telefono = T_TipoTelefono.ID_Tipo_Telefono
+			LEFT OUTER JOIN T_Puesto ON T_Personal.ID_Puesto = T_Puesto.ID_Puesto", 
+                    "T_Personal.*,
+			T_UnidadEjecutora.ID_Unidad_Ejecutora, T_UnidadEjecutora.Departamento,
+			T_Empresa.ID_Empresa, T_Empresa.Empresa,
+			T_TipoTelefono.Tipo_Telefono, T_TipoTelefono.ID_Tipo_Telefono,
+			T_Telefono.Numero,T_Telefono.ID_Telefono,T_Telefono.Observaciones as Observaciones_Tel,
+			T_Puesto.ID_Puesto, T_Puesto.Puesto",
+                    "(".$this->condicion.") AND (T_TipoTelefono.ID_Tipo_Telefono = '2' OR 
+			T_TipoTelefono.ID_Tipo_Telefono = '3' OR 
+			T_TipoTelefono.ID_Tipo_Telefono = '4' OR 
+			T_TipoTelefono.ID_Tipo_Telefono = '27') ORDER BY T_Personal.Apellido_Nombre");
+            $this->arreglo=$this->obj_data_provider->getArreglo();
+            $this->obj_data_provider->desconectar();
+            $this->resultado_operacion=true;
+        }
+    }
 }?>

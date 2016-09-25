@@ -26,7 +26,7 @@
         <li class="active"><a href="index.php?ctl=inicio"><b>Inicio</b></a></li>
         <li><a href="index.php?ctl=personal_listar_publico">Personal</a></li>
         <li><a href="index.php?ctl=puntobcr_listar_publico">Puntos BCR</a></li>
-        <li><a href="#">Padrones Fotograficos</a></li>
+        <!--<li><a href="#">Padrones Fotograficos</a></li>-->
         <li><a href="#">Contáctenos</a></li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
@@ -36,15 +36,15 @@
   </div>
 </nav>
   
-<div class="container-fluid text-center">
+<div class="container-fluid text-left">
   <div class="row content">
     <div class="col-sm-2 sidenav">
-<!--      <p><a href="#">Bancobcr.com</a></p>
-      <p><a href="#">Somos BCR</a></p>-->
-      <!--<p><a href="#">Link</a></p>-->
+<!--      <p><a href="#">Formulario Claves de Alarma</a></p>
+      <p><a href="#">Formulario Acceso Controlado</a></p>
+      <p><a href="#">Formulario de Video</a></p>-->
     </div>
      <!--PANTALLA PRINCIPAL DE LA PAGINA-->
-    <div class="col-sm-8 text-left">
+    <div class="col-sm-9 text-left">
         <div class="container">
             <br>
             <div id="myCarousel" class="carousel slide" data-ride="carousel">
@@ -104,15 +104,15 @@
 
         
     </div>
-    <div class="col-sm-2 sidenav">
+<!--    <div class="col-sm-2 sidenav">
       <div class="well">
           <p>Jefatura de Seguridad del Banco de Costa Rica<br>
           </p>
       </div>
-<!--      <div class="well">
+      <div class="well">
         <p>ADS</p>
-      </div>-->
-    </div>
+      </div>
+    </div>-->
   </div>
 </div>
 

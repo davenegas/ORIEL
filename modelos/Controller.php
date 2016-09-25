@@ -853,8 +853,7 @@
                         $obj_roles->inserta_rol();
                         $obj_roles->obtiene_id_ultimo_rol_ingresado();
                         $id_ult_rol=$obj_roles->getId_ultimo_rol_ingresado();
-                        header ("location:/ORIEL/index.php?ctl=guardar_modulo_rol($id_ult_rol)");
-                        //$this->guardar_modulo_rol($id_ult_rol);
+                        $this->guardar_modulo_rol($id_ult_rol);
                     }   else    {
                          header ("location:/ORIEL/index.php?ctl=gestion_roles");
                         //$this->gestion_roles();
@@ -1079,11 +1078,14 @@
                             $_POST['Cedula']="";
                             $_GET['id']=-1;
                         }
-                        if($_POST['Correo']==$validacion[$i]['Correo']){
+                        if($_POST['Correo']!="" && $_POST['Correo']==$validacion[$i]['Correo']){
                             $correcto=1;
                             echo '<script>alert("Este correo ya se encuentra registrado en el sistema");</script>';
                             $_POST['Correo']="";
                             $_GET['id']=-1;
+                        }
+                        if($_POST['Correo']==""){
+                            $correcto=0;
                         }
                     }
                 if($correcto==0){
@@ -1101,8 +1103,8 @@
                     header ("location:/ORIEL/index.php?ctl=listar_usuarios");
                     //$this->listar_usuarios();
                  }   else    {
-                    header ("location:/ORIEL/index.php?ctl=gestion_usuarios");
-                    //$this->gestion_usuarios();
+                    //header ("location:/ORIEL/index.php?ctl=gestion_usuarios");
+                    $this->gestion_usuarios();
                 }
             }
             
@@ -2985,7 +2987,7 @@
     public function personal_listar(){
         if(isset($_SESSION['nombre'])){
             $obj_personal=new cls_personal();
-            $obj_personal->obtiene_todo_el_personal();
+            $obj_personal->obtiene_todo_el_personal_modulo_personas();
             $personas= $obj_personal->getArreglo();
             require __DIR__ . '/../vistas/plantillas/frm_personal_listar.php';
         }else{
@@ -3029,7 +3031,7 @@
             
             $ide=$_GET['id'];
             $obj_personal->setCondicion("T_Personal.ID_Persona='".$_GET['id']."'");
-            $obj_personal->obtiene_todo_el_personal();
+            $obj_personal->obtiene_todo_el_personal_modulo_personas();
             $params= $obj_personal->getArreglo();
             
             //Obtiene empresa remesera
