@@ -609,69 +609,32 @@
             $obj_unidades_ejecutoras->setCondicion("Not ID_Unidad_Ejecutora In (Select ID_Unidad_Ejecutora From t_personal) and not ID_Unidad_Ejecutora In (Select ID_Unidad_Ejecutora From t_ue_puntobcr)");
             $obj_unidades_ejecutoras->obtener_unidades_ejecutoras();
             $unidades_eliminadas= count($obj_unidades_ejecutoras->getArreglo());
+            $obj_unidades_ejecutoras->eliminar_ue_sobrantes_para_prontuario();
             
-            $obj_puestos->setCondicion($condicion);
-                        
-            // Lee los puestos que se encuentran en el prontuario y los pasa a un vector separado en modo distinct
-            /*for ($i = 0; $i < count($_SESSION['prontuario']); $i++) {
-                    $arreglo_telefonos_extensiones[]=array($_SESSION['prontuario'][$i][1],str_replace (" ","",str_replace ("-","",$_SESSION['prontuario'][$i][4])),str_replace (".","",$_SESSION['prontuario'][$i][5]));
-                    
-                    $obj_personal->setCondicion("Cedula='".$arreglo_telefonos_extensiones[$i][0]."'");
-                    $obj_personal->obtiene_id_de_persona_para_prontuario();
-                    //$obj_telefono->setCondicion("(ID=".$obj_personal->getId().") AND (ID_Tipo_Telefono=2 or ID_Tipo_Telefono=3 or ID_Tipo_Telefono=4 or ID_Tipo_Telefono=27 or ID_Tipo_Telefono=28) AND (Numero='0')");
-                    //$obj_telefono->eliminar_telefonos_para_prontuario();
-                    $obj_telefono->setCondicion("(ID=".$obj_personal->getId().") AND (ID_Tipo_Telefono=2 or ID_Tipo_Telefono=3 or ID_Tipo_Telefono=4 or ID_Tipo_Telefono=27 or ID_Tipo_Telefono=28) ");
-                    $obj_telefono->obtiene_telefonos_por_criterio_para_prontuario();
-                    
-                    $obj_telefono->setid2($obj_personal->getId());
-                    $obj_telefono->setTipo_telefono("4");
-                    $obj_telefono->setObservaciones("");
-                    $obj_telefono->setEstado("1");
-                                        
-                    if (count($obj_telefono->getArreglo())>0){
-                        $obj_telefono->setCondicion("(ID=".$obj_personal->getId().") AND (ID_Tipo_Telefono=2 or ID_Tipo_Telefono=3 or ID_Tipo_Telefono=4 or ID_Tipo_Telefono=27 or ID_Tipo_Telefono=28) AND (Numero='".$arreglo_telefonos_extensiones[$i][2]."' or Numero='".$arreglo_telefonos_extensiones[$i][1]."' or Numero='".$arreglo_telefonos_extensiones[$i][1]." ext ".$arreglo_telefonos_extensiones[$i][2]."')");
-                        $obj_telefono->obtiene_telefonos_por_criterio_para_prontuario();
-                        if (count($obj_telefono->getArreglo())==0){
-                            if (strlen($arreglo_telefonos_extensiones[$i][1])==8){
-                                if (($arreglo_telefonos_extensiones[$i][1]=="22111111")||($arreglo_telefonos_extensiones[$i][1]=="22879000")){
-                                    if (strlen($arreglo_telefonos_extensiones[$i][2])>4){
-                                        $obj_telefono->setNumero($arreglo_telefonos_extensiones[$i][2]);
-                                        $obj_telefono->guardar_telefono_para_prontuario();
-                                        //echo $arreglo_telefonos_extensiones[$i][0]. " ". $arreglo_telefonos_extensiones[$i][1] . " " . $arreglo_telefonos_extensiones[$i][2];
-                                        $nuevos_guardados++;
-                                    }
-                                }else{
-                                    if (strlen($arreglo_telefonos_extensiones[$i][2])>0){
-                                        $obj_telefono->setNumero($arreglo_telefonos_extensiones[$i][1]." ext ".$arreglo_telefonos_extensiones[$i][2]);
-                                        $obj_telefono->guardar_telefono_para_prontuario();
-                                        //echo $arreglo_telefonos_extensiones[$i][0]. " ". $arreglo_telefonos_extensiones[$i][1] . " " . $arreglo_telefonos_extensiones[$i][2];
-                                        $nuevos_guardados++;
-                                    }else{
-                                         $obj_telefono->setNumero($arreglo_telefonos_extensiones[$i][1]);
-                                         $obj_telefono->guardar_telefono_para_prontuario();
-                                         //echo $arreglo_telefonos_extensiones[$i][0]. " ". $arreglo_telefonos_extensiones[$i][1] . " " . $arreglo_telefonos_extensiones[$i][2];
-                                         $nuevos_guardados++;
-                                    }
-                                }
-                                    
-                            }else{
-                                if (strlen($arreglo_telefonos_extensiones[$i][2])==5){
-                                    $obj_telefono->setNumero($arreglo_telefonos_extensiones[$i][2]);
-                                    $obj_telefono->guardar_telefono_para_prontuario();
-                                    //echo $arreglo_telefonos_extensiones[$i][0]. " ". $arreglo_telefonos_extensiones[$i][1] . " " . $arreglo_telefonos_extensiones[$i][2];
-                                    $nuevos_guardados++;
-                                }
-                            }
-                            $numeros_actualizados++;
-                            
-                        }
-                        
-                    }
-            }
+            $obj_puestos->setCondicion("Not ID_Puesto In (Select ID_Puesto From t_personal)");
+            $obj_puestos->obtener_puestos();
+            $puestos_eliminados= count($obj_puestos->getArreglo());
+            $obj_puestos->eliminar_puestos_sobrantes_para_prontuario();
             
-            $resultados='Se actualizaron un total de '.$nuevos_guardados.' extensiones telefónicas en la bd.';*/
-              
-           //require __DIR__ . '/../vistas/plantillas/frm_importar_prontuario_paso_9.php';
+            $ue_eliminadas="Fueron eliminadas un total de ".$unidades_eliminadas." unidades ejecutoras sin uso de la base de datos.";
+            $puestos="Fueron eliminados un total de ".$puestos_eliminados." puestos sin uso de la base de datos.";
+                                     
+           require __DIR__ . '/../vistas/plantillas/frm_importar_prontuario_paso_9.php';
+     
+        }else {
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        } 
+    }
+    
+    
+    // Paso de importación del prontuario que permite actualizar la tabla de personas en el sistema
+    public function frm_importar_prontuario_paso_10(){
+        
+        if(isset($_SESSION['nombre'])){
+                                 
+           require __DIR__ . '/../vistas/plantillas/frm_importar_prontuario_paso_10.php';
      
         }else {
             $tipo_de_alerta="alert alert-warning";

@@ -2,7 +2,7 @@
 <html lang="es">
     <head>
         <meta charset="utf-8"/>
-        <title>Importar Prontuario 9 (Personas)</title>
+        <title>Importar Prontuario 10 (Personas)</title>
         <?php require_once 'frm_librerias_head.html'; ?> 
         <script>
           $(document).ready(function () {
@@ -18,13 +18,11 @@
         </div>
         <div class="container animated fadeIn">
         <h2>Importación del Personal(9/10):</h2>
-        <h3>Detalle de actualización:</h3>
+        <h3>Finalización:</h3>
        
         <ul class="list-group">
-        <li class="list-group-item list-group-item-success"><?php echo $ue_eliminadas;?></li> 
-        <li class="list-group-item list-group-item-success"><?php echo $puestos;?></li> 
+        <li class="list-group-item list-group-item-success">El proceso de importación de Prontuario culminó exitosamente!!!</li>  
         </ul> 
-        <a href="index.php?ctl=frm_importar_prontuario_paso_10" class="btn btn-default espacio-abajo" role="button">Confirmación Final</a>
         <a href="index.php?ctl=principal" class="btn btn-default espacio-abajo" role="button">Salir del Asistente</a> 
         </div>
         <?php require 'vistas/plantillas/pie_de_pagina.php' ?>
