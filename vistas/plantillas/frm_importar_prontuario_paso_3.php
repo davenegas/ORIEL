@@ -14,7 +14,7 @@
     <body>
         <?php require_once 'encabezado.php';?>
         <div id="cargando">
-            <center><img align="center" src="vistas/Imagenes/cargando (2).gif"/></center>
+            <center><img align="center" src="vistas/Imagenes/Espere.gif"/></center>
         </div>
         <div class="container animated fadeIn">
         <h2>Importación de Unidades Ejecutoras (3/10):</h2>

@@ -51,7 +51,7 @@
       
     <div class="col-sm-8 text-left">
         <div id="cargando">
-            <center><img align="center" src="vistas/Imagenes/cargando (2).gif"/></center>
+            <center><img align="center" src="vistas/Imagenes/Espere.gif"/></center>
         </div>
         <h2>Listado General de Personal</h2>  
         <table id="tabla" class="display" cellspacing="0" width="100%">
