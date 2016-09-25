@@ -23,7 +23,7 @@
         <ul class="list-group">
         <li class="list-group-item list-group-item-success"><?php echo $resultados;?></li> 
         </ul> 
-        <a href="index.php?ctl=frm_importar_prontuario_paso_8" class="btn btn-default espacio-abajo" role="button">Gestionar Extensiones Telefónicas</a>
+        <a href="index.php?ctl=frm_importar_prontuario_paso_9" class="btn btn-default espacio-abajo" role="button">Depurar Tablas de BD</a>
         <a href="index.php?ctl=principal" class="btn btn-default espacio-abajo" role="button">Salir del Asistente</a> 
         </div>
         <?php require 'vistas/plantillas/pie_de_pagina.php' ?>
