@@ -42,6 +42,7 @@ $map = array(
     //Información pública
     'personal_listar_publico'=>array('controller'=>'Controller', 'action'=>'personal_listar_publico'),
     'puntobcr_listar_publico'=>array('controller'=>'Controller', 'action'=>'puntobcr_listar_publico'),
+    'frm_contacto_publico'=>array('controller'=>'Controller', 'action'=>'frm_contacto_publico'),
     
     //Controlador de Modulos
     'modulos_listar' => array('controller' =>'Controller', 'action' =>'modulos_listar'),
@@ -56,7 +57,6 @@ $map = array(
     'gestion_roles'=>array('controller'=>'Controller', 'action'=>'gestion_roles'),
      
      //Controlador de Eventos (Bitacora Digital)
-    
     'frm_eventos_listar' =>  array('controller'=>'Controller','action'=>'frm_eventos_listar'),
     'frm_eventos_agregar' =>  array('controller'=>'Controller','action'=>'frm_eventos_agregar'),
     'dibuja_tabla_eventos_relacionados_a_punto_bcr' =>  array('controller'=>'Controller','action'=>'dibuja_tabla_eventos_relacionados_a_punto_bcr'),
@@ -78,6 +78,11 @@ $map = array(
 
     //Areas de apoyo
     'areas_apoyo_listar'=>array('controller'=>'Controller','action'=> 'areas_apoyo_listar'),
+    'Area_apoyo_agregar'=>array('controller'=>'Controller','action'=> 'Area_apoyo_agregar'), //Puntos BCR
+    'Area_apoyo_nueva'=>array('controller'=>'Controller','action'=> 'Area_apoyo_nueva'),
+    'area_apoyo_gestion'=>array('controller'=>'Controller','action'=> 'area_apoyo_gestion'),       
+    'area_apoyo_eliminar_telefono'=>array('controller'=>'Controller','action'=> 'area_apoyo_eliminar_telefono'),  
+    'area_apoyo_numero_telefono_guardar'=>array('controller'=>'Controller','action'=> 'area_apoyo_numero_telefono_guardar'),  
     
     //Trazabilidad
     'frm_trazabilidad_listar'=>array('controller'=>'Controller','action'=> 'frm_trazabilidad_listar'),
@@ -96,7 +101,6 @@ $map = array(
     'puntobcr_agregar_ue'=>array('controller'=>'Controller','action'=> 'puntobcr_agregar_ue'),
     'puntobcr_desligar_ue'=>array('controller'=>'Controller','action'=> 'puntobcr_desligar_ue'),
     'puntobcr_asignar_area_apoyo'=>array('controller'=>'Controller','action'=> 'puntobcr_asignar_area_apoyo'),
-    'Area_apoyo_agregar'=>array('controller'=>'Controller','action'=> 'Area_apoyo_agregar'),
     'puntobcr_desligar_area_apoyo'=>array('controller'=>'Controller','action'=> 'puntobcr_desligar_area_apoyo'),
     'direccionIP_agregar'=>array('controller'=>'Controller','action'=> 'direccionIP_agregar'),
     'puntobcr_asignar_direccion_ip'=>array('controller'=>'Controller','action'=> 'puntobcr_asignar_direccion_ip'),

@@ -168,10 +168,11 @@ class cls_areasapoyo{
 			LEFT OUTER JOIN T_TipoTelefono ON T_Telefono.ID_Tipo_Telefono = T_TipoTelefono.ID_Tipo_Telefono
 			LEFT OUTER JOIN T_PuntoBCRAreaApoyo ON T_AreasApoyo.ID_Area_Apoyo = T_PuntoBCRAreaApoyo.ID_Area_Apoyo", 
                     "T_AreasApoyo.ID_Area_Apoyo, T_AreasApoyo.Nombre_Area, T_AreasApoyo.Direccion,
-			T_AreasApoyo.Observaciones, T_AreasApoyo.Estado,
+			T_AreasApoyo.Observaciones, T_AreasApoyo.Estado,T_AreasApoyo.ID_Distrito,
 			T_TipoAreaApoyo.ID_Tipo_Area_Apoyo, T_TipoAreaApoyo.Nombre_Tipo_Area,
 			T_Distrito.ID_Distrito,T_Distrito.Nombre_Distrito,
-			T_Telefono.Numero",
+			T_TipoTelefono.Tipo_Telefono, T_TipoTelefono.ID_Tipo_Telefono,
+			T_Telefono.Numero,T_Telefono.ID_Telefono,T_Telefono.Observaciones as Observaciones_Tel",
                     $this->condicion." AND (T_TipoTelefono.ID_Tipo_Telefono = '10' OR
                           T_TipoTelefono.ID_Tipo_Telefono = '11' OR 
 			  T_TipoTelefono.ID_Tipo_Telefono = '12' OR 

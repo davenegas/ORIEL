@@ -242,7 +242,7 @@ class Data_Provider{
        //Arma el insert SQL, de acuerdo a los parámetros recibidos por usuario
        
         $consulta=$this->conexion->query("insert into ".$table."(".$campos.") values(".$valores.");");
-        //echo ("insert into ".$table."(".$campos.") values(".$valores.");");
+        echo ("insert into ".$table."(".$campos.") values(".$valores.");");
         //Establece a true el resultado de operación
         $this->resultado_operacion=true;
         
@@ -280,7 +280,7 @@ class Data_Provider{
             
         // Gestión de insercion del metodo de la clase, recibe el string SQL completo a ejecutar
         $consulta=$this->conexion->query($detalle_sql);
-        //echo ("insert into ".$table."(".$campos.") values(".$valores.");");
+        //echo ($detalle_sql);
         //estable la variable de control a true
         $this->resultado_operacion=true;
           
@@ -291,7 +291,7 @@ class Data_Provider{
        $consulta=$this->conexion->query($sql);
        //estable la variable de control a true
        $this->resultado_operacion=true;
-       //echo($sql);
+       echo($sql);
    }
 
    //Metodo de la clase que permite editar datos en la bd, administrado también por trazabilidad

@@ -33,7 +33,7 @@
         <li><a href="index.php?ctl=personal_listar_publico">Personal</a></li>
         <li class="active"><a href="index.php?ctl=puntobcr_listar_publico">Puntos BCR</a></li>
         <!--<li><a href="#">Padrones Fotograficos</a></li>-->
-        <li><a href="#">Contáctenos</a></li>
+        <li><a href="index.php?ctl=frm_contacto_publico">Contáctenos</a></li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li><a href="index.php?ctl=iniciar_sesion"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
@@ -72,12 +72,12 @@
             for ($i = 0; $i <$tam; $i++) {
             ?>
             <tr>
-                <td style="text-align:center"><?php echo $puntosbcr[$i]['ID_PuntoBCR'];?></td>
+                <td style="text-align:center"><?php echo $puntosbcr[$i]['Nombre'];?></td>
                 <td style="text-align:center"><?php echo $puntosbcr[$i]['Departamento'];?></td>
                 <td style="text-align:center"><?php echo $puntosbcr[$i]['Direccion'];?></td>
                 <td style="text-align:center"><?php echo $puntosbcr[$i]['Dia_Laboral']." - ".$puntosbcr[$i]['Hora_Laboral'];?></td>
                 <td style="text-align:center"><?php echo $puntosbcr[$i]['Tipo_Punto'];?></td>
-                 <td style="text-align:center"><?php echo $puntosbcr[$i]['Numero'];?></td>
+                <td style="text-align:center"><?php echo $puntosbcr[$i]['Numero'];?></td>
             </tr>     
                     
             <?php }
