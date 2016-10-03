@@ -39,37 +39,33 @@
         <div class="navbar-header">
             <a class="navbar-brand" href="index.php?ctl=principal"><b>Jefatura Seguridad</b></a>
         </div>
-          <ul class="nav navbar-nav">
+            <ul class="nav navbar-nav">
 
-          <?php 
-          //************************************************Pinta Menu de Seguridad***************************************************************
-           if (($_SESSION['modulos']['Seguridad-Módulos']==1)||($_SESSION['modulos']['Seguridad-Roles']==1)||
-                   ($_SESSION['modulos']['Seguridad-Usuarios']==1)||($_SESSION['modulos']['Seguridad-Trazabilidad']==1)){
-          ?>
-                <li class="dropdown">
-                <a class="dropdown-toggle" data-toggle="dropdown" href="#">Seguridad
-                <span class="caret"></span></a>
-                <ul class="dropdown-menu">
+            <?php 
+            //************************************************Pinta Menu de Seguridad***************************************************************
+            if (($_SESSION['modulos']['Seguridad-Módulos']==1)||($_SESSION['modulos']['Seguridad-Roles']==1)||
+                    ($_SESSION['modulos']['Seguridad-Usuarios']==1)||($_SESSION['modulos']['Seguridad-Trazabilidad']==1)){
+            ?>
+            <li class="dropdown">
+            <a class="dropdown-toggle" data-toggle="dropdown" href="#">Seguridad
+            <span class="caret"></span></a>
+            <ul class="dropdown-menu">
 
-           <?php if ($_SESSION['modulos']['Seguridad-Módulos']==1){ ?>
-                <li><a href="index.php?ctl=modulos_listar">Módulos</a></li>
-           <?php  };  ?>
+                <?php if ($_SESSION['modulos']['Seguridad-Módulos']==1){ ?>
+                    <li><a href="index.php?ctl=modulos_listar">Módulos</a></li>
+                <?php  };  ?>
 
-                
-           <?php   if ($_SESSION['modulos']['Seguridad-Roles']==1){ ?>
-                <li><a href="index.php?ctl=listar_roles">Roles</a></li>
-           <?php  }; ?>
+                <?php   if ($_SESSION['modulos']['Seguridad-Roles']==1){ ?>
+                    <li><a href="index.php?ctl=listar_roles">Roles</a></li>
+                <?php  }; ?>
 
-                
-           <?php  if ($_SESSION['modulos']['Seguridad-Usuarios']==1){?>
-                <li><a href="index.php?ctl=listar_usuarios">Usuarios</a></li>
-           <?php    }; ?>   
+                <?php  if ($_SESSION['modulos']['Seguridad-Usuarios']==1){?>
+                    <li><a href="index.php?ctl=listar_usuarios">Usuarios</a></li>
+                <?php    }; ?>   
 
-            <?php if ($_SESSION['modulos']['Seguridad-Trazabilidad']==1){ ?>
-               <li><a href="index.php?ctl=principal">Trazabilidad</a></li> 
-           <?php    }; ?>
-           
-
+                <?php if ($_SESSION['modulos']['Seguridad-Trazabilidad']==1){ ?>
+                    <li><a href="index.php?ctl=principal">Trazabilidad</a></li> 
+                <?php    }; ?>
 
             </ul>
             </li>
@@ -77,39 +73,36 @@
           <?php  };    ?>
 
 
-
            <?php 
            //************************************************Pinta Menu de Catalogos***************************************************************
            if (($_SESSION['modulos']['Catálogos-Empresas']==1||$_SESSION['modulos']['Catálogos-Tipo Evento']==1||
-                   $_SESSION['modulos']['Importar- Prontuario']==1)){
-          ?>
+                   $_SESSION['modulos']['Importar- Prontuario']==1||$_SESSION['modulos']['Catálogos-Direcciones IP']==1)){  ?>
 
-                <li class="dropdown">
-                <a class="dropdown-toggle" data-toggle="dropdown" href="#">Catálogos
-                <span class="caret"></span></a>
-                <ul class="dropdown-menu">
+            <li class="dropdown">
+            <a class="dropdown-toggle" data-toggle="dropdown" href="#">Catálogos
+            <span class="caret"></span></a>
+            <ul class="dropdown-menu">
 
-            
+                <?php if ($_SESSION['modulos']['Catálogos-Empresas']==1){ ?>
+                    <li><a href="index.php?ctl=empresas_listar">Empresas</a></li>
+                <?php };?>   
 
-            <?php 
-            if ($_SESSION['modulos']['Catálogos-Empresas']==1){
-            ?>
-                <li><a href="index.php?ctl=empresas_listar">Empresas</a></li>
-            <?php 
-            };
-            ?>   
-            <?php 
-            if ($_SESSION['modulos']['Catálogos-Tipo Evento']==1){
-            ?>
-                <li><a href="index.php?ctl=tipo_eventos_listar">Tipo Evento</a></li>
-            <?php 
-            };
-            ?>
-                
-           <?php  if ($_SESSION['modulos']['Importar- Prontuario']==1){?>
-               <li><a href="index.php?ctl=frm_importar_prontuario_paso_1">Importar Prontuario</a></li> 
-           <?php  }; ?>  
-               
+                <?php if ($_SESSION['modulos']['Catálogos-Tipo Evento']==1){ ?>
+                    <li><a href="index.php?ctl=tipo_eventos_listar">Tipo Evento</a></li>
+                <?php }; ?>
+
+                <?php  if ($_SESSION['modulos']['Catálogos-Direcciones IP']==1){?>
+                   <li><a href="index.php?ctl=direcciones_ip_listar">Direcciones IP's</a></li> 
+                <?php  }; ?>  
+                   
+                <?php  if ($_SESSION['modulos']['Catálogos-Horarios']==1){?>
+                   <li><a href="index.php?ctl=horario_listar">Horarios BCR</a></li> 
+                <?php  }; ?>     
+
+                <?php  if ($_SESSION['modulos']['Importar- Prontuario']==1){?>
+                   <li><a href="index.php?ctl=frm_importar_prontuario_paso_1">Importar Prontuario</a></li> 
+                <?php  }; ?>  
+              
             </ul>
             </li>
 
@@ -118,58 +111,37 @@
           ?>
 
 
-           <?php 
+            <?php 
 
            //************************************************Pinta Menu de Reportes***************************************************************
            if (($_SESSION['modulos']['Reportes-Eventos']==1)||($_SESSION['modulos']['Reportes-Oficinas']==1)||
                    ($_SESSION['modulos']['Reportes-Personal']==1)||($_SESSION['modulos']['Reportes-Alertas']==1)||
-                   ($_SESSION['modulos']['Reportes-Trazabilidad']==1)){
-          ?>
+                   ($_SESSION['modulos']['Reportes-Trazabilidad']==1)){ ?>
 
-                <li class="dropdown">
-                <a class="dropdown-toggle" data-toggle="dropdown" href="#">Reportes
-                <span class="caret"></span></a>
-                <ul class="dropdown-menu">
+            <li class="dropdown">
+            <a class="dropdown-toggle" data-toggle="dropdown" href="#">Reportes
+            <span class="caret"></span></a>
+            <ul class="dropdown-menu">
 
-           <?php 
-           if ($_SESSION['modulos']['Reportes-Eventos']==1){
-           ?>
-                <li><a href="index.php?ctl=principal">Eventos</a></li>
-           <?php 
-           };
-           ?>
+                <?php if ($_SESSION['modulos']['Reportes-Eventos']==1){ ?>
+                     <li><a href="index.php?ctl=principal">Eventos</a></li>
+                <?php  }; ?>
 
-           <?php 
-           if ($_SESSION['modulos']['Reportes-Oficinas']==1){
-           ?>
-                <li><a href="index.php?ctl=principal">Oficinas</a></li>
-           <?php 
-           };
-           ?>
+                <?php if ($_SESSION['modulos']['Reportes-Oficinas']==1){?>
+                     <li><a href="index.php?ctl=principal">Oficinas</a></li>
+                <?php  }; ?>
 
-           <?php 
-           if ($_SESSION['modulos']['Reportes-Personal']==1){
-           ?>
-                <li><a href="index.php?ctl=principal">Personal</a></li>
-           <?php 
-           };
-           ?>   
+                <?php if ($_SESSION['modulos']['Reportes-Personal']==1){ ?>
+                     <li><a href="index.php?ctl=principal">Personal</a></li>
+                <?php }; ?>   
 
-            <?php 
-           if ($_SESSION['modulos']['Reportes-Alertas']==1){
-           ?>
-               <li><a href="index.php?ctl=principal">Alertas</a></li> 
-           <?php 
-           };
-           ?>   
+                 <?php if ($_SESSION['modulos']['Reportes-Alertas']==1){ ?>
+                    <li><a href="index.php?ctl=principal">Alertas</a></li> 
+                <?php }; ?>   
 
-            <?php 
-           if ($_SESSION['modulos']['Reportes-Trazabilidad']==1){
-           ?>
-               <li><a href="index.php?ctl=frm_trazabilidad_listar">Trazabilidad</a></li> 
-           <?php 
-           };
-           ?>   
+                 <?php if ($_SESSION['modulos']['Reportes-Trazabilidad']==1){ ?>
+                    <li><a href="index.php?ctl=frm_trazabilidad_listar">Trazabilidad</a></li> 
+                <?php }; ?>   
 
             </ul>
             </li>
@@ -181,64 +153,40 @@
 
             <?php 
 
-           //************************************************Pinta Menu de Módulos***************************************************************
-          if (($_SESSION['modulos']['Módulo-Bitácora Digital']==1)||($_SESSION['modulos']['Módulo-MRI BCR']==1)||
-                  ($_SESSION['modulos']['Módulo-Controles de Video']==1)||($_SESSION['modulos']['Módulo-PuntosBCR']==1)||
-                  ($_SESSION['modulos']['Módulo-Personal']==1)||($_SESSION['modulos']['Módulo-Áreas de Apoyo']==1)){
-          ?>
+            //************************************************Pinta Menu de Módulos***************************************************************
+            if (($_SESSION['modulos']['Módulo-Bitácora Digital']==1)||($_SESSION['modulos']['Módulo-MRI BCR']==1)||
+                    ($_SESSION['modulos']['Módulo-Controles de Video']==1)||($_SESSION['modulos']['Módulo-PuntosBCR']==1)||
+                    ($_SESSION['modulos']['Módulo-Personal']==1)||($_SESSION['modulos']['Módulo-Áreas de Apoyo']==1)){
+            ?>
 
-                <li class="dropdown">
-                <a class="dropdown-toggle" data-toggle="dropdown" href="#">Módulos
-                <span class="caret"></span></a>
-                <ul class="dropdown-menu">
+            <li class="dropdown">
+            <a class="dropdown-toggle" data-toggle="dropdown" href="#">Módulos
+            <span class="caret"></span></a>
+            <ul class="dropdown-menu">
 
-           <?php 
-           if ($_SESSION['modulos']['Módulo-Bitácora Digital']==1){
-           ?>
-                <li><a href="index.php?ctl=frm_eventos_listar">Bitácora Digital</a></li>
-           <?php 
-           };
-           ?>
+                <?php if ($_SESSION['modulos']['Módulo-Bitácora Digital']==1){ ?>
+                     <li><a href="index.php?ctl=frm_eventos_listar">Bitácora Digital</a></li>
+                <?php }; ?>
 
-           <?php 
-           if ($_SESSION['modulos']['Módulo-MRI BCR']==1){
-           ?>
-                <!--<li><a href="#">MRI-BCR</a></li>-->
-           <?php 
-           };
-           ?>
-                
-           <?php 
-           if ($_SESSION['modulos']['Módulo-PuntosBCR']==1){
-           ?>
-                <li><a href="index.php?ctl=puntos_bcr_listar">Puntos BCR</a></li>
-           <?php 
-           };
-           ?>
+                <?php  if ($_SESSION['modulos']['Módulo-MRI BCR']==1){ ?>
+                     <!--<li><a href="#">MRI-BCR</a></li>-->
+                <?php }; ?>
 
-           <?php 
-           if ($_SESSION['modulos']['Módulo-Personal']==1){
-           ?>
-                <li><a href="index.php?ctl=personal_listar">Personal</a></li>
-           <?php 
-           };
-           ?>
+                <?php if ($_SESSION['modulos']['Módulo-PuntosBCR']==1){ ?>
+                     <li><a href="index.php?ctl=puntos_bcr_listar">Puntos BCR</a></li>
+                <?php }; ?>
 
-           <?php 
-           if ($_SESSION['modulos']['Módulo-Áreas de Apoyo']==1){
-           ?>
-                <li><a href="index.php?ctl=areas_apoyo_listar">Áreas de Apoyo</a></li>
-           <?php 
-           };
-           ?>  
-                
-            <?php 
-           if ($_SESSION['modulos']['Módulo-Control de Video']==1){
-           ?>
-               <!--<li><a href="#">Controles de Video</a></li>--> 
-          <?php 
-           };
-           ?>   
+                <?php if ($_SESSION['modulos']['Módulo-Personal']==1){ ?>
+                     <li><a href="index.php?ctl=personal_listar">Personal</a></li>
+                <?php }; ?>
+
+                <?php if ($_SESSION['modulos']['Módulo-Áreas de Apoyo']==1){ ?>
+                     <li><a href="index.php?ctl=areas_apoyo_listar">Áreas de Apoyo</a></li>
+                <?php }; ?>  
+
+                 <?php if ($_SESSION['modulos']['Módulo-Control de Video']==1){?>
+                    <!--<li><a href="#">Controles de Video</a></li>--> 
+               <?php }; ?>   
 
             </ul>
             </li>
@@ -249,67 +197,51 @@
             
             
                <?php 
-          //************************************************Pinta Menu de Ayuda***************************************************************
-           if (($_SESSION['modulos']['Ayuda']==1)){
-           ?>
-              <li class="dropdown">
-                <a class="dropdown-toggle" data-toggle="dropdown" href="#">Ayuda
-                <span class="caret"></span></a>
-                <ul class="dropdown-menu">
-              <!--<li><a href="#">Ayuda</a></li>--> 
-          </ul>
+            //************************************************Pinta Menu de Ayuda***************************************************************
+            if (($_SESSION['modulos']['Ayuda']==1)){
+            ?>
+            <li class="dropdown">
+            <a class="dropdown-toggle" data-toggle="dropdown" href="#">Ayuda
+            <span class="caret"></span></a>
+            <ul class="dropdown-menu">
+                <!--<li><a href="#">Ayuda</a></li>--> 
+            </ul>
             </li>
            <?php 
            };
            ?>       
-            </ul>  
+           </ul>  
 
 
 
           <ul class="nav navbar-nav navbar-right">
               
-           <?php 
-          //************************************************Pinta Menu de Otros enlaces***************************************************************
-           if (($_SESSION['modulos']['Controles de Video']==1)||($_SESSION['modulos']['Oficiales']==1)||
-                   ($_SESSION['modulos']['Padrón Fotográfico']==1)||($_SESSION['modulos']['Personal Externo']==1)){
-          ?>
-
-                <li class="dropdown">
-                <a class="dropdown-toggle" data-toggle="dropdown" href="#">Otros Enlaces
-                <span class="caret"></span></a>
-                <ul class="dropdown-menu">
-
-           <?php 
-           if ($_SESSION['modulos']['Controles de Video']==1){
-           ?>
-                <li><a href="http://10.170.5.80/Operaciones_de_Seguridad/ctrlvideo/consulta.html">Controles de Video</a></li>
-           <?php 
-           };
-           ?>
-
-           <?php 
-           if ($_SESSION['modulos']['Oficiales']==1){
-           ?>
-                <li><a href="http://10.170.5.80/Operaciones_de_Seguridad">Oficiales</a></li>
-           <?php 
-           };
-           ?>
-
-           <?php 
-           if ($_SESSION['modulos']['Padrón Fotográfico']==1){
-           ?>
-                <li><a href="http://10.170.5.80/Operaciones_de_Seguridad/oficinas/consultaofic.htm">Padrón Fotográfico</a></li>
-           <?php 
-           };
-           ?>   
-
             <?php 
-           if ($_SESSION['modulos']['Personal Externo']==1){
-           ?>
-               <li><a href="http://10.170.5.80/Operaciones_de_Seguridad/externos/index.php">Personal Externo</a></li> 
-           <?php 
-           };
-           ?>   
+            //************************************************Pinta Menu de Otros enlaces***************************************************************
+            if (($_SESSION['modulos']['Controles de Video']==1)||($_SESSION['modulos']['Oficiales']==1)||
+                   ($_SESSION['modulos']['Padrón Fotográfico']==1)||($_SESSION['modulos']['Personal Externo']==1)){
+            ?>
+
+            <li class="dropdown">
+            <a class="dropdown-toggle" data-toggle="dropdown" href="#">Otros Enlaces
+            <span class="caret"></span></a>
+            <ul class="dropdown-menu">
+
+                <?php if ($_SESSION['modulos']['Controles de Video']==1){ ?>
+                    <li><a href="http://10.170.5.80/Operaciones_de_Seguridad/ctrlvideo/consulta.html">Controles de Video</a></li>
+                <?php }; ?>
+
+                <?php if ($_SESSION['modulos']['Oficiales']==1){ ?>
+                    <li><a href="http://10.170.5.80/Operaciones_de_Seguridad">Oficiales</a></li>
+                <?php }; ?>
+
+                <?php if ($_SESSION['modulos']['Padrón Fotográfico']==1){ ?>
+                    <li><a href="http://10.170.5.80/Operaciones_de_Seguridad/oficinas/consultaofic.htm">Padrón Fotográfico</a></li>
+                <?php }; ?>   
+
+                 <?php if ($_SESSION['modulos']['Personal Externo']==1){ ?>
+                    <li><a href="http://10.170.5.80/Operaciones_de_Seguridad/externos/index.php">Personal Externo</a></li> 
+                <?php }; ?>   
 
             </ul>
             </li>
@@ -318,7 +250,7 @@
           };
           ?>
             
-             <li><a href="index.php?ctl=principal"><span class="glyphicon glyphicon-th-large"></span><?php echo $_SESSION['name']." ".$_SESSION['apellido'];?></a></li>
+            <li><a href="index.php?ctl=principal"><span class="glyphicon glyphicon-th-large"></span><?php echo $_SESSION['name']." ".$_SESSION['apellido'];?></a></li>
           <li><a href="index.php?ctl=cerrar_sesion"><span class="glyphicon glyphicon-log-in"></span>Cerrar Sesión</a></li>    
         </ul>
 

@@ -1585,21 +1585,20 @@
             $obj_eventos->setPunto_bcr($_POST['id_punto_bcr']);
             
                 if ($obj_eventos->existe_abierto_este_tipo_de_evento_en_este_sitio()){
-                     echo "Ya existe este evento abierto para este punto BCR. Proceda a cerrarlo o agregue un seguimiento!!!";
-                     exit;
+                    //echo "true";
+                    exit;
                 }else
                 {
-                     echo "";
-                     exit;
+                    //echo "false";
+                    exit;
                 }
             }else {
                $tipo_de_alerta="alert alert-warning";
                $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
                require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
            }
-        }else
-        {
-            echo "";
+        }   else   {
+            //echo "false";
             exit;
         }
     }
@@ -2096,14 +2095,14 @@
             if ($fecha_seguimiento >  date("Y-m-d")){
                 echo "<script type=\"text/javascript\">alert('No es posible ingresar eventos futuros!!!!');history.go(-1);</script>";;
                 exit();
-            }else{
-                 $hora_seguimiento = strtotime($_POST['Hora']);
-                 $hora_seguimiento = date("H:i", $hora_seguimiento);
-            
-                 if ($hora_seguimiento >  date("H:i", time())){
-                    echo "<script type=\"text/javascript\">alert('No es posible ingresar eventos futuros!!!!');history.go(-1);</script>";;
-                    exit();
-                 }
+            }if($fecha_seguimiento == date("Y-m-d")){
+                $hora_seguimiento = strtotime($_POST['Hora']);
+                $hora_seguimiento = date("H:i", $hora_seguimiento);
+                
+                if ($hora_seguimiento >  date("H:i", time())){
+                   echo "<script type=\"text/javascript\">alert('No es posible ingresar eventos futuros!!!!');history.go(-1);</script>";;
+                   exit();
+                }
             }
              
             $obj_eventos->setFecha(($_POST['Fecha']));
@@ -2266,22 +2265,7 @@
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }  
     }
-    
-    public function areas_apoyo_listar(){
-        if(isset($_SESSION['nombre'])){
-            $obj_areasApoyo=new cls_areasapoyo();
-            $obj_areasApoyo->setCondicion("");
-            $obj_areasApoyo->obtiene_todos_las_areas_apoyo();
-            $params= $obj_areasApoyo->getArreglo();
-            
-            require __DIR__ . '/../vistas/plantillas/frm_areas_apoyo_listar.php';
-        }else{
-            $tipo_de_alerta="alert alert-warning";
-            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
-            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
-        }
-    }
-    
+       
     public function puntos_bcr_listar(){
         if(isset($_SESSION['nombre'])){
             $obj_puntosbcr=new cls_puntosBCR();
@@ -3122,6 +3106,21 @@
     ////////////////////////////////////////////////////////////////////////////
     /////////////Funciones para Areas de Apoyo//////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////
+    public function areas_apoyo_listar(){
+        if(isset($_SESSION['nombre'])){
+            $obj_areasApoyo=new cls_areasapoyo();
+            $obj_areasApoyo->setCondicion("");
+            $obj_areasApoyo->obtiene_todos_las_areas_apoyo();
+            $params= $obj_areasApoyo->getArreglo();
+            
+            require __DIR__ . '/../vistas/plantillas/frm_areas_apoyo_listar.php';
+        }else{
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }
+    }    
+
     //Función para agregar area de apoyo nueva desde Formulario de Punto BCR
     public function Area_apoyo_agregar(){
         if(isset($_SESSION['nombre'])){
@@ -3301,6 +3300,82 @@
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }
     }
+    
+    
+    ////////////////////////////////////////////////////////////////////////////
+    /////////////Funciones para Direeciones IP's////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////
+    public function direcciones_ip_listar(){
+       if(isset($_SESSION['nombre'])){
+            $obj_direcciones=new cls_direccionIP();
+            $obj_direcciones->setCondicion("");
+            $obj_direcciones->obtiene_direccionesIP();
+            $params= $obj_direcciones->getArreglo();
+            
+            require __DIR__ . '/../vistas/plantillas/frm_direcciones_ip_listar.php';
+        }else{
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        } 
+    }
+    
+    ////////////////////////////////////////////////////////////////////////////
+    /////////////Funciones para Horarios ///////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////
+    public function horario_listar(){
+        if(isset($_SESSION['nombre'])){
+            $obj_horario = new cls_horario();
+            
+            $obj_horario->obtiene_todos_los_horarios();
+            
+            $horarios= $obj_horario->getArreglo();
+            
+            require __DIR__ . '/../vistas/plantillas/frm_horario_lista.php';
+        }else{
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        } 
+    }
+    
+    public function horario_gestion(){
+        if(isset($_SESSION['nombre'])){
+            if($_GET['ide']==0){
+                $params[0]['ID_Horario']="0";
+                $params[0]['Dia_Laboral']="";
+                $params[0]['Hora_Laboral']="";
+                $params[0]['Observaciones']="";
+                $params[0]['Estado']="1";
+            }  else  {
+                echo "edita registro";
+            }
+            require __DIR__ . '/../vistas/plantillas/frm_horario_gestion.php';
+        }else{
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        } 
+    }
+    
+    public function horario_guardar() {
+        if(isset($_SESSION['nombre'])){
+            $obj_horario = new cls_horario();
+            $obj_horario->setId($_GET['id']);
+            $obj_horario->setDias_laborados($_POST['dias_laborados']);
+            $obj_horario->setHoras_laboradas($_POST['horas_laboradas']);
+            $obj_horario->setObservaciones($_POST['observaciones']);
+            $obj_horario->setEstado($_POST['estado']);
+            $obj_horario->agregar_horario();
+            
+            $this->horario_listar();
+        }else{
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        } 
+    }
+    
     ////////////////////////////////////////////////////////////////////////////
     //Trazabilidad
     //FUNCIONES PARA EVENTOS
@@ -3323,5 +3398,6 @@
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }
-    } 
+    }
+
 } 

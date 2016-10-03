@@ -11,6 +11,15 @@ class cls_horario{
     private $obj_data_provider;
     private $condicion;
     private $resultado_operacion;
+    private $observaciones;
+
+    function getObservaciones() {
+        return $this->observaciones;
+    }
+
+    function setObservaciones($observaciones) {
+        $this->observaciones = $observaciones;
+    }
 
     function getId() {
         return $this->id;
@@ -118,4 +127,11 @@ class cls_horario{
         }  
     }
     
+    public function agregar_horario(){
+        $this->obj_data_provider->conectar();
+        $this->arreglo= $this->obj_data_provider->inserta_datos("T_Horario", "Dia_Laboral, Hora_Laboral, Observaciones, Estado",
+                        "'".$this->dias_laborados."','".$this->horas_laboradas."','".$this->observaciones."','".$this->estado."'");
+        $this->obj_data_provider->desconectar();
+        $this->resultado_operacion=true;
+    }
 }

@@ -47,7 +47,7 @@
      <!--col-sm-8 Se cambio mientras se agrega un menú diferente-->
     <div class="col-sm-12 text-center">
         <div>
-            <center><img src="vistas/Imagenes/contacto.jpg" width="800" /></center>
+            <center><img src="vistas/Imagenes/contacto.jpg" width="600" /></center>
         </div>
     </div>
 <!--    <div class="col-sm-2 sidenav">

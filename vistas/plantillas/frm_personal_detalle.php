@@ -8,7 +8,6 @@
         <link rel="stylesheet" href="vistas/css/ventanaoculta.css">
         <?php require_once 'frm_librerias_head.html'; ?>
         
-
     </head>
     <body>
         <?php require_once 'encabezado.php';?>

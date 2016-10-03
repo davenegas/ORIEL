@@ -44,6 +44,11 @@ $map = array(
     'puntobcr_listar_publico'=>array('controller'=>'Controller', 'action'=>'puntobcr_listar_publico'),
     'frm_contacto_publico'=>array('controller'=>'Controller', 'action'=>'frm_contacto_publico'),
     
+    //Controlador de Horarios
+    'horario_listar'=>array('controller'=>'Controller', 'action'=>'horario_listar'),
+    'horario_gestion'=>array('controller'=>'Controller', 'action'=>'horario_gestion'),
+    'horario_guardar'=>array('controller'=>'Controller', 'action'=>'horario_guardar'),
+    
     //Controlador de Modulos
     'modulos_listar' => array('controller' =>'Controller', 'action' =>'modulos_listar'),
     'modulos_gestion' => array('controller' =>'Controller', 'action' =>'modulos_gestion'),
@@ -83,6 +88,9 @@ $map = array(
     'area_apoyo_gestion'=>array('controller'=>'Controller','action'=> 'area_apoyo_gestion'),       
     'area_apoyo_eliminar_telefono'=>array('controller'=>'Controller','action'=> 'area_apoyo_eliminar_telefono'),  
     'area_apoyo_numero_telefono_guardar'=>array('controller'=>'Controller','action'=> 'area_apoyo_numero_telefono_guardar'),  
+    
+    //Controlador de Direcciones ip 
+    'direcciones_ip_listar'=>array('controller'=>'Controller','action'=> 'direcciones_ip_listar'), 
     
     //Trazabilidad
     'frm_trazabilidad_listar'=>array('controller'=>'Controller','action'=> 'frm_trazabilidad_listar'),
@@ -146,8 +154,6 @@ $map = array(
     'recordar_password'=>array('controller'=>'Controller', 'action'=>'recordar_password'),
     'iniciar_sistema_cambiando_clave'=>array('controller'=>'Controller', 'action'=>'iniciar_sistema_cambiando_clave'),
     'cambia_clave_usuario_post'=>array('controller'=>'Controller', 'action'=>'cambia_clave_usuario_post')
-    
-    
 
     );
  

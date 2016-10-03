@@ -8,10 +8,11 @@
     </head>
     <body>
         <?php require_once 'encabezado.php';?>
-        <div class="container">
+        <section class="container">
         <h2>Gestión de Empresas</h2>
         <p>Mediante esta pantalla, podrá agregar o editar empresas:</p>
         <div class="container">
+            
         <form class="form-horizontal" role="form" method="POST" action="index.php?ctl=empresa_guardar&id=<?php echo trim($ide);?>">
         <div class="form-group">
           <label for="empresa">Nombre de la Empresa</label>
@@ -41,6 +42,8 @@
         <button type="submit" class="btn btn-default">Guardar</button>
         <td><a href="index.php?ctl=empresas_listar" class="btn btn-default" role="button">Cancelar</a></td>
       </form>     
-      <?php require_once 'pie_de_pagina.php' ?>
+      </div>
+    </section>
+    <?php require_once 'pie_de_pagina.php' ?>
     </body>
 </html>
