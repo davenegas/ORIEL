@@ -129,8 +129,8 @@ class cls_horario{
     
     public function agregar_horario(){
         $this->obj_data_provider->conectar();
-        $this->arreglo= $this->obj_data_provider->inserta_datos("T_Horario", "Dia_Laboral, Hora_Laboral, Observaciones, Estado",
-                        "'".$this->dias_laborados."','".$this->horas_laboradas."','".$this->observaciones."','".$this->estado."'");
+        $this->arreglo= $this->obj_data_provider->inserta_datos("T_Horario", "ID_Horario, Dia_Laboral, Hora_Laboral, Observaciones, Estado",
+                        "null,'".$this->dias_laborados."','".$this->horas_laboradas."','".$this->observaciones."','".$this->estado."'");
         $this->obj_data_provider->desconectar();
         $this->resultado_operacion=true;
     }

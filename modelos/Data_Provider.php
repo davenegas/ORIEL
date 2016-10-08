@@ -138,7 +138,7 @@ class Data_Provider{
 
    //Constructor que inicializa las variables 
    public function __construct(){
-   
+       
        //Controlador de excepciones
        try{
            
@@ -285,6 +285,7 @@ class Data_Provider{
         $this->resultado_operacion=true;
           
    }    
+   
    //Método utilizado para ejecutar procedimiento almacenado que inserta datos en la BD
    public function insertar_datos_con_phpmyadmin($sql){
        //Ejecuta la sentencia SQL

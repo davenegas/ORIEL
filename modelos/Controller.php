@@ -3368,7 +3368,7 @@
             $obj_horario->setEstado($_POST['estado']);
             $obj_horario->agregar_horario();
             
-            $this->horario_listar();
+            header("location:/ORIEL/index.php?ctl=horario_listar");
         }else{
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";

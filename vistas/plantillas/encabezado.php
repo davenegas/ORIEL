@@ -155,7 +155,7 @@
 
             //************************************************Pinta Menu de Módulos***************************************************************
             if (($_SESSION['modulos']['Módulo-Bitácora Digital']==1)||($_SESSION['modulos']['Módulo-MRI BCR']==1)||
-                    ($_SESSION['modulos']['Módulo-Controles de Video']==1)||($_SESSION['modulos']['Módulo-PuntosBCR']==1)||
+                    ($_SESSION['modulos']['Módulo-Control de Video']==1)||($_SESSION['modulos']['Módulo-PuntosBCR']==1)||
                     ($_SESSION['modulos']['Módulo-Personal']==1)||($_SESSION['modulos']['Módulo-Áreas de Apoyo']==1)){
             ?>
 

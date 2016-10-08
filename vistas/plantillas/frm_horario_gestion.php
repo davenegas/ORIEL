@@ -49,7 +49,7 @@
         </select>
       </div>
         <button type="submit" class="btn btn-default">Guardar</button>
-        <td><a href="index.php?ctl=empresas_listar" class="btn btn-default" role="button">Cancelar</a></td>
+        <td><a href="index.php?ctl=horario_listar" class="btn btn-default" role="button">Cancelar</a></td>
       </form>     
     </div>
     </section>
