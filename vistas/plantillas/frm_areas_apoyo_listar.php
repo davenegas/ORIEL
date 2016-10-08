@@ -16,7 +16,7 @@
         <table id="tabla" class="display" cellspacing="0" width="100%">
           <thead>
             <tr>
-              <th style="text-align:center">ID Area</th>
+              <!--<th style="text-align:center">ID Area</th>-->
               <th style="text-align:center">Tipo de Area</th>
               <th style="text-align:center">Nombre Area</th>
               <th style="text-align:center">Observaciones</th>
@@ -35,7 +35,7 @@
             for ($i = 0; $i <$tam; $i++) {
             ?>
             <tr>
-                <td style="text-align:center"><?php echo $params[$i]['ID_Area_Apoyo'];?></td>
+                <!--<td style="text-align:center"><?php echo $params[$i]['ID_Area_Apoyo'];?></td>-->
                 <td style="text-align:center"><?php echo $params[$i]['Nombre_Tipo_Area'];?></td>
                 <td style="text-align:center"><?php echo $params[$i]['Nombre_Area'];?></td>
                 <td style="text-align:center"><?php echo $params[$i]['Observaciones'];?></td>
@@ -49,18 +49,18 @@
                     }else {?>  
                         <td>Inactivo</td>
                     <?php  } ?>
-                    <td><a href="index.php?ctl=cambiar_estado_area_apoyo&id=
+                    <td style="text-align:center"><a href="index.php?ctl=area_apoyo_cambiar_estado&id=
                         <?php echo $params[$i]['ID_Area_Apoyo']?>&estado=<?php echo $params[$i]['Estado']?>">
                             Activar/Desactivar</a></td>
-                    <td><a href="index.php?ctl=gestion_area_apoyo&id=
-                        <?php echo $params[$i]['ID_Area_Apoyo']?>&estado=<?php echo $params[$i]['Estado']?>&descripcion=<?php echo $params[$i]['Observaciones']?>">
+                    <td style="text-align:center"><a href="index.php?ctl=area_apoyo_gestion&id=
+                        <?php echo $params[$i]['ID_Area_Apoyo']?>">
                             Editar</a></td>
                      </tr>     
 
                 <?php }} ?>
             </tbody>
         </table>
-        <a href="index.php?ctl=frm_area_apoyo_gestion&id=0" class="btn btn-default" role="button">Agregar Nueva Area de Apoyo</a>
+        <a href="index.php?ctl=area_apoyo_gestion&id=0" class="btn btn-default" role="button">Agregar Nueva Area de Apoyo</a>
         </div>
             <?php require 'vistas/plantillas/pie_de_pagina.php' ?>
     </body>

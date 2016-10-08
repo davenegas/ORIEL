@@ -138,7 +138,6 @@ class cls_telefono{
     
     
      public function guardar_telefono_para_prontuario(){
-        
         $this->obj_data_provider->conectar();
         $this->estado="1";
          $this->obj_data_provider->inserta_datos_para_prontuario("T_Telefono","Numero,ID_Tipo_Telefono, ID, Observaciones, Estado","'".$this->numero."','".$this->tipo_telefono."','".$this->id2."','".$this->observaciones."','".$this->estado."'");

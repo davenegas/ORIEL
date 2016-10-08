@@ -237,6 +237,7 @@ class cls_usuarios{
       
         $sql=("call sp_set_usuario('".$this->id."','".$this->nombre."','".$this->apellido."','".$this->cedula."','".$this->correo."','".$this->rol."','".$this->observaciones."','".$this->estado."','".Encrypter::encrypt($this->cedula)."')");
         $this->obj_data_provider->insertar_datos_con_phpmyadmin($sql);
+        $this->obj_data_provider->desconectar();
   }
   //Este metodo realiza la tarea de actualizar la información de un módulo de seguridad en específico en la bd
   function edita_passsword(){

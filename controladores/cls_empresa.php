@@ -130,7 +130,7 @@ class cls_empresa{
         //Verifica el valor de estado, para ingresarlo en el sistema
         if ($this->estado=="Activo"){
             $this->estado="1";
-        }  else {
+        }  if ($this->estado=="Inactivo") {
              $this->estado="0";
         }
         $sql=("call sp_set_empresa('".$this->id."','".$this->empresa."','".$this->observaciones."','".$this->estado."')");

@@ -27,7 +27,7 @@
         <li><a href="index.php?ctl=personal_listar_publico">Personal</a></li>
         <li><a href="index.php?ctl=puntobcr_listar_publico">Puntos BCR</a></li>
         <!--<li><a href="#">Padrones Fotograficos</a></li>-->
-        <li><a href="#">Contáctenos</a></li>
+        <li><a href="index.php?ctl=frm_contacto_publico">Contáctenos</a></li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li><a href="index.php?ctl=iniciar_sesion"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
@@ -38,13 +38,14 @@
   
 <div class="container-fluid text-left">
   <div class="row content">
-    <div class="col-sm-2 sidenav">
-<!--      <p><a href="#">Formulario Claves de Alarma</a></p>
+<!--    <div class="col-sm-1 sidenav">
+      <p><a href="#">Formulario Claves de Alarma</a></p>
       <p><a href="#">Formulario Acceso Controlado</a></p>
-      <p><a href="#">Formulario de Video</a></p>-->
-    </div>
+      <p><a href="#">Formulario de Video</a></p>
+    </div>-->
      <!--PANTALLA PRINCIPAL DE LA PAGINA-->
-    <div class="col-sm-9 text-left">
+     <!--col-sm-8 Se cambio mientras se agrega un menú diferente-->
+    <div class="col-sm-12 text-center">
         <div class="container">
             <br>
             <div id="myCarousel" class="carousel slide" data-ride="carousel">
@@ -102,7 +103,6 @@
             </div>
           </div>
 
-        
     </div>
 <!--    <div class="col-sm-2 sidenav">
       <div class="well">

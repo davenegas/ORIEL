@@ -486,7 +486,7 @@ class cls_eventos{
         //Verifica el valor de estado, para ingresarlo en el sistema
         if ($this->estado=="Activo"){
             $this->estado="1";
-        }  else {
+        } if($this->estado=="Inactivo") {
              $this->estado="0";
         }
         

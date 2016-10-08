@@ -32,7 +32,7 @@
         <li class="active"><a href="index.php?ctl=personal_listar_publico">Personal</a></li>
         <li><a href="index.php?ctl=puntobcr_listar_publico">Puntos BCR</a></li>
         <!--<li><a href="#">Padrones Fotograficos</a></li>-->
-        <li><a href="#">Contáctenos</a></li>
+        <li><a href="index.php?ctl=frm_contacto_publico">Contáctenos</a></li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li><a href="index.php?ctl=iniciar_sesion"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
@@ -86,9 +86,9 @@
       <div class="well">
         <p>Información del Personal BCR</p>
       </div>
-<!--      <div class="well">
-        <p>ADS</p>
-      </div>-->
+      <div class="well">
+        <p>Las busquedas se pueden realizar por cualquier campo sin importar el orden</p>
+      </div>
     </div>
   </div>
 </div>
