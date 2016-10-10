@@ -24,7 +24,7 @@
         <li class="list-group-item list-group-item-success"><?php echo $ue_eliminadas;?></li> 
         <li class="list-group-item list-group-item-success"><?php echo $puestos;?></li> 
         </ul> 
-        <a href="index.php?ctl=frm_importar_prontuario_paso_10" class="btn btn-default espacio-abajo" role="button">Confirmación Final</a>
+        <a href="index.php?ctl=frm_importar_prontuario_paso_10" class="btn btn-default espacio-abajo" role="button">Gestionar Teléfonos Residencia</a>
         <a href="index.php?ctl=principal" class="btn btn-default espacio-abajo" role="button">Salir del Asistente</a> 
         </div>
         <?php require 'vistas/plantillas/pie_de_pagina.php' ?>
