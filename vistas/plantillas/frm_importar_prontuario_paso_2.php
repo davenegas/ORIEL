@@ -30,10 +30,12 @@
               <th>Cédula</th>
               <th>Clase</th>
               <th>Puesto</th>
+              <th>Correo</th>
               <th>Teléfono</th>
               <th>Extensión</th>
               <th>Unidad Ejecutora</th>
               <th>Dirección</th>
+              <th>Teléfono Residencia</th>
               <th>Teléfono Celular</th>
             </tr>
           </thead>
@@ -52,6 +54,8 @@
             <td><?php echo $_SESSION['prontuario'][$i][6];?></td>
             <td><?php echo $_SESSION['prontuario'][$i][7];?></td>
             <td><?php echo $_SESSION['prontuario'][$i][8];?></td>
+             <td><?php echo $_SESSION['prontuario'][$i][9];?></td>
+              <td><?php echo $_SESSION['prontuario'][$i][10];?></td>
             </tr>
             
             <?php }

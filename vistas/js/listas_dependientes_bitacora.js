@@ -26,6 +26,7 @@ $(document).ready(function(){
                     id_tipo_evento=document.getElementById('tipo_evento').value;
                     $.post("index.php?ctl=alerta_en_vivo_mismo_punto_bcr_y_evento", { id_punto_bcr: id_punto_bcr,id_tipo_evento:id_tipo_evento }, function(data){
                         //$(document).html(data);
+                       // alert("_"+data+"_");
                     if (data!="      "){
                          alert(data);
                     }
@@ -47,6 +48,7 @@ $(document).ready(function(){
                     }          
                     $.post("index.php?ctl=alerta_en_vivo_mismo_punto_bcr_y_evento", { id_punto_bcr: id_punto_bcr,id_tipo_evento:id_tipo_evento }, function(data){
                         //$(document).html(data);
+                         //alert("_"+data+"_");
                     if (data!="      "){
                          alert(data);
                      }
