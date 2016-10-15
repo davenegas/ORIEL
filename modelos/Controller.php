@@ -2528,10 +2528,15 @@
                 $obj_empresa->obtiene_todas_las_empresas();
                 $empresas= $obj_empresa->getArreglo();
                 
-                //Obtiene Horarios
+                //Obtiene todos los Horarios
                 $obj_horario->setCondicion("");
                 $obj_horario->obtiene_todos_los_horarios();
                 $horarios= $obj_horario->getArreglo();
+                
+                //Obtiene horario de oficina
+                $obj_horario->setCondicion("ID_Horario='".$params[0]['ID_Horario']."'");
+                $obj_horario->obtiene_todos_los_horarios();
+                $horariopunto= $obj_horario->getArreglo();
                 
                 //Obtiene Direcciones IP del sitio
                 $obj_direccionIP->setCondicion("T_PuntoBCRDireccionIP.ID_PuntoBCR='".$_GET['id']."'");
@@ -2921,6 +2926,19 @@
                     header ("location:/ORIEL/index.php?ctl=puntos_bcr_listar");
                 }
             }
+        }else{
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }
+    }
+    
+    public function puntobcr_asignar_horario() {
+        if(isset($_SESSION['nombre'])){
+            $obj_horario = new cls_horario();
+            $obj_horario->setId($_POST['id_horario']);
+            $obj_horario->setCondicion("ID_PuntoBCR='".$_POST['id_puntobcr']."'");
+            $obj_horario->asignar_horario_puntobcr();  
         }else{
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";

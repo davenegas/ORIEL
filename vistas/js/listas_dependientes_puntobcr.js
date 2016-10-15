@@ -125,6 +125,7 @@ function ocultar_elemento(){
     document.getElementById('asignar_ue').style.display = "none";
     document.getElementById('asignar_area').style.display = "none";
     document.getElementById('asignar_direccion_IP').style.display = "none";
+    document.getElementById('asignar_horario').style.display = "none";
 }
 
 ///////////////////////////////////////////////////////
@@ -260,4 +261,19 @@ function validar_direccion_ip(){
         document.getElementById('nueva_direccion_ip').submit();
         document.getElementById('asignar_direccion_IP').style.display = "none";
     } 
+}
+
+///////////////////////////////////////////////////////////
+//Funciones para asignar Horario al Punto BCR
+function mostrar_horario(){
+    document.getElementById('asignar_horario').style.display = "block";
+}
+function asignar_horario(id_hora){
+    id_horario = id_hora;
+    id_puntobcr = document.getElementById('ID_PuntoBCR').value;
+    document.getElementById('asignar_horario').style.display = "none";
+    $.post("index.php?ctl=puntobcr_asignar_horario", { id_horario: id_horario, id_puntobcr:id_puntobcr}, function(data){
+            alert (data);
+            location.reload();
+          });
 }

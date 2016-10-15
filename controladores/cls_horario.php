@@ -3,6 +3,7 @@
 class cls_horario{
     
     private $id;
+    private $id2;
     private $descripcion;
     private $estado;
     private $dias_laborados;
@@ -23,6 +24,14 @@ class cls_horario{
 
     function getId() {
         return $this->id;
+    }
+    
+    function getId2() {
+        return $this->id2;
+    }
+
+    function setId2($id2) {
+        $this->id2 = $id2;
     }
 
     function getDescripcion() {
@@ -96,6 +105,7 @@ class cls_horario{
         
     public function __construct() {
       $this->id="";
+      $this->id2="";
       $this->descripcion="";
       $this->estado="";
       $this->dias_laborados="";
@@ -118,7 +128,7 @@ class cls_horario{
         }
         else{
             $this->arreglo=$this->obj_data_provider->trae_datos(
-                    "T_TipoPuntoBCR", 
+                    "T_Horario", 
                     "*",
                     $this->condicion);
             $this->arreglo=$this->obj_data_provider->getArreglo();
@@ -133,5 +143,11 @@ class cls_horario{
                         "null,'".$this->dias_laborados."','".$this->horas_laboradas."','".$this->observaciones."','".$this->estado."'");
         $this->obj_data_provider->desconectar();
         $this->resultado_operacion=true;
+    }
+    
+    public function asignar_horario_puntobcr(){
+        $this->obj_data_provider->conectar();
+        $this->obj_data_provider->edita_datos("T_PuntoBCR", "ID_Horario='".$this->id."'", $this->condicion);
+        $this->obj_data_provider->desconectar();
     }
 }

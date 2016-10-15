@@ -13,3 +13,11 @@ $(document).ready(function() {
 $(document).ready(function() {
     $('#tabla4').dataTable();
 } );
+
+$(document).ready(function() {
+    $('#tabla5').dataTable();
+} );
+
+$(document).ready(function() {
+    $('#tabla6').dataTable();
+} );

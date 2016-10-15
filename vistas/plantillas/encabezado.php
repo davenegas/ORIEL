@@ -76,7 +76,8 @@
            <?php 
            //************************************************Pinta Menu de Catalogos***************************************************************
            if (($_SESSION['modulos']['Catálogos-Empresas']==1||$_SESSION['modulos']['Catálogos-Tipo Evento']==1||
-                   $_SESSION['modulos']['Importar- Prontuario']==1||$_SESSION['modulos']['Catálogos-Direcciones IP']==1)){  ?>
+                   $_SESSION['modulos']['Importar- Prontuario']==1||$_SESSION['modulos']['Catálogos-Direcciones IP']==1||
+                   $_SESSION['modulos']['Catálogos-Horarios']==1)){  ?>
 
             <li class="dropdown">
             <a class="dropdown-toggle" data-toggle="dropdown" href="#">Catálogos
