@@ -26,9 +26,11 @@ $(document).ready(function(){
                     id_tipo_evento=document.getElementById('tipo_evento').value;
                     $.post("index.php?ctl=alerta_en_vivo_mismo_punto_bcr_y_evento", { id_punto_bcr: id_punto_bcr,id_tipo_evento:id_tipo_evento }, function(data){
                         //$(document).html(data);
-                    if (data== "true"){ 
-                        alert("Ya existe este evento abierto para este punto BCR. Proceda a cerrarlo o agregue un seguimiento!!!");
-                     }
+                       // alert("_"+data+"_");
+                    if (data!="      "){
+                         alert(data);
+                    }
+
                     }); 
                     $.post("index.php?ctl=dibuja_tabla_eventos_relacionados_a_punto_bcr", { id_punto_bcr: id_punto_bcr}, function(data){
                         $("#tabla").html(data); 
@@ -46,9 +48,9 @@ $(document).ready(function(){
                     }          
                     $.post("index.php?ctl=alerta_en_vivo_mismo_punto_bcr_y_evento", { id_punto_bcr: id_punto_bcr,id_tipo_evento:id_tipo_evento }, function(data){
                         //$(document).html(data);
-                        alert ("Datos:"+data+".");
-                    if (data=="true"){
-                         alert("Ya existe este evento abierto para este punto BCR. Proceda a cerrarlo o agregue un seguimiento!!!");
+                         //alert("_"+data+"_");
+                    if (data!="      "){
+                         alert(data);
                      }
                     });    
                     $.post("index.php?ctl=actualiza_en_vivo_estado_evento", { id_tipo_evento: id_tipo_evento}, function(data){
@@ -102,5 +104,5 @@ $(document).ready(function(){
            });
         });
     
-   
+
 

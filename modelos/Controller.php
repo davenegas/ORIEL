@@ -125,17 +125,17 @@
                 if (count($unidades_ejecutoras)>0){
                     $bandera=0;
                     for ($x = 0; $x < count($unidades_ejecutoras); $x++) {
-                        if ($_SESSION['prontuario'][$i][6]==$unidades_ejecutoras[$x]){
+                        if ($_SESSION['prontuario'][$i][7]==$unidades_ejecutoras[$x]){
                             $bandera=1;
                         }
                     }
                     if ($bandera==0){
-                        $unidades_ejecutoras[]=$_SESSION['prontuario'][$i][6];
+                        $unidades_ejecutoras[]=$_SESSION['prontuario'][$i][7];
                     }else{
                         $bandera=0;
                     }
                 }else{
-                    $unidades_ejecutoras[]=$_SESSION['prontuario'][$i][6];
+                    $unidades_ejecutoras[]=$_SESSION['prontuario'][$i][7];
                 }
             }
             
@@ -314,7 +314,7 @@
             // Lee los puestos que se encuentran en el prontuario y los pasa a un vector separado en modo distinct
             for ($i = 0; $i < count($_SESSION['prontuario']); $i++) {
                 
-                    $arreglo_personal[]=array($_SESSION['prontuario'][$i][0],$_SESSION['prontuario'][$i][1],$_SESSION['prontuario'][$i][3],$_SESSION['prontuario'][$i][6],$_SESSION['prontuario'][$i][7]);
+                    $arreglo_personal[]=array($_SESSION['prontuario'][$i][0],$_SESSION['prontuario'][$i][1],$_SESSION['prontuario'][$i][3],$_SESSION['prontuario'][$i][4],$_SESSION['prontuario'][$i][7],$_SESSION['prontuario'][$i][8]);
                
             }
             
@@ -337,11 +337,12 @@
 
                 $obj_personal->setCedula($arreglo_personal[$i][1]);
 
-                $obj_ue->setDepartamento($arreglo_personal[$i][3]);
+                $obj_ue->setDepartamento($arreglo_personal[$i][4]);
                 $obj_ue->obtiene_id_ue_por_nombre();
                 $obj_personal->setId_unidad_ejecutora($obj_ue->getId());
 
-                $obj_personal->setDireccion($arreglo_personal[$i][4]);
+                $obj_personal->setCorreo($arreglo_personal[$i][3]);
+                $obj_personal->setDireccion($arreglo_personal[$i][5]);
 
                 $obj_personal->setLinkfoto("http://bcr0157uco01/foto/".$arreglo_personal[$i][1].".jpg?rnd=7055");
                 $obj_personal->setId_empresa("1");
@@ -404,7 +405,7 @@
             // Lee los puestos que se encuentran en el prontuario y los pasa a un vector separado en modo distinct
             for ($i = 0; $i < count($_SESSION['prontuario']); $i++) {
                 
-                    $arreglo_personal[]=array($_SESSION['prontuario'][$i][0],$_SESSION['prontuario'][$i][1],$_SESSION['prontuario'][$i][3],$_SESSION['prontuario'][$i][6],$_SESSION['prontuario'][$i][7]);
+                    $arreglo_personal[]=array($_SESSION['prontuario'][$i][0],$_SESSION['prontuario'][$i][1],$_SESSION['prontuario'][$i][3],$_SESSION['prontuario'][$i][7],$_SESSION['prontuario'][$i][8]);
                
             }
             
@@ -465,8 +466,8 @@
             
             // Lee los puestos que se encuentran en el prontuario y los pasa a un vector separado en modo distinct
             for ($i = 0; $i < count($_SESSION['prontuario']); $i++) {
-                    $arreglo_telefonos_celulares[]=array($_SESSION['prontuario'][$i][1],str_replace (" ","",str_replace ("-","",$_SESSION['prontuario'][$i][8])));
-                    
+                    $arreglo_telefonos_celulares[]=array($_SESSION['prontuario'][$i][1],str_replace (" ","",str_replace ("-","",$_SESSION['prontuario'][$i][10])));
+                                       
                     $obj_personal->setCondicion("Cedula='".$arreglo_telefonos_celulares[$i][0]."'");
                     $obj_personal->obtiene_id_de_persona_para_prontuario();
                     $obj_telefono->setCondicion("(ID=".$obj_personal->getId().") AND (ID_Tipo_Telefono=2 or ID_Tipo_Telefono=3 or ID_Tipo_Telefono=4 or ID_Tipo_Telefono=27 or ID_Tipo_Telefono=28) AND (Numero='0')");
@@ -483,14 +484,14 @@
                         $obj_telefono->setCondicion("(ID=".$obj_personal->getId().") AND (ID_Tipo_Telefono=2 or ID_Tipo_Telefono=3 or ID_Tipo_Telefono=4 or ID_Tipo_Telefono=27 or ID_Tipo_Telefono=28) AND Numero='".$arreglo_telefonos_celulares[$i][1]."'");
                         $obj_telefono->obtiene_telefonos_por_criterio_para_prontuario();
                         if (count($obj_telefono->getArreglo())==0){
-                            if (strlen($arreglo_telefonos_celulares[$i][1])==8){
+                            if ((strlen($arreglo_telefonos_celulares[$i][1])==8)&&(is_numeric($arreglo_telefonos_celulares[$i][1]))){
                                 $obj_telefono->setNumero($arreglo_telefonos_celulares[$i][1]);
                                 $obj_telefono->guardar_telefono_para_prontuario();
                                 $numeros_actualizados++;
                             }
                         }
                     }else{
-                       if (strlen($arreglo_telefonos_celulares[$i][1])==8){
+                       if ((strlen($arreglo_telefonos_celulares[$i][1])==8)&&(is_numeric($arreglo_telefonos_celulares[$i][1]))){
                            $obj_telefono->setNumero($arreglo_telefonos_celulares[$i][1]);
                            $obj_telefono->guardar_telefono_para_prontuario();
                            $numeros_actualizados++;
@@ -531,7 +532,7 @@
                         
             // Lee los puestos que se encuentran en el prontuario y los pasa a un vector separado en modo distinct
             for ($i = 0; $i < count($_SESSION['prontuario']); $i++) {
-                    $arreglo_telefonos_extensiones[]=array($_SESSION['prontuario'][$i][1],str_replace (" ","",str_replace ("-","",$_SESSION['prontuario'][$i][4])),str_replace (".","",$_SESSION['prontuario'][$i][5]));
+                    $arreglo_telefonos_extensiones[]=array($_SESSION['prontuario'][$i][1],str_replace (" ","",str_replace ("-","",$_SESSION['prontuario'][$i][5])),str_replace (".","",$_SESSION['prontuario'][$i][6]));
                     
                     $obj_personal->setCondicion("Cedula='".$arreglo_telefonos_extensiones[$i][0]."'");
                     $obj_personal->obtiene_id_de_persona_para_prontuario();
@@ -549,7 +550,7 @@
                         $obj_telefono->setCondicion("(ID=".$obj_personal->getId().") AND (ID_Tipo_Telefono=2 or ID_Tipo_Telefono=3 or ID_Tipo_Telefono=4 or ID_Tipo_Telefono=27 or ID_Tipo_Telefono=28) AND (Numero='".$arreglo_telefonos_extensiones[$i][2]."' or Numero='".$arreglo_telefonos_extensiones[$i][1]."' or Numero='".$arreglo_telefonos_extensiones[$i][1]." ext ".$arreglo_telefonos_extensiones[$i][2]."')");
                         $obj_telefono->obtiene_telefonos_por_criterio_para_prontuario();
                         if (count($obj_telefono->getArreglo())==0){
-                            if (strlen($arreglo_telefonos_extensiones[$i][1])==8){
+                            if ((strlen($arreglo_telefonos_extensiones[$i][1])==8)&&(is_numeric($arreglo_telefonos_extensiones[$i][1]))){
                                 if (($arreglo_telefonos_extensiones[$i][1]=="22111111")||($arreglo_telefonos_extensiones[$i][1]=="22879000")){
                                     if (strlen($arreglo_telefonos_extensiones[$i][2])>4){
                                         $obj_telefono->setNumero($arreglo_telefonos_extensiones[$i][2]);
@@ -633,10 +634,76 @@
     
     // Paso de importación del prontuario que permite actualizar la tabla de personas en el sistema
     public function frm_importar_prontuario_paso_10(){
+         if(isset($_SESSION['nombre'])){
+            
+            //Crea objeto de tipo puestos para administración de la tabla
+            $obj_personal = new cls_personal();
+            $obj_telefono= new cls_telefono();
+             
+            // Crea vector para almacenar los puestos que vienen en el prontuario pero en modo disctinct
+            $arreglo_telefonos_celulares=array();
+            
+            $numeros_actualizados=0;
+            
+            // Lee los puestos que se encuentran en el prontuario y los pasa a un vector separado en modo distinct
+            for ($i = 0; $i < count($_SESSION['prontuario']); $i++) {
+                    $arreglo_telefonos_celulares[]=array($_SESSION['prontuario'][$i][1],str_replace (" ","",str_replace ("-","",$_SESSION['prontuario'][$i][9])));
+                                       
+                    $obj_personal->setCondicion("Cedula='".$arreglo_telefonos_celulares[$i][0]."'");
+                    $obj_personal->obtiene_id_de_persona_para_prontuario();
+                    //$obj_telefono->setCondicion("(ID=".$obj_personal->getId().") AND (ID_Tipo_Telefono=2 or ID_Tipo_Telefono=3 or ID_Tipo_Telefono=4 or ID_Tipo_Telefono=27 or ID_Tipo_Telefono=28) AND (Numero='0')");
+                    //$obj_telefono->eliminar_telefonos_para_prontuario();
+                    $obj_telefono->setCondicion("(ID=".$obj_personal->getId().") AND (ID_Tipo_Telefono=2 or ID_Tipo_Telefono=3 or ID_Tipo_Telefono=4 or ID_Tipo_Telefono=27 or ID_Tipo_Telefono=28) ");
+                    $obj_telefono->obtiene_telefonos_por_criterio_para_prontuario();
+                    
+                    $obj_telefono->setid2($obj_personal->getId());
+                    $obj_telefono->setTipo_telefono("2");
+                    $obj_telefono->setObservaciones("");
+                    $obj_telefono->setEstado("1");
+                                        
+                    if (count($obj_telefono->getArreglo())>0){
+                        $obj_telefono->setCondicion("(ID=".$obj_personal->getId().") AND (ID_Tipo_Telefono=2 or ID_Tipo_Telefono=3 or ID_Tipo_Telefono=4 or ID_Tipo_Telefono=27 or ID_Tipo_Telefono=28) AND Numero='".$arreglo_telefonos_celulares[$i][1]."'");
+                        $obj_telefono->obtiene_telefonos_por_criterio_para_prontuario();
+                        if (count($obj_telefono->getArreglo())==0){
+                            if ((strlen($arreglo_telefonos_celulares[$i][1])==8)&&(is_numeric($arreglo_telefonos_celulares[$i][1]))){
+                                $obj_telefono->setNumero($arreglo_telefonos_celulares[$i][1]);
+                                $obj_telefono->guardar_telefono_para_prontuario();
+                                $numeros_actualizados++;
+                            }
+                        }
+                    }else{
+                       if ((strlen($arreglo_telefonos_celulares[$i][1])==8)&&(is_numeric($arreglo_telefonos_celulares[$i][1]))){
+                           $obj_telefono->setNumero($arreglo_telefonos_celulares[$i][1]);
+                           $obj_telefono->guardar_telefono_para_prontuario();
+                           $numeros_actualizados++;
+                       }else{
+                           $obj_telefono->setNumero("0");
+                           $obj_telefono->setTipo_telefono("3");
+                           $obj_telefono->guardar_telefono_para_prontuario();
+                           $numeros_actualizados++;
+                       }
+                    }
+            }
+            
+            $resultados= "Fueron actualizados un total de: ".$numeros_actualizados." números de residencia.";
+                                
+           require __DIR__ . '/../vistas/plantillas/frm_importar_prontuario_paso_10.php';
+     
+        }else {
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        } 
+        
+    }
+    
+    
+    // Paso de importación del prontuario que permite actualizar la tabla de personas en el sistema
+    public function frm_importar_prontuario_paso_11(){
         
         if(isset($_SESSION['nombre'])){
                                  
-           require __DIR__ . '/../vistas/plantillas/frm_importar_prontuario_paso_10.php';
+           require __DIR__ . '/../vistas/plantillas/frm_importar_prontuario_paso_11.php';
      
         }else {
             $tipo_de_alerta="alert alert-warning";
@@ -1585,7 +1652,7 @@
             $obj_eventos->setPunto_bcr($_POST['id_punto_bcr']);
             
                 if ($obj_eventos->existe_abierto_este_tipo_de_evento_en_este_sitio()){
-                    //echo "true";
+                    echo "Ya existe abierto este tipo de evento para este punto BCR. Proceda a cerrarlo o ingrese un seguimiento!!!";
                     exit;
                 }else
                 {

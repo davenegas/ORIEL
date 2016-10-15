@@ -68,8 +68,11 @@
                <td style="text-align:center"><a href="index.php?ctl=personal_cambiar_estado&id=
                    <?php echo $personas[$i]['ID_Persona']?>&estado=<?php echo $personas[$i]['Estado']?>">
                 Activar/Desactivar</a></td> <?php }?>
-               <td style="text-align:center"><a href="index.php?ctl=personal_gestion&id=
-                   <?php echo $personas[$i]['ID_Persona']?>&estado=<?php echo $personas[$i]['Estado']?>&descripcion=<?php echo $personas[$i]['Observaciones']?>">
+<!--               <td style="text-align:center"><a href="index.php?ctl=personal_gestion&id=
+                  <?php echo $personas[$i]['ID_Persona']?>&estado=<?php echo $personas[$i]['Estado']?>&descripcion=<?php echo $personas[$i]['Observaciones']?>">
+                       Detalle</a></td>-->
+                    <td style="text-align:center"><a href="index.php?ctl=personal_gestion&id=
+                  <?php echo $personas[$i]['ID_Persona']?>&estado=<?php echo $personas[$i]['Estado']?>">
                        Detalle</a></td>
             </tr>     
                     

@@ -376,7 +376,7 @@ class cls_personal{
     
     public function agregar_nueva_persona_para_prontuario(){
         $this->obj_data_provider->conectar();
-        $this->obj_data_provider->inserta_datos_para_prontuario("t_personal", "Cedula,Apellido_Nombre,ID_Unidad_Ejecutora,ID_Puesto,Direccion,Link_Foto,ID_Empresa,Observaciones,Estado", "'".$this->cedula."','".$this->apellidonombre."',".$this->id_unidad_ejecutora.",".$this->id_puesto.",'".$this->direccion."','".$this->linkfoto."',".$this->id_empresa.",'".$this->observaciones."','".$this->estado."'");
+        $this->obj_data_provider->inserta_datos_para_prontuario("t_personal", "Cedula,Apellido_Nombre,ID_Unidad_Ejecutora,ID_Puesto,Direccion,Link_Foto,ID_Empresa,Observaciones,Estado,Correo", "'".$this->cedula."','".$this->apellidonombre."',".$this->id_unidad_ejecutora.",".$this->id_puesto.",'".$this->direccion."','".$this->linkfoto."',".$this->id_empresa.",'".$this->observaciones."','".$this->estado."','".$this->correo."'");
         $this->obj_data_provider->desconectar();
     }
     
@@ -395,7 +395,7 @@ class cls_personal{
         $this->obj_data_provider->conectar();
         
         //Llama al metodo para editar los datos correspondientes
-        $this->obj_data_provider->edita_datos_para_prontuario("t_personal","Cedula='".$this->cedula."',Apellido_Nombre='".$this->apellidonombre."',ID_Unidad_Ejecutora=".$this->id_unidad_ejecutora.",ID_Puesto=".$this->id_puesto.",Direccion='".$this->direccion."',Link_Foto='".$this->linkfoto."',ID_Empresa=".$this->id_empresa.",Observaciones='".$this->observaciones."',Estado='".$this->estado."'",$this->condicion);
+        $this->obj_data_provider->edita_datos_para_prontuario("t_personal","Cedula='".$this->cedula."',Apellido_Nombre='".$this->apellidonombre."',ID_Unidad_Ejecutora=".$this->id_unidad_ejecutora.",ID_Puesto=".$this->id_puesto.",Direccion='".$this->direccion."',Link_Foto='".$this->linkfoto."',ID_Empresa=".$this->id_empresa.",Observaciones='".$this->observaciones."',Correo='".$this->correo."',Estado='".$this->estado."'",$this->condicion);
        
         //Metodo de la clase data provider que desconecta la sesión con la base de datos
         $this->obj_data_provider->desconectar();
