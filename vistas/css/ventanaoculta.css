@@ -39,6 +39,18 @@ CSS settings for HTML div Exact Center
     overflow:auto
 }
 
+#asignar_horario {
+    width:100%;
+    height:100%;
+    opacity:.95;
+    top:0;
+    left:0;
+    display:none;
+    position:fixed;
+    background-color: #313131;
+    overflow:auto
+}
+
 #asignar_direccion_IP{
     width:100%;
     height:100%;
@@ -86,6 +98,24 @@ CSS settings for HTML div Exact Center
 
 #ventana2 {
     max-width:800px;
+    min-width:600px;
+    padding:20px 30px;
+    border:2px solid gray;
+    border-radius:10px;
+    font-family:raleway;
+    background-color:#fff
+}
+
+#popupventana3{
+    position:absolute;
+    left:30%;
+    top:15%;
+    margin-left:-202px;
+    font-family:'Raleway',sans-serif
+}
+
+#ventana3 {
+    max-width:1000px;
     min-width:600px;
     padding:20px 30px;
     border:2px solid gray;

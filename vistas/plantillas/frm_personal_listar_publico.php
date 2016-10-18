@@ -53,6 +53,9 @@
         <div id="cargando">
             <center><img align="center" src="vistas/Imagenes/Espere.gif"/></center>
         </div>
+<!--        <pre>
+            <?php print_r($personas)?>
+        </pre>-->
         <h2>Listado General de Personal</h2>  
         <table id="tabla" class="display" cellspacing="0" width="100%">
           <thead>
@@ -62,6 +65,8 @@
               <th style="text-align:center">Departamento</th>
               <th style="text-align:center">Telefonos</th>
               <th style="text-align:center">Correo</th>
+              <th hidden>Observaciones</th>
+              <th hidden>Observaciones UE</th>
             </tr>
           </thead>
           <tbody>
@@ -75,6 +80,8 @@
                 <td style="text-align:center"><?php echo $personas[$i]['Departamento'];?></td>
                 <td style="text-align:center"><?php echo $personas[$i]['Numero'];?></td>
                 <td style="text-align:center"><?php echo $personas[$i]['Correo'];?></td>
+                <td hidden><?php echo $personas[$i]['Observaciones'];?></td>
+                <td hidden><?php echo $personas[$i]['Observaciones_UE'];?></td>
             </tr>     
                     
             <?php }

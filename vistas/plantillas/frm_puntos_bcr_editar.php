@@ -21,6 +21,9 @@
                 <?php }?>
             </h2>
         </header>
+<!--            <pre>
+                <?php print_r($params)?>
+            </pre>-->
             <div class="bordegris"> 
             <h3>Información General del Punto BCR
             <?php if($_SESSION['modulos']['Editar- Puntos BCR']==1){ ?>
@@ -323,8 +326,8 @@
                 </select>
             </div>
             
-            <div class="col-md-4 espacio-abajo">
-                <label for="Horario">Horario Días</label>
+<!--            <div class="col-md-4 espacio-abajo">
+                <label for="Horario">Horario</label>
                 <select class="form-control" id="Horario" disabled name="Horario" > 
                 <?php
                 $tam = count($horarios);
@@ -333,23 +336,23 @@
                 {
                     if($horarios[$i]['ID_Horario']==$params[0]['ID_Horario']){
                         
-                       ?> <option value="<?php echo $horarios[$i]['ID_Horario']?>" selected="selected"><?php echo $horarios[$i]['Dia_Laboral']." - ".$horarios[$i]['Hora_Laboral'];?></option><?php
+                       ?> <option value="<?php echo $horarios[$i]['ID_Horario']?>" selected="selected"><?php echo $horarios[$i]['Observaciones'];?></option><?php
                     }
                     else {?>
-                        <option value="<?php echo $horarios[$i]['ID_Horario']?>" ><?php echo $horarios[$i]['Dia_Laboral']?></option>   
+                        <option value="<?php echo $horarios[$i]['ID_Horario']?>" ><?php echo $horarios[$i]['Observaciones']?></option>   
                 <?php }}  ?>
                 </select>
-            </div>
+            </div>-->
 
-            <div class="col-md-4 espacio-abajo">
+            <div class="col-md-8 espacio-abajo">
               <label for="Observaciones_generales">Observaciones</label>
-              <input type="text" readonly class="form-control" id="Observaciones_generales" name="Observaciones_generales" value="<?php echo $params[0]['Observaciones'];?>">
+              <input type="text" readonly class="form-control" id="Observaciones_generales" name="Observaciones_generales" value="<?php echo $params[0]['Observaciones_Punto'];?>">
             </div>
             
             <!--Información del Gerente de Zona del BCR-->
             <div class="col-md-4 espacio-abajo">
               <label for="zonas_gerente">Gerente de Zona BCR</label>
-              <select class="form-control" id="zonas_gerente" disabled name="zonas_gerente" > 
+              <select class="form-control" id="zonas_gerente" disabled name="zonas_gerente"> 
                 <?php
                 $tam = count($gerente_zona_bcr);
                 $ubicacionpersona="";
@@ -398,7 +401,54 @@
               <label for="tel_supervisor">Teléfono</label>
               <input type="text" readonly class="form-control" id="tel_supervisor" name="tel_supervisor" value="<?php echo $supervisor_zona_externo[$ubicacionpersona]['Numero'];?>">
             </div>
-        </div>   
+        </div>  
+        
+        <div class="bordegris espacio-abajo-5">
+            <div>
+            <?php if($_SESSION['modulos']['Editar- Puntos BCR']==1){ ?> 
+                <h3>Horario Punto BCR<a id="popup" onclick="mostrar_horario()" class="btn azul" role="button">Cambiar Horario</a></h3>    
+            <?php } else {?>
+                <h3>Horario Punto BCR</h3>
+            <?php } ?> 
+            <table class="display col-md-12  table-striped quitar-float espacio-abajo" id="direccionIP">
+                <thead> 
+                    <tr>
+                        <th style="text-align:center">Horario</th>
+                        <th style="text-align:center">Domingo</th>
+                        <th style="text-align:center">Lunes</th>
+                        <th style="text-align:center">Martes</th>
+                        <th style="text-align:center">Miercoles</th>
+                        <th style="text-align:center">jueves</th>
+                        <th style="text-align:center">Viernes</th>
+                        <th style="text-align:center">Sábado</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td style="text-align:center">Hora de apertura a público</td>
+                        <td style="text-align:center"><?php echo $horariopunto[0]['Hora_Apertura_Domingo'];?></td>
+                        <td style="text-align:center"><?php echo $horariopunto[0]['Hora_Apertura_Lunes'];?></td>
+                        <td style="text-align:center"><?php echo $horariopunto[0]['Hora_Apertura_Martes'];?></td>
+                        <td style="text-align:center"><?php echo $horariopunto[0]['Hora_Apertura_Miercoles'];?></td>
+                        <td style="text-align:center"><?php echo $horariopunto[0]['Hora_Apertura_Jueves'];?></td>
+                        <td style="text-align:center"><?php echo $horariopunto[0]['Hora_Apertura_Viernes'];?></td>
+                        <td style="text-align:center"><?php echo $horariopunto[0]['Hora_Apertura_Sabado'];?></td>
+                    </tr>
+                    <tr>
+                        <td style="text-align:center">Hora de cierre a público</td>
+                        <td style="text-align:center"><?php echo $horariopunto[0]['Hora_Cierre_Domingo'];?></td>
+                        <td style="text-align:center"><?php echo $horariopunto[0]['Hora_Cierre_Lunes'];?></td>
+                        <td style="text-align:center"><?php echo $horariopunto[0]['Hora_Cierre_Martes'];?></td>
+                        <td style="text-align:center"><?php echo $horariopunto[0]['Hora_Cierre_Miercoles'];?></td>
+                        <td style="text-align:center"><?php echo $horariopunto[0]['Hora_Cierre_Jueves'];?></td>
+                        <td style="text-align:center"><?php echo $horariopunto[0]['Hora_Cierre_Viernes'];?></td>
+                        <td style="text-align:center"><?php echo $horariopunto[0]['Hora_Cierre_Sabado'];?></td>
+                    </tr>
+                    <?php //}?>
+                </tbody> 
+            </table>
+            </div>
+        </div>
         
         <a href="index.php?ctl=puntos_bcr_listar" class="btn btn-default espacio-arriba" role="button">Volver</a>
         <?php require_once 'pie_de_pagina.php' ?>
@@ -437,7 +487,7 @@
             <!--Cierre agregar teléfono a Punto BCR-->
             </div>
         
-        <!--Asignar UE a Punto BRC-->
+        <!--Asignar UE a Punto BCR-->
         <div id="asignar_ue">
             <div id="popupventana2">
                 <div id="ventana2">
@@ -674,5 +724,50 @@
             </div>
         </div>
         
+        <!--Asignar Horario al Punto BCR-->
+        <div id="asignar_horario">
+            <div id="popupventana3">
+                <div id="ventana3">
+                <img id="close" src='vistas/Imagenes/cerrar.png' width="25" onclick ="ocultar_elemento()"> 
+                    <!--Tabla con la lista de Horarios-->
+                    <table id="tabla5" class="display" cellspacing="0" width="100%">
+                    <thead> 
+                        <tr>
+                            <th style="text-align:center">Horario</th>
+                            <th style="text-align:center">Domingo</th>
+                            <th style="text-align:center">Lunes</th>
+                            <th style="text-align:center">Martes</th>
+                            <th style="text-align:center">Miercoles</th>
+                            <th style="text-align:center">jueves</th>
+                            <th style="text-align:center">Viernes</th>
+                            <th style="text-align:center">Sábado</th>
+                             <th style="text-align:center">Observaciones</th>
+                            <th style="text-align:center">Opciones</th>
+                        </tr>
+                    </thead>
+                <tbody>
+                    <?php $tam = count($horarios);
+                    
+                    for($i=0; $i<$tam;$i++){?>
+                    <tr>
+                        <td style="text-align:center">Horario público</td>
+                        <td style="text-align:center"><?php echo $horarios[$i]['Hora_Apertura_Domingo']." - ".$horarios[$i]['Hora_Cierre_Domingo'];?></td>
+                        <td style="text-align:center"><?php echo $horarios[$i]['Hora_Apertura_Lunes']." - ".$horarios[$i]['Hora_Cierre_Lunes'];?></td>
+                        <td style="text-align:center"><?php echo $horarios[$i]['Hora_Apertura_Martes']." - ".$horarios[$i]['Hora_Cierre_Martes'];?></td>
+                        <td style="text-align:center"><?php echo $horarios[$i]['Hora_Apertura_Miercoles']." - ".$horarios[$i]['Hora_Cierre_Miercoles'];?></td>
+                        <td style="text-align:center"><?php echo $horarios[$i]['Hora_Apertura_Jueves']." - ".$horarios[$i]['Hora_Cierre_Jueves'];?></td>
+                        <td style="text-align:center"><?php echo $horarios[$i]['Hora_Apertura_Viernes']." - ".$horarios[$i]['Hora_Cierre_Viernes'];?></td>
+                        <td style="text-align:center"><?php echo $horarios[$i]['Hora_Apertura_Sabado']." - ".$horarios[$i]['Hora_Cierre_Sabado'];?></td>
+                        <td style="text-align:center"><?php echo $horarios[$i]['Observaciones'];?></td>
+                        <td style="text-align:center"><a class="btn" role="button" onclick="asignar_horario(<?php echo $horarios[$i]['ID_Horario'];?>);">
+                                    Asignar al PuntoBCR</a></td>
+                    </tr>
+                    <?php }?>
+                </tbody> 
+                  </table>
+                </div>
+            </div>
+        <!--Cierre Asignar Horario a Punto BCR-->
+        </div> 
     </body>
 </html>

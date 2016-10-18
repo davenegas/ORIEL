@@ -2,7 +2,7 @@
 <html lang="es">
     <head>
         <meta charset="utf-8"/>
-        <title>Gestión de Personal BCR</title>
+        <title>Gestión de Personal Externo</title>
         <script language="javascript" src="vistas/js/jquery.js"></script>
         <script language="javascript" src="vistas/js/listas_dependientes_personal.js"></script>
         <link rel="stylesheet" href="vistas/css/ventanaoculta.css">
@@ -27,20 +27,14 @@
                     <input class="quitar-float" type="checkbox" id="chk_general" name="chk_general">
                 <?php }?>
                 </h3>
+                <!--Información del personal Externo-->
                 <div class="col-md-4 espacio-abajo">
                     <label for="ID_Persona">ID Persona</label>
-                    <input type="text" required="ID_Persona" readonly class="form-control" id="ID_Persona" name="ID_Persona" value="<?php echo $params[0]['ID_Persona'];?>">
+                    <input type="text" required="ID_Persona" readonly class="form-control" id="ID_Persona" name="ID_Persona" value="<?php echo $params[0]['ID_Persona_Externa'];?>">
                 </div>
                 <div class="col-md-4 espacio-abajo">
-                    <label for="cedula">Cedula</label>
-                    <input type="text" required="cedula" readonly class="form-control" id="cedula" name="cedula" value="<?php echo $params[0]['Cedula'];?>">
-                </div>
-                <div class="col-md-4 espacio-abajo">
-                    <IMG SRC="<?php echo $params[0]['Link_Foto'];?>" id="foto_personal">
-                </div> 
-                <div class="col-md-8 espacio-abajo quitar-float">
-                    <label for="nombre">Nombre y Apellidos</label>
-                    <input type="text" required readonly class="form-control" ALIGN="right" id="nombre" name="nombre" value="<?php echo $params[0]['Apellido_Nombre'];?>">
+                    <label for="identificacion">Identificación</label>
+                    <input type="text" required="cedula" readonly class="form-control" id="identificacion" name="identificacion" value="<?php echo $params[0]['Identificacion'];?>">
                 </div>
                 <div class="col-md-4 espacio-abajo">
                     <label for="Empresa">Empresa</label>
@@ -57,7 +51,10 @@
                         <?php } }  ?>
                     </select>
                 </div>
-                
+                <div class="col-md-8 espacio-abajo quitar-float">
+                    <label for="nombre">Nombre y Apellidos</label>
+                    <input type="text" required readonly class="form-control" ALIGN="right" id="nombre" name="nombre" value="<?php echo $params[0]['Apellido_Nombre'];?>">
+                </div>
                 <div class="col-md-4 espacio-abajo">
                     <label for="observaciones">Observaciones</label>
                     <input type="text" required readonly class="form-control" id="observaciones" name="observaciones" value="<?php echo $params[0]['Observaciones'];?>">

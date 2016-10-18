@@ -75,7 +75,7 @@
                 <td style="text-align:center"><?php echo $puntosbcr[$i]['Nombre'];?></td>
                 <td style="text-align:center"><?php echo $puntosbcr[$i]['Departamento'];?></td>
                 <td style="text-align:center"><?php echo $puntosbcr[$i]['Direccion'];?></td>
-                <td style="text-align:center"><?php echo $puntosbcr[$i]['Dia_Laboral']." - ".$puntosbcr[$i]['Hora_Laboral'];?></td>
+                <td style="text-align:center"><?php echo $puntosbcr[$i]['Observaciones'];?></td>
                 <td style="text-align:center"><?php echo $puntosbcr[$i]['Tipo_Punto'];?></td>
                 <td style="text-align:center"><?php echo $puntosbcr[$i]['Numero'];?></td>
             </tr>     
