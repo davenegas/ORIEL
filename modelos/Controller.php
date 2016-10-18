@@ -120,6 +120,14 @@
             // Crea vector para almacenar las unidades ejecutoras que vienen en el prontuario pero en modo disctinct
             $unidades_ejecutoras=array();
             
+            $dias = array("Domingo","Lunes","Martes","Miercoles","Jueves","Viernes","Sábado");
+            $meses = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
+ 
+            $vector_inconsistencias=array(array("Resumen general de actualizacion de unidades ejecutoras",$dias[date('w')]." ".date('d')." de ".$meses[date('n')-1]. " del ".date('Y').", ".date("H:i", time()) . " hrs"));
+            $vector_inconsistencias[]=array ("","");
+            $vector_inconsistencias[]=array ("Valor Prontuario:","Valor en Base de Datos:");
+            $vector_inconsistencias[]=array ("","");
+            
             // Lee las unidades ejecutoras que se encuentran en el prontuario y las pasa a un vector separado en modo distinct
             for ($i = 0; $i < count($_SESSION['prontuario']); $i++) {
                 if (count($unidades_ejecutoras)>0){
@@ -148,7 +156,10 @@
                 $obj_unidades_ejecutoras->setCondicion("Departamento Like '".substr($unidades_ejecutoras[$i],0,strpos($unidades_ejecutoras[$i],"-")+1)."%'");
                 $obj_unidades_ejecutoras->obtener_unidades_ejecutoras();
             
+                
                 if (count($obj_unidades_ejecutoras->getArreglo())>1){
+                    
+                    $temporal_inconsistencias="UNIDADES DUPLICADAS:";
                     $obj_unidades_ejecutoras->setNumero_ue(substr($unidades_ejecutoras[$i],0,strpos($unidades_ejecutoras[$i],"-")-1));
                     $obj_unidades_ejecutoras->setDepartamento($unidades_ejecutoras[$i]);
                     $obj_unidades_ejecutoras->setObservaciones("");
@@ -161,8 +172,13 @@
                         $obj_unidades_ejecutoras->edita_ue_de_personas_para_prontuario();
                         $obj_unidades_ejecutoras->edita_ue_de_sitios_bcr_para_prontuario();
                         $obj_unidades_ejecutoras->eliminar_ue_sobrantes_para_prontuario();
+                        $unidades_ejecutoras_duplicadas=$obj_unidades_ejecutoras->getArreglo()[$x].",";
+                        $temporal_inconsistencias.=Encrypter::quitar_tildes($unidades_ejecutoras_duplicadas);
                     }
                     $editadas++;
+                    $unidad_prontuario=$unidades_ejecutoras[$i];
+                    $vector_inconsistencias[]=array ("UE DUPLICADAS, Modificacion: ".Encrypter::quitar_tildes($unidad_prontuario),$temporal_inconsistencias);
+                    $vector_inconsistencias[]=array ("","");
                 }
                 if (count($obj_unidades_ejecutoras->getArreglo())==1){
                     if (!($obj_unidades_ejecutoras->getArreglo()[0]['Departamento']==$unidades_ejecutoras[$i])){
@@ -172,6 +188,10 @@
                         $obj_unidades_ejecutoras->setEstado("1");
                         $obj_unidades_ejecutoras->setCondicion("ID_Unidad_Ejecutora=".$obj_unidades_ejecutoras->getArreglo()[0]['ID_Unidad_Ejecutora']);
                         $obj_unidades_ejecutoras->edita_ue_para_prontuario();
+                        $unidad_prontuario=$unidades_ejecutoras[$i];
+                        $unidad_base_datos=$obj_unidades_ejecutoras->getArreglo()[0]['Departamento'];
+                        $vector_inconsistencias[]=array ("EDICION, se identifica informacion distinta de unidad ejecutora: ".Encrypter::quitar_tildes($unidad_prontuario),Encrypter::quitar_tildes($unidad_base_datos));
+                        $vector_inconsistencias[]=array ("","");
                         $editadas++;
                     }
                 }
@@ -181,9 +201,12 @@
                     $obj_unidades_ejecutoras->setObservaciones("");
                     $obj_unidades_ejecutoras->setEstado("1");
                     $obj_unidades_ejecutoras->agregar_nueva_ue_para_prontuario();
+                    $unidad_prontuario=$unidades_ejecutoras[$i];
+                    $unidad_base_datos=$obj_unidades_ejecutoras->getArreglo()[0]['Departamento'];
+                    $vector_inconsistencias[]=array ("INSERCION, se identifica nueva unidad ejecutora: ".Encrypter::quitar_tildes($unidad_prontuario),"Se ingresa a la Base de Datos de Oriel");
+                    $vector_inconsistencias[]=array ("","");
                     $nuevas++;
-                }
-                
+                }    
             }
             $obj_unidades_ejecutoras->setCondicion("Not ID_Unidad_Ejecutora In (Select ID_Unidad_Ejecutora From t_personal)and not ID_Unidad_Ejecutora In (Select ID_Unidad_Ejecutora From t_ue_puntobcr)");
             $obj_unidades_ejecutoras->obtener_unidades_ejecutoras();
@@ -193,11 +216,18 @@
             }else{
                 $cuenta_ue_inactivas=count($obj_unidades_ejecutoras->getArreglo());
             }
+           
             $total_unidades_ejecutoras="Se identificaron un total de ".count($unidades_ejecutoras)." unidades ejecutoras en el prontuario adjunto.";
             $nuevas_unidades_ejecutoras="Se agregaron un total de ".$nuevas." unidades ejecutoras nuevas al sistema.";
-            $unidades_inactivas="Se identificaron un total de ".$cuenta_ue_inactivas." unidades ejecutoras no ligadas a ninguna persona ni punto BCR (probablemente están en desuso o inactivas).";
+            $unidades_inactivas="Se identificaron un total de ".$cuenta_ue_inactivas." unidades ejecutoras no ligadas a ninguna persona ni punto BCR (probablemente estan en desuso o inactivas).";
             $unidades_editadas="Se editaron un total de ".$editadas." unidades ejecutoras";
             
+            $vector_inconsistencias[]=array ("","");
+            $vector_inconsistencias[]=array (Encrypter::quitar_tildes($total_unidades_ejecutoras),"");
+            $vector_inconsistencias[]=array (Encrypter::quitar_tildes($nuevas_unidades_ejecutoras),"");
+            $vector_inconsistencias[]=array (Encrypter::quitar_tildes($unidades_inactivas),"");
+            $vector_inconsistencias[]=array (Encrypter::quitar_tildes($unidades_editadas),"");
+                   
            require __DIR__ . '/../vistas/plantillas/frm_importar_prontuario_paso_3.php';
      
         }else {
@@ -206,7 +236,7 @@
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         } 
     }
-    
+     
     // Paso de importación del prontuario que permite actualizar la tabla de puestos en el sistema
     public function frm_importar_prontuario_paso_4(){
         if(isset($_SESSION['nombre'])){
@@ -380,7 +410,7 @@
           
             $total_personas="Se identificaron un total de ".count($arreglo_personal)." personas en el prontuario adjunto.";
             $nuevas_personas="Se agregaron un total de ".$nuevos." personas nuevas al sistema.";
-            $personas_editadas="Se editaron un total de ".$editados." personas.";
+            $personas_editadas="Se revisó a nivel general la información de ".$editados." personas. Fue actualizado solo lo pertinente.";
             
            require __DIR__ . '/../vistas/plantillas/frm_importar_prontuario_paso_5.php';
      
@@ -464,14 +494,46 @@
             
             $numeros_actualizados=0;
             
+            $dias = array("Domingo","Lunes","Martes","Miercoles","Jueves","Viernes","Sábado");
+            $meses = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
+            $vector_inconsistencias=array(array("Resumen general de inconsistencias al actualizar numeros de celular de personas en el sistema:",$dias[date('w')]." ".date('d')." de ".$meses[date('n')-1]. " del ".date('Y').", ".date("H:i", time()) . " hrs"));
+            $vector_inconsistencias[]=array ("","");
+            $vector_inconsistencias[]=array ("Valor Prontuario:","Valor en Base de Datos:");
+            $vector_inconsistencias[]=array ("","");
+            
             // Lee los puestos que se encuentran en el prontuario y los pasa a un vector separado en modo distinct
             for ($i = 0; $i < count($_SESSION['prontuario']); $i++) {
+                
                     $arreglo_telefonos_celulares[]=array($_SESSION['prontuario'][$i][1],str_replace (" ","",str_replace ("-","",$_SESSION['prontuario'][$i][10])));
                                        
                     $obj_personal->setCondicion("Cedula='".$arreglo_telefonos_celulares[$i][0]."'");
                     $obj_personal->obtiene_id_de_persona_para_prontuario();
                     $obj_telefono->setCondicion("(ID=".$obj_personal->getId().") AND (ID_Tipo_Telefono=2 or ID_Tipo_Telefono=3 or ID_Tipo_Telefono=4 or ID_Tipo_Telefono=27 or ID_Tipo_Telefono=28) AND (Numero='0')");
                     $obj_telefono->eliminar_telefonos_para_prontuario();
+                    
+                    ///////////////////////////Generar inconsistencias del sistema
+                   
+                    if ((strlen($arreglo_telefonos_celulares[$i][1])==8)&&(is_numeric($arreglo_telefonos_celulares[$i][1]))){
+                                
+                        $obj_telefono->setCondicion("(ID=".$obj_personal->getId().") AND (ID_Tipo_Telefono=3 or ID_Tipo_Telefono=27) AND (Numero<>'".$arreglo_telefonos_celulares[$i][1]."')");
+                        //echo "(ID=".$obj_personal->getId().") AND (ID_Tipo_Telefono=3 or ID_Tipo_Telefono=27) AND (Numero<>'".$arreglo_telefonos_celulares[$i][1]."')"."<br>";
+                        $obj_telefono->obtiene_telefonos_por_criterio_para_prontuario();
+                        
+                        if (count($obj_telefono->getArreglo())>0){
+                            $valor_prontuario="El funcionario (a) con cedula: ".$arreglo_telefonos_celulares[$i][0]." tiene el el numero de celular: ".$arreglo_telefonos_celulares[$i][1]." a nivel de prontuario.";
+                            $valor_base_datos="Numeros de telefono celular registrados en la base de datos de Oriel: ";
+                             for ($x = 0; $x < count($obj_telefono->getArreglo()); $x++) {
+                                 
+                                $valor_base_datos.=$obj_telefono->getArreglo()[$x]['Numero'].", ";
+                                
+                             }
+                             $vector_inconsistencias[]=array ($valor_prontuario,$valor_base_datos);
+                             $vector_inconsistencias[]=array ("","");
+                        }  
+                    }
+                                     
+                    ///////////////////////////////////////////////////////////////
+                    
                     $obj_telefono->setCondicion("(ID=".$obj_personal->getId().") AND (ID_Tipo_Telefono=2 or ID_Tipo_Telefono=3 or ID_Tipo_Telefono=4 or ID_Tipo_Telefono=27 or ID_Tipo_Telefono=28) ");
                     $obj_telefono->obtiene_telefonos_por_criterio_para_prontuario();
                     
@@ -499,13 +561,16 @@
                            $obj_telefono->setNumero("0");
                            $obj_telefono->setTipo_telefono("3");
                            $obj_telefono->guardar_telefono_para_prontuario();
-                           $numeros_actualizados++;
+                           //$numeros_actualizados++;
                        }
                     }
             }
             
             $resultados= "Fueron actualizados un total de: ".$numeros_actualizados." números de celular.";
-                                
+            $vector_inconsistencias[]=array ("","");
+            $vector_inconsistencias[]=array ("","");
+            $vector_inconsistencias[]=array (Encrypter::quitar_tildes($resultados),"");  
+            
            require __DIR__ . '/../vistas/plantillas/frm_importar_prontuario_paso_7.php';
      
         }else {
