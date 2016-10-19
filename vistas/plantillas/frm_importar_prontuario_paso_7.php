@@ -4,6 +4,7 @@
         <meta charset="utf-8"/>
         <title>Importar Prontuario 7 (Personas)</title>
         <?php require_once 'frm_librerias_head.html'; ?> 
+        
         <script>
           $(document).ready(function () {
             // Una vez se cargue al completo la página desaparecerá el div "cargando"
@@ -23,8 +24,8 @@
             // Simulamos el click al elemento creado para descargarlo
             tmpElemento.click();
           });
-
         </script>
+        
     </head>
     <body>
         <?php require_once 'encabezado.php';?>
@@ -38,8 +39,7 @@
         <ul class="list-group">
         <li class="list-group-item list-group-item-success"><?php echo $resultados;?></li> 
         </ul> 
-        
-        
+
         <div class="container">
         <table hidden="hidden" id="tabla_inconsistencias" cellspacing="0" width="100%">   
           <tbody>
@@ -56,10 +56,10 @@
         </table>
         </div>
         
-        
         <a href="index.php?ctl=frm_importar_prontuario_paso_8" class="btn btn-default espacio-abajo" role="button">Gestionar Extensiones Telefónicas</a>
         <a href="index.php?ctl=principal" class="btn btn-default espacio-abajo" role="button">Salir del Asistente</a> 
         </div>
+        
         <?php require 'vistas/plantillas/pie_de_pagina.php' ?>
     </body>
 </html>

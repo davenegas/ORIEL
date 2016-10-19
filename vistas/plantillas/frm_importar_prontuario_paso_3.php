@@ -58,7 +58,7 @@
           </tbody>
         </table>
         </div>
-        <div class="espacio-arriba"><a href="javascript:void(null)"><img src="vistas/Imagenes/export_to_excel.gif" onClick="generar_excel();"></a></div> 
+        <!--<div class="espacio-arriba"><a href="javascript:void(null)"><img src="vistas/Imagenes/export_to_excel.gif" onClick="generar_excel();"></a></div>--> 
         <a href="index.php?ctl=frm_importar_prontuario_paso_4" class="btn btn-default espacio-abajo" role="button">Gestionar Puestos BCR</a>
         <a href="index.php?ctl=principal" class="btn btn-default espacio-abajo" role="button">Salir del Asistente</a> 
         </div>
