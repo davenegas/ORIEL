@@ -2063,7 +2063,7 @@
                 if ($fecha_seguimiento >  date("Y-m-d")){
                     echo "<script type=\"text/javascript\">alert('No es posible ingresar eventos futuros!!!!');history.go(-1);</script>";;
                     exit();
-                }else{
+                }if($fecha_seguimiento == date("Y-m-d")){
                      $hora_seguimiento = strtotime($_POST['hora']);
                      $hora_seguimiento = date("H:i", $hora_seguimiento);
 
@@ -2174,7 +2174,11 @@
              
             $obj_eventos->setFecha(($_POST['Fecha']));
             $obj_eventos->setHora(($_POST['Hora']));
-            $obj_eventos->setDetalle(($_POST['DetalleSeguimiento']));
+            //Validación de informacion en detalle de evento, elimina algunos caracteres especiales
+            $detalle = $_POST['DetalleSeguimiento'];
+            $detalle= str_replace("'","",$detalle);
+            $detalle= str_replace('"','',$detalle);
+            $obj_eventos->setDetalle($detalle);
             $obj_eventos->setId_usuario($_SESSION['id']);
             
             //$this->frm_eventos_listar();
@@ -3426,6 +3430,7 @@
     
     public function horario_gestion(){
         if(isset($_SESSION['nombre'])){
+            $obj_horario = new cls_horario();
             if($_GET['ide']==0){
                 $params[0]['ID_Horario']="0";
                 $params[0]['Dia_Laboral']="";
@@ -3433,7 +3438,9 @@
                 $params[0]['Observaciones']="";
                 $params[0]['Estado']="1";
             }  else  {
-                echo "edita registro";
+                $obj_horario->setCondicion("ID_Horario='".$_GET['ide']."'");
+                $obj_horario->obtiene_todos_los_horarios();
+                $params= $obj_horario->getArreglo();
             }
             require __DIR__ . '/../vistas/plantillas/frm_horario_gestion.php';
         }else{
@@ -3446,12 +3453,105 @@
     public function horario_guardar() {
         if(isset($_SESSION['nombre'])){
             $obj_horario = new cls_horario();
-            $obj_horario->setId($_GET['id']);
-            $obj_horario->setDias_laborados($_POST['dias_laborados']);
-            $obj_horario->setHoras_laboradas($_POST['horas_laboradas']);
+            $obj_horario->setId($_GET['id']); 
+            //Valida informacion enviada por el formulario
+            //cuando la hora es 00:00 se agregará null
+            
+            //Valida Hora de entrada domingo
+            if($_POST['entrada_domingo']=="00:00:00" || $_POST['entrada_domingo']=="00:00"){
+                $obj_horario->setHora_apertura_domingo(null);
+            }else {
+                $obj_horario->setHora_apertura_domingo($_POST['entrada_domingo']);
+            }
+            //valida hora de cierre domingo
+            if($_POST['salida_domingo']=="00:00:00"|| $_POST['salida_domingo']=="00:00"){
+                $obj_horario->setHora_cierre_domingo(null);
+            }else {
+                $obj_horario->setHora_cierre_domingo($_POST['salida_domingo']);
+            }
+            //valida hora de entrada lunes
+            if($_POST['entrada_lunes']=="00:00:00"|| $_POST['entrada_lunes']=="00:00"){
+                $obj_horario->setHora_apertura_lunes(null);
+            }else {
+                $obj_horario->setHora_apertura_lunes($_POST['entrada_lunes']);
+            }
+            //valida hora de cierre lunes
+            if($_POST['salida_lunes']=="00:00:00"|| $_POST['salida_lunes']=="00:00"){
+                $obj_horario->setHora_cierre_lunes(null);
+            }else {
+                $obj_horario->setHora_cierre_lunes($_POST['salida_lunes']);
+            }
+            //valida hora de entrada de martes
+            if($_POST['entrada_martes']=="00:00:00"|| $_POST['entrada_martes']=="00:00"){
+                $obj_horario->setHora_apertura_martes(null);
+            }else {
+                $obj_horario->setHora_apertura_martes($_POST['entrada_martes']);
+            }
+            //Valida hora de cierre de martes
+            if($_POST['salida_martes']=="00:00:00"|| $_POST['salida_martes']=="00:00"){
+                $obj_horario->setHora_cierre_martes(null);
+            }else {
+                $obj_horario->setHora_cierre_martes($_POST['salida_martes']);
+            }
+            //valida hora de entrada de miercoles
+            if($_POST['entrada_miercoles']=="00:00:00"|| $_POST['entrada_miercoles']=="00:00"){
+                $obj_horario->setHora_apertura_miercoles(null);
+            }else {
+                $obj_horario->setHora_apertura_miercoles($_POST['entrada_miercoles']);
+            }
+            //Valida hora de cierre de miercoles
+            if($_POST['salida_miercoles']=="00:00:00"|| $_POST['salida_miercoles']=="00:00"){
+                $obj_horario->setHora_cierre_miercoles(null);
+            }else {
+                $obj_horario->setHora_cierre_miercoles($_POST['salida_miercoles']);
+            }
+            //Valida hora de entrada de jueves
+            if($_POST['entrada_jueves']=="00:00:00"|| $_POST['entrada_jueves']=="00:00"){
+                $obj_horario->setHora_apertura_jueves(null);
+            }else {
+                $obj_horario->setHora_apertura_jueves($_POST['entrada_jueves']);
+            }
+            //Valida hora de cierre de jueves
+            if($_POST['salida_jueves']=="00:00:00"|| $_POST['salida_jueves']=="00:00"){
+                $obj_horario->setHora_cierre_jueves(null);
+            }else {
+                $obj_horario->setHora_cierre_jueves($_POST['salida_jueves']);
+            }
+            //Valida hora de entrada de viernes
+            if($_POST['entrada_viernes']=="00:00:00"|| $_POST['entrada_viernes']=="00:00"){
+                $obj_horario->setHora_apertura_viernes(null);
+            }else {
+                $obj_horario->setHora_apertura_viernes($_POST['entrada_viernes']);
+            }
+            //Valida hora cierre de viernes
+            if($_POST['salida_viernes']=="00:00:00"|| $_POST['salida_viernes']=="00:00"){
+                $obj_horario->setHora_cierre_viernes(null);
+            }else {
+                $obj_horario->setHora_cierre_viernes($_POST['salida_viernes']);
+            }
+            //Valida hora de entrada de sabado
+            if($_POST['entrada_sabado']=="00:00:00"|| $_POST['entrada_sabado']=="00:00"){
+                $obj_horario->setHora_apertura_sabado(null);
+            }else {
+                $obj_horario->setHora_apertura_sabado($_POST['entrada_sabado']);
+            }
+            //valida de cierre de sabado
+            if($_POST['salida_sabado']=="00:00:00"|| $_POST['salida_sabado']=="00:00"){
+                $obj_horario->setHora_cierre_sabado(null);
+            }else {
+                $obj_horario->setHora_cierre_sabado($_POST['salida_sabado']);
+            }
             $obj_horario->setObservaciones($_POST['observaciones']);
             $obj_horario->setEstado($_POST['estado']);
-            $obj_horario->agregar_horario();
+            
+            //valida si es Horario nuevo o actualizacion
+            if($_GET['id']==0){
+                $obj_horario->agregar_horario();
+            } else {
+                echo "edita";
+                $obj_horario->setCondicion("ID_Horario='".$_GET['id']."'");
+                $obj_horario->actualizar_horario();
+            }
             
             header("location:/ORIEL/index.php?ctl=horario_listar");
         }else{

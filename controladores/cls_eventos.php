@@ -218,21 +218,16 @@ class cls_eventos{
     function obtiene_id_ultimo_evento_ingresado(){
       //Establece la conexión con la bd
       $this->obj_data_provider->conectar();
-      
       $this->obj_data_provider->trae_datos("T_Evento","max(ID_Evento) ID_Evento","ID_Usuario=".$this->id_usuario." AND ID_Tipo_Evento=".$this->tipo_evento." AND ID_PuntoBCR=".$this->punto_bcr);
-      
       $this->arreglo=$this->obj_data_provider->getArreglo();
-     
       $this->obj_data_provider->desconectar();
-      
       $this->resultado_operacion=true;
-      
+
       if (count($this->arreglo)>0){
-          $this->setId_ultimo_evento_ingresado($this->arreglo[0]['ID_Evento']);
-         
+        $this->setId_ultimo_evento_ingresado($this->arreglo[0]['ID_Evento']);
       }else
       {
-          $this->setId_ultimo_evento_ingresado(1);
+        $this->setId_ultimo_evento_ingresado(1);
       }    
   }
   
@@ -242,21 +237,16 @@ class cls_eventos{
     function existe_abierto_este_tipo_de_evento_en_este_sitio(){
       //Establece la conexión con la bd
       $this->obj_data_provider->conectar();
-      
       $this->obj_data_provider->trae_datos("T_Evento","*","ID_Tipo_Evento=".$this->tipo_evento." AND ID_PuntoBCR=".$this->punto_bcr." AND ID_EstadoEvento<>3"." AND ID_EstadoEvento<>5");
-      
       $this->arreglo=$this->obj_data_provider->getArreglo();
-     
       $this->obj_data_provider->desconectar();
-      
       $this->resultado_operacion=true;
       
       if (count($this->arreglo)>0){
-          return true;
-         
+        return true;
       }else
       {
-          return false;
+        return false;
       }    
   }
   
@@ -266,21 +256,17 @@ class cls_eventos{
     function obtiene_prioridad_de_tipo_de_evento(){
       //Establece la conexión con la bd
       $this->obj_data_provider->conectar();
-      
       $this->obj_data_provider->trae_datos("T_TipoEvento","*","ID_Tipo_Evento=".$this->tipo_evento);
-      
       $this->arreglo=$this->obj_data_provider->getArreglo();
-     
       $this->obj_data_provider->desconectar();
-      
       $this->resultado_operacion=true;
       
       if (count($this->arreglo)>0){
-          return $this->arreglo[0]['Prioridad'];
+        return $this->arreglo[0]['Prioridad'];
          
       }else
       {
-          return 0;
+        return 0;
       }    
   }
     
