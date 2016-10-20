@@ -4,12 +4,7 @@
         <meta charset="utf-8"/>
         <title>Importar Prontuario Paso 1 (Seleccionar Adjunto)</title>
         <?php require_once 'frm_librerias_head.html';?>
-        <script language="javascript" src="vistas/js/valida_un_solo_click_en_formulario.js"></script>
-        <script>
-            function prueba(){
-                alert('Prueba');
-            }
-        </script>
+        <script language="javascript" src="vistas/js/valida_un_solo_click_en_formulario.js"></script>  
     </head>
     <body>
         <?php require_once 'encabezado.php';?>
@@ -28,8 +23,6 @@
                 <button type="submit" class="btn btn-default">Enviar Información</button>
                 <td><a href="index.php?ctl=principal" class="btn btn-default" role="button">Salir del Asistente</a></td> 
                 </form>
-             
-            <div class="espacio-arriba"><a href="javascript:void(null)"><img src="vistas/Imagenes/export_to_excel.gif" onClick="prueba();"></a></div> 
         </div>
             <?php require 'vistas/plantillas/pie_de_pagina.php'?>
     </body>
