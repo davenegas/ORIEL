@@ -326,24 +326,6 @@
                 </select>
             </div>
             
-<!--            <div class="col-md-4 espacio-abajo">
-                <label for="Horario">Horario</label>
-                <select class="form-control" id="Horario" disabled name="Horario" > 
-                <?php
-                $tam = count($horarios);
-
-                for($i=0; $i<$tam;$i++)
-                {
-                    if($horarios[$i]['ID_Horario']==$params[0]['ID_Horario']){
-                        
-                       ?> <option value="<?php echo $horarios[$i]['ID_Horario']?>" selected="selected"><?php echo $horarios[$i]['Observaciones'];?></option><?php
-                    }
-                    else {?>
-                        <option value="<?php echo $horarios[$i]['ID_Horario']?>" ><?php echo $horarios[$i]['Observaciones']?></option>   
-                <?php }}  ?>
-                </select>
-            </div>-->
-
             <div class="col-md-8 espacio-abajo">
               <label for="Observaciones_generales">Observaciones</label>
               <input type="text" readonly class="form-control" id="Observaciones_generales" name="Observaciones_generales" value="<?php echo $params[0]['Observaciones_Punto'];?>">

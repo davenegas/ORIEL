@@ -3146,7 +3146,6 @@
             $obj_puntobcr->setCondicion("ID_PuntoBCR='".$_POST['id_puntobcr']."'");
             
             $obj_puntobcr->setEmpresa($_POST['id_empresa']);
-            $obj_puntobcr->setHorario($_POST['id_horario']);
             $obj_puntobcr->setObservaciones($_POST['observaciones']);
             $obj_puntobcr->setGerente($_POST['id_gerente']);
             $obj_puntobcr->setSupervisor($_POST['id_supervisor']);
@@ -3727,7 +3726,7 @@
             if($_GET['id']==0){
                 $obj_horario->agregar_horario();
             } else {
-                echo "edita";
+                //echo "edita";
                 $obj_horario->setCondicion("ID_Horario='".$_GET['id']."'");
                 $obj_horario->actualizar_horario();
             }
@@ -3739,6 +3738,49 @@
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         } 
     }
+    
+    ////////////////////////////////////////////////////////////////////////////
+    //////////Funciones para proveedores de enlaces BCR/////////////////////////
+    ////////////////////////////////////////////////////////////////////////////
+    public function proveedor_listar(){
+       if(isset($_SESSION['nombre'])){
+           $obj_proveedor = new cls_proveedor_enlace();
+           $obj_proveedor->obtener_proveedores();
+           $params = $obj_proveedor->getArreglo();
+           require __DIR__ . '/../vistas/plantillas/frm_proveedor_enlace_catalogo.php';
+        }else{
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        } 
+    }
+    //Funcion permite actualizar o crear un proveedor de enlaces
+    public function proveedor_enlace_catalogo() {
+        if(isset($_SESSION['nombre'])){
+           $obj_proveedor = new cls_proveedor_enlace();
+           //Obtiene informacion enviada por el formulario
+           $obj_proveedor->setNombre($_POST['nombre']);
+           $obj_proveedor->setObservaciones($_POST['observaciones']);
+           //Valida si el un nuevo proveedor o actualizar uno existente
+           if($_POST['ID_Proveedor']==0){
+               $obj_proveedor->setCondicion("");
+           } else{
+               $obj_proveedor->setCondicion("ID_Proveedor='".$_POST['ID_Proveedor']."'");
+           }
+           //agrega o actualiza el proveedor de enlaces
+           $obj_proveedor->agregar_proveedor();
+           //Carga nuevamente la ventana de proveedores
+           $obj_proveedor->setCondicion("");
+           $obj_proveedor->obtener_proveedores();
+           $params = $obj_proveedor->getArreglo();
+           require __DIR__ . '/../vistas/plantillas/frm_proveedor_enlace_catalogo.php';
+        }else{
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        } 
+    }
+   
     
     ////////////////////////////////////////////////////////////////////////////
     //Trazabilidad
