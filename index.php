@@ -43,6 +43,12 @@ $map = array(
     'personal_listar_publico'=>array('controller'=>'Controller', 'action'=>'personal_listar_publico'),
     'puntobcr_listar_publico'=>array('controller'=>'Controller', 'action'=>'puntobcr_listar_publico'),
     'frm_contacto_publico'=>array('controller'=>'Controller', 'action'=>'frm_contacto_publico'),
+    'cuenta_visitas_a_la_pagina'=>array('controller'=>'Controller', 'action'=>'cuenta_visitas_a_la_pagina'),
+    'cuenta_visitas_a_personal_publico'=>array('controller'=>'Controller', 'action'=>'cuenta_visitas_a_personal_publico'),
+    'cuenta_visitas_a_personal_privado'=>array('controller'=>'Controller', 'action'=>'cuenta_visitas_a_personal_privado'),
+    'cuenta_visitas_a_puntos_bcr_publico'=>array('controller'=>'Controller', 'action'=>'cuenta_visitas_a_puntos_bcr_publico'),
+    'cuenta_visitas_a_puntos_bcr_privado'=>array('controller'=>'Controller', 'action'=>'cuenta_visitas_a_puntos_bcr_privado'),
+    'cuenta_visitas_a_bitacora_digital'=>array('controller'=>'Controller', 'action'=>'cuenta_visitas_a_bitacora_digital'),
     
     //Controlador de Horarios
     'horario_listar'=>array('controller'=>'Controller', 'action'=>'horario_listar'),

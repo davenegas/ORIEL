@@ -5,6 +5,11 @@
         <title>Lista de Eventos</title>
         <?php require_once 'frm_librerias_head.html'; ?>          
         <script language="javascript" src="vistas/js/refresca_pagina_automaticamente.js"></script>  
+         <script>
+          $(document).ready(function () {
+            $.post("index.php?ctl=cuenta_visitas_a_bitacora_digital");
+          });
+        </script>
     </head>
     <body>
         <?php require_once 'encabezado.php';?>

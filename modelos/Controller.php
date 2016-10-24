@@ -2329,6 +2329,398 @@
         }
     }
     
+     public function cuenta_visitas_a_puntos_bcr_publico(){
+        
+           $raiz=$_SERVER['DOCUMENT_ROOT'];
+             
+            $time = time();
+
+            if (substr($raiz,-1)!="/"){
+                $raiz.="/";
+            }
+            
+            $ruta=  $raiz."Cuenta_Visitas_Oriel/Consulta_Publica_Puntos_BCR/".date("Ymd", $time)." Visitas_a_Puntos_BCR_Publico.txt";
+            
+            $fp = fopen($ruta,"a+");
+            fclose($fp);
+            
+            $ip = $_SERVER['REMOTE_ADDR'];
+            $nombre_host = gethostbyaddr($_SERVER['REMOTE_ADDR']);
+            $ip=$ip."-->".$nombre_host;
+            
+            $existe = 0;
+            $visitas = array();
+                       
+            $fp = fopen($ruta,"r"); 
+            $ips="";
+           
+            while($ip2 = fgets($fp)){
+                $ips .= $ip2;
+               
+            }
+            
+            fclose($fp);
+            
+            $cadena_de_direcciones="";
+            $total_visitas=0;
+            if (strlen($ips)>0){
+                $total_direcciones=  explode(",", $ips); 
+                
+                for ($i = 0; $i < count($total_direcciones)-1; $i++) {
+                    $total_visitas++;
+                    $cadena_de_direcciones.=$total_direcciones[$i].",";
+                }
+                //$cadena_de_direcciones.=$ip.",";
+                $total_visitas++;
+                $cadena_de_direcciones.=$ip.",";
+                $fp = fopen($ruta,"w+"); //no olvidar crear al archivo visitantes.txt y poner el path correcto
+                fwrite($fp, $cadena_de_direcciones);
+                fclose($fp);
+            }else{
+                $fp = fopen($ruta,"w+"); //no olvidar crear al archivo visitantes.txt y poner el path correcto
+                fwrite($fp, $ip.",");
+                $total_visitas++;
+                fclose($fp);
+            }        
+
+            $ruta=  $raiz."Cuenta_Visitas_Oriel/Consulta_Publica_Puntos_BCR/".date("Ymd", $time)." Total_de_Visitas_Puntos_BCR_Publico.txt";
+            
+            $fp = fopen($ruta,"w+");
+
+            fwrite($fp, "Total de consultas a la tabla puntos BCR desde la parte publica ".date("Ymd", $time).":".$total_visitas);
+            fclose($fp);
+
+    }
+    
+    public function cuenta_visitas_a_puntos_bcr_privado(){
+        
+           $raiz=$_SERVER['DOCUMENT_ROOT'];
+             
+            $time = time();
+
+            if (substr($raiz,-1)!="/"){
+                $raiz.="/";
+            }
+            
+            $ruta=  $raiz."Cuenta_Visitas_Oriel/Consulta_Privada_Puntos_BCR/".date("Ymd", $time)." Visitas_a_Puntos_BCR_Privado.txt";
+            
+            $fp = fopen($ruta,"a+");
+            fclose($fp);
+            
+            $ip = $_SERVER['REMOTE_ADDR'];
+            $nombre_host = gethostbyaddr($_SERVER['REMOTE_ADDR']);
+            $ip=$ip."-->".$nombre_host;
+            
+            $existe = 0;
+            $visitas = array();
+                       
+            $fp = fopen($ruta,"r"); 
+            $ips="";
+           
+            while($ip2 = fgets($fp)){
+                $ips .= $ip2;
+               
+            }
+            
+            fclose($fp);
+            
+            $cadena_de_direcciones="";
+            $total_visitas=0;
+            if (strlen($ips)>0){
+                $total_direcciones=  explode(",", $ips); 
+                
+                for ($i = 0; $i < count($total_direcciones)-1; $i++) {
+                    $total_visitas++;
+                    $cadena_de_direcciones.=$total_direcciones[$i].",";
+                }
+                //$cadena_de_direcciones.=$ip.",";
+                $total_visitas++;
+                $cadena_de_direcciones.=$ip.",";
+                $fp = fopen($ruta,"w+"); //no olvidar crear al archivo visitantes.txt y poner el path correcto
+                fwrite($fp, $cadena_de_direcciones);
+                fclose($fp);
+            }else{
+                $fp = fopen($ruta,"w+"); //no olvidar crear al archivo visitantes.txt y poner el path correcto
+                fwrite($fp, $ip.",");
+                $total_visitas++;
+                fclose($fp);
+            }        
+
+             
+            $ruta=  $raiz."Cuenta_Visitas_Oriel/Consulta_Privada_Puntos_BCR/".date("Ymd", $time)." Total_de_Visitas_Puntos_BCR_Privado.txt";
+            
+            $fp = fopen($ruta,"w+");
+
+            fwrite($fp, "Total de consultas a la tabla puntos BCR desde la parte privada ".date("Ymd", $time).":".$total_visitas);
+            fclose($fp);
+
+    }
+    
+    
+    public function cuenta_visitas_a_bitacora_digital(){
+        
+           $raiz=$_SERVER['DOCUMENT_ROOT'];
+             
+            $time = time();
+
+            if (substr($raiz,-1)!="/"){
+                $raiz.="/";
+            }
+            
+            $ruta=  $raiz."Cuenta_Visitas_Oriel/Consulta_Privada_Bitacora_Digital/".date("Ymd", $time)." Visitas_a_Bitacora_Digital.txt";
+            
+            $fp = fopen($ruta,"a+");
+            fclose($fp);
+            
+            $ip = $_SERVER['REMOTE_ADDR'];
+            $nombre_host = gethostbyaddr($_SERVER['REMOTE_ADDR']);
+            $ip=$ip."-->".$nombre_host;
+            
+            $existe = 0;
+            $visitas = array();
+                       
+            $fp = fopen($ruta,"r"); 
+            $ips="";
+           
+            while($ip2 = fgets($fp)){
+                $ips .= $ip2;
+               
+            }
+            
+            fclose($fp);
+            
+            $cadena_de_direcciones="";
+            $total_visitas=0;
+            if (strlen($ips)>0){
+                $total_direcciones=  explode(",", $ips); 
+                
+                for ($i = 0; $i < count($total_direcciones)-1; $i++) {
+                    $total_visitas++;
+                    $cadena_de_direcciones.=$total_direcciones[$i].",";
+                }
+                //$cadena_de_direcciones.=$ip.",";
+                $total_visitas++;
+                $cadena_de_direcciones.=$ip.",";
+                $fp = fopen($ruta,"w+"); //no olvidar crear al archivo visitantes.txt y poner el path correcto
+                fwrite($fp, $cadena_de_direcciones);
+                fclose($fp);
+            }else{
+                $fp = fopen($ruta,"w+"); //no olvidar crear al archivo visitantes.txt y poner el path correcto
+                fwrite($fp, $ip.",");
+                $total_visitas++;
+                fclose($fp);
+            }        
+
+             
+            $ruta=  $raiz."Cuenta_Visitas_Oriel/Consulta_Privada_Bitacora_Digital/".date("Ymd", $time)." Total_de_Visitas_Bitacora_Digital.txt";
+            
+            $fp = fopen($ruta,"w+");
+
+            fwrite($fp, "Total de consultas a la tabla bitacora digital ".date("Ymd", $time).":".$total_visitas);
+            fclose($fp);
+
+    }
+    
+    public function cuenta_visitas_a_personal_privado(){
+        
+           $raiz=$_SERVER['DOCUMENT_ROOT'];
+             
+            $time = time();
+
+            if (substr($raiz,-1)!="/"){
+                $raiz.="/";
+            }
+            
+            $ruta=  $raiz."Cuenta_Visitas_Oriel/Consulta_Privada_Personal/".date("Ymd", $time)." Visitas_a_Personal_Privado.txt";
+            
+            $fp = fopen($ruta,"a+");
+            fclose($fp);
+            
+            $ip = $_SERVER['REMOTE_ADDR'];
+            $nombre_host = gethostbyaddr($_SERVER['REMOTE_ADDR']);
+            $ip=$ip."-->".$nombre_host;
+            
+            $existe = 0;
+            $visitas = array();
+                       
+            $fp = fopen($ruta,"r"); 
+            $ips="";
+           
+            while($ip2 = fgets($fp)){
+                $ips .= $ip2;
+               
+            }
+            
+            fclose($fp);
+            
+           $cadena_de_direcciones="";
+            $total_visitas=0;
+            if (strlen($ips)>0){
+                $total_direcciones=  explode(",", $ips); 
+                
+                for ($i = 0; $i < count($total_direcciones)-1; $i++) {
+                    $total_visitas++;
+                    $cadena_de_direcciones.=$total_direcciones[$i].",";
+                }
+                //$cadena_de_direcciones.=$ip.",";
+                $total_visitas++;
+                $cadena_de_direcciones.=$ip.",";
+                $fp = fopen($ruta,"w+"); //no olvidar crear al archivo visitantes.txt y poner el path correcto
+                fwrite($fp, $cadena_de_direcciones);
+                fclose($fp);
+            }else{
+                $fp = fopen($ruta,"w+"); //no olvidar crear al archivo visitantes.txt y poner el path correcto
+                fwrite($fp, $ip.",");
+                $total_visitas++;
+                fclose($fp);
+            }        
+             
+            $ruta=  $raiz."Cuenta_Visitas_Oriel/Consulta_Privada_Personal/".date("Ymd", $time)." Total_de_Visitas_Personal_Privado.txt";
+            
+            $fp = fopen($ruta,"w+");
+
+            fwrite($fp, "Total de consultas a la tabla personal desde la parte privada ".date("Ymd", $time).":".$total_visitas);
+            fclose($fp);
+
+    }
+    
+    
+    public function cuenta_visitas_a_personal_publico(){
+        
+           $raiz=$_SERVER['DOCUMENT_ROOT'];
+             
+            $time = time();
+
+            if (substr($raiz,-1)!="/"){
+                $raiz.="/";
+            }
+            
+            $ruta=  $raiz."Cuenta_Visitas_Oriel/Consulta_Publica_Personal/".date("Ymd", $time)." Visitas_a_Personal_Publico.txt";
+            
+            $fp = fopen($ruta,"a+");
+            fclose($fp);
+            
+            $ip = $_SERVER['REMOTE_ADDR'];
+            $nombre_host = gethostbyaddr($_SERVER['REMOTE_ADDR']);
+            $ip=$ip."-->".$nombre_host;
+            
+            $existe = 0;
+            $visitas = array();
+                       
+            $fp = fopen($ruta,"r"); 
+            $ips="";
+           
+            while($ip2 = fgets($fp)){
+                $ips .= $ip2;
+               
+            }
+            
+            fclose($fp);
+            
+            $cadena_de_direcciones="";
+            $total_visitas=0;
+            if (strlen($ips)>0){
+                $total_direcciones=  explode(",", $ips); 
+                
+                for ($i = 0; $i < count($total_direcciones)-1; $i++) {
+                    $total_visitas++;
+                    $cadena_de_direcciones.=$total_direcciones[$i].",";
+                }
+                //$cadena_de_direcciones.=$ip.",";
+                $total_visitas++;
+                $cadena_de_direcciones.=$ip.",";
+                $fp = fopen($ruta,"w+"); //no olvidar crear al archivo visitantes.txt y poner el path correcto
+                fwrite($fp, $cadena_de_direcciones);
+                fclose($fp);
+            }else{
+                $fp = fopen($ruta,"w+"); //no olvidar crear al archivo visitantes.txt y poner el path correcto
+                fwrite($fp, $ip.",");
+                $total_visitas++;
+                fclose($fp);
+            }        
+             
+            $ruta=  $raiz."Cuenta_Visitas_Oriel/Consulta_Publica_Personal/".date("Ymd", $time)." Total_de_Visitas_Personal_Publico.txt";
+            
+            $fp = fopen($ruta,"w+");
+
+            fwrite($fp, "Total de consultas a la tabla personal desde la parte publica ".date("Ymd", $time).":".$total_visitas);
+            fclose($fp);
+
+    }
+    
+    public function cuenta_visitas_a_la_pagina(){
+        
+           $raiz=$_SERVER['DOCUMENT_ROOT'];
+             
+            $time = time();
+
+            if (substr($raiz,-1)!="/"){
+                $raiz.="/";
+            }
+            
+            $ruta=  $raiz."Cuenta_Visitas_Oriel/Ingreso_al_Sitio/".date("Ymd", $time)." Visitas_al_Sitio.txt";
+            
+            $fp = fopen($ruta,"a+");
+            fclose($fp);
+            
+            $ip = $_SERVER['REMOTE_ADDR'];
+            $nombre_host = gethostbyaddr($_SERVER['REMOTE_ADDR']);
+            $ip=$ip."-->".$nombre_host;
+            
+            $existe = 0;
+            $visitas = array();
+                       
+            $fp = fopen($ruta,"r"); 
+            $ips="";
+           
+            while($ip2 = fgets($fp)){
+                $ips .= $ip2;
+               
+            }
+            
+            fclose($fp);
+            
+            $bandera=0;
+            $cadena_de_direcciones="";
+            $total_visitas=0;
+            if (strlen($ips)>0){
+                $total_direcciones=  explode(",", $ips); 
+                
+                for ($i = 0; $i < count($total_direcciones)-1; $i++) {
+                   
+                    if ($ip==$total_direcciones[$i]){
+                        $bandera=1;
+                    }else{
+                        $total_visitas++;
+                    }
+                    $cadena_de_direcciones.=$total_direcciones[$i].",";
+                }
+            }else{
+                $fp = fopen($ruta,"w+"); //no olvidar crear al archivo visitantes.txt y poner el path correcto
+                fwrite($fp, $ip);
+                fclose($fp);
+            }        
+         
+            if($bandera == 0){
+                $total_visitas++;
+                $cadena_de_direcciones.=$ip.",";
+                $fp = fopen($ruta,"w+"); //no olvidar crear al archivo visitantes.txt y poner el path correcto
+                fwrite($fp, $cadena_de_direcciones);
+                fclose($fp);
+             }else{
+                 $total_visitas++;
+             }
+             
+            $ruta=  $raiz."Cuenta_Visitas_Oriel/Ingreso_al_Sitio/".date("Ymd", $time)." Total_de_Visitas_al_Sitio.txt";
+            
+            $fp = fopen($ruta,"w+");
+
+            fwrite($fp, "Total de visitas registradas el día ".date("Ymd", $time).":".$total_visitas);
+            fclose($fp);
+
+    }
+    
+    
     public function guardar_seguimiento_evento(){
         if(isset($_SESSION['nombre'])){
             $obj_eventos = new cls_eventos();

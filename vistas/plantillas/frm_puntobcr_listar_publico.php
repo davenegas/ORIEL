@@ -10,6 +10,7 @@
         $(document).ready(function () {
         // Una vez se cargue al completo la página desaparecerá el div "cargando"
         $('#cargando').hide();
+        $.post("index.php?ctl=cuenta_visitas_a_puntos_bcr_publico");  
         });
     </script>
 </head>

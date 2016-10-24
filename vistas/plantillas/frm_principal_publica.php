@@ -5,12 +5,19 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <?php require_once 'frm_librerias_head.html';?>
+   <script>
+   $(document).ready(function(){
+            //alert('prueba');
+            $.post("index.php?ctl=cuenta_visitas_a_la_pagina");      
+            
+    });
+   </script>
 
 </head>
 <body>
 <br>
      <center><img src="vistas/Imagenes/Banner_Centro_de_Control.jpg" alt=""/></center>
-     <br>
+     <br>  
 <nav class="navbar navbar-default">
   <div class="container-fluid">
     <div class="navbar-header">
