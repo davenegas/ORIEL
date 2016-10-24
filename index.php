@@ -17,6 +17,7 @@ require_once __DIR__ . '/controladores/cls_general.php';
 require_once __DIR__ . '/controladores/cls_telefono.php';
 require_once __DIR__ . '/controladores/cls_unidad_ejecutora.php';
 require_once __DIR__ . '/controladores/cls_puestos.php';
+require_once __DIR__ . '/controladores/cls_proveedor_enlace.php';
 require_once __DIR__ . '/modelos/Controller.php';
 require_once __DIR__ . '/modelos/Encrypter.php';
 require_once __DIR__ . '/modelos/PHPMailerAutoload.php';
@@ -49,6 +50,10 @@ $map = array(
     'cuenta_visitas_a_puntos_bcr_publico'=>array('controller'=>'Controller', 'action'=>'cuenta_visitas_a_puntos_bcr_publico'),
     'cuenta_visitas_a_puntos_bcr_privado'=>array('controller'=>'Controller', 'action'=>'cuenta_visitas_a_puntos_bcr_privado'),
     'cuenta_visitas_a_bitacora_digital'=>array('controller'=>'Controller', 'action'=>'cuenta_visitas_a_bitacora_digital'),
+    
+    //Información Proveedor enlaces
+    'proveedor_listar'=>array('controller'=>'Controller', 'action'=>'proveedor_listar'),
+    'proveedor_enlace_catalogo'=>array('controller'=>'Controller', 'action'=>'proveedor_enlace_catalogo'),
     
     //Controlador de Horarios
     'horario_listar'=>array('controller'=>'Controller', 'action'=>'horario_listar'),

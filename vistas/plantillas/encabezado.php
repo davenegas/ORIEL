@@ -100,6 +100,10 @@
                    <li><a href="index.php?ctl=horario_listar">Horarios BCR</a></li> 
                 <?php  }; ?>     
 
+                <?php  if ($_SESSION['modulos']['Catálogos-Horarios']==1){?>
+                   <li><a href="index.php?ctl=proveedor_listar">Proveedores enlaces</a></li> 
+                <?php  }; ?> 
+                   
                 <?php  if ($_SESSION['modulos']['Importar- Prontuario']==1){?>
                    <li><a href="index.php?ctl=frm_importar_prontuario_paso_1">Importar Prontuario</a></li> 
                 <?php  }; ?>  

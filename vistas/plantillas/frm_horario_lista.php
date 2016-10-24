@@ -9,36 +9,45 @@
     <body>
         <?php require_once 'encabezado.php';?>
         <section class='container'>
+            <pre>
+                <?php print_r($horarios)?>
+            </pre>
             <h2>Listado General de Horarios</h2>
             <p>A continuación se detallan los diferentes horario registrados en el sistema</p>
-            <table id="tabla" class="display" cellspacing="0" width="100%">
-                <thead>
+            <table id="tabla5" class="display" cellspacing="0" width="100%">
+                <thead> 
                     <tr>
-                        <th>ID Horario</th>
-                        <th>Dias Laborados</th>
-                        <th>Horas Laboradas</th>
-                        <th>Observaciones</th>
-                        <th>Estado</th>
-<!--                        <th>Cambiar Estado</th>
-                        <th>Mantenimiento</th>-->
+                        <th style="text-align:center">Horario</th>
+                        <th style="text-align:center">Domingo</th>
+                        <th style="text-align:center">Lunes</th>
+                        <th style="text-align:center">Martes</th>
+                        <th style="text-align:center">Miercoles</th>
+                        <th style="text-align:center">jueves</th>
+                        <th style="text-align:center">Viernes</th>
+                        <th style="text-align:center">Sábado</th>
+                        <th style="text-align:center">Observaciones</th>
+                        <th style="text-align:center">Opciones</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <?php 
-                    $tam = count($horarios);
-                    for($i=0;$i<$tam;$i++){
-                    ?>
-                        <tr>
-                            <td><?php echo $horarios[$i]['ID_Horario']?></td>
-                            <td><?php echo $horarios[$i]['Dia_Laboral']?></td>
-                            <td><?php echo $horarios[$i]['Hora_Laboral']?></td>
-                            <td><?php echo $horarios[$i]['Observaciones']?></td>
-                            <td><?php echo $horarios[$i]['Estado']?></td> 
-<!--                            <td><a href="">Cambiar estado</a></td>
-                            <td><a href="index.php?ctl=horario_gestion&ide=<?php echo $horarios[$i]['ID_Horario']?>">Editar</a></td>-->
-                        </tr>
+                    <?php $tam = count($horarios);
+                    for($i=0; $i<$tam;$i++){?>
+                    <tr>
+                        <td style="text-align:center">Horario público</td>
+                        <td style="text-align:center"><?php echo $horarios[$i]['Hora_Apertura_Domingo']." - ".$horarios[$i]['Hora_Cierre_Domingo'];?></td>
+                        <td style="text-align:center"><?php echo $horarios[$i]['Hora_Apertura_Lunes']." - ".$horarios[$i]['Hora_Cierre_Lunes'];?></td>
+                        <td style="text-align:center"><?php echo $horarios[$i]['Hora_Apertura_Martes']." - ".$horarios[$i]['Hora_Cierre_Martes'];?></td>
+                        <td style="text-align:center"><?php echo $horarios[$i]['Hora_Apertura_Miercoles']." - ".$horarios[$i]['Hora_Cierre_Miercoles'];?></td>
+                        <td style="text-align:center"><?php echo $horarios[$i]['Hora_Apertura_Jueves']." - ".$horarios[$i]['Hora_Cierre_Jueves'];?></td>
+                        <td style="text-align:center"><?php echo $horarios[$i]['Hora_Apertura_Viernes']." - ".$horarios[$i]['Hora_Cierre_Viernes'];?></td>
+                        <td style="text-align:center"><?php echo $horarios[$i]['Hora_Apertura_Sabado']." - ".$horarios[$i]['Hora_Cierre_Sabado'];?></td>
+                        <td style="text-align:center"><?php echo $horarios[$i]['Observaciones'];?></td>
+                        <td style="text-align:center"><a href="index.php?ctl=horario_gestion&ide=
+                                    <?php echo $horarios[$i]['ID_Horario']?>">
+                                    Editar Horario</a></td>
+                    </tr>
                     <?php }?>
-                </tbody>
+                </tbody> 
             </table> 
             <a href="index.php?ctl=horario_gestion&ide=0" class="btn btn-default" role="button">Agregar Nuevo Horario</a>
         </section>

@@ -16,15 +16,78 @@
         <form class="form-horizontal" role="form" method="POST" action="index.php?ctl=horario_guardar&id=<?php echo $params[0]['ID_Horario'];?>">
             
 <!--        <input hidden id="id_horario" name="id_horario" type="text" value="<?php echo $params[0]['ID_Horario']; ?>">-->
-        <div class="form-group">
-          <label for="dias_laborados">Días Laborados</label>
-          <input type="text" required class="form-control" id="dias_laborados" name="dias_laborados" placeholder="Indique los días que trabaja la oficina" value="<?php echo $params[0]['Dia_Laboral'];?>">
+        <div class="col-md-4">
+            <label><h4>Día de la semana</h4></label>
         </div>
-            
-        <div class="form-group">
-          <label for="horas_laboradas">Horas Laboradas</label>
-          <input type="text" required class="form-control" id="horas_laboradas" name="horas_laboradas" placeholder="Indique las horas de apertura al publico" value="<?php echo $params[0]['Hora_Laboral'];?>">
+        <div class="col-md-4">
+            <label><h4>Hora Entrada</h4></label>
         </div>
+        <div class="col-md-4">
+            <label><h4>Hora Salida</h4></label>
+        </div>
+        <div class="col-md-4">
+            <label>Domingo</label>
+        </div>
+        <div class="col-md-4">
+            <input type="time" class="form-control" id="entrada_domingo" name="entrada_domingo" value="<?php echo $params[0]['Hora_Apertura_Domingo'];?>">
+        </div>
+        <div class="col-md-4">
+            <input type="time" class="form-control" id="salida_domingo" name="salida_domingo" value="<?php echo $params[0]['Hora_Cierre_Domingo'];?>">
+        </div>
+        <div class="col-md-4">
+        <label>Lunes</label>
+        </div>
+        <div class="col-md-4">
+            <input type="time" class="form-control" id="entrada_lunes" name="entrada_lunes" value="<?php echo $params[0]['Hora_Apertura_Lunes'];?>">
+        </div>
+        <div class="col-md-4">
+            <input type="time" class="form-control" id="salida_lunes" name="salida_lunes" value="<?php echo $params[0]['Hora_Cierre_Lunes'];?>">
+        </div>
+        <div class="col-md-4">
+            <label>Martes</label>
+        </div>
+        <div class="col-md-4">
+            <input type="time" class="form-control" id="entrada_martes" name="entrada_martes" value="<?php echo $params[0]['Hora_Apertura_Martes'];?>">
+        </div>
+        <div class="col-md-4">
+            <input type="time" class="form-control" id="salida_martes" name="salida_martes" value="<?php echo $params[0]['Hora_Cierre_Martes'];?>">
+        </div>
+        <div class="col-md-4">
+            <label>Miercoles</label>
+        </div>
+        <div class="col-md-4">
+            <input type="time" class="form-control" id="entrada_miercoles" name="entrada_miercoles" value="<?php echo $params[0]['Hora_Apertura_Miercoles'];?>">
+        </div>
+        <div class="col-md-4">
+            <input type="time" class="form-control" id="salida_miercoles" name="salida_miercoles" value="<?php echo $params[0]['Hora_Cierre_Miercoles'];?>">
+        </div>    
+        <div class="col-md-4">
+        <label>Jueves</label>
+        </div>
+        <div class="col-md-4">
+            <input type="time" class="form-control" id="entrada_jueves" name="entrada_jueves" value="<?php echo $params[0]['Hora_Apertura_Jueves'];?>">
+        </div>
+        <div class="col-md-4">
+            <input type="time" class="form-control" id="salida_jueves" name="salida_jueves" value="<?php echo $params[0]['Hora_Cierre_Jueves'];?>">
+        </div>
+        <div class="col-md-4">
+            <label>Viernes</label>
+        </div>
+        <div class="col-md-4">
+            <input type="time" class="form-control" id="entrada_viernes" name="entrada_viernes" value="<?php echo $params[0]['Hora_Apertura_Viernes'];?>">
+        </div>
+        <div class="col-md-4">
+            <input type="time" class="form-control" id="salida_viernes" name="salida_viernes" value="<?php echo $params[0]['Hora_Cierre_Viernes'];?>">
+        </div>
+        <div class="col-md-4">
+            <label>Sábado</label>
+        </div>
+        <div class="col-md-4">
+            <input type="time" class="form-control" id="entrada_sabado" name="entrada_sabado" value="<?php echo $params[0]['Hora_Apertura_Sabado'];?>">
+        </div>
+        <div class="col-md-4">
+            <input type="time" class="form-control" id="salida_sabado" name="salida_sabado" value="<?php echo $params[0]['Hora_Cierre_Sabado'];?>">
+        </div>    
             
         <div class="form-group">
           <label for="observaciones">Observaciones</label>
@@ -33,7 +96,7 @@
             
         <div class="form-group">
         <label for="sel1">Estado</label>
-        <select class="form-control" id="estado" name="estado" >
+        <select class="form-control" id="estado" name="estado">
             <?php if ($params[0]['Estado']==1){
             ?>
                 <option value="1" selected="selected">Activo</option>

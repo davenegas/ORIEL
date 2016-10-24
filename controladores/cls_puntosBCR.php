@@ -340,7 +340,7 @@ class cls_puntosBCR{
     
     public function actualizar_informacion_adicional_puntobcr(){
         $this->obj_data_provider->conectar();
-        $this->arreglo=$this->obj_data_provider->edita_datos("T_PuntoBCR", "ID_Empresa='".$this->empresa."', ". "ID_Horario='".$this->horario."', "."Observaciones='".$this->observaciones."', "."ID_Gerente_Zona='".$this->gerente."', "."ID_Supervisor_Zona='".$this->supervisor."'",$this->condicion);
+        $this->arreglo=$this->obj_data_provider->edita_datos("T_PuntoBCR", "ID_Empresa='".$this->empresa."', Observaciones='".$this->observaciones."', ID_Gerente_Zona='".$this->gerente."', ID_Supervisor_Zona='".$this->supervisor."'",$this->condicion);
         $this->arreglo=$this->obj_data_provider->getArreglo();
         $this->obj_data_provider->desconectar();
         $this->resultado_operacion=true;
