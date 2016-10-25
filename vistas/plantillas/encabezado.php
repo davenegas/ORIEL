@@ -101,7 +101,7 @@
                 <?php  }; ?>     
 
                 <?php  if ($_SESSION['modulos']['Catálogos-Horarios']==1){?>
-                   <li><a href="index.php?ctl=proveedor_listar">Proveedores enlaces</a></li> 
+                   <li><a href="">Proveedores enlaces</a></li> 
                 <?php  }; ?> 
                    
                 <?php  if ($_SESSION['modulos']['Importar- Prontuario']==1){?>
