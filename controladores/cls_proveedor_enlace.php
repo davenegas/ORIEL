@@ -102,8 +102,7 @@ class cls_proveedor_enlace{
                     "null,'".$this->nombre."','".$this->observaciones."'");
             $this->obj_data_provider->desconectar();
             $this->resultado_operacion=true;
-        }
-        else{
+        }   else    {
             $this->obj_data_provider->conectar();
             //Llama al metodo que realiza la consulta a la bd
             $this->obj_data_provider->edita_datos("T_Proveedor", "Nombre_Proveedor='".$this->nombre."', Observaciones='".$this->observaciones."'", $this->condicion);
