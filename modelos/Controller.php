@@ -4155,6 +4155,7 @@
            $obj_proveedor->setObservaciones($_POST['observaciones']);
            //Valida si el un nuevo proveedor o actualizar uno existente
            if($_POST['ID_Proveedor']==0){
+               $obj_proveedor->setEstado("1");
                $obj_proveedor->setCondicion("");
            } else{
                $obj_proveedor->setCondicion("ID_Proveedor='".$_POST['ID_Proveedor']."'");
