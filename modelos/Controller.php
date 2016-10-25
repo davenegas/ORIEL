@@ -4174,10 +4174,9 @@
         } 
     }
    
-    
     ////////////////////////////////////////////////////////////////////////////
-    //Trazabilidad
-    //FUNCIONES PARA EVENTOS
+    //////////////////////////////Trazabilidad//////////////////////////////////
+    /////////////////////FUNCIONES PARA EVENTOS/////////////////////////////////
     public function frm_trazabilidad_listar(){
         if(isset($_SESSION['nombre'])){
             $obj_traza = new cls_trazabilidad();
@@ -4199,4 +4198,19 @@
         }
     }
 
+    ////////////////////////////////////////////////////////////////////////////
+    /////////////////////Funciones para Unidades Ejecutoras/////////////////////
+    ////////////////////////////////////////////////////////////////////////////
+    
+    public function unidad_ejecutora_listar(){
+       if(isset($_SESSION['nombre'])){
+            
+            require __DIR__.'/../vistas/plantillas/frm_trazabilidad_listar.php';
+        }
+        else {
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        } 
+    }
 } 

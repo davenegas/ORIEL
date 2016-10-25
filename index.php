@@ -55,6 +55,9 @@ $map = array(
     'proveedor_listar'=>array('controller'=>'Controller', 'action'=>'proveedor_listar'),
     'proveedor_enlace_catalogo'=>array('controller'=>'Controller', 'action'=>'proveedor_enlace_catalogo'),
     
+    //Información de Unidades Ejecutoras
+    'unidad_ejecutora_listar'=>array('controller'=>'Controller', 'action'=>'unidad_ejecutora_listar'),
+    
     //Controlador de Horarios
     'horario_listar'=>array('controller'=>'Controller', 'action'=>'horario_listar'),
     'horario_gestion'=>array('controller'=>'Controller', 'action'=>'horario_gestion'),
