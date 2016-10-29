@@ -18,6 +18,8 @@ require_once __DIR__ . '/controladores/cls_telefono.php';
 require_once __DIR__ . '/controladores/cls_unidad_ejecutora.php';
 require_once __DIR__ . '/controladores/cls_puestos.php';
 require_once __DIR__ . '/controladores/cls_proveedor_enlace.php';
+require_once __DIR__ . '/controladores/cls_tipo_enlace.php';
+require_once __DIR__ . '/controladores/cls_medio_enlace.php';
 require_once __DIR__ . '/modelos/Controller.php';
 require_once __DIR__ . '/modelos/Encrypter.php';
 require_once __DIR__ . '/modelos/PHPMailerAutoload.php';
@@ -53,11 +55,24 @@ $map = array(
     
     //Información Proveedor enlaces
     'proveedor_listar'=>array('controller'=>'Controller', 'action'=>'proveedor_listar'),
-    'proveedor_enlace_catalogo'=>array('controller'=>'Controller', 'action'=>'proveedor_enlace_catalogo'),
+    'proveedor_enlace_guardar'=>array('controller'=>'Controller', 'action'=>'proveedor_enlace_guardar'),
+    'proveedor_enlace_cambiar_estado'=>array('controller'=>'Controller', 'action'=>'proveedor_enlace_cambiar_estado'),
     
-    //Información de Unidades Ejecutoras
+    //Información Tipos de enlaces
+    'tipo_enlace_listar'=>array('controller'=>'Controller', 'action'=>'tipo_enlace_listar'),
+    'tipo_enlace_cambiar_estado'=>array('controller'=>'Controller', 'action'=>'tipo_enlace_cambiar_estado'),
+    'tipo_enlace_guardar'=>array('controller'=>'Controller', 'action'=>'tipo_enlace_guardar'),
+    
+    //Controlador de medio de enlace
+    'medio_enlace_listar'=>array('controller'=>'Controller', 'action'=>'medio_enlace_listar'),
+    'medio_enlace_guardar'=>array('controller'=>'Controller', 'action'=>'medio_enlace_guardar'),
+    'medio_enlace_cambiar_estado'=>array('controller'=>'Controller', 'action'=>'medio_enlace_cambiar_estado'),
+    
+    //Controlador de Unidades Ejecutoras
     'unidad_ejecutora_listar'=>array('controller'=>'Controller', 'action'=>'unidad_ejecutora_listar'),
-    
+    'unidad_ejecutora_guardar'=>array('controller'=>'Controller', 'action'=>'unidad_ejecutora_guardar'),
+    'unidad_ejecutora_cambiar_estado'=>array('controller'=>'Controller', 'action'=>'unidad_ejecutora_cambiar_estado'),
+   
     //Controlador de Horarios
     'horario_listar'=>array('controller'=>'Controller', 'action'=>'horario_listar'),
     'horario_gestion'=>array('controller'=>'Controller', 'action'=>'horario_gestion'),

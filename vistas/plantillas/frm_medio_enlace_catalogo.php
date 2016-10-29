@@ -2,7 +2,7 @@
 <html lang="es">
     <head>
         <meta charset="utf-8"/>
-        <title>Lista de Unidades Ejecutoras</title>
+        <title>Lista de Medio de comunicación</title>
         <?php require_once 'frm_librerias_head.html';?>
         <link rel="stylesheet" href="vistas/css/ventanaoculta.css">
         <script>
@@ -13,7 +13,7 @@
             //Valida informacion completa de formulario de proveedor
             function check_empty() {
                 if (document.getElementById('nombre').value == "") {
-                    alert("Digita el nombre del Proveedor !");
+                    alert("Digita el nombre del medio de comunicación !");
                 } else {
                     //alert("Form Submitted Successfully...");
                     //Envia el formulario y lo oculta
@@ -22,20 +22,17 @@
                 }
             }
             //Funcion para agregar un nuevo proveedor- formulario en blanco
-            function mostrar_agregar_proveedor() {
-                document.getElementById('ID_Unidad_Ejecutora').value="0";
-                document.getElementById('numero').value=null;
+            function mostrar_agregar_medio_enlace() {
+                document.getElementById('ID_Medio_Enlace').value="0";
                 document.getElementById('nombre').value=null;
                 document.getElementById('observaciones').value=null;
                 document.getElementById('formulario_oculto_1').style.display = "block";
             }
             //Funcion para editar informacion de proveedor
-            function Editar_UE(id_ue,num,nomb,obser, estado){
-                document.getElementById('ID_Unidad_Ejecutora').value=id_ue;
-                document.getElementById('numero').value=num;
+            function Editar_medio_enlace(id_enlace,nomb, obser){
+                document.getElementById('ID_Medio_Enlace').value=id_enlace;
                 document.getElementById('nombre').value=nomb;
                 document.getElementById('observaciones').value=obser;
-                $("#estado option[value="+estado+"]").attr("selected",true);
                 document.getElementById('formulario_oculto_1').style.display = "block";
             };
         </script>
@@ -44,14 +41,13 @@
         <?php require_once 'encabezado.php';?>
         
         <div class="container">
-        <h2>Listado General de Unidades Ejecutoras BCR</h2>
-        <p>A continuación se detallan las diferentes unidades ejecutoras que están registrados en el sistema:</p>            
+        <h2>Listado General de medios de comunicación BCR</h2>
+        <p>A continuación se detallan los diferentes medios de comunicación que están registrados en el sistema:</p>            
         <table id="tabla" class="display" cellspacing="0">
           <thead>
             <tr>
-              <th>ID Unidad Ejecutora</th>
-              <th>Numero de UE</th>
-              <th>Nombre UE</th>
+              <th>ID Medio Enlace</th>
+              <th>Medio de Enlace</th>
               <th>Observaciones</th>
               <th>Estado</th>
               <th>Cambiar Estado</th>
@@ -64,57 +60,43 @@
             for ($i = 0; $i <$tam; $i++) {
             ?>
             <tr>
-                <td><?php echo $params[$i]['ID_Unidad_Ejecutora'];?></td>
-                <td><?php echo $params[$i]['Numero_UE'];?></td>
-                <td><?php echo $params[$i]['Departamento'];?></td>
+                <td><?php echo $params[$i]['ID_Medio_Enlace'];?></td>
+                <td><?php echo $params[$i]['Medio_Enlace'];?></td>
                 <td><?php echo $params[$i]['Observaciones'];?></td>
                 <?php if ($params[$i]['Estado']==1){?>  
                     <td>Activo</td>
                 <?php }else {?>  
                     <td>Inactivo</td>
                 <?php }?>
-                <td><a href="index.php?ctl=unidad_ejecutora_cambiar_estado&ide=<?php echo $params[$i]['ID_Unidad_Ejecutora']?>&estado=<?php echo $params[$i]['Estado']?>"> 
+                <td><a href="index.php?ctl=medio_enlace_cambiar_estado&ide=<?php echo $params[$i]['ID_Medio_Enlace']?>&estado=<?php echo $params[$i]['Estado']?>"> 
                         Activar/Desactivar</a></td>
-                <td><a role="button" onclick="Editar_UE(<?php echo $params[$i]['ID_Unidad_Ejecutora'];?>,'<?php echo $params[$i]['Numero_UE'];?>',
-                                                        '<?php echo $params[$i]['Departamento'];?>','<?php echo $params[$i]['Observaciones'];?>', <?php echo $params[$i]['Estado'];?>)"> 
+                <td><a role="button" onclick="Editar_medio_enlace(<?php echo $params[$i]['ID_Medio_Enlace'];?>,'<?php echo $params[$i]['Medio_Enlace'];?>','<?php echo $params[$i]['Observaciones'];?>')"> 
                        Editar</a></td>
             </tr>     
             <?php } ?>
             </tbody>
         </table>
-        <a id="popup" onclick="mostrar_agregar_proveedor()" class="btn btn-default" role="button">Agregar Nueva UE</a>
+        <a id="popup" onclick="mostrar_agregar_medio_enlace()" class="btn btn-default" role="button">Agregar Nuevo Medio de Enlace</a>
         </div>
             <?php require 'vistas/plantillas/pie_de_pagina.php' ?>
         
-        <!--agregar o editar Unidad ejecutora-->
+        <!--agregar o editar proveedor-->
         <div id="formulario_oculto_1"> 
             <div id="popupventana">
                 <!--Formulario para proveedor de enlaces de telecomunicaciones-->
-                <form id="ventana" method="POST" name="form" action="index.php?ctl=unidad_ejecutora_guardar">
+                <form id="ventana" method="POST" name="form" action="index.php?ctl=medio_enlace_guardar">
                     <img id="close" src='vistas/Imagenes/cerrar.png' width="25" onclick ="ocultar_elemento()">
-                    <h2>Unidad Ejecutora</h2>
+                    <h2>Medio de enlace comunicación</h2>
                     <hr>
-                    <input hidden id="ID_Unidad_Ejecutora" name="ID_Unidad_Ejecutora" type="text">
-                    
-                    <label for="numero">Número de UE</label>
-                    <input class="form-control espacio-abajo" required id="numero" name="numero" placeholder="Número de Unidad Ejecutora" type="text">
-                    
-                    <label for="nombre">Nombre UE</label>
-                    <input class="form-control espacio-abajo" required id="nombre" name="nombre" placeholder="Nombre de la Unidad Ejecutora" type="text">
-                    
+                    <input hidden id="ID_Medio_Enlace" name="ID_Medio_Enlace" type="text">
+                    <label for="nombre">Medio de Enlace</label>
+                    <input class="form-control espacio-abajo" required id="nombre" name="nombre" placeholder="Nombre del proveedor del enlace" type="text">
                     <label for="observaciones">Observaciones</label>
                     <input type="text" class="form-control espacio-abajo" id="observaciones" name="observaciones" placeholder="Observaciones del proveedor">
-                    <div class="form-group">
-                        <label for="sel1">Estado</label>
-                        <select class="form-control" id="estado" name="estado">
-                            <option value="1">Activo</option>
-                            <option value="0">Inactivo</option>  
-                        </select>
-                      </div>
                     <button><a href="javascript:%20check_empty()" id="submit">Guardar</a></button>
                 </form>
             </div>
         <!--Cierre agregar teléfono a Punto BCR-->
         </div>
     </body>
-</html> 
+</html>

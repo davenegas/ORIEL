@@ -1,6 +1,6 @@
 <?php
 
-class cls_proveedor_enlace{
+class cls_medio_enlace{
     public $id;
     public $nombre;
     public $observaciones;
@@ -75,11 +75,11 @@ class cls_proveedor_enlace{
         $this->condicion="";
     }
     
-    public function obtener_proveedores(){
+    public function obtener_medio_enlaces(){
         if($this->condicion==""){
             $this->obj_data_provider->conectar();
             //Llama al metodo que realiza la consulta a la bd
-            $this->obj_data_provider->trae_datos("T_Proveedor", "*", "");
+            $this->obj_data_provider->trae_datos("T_MedioEnlace", "*", "");
             $this->arreglo=$this->obj_data_provider->getArreglo();
             $this->obj_data_provider->desconectar();
             $this->resultado_operacion=true;
@@ -87,34 +87,34 @@ class cls_proveedor_enlace{
         else{
             $this->obj_data_provider->conectar();
             //Llama al metodo que realiza la consulta a la bd
-            $this->obj_data_provider->trae_datos("T_Proveedor", "*", $this->condicion);
+            $this->obj_data_provider->trae_datos("T_MedioEnlace", "*", $this->condicion);
             $this->arreglo=$this->obj_data_provider->getArreglo();
             $this->obj_data_provider->desconectar();
             $this->resultado_operacion=true;
         }
     }
     
-    public function agregar_proveedor(){
+    public function guardar_medio_enlaces(){
         if($this->condicion==""){
             $this->obj_data_provider->conectar();
             //Llama al metodo que realiza la consulta a la bd
-            $this->obj_data_provider->inserta_datos("T_Proveedor", "ID_Proveedor, Nombre_Proveedor, Observaciones, Estado", 
+            $this->obj_data_provider->inserta_datos("T_MedioEnlace", "ID_Medio_Enlace, Medio_Enlace, Observaciones, Estado", 
                     "null,'".$this->nombre."','".$this->observaciones."','".$this->estado."'");
             $this->obj_data_provider->desconectar();
             $this->resultado_operacion=true;
         }   else    {
             $this->obj_data_provider->conectar();
             //Llama al metodo que realiza la consulta a la bd
-            $this->obj_data_provider->edita_datos("T_Proveedor", "Nombre_Proveedor='".$this->nombre."', Observaciones='".$this->observaciones."'", $this->condicion);
+            $this->obj_data_provider->edita_datos("T_MedioEnlace", "Medio_Enlace='".$this->nombre."', Observaciones='".$this->observaciones."'", $this->condicion);
             $this->obj_data_provider->desconectar();
             $this->resultado_operacion=true;
         }
     }
     
-    public function cambiar_estado_proveedor() {
+    public function cambiar_estado_medio_enlace(){
         $this->obj_data_provider->conectar();
         //Llama al metodo que realiza la consulta a la bd
-        $this->obj_data_provider->edita_datos("T_Proveedor", "Estado='".$this->estado."'", $this->condicion);
+        $this->obj_data_provider->edita_datos("T_MedioEnlace", "Estado='".$this->estado."'", $this->condicion);
         $this->obj_data_provider->desconectar();
         $this->resultado_operacion=true;
     }

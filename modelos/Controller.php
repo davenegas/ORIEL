@@ -4147,7 +4147,7 @@
         } 
     }
     //Funcion permite actualizar o crear un proveedor de enlaces
-    public function proveedor_enlace_catalogo() {
+    public function proveedor_enlace_guardar() {
         if(isset($_SESSION['nombre'])){
            $obj_proveedor = new cls_proveedor_enlace();
            //Obtiene informacion enviada por el formulario
@@ -4173,7 +4173,163 @@
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         } 
     }
-   
+    
+    public function proveedor_enlace_cambiar_estado(){
+        if(isset($_SESSION['nombre'])){
+           $obj_proveedor = new cls_proveedor_enlace();
+           //Invierte el estado enviado por el formulario
+           if($_GET['estado']==0){
+               $obj_proveedor->setEstado("1");
+           }else {
+               $obj_proveedor->setEstado("0");
+           }
+           //agrega la condicion y actualiza el estado en BD
+           $obj_proveedor->setCondicion("ID_Proveedor='".$_GET['ide']."'");
+           $obj_proveedor->cambiar_estado_proveedor();
+           //Carga nuevamente la lista de proveedores
+           $obj_proveedor->setCondicion("");
+           $obj_proveedor->obtener_proveedores();
+           $params = $obj_proveedor->getArreglo();
+           require __DIR__ . '/../vistas/plantillas/frm_proveedor_enlace_catalogo.php';
+        }else{
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        } 
+    }
+    
+    ////////////////////////////////////////////////////////////////////////////
+    /////////////Funciones para Tipos de enlaces BCR////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////
+    public function tipo_enlace_listar() {
+        if(isset($_SESSION['nombre'])){
+           $obj_tipo_enlace = new cls_tipo_enlace();
+           $obj_tipo_enlace->obtener_tipo_enlaces();
+           $params = $obj_tipo_enlace->getArreglo();
+           require __DIR__ . '/../vistas/plantillas/frm_tipo_enlace_catalogo.php';
+        }else{
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        } 
+    }
+    
+    public function tipo_enlace_guardar() {
+        if(isset($_SESSION['nombre'])){
+           $obj_tipo_enlace = new cls_tipo_enlace();
+           //Obtiene informacion enviada por el formulario (frm_tipo_enlace_catalogo)
+           $obj_tipo_enlace->setNombre($_POST['nombre']);
+           $obj_tipo_enlace->setObservaciones($_POST['observaciones']);
+           //Valida si el un nuevo tipo de enlace o actualizar uno existente
+           if($_POST['ID_Tipo_Enlace']==0){
+               $obj_tipo_enlace->setEstado("1");
+               $obj_tipo_enlace->setCondicion("");
+           } else{
+               $obj_tipo_enlace->setCondicion("ID_Tipo_Enlace='".$_POST['ID_Tipo_Enlace']."'");
+           }
+           //agrega o actualiza el proveedor de enlaces
+           $obj_tipo_enlace->guardar_tipo_enlaces();
+           //Carga nuevamente la ventana de tipos de enlace
+           $obj_tipo_enlace->setCondicion("");
+           $obj_tipo_enlace->obtener_tipo_enlaces();
+           $params = $obj_tipo_enlace->getArreglo();
+           require __DIR__ . '/../vistas/plantillas/frm_tipo_enlace_catalogo.php';
+        }else{
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }
+    }
+    
+    public function tipo_enlace_cambiar_estado(){
+        if(isset($_SESSION['nombre'])){
+           $obj_tipo_enlace = new cls_tipo_enlace();
+           //Invierte el estado que envia el formulario
+           if($_GET['estado']==0){
+               $obj_tipo_enlace->setEstado("1");
+           }else {
+               $obj_tipo_enlace->setEstado("0");
+           }
+           $obj_tipo_enlace->setCondicion("ID_Tipo_Enlace='".$_GET['ide']."'");
+           $obj_tipo_enlace->cambiar_estado_tipo_enlace();
+           //Carga nuevamente la ventana con la información modificada
+           $obj_tipo_enlace->setCondicion("");
+           $obj_tipo_enlace->obtener_tipo_enlaces();
+           $params = $obj_tipo_enlace->getArreglo();
+           require __DIR__ . '/../vistas/plantillas/frm_tipo_enlace_catalogo.php';
+        }else{
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }
+    }
+    
+    ////////////////////////////////////////////////////////////////////////////
+    //////////Funciones para Medio de enlaces BCR/////////////////////////
+    ////////////////////////////////////////////////////////////////////////////
+    public function medio_enlace_listar(){
+       if(isset($_SESSION['nombre'])){
+           $obj_medio = new cls_medio_enlace();
+           $obj_medio->obtener_medio_enlaces();
+           $params = $obj_medio->getArreglo();
+           require __DIR__ . '/../vistas/plantillas/frm_medio_enlace_catalogo.php';
+        }else{
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        } 
+    }
+    
+    public function medio_enlace_guardar(){
+       if(isset($_SESSION['nombre'])){
+           $obj_medio = new cls_medio_enlace();
+           //Obtiene informacion enviada por el formulario
+           $obj_medio->setNombre($_POST['nombre']);
+           $obj_medio->setObservaciones($_POST['observaciones']);
+           //Valida si el un nuevo medio de enlace o actualizar uno existente
+           if($_POST['ID_Medio_Enlace']==0){
+               $obj_medio->setEstado("1");
+               $obj_medio->setCondicion("");
+           } else{
+               $obj_medio->setCondicion("ID_Medio_Enlace='".$_POST['ID_Medio_Enlace']."'");
+           }
+           //agrega o actualiza el proveedor de enlaces
+           $obj_medio->guardar_medio_enlaces();
+           //Carga nuevamente la ventana de tipos de enlace
+           $obj_medio->setCondicion("");
+           $obj_medio->obtener_medio_enlaces();
+           $params = $obj_medio->getArreglo();
+           require __DIR__ . '/../vistas/plantillas/frm_medio_enlace_catalogo.php';
+        }else{
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        } 
+    }
+    
+    public function medio_enlace_cambiar_estado(){
+       if(isset($_SESSION['nombre'])){
+           $obj_medio = new cls_medio_enlace();
+           //Invierte el estado que envia el formulario
+           if($_GET['estado']==0){
+               $obj_medio->setEstado("1");
+           }else {
+               $obj_medio->setEstado("0");
+           }
+           $obj_medio->setCondicion("ID_Medio_Enlace='".$_GET['ide']."'");
+           $obj_medio->cambiar_estado_medio_enlace();
+           //Carga nuevamente la ventana con la información modificada
+           $obj_medio->setCondicion("");
+           $obj_medio->obtener_medio_enlaces();
+           $params = $obj_medio->getArreglo();
+           require __DIR__ . '/../vistas/plantillas/frm_medio_enlace_catalogo.php';
+        }else{
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        } 
+    }
+    
     ////////////////////////////////////////////////////////////////////////////
     //////////////////////////////Trazabilidad//////////////////////////////////
     /////////////////////FUNCIONES PARA EVENTOS/////////////////////////////////
@@ -4204,8 +4360,11 @@
     
     public function unidad_ejecutora_listar(){
        if(isset($_SESSION['nombre'])){
+            $obj_unidad_ejecutora = new cls_unidad_ejecutora();
+            $obj_unidad_ejecutora->obtener_unidades_ejecutoras();
+            $params = $obj_unidad_ejecutora->getArreglo();
             
-            require __DIR__.'/../vistas/plantillas/frm_trazabilidad_listar.php';
+            require __DIR__.'/../vistas/plantillas/frm_unidad_ejecutora_catalogo.php';
         }
         else {
             $tipo_de_alerta="alert alert-warning";
@@ -4213,4 +4372,58 @@
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         } 
     }
+    
+    public function unidad_ejecutora_guardar() {
+        if(isset($_SESSION['nombre'])){
+            $obj_unidad_ejecutora = new cls_unidad_ejecutora();
+            $obj_unidad_ejecutora->setNumero_ue($_POST['numero']);
+            $obj_unidad_ejecutora->setDepartamento($_POST['nombre']);
+            $obj_unidad_ejecutora->setObservaciones($_POST['observaciones']);            
+            
+            if($_POST['ID_Unidad_Ejecutora']==0){
+                $obj_unidad_ejecutora->setEstado(1);
+                $obj_unidad_ejecutora->agregar_nueva_ue();
+            }else{
+                $obj_unidad_ejecutora->setEstado($_POST['estado']);
+                $obj_unidad_ejecutora->setCondicion("ID_Unidad_Ejecutora='".$_POST['ID_Unidad_Ejecutora']."'");
+                $obj_unidad_ejecutora->edita_ue();
+            }
+            $obj_unidad_ejecutora->setCondicion("");
+            $obj_unidad_ejecutora->obtener_unidades_ejecutoras();
+            $params = $obj_unidad_ejecutora->getArreglo();
+            require __DIR__.'/../vistas/plantillas/frm_unidad_ejecutora_catalogo.php';
+        }
+        else {
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }
+    }
+    
+    public function unidad_ejecutora_cambiar_estado() {
+         if(isset($_SESSION['nombre'])){
+            $obj_unidad_ejecutora = new cls_unidad_ejecutora();
+            //Valida el estado que envia por parametro y lo invierta para almacernarlo en BD
+            if($_GET['estado']==1){
+               $obj_unidad_ejecutora->setEstado("0");
+            } else{
+                $obj_unidad_ejecutora->setEstado("1");
+            }
+            //Condición para editar estado de unidad ejecutora
+            $obj_unidad_ejecutora->setCondicion("ID_Unidad_Ejecutora='".$_GET['ide']."'");
+            $obj_unidad_ejecutora->cambia_estado_ue();           
+            
+            //Carga nuevamente la lista de unidades ejecutoras
+            $obj_unidad_ejecutora->setCondicion("");
+            $obj_unidad_ejecutora->obtener_unidades_ejecutoras();
+            $params = $obj_unidad_ejecutora->getArreglo();
+            require __DIR__.'/../vistas/plantillas/frm_unidad_ejecutora_catalogo.php';
+        }
+        else {
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }    
+    }
+    
 } 

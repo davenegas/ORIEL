@@ -70,12 +70,12 @@
             </ul>
             </li>
 
-          <?php  };    ?>
+            <?php  };    ?>
 
 
-           <?php 
-           //************************************************Pinta Menu de Catalogos***************************************************************
-           if (($_SESSION['modulos']['Catálogos-Empresas']==1||$_SESSION['modulos']['Catálogos-Tipo Evento']==1||
+            <?php 
+            //************************************************Pinta Menu de Catalogos***************************************************************
+            if (($_SESSION['modulos']['Catálogos-Empresas']==1||$_SESSION['modulos']['Catálogos-Tipo Evento']==1||
                    $_SESSION['modulos']['Importar- Prontuario']==1||$_SESSION['modulos']['Catálogos-Direcciones IP']==1||
                    $_SESSION['modulos']['Catálogos-Horarios']==1)){  ?>
 
@@ -98,16 +98,26 @@
                    
                 <?php  if ($_SESSION['modulos']['Catálogos-Horarios']==1){?>
                    <li><a href="index.php?ctl=horario_listar">Horarios BCR</a></li> 
-                <?php  }; ?>     
-
-                <?php  if ($_SESSION['modulos']['Catálogos-Horarios']==1){?>
-                   <li><a href="index.php?ctl=proveedor_listar">Proveedores enlaces</a></li> 
-                <?php  }; ?> 
-                
+                <?php  }; ?>    
+                   
                 <?php  if ($_SESSION['modulos']['Catálogos-Horarios']==1){?>
                    <li><a href="index.php?ctl=unidad_ejecutora_listar">Unidades Ejecutoras</a></li> 
                 <?php  }; ?>
                    
+                <!--Catalogos de Enlace de Telecomunicaciones-->
+                <?php  if ($_SESSION['modulos']['Catálogos-Proveedor enlaces']==1){?>
+                   <li><a href="index.php?ctl=proveedor_listar">Proveedores enlaces</a></li> 
+                <?php  }; ?> 
+                
+                <?php  if ($_SESSION['modulos']['Catálogos-Tipo enlaces']==1){?>
+                   <li><a href="index.php?ctl=tipo_enlace_listar">Tipos de enlaces</a></li> 
+                <?php  }; ?>
+                   
+                <?php  if ($_SESSION['modulos']['Catálogos-Medio enlaces']==1){?>
+                   <li><a href="index.php?ctl=medio_enlace_listar">Medios de enlaces</a></li> 
+                <?php  }; ?>
+                   
+                <!--Catalogos Prontuario--> 
                 <?php  if ($_SESSION['modulos']['Importar- Prontuario']==1){?>
                    <li><a href="index.php?ctl=frm_importar_prontuario_paso_1">Importar Prontuario</a></li> 
                 <?php  }; ?>  
