@@ -7,7 +7,7 @@
         <script language="javascript" src="vistas/js/listas_dependientes_puntobcr.js"></script>
         <link rel="stylesheet" href="vistas/css/ventanaoculta.css">
         <?php require_once 'frm_librerias_head.html'; ?>
-        
+       
 
     </head>
     <body>
@@ -26,9 +26,11 @@
             </pre>-->
             <div class="bordegris"> 
             <h3>Información General del Punto BCR
+                
             <?php if($_SESSION['modulos']['Editar- Puntos BCR']==1){ ?>
                 <input class="quitar-float" type="checkbox" id="chk_informacion_general" name="chk_ubicacion">
             <?php }?>
+                <a href="index.php?ctl=frm_puntos_bcr_padron_fotografico" align="right"><img src="vistas/Imagenes/gallery.gif" width="40" height="40"></a>
             </h3>
             <div class="col-md-4">
               <label for="ID_PuntoBCR">ID Punto</label>
