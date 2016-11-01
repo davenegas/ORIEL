@@ -508,8 +508,10 @@
                                        
                     $obj_personal->setCondicion("Cedula='".$arreglo_telefonos_celulares[$i][0]."'");
                     $obj_personal->obtiene_id_de_persona_para_prontuario();
-                    /*$obj_telefono->setCondicion("(ID=".$obj_personal->getId().") AND (ID_Tipo_Telefono=2 or ID_Tipo_Telefono=3 or ID_Tipo_Telefono=4 or ID_Tipo_Telefono=27 or ID_Tipo_Telefono=28) AND (Numero='0')");
+                    /*$obj_telefono->setCondicion("(ID=".$obj_personal->getId().") AND (ID_Tipo_Telefono=3) AND (Numero='0')");
                     $obj_telefono->eliminar_telefonos_para_prontuario();*/
+                    $obj_telefono->setCondicion("(ID=".$obj_personal->getId().") AND (ID_Tipo_Telefono=2 or ID_Tipo_Telefono=3 or ID_Tipo_Telefono=4 or ID_Tipo_Telefono=27 or ID_Tipo_Telefono=28) AND (Numero='0')");
+                    $obj_telefono->eliminar_telefonos_para_prontuario();
                     
                     ///////////////////////////Generar inconsistencias del sistema
                    
@@ -609,8 +611,8 @@
                     
                     $obj_personal->setCondicion("Cedula='".$arreglo_telefonos_extensiones[$i][0]."'");
                     $obj_personal->obtiene_id_de_persona_para_prontuario();
-                    //$obj_telefono->setCondicion("(ID=".$obj_personal->getId().") AND (ID_Tipo_Telefono=2 or ID_Tipo_Telefono=3 or ID_Tipo_Telefono=4 or ID_Tipo_Telefono=27 or ID_Tipo_Telefono=28) AND (Numero='0')");
-                    //$obj_telefono->eliminar_telefonos_para_prontuario();
+                    /*$obj_telefono->setCondicion("(ID=".$obj_personal->getId().") AND (ID_Tipo_Telefono=2 or ID_Tipo_Telefono=3 or ID_Tipo_Telefono=4 or ID_Tipo_Telefono=27 or ID_Tipo_Telefono=28) AND (Numero='0')");
+                    $obj_telefono->eliminar_telefonos_para_prontuario();*/
                     
                   ///////////////////////////Generar inconsistencias del sistema
                     
@@ -802,8 +804,10 @@
                                        
                     $obj_personal->setCondicion("Cedula='".$arreglo_telefonos_casa[$i][0]."'");
                     $obj_personal->obtiene_id_de_persona_para_prontuario();
-                    $obj_telefono->setCondicion("(ID=".$obj_personal->getId().") AND (ID_Tipo_Telefono=2 or ID_Tipo_Telefono=3 or ID_Tipo_Telefono=4 or ID_Tipo_Telefono=27 or ID_Tipo_Telefono=28) AND (Numero='0')");
-                    $obj_telefono->eliminar_telefonos_para_prontuario();
+                   /* $obj_telefono->setCondicion("(ID=".$obj_personal->getId().") AND (ID_Tipo_Telefono=2 or ID_Tipo_Telefono=3 or ID_Tipo_Telefono=4 or ID_Tipo_Telefono=27 or ID_Tipo_Telefono=28) AND (Numero='0')");
+                    $obj_telefono->eliminar_telefonos_para_prontuario();*/
+                    /*$obj_telefono->setCondicion("(ID=".$obj_personal->getId().") AND (ID_Tipo_Telefono=2) AND (Numero='0')");
+                    $obj_telefono->eliminar_telefonos_para_prontuario();*/
                     
                     ///////////////////////////Generar inconsistencias del sistema
                    
@@ -854,7 +858,7 @@
                            $numeros_actualizados++;
                        }else{
                            $obj_telefono->setNumero("0");
-                           $obj_telefono->setTipo_telefono("4");
+                           $obj_telefono->setTipo_telefono("2");
                            $obj_telefono->guardar_telefono_para_prontuario();
                            $numeros_actualizados++;
                        }
@@ -864,7 +868,9 @@
             $resultados= "Fueron actualizados un total de: ".$numeros_actualizados." números de residencia.";
             $vector_inconsistencias[]=array ("","");
             $vector_inconsistencias[]=array ("","");
-            $vector_inconsistencias[]=array (Encrypter::quitar_tildes($resultados),"");  
+            $vector_inconsistencias[]=array (Encrypter::quitar_tildes($resultados),"");
+            
+            $obj_telefono->agrega_extension_cero_en_personas_sin_telefonos_asociados_para_prontuario();
                                 
            require __DIR__ . '/../vistas/plantillas/frm_importar_prontuario_paso_10.php';
      
@@ -2953,16 +2959,25 @@
                 exit();
               }
               
+               if (!(isset($_POST['id_punto_bcr']))){
+                
+                exit();
+              }
+              
               $nombre=$_POST['Nombre'];
               $categoria=$_POST['Categoria'];
               $descripcion=$_POST['Descripcion'];
+              
+              
               //Validación de informacion en detalle de evento, elimina algunos caracteres especiales
               
               $descripcion= str_replace("'","",$descripcion);
               $descripcion= str_replace('"','',$descripcion);
 
               $recepcion_archivo=$_FILES['archivo_adjunto']['error'];
-              echo $recepcion_archivo;
+             
+              
+              /*echo $recepcion_archivo;
               echo "<br>";
               echo basename($_FILES['archivo_adjunto']['tmp_name']);
               echo "<br>";
@@ -2977,10 +2992,12 @@
               
               echo "<br>";
               
-              echo "<img src='data:image/jpg;base64,".$imdata."' width='1000' height='1000'/>";
+              echo "<img src='data:image/jpg;base64,".$imdata."' width='1000' height='1000'/>";*/
               
              // echo 'Prueba';
-           /* $obj_eventos = new cls_eventos();
+              
+            /*  
+            $obj_eventos = new cls_eventos();
             $obj_eventos->setId($_GET['id']);
             $obj_eventos->setId2(0);
             
@@ -3000,9 +3017,15 @@
             //$this->frm_eventos_listar();
             
             $recepcion_archivo=$_FILES['archivo_adjunto']['error'];
-            
-            //echo basename($_FILES['archivo_adjunto']['tmp_name']);
-            //echo basename($_FILES['archivo_adjunto']['type']);
+            */
+            echo basename($_FILES['archivo_adjunto']['tmp_name']);
+            echo '<br>';
+            echo basename($_FILES['archivo_adjunto']['type']);
+            echo '<br>';
+            echo $_FILES['archivo_adjunto']['type'];
+            echo '<br>';
+            echo $_POST['id_punto_bcr'];
+        
             $date=new DateTime(); //this returns the current date time
             $result = $date->format('Y-m-d-H-i-s');
             //echo $result;
@@ -3015,38 +3038,44 @@
                 $raiz.="/";
             }
             
-            $ruta=  $raiz."Adjuntos_Bitacora/".Encrypter::quitar_tildes($result.$_FILES['archivo_adjunto']['name']);
+            $ruta=  $raiz."Padron Fotografico Puntos BCR/".Encrypter::quitar_tildes($result.$_FILES['archivo_adjunto']['name']);
             //$ruta=  $_SERVER['DOCUMENT_ROOT']."Adjuntos_Bitacora/".$result.$_FILES['archivo_adjunto']['name'];
           
             switch ($recepcion_archivo) {
                 case 0:{
-                    
-                    if (move_uploaded_file($_FILES['archivo_adjunto']['tmp_name'], $ruta)){
-                        $obj_eventos->setAdjunto(Encrypter::quitar_tildes($result.$_FILES['archivo_adjunto']['name'])); 
-                        $obj_eventos->ingresar_seguimiento_evento();
-                        $obj_eventos->edita_estado_evento($_POST['estado_del_evento']);
-                        header ("location:/ORIEL/index.php?ctl=frm_eventos_listar");
-                    }  else {
-                        //echo "<script type=\"text/javascript\">alert('Hubo un problema al subir el archivo al servidor!!!');history.go(-1);</script>";;
-                        $obj_eventos->setAdjunto("N/A");
-                        $obj_eventos->ingresar_seguimiento_evento();
-                        $obj_eventos->edita_estado_evento($_POST['estado_del_evento']);
-                        header ("location:/ORIEL/index.php?ctl=frm_eventos_listar");
-                        //echo "<script type=\"text/javascript\">alert('No fue seleccionado ningun archivo!!!!');history.go(-1);</script>";;
+                    if ((basename($_FILES['archivo_adjunto']['type'])==="jpeg")||(basename($_FILES['archivo_adjunto']['type'])==="gif")||(basename($_FILES['archivo_adjunto']['type'])==="png")||(basename($_FILES['archivo_adjunto']['type'])==="bmp")||(basename($_FILES['archivo_adjunto']['type'])==="tiff")){
+                        if (move_uploaded_file($_FILES['archivo_adjunto']['tmp_name'], $ruta)){
+                            /*$obj_eventos->setAdjunto(Encrypter::quitar_tildes($result.$_FILES['archivo_adjunto']['name'])); 
+                            $obj_eventos->ingresar_seguimiento_evento();
+                            $obj_eventos->edita_estado_evento($_POST['estado_del_evento']);*/
+                            //header ("location:/ORIEL/index.php?ctl=frm_puntos_bcr_padron_fotografico");
+                       // }  else {
+                            //echo "<script type=\"text/javascript\">alert('Hubo un problema al subir el archivo al servidor!!!');history.go(-1);</script>";;
+                            /*$obj_eventos->setAdjunto("N/A");
+                            $obj_eventos->ingresar_seguimiento_evento();
+                            $obj_eventos->edita_estado_evento($_POST['estado_del_evento']);*/
+                           // header ("location:/ORIEL/index.php?ctl=frm_puntos_bcr_padron_fotografico");
+                            //echo "<script type=\"text/javascript\">alert('No fue seleccionado ningun archivo!!!!');history.go(-1);</script>";;
+                        }
+                    }else{
+                        echo "<script type=\"text/javascript\">alert('El archivo no corresponde a un formato valido de imagenes !!!!');history.go(-1);</script>";;
                     }
                     break;
                 }
                     
                 case 2:{
-                    echo "<script type=\"text/javascript\">alert('El archivo consume mayor espacio del permitido (1 mb) !!!!');history.go(-1);</script>";;
+                    echo "<script type=\"text/javascript\">alert('El archivo consume mayor espacio del permitido (2 mb) !!!!');history.go(-1);</script>";;
                     break;
                 }
                 case 4:{ 
-                    $obj_eventos->setAdjunto("N/A");
+                    /*$obj_eventos->setAdjunto("N/A");
                     $obj_eventos->ingresar_seguimiento_evento();
-                    $obj_eventos->edita_estado_evento($_POST['estado_del_evento']);
-                    header ("location:/ORIEL/index.php?ctl=frm_eventos_listar");
-                    //echo "<script type=\"text/javascript\">alert('No fue seleccionado ningun archivo!!!!');history.go(-1);</script>";;
+                    $obj_eventos->edita_estado_evento($_POST['estado_del_evento']);*/
+                    
+                    echo "<script type=\"text/javascript\">alert('No fue seleccionado ningun archivo!!!!');history.go(-1);</script>";;
+                    //sleep(1);
+                    //header ("location:/ORIEL/index.php?ctl=frm_puntos_bcr_padron_fotografico");
+                    
                     break;
                 }
                  case 6:{
@@ -3068,10 +3097,12 @@
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
-        } */
+         } 
+           
+         
             
            // require __DIR__ . '/../vistas/plantillas/frm_puntos_bcr_padron_fotografico.php';
-        }
+       // }*/
     }
     
     

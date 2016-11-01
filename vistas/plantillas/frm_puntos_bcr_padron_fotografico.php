@@ -24,13 +24,18 @@
               
                 <div class="col-xs-12 quitar-float espacio-abajo">
                     <label for="archivo_adjunto">Adjuntar Archivo: </label>
-                    <input type="hidden" name="MAX_FILE_SIZE" value="4000000">
+                    <input type="hidden" name="MAX_FILE_SIZE" value="2000000">
                     <input type="file" name="archivo_adjunto" id="seleccionar_archivo" class="btn btn-default">
                 </div>   
               
                 <div class="col-xs-4">
                     <label for="Nombre">Nombre</label>
                     <input type="text" required=”required” class="form-control" id="Nombre" name="Nombre" >
+                </div>
+              
+              <div hidden="hidden" class="col-xs-4">
+                    <label for="id_punto_bcr">id_punto_bcr</label>
+                    <input type="text" class="form-control" id="id_punto_bcr" name="id_punto_bcr" value="<?php echo $_GET['id'];?>">
                 </div>
                 
                 <div class="col-xs-4">
@@ -63,11 +68,8 @@
         
         <!--Detalles de Evento--> 
             <hr/>
+            <a href="index.php?ctl=gestion_punto_bcr&id=<?php echo $_GET['id'];?>" class="btn btn-default" role="button">Volver</a>
             <h3>Visualización de Imágenes</h3>
-           
-        
-        <td><a href="index.php?ctl=frm_eventos_lista_cerrados" class="btn btn-default" role="button">Volver</a></td>
-     
         </div>
             <?php require 'vistas/plantillas/pie_de_pagina.php'?>
     </body>
