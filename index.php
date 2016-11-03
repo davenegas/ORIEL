@@ -20,6 +20,7 @@ require_once __DIR__ . '/controladores/cls_puestos.php';
 require_once __DIR__ . '/controladores/cls_proveedor_enlace.php';
 require_once __DIR__ . '/controladores/cls_tipo_enlace.php';
 require_once __DIR__ . '/controladores/cls_medio_enlace.php';
+require_once __DIR__ . '/controladores/cls_enlace_telecom.php';
 require_once __DIR__ . '/modelos/Controller.php';
 require_once __DIR__ . '/modelos/Encrypter.php';
 require_once __DIR__ . '/modelos/PHPMailerAutoload.php';
@@ -145,7 +146,9 @@ $map = array(
     'PuntoBCR_actualiza_informacion_adicional'=>array('controller'=>'Controller','action'=> 'PuntoBCR_actualiza_informacion_adicional'),
     'punto_bcr_cambiar_estado'=>array('controller'=>'Controller','action'=> 'punto_bcr_cambiar_estado'),
     'puntobcr_asignar_horario'=>array('controller'=>'Controller','action'=> 'puntobcr_asignar_horario'),
-     
+    'enlace_puntobcr_guardar'=>array('controller'=>'Controller','action'=> 'enlace_puntobcr_guardar'),
+    'puntobcr_eliminar_enlace'=>array('controller'=>'Controller','action'=> 'puntobcr_eliminar_enlace'),
+      
     //Empresas
     'empresas_listar'=>array('controller'=>'Controller','action'=> 'empresas_listar'),
     'empresa_gestion'=>array('controller'=>'Controller','action'=> 'empresa_gestion'),

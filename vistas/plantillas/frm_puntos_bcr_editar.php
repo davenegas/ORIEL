@@ -98,6 +98,56 @@
                 </tbody> 
             </table>
             </div>
+            <!--Información de telecomunicaciones--> 
+            <div class="bordegris" >
+                <?php if($_SESSION['modulos']['Editar Telecomunicaciones- Puntos BCR']==1){ ?>   
+                    <h3 class="quitar-float">Información de Telecom <a id="popup" onclick="mostrar_enlace_telecom()" class="btn azul" role="button">Agregar Enlace</a></h3> 
+                <?php } else {?>
+                    <h3 class="quitar-float">Información de Telecom</h3>
+                <?php } ?>
+                <div>
+                    <table class="display col-md-12  table-striped quitar-float espacio-abajo" id="telecom">
+                        <thead> 
+                            <th style="text-align:center">Enlace</th>
+                            <th style="text-align:center">Interface</th>
+                            <th style="text-align:center">Línea</th>
+                            <th style="text-align:center">Proveedor</th>
+                            <th style="text-align:center">Tipo enlace</th>
+                            <th style="text-align:center">Bandwidth</th>
+                            <th style="text-align:center">Medio enlace</th>
+                            <th style="text-align:center">Observaciones</th>
+                            <?php if($_SESSION['modulos']['Editar Telecomunicaciones- Puntos BCR']==1){ ?>
+                            <th style="text-align:center" colspan="2">Funciones</th>
+                            <?php } ?>
+                        </thead>
+                        <tbody>
+                            <?php 
+                            $tam=count($telecom);
+                            for ($i = 0; $i <$tam; $i++) {
+                            ?>
+                            <tr>
+                                <td style="text-align:center"><?php echo $telecom[$i]['Enlace'];?></td>
+                                <td style="text-align:center"><?php echo $telecom[$i]['Interface_Enlace'];?></td>
+                                <td style="text-align:center"><?php echo $telecom[$i]['Numero_Linea'];?></td>
+                                <td style="text-align:center"><?php echo $telecom[$i]['Nombre_Proveedor'];?></td>
+                                <td style="text-align:center"><?php echo $telecom[$i]['Tipo_Enlace'];?></td>
+                                <td style="text-align:center"><?php echo $telecom[$i]['Bandwidth'];?></td>
+                                <td style="text-align:center"><?php echo $telecom[$i]['Medio_Enlace'];?></td>
+                                <td style="text-align:center"><?php echo $telecom[$i]['Observaciones'];?></td>
+                                <?php if($_SESSION['modulos']['Editar Telecomunicaciones- Puntos BCR']==1){ ?>
+                                    <td style="text-align:center"><a class="btn" role="button" onclick="mostrar_editar_enlace(<?php echo $telecom[$i]['ID_Enlace'];?>,'<?php echo $telecom[$i]['Enlace'];?>','<?php echo $telecom[$i]['Interface_Enlace'];?>','<?php echo $telecom[$i]['Numero_Linea'];?>'
+                                                                                                                ,'<?php echo $telecom[$i]['ID_Proveedor'];?>','<?php echo $telecom[$i]['ID_Tipo_Enlace'];?>','<?php echo $telecom[$i]['Bandwidth'];?>'
+                                                                                                                        ,'<?php echo $telecom[$i]['ID_Medio_Enlace'];?>','<?php echo $telecom[$i]['Observaciones'];?>');">
+                                        Editar</a></td>
+                                    <td style="text-align:center"><a class="btn" role="button" onclick="eliminar_enlace('<?php echo $telecom[$i]['ID_Enlace'];?>');">
+                                        Eliminar</a></td>    
+                                <?php } ?>
+                            </tr>
+                            <?php } ?>
+                        </tbody> 
+                    </table>
+                </div>
+            </div>
             <?php if($_SESSION['modulos']['Editar- Puntos BCR']==1){ ?>   
             <h3 class="quitar-float">Unidades Ejecutoras asociadas al PuntoBCR <a id="popup" onclick="mostrar_lista_ue()" class="btn azul" role="button">Agregar UE</a></h3> 
             <?php } else {?>
@@ -751,5 +801,67 @@
             </div>
         <!--Cierre Asignar Horario a Punto BCR-->
         </div> 
+        
+        <!--agregar o editar enlace del Punto BCR-->
+        <div id="formulario_oculto_1"> 
+            <div id="popupventana4">
+                <div id="ventana4">
+                <!--Formulario para ingresar nuevos números de teléfono-->
+                <form id="frm_enlace_guardar" method="POST" name="form" action="index.php?ctl=enlace_puntobcr_guardar">
+                    <img id="close" src='vistas/Imagenes/cerrar.png' width="25" onclick ="ocultar_elemento()">
+                    <h2>Información de Enlace</h2>
+                    <hr>
+                    <input hidden id="ID_Enlace" name="ID_Enlace" type="text">
+                    <input hidden id="ID_PuntoBCR" name="ID_PuntoBCR" type="text" value="<?php echo $params[0]['ID_PuntoBCR']; ?>">
+                    
+                    <label for="enlace">Enlace</label>
+                    <select class="form-control" id="enlace" name="enlace" > 
+                        <option value="Principal">Principal</option>
+                        <option value="Respaldo 1">Respaldo 1</option>
+                        <option value="Respaldo 2">Respaldo 2</option>
+                    </select>
+                    <label for="interface">Interface</label>
+                    <input class="form-control" required id="interface" name="interface" type="text">
+                    
+                    <label for="linea">Número de Línea</label>
+                    <input class="form-control" required id="linea" name="linea" type="text">
+                    
+                    <label for="bandwidth">Bandwidth</label>
+                    <input class="form-control" required id="bandwidth" name="bandwidth" type="text">
+                    
+                    <label for="medio_enlace">Medio de Enlace</label>
+                    <select class="form-control" id="medio_enlace" name="medio_enlace" > 
+                        <?php
+                        $tam = count($medio_enlace);
+                        for($i=0; $i<$tam;$i++){?> 
+                            <option value="<?php echo $medio_enlace[$i]['ID_Medio_Enlace']?>"><?php echo $medio_enlace[$i]['Medio_Enlace'];?></option>
+                        <?php   }   ?>
+                    </select>
+                    
+                    <label for="proveedor_enlace">Proveedor de Enlace</label>
+                    <select class="form-control" id="proveedor_enlace" name="proveedor_enlace" > 
+                        <?php
+                        $tam = count($proveedor_enlace);
+                        for($i=0; $i<$tam;$i++){?> 
+                            <option value="<?php echo $proveedor_enlace[$i]['ID_Proveedor']?>"><?php echo $proveedor_enlace[$i]['Nombre_Proveedor'];?></option>
+                        <?php   }   ?>
+                    </select>
+                    
+                    <label for="tipo_enlace">Tipo de Enlace</label>
+                    <select class="form-control" id="tipo_enlace" name="tipo_enlace" > 
+                        <?php
+                        $tam = count($tipo_enlace);
+                        for($i=0; $i<$tam;$i++){?> 
+                            <option value="<?php echo $tipo_enlace[$i]['ID_Tipo_Enlace']?>"><?php echo $tipo_enlace[$i]['Tipo_Enlace'];?></option>
+                        <?php   }   ?>
+                    </select>
+                    <label for="observaciones_enlace">Observaciones</label>
+                    <textarea class="form-control espacio-abajo" id="observaciones_enlace" name="observaciones_enlace"></textarea>
+                    <button><a href="javascript:%20validar_enlace()" id="submit">Guardar</a></button>
+                    </form>
+                </div>
+            </div>
+        <!--Cierre agregar o editar enlace del Punto BCR-->
+        </div>
     </body>
 </html>

@@ -20,7 +20,9 @@
         <div class="container">
         <h2>Listado General de Puntos BCR</h2>
         <p>A continuación se detallan los Puntos BCR que están registrados en el sistema:</p>   
-
+<!--        <pre>
+            <?php print_r($params)?>;
+        </pre>-->
         <table id="tabla" class="display" cellspacing="0" width="100%">
           <thead>
             <tr>
