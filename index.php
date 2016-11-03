@@ -148,7 +148,9 @@ $map = array(
     'puntobcr_asignar_horario'=>array('controller'=>'Controller','action'=> 'puntobcr_asignar_horario'),
     'enlace_puntobcr_guardar'=>array('controller'=>'Controller','action'=> 'enlace_puntobcr_guardar'),
     'puntobcr_eliminar_enlace'=>array('controller'=>'Controller','action'=> 'puntobcr_eliminar_enlace'),
-      
+    'frm_puntos_bcr_padron_fotografico'=>array('controller'=>'Controller','action'=> 'frm_puntos_bcr_padron_fotografico'),
+    'guardar_imagen_puntos_bcr'=>array('controller'=>'Controller','action'=> 'guardar_imagen_puntos_bcr'), 
+
     //Empresas
     'empresas_listar'=>array('controller'=>'Controller','action'=> 'empresas_listar'),
     'empresa_gestion'=>array('controller'=>'Controller','action'=> 'empresa_gestion'),

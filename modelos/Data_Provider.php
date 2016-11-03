@@ -275,6 +275,19 @@ class Data_Provider{
   
    }    
    
+    // Método ABC SQL que permite ingresar información en las tablas de la bd
+   public function inserta_datos_para_prontuario_especial($table,$campos,$valores){
+            
+        // Gestión de insercion del metodo de la clase
+       //Arma el insert SQL, de acuerdo a los parámetros recibidos por usuario
+       
+        $consulta=$this->conexion->query("insert into ".$table."(".$campos.") ".$valores.";");
+        //echo ("insert into ".$table."(".$campos.") values(".$valores.");");
+        //Establece a true el resultado de operación
+        $this->resultado_operacion=true;
+  
+   }    
+   
    //Método utilizado para insertar datos en la tabla traza, para consultas ABC mediante procedimientos almacenados
    public function inserta_datos_para_uso_de_trazabilidad($detalle_sql){
             

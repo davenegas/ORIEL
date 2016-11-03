@@ -145,6 +145,14 @@ class cls_telefono{
         $this->resultado_operacion=$this->obj_data_provider->getResultado_operacion();  
     }
     
+     public function agrega_extension_cero_en_personas_sin_telefonos_asociados_para_prontuario(){
+        $this->obj_data_provider->conectar();
+        $this->estado="1";
+         $this->obj_data_provider->inserta_datos_para_prontuario_especial("t_telefono","Numero,ID_Tipo_Telefono,ID,Observaciones,Estado","Select 0,4,ID_Persona,'',1 From t_personal where not ID_Persona In (Select ID From t_telefono where ID_Tipo_Telefono in(4,27))");
+        $this->obj_data_provider->desconectar();
+        $this->resultado_operacion=$this->obj_data_provider->getResultado_operacion();  
+    }
+    
     public function eliminar_telefono() {
         $this->obj_data_provider->conectar();
         $this->arreglo=$this->obj_data_provider->eliminar_datos("T_Telefono", $this->condicion);

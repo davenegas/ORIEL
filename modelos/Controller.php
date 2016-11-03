@@ -508,6 +508,8 @@
                                        
                     $obj_personal->setCondicion("Cedula='".$arreglo_telefonos_celulares[$i][0]."'");
                     $obj_personal->obtiene_id_de_persona_para_prontuario();
+                    /*$obj_telefono->setCondicion("(ID=".$obj_personal->getId().") AND (ID_Tipo_Telefono=3) AND (Numero='0')");
+                    $obj_telefono->eliminar_telefonos_para_prontuario();*/
                     $obj_telefono->setCondicion("(ID=".$obj_personal->getId().") AND (ID_Tipo_Telefono=2 or ID_Tipo_Telefono=3 or ID_Tipo_Telefono=4 or ID_Tipo_Telefono=27 or ID_Tipo_Telefono=28) AND (Numero='0')");
                     $obj_telefono->eliminar_telefonos_para_prontuario();
                     
@@ -609,8 +611,8 @@
                     
                     $obj_personal->setCondicion("Cedula='".$arreglo_telefonos_extensiones[$i][0]."'");
                     $obj_personal->obtiene_id_de_persona_para_prontuario();
-                    //$obj_telefono->setCondicion("(ID=".$obj_personal->getId().") AND (ID_Tipo_Telefono=2 or ID_Tipo_Telefono=3 or ID_Tipo_Telefono=4 or ID_Tipo_Telefono=27 or ID_Tipo_Telefono=28) AND (Numero='0')");
-                    //$obj_telefono->eliminar_telefonos_para_prontuario();
+                    /*$obj_telefono->setCondicion("(ID=".$obj_personal->getId().") AND (ID_Tipo_Telefono=2 or ID_Tipo_Telefono=3 or ID_Tipo_Telefono=4 or ID_Tipo_Telefono=27 or ID_Tipo_Telefono=28) AND (Numero='0')");
+                    $obj_telefono->eliminar_telefonos_para_prontuario();*/
                     
                   ///////////////////////////Generar inconsistencias del sistema
                     
@@ -802,8 +804,10 @@
                                        
                     $obj_personal->setCondicion("Cedula='".$arreglo_telefonos_casa[$i][0]."'");
                     $obj_personal->obtiene_id_de_persona_para_prontuario();
-                    //$obj_telefono->setCondicion("(ID=".$obj_personal->getId().") AND (ID_Tipo_Telefono=2 or ID_Tipo_Telefono=3 or ID_Tipo_Telefono=4 or ID_Tipo_Telefono=27 or ID_Tipo_Telefono=28) AND (Numero='0')");
-                    //$obj_telefono->eliminar_telefonos_para_prontuario();
+                   /* $obj_telefono->setCondicion("(ID=".$obj_personal->getId().") AND (ID_Tipo_Telefono=2 or ID_Tipo_Telefono=3 or ID_Tipo_Telefono=4 or ID_Tipo_Telefono=27 or ID_Tipo_Telefono=28) AND (Numero='0')");
+                    $obj_telefono->eliminar_telefonos_para_prontuario();*/
+                    /*$obj_telefono->setCondicion("(ID=".$obj_personal->getId().") AND (ID_Tipo_Telefono=2) AND (Numero='0')");
+                    $obj_telefono->eliminar_telefonos_para_prontuario();*/
                     
                     ///////////////////////////Generar inconsistencias del sistema
                    
@@ -854,7 +858,7 @@
                            $numeros_actualizados++;
                        }else{
                            $obj_telefono->setNumero("0");
-                           $obj_telefono->setTipo_telefono("3");
+                           $obj_telefono->setTipo_telefono("2");
                            $obj_telefono->guardar_telefono_para_prontuario();
                            $numeros_actualizados++;
                        }
@@ -864,7 +868,9 @@
             $resultados= "Fueron actualizados un total de: ".$numeros_actualizados." números de residencia.";
             $vector_inconsistencias[]=array ("","");
             $vector_inconsistencias[]=array ("","");
-            $vector_inconsistencias[]=array (Encrypter::quitar_tildes($resultados),"");  
+            $vector_inconsistencias[]=array (Encrypter::quitar_tildes($resultados),"");
+            
+            $obj_telefono->agrega_extension_cero_en_personas_sin_telefonos_asociados_para_prontuario();
                                 
            require __DIR__ . '/../vistas/plantillas/frm_importar_prontuario_paso_10.php';
      
@@ -2825,6 +2831,280 @@
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         } 
     }
+    
+    
+    
+    public function frm_puntos_bcr_padron_fotografico(){
+        if(isset($_SESSION['nombre'])){
+           /* $obj_eventos = new cls_eventos();
+            $obj_eventos->setId($_GET['id']);
+            $obj_eventos->setId2(0);
+            
+            $fecha_seguimiento = strtotime($_POST['Fecha']);
+	    $fecha_seguimiento = date("Y-m-d", $fecha_seguimiento);
+            
+            if ($fecha_seguimiento >  date("Y-m-d")){
+                echo "<script type=\"text/javascript\">alert('No es posible ingresar eventos futuros!!!!');history.go(-1);</script>";;
+                exit();
+            }if($fecha_seguimiento == date("Y-m-d")){
+                $hora_seguimiento = strtotime($_POST['Hora']);
+                $hora_seguimiento = date("H:i", $hora_seguimiento);
+                
+                if ($hora_seguimiento >  date("H:i", time())){
+                   echo "<script type=\"text/javascript\">alert('No es posible ingresar eventos futuros!!!!');history.go(-1);</script>";;
+                   exit();
+                }
+            }
+             
+            $obj_eventos->setFecha(($_POST['Fecha']));
+            $obj_eventos->setHora(($_POST['Hora']));
+            //Validación de informacion en detalle de evento, elimina algunos caracteres especiales
+            $detalle = $_POST['DetalleSeguimiento'];
+            $detalle= str_replace("'","",$detalle);
+            $detalle= str_replace('"','',$detalle);
+            $obj_eventos->setDetalle($detalle);
+            $obj_eventos->setId_usuario($_SESSION['id']);
+            
+            //$this->frm_eventos_listar();
+            
+            $recepcion_archivo=$_FILES['archivo_adjunto']['error'];
+            
+            //echo basename($_FILES['archivo_adjunto']['tmp_name']);
+            //echo basename($_FILES['archivo_adjunto']['type']);
+            $date=new DateTime(); //this returns the current date time
+            $result = $date->format('Y-m-d-H-i-s');
+            //echo $result;
+            $krr = explode('-',$result);
+            $result = implode("",$krr);
+                       
+            $raiz=$_SERVER['DOCUMENT_ROOT'];
+                       
+            if (substr($raiz,-1)!="/"){
+                $raiz.="/";
+            }
+            
+            $ruta=  $raiz."Adjuntos_Bitacora/".Encrypter::quitar_tildes($result.$_FILES['archivo_adjunto']['name']);
+            //$ruta=  $_SERVER['DOCUMENT_ROOT']."Adjuntos_Bitacora/".$result.$_FILES['archivo_adjunto']['name'];
+          
+            switch ($recepcion_archivo) {
+                case 0:{
+                    
+                    if (move_uploaded_file($_FILES['archivo_adjunto']['tmp_name'], $ruta)){
+                        $obj_eventos->setAdjunto(Encrypter::quitar_tildes($result.$_FILES['archivo_adjunto']['name'])); 
+                        $obj_eventos->ingresar_seguimiento_evento();
+                        $obj_eventos->edita_estado_evento($_POST['estado_del_evento']);
+                        header ("location:/ORIEL/index.php?ctl=frm_eventos_listar");
+                    }  else {
+                        //echo "<script type=\"text/javascript\">alert('Hubo un problema al subir el archivo al servidor!!!');history.go(-1);</script>";;
+                        $obj_eventos->setAdjunto("N/A");
+                        $obj_eventos->ingresar_seguimiento_evento();
+                        $obj_eventos->edita_estado_evento($_POST['estado_del_evento']);
+                        header ("location:/ORIEL/index.php?ctl=frm_eventos_listar");
+                        //echo "<script type=\"text/javascript\">alert('No fue seleccionado ningun archivo!!!!');history.go(-1);</script>";;
+                    }
+                    break;
+                }
+                    
+                case 2:{
+                    echo "<script type=\"text/javascript\">alert('El archivo consume mayor espacio del permitido (1 mb) !!!!');history.go(-1);</script>";;
+                    break;
+                }
+                case 4:{ 
+                    $obj_eventos->setAdjunto("N/A");
+                    $obj_eventos->ingresar_seguimiento_evento();
+                    $obj_eventos->edita_estado_evento($_POST['estado_del_evento']);
+                    header ("location:/ORIEL/index.php?ctl=frm_eventos_listar");
+                    //echo "<script type=\"text/javascript\">alert('No fue seleccionado ningun archivo!!!!');history.go(-1);</script>";;
+                    break;
+                }
+                 case 6:{
+                    echo "<script type=\"text/javascript\">alert('El servidor no tiene acceso a la carpeta temporal de almacenamiento!!!!');history.go(-1);</script>";
+                    break;
+                 } 
+                case 7:{
+                    echo "<script type=\"text/javascript\">alert('No es posible escribir en el disco duro del servidor!!!!');history.go(-1);</script>";;
+                    break;
+                }  
+                case 8:{
+                    echo "<script type=\"text/javascript\">alert('Fue detenida la carga del archivo debido a una extension de PHP!!!!');history.go(-1);</script>";;
+                    break;
+                }   
+            }
+            
+                   
+        }else {
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        } */
+            
+            require __DIR__ . '/../vistas/plantillas/frm_puntos_bcr_padron_fotografico.php';
+        }
+    }
+    
+    public function guardar_imagen_puntos_bcr(){
+        if(isset($_SESSION['nombre'])){
+              if (!(isset($_POST['Nombre']))){
+                echo "<script type=\"text/javascript\">alert('Es necesario ingresar un nombre de referencia para la imágen!');history.go(-1);</script>";;
+                exit();
+              }
+              
+              if (!(isset($_POST['Descripcion']))){
+                echo "<script type=\"text/javascript\">alert('Es necesario ingresar una descripción básica para la imágen!');history.go(-1);</script>";;
+                exit();
+              }
+              
+               if (!(isset($_POST['Categoria']))){
+                echo "<script type=\"text/javascript\">alert('Es necesario elegir una categoría para la imágen!');history.go(-1);</script>";;
+                exit();
+              }
+              
+               if (!(isset($_POST['id_punto_bcr']))){
+                
+                exit();
+              }
+              
+              $nombre=$_POST['Nombre'];
+              $categoria=$_POST['Categoria'];
+              $descripcion=$_POST['Descripcion'];
+              
+              
+              //Validación de informacion en detalle de evento, elimina algunos caracteres especiales
+              
+              $descripcion= str_replace("'","",$descripcion);
+              $descripcion= str_replace('"','',$descripcion);
+
+              $recepcion_archivo=$_FILES['archivo_adjunto']['error'];
+             
+              
+              /*echo $recepcion_archivo;
+              echo "<br>";
+              echo basename($_FILES['archivo_adjunto']['tmp_name']);
+              echo "<br>";
+              echo basename($_FILES['archivo_adjunto']['type']);
+              echo "<br>";
+              $im = file_get_contents($_FILES['archivo_adjunto']['tmp_name']);
+              $imdata = base64_encode($im);
+              
+              
+              echo "<br>";
+              echo $imdata;
+              
+              echo "<br>";
+              
+              echo "<img src='data:image/jpg;base64,".$imdata."' width='1000' height='1000'/>";*/
+              
+             // echo 'Prueba';
+              
+            /*  
+            $obj_eventos = new cls_eventos();
+            $obj_eventos->setId($_GET['id']);
+            $obj_eventos->setId2(0);
+            
+            $fecha_seguimiento = strtotime($_POST['Fecha']);
+	    $fecha_seguimiento = date("Y-m-d", $fecha_seguimiento);
+            
+                        
+            $obj_eventos->setFecha(($_POST['Fecha']));
+            $obj_eventos->setHora(($_POST['Hora']));
+            //Validación de informacion en detalle de evento, elimina algunos caracteres especiales
+            $detalle = $_POST['DetalleSeguimiento'];
+            $detalle= str_replace("'","",$detalle);
+            $detalle= str_replace('"','',$detalle);
+            $obj_eventos->setDetalle($detalle);
+            $obj_eventos->setId_usuario($_SESSION['id']);
+            
+            //$this->frm_eventos_listar();
+            
+            $recepcion_archivo=$_FILES['archivo_adjunto']['error'];
+            */
+            echo basename($_FILES['archivo_adjunto']['tmp_name']);
+            echo '<br>';
+            echo basename($_FILES['archivo_adjunto']['type']);
+            echo '<br>';
+            echo $_FILES['archivo_adjunto']['type'];
+            echo '<br>';
+            echo $_POST['id_punto_bcr'];
+        
+            $date=new DateTime(); //this returns the current date time
+            $result = $date->format('Y-m-d-H-i-s');
+            //echo $result;
+            $krr = explode('-',$result);
+            $result = implode("",$krr);
+                       
+            $raiz=$_SERVER['DOCUMENT_ROOT'];
+                       
+            if (substr($raiz,-1)!="/"){
+                $raiz.="/";
+            }
+            
+            $ruta=  $raiz."Padron Fotografico Puntos BCR/".Encrypter::quitar_tildes($result.$_FILES['archivo_adjunto']['name']);
+            //$ruta=  $_SERVER['DOCUMENT_ROOT']."Adjuntos_Bitacora/".$result.$_FILES['archivo_adjunto']['name'];
+          
+            switch ($recepcion_archivo) {
+                case 0:{
+                    if ((basename($_FILES['archivo_adjunto']['type'])==="jpeg")||(basename($_FILES['archivo_adjunto']['type'])==="gif")||(basename($_FILES['archivo_adjunto']['type'])==="png")||(basename($_FILES['archivo_adjunto']['type'])==="bmp")||(basename($_FILES['archivo_adjunto']['type'])==="tiff")){
+                        if (move_uploaded_file($_FILES['archivo_adjunto']['tmp_name'], $ruta)){
+                            /*$obj_eventos->setAdjunto(Encrypter::quitar_tildes($result.$_FILES['archivo_adjunto']['name'])); 
+                            $obj_eventos->ingresar_seguimiento_evento();
+                            $obj_eventos->edita_estado_evento($_POST['estado_del_evento']);*/
+                            //header ("location:/ORIEL/index.php?ctl=frm_puntos_bcr_padron_fotografico");
+                       // }  else {
+                            //echo "<script type=\"text/javascript\">alert('Hubo un problema al subir el archivo al servidor!!!');history.go(-1);</script>";;
+                            /*$obj_eventos->setAdjunto("N/A");
+                            $obj_eventos->ingresar_seguimiento_evento();
+                            $obj_eventos->edita_estado_evento($_POST['estado_del_evento']);*/
+                           // header ("location:/ORIEL/index.php?ctl=frm_puntos_bcr_padron_fotografico");
+                            //echo "<script type=\"text/javascript\">alert('No fue seleccionado ningun archivo!!!!');history.go(-1);</script>";;
+                        }
+                    }else{
+                        echo "<script type=\"text/javascript\">alert('El archivo no corresponde a un formato valido de imagenes !!!!');history.go(-1);</script>";;
+                    }
+                    break;
+                }
+                    
+                case 2:{
+                    echo "<script type=\"text/javascript\">alert('El archivo consume mayor espacio del permitido (2 mb) !!!!');history.go(-1);</script>";;
+                    break;
+                }
+                case 4:{ 
+                    /*$obj_eventos->setAdjunto("N/A");
+                    $obj_eventos->ingresar_seguimiento_evento();
+                    $obj_eventos->edita_estado_evento($_POST['estado_del_evento']);*/
+                    
+                    echo "<script type=\"text/javascript\">alert('No fue seleccionado ningun archivo!!!!');history.go(-1);</script>";;
+                    //sleep(1);
+                    //header ("location:/ORIEL/index.php?ctl=frm_puntos_bcr_padron_fotografico");
+                    
+                    break;
+                }
+                 case 6:{
+                    echo "<script type=\"text/javascript\">alert('El servidor no tiene acceso a la carpeta temporal de almacenamiento!!!!');history.go(-1);</script>";
+                    break;
+                 } 
+                case 7:{
+                    echo "<script type=\"text/javascript\">alert('No es posible escribir en el disco duro del servidor!!!!');history.go(-1);</script>";;
+                    break;
+                }  
+                case 8:{
+                    echo "<script type=\"text/javascript\">alert('Fue detenida la carga del archivo debido a una extension de PHP!!!!');history.go(-1);</script>";;
+                    break;
+                }   
+            }
+            
+                   
+        }else {
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+         } 
+           
+         
+            
+           // require __DIR__ . '/../vistas/plantillas/frm_puntos_bcr_padron_fotografico.php';
+       // }*/
+    }
+    
     
     //////////////////////////
     /*Metodos relacionados del area de Tipos de Evento de Seguridad del Sistema*/
