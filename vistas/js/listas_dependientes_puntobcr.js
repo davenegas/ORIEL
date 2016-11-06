@@ -124,6 +124,7 @@ function ocultar_elemento(){
     document.getElementById('asignar_area').style.display = "none";
     document.getElementById('asignar_direccion_IP').style.display = "none";
     document.getElementById('asignar_horario').style.display = "none";
+    document.getElementById('formulario_oculto_1').style.display = "none";
 }
 
 ///////////////////////////////////////////////////////
@@ -274,4 +275,55 @@ function asignar_horario(id_hora){
             //alert (data);
             location.reload();
           });
+}
+///////////////////////////////////////////////
+//Funciones para agregar o editar enlaces de telecomunicaciones
+function mostrar_enlace_telecom(){
+    document.getElementById('ID_Enlace').value="0";
+    $("#enlace option[value=1]").attr("selected",true);
+    document.getElementById('interface').value="";
+    document.getElementById('linea').value="";
+    document.getElementById('bandwidth').value="";
+    $("#medio_enlace option[value=1]").attr("selected",true);
+    $("#proveedor_enlace option[value=1]").attr("selected",true);
+    $("#tipo_enlace option[value=1]").attr("selected",true);
+    document.getElementById('observaciones_enlace').value="";
+    document.getElementById('formulario_oculto_1').style.display = "block";
+}
+function mostrar_editar_enlace(id, enlace, interf, linea,provee, tipo, bandw, medio, obser ){
+    document.getElementById('ID_Enlace').value=id;
+    $("#enlace option[value="+enlace+"]").attr("selected",true);
+    document.getElementById('interface').value=interf;
+    document.getElementById('linea').value=linea;
+    document.getElementById('bandwidth').value=bandw;
+    $("#medio_enlace option[value="+medio+"]").attr("selected",true);
+    $("#proveedor_enlace option[value="+provee+"]").attr("selected",true);
+    $("#tipo_enlace option[value="+tipo+"]").attr("selected",true);
+    document.getElementById('observaciones_enlace').value=obser;
+    document.getElementById('formulario_oculto_1').style.display = "block";
+}
+function eliminar_enlace(ide){
+    id_enlace= ide;
+    $.confirm({title: 'Confirmación!', content: 'Desea eliminar el enlace de Telecomunicaciones?', 
+        confirm: function(){
+            id_puntobcr = document.getElementById('ID_PuntoBCR').value;
+            $.post("index.php?ctl=puntobcr_eliminar_enlace", { id_enlace: id_enlace, id_puntobcr:id_puntobcr }, function(data){
+                location.reload();
+                alert (data);
+              });
+        },
+        cancel: function(){
+                //$.alert('Canceled!')
+        }
+    });
+}
+function validar_enlace(){
+   if (document.getElementById('interface').value == "" ||document.getElementById('linea').value==""
+           ||document.getElementById('bandwidth').value=="") {
+        alert("Completa la información del enlace !");
+    } else {
+        //alert("Form Submitted Successfully...");
+        document.getElementById('frm_enlace_guardar').submit();
+        document.getElementById('formulario_oculto_1').style.display = "none";
+    }  
 }

@@ -134,7 +134,23 @@ CSS settings for HTML div Exact Center
     font-family:raleway;
     background-color:#fff
 }
+#popupventana4{
+    position:absolute;
+    left:50%;
+    top:17%;
+    margin-left:-202px;
+    font-family:'Raleway',sans-serif
+}
 
+#ventana4 {
+    max-width:400px;
+    min-width:350px;
+    padding:10px 50px;
+    border:2px solid gray;
+    border-radius:10px;
+    font-family:raleway;
+    background-color:#fff
+}
 #msg {
 background-image:url(../images/msg.png);
 background-repeat:no-repeat;

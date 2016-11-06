@@ -3298,6 +3298,10 @@
             $obj_direccionIP = new cls_direccionIP();
             $obj_telefono = new cls_telefono();
             $obj_unidad_ejecutora = new cls_unidad_ejecutora();
+            $obj_enlace_telecom = new cls_enlace_telecom();
+            $obj_medio_enlace = new cls_medio_enlace();
+            $obj_proveedor_enlace = new cls_proveedor_enlace();
+            $obj_tipo_enlace = new cls_tipo_enlace();
             
             if ($_GET['id']==0){
                 
@@ -3456,6 +3460,23 @@
                 $obj_Personal->setCondicion("");
                 $obj_Personal->obtener_supervisor_zona();
                 $supervisor_zona_externo = $obj_Personal->getArreglo();
+                
+                //Obtiene la información de telecom
+                $obj_enlace_telecom->setCondicion("T_PuntoBCREnlace.ID_PuntoBCR='".$_GET['id']."'");
+                $obj_enlace_telecom->obtener_todos_enlaces();
+                $telecom = $obj_enlace_telecom->getArreglo();
+                
+                //Obtiene la información de medios de enlace
+                $obj_medio_enlace->obtener_medio_enlaces();
+                $medio_enlace = $obj_medio_enlace->getArreglo();
+                
+                //Obtiene la informacion de tipos de enlace
+                $obj_tipo_enlace->obtener_tipo_enlaces();
+                $tipo_enlace =  $obj_tipo_enlace->getArreglo();
+                
+                //Obtiene la informacion de proveedor de enlaces
+                $obj_proveedor_enlace->obtener_proveedores();
+                $proveedor_enlace= $obj_proveedor_enlace->getArreglo();
                 
                 require __DIR__ . '/../vistas/plantillas/frm_puntos_bcr_editar.php';
             }
@@ -3818,9 +3839,62 @@
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }
     }
+    
+    public function enlace_puntobcr_guardar() {
+        if(isset($_SESSION['nombre'])){
+            $obj_enlace = new cls_enlace_telecom();  
+            //Obtiene la información enviada por el formulario por POST
+            $obj_enlace->setEnlace($_POST['enlace']);
+            $obj_enlace->setInterface($_POST['interface']);
+            $obj_enlace->setLinea($_POST['linea']);
+            $obj_enlace->setBandwidth($_POST['bandwidth']);
+            $obj_enlace->setMedio_enlace($_POST['medio_enlace']);
+            $obj_enlace->setProveedor($_POST['proveedor_enlace']);
+            $obj_enlace->setTipo_enlace($_POST['tipo_enlace']);
+            $obj_enlace->setObservaciones($_POST['observaciones_enlace']);
+            //Valida si es un enlace nuevo o actualizacion y genera la condicion
+            if($_POST['ID_Enlace']=="0"){
+                $obj_enlace->setCondicion("");
+            }   else    {
+                $obj_enlace->setCondicion("ID_Enlace='".$_POST['ID_Enlace']."'");
+            }
+            //Guarda la informacion del enlace
+            $obj_enlace->guardar_enlaces_telecomunicaciones();
+            //Obtiene el registro del ultimo enlace guardado
+            $ultimo= $obj_enlace->getArreglo();
+            $ultimo= $ultimo[0]['ID_Enlace'];
+            //Guarda relacion entre enlace y punto
+            $obj_enlace->setId($ultimo);
+            $obj_enlace->setId2($_POST['ID_PuntoBCR']);
+            $obj_enlace->guardar_puntobcr_enlace();
+            
+            header("location:/ORIEL/index.php?ctl=gestion_punto_bcr&id=".$_POST['ID_PuntoBCR']);
+        }else{
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }
+    }
+    
+    public function puntobcr_eliminar_enlace(){
+        if(isset($_SESSION['nombre'])){
+            $obj_enlace = new cls_enlace_telecom();
+            //Elimina la relacion entre PuntoBCR y el enlace
+            $obj_enlace->setCondicion("ID_PuntoBCR=".$_POST['id_puntobcr']." and ID_Enlace=".$_POST['id_enlace']);
+            $obj_enlace->eliminar_enlace_entre_puntobcr_telecom();
+            //Elimina el enlace de la base de datos
+            $obj_enlace->setCondicion("ID_Enlace=".$_POST['id_enlace']);
+            $obj_enlace->eliminar_enlace_telecomunicaciones();
+        }else{
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }
+    }
+    
     ////////////////////////////////////////////////////////////////////////////
-    //MANTENIMIENTO DE PERSONAL
-    //
+    /////////////////////////MANTENIMIENTO DE PERSONAL//////////////////////////
+    ////////////////////////////////////////////////////////////////////////////
     public function personal_listar(){
         if(isset($_SESSION['nombre'])){
             $obj_personal=new cls_personal();
