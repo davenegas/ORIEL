@@ -2964,9 +2964,10 @@
                 exit();
               }
               
-              $nombre=$_POST['Nombre'];
+              $nombre_imagen=$_POST['Nombre'];
               $categoria=$_POST['Categoria'];
               $descripcion=$_POST['Descripcion'];
+              $id_punto_bcr=$_POST['id_punto_bcr'];
               
               
               //Validación de informacion en detalle de evento, elimina algunos caracteres especiales
@@ -2975,56 +2976,14 @@
               $descripcion= str_replace('"','',$descripcion);
 
               $recepcion_archivo=$_FILES['archivo_adjunto']['error'];
-             
               
-              /*echo $recepcion_archivo;
-              echo "<br>";
-              echo basename($_FILES['archivo_adjunto']['tmp_name']);
-              echo "<br>";
-              echo basename($_FILES['archivo_adjunto']['type']);
-              echo "<br>";
-              $im = file_get_contents($_FILES['archivo_adjunto']['tmp_name']);
-              $imdata = base64_encode($im);
-              
-              
-              echo "<br>";
-              echo $imdata;
-              
-              echo "<br>";
-              
-              echo "<img src='data:image/jpg;base64,".$imdata."' width='1000' height='1000'/>";*/
-              
-             // echo 'Prueba';
-              
-            /*  
-            $obj_eventos = new cls_eventos();
-            $obj_eventos->setId($_GET['id']);
-            $obj_eventos->setId2(0);
-            
-            $fecha_seguimiento = strtotime($_POST['Fecha']);
-	    $fecha_seguimiento = date("Y-m-d", $fecha_seguimiento);
-            
-                        
-            $obj_eventos->setFecha(($_POST['Fecha']));
-            $obj_eventos->setHora(($_POST['Hora']));
-            //Validación de informacion en detalle de evento, elimina algunos caracteres especiales
-            $detalle = $_POST['DetalleSeguimiento'];
-            $detalle= str_replace("'","",$detalle);
-            $detalle= str_replace('"','',$detalle);
-            $obj_eventos->setDetalle($detalle);
-            $obj_eventos->setId_usuario($_SESSION['id']);
-            
-            //$this->frm_eventos_listar();
-            
+            $obj_padron_fotografico = new cls_padron_fotografico_puntosbcr();
+            $obj_padron_fotografico->setId_puntobcr($id_punto_bcr);
+            $obj_padron_fotografico->setNombre_imagen($nombre_imagen);
+            $obj_padron_fotografico->setDescripcion($descripcion);
+            $obj_padron_fotografico->setCategoria($categoria);
+                       
             $recepcion_archivo=$_FILES['archivo_adjunto']['error'];
-            */
-            echo basename($_FILES['archivo_adjunto']['tmp_name']);
-            echo '<br>';
-            echo basename($_FILES['archivo_adjunto']['type']);
-            echo '<br>';
-            echo $_FILES['archivo_adjunto']['type'];
-            echo '<br>';
-            echo $_POST['id_punto_bcr'];
         
             $date=new DateTime(); //this returns the current date time
             $result = $date->format('Y-m-d-H-i-s');
@@ -3038,24 +2997,22 @@
                 $raiz.="/";
             }
             
-            $ruta=  $raiz."Padron Fotografico Puntos BCR/".Encrypter::quitar_tildes($result.$_FILES['archivo_adjunto']['name']);
-            //$ruta=  $_SERVER['DOCUMENT_ROOT']."Adjuntos_Bitacora/".$result.$_FILES['archivo_adjunto']['name'];
-          
+            $ruta=  $raiz."Padron_Fotografico_Puntos_BCR/".Encrypter::quitar_tildes($result.$_FILES['archivo_adjunto']['name']);
+                      
+            $nombre_ruta=Encrypter::quitar_tildes($result.$_FILES['archivo_adjunto']['name']);
+            
+            
             switch ($recepcion_archivo) {
                 case 0:{
-                    if ((basename($_FILES['archivo_adjunto']['type'])==="jpeg")||(basename($_FILES['archivo_adjunto']['type'])==="gif")||(basename($_FILES['archivo_adjunto']['type'])==="png")||(basename($_FILES['archivo_adjunto']['type'])==="bmp")||(basename($_FILES['archivo_adjunto']['type'])==="tiff")){
+                    if ((basename($_FILES['archivo_adjunto']['type'])==="jpeg")||(basename($_FILES['archivo_adjunto']['type'])==="gif")||(basename($_FILES['archivo_adjunto']['type'])==="png")||(basename($_FILES['archivo_adjunto']['type'])==="bmp")||(basename($_FILES['archivo_adjunto']['type'])==="tiff")||(basename($_FILES['archivo_adjunto']['type'])==="jpg")){
                         if (move_uploaded_file($_FILES['archivo_adjunto']['tmp_name'], $ruta)){
-                            /*$obj_eventos->setAdjunto(Encrypter::quitar_tildes($result.$_FILES['archivo_adjunto']['name'])); 
-                            $obj_eventos->ingresar_seguimiento_evento();
-                            $obj_eventos->edita_estado_evento($_POST['estado_del_evento']);*/
-                            //header ("location:/ORIEL/index.php?ctl=frm_puntos_bcr_padron_fotografico");
-                       // }  else {
-                            //echo "<script type=\"text/javascript\">alert('Hubo un problema al subir el archivo al servidor!!!');history.go(-1);</script>";;
-                            /*$obj_eventos->setAdjunto("N/A");
-                            $obj_eventos->ingresar_seguimiento_evento();
-                            $obj_eventos->edita_estado_evento($_POST['estado_del_evento']);*/
-                           // header ("location:/ORIEL/index.php?ctl=frm_puntos_bcr_padron_fotografico");
-                            //echo "<script type=\"text/javascript\">alert('No fue seleccionado ningun archivo!!!!');history.go(-1);</script>";;
+                            $obj_padron_fotografico->setNombre_ruta(Encrypter::quitar_tildes($nombre_ruta));
+                            $obj_padron_fotografico->setFormato(basename($_FILES['archivo_adjunto']['type']));
+                            $obj_padron_fotografico->setCondicion("");
+                            $obj_padron_fotografico->guardar_imagen_puntobcr();
+                            header ("location:/ORIEL/index.php?ctl=frm_puntos_bcr_padron_fotografico&id=".$obj_padron_fotografico->getId_puntobcr());
+                        }else{
+                            echo "<script type=\"text/javascript\">alert('Hubo un problema al subir el archivo al servidor!!!');history.go(-1);</script>";;
                         }
                     }else{
                         echo "<script type=\"text/javascript\">alert('El archivo no corresponde a un formato valido de imagenes !!!!');history.go(-1);</script>";;
@@ -3068,14 +3025,9 @@
                     break;
                 }
                 case 4:{ 
-                    /*$obj_eventos->setAdjunto("N/A");
-                    $obj_eventos->ingresar_seguimiento_evento();
-                    $obj_eventos->edita_estado_evento($_POST['estado_del_evento']);*/
                     
                     echo "<script type=\"text/javascript\">alert('No fue seleccionado ningun archivo!!!!');history.go(-1);</script>";;
-                    //sleep(1);
-                    //header ("location:/ORIEL/index.php?ctl=frm_puntos_bcr_padron_fotografico");
-                    
+                                       
                     break;
                 }
                  case 6:{

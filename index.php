@@ -20,6 +20,7 @@ require_once __DIR__ . '/controladores/cls_puestos.php';
 require_once __DIR__ . '/controladores/cls_proveedor_enlace.php';
 require_once __DIR__ . '/controladores/cls_tipo_enlace.php';
 require_once __DIR__ . '/controladores/cls_medio_enlace.php';
+require_once __DIR__ . '/controladores/cls_padron_fotografico_puntosbcr.php';
 require_once __DIR__ . '/controladores/cls_enlace_telecom.php';
 require_once __DIR__ . '/modelos/Controller.php';
 require_once __DIR__ . '/modelos/Encrypter.php';

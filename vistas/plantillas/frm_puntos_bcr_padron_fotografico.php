@@ -11,12 +11,6 @@
         
         <div class="container animated fadeIn">
             <h1 align="center">Padrón Fotográfico</h1>
-            <!--<hr/>-->
-            <!--<h3>Mantenimiento</h3>-->
-           
-        <!--<p>A continuación se detallan los diferentes eventos que están registrados en el sistema:</p>-->            
-     
-            <!--<hr/>-->
             <h3>Agregar nueva Imágen</h3>
                 
                 <!--Agregar nuevo detalle o seguimiento del evento-->
@@ -70,7 +64,9 @@
             <hr/>
             <a href="index.php?ctl=gestion_punto_bcr&id=<?php echo $_GET['id'];?>" class="btn btn-default" role="button">Volver</a>
             <h3>Visualización de Imágenes</h3>
+
         </div>
+
             <?php require 'vistas/plantillas/pie_de_pagina.php'?>
     </body>
 </html>
