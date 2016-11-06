@@ -154,7 +154,10 @@ function eliminar_telefono(ide){
                 //$.alert('Canceled!')
         }
     });
-};
+}
+function editar_telefono(){
+    
+}
 
 ////////////////////////////////////////////////////
 //Funciones para UE
@@ -227,6 +230,10 @@ function eliminar_area(ide){
 ///////////////////////////////////////////////
 //Funciones para agregar o asignar Direccion IP
 function mostrar_direccion_IP(){
+    document.getElementById('ID_Direccion_IP').value = "0";
+    document.getElementById('lista_direcciones').hidden=false;
+    document.getElementById('direccion_ip').value = "";
+    document.getElementById('observaciones_ip').value = "";
     document.getElementById('asignar_direccion_IP').style.display = "block";
 }
 function asignar_ip(id){
@@ -261,7 +268,14 @@ function validar_direccion_ip(){
         document.getElementById('asignar_direccion_IP').style.display = "none";
     } 
 }
-
+function editar_ip(ide, tipo, direc, obser){
+    document.getElementById('lista_direcciones').hidden=true;
+    document.getElementById('ID_Direccion_IP').value = ide;
+    $("#tipo_ip option[value="+tipo+"]").attr("selected",true);
+    document.getElementById('direccion_ip').value = direc;
+    document.getElementById('observaciones_ip').value = obser;
+    document.getElementById('asignar_direccion_IP').style.display = "block";
+}
 ///////////////////////////////////////////////////////////
 //Funciones para asignar Horario al Punto BCR
 function mostrar_horario(){
@@ -276,6 +290,7 @@ function asignar_horario(id_hora){
             location.reload();
           });
 }
+
 ///////////////////////////////////////////////
 //Funciones para agregar o editar enlaces de telecomunicaciones
 function mostrar_enlace_telecom(){

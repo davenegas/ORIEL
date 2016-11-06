@@ -3800,13 +3800,13 @@
     
     public function direccionIP_agregar(){
         if(isset($_SESSION['nombre'])){
-            echo "<script>alert('test msgbox')</script>";
+            //echo "<script>alert('test msgbox')</script>";
             $obj_direccion_ip = new cls_direccionIP();
             //Crea nueva area de apoyo
-            $obj_direccion_ip->setId(null);
+            $obj_direccion_ip->setId($_POST['ID_Direccion_IP']);
             $obj_direccion_ip->setTipo_IP($_POST['tipo_ip']);
             $obj_direccion_ip->setDireccionIP($_POST['direccion_ip']);
-            $obj_direccion_ip->setObservaciones($_POST['observaciones']);
+            $obj_direccion_ip->setObservaciones($_POST['observaciones_ip']);
             $obj_direccion_ip->setCondicion("");
             $obj_direccion_ip->agregar_direccion_ip();
             
