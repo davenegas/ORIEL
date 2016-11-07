@@ -364,6 +364,7 @@ class Data_Provider{
    //Método que permite eliminar registros de la BD
    public function eliminar_datos($table,$condicion){
 
+       //echo "delete from ".$table." where ".$condicion.";";
        // Trae los datos de la bd que se van a eliminar, mediante la condición, nombre de la tabla, y todos los registros
        $this->trae_datos($table, "*", $condicion);
        //Establece una variable cadena para armar los datos iniciales que se encuentran en la base de datos

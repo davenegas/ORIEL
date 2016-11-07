@@ -2191,6 +2191,22 @@
         
     }
     
+    
+    public function eliminar_imagen_prontuario_puntobcr(){
+        //echo "<script type=\"text/javascript\">alert('Evento recuperado con Éxito!!!');</script>";
+        if(isset($_SESSION['nombre'])){
+            $obj_padron_fotografico= new cls_padron_fotografico_puntosbcr();
+            if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+                $obj_padron_fotografico->setCondicion("ID_padron_puntobcr=".$_POST['id_imagen']);
+                $obj_padron_fotografico->eliminar_imagen_puntobcr();
+            }
+        }else {
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }
+    }
+    
     public function frm_eventos_recuperar(){
         //echo "<script type=\"text/javascript\">alert('Evento recuperado con Éxito!!!');</script>";
         if(isset($_SESSION['nombre'])){
@@ -2836,110 +2852,26 @@
     
     public function frm_puntos_bcr_padron_fotografico(){
         if(isset($_SESSION['nombre'])){
-           /* $obj_eventos = new cls_eventos();
-            $obj_eventos->setId($_GET['id']);
-            $obj_eventos->setId2(0);
             
-            $fecha_seguimiento = strtotime($_POST['Fecha']);
-	    $fecha_seguimiento = date("Y-m-d", $fecha_seguimiento);
-            
-            if ($fecha_seguimiento >  date("Y-m-d")){
-                echo "<script type=\"text/javascript\">alert('No es posible ingresar eventos futuros!!!!');history.go(-1);</script>";;
+            if (isset($_GET['id'])){
+                $obj_padron_fotografico= new cls_padron_fotografico_puntosbcr();
+                $obj_padron_fotografico->setCondicion("ID_PuntoBCR=".$_GET['id']); 
+                $obj_padron_fotografico->obtener_imagenes_puntosbcr();
+                $params=$obj_padron_fotografico->getArreglo();
+                /*echo '<pre>';
+                print_r($params);
+                echo '</pre>';*/
+            }else{
+                echo "<script type=\"text/javascript\">alert('Se presentó un error inesperado, por favor vuelva a seleccionar el punto BCR');history.go(-1);</script>";;
                 exit();
-            }if($fecha_seguimiento == date("Y-m-d")){
-                $hora_seguimiento = strtotime($_POST['Hora']);
-                $hora_seguimiento = date("H:i", $hora_seguimiento);
-                
-                if ($hora_seguimiento >  date("H:i", time())){
-                   echo "<script type=\"text/javascript\">alert('No es posible ingresar eventos futuros!!!!');history.go(-1);</script>";;
-                   exit();
-                }
-            }
-             
-            $obj_eventos->setFecha(($_POST['Fecha']));
-            $obj_eventos->setHora(($_POST['Hora']));
-            //Validación de informacion en detalle de evento, elimina algunos caracteres especiales
-            $detalle = $_POST['DetalleSeguimiento'];
-            $detalle= str_replace("'","",$detalle);
-            $detalle= str_replace('"','',$detalle);
-            $obj_eventos->setDetalle($detalle);
-            $obj_eventos->setId_usuario($_SESSION['id']);
-            
-            //$this->frm_eventos_listar();
-            
-            $recepcion_archivo=$_FILES['archivo_adjunto']['error'];
-            
-            //echo basename($_FILES['archivo_adjunto']['tmp_name']);
-            //echo basename($_FILES['archivo_adjunto']['type']);
-            $date=new DateTime(); //this returns the current date time
-            $result = $date->format('Y-m-d-H-i-s');
-            //echo $result;
-            $krr = explode('-',$result);
-            $result = implode("",$krr);
-                       
-            $raiz=$_SERVER['DOCUMENT_ROOT'];
-                       
-            if (substr($raiz,-1)!="/"){
-                $raiz.="/";
             }
             
-            $ruta=  $raiz."Adjuntos_Bitacora/".Encrypter::quitar_tildes($result.$_FILES['archivo_adjunto']['name']);
-            //$ruta=  $_SERVER['DOCUMENT_ROOT']."Adjuntos_Bitacora/".$result.$_FILES['archivo_adjunto']['name'];
-          
-            switch ($recepcion_archivo) {
-                case 0:{
-                    
-                    if (move_uploaded_file($_FILES['archivo_adjunto']['tmp_name'], $ruta)){
-                        $obj_eventos->setAdjunto(Encrypter::quitar_tildes($result.$_FILES['archivo_adjunto']['name'])); 
-                        $obj_eventos->ingresar_seguimiento_evento();
-                        $obj_eventos->edita_estado_evento($_POST['estado_del_evento']);
-                        header ("location:/ORIEL/index.php?ctl=frm_eventos_listar");
-                    }  else {
-                        //echo "<script type=\"text/javascript\">alert('Hubo un problema al subir el archivo al servidor!!!');history.go(-1);</script>";;
-                        $obj_eventos->setAdjunto("N/A");
-                        $obj_eventos->ingresar_seguimiento_evento();
-                        $obj_eventos->edita_estado_evento($_POST['estado_del_evento']);
-                        header ("location:/ORIEL/index.php?ctl=frm_eventos_listar");
-                        //echo "<script type=\"text/javascript\">alert('No fue seleccionado ningun archivo!!!!');history.go(-1);</script>";;
-                    }
-                    break;
-                }
-                    
-                case 2:{
-                    echo "<script type=\"text/javascript\">alert('El archivo consume mayor espacio del permitido (1 mb) !!!!');history.go(-1);</script>";;
-                    break;
-                }
-                case 4:{ 
-                    $obj_eventos->setAdjunto("N/A");
-                    $obj_eventos->ingresar_seguimiento_evento();
-                    $obj_eventos->edita_estado_evento($_POST['estado_del_evento']);
-                    header ("location:/ORIEL/index.php?ctl=frm_eventos_listar");
-                    //echo "<script type=\"text/javascript\">alert('No fue seleccionado ningun archivo!!!!');history.go(-1);</script>";;
-                    break;
-                }
-                 case 6:{
-                    echo "<script type=\"text/javascript\">alert('El servidor no tiene acceso a la carpeta temporal de almacenamiento!!!!');history.go(-1);</script>";
-                    break;
-                 } 
-                case 7:{
-                    echo "<script type=\"text/javascript\">alert('No es posible escribir en el disco duro del servidor!!!!');history.go(-1);</script>";;
-                    break;
-                }  
-                case 8:{
-                    echo "<script type=\"text/javascript\">alert('Fue detenida la carga del archivo debido a una extension de PHP!!!!');history.go(-1);</script>";;
-                    break;
-                }   
-            }
-            
-                   
+            require __DIR__ . '/../vistas/plantillas/frm_puntos_bcr_padron_fotografico.php';
         }else {
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
-        } */
-            
-            require __DIR__ . '/../vistas/plantillas/frm_puntos_bcr_padron_fotografico.php';
-        }
+        } 
     }
     
     public function guardar_imagen_puntos_bcr(){
@@ -3965,8 +3897,8 @@
             $obj_telefono->obtiene_tipo_telefonos();
             $tipo_telefono = $obj_telefono->getArreglo();
             
-                
             require __DIR__ . '/../vistas/plantillas/frm_personal_detalle.php';
+            
         }else{
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
