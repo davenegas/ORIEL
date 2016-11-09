@@ -290,6 +290,20 @@ function asignar_horario(id_hora){
             location.reload();
           });
 }
+function eliminar_horario(){
+    $.confirm({title: 'Confirmación!', content: 'Desea eliminar el Horario del Punto?', 
+        confirm: function(){
+            id_puntobcr = document.getElementById('ID_PuntoBCR').value;
+            $.post("index.php?ctl=puntobcr_eliminar_horario", { id_puntobcr:id_puntobcr }, function(data){
+                location.reload();
+                //alert (data);
+              });
+        },
+        cancel: function(){
+                //$.alert('Canceled!')
+        }
+    });
+}
 
 ///////////////////////////////////////////////
 //Funciones para agregar o editar enlaces de telecomunicaciones
@@ -307,7 +321,7 @@ function mostrar_enlace_telecom(){
 }
 function mostrar_editar_enlace(id, enlace, interf, linea,provee, tipo, bandw, medio, obser ){
     document.getElementById('ID_Enlace').value=id;
-    $("#enlace option[value="+enlace+"]").attr("selected",true);
+    $("#enlace option[value='"+enlace+"']").attr("selected",true);
     document.getElementById('interface').value=interf;
     document.getElementById('linea').value=linea;
     document.getElementById('bandwidth').value=bandw;

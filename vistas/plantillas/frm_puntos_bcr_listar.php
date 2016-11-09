@@ -46,7 +46,7 @@
             $tam=count($params);
             for ($i = 0; $i <$tam; $i++) {
             //Solamente muestra los puntos activos o todos a quien puede cambiar el estado
-            if($_SESSION['modulos']['Editar Estado- Puntos BCR']==1||$params[$i]['Estado']==1){    
+            if($_SESSION['modulos']['Editar Estado- Puntos BCR']==1||$params[$i]['Estado_Punto']==1){    
             ?>
             <tr>
                 <td style="text-align:center"><?php echo $params[$i]['ID_PuntoBCR'];?></td>
@@ -57,7 +57,7 @@
                 <td style="text-align:center"><?php echo $params[$i]['Tipo_Punto'];?></td>
                 <td style="text-align:center"><?php echo $params[$i]['Observaciones'];?></td>
                 <?php if($_SESSION['modulos']['Editar Estado- Puntos BCR']==1){ 
-                    if ($params[$i]['Estado']==1){  ?>  
+                    if ($params[$i]['Estado_Punto']==1){  ?>  
                         <td style="text-align:center">Activo</td>
                         <?php 
                     }   else   {?>  
@@ -66,11 +66,11 @@
                     }?>
 
                     <td style="text-align:center"><a href="index.php?ctl=punto_bcr_cambiar_estado&id=
-                        <?php echo $params[$i]['ID_PuntoBCR']?>&estado=<?php echo $params[$i]['Estado']?>">
+                        <?php echo $params[$i]['ID_PuntoBCR']?>&estado=<?php echo $params[$i]['Estado_Punto']?>">
                         Activar/Desactivar</a></td>
                 <?php } ?>
                 <td style="text-align:center"><a href="index.php?ctl=gestion_punto_bcr&id=
-                    <?php echo $params[$i]['ID_PuntoBCR']?>&estado=<?php echo $params[$i]['Estado']?>
+                    <?php echo $params[$i]['ID_PuntoBCR']?>&estado=<?php echo $params[$i]['Estado_Punto']?>
                     &descripcion=<?php echo $params[$i]['Observaciones']?>">
                     Detalles</a></td>
                  

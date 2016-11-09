@@ -3,6 +3,7 @@
     <head>
         <meta charset="utf-8"/>
         <title>Gestión de Puntos BCR</title>
+        <!--librerias para el funcionamiento de la ventan-->
         <script language="javascript" src="vistas/js/jquery.js"></script>
         <script language="javascript" src="vistas/js/listas_dependientes_puntobcr.js"></script>
         <link rel="stylesheet" href="vistas/css/ventanaoculta.css">
@@ -117,7 +118,7 @@
                             <th style="text-align:center">Línea</th>
                             <th style="text-align:center">Proveedor</th>
                             <th style="text-align:center">Tipo enlace</th>
-                            <th style="text-align:center">Bandwidth</th>
+                            <th style="text-align:center">Bandwidth(kbps)</th>
                             <th style="text-align:center">Medio enlace</th>
                             <th style="text-align:center">Observaciones</th>
                             <?php if($_SESSION['modulos']['Editar Telecomunicaciones- Puntos BCR']==1){ ?>
@@ -444,7 +445,10 @@
         <div class="bordegris espacio-abajo-5">
             <div>
             <?php if($_SESSION['modulos']['Editar- Puntos BCR']==1){ ?> 
-                <h3>Horario Punto BCR<a id="popup" onclick="mostrar_horario()" class="btn azul" role="button">Cambiar Horario</a></h3>    
+                <h3>Horario Punto BCR
+                    <a id="popup" onclick="mostrar_horario()" class="btn azul" role="button">Cambiar Horario</a> - 
+                    <a id="popup" onclick="eliminar_horario()" class="btn rojo" role="button">Eliminar Horario</a>                
+                </h3>    
             <?php } else {?>
                 <h3>Horario Punto BCR</h3>
             <?php } ?> 
@@ -830,6 +834,7 @@
                         <option value="Principal">Principal</option>
                         <option value="Respaldo 1">Respaldo 1</option>
                         <option value="Respaldo 2">Respaldo 2</option>
+                        <option value="Internet Red Cors">Internet Red Cors</option>
                     </select>
                     <label for="interface">Interface</label>
                     <input class="form-control" required id="interface" name="interface" type="text">
@@ -837,17 +842,8 @@
                     <label for="linea">Número de Línea</label>
                     <input class="form-control" required id="linea" name="linea" type="text">
                     
-                    <label for="bandwidth">Bandwidth</label>
+                    <label for="bandwidth">Bandwidth(kbps)</label>
                     <input class="form-control" required id="bandwidth" name="bandwidth" type="text">
-                    
-                    <label for="medio_enlace">Medio de Enlace</label>
-                    <select class="form-control" id="medio_enlace" name="medio_enlace" > 
-                        <?php
-                        $tam = count($medio_enlace);
-                        for($i=0; $i<$tam;$i++){?> 
-                            <option value="<?php echo $medio_enlace[$i]['ID_Medio_Enlace']?>"><?php echo $medio_enlace[$i]['Medio_Enlace'];?></option>
-                        <?php   }   ?>
-                    </select>
                     
                     <label for="proveedor_enlace">Proveedor de Enlace</label>
                     <select class="form-control" id="proveedor_enlace" name="proveedor_enlace" > 
@@ -866,6 +862,16 @@
                             <option value="<?php echo $tipo_enlace[$i]['ID_Tipo_Enlace']?>"><?php echo $tipo_enlace[$i]['Tipo_Enlace'];?></option>
                         <?php   }   ?>
                     </select>
+                    
+                    <label for="medio_enlace">Medio de Enlace</label>
+                    <select class="form-control" id="medio_enlace" name="medio_enlace" > 
+                        <?php
+                        $tam = count($medio_enlace);
+                        for($i=0; $i<$tam;$i++){?> 
+                            <option value="<?php echo $medio_enlace[$i]['ID_Medio_Enlace']?>"><?php echo $medio_enlace[$i]['Medio_Enlace'];?></option>
+                        <?php   }   ?>
+                    </select>
+                    
                     <label for="observaciones_enlace">Observaciones</label>
                     <textarea class="form-control espacio-abajo" id="observaciones_enlace" name="observaciones_enlace"></textarea>
                     <button><a href="javascript:%20validar_enlace()" id="submit">Guardar</a></button>

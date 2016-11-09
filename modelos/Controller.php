@@ -3772,6 +3772,18 @@
         }
     }
     
+    public function puntobcr_eliminar_horario() {
+        if(isset($_SESSION['nombre'])){
+            $obj_horario = new cls_horario();
+            $obj_horario->setCondicion("ID_PuntoBCR='".$_POST['id_puntobcr']."'");
+            $obj_horario->eliminar_horario_puntobcr(); 
+        }else{
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }
+    }
+    
     public function enlace_puntobcr_guardar() {
         if(isset($_SESSION['nombre'])){
             $obj_enlace = new cls_enlace_telecom();  
@@ -4137,18 +4149,15 @@
         if(isset($_SESSION['nombre'])){   
             if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 $obj_telefono = new cls_telefono();
-                //echo '<script>alert("Ingresa");</script>';
                 $obj_telefono->setId($_POST['ID_Telefono']);
                 $obj_telefono->setId2($_POST['ID_Area_Apoyo']);
                 $obj_telefono->setTipo_telefono($_POST['Tipo_Telefono']);
                 $obj_telefono->setNumero($_POST['numero']);
-                $obj_telefono->setObservaciones($_POST['observaciones']);
+                $obj_telefono->setObservaciones($_POST['observaciones_tel']);
                 if($_POST['ID_Telefono']==0){
-                    //echo '<script>alert("Nuevo Numero");</script>';
                     $obj_telefono->guardar_telefono();
                 }
                 else{
-                    //echo '<script>alert("Actualiza Numero");</script>';
                     $obj_telefono->setCondicion("ID_Telefono='".$_POST['ID_Telefono']."'");
                     $obj_telefono->actualizar_telefono();
                 }
