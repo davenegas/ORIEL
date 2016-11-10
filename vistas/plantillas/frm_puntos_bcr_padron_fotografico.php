@@ -20,13 +20,14 @@
         function eliminar_imagen(id_imagen){
             
             id=id_imagen;
+            //n_ruta=ruta_imagen;
             
             $.confirm({
             title: 'Confirmación!',
             content: 'Desea eliminar esta imagen?',
             confirm: function(){
                 //alert (id_imagen );
-                $.post("index.php?ctl=eliminar_imagen_prontuario_puntobcr", { id_imagen:id_imagen });//,function(data){
+                $.post("index.php?ctl=eliminar_imagen_prontuario_puntobcr", {id_imagen:id_imagen});//,function(data){
                                $.alert({
                             title: 'Información!',
                             content: 'Imágen eliminada con exito con éxito!!!',
@@ -80,6 +81,7 @@
                         <option value="Equipos de Respaldo y Soporte" >Equipos de Respaldo y Soporte</option>  
                         <option value="Equipos de Seguridad" >Equipos de Seguridad</option>   
                         <option value="Equipos de Telecomunicaciones" >Equipos de Telecomunicaciones</option>   
+                        <option value="Salud Ocupacional" >Salud Ocupacional</option>   
                         <option value="Vista Atms" >Vista Atms</option>   
                         <option value="Vista Estructural" >Vista Estructural</option>  
                         <option value="Vista Estructural" >Vista Geográfica</option>   

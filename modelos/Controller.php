@@ -2199,6 +2199,18 @@
             if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 $obj_padron_fotografico->setCondicion("ID_padron_puntobcr=".$_POST['id_imagen']);
                 $obj_padron_fotografico->eliminar_imagen_puntobcr();
+                
+//                $raiz=$_SERVER['DOCUMENT_ROOT'];
+//                       
+//                if (substr($raiz,-1)!="/"){
+//                    $raiz.="/";
+//                }
+//
+//                $ruta=  $raiz."Padron_Fotografico_Puntos_BCR/".$_POST['ruta_imagen'];
+//                unlink($ruta);
+                
+                
+                      
             }
         }else {
             $tipo_de_alerta="alert alert-warning";
