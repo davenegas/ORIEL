@@ -2192,7 +2192,7 @@
     }
     
     
-    public function eliminar_imagen_prontuario_puntobcr(){
+    public function eliminar_imagen_padron_puntobcr(){
         //echo "<script type=\"text/javascript\">alert('Evento recuperado con Éxito!!!');</script>";
         if(isset($_SESSION['nombre'])){
             $obj_padron_fotografico= new cls_padron_fotografico_puntosbcr();
@@ -2200,16 +2200,18 @@
                 $obj_padron_fotografico->setCondicion("ID_padron_puntobcr=".$_POST['id_imagen']);
                 $obj_padron_fotografico->eliminar_imagen_puntobcr();
                 
-//                $raiz=$_SERVER['DOCUMENT_ROOT'];
-//                       
-//                if (substr($raiz,-1)!="/"){
-//                    $raiz.="/";
-//                }
-//
-//                $ruta=  $raiz."Padron_Fotografico_Puntos_BCR/".$_POST['ruta_imagen'];
-//                unlink($ruta);
-                
-                
+                $raiz=$_SERVER['DOCUMENT_ROOT'];
+    
+                if (substr($raiz,-1)!="/"){
+                    $raiz.="/";
+                }
+
+
+                //$ruta=  $raiz."Padron_Fotografico_Puntos_BCR/20161110111422Entrada Principal.jpg";
+               $ruta=  $raiz."Padron_Fotografico_Puntos_BCR/".$_POST['ruta_imagen'];
+
+               // echo $ruta;
+                unlink($ruta);
                       
             }
         }else {
@@ -2941,9 +2943,9 @@
                 $raiz.="/";
             }
             
-            $ruta=  $raiz."Padron_Fotografico_Puntos_BCR/".Encrypter::quitar_tildes($result.$_FILES['archivo_adjunto']['name']);
+            $ruta=  $raiz."Padron_Fotografico_Puntos_BCR/".Encrypter::quitar_tildes($id_punto_bcr."-".$result."-".$_FILES['archivo_adjunto']['name']);
                       
-            $nombre_ruta=Encrypter::quitar_tildes($result.$_FILES['archivo_adjunto']['name']);
+            $nombre_ruta=Encrypter::quitar_tildes($id_punto_bcr."-".$result."-".$_FILES['archivo_adjunto']['name']);
             
             
             switch ($recepcion_archivo) {
@@ -2993,12 +2995,8 @@
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
-         } 
-           
+         }  
          
-            
-           // require __DIR__ . '/../vistas/plantillas/frm_puntos_bcr_padron_fotografico.php';
-       // }*/
     }
     
     

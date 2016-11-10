@@ -20,14 +20,16 @@
         function eliminar_imagen(id_imagen){
             
             id=id_imagen;
-            //n_ruta=ruta_imagen;
             
+            var ruta_imagen=document.getElementsByTagName("td")[5].innerHTML;
+            //alert(variable);
+          
             $.confirm({
             title: 'Confirmación!',
             content: 'Desea eliminar esta imagen?',
             confirm: function(){
                 //alert (id_imagen );
-                $.post("index.php?ctl=eliminar_imagen_prontuario_puntobcr", {id_imagen:id_imagen});//,function(data){
+                $.post("index.php?ctl=eliminar_imagen_padron_puntobcr", {id_imagen:id_imagen,ruta_imagen:ruta_imagen});//,function(data){
                                $.alert({
                             title: 'Información!',
                             content: 'Imágen eliminada con exito con éxito!!!',
@@ -48,6 +50,9 @@
         
         <div class="container animated fadeIn">
             <h1 align="center">Padrón Fotográfico</h1>
+            
+        <?php if($_SESSION['modulos']['Editar- Padrón Fotográfico']==1){ ?>
+            
             <h3>Agregar nueva Imágen</h3>
                 
                 <!--Agregar nuevo detalle o seguimiento del evento-->
@@ -96,7 +101,7 @@
                
             </form>
         
-       
+       <?php }?>
         
         <!--Detalles de Evento--> 
             <hr/>
@@ -112,13 +117,11 @@
                 <th style="text-align:center">Descripción</th>
                 <th style="text-align:center">Imágen</th>
                 <!--<th style="text-align:center" hidden="hidden">ID_Imagen</th>-->
+                <?php if($_SESSION['modulos']['Editar- Padrón Fotográfico']==1){ ?>
                 <th style="text-align:center">Gestión</th>
-<!--                <th style="text-align:center">Rol</th>
-                <th style="text-align:center">Observaciones</th>
-                <th style="text-align:center">Estado</th>
-                <th style="text-align:center">Cambiar Estado</th>
-                <th style="text-align:center">Password</th>
-                <th style="text-align:center">Editar</th>-->
+                <?php } ?>
+                <th style="text-align:center" hidden="hidden">Nombre Ruta</th>
+
             </tr>
           </thead>
 
@@ -134,7 +137,10 @@
             <td style="text-align:center"><?php echo $params [$i]['descripcion'];?></td>
             <td style="text-align:center"><a class="fancybox-button" rel="fancybox-button" href="../../../Padron_Fotografico_Puntos_BCR/<?php echo $params[$i]['nombre_ruta'];?>" title="<?php echo $params[$i]['nombre_imagen'].' ('.$params[$i]['descripcion'].')';?>">
                 <img src="../../../Padron_Fotografico_Puntos_BCR/<?php echo $params[$i]['nombre_ruta'];?>" alt="" width="200px"/></a></td>
+            <?php if($_SESSION['modulos']['Editar- Padrón Fotográfico']==1){ ?>
             <td align="center"><a onclick="eliminar_imagen(<?php echo $params[$i]['ID_padron_puntobcr'];?>);">Eliminar</a></td>    
+            <?php } ?>
+            <td style="text-align:center" hidden="hidden"><?php echo $params [$i]['nombre_ruta'];?></td>
             <!--<td style="text-align:center"><?php echo $params[$i]['nombre_ruta'].'.'.$params[$i]['formato'];?></td>-->
             <!--<td style="text-align:center"><img src="../../../Padron_Fotografico_Puntos_BCR/<?php echo $params[$i]['nombre_ruta'];?>" alt="" width="100" height="100"/></td>-->
 <!--            <td style="text-align:center"><?php echo $params[$i]['Descripcion'];?></td>
