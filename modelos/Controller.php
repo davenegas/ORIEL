@@ -337,7 +337,25 @@
             $obj_personal = new cls_personal();
             $obj_puesto = new cls_puestos();
             $obj_ue = new cls_unidad_ejecutora();
+            
+            $dias = array("Domingo","Lunes","Martes","Miercoles","Jueves","Viernes","Sábado");
+            $meses = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
  
+            // Arreglo que almacena las personas que cambian de puesto en el sistema
+            $vector_cambios_de_puesto=array();
+            $fecha_completa=$dias[date('w')]." ".date('d')." de ".$meses[date('n')-1]. " del ".date('Y').", ".date("H:i", time()) . " hrs";
+            $vector_cambios_de_puesto[]=array("Resumen general de cambios de puesto en personal",$fecha_completa,"","","");
+            $vector_cambios_de_puesto[]=array ("","","","","");
+            $vector_cambios_de_puesto[]=array ("Nombre Persona:","Cedula:","Puesto Anterior:","Puesto Nuevo:","Unidad Ejecutora:");
+            $vector_cambios_de_puesto[]=array ("","","","","");
+            
+             // Arreglo que almacena las personas que cambian de unidad ejecutora en el sistema
+            $vector_cambios_de_ue=array();
+            $vector_cambios_de_ue[]=array("Resumen general de cambios de unidad ejecutora en personal",$fecha_completa,"","","");
+            $vector_cambios_de_ue[]=array ("","","","","");
+            $vector_cambios_de_ue[]=array ("Nombre Persona:","Cedula:","Unidad Ejecutora Anterior:","Nueva Unidad Ejecutora","");
+            $vector_cambios_de_ue[]=array ("","","","","");
+            
             // Crea vector para almacenar los puestos que vienen en el prontuario pero en modo disctinct
             $arreglo_personal=array();
             
@@ -353,6 +371,8 @@
             $nuevos=0;
             $editados=0;
             $eliminadas=0;
+            $cambios_de_puesto=0;
+            $cambios_de_ue=0;
             
             for ($i = 0; $i < count($arreglo_personal); $i++){
 
@@ -364,12 +384,37 @@
                 $obj_puesto->setPuesto($arreglo_personal[$i][2]);
                 $obj_puesto->obtiene_id_puesto_por_nombre();
                 $obj_personal->setId_puesto($obj_puesto->getId());
+                
+                if (count($obj_personal->getArreglo())==1){  
+
+                   if (!(strcmp($obj_puesto->getId(), $obj_personal->getArreglo()[0]['ID_Puesto']))==0){
+                        $obj_puesto->setCondicion("ID_Puesto=".$obj_personal->getArreglo()[0]['ID_Puesto']);
+                        $obj_puesto->obtener_puestos();
+                        $vector_cambios_de_puesto[]=array ($arreglo_personal[$i][0],$arreglo_personal[$i][1],$obj_puesto->getArreglo()[0]['Puesto'],$arreglo_personal[$i][2],$arreglo_personal[$i][4]);
+                        $vector_cambios_de_puesto[]=array ("","","","","");
+                        $cambios_de_puesto++;
+                   }
+                    
+                }
 
                 $obj_personal->setCedula($arreglo_personal[$i][1]);
 
                 $obj_ue->setDepartamento($arreglo_personal[$i][4]);
                 $obj_ue->obtiene_id_ue_por_nombre();
                 $obj_personal->setId_unidad_ejecutora($obj_ue->getId());
+                
+                if (count($obj_personal->getArreglo())==1){  
+
+                   if (!(strcmp($obj_ue->getId(), $obj_personal->getArreglo()[0]['ID_Unidad_Ejecutora']))==0){
+                        $obj_ue->setCondicion("ID_Unidad_Ejecutora=".$obj_personal->getArreglo()[0]['ID_Unidad_Ejecutora']);
+                         $obj_ue->obtener_unidades_ejecutoras();
+                        $vector_cambios_de_ue[]=array ($arreglo_personal[$i][0],$arreglo_personal[$i][1],$obj_ue->getArreglo()[0]['Departamento'],$arreglo_personal[$i][4],"");
+                        $vector_cambios_de_ue[]=array ("","","","","");
+                        $cambios_de_ue++;
+                   }
+                    
+                }
+                
 
                 $obj_personal->setCorreo($arreglo_personal[$i][3]);
                 $obj_personal->setDireccion($arreglo_personal[$i][5]);
@@ -408,11 +453,17 @@
                 
             }
           
+            $vector_cambios_de_puesto[]=array ("","","","","");
+            $vector_cambios_de_puesto[]=array ("Se identificaron un total de ".$cambios_de_puesto." personas que cambiaron de puesto en el sistema","","","","");
+            
+            $vector_cambios_de_ue[]=array ("","","","","");
+            $vector_cambios_de_ue[]=array ("Se identificaron un total de ".$cambios_de_ue." personas que cambiaron de unidad ejecutora en el sistema","","","","");
+            
             $total_personas="Se identificaron un total de ".count($arreglo_personal)." personas en el prontuario adjunto.";
             $nuevas_personas="Se agregaron un total de ".$nuevos." personas nuevas al sistema.";
             $personas_editadas="Se revisó a nivel general la información de ".$editados." personas. Fue actualizado solo lo pertinente.";
             
-           require __DIR__ . '/../vistas/plantillas/frm_importar_prontuario_paso_5.php';
+            require __DIR__ . '/../vistas/plantillas/frm_importar_prontuario_paso_5.php';
      
         }else {
             $tipo_de_alerta="alert alert-warning";
@@ -426,8 +477,21 @@
         
         if(isset($_SESSION['nombre'])){
             
+            $vector_personas_eliminadas=array();
+            
             //Crea objeto de tipo puestos para administración de la tabla
             $obj_personal = new cls_personal();
+            
+            $dias = array("Domingo","Lunes","Martes","Miercoles","Jueves","Viernes","Sábado");
+            $meses = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
+ 
+            // Arreglo que almacena las personas que cambian de puesto en el sistema
+            $vector_personas_eliminadas=array();
+            $fecha_completa=$dias[date('w')]." ".date('d')." de ".$meses[date('n')-1]. " del ".date('Y').", ".date("H:i", time()) . " hrs";
+            $vector_personas_eliminadas[][]=array("Resumen general de funcionarios BCR eliminados de la Base de Datos",$fecha_completa,"","","","","","","","","","","","","","","","","","");
+            $vector_personas_eliminadas[][]=array ("","","","","","","","","","","","","","","","","","","","");
+            $vector_personas_eliminadas[][]=array ("ID Persona:","Cedula:","Nombre:","ID_UE:","ID_Puesto:","Correo:","Gafete:","Direccion:","Link_Foto:","ID_Empresa:","Observaciones:","Estado:","Departamento:","Empresa:","Tipo_Telefono:","ID_Tipo_Telefono:","Numero:","ID_Telefono:","Observaciones_Tel:","Puesto:");
+            $vector_personas_eliminadas[][]=array ("","","","","","","","","","","","","","","","","","","","");
              
             // Crea vector para almacenar los puestos que vienen en el prontuario pero en modo disctinct
             $arreglo_personal=array();
@@ -461,6 +525,10 @@
                        $excepciones.="La persona con nombre:". $params[$i]['Apellido_Nombre']." y número de cédula: ".$params[$i]['Cedula']." no pudo ser borrada de la base de datos, ya que está asignada como Gerente de Zona BCR. Proceda antes a actualizar este cargo con otro miembro del personal. <br>";
                     }else{
                         $personas_eliminadas++;
+                        $obj_personal->setCondicion("T_Personal.ID_Persona=".$params[$i]['ID_Persona']);
+                        $obj_personal->obtiene_todo_el_personal_modulo_personas();
+                        $vector_personas_eliminadas[]=$obj_personal->getArreglo();
+                        $vector_personas_eliminadas[][]=array ("","","","","","","","","","","","","","","","","","","","");
                         $obj_personal->setCondicion("ID=".$params[$i]['ID_Persona']);
                         $obj_personal->eliminar_telefonos_personas_bcr_fuera_de_prontuario_para_prontuario();
                         $obj_personal->setCondicion("ID_Persona=".$params[$i]['ID_Persona']);
@@ -470,8 +538,13 @@
                 
             }                    
             $personas_fuera="Se eliminaron un total de ".$personas_eliminadas." personas de la base de datos.";
-                        
-           require __DIR__ . '/../vistas/plantillas/frm_importar_prontuario_paso_6.php';
+            $vector_personas_eliminadas[][]=array ("","","","","","","","","","","","","","","","","","","","");
+            $vector_personas_eliminadas[][]=array ($personas_fuera,"","","","","","","","","","","","","","","","","","","");
+          
+            echo '<pre>';
+            print_r($personas_eliminadas);
+            echo '</pre>';
+           //require __DIR__ . '/../vistas/plantillas/frm_importar_prontuario_paso_6.php';
      
         }else {
             $tipo_de_alerta="alert alert-warning";
@@ -2910,9 +2983,9 @@
                 exit();
               }
               
-              $nombre_imagen=$_POST['Nombre'];
+              $nombre_imagen= str_replace('"','',str_replace("'","",$_POST['Nombre']));
               $categoria=$_POST['Categoria'];
-              $descripcion=$_POST['Descripcion'];
+              $descripcion=str_replace("'","",$_POST['Descripcion']);
               $id_punto_bcr=$_POST['id_punto_bcr'];
               
               
@@ -2943,9 +3016,9 @@
                 $raiz.="/";
             }
             
-            $ruta=  $raiz."Padron_Fotografico_Puntos_BCR/".Encrypter::quitar_tildes($id_punto_bcr."-".$result."-".$_FILES['archivo_adjunto']['name']);
+            $ruta=  str_replace('"','',str_replace("'","",$raiz."Padron_Fotografico_Puntos_BCR/".Encrypter::quitar_tildes($id_punto_bcr."-".$result."-".$_FILES['archivo_adjunto']['name'])));
                       
-            $nombre_ruta=Encrypter::quitar_tildes($id_punto_bcr."-".$result."-".$_FILES['archivo_adjunto']['name']);
+            $nombre_ruta=str_replace('"','',str_replace("'","",Encrypter::quitar_tildes($id_punto_bcr."-".$result."-".$_FILES['archivo_adjunto']['name'])));
             
             
             switch ($recepcion_archivo) {

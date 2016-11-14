@@ -111,14 +111,14 @@ class cls_padron_fotografico_puntosbcr{
         if($this->condicion==""){
             $this->obj_data_provider->conectar();
             //Llama al metodo que realiza la consulta a la bd
-            $this->obj_data_provider->trae_datos("t_padron_fotografico_puntobcr", "*", "");
+            $this->obj_data_provider->trae_datos("T_PadronFotograficoPuntoBCR", "*", "");
             $this->arreglo=$this->obj_data_provider->getArreglo();
             $this->obj_data_provider->desconectar();
         }
         else{
             $this->obj_data_provider->conectar();
             //Llama al metodo que realiza la consulta a la bd
-            $this->obj_data_provider->trae_datos("t_padron_fotografico_puntobcr", "*", $this->condicion);
+            $this->obj_data_provider->trae_datos("T_PadronFotograficoPuntoBCR", "*", $this->condicion);
             $this->arreglo=$this->obj_data_provider->getArreglo();
             $this->obj_data_provider->desconectar();
         }
@@ -128,14 +128,14 @@ class cls_padron_fotografico_puntosbcr{
         if($this->condicion==""){
             $this->obj_data_provider->conectar();
             //Llama al metodo que realiza la consulta a la bd
-            $this->obj_data_provider->inserta_datos("t_padron_fotografico_puntobcr", "ID_padron_puntobcr,ID_PuntoBCR, nombre_ruta, nombre_imagen, descripcion,categoria,formato", 
+            $this->obj_data_provider->inserta_datos("T_PadronFotograficoPuntoBCR", "ID_Padron_PuntoBCR,ID_PuntoBCR, Nombre_Ruta, Nombre_Imagen, Descripcion,Categoria,Formato", 
                     "null,".$this->id_puntobcr.",'".$this->nombre_ruta."','".$this->nombre_imagen."','".$this->descripcion."','".$this->categoria."','".$this->formato."'");
             $this->obj_data_provider->desconectar();
          
         }   else    {
             $this->obj_data_provider->conectar();
             //Llama al metodo que realiza la consulta a la bd
-            $this->obj_data_provider->edita_datos("t_padron_fotografico_puntobcr", "ID_PuntoBCR=".$this->id_puntobcr.", nombre_ruta='".$this->nombre_ruta."', nombre_imagen='".$this->nombre_imagen."', descripcion='".$this->descripcion."', categoria='".$this->categoria."', formato='".$this->formato."'", $this->condicion);
+            $this->obj_data_provider->edita_datos("T_PadronFotograficoPuntoBCR", "ID_PuntoBCR=".$this->id_puntobcr.", Nombre_Ruta='".$this->nombre_ruta."', Nombre_Imagen='".$this->nombre_imagen."', Descripcion='".$this->descripcion."', Categoria='".$this->categoria."', Formato='".$this->formato."'", $this->condicion);
             $this->obj_data_provider->desconectar();
            
         }
@@ -143,7 +143,7 @@ class cls_padron_fotografico_puntosbcr{
     
    public function eliminar_imagen_puntobcr() {
         $this->obj_data_provider->conectar();
-        $this->arreglo=$this->obj_data_provider->eliminar_datos("t_padron_fotografico_puntobcr", $this->condicion);
+        $this->arreglo=$this->obj_data_provider->eliminar_datos("T_PadronFotograficoPuntoBCR", $this->condicion);
         $this->obj_data_provider->desconectar();
        
     }

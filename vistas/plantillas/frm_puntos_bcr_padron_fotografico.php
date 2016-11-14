@@ -51,7 +51,7 @@
         <div class="container animated fadeIn">
             <h1 align="center">Padrón Fotográfico</h1>
             
-        <?php if($_SESSION['modulos']['Editar- Padrón Fotográfico']==1){ ?>
+        <?php if($_SESSION['modulos']['Editar- Padrón Fotográfico Puntos BCR']==1){ ?>
             
             <h3>Agregar nueva Imágen</h3>
                 
@@ -82,14 +82,14 @@
                 <div class="col-xs-4 espacio-abajo">
                     <label for="Categoria">Categoría</label>
                     <select class="form-control espacio-abajo" id="Categoria" name="Categoria" required=”required”> 
-                        <option value="Equipos de Respaldo y Soporte" >Equipos Ambientales</option>  
+                        <option value="Equipos Ambientales" >Equipos Ambientales</option>  
                         <option value="Equipos de Respaldo y Soporte" >Equipos de Respaldo y Soporte</option>  
                         <option value="Equipos de Seguridad" >Equipos de Seguridad</option>   
                         <option value="Equipos de Telecomunicaciones" >Equipos de Telecomunicaciones</option>   
                         <option value="Salud Ocupacional" >Salud Ocupacional</option>   
                         <option value="Vista Atms" >Vista Atms</option>   
                         <option value="Vista Estructural" >Vista Estructural</option>  
-                        <option value="Vista Estructural" >Vista Geográfica</option>   
+                        <option value="Vista Geográfica" >Vista Geográfica</option>   
                          <option value="Vista General Exterior" >Vista General Exterior</option>  
                         <option value="Vista General Interior" >Vista General Interior</option>   
  
@@ -97,7 +97,6 @@
                 </div>
                     
                 <button type="submit" class="btn btn-default">Guardar Imágen</button>
-                <!--<button type="submit" class="btn btn-default">Guardar Seguimiento</button>-->
                
             </form>
         
@@ -116,8 +115,7 @@
                 <th style="text-align:center">Nombre Imágen</th>
                 <th style="text-align:center">Descripción</th>
                 <th style="text-align:center">Imágen</th>
-                <!--<th style="text-align:center" hidden="hidden">ID_Imagen</th>-->
-                <?php if($_SESSION['modulos']['Editar- Padrón Fotográfico']==1){ ?>
+                <?php if($_SESSION['modulos']['Editar- Padrón Fotográfico Puntos BCR']==1){ ?>
                 <th style="text-align:center">Gestión</th>
                 <?php } ?>
                 <th style="text-align:center" hidden="hidden">Nombre Ruta</th>
@@ -132,39 +130,22 @@
             for ($i = 0; $i <$tam; $i++) {
             ?>
             <tr>
-            <td style="text-align:center"><?php echo $params[$i]['categoria'];?></td>
-            <td style="text-align:center"><?php echo $params[$i]['nombre_imagen'];?></td>
-            <td style="text-align:center"><?php echo $params [$i]['descripcion'];?></td>
-            <td style="text-align:center"><a class="fancybox-button" rel="fancybox-button" href="../../../Padron_Fotografico_Puntos_BCR/<?php echo $params[$i]['nombre_ruta'];?>" title="<?php echo $params[$i]['nombre_imagen'].' ('.$params[$i]['descripcion'].')';?>">
-                <img src="../../../Padron_Fotografico_Puntos_BCR/<?php echo $params[$i]['nombre_ruta'];?>" alt="" width="200px"/></a></td>
-            <?php if($_SESSION['modulos']['Editar- Padrón Fotográfico']==1){ ?>
-            <td align="center"><a onclick="eliminar_imagen(<?php echo $params[$i]['ID_padron_puntobcr'];?>);">Eliminar</a></td>    
+            <td style="text-align:center"><?php echo $params[$i]['Categoria'];?></td>
+            <td style="text-align:center"><?php echo $params[$i]['Nombre_Imagen'];?></td>
+            <td style="text-align:center"><?php echo $params [$i]['Descripcion'];?></td>
+            <td style="text-align:center"><a class="fancybox-button" rel="fancybox-button" href="../../../Padron_Fotografico_Puntos_BCR/<?php echo $params[$i]['Nombre_Ruta'];?>" title="<?php echo $params[$i]['Nombre_Imagen'].' ('.$params[$i]['Descripcion'].')';?>">
+                <img src="../../../Padron_Fotografico_Puntos_BCR/<?php echo $params[$i]['Nombre_Ruta'];?>" alt="" width="200px"/></a></td>
+            <?php if($_SESSION['modulos']['Editar- Padrón Fotográfico Puntos BCR']==1){ ?>
+            <td align="center"><a onclick="eliminar_imagen(<?php echo $params[$i]['ID_Padron_PuntoBCR'];?>);">Eliminar</a></td>    
             <?php } ?>
-            <td style="text-align:center" hidden="hidden"><?php echo $params [$i]['nombre_ruta'];?></td>
-            <!--<td style="text-align:center"><?php echo $params[$i]['nombre_ruta'].'.'.$params[$i]['formato'];?></td>-->
-            <!--<td style="text-align:center"><img src="../../../Padron_Fotografico_Puntos_BCR/<?php echo $params[$i]['nombre_ruta'];?>" alt="" width="100" height="100"/></td>-->
-<!--            <td style="text-align:center"><?php echo $params[$i]['Descripcion'];?></td>
-
-            <td style="text-align:center"><?php echo $params[$i]['Observaciones'];?></td>-->
+            <td style="text-align:center" hidden="hidden"><?php echo $params [$i]['Nombre_Ruta'];?></td>
            
-<!--            <td><a href="index.php?ctl=cambiar_estado_usuario&id=
-               <?php echo $params[$i]['ID_Usuario']?>&estado=<?php echo $params[$i]['Estado']?>&rol=<?php echo $params[$i]['ID_Rol']?>">
-                   Activar/ Desactivar</a></td>
-            <td><a href="index.php?ctl=reset_password&id=<?php echo $params[$i]['ID_Usuario']."&cedula=".$params[$i]['Cedula']?>"> 
-                    Reset Password</a> </td>
-            <td><a href="index.php?ctl=gestion_usuarios&id=<?php echo $params[$i]['ID_Usuario']?>">
-                   Editar Usuario</a></td>-->
             </tr>     
                     
             <?php }
             ?>
             </tbody>
         </table>
-            
-            
-            
-            
-            
 
         </div>
 
