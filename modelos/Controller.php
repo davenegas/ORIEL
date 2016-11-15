@@ -1670,7 +1670,7 @@
             $obj_eventos->setCondicion("T_Evento.ID_EstadoEvento<>3 AND T_Evento.ID_EstadoEvento<>5");
             $obj_eventos ->obtiene_todos_los_eventos(); 
             $params= $obj_eventos->getArreglo();
-            
+            $puesto_enviado=0;
             //Implementación para obtener el último seguimiento de cada evento, además del último usuario que lo agregó
             
         $tam=count($params);
@@ -1713,6 +1713,81 @@
 //            echo '</pre>';
         } 
        
+        require __DIR__.'/../vistas/plantillas/frm_eventos_listar.php';
+        }
+        else {
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }
+    }
+    
+    public function eventos_listar_filtrado(){
+        if(isset($_SESSION['nombre'])){
+            $obj_eventos = new cls_eventos();
+            if($_POST['puesto']==1){
+                $puesto_enviado=1;
+                $obj_eventos->setCondicion("T_Evento.ID_EstadoEvento<>3 AND T_Evento.ID_EstadoEvento<>5 AND (T_Evento.ID_Provincia=4 OR T_Evento.ID_Provincia=5 OR T_Evento.ID_Provincia=6) AND (T_Evento.ID_Tipo_Punto<>3 AND T_Evento.ID_Tipo_Punto<>4)");
+            }
+            if($_POST['puesto']==2){
+                $puesto_enviado=2;
+                $obj_eventos->setCondicion("T_Evento.ID_EstadoEvento<>3 AND T_Evento.ID_EstadoEvento<>5 AND T_Evento.ID_Provincia=1 AND (T_Evento.ID_Tipo_Punto<>3 AND T_Evento.ID_Tipo_Punto<>4)");
+            }
+            if($_POST['puesto']==3){
+                $puesto_enviado=3;
+                $obj_eventos->setCondicion("T_Evento.ID_EstadoEvento<>3 AND T_Evento.ID_EstadoEvento<>5 AND (T_Evento.ID_Tipo_Punto=3 OR T_Evento.ID_Tipo_Punto=4)");
+            }
+            if($_POST['puesto']==4){
+                $puesto_enviado=4;
+                $obj_eventos->setCondicion("T_Evento.ID_EstadoEvento<>3 AND T_Evento.ID_EstadoEvento<>5 AND (T_Evento.ID_Provincia=2 OR T_Evento.ID_Provincia=3 OR T_Evento.ID_Provincia=7) AND (T_Evento.ID_Tipo_Punto<>3 AND T_Evento.ID_Tipo_Punto<>4)");
+            }if($_POST['puesto']==0){
+                $puesto_enviado=0;
+                $obj_eventos->setCondicion("T_Evento.ID_EstadoEvento<>3 AND T_Evento.ID_EstadoEvento<>5");
+            }
+            $obj_eventos ->obtiene_todos_los_eventos(); 
+            $params= $obj_eventos->getArreglo();
+            
+            //Implementación para obtener el último seguimiento de cada evento, además del último usuario que lo agregó
+            
+        $tam=count($params);
+        if (count($params)>0){
+            for ($i = 0; $i <$tam; $i++) {
+                $obj_eventos->setCondicion("T_DetalleEvento.ID_Evento=".$params[$i]['ID_Evento']." order by T_DetalleEvento.Fecha desc,T_DetalleEvento.Hora desc");
+                //Obtiene los seguimientos del evento seleccionado, si los hubiere
+                $obj_eventos->obtiene_detalle_evento();
+
+                if(count($obj_eventos->getArreglo())>0){
+                    if ($i==0){
+                        $todos_los_seguimientos_juntos=$obj_eventos->getArreglo();
+                    }else{
+                        $todos_los_seguimientos_juntos = array_merge($todos_los_seguimientos_juntos,$obj_eventos->getArreglo());                 
+                    }
+                }
+                
+                $obj_eventos->setCondicion("T_DetalleEvento.ID_Evento=".$params[$i]['ID_Evento']." order by T_DetalleEvento.Fecha desc,T_DetalleEvento.Hora desc limit 0,1");
+                //Obtiene los seguimientos del evento seleccionado, si los hubiere
+                $obj_eventos->obtiene_detalle_evento();
+                $ultimo_seguimiento_asociado= $obj_eventos->getArreglo();
+
+                //Verifica si existen seguimientos asociados al evento actual
+                if(count($ultimo_seguimiento_asociado)>0){
+                    if ($i==0){
+                        $detalle_y_ultimo_usuario= array(['Detalle'=>"Fecha: ".date_format(date_create($ultimo_seguimiento_asociado[0]['Fecha']), 'd/m/Y').".Hora: ".$ultimo_seguimiento_asociado[0]['Hora'].". ".$ultimo_seguimiento_asociado[0]['Detalle']]+['Usuario'=>$ultimo_seguimiento_asociado[0]['Nombre_Usuario']." ".$ultimo_seguimiento_asociado[0]['Apellido']]);
+                    }else{
+                        $detalle_y_ultimo_usuario = array_merge($detalle_y_ultimo_usuario,array(['Detalle'=>"Fecha: ".date_format(date_create($ultimo_seguimiento_asociado[0]['Fecha']), 'd/m/Y').".Hora: ".$ultimo_seguimiento_asociado[0]['Hora'].". ".$ultimo_seguimiento_asociado[0]['Detalle']]+['Usuario'=>$ultimo_seguimiento_asociado[0]['Nombre_Usuario']." ".$ultimo_seguimiento_asociado[0]['Apellido']]));  
+                    }
+                }else{
+                    if ($i==0){
+                        $detalle_y_ultimo_usuario= array(['Detalle'=>"No hay seguimientos asociados a este evento. Para agregar uno oprima el link:'Gestionar Seguimiento de la fila respectiva.'"]+['Usuario'=>$params[$i]['Nombre_Usuario']." ".$params[$i]['Apellido']]);
+                    }else{
+                        $detalle_y_ultimo_usuario = array_merge($detalle_y_ultimo_usuario,array(['Detalle'=>"No hay seguimientos asociados a este evento. Para agregar uno oprima el link:'Gestionar Seguimiento de la fila respectiva.'"]+['Usuario'=>$params[$i]['Nombre_Usuario']." ".$params[$i]['Apellido']]));
+                    }
+                }
+            }
+//            echo '<pre>';
+//            print_r($detalle_y_ultimo_usuario);
+//            echo '</pre>';
+        } 
         require __DIR__.'/../vistas/plantillas/frm_eventos_listar.php';
         }
         else {

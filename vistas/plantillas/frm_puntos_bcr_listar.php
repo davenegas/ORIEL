@@ -30,6 +30,8 @@
               <th style="text-align:center">Nombre</th>
               <th style="text-align:center">Unidad Ejecutora</th>
               <th style="text-align:center">Codigo</th>
+              <th hidden>Número de Linea</th>
+              <th hidden>Direccion IP</th>
               <th style="text-align:center">Cuenta SIS</th>
               <th style="text-align:center">Tipo de Punto</th>
               <th style="text-align:center">Observaciones</th>
@@ -53,6 +55,8 @@
                 <td style="text-align:center"><?php echo $params[$i]['Nombre'];?></td>
                 <td style="text-align:center"><?php echo $params[$i]['Departamento'];?></td>
                 <td style="text-align:center"><?php echo $params[$i]['Codigo'];?></td>
+                <td hidden style="text-align:center"><?php echo $params[$i]['Numero_Linea'];?></td>
+                <td hidden style="text-align:center"><?php echo $params[$i]['Direccion_IP'];?></td>
                 <td style="text-align:center"><?php echo $params[$i]['Cuenta_SIS'];?></td>
                 <td style="text-align:center"><?php echo $params[$i]['Tipo_Punto'];?></td>
                 <td style="text-align:center"><?php echo $params[$i]['Observaciones'];?></td>
