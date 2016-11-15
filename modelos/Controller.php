@@ -488,10 +488,10 @@
             // Arreglo que almacena las personas que cambian de puesto en el sistema
             $vector_personas_eliminadas=array();
             $fecha_completa=$dias[date('w')]." ".date('d')." de ".$meses[date('n')-1]. " del ".date('Y').", ".date("H:i", time()) . " hrs";
-            $vector_personas_eliminadas[][]=array("Resumen general de funcionarios BCR eliminados de la Base de Datos",$fecha_completa,"","","","","","","","","","","","","","","","","","");
-            $vector_personas_eliminadas[][]=array ("","","","","","","","","","","","","","","","","","","","");
-            $vector_personas_eliminadas[][]=array ("ID Persona:","Cedula:","Nombre:","ID_UE:","ID_Puesto:","Correo:","Gafete:","Direccion:","Link_Foto:","ID_Empresa:","Observaciones:","Estado:","Departamento:","Empresa:","Tipo_Telefono:","ID_Tipo_Telefono:","Numero:","ID_Telefono:","Observaciones_Tel:","Puesto:");
-            $vector_personas_eliminadas[][]=array ("","","","","","","","","","","","","","","","","","","","");
+            $vector_personas_eliminadas[][]=array("ID_Persona" => "Resumen general de funcionarios BCR eliminados de la Base de Datos","Cedula" => $fecha_completa,"Apellido_Nombre" => "","ID_Unidad_Ejecutora" => "","ID_Puesto" => "","Correo" => "","Numero_Gafete" => "","Direccion" => "","Link_Foto" => "","ID_Empresa" => "","Observaciones" => "","Estado" => "","Departamento" => "","Empresa" => "","Tipo_Telefono" => "","ID_Tipo_Telefono" => "","Numero" => "","ID_Telefono" => "","Observaciones_Tel" => "","Puesto" => "");
+            $vector_personas_eliminadas[][]=array("ID_Persona" => "","Cedula" => "","Apellido_Nombre" => "","ID_Unidad_Ejecutora" => "","ID_Puesto" => "","Correo" => "","Numero_Gafete" => "","Direccion" => "","Link_Foto" => "","ID_Empresa" => "","Observaciones" => "","Estado" => "","Departamento" => "","Empresa" => "","Tipo_Telefono" => "","ID_Tipo_Telefono" => "","Numero" => "","ID_Telefono" => "","Observaciones_Tel" => "","Puesto" => "");
+            $vector_personas_eliminadas[][]=array("ID_Persona" => "ID Persona:","Cedula" => "Cedula:","Apellido_Nombre" => "Nombre:","ID_Unidad_Ejecutora" => "ID_UE:","ID_Puesto" => "ID_Puesto:","Correo" => "Correo:","Numero_Gafete" => "Gafete:","Direccion" => "Direccion:","Link_Foto" => "Link_Foto:","ID_Empresa" => "ID_Empresa:","Observaciones" => "Observaciones:","Estado" => "Estado:","Departamento" => "Departamento:","Empresa" => "Empresa:","Tipo_Telefono" => "Tipo Telefono:","ID_Tipo_Telefono" => "ID Tipo Telefono:","Numero" => "Numero:","ID_Telefono" => "ID_Telefono:","Observaciones_Tel" => "Observaciones_Tel:","Puesto" => "Puesto:");
+            $vector_personas_eliminadas[][]=array("ID_Persona" => "","Cedula" => "","Apellido_Nombre" => "","ID_Unidad_Ejecutora" => "","ID_Puesto" => "","Correo" => "","Numero_Gafete" => "","Direccion" => "","Link_Foto" => "","ID_Empresa" => "","Observaciones" => "","Estado" => "","Departamento" => "","Empresa" => "","Tipo_Telefono" => "","ID_Tipo_Telefono" => "","Numero" => "","ID_Telefono" => "","Observaciones_Tel" => "","Puesto" => "");
              
             // Crea vector para almacenar los puestos que vienen en el prontuario pero en modo disctinct
             $arreglo_personal=array();
@@ -528,7 +528,7 @@
                         $obj_personal->setCondicion("T_Personal.ID_Persona=".$params[$i]['ID_Persona']);
                         $obj_personal->obtiene_todo_el_personal_modulo_personas();
                         $vector_personas_eliminadas[]=$obj_personal->getArreglo();
-                        $vector_personas_eliminadas[][]=array ("","","","","","","","","","","","","","","","","","","","");
+                        $vector_personas_eliminadas[][]=array("ID_Persona" => "","Cedula" => "","Apellido_Nombre" => "","ID_Unidad_Ejecutora" => "","ID_Puesto" => "","Correo" => "","Numero_Gafete" => "","Direccion" => "","Link_Foto" => "","ID_Empresa" => "","Observaciones" => "","Estado" => "","Departamento" => "","Empresa" => "","Tipo_Telefono" => "","ID_Tipo_Telefono" => "","Numero" => "","ID_Telefono" => "","Observaciones_Tel" => "","Puesto" => "");
                         $obj_personal->setCondicion("ID=".$params[$i]['ID_Persona']);
                         $obj_personal->eliminar_telefonos_personas_bcr_fuera_de_prontuario_para_prontuario();
                         $obj_personal->setCondicion("ID_Persona=".$params[$i]['ID_Persona']);
@@ -538,13 +538,10 @@
                 
             }                    
             $personas_fuera="Se eliminaron un total de ".$personas_eliminadas." personas de la base de datos.";
-            $vector_personas_eliminadas[][]=array ("","","","","","","","","","","","","","","","","","","","");
-            $vector_personas_eliminadas[][]=array ($personas_fuera,"","","","","","","","","","","","","","","","","","","");
-          
-            echo '<pre>';
-            print_r($personas_eliminadas);
-            echo '</pre>';
-           //require __DIR__ . '/../vistas/plantillas/frm_importar_prontuario_paso_6.php';
+            $vector_personas_eliminadas[][]=array("ID_Persona" => "","Cedula" => "","Apellido_Nombre" => "","ID_Unidad_Ejecutora" => "","ID_Puesto" => "","Correo" => "","Numero_Gafete" => "","Direccion" => "","Link_Foto" => "","ID_Empresa" => "","Observaciones" => "","Estado" => "","Departamento" => "","Empresa" => "","Tipo_Telefono" => "","ID_Tipo_Telefono" => "","Numero" => "","ID_Telefono" => "","Observaciones_Tel" => "","Puesto" => "");
+            $vector_personas_eliminadas[][]=array("ID_Persona" => $personas_fuera,"Cedula" => "","Apellido_Nombre" => "","ID_Unidad_Ejecutora" => "","ID_Puesto" => "","Correo" => "","Numero_Gafete" => "","Direccion" => "","Link_Foto" => "","ID_Empresa" => "","Observaciones" => "","Estado" => "","Departamento" => "","Empresa" => "","Tipo_Telefono" => "","ID_Tipo_Telefono" => "","Numero" => "","ID_Telefono" => "","Observaciones_Tel" => "","Puesto" => "");
+           
+            require __DIR__ . '/../vistas/plantillas/frm_importar_prontuario_paso_6.php';
      
         }else {
             $tipo_de_alerta="alert alert-warning";
@@ -877,11 +874,7 @@
                                        
                     $obj_personal->setCondicion("Cedula='".$arreglo_telefonos_casa[$i][0]."'");
                     $obj_personal->obtiene_id_de_persona_para_prontuario();
-                   /* $obj_telefono->setCondicion("(ID=".$obj_personal->getId().") AND (ID_Tipo_Telefono=2 or ID_Tipo_Telefono=3 or ID_Tipo_Telefono=4 or ID_Tipo_Telefono=27 or ID_Tipo_Telefono=28) AND (Numero='0')");
-                    $obj_telefono->eliminar_telefonos_para_prontuario();*/
-                    /*$obj_telefono->setCondicion("(ID=".$obj_personal->getId().") AND (ID_Tipo_Telefono=2) AND (Numero='0')");
-                    $obj_telefono->eliminar_telefonos_para_prontuario();*/
-                    
+                                      
                     ///////////////////////////Generar inconsistencias del sistema
                    
                     if ((strlen($arreglo_telefonos_casa[$i][1])==8)&&(is_numeric($arreglo_telefonos_casa[$i][1]))){
@@ -944,8 +937,24 @@
             $vector_inconsistencias[]=array (Encrypter::quitar_tildes($resultados),"");
             
             $obj_telefono->agrega_extension_cero_en_personas_sin_telefonos_asociados_para_prontuario();
-                                
+            
+            $obj_personal->setCondicion("ID_Persona In (Select ID From t_telefono where ID_Tipo_Telefono in(2,3,4,27,28) and Numero='0') and ID_Empresa=1");
+            $obj_personal->obtener_personas_con_numeros_en_cero_para_prontuario();
+            
+            $vector_personas_con_numeros_en_cero=array();
+            $fecha_completa=$dias[date('w')]." ".date('d')." de ".$meses[date('n')-1]. " del ".date('Y').", ".date("H:i", time()) . " hrs";
+            $vector_personas_con_numeros_en_cero[][]=array("Apellido_Nombre" => "Resumen general de funcionarios BCR con numeros de telefono en cero en la BD","Cedula" => $fecha_completa,"ID_Persona" => "");
+            $vector_personas_con_numeros_en_cero[][]=array("Apellido_Nombre" => "","Cedula" => "","ID_Persona" => "");
+            
+            $vector_personas_con_numeros_en_cero[]=$obj_personal->getArreglo();
+            $vector_personas_con_numeros_en_cero[][]=array("Apellido_Nombre" => "","Cedula" => "","ID_Persona" => "");
+            
+            $numero_personas_cero=count($obj_personal->getArreglo());
+            $vector_personas_con_numeros_en_cero[][]=array("Apellido_Nombre" => "Se encontraron un toal de ".$numero_personas_cero. " personas que tienen numeros de telefono en cero.","Cedula" => "","ID_Persona" => "");
+              
            require __DIR__ . '/../vistas/plantillas/frm_importar_prontuario_paso_10.php';
+            
+           
      
         }else {
             $tipo_de_alerta="alert alert-warning";

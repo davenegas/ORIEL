@@ -44,7 +44,7 @@
         
         
          <div class="container">
-        <table hidden="hidden" id="tabla_personas_eliminadas" cellspacing="0" width="100%">   
+             <table hidden="hidden" id="tabla_personas_eliminadas" cellspacing="0" width="100%">   
           <tbody>
             <?php  $tam=count($vector_personas_eliminadas);
 
