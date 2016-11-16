@@ -70,6 +70,9 @@ $map = array(
     'medio_enlace_guardar'=>array('controller'=>'Controller', 'action'=>'medio_enlace_guardar'),
     'medio_enlace_cambiar_estado'=>array('controller'=>'Controller', 'action'=>'medio_enlace_cambiar_estado'),
     
+    //Controlador de Enlace Telecom
+    'enlace_reporte'=>array('controller'=>'Controller', 'action'=>'enlace_reporte'),
+    
     //Controlador de Unidades Ejecutoras
     'unidad_ejecutora_listar'=>array('controller'=>'Controller', 'action'=>'unidad_ejecutora_listar'),
     'unidad_ejecutora_guardar'=>array('controller'=>'Controller', 'action'=>'unidad_ejecutora_guardar'),

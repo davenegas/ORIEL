@@ -234,6 +234,32 @@ class cls_enlace_telecom{
         $this->obj_data_provider->eliminar_datos("T_EnlaceTelecomunicaciones", $this->condicion);
         $this->obj_data_provider->desconectar();
     }
+    
+    public function enlaces_reporte(){
+        $this->obj_data_provider->conectar();
+        //Llama al metodo que realiza la consulta a la bd
+        $this->obj_data_provider->trae_datos("T_EnlaceTelecomunicaciones
+                    LEFT OUTER JOIN T_PuntoBCREnlace ON T_PuntoBCREnlace.ID_Enlace = T_EnlaceTelecomunicaciones.ID_Enlace
+                    LEFT OUTER JOIN T_PuntoBCR ON T_PuntoBCR.ID_PuntoBCR = T_PuntoBCREnlace.ID_PuntoBCR
+                    LEFT OUTER JOIN T_UE_PuntoBCR ON T_PuntoBCR.ID_PuntoBCR= T_UE_PuntoBCR.ID_PuntoBCR
+                    LEFT OUTER JOIN T_UnidadEjecutora ON T_UE_PuntoBCR.ID_Unidad_Ejecutora = T_UnidadEjecutora.ID_Unidad_Ejecutora
+                    LEFT OUTER JOIN T_MedioEnlace ON T_MedioEnlace.ID_Medio_Enlace = T_EnlaceTelecomunicaciones.ID_Medio_Enlace
+                    LEFT OUTER JOIN T_Proveedor ON T_Proveedor.ID_Proveedor = T_EnlaceTelecomunicaciones.ID_Proveedor
+                    LEFT OUTER JOIN T_TipoEnlace ON T_TipoEnlace.ID_Tipo_Enlace = T_EnlaceTelecomunicaciones.ID_Tipo_Enlace
+                    ORDER BY  T_PuntoBCR.Nombre, T_EnlaceTelecomunicaciones.Enlace", 
+                                        
+                                    "T_PuntoBCR.ID_PuntoBCR, T_PuntoBCR.Nombre, T_PuntoBCR.Codigo, 
+                    T_UnidadEjecutora.ID_Unidad_Ejecutora, T_UnidadEjecutora.Departamento, T_UnidadEjecutora.Numero_UE,
+                    T_EnlaceTelecomunicaciones.*,
+                    T_MedioEnlace.ID_Medio_Enlace, T_MedioEnlace.Medio_Enlace,
+                    T_Proveedor.ID_Proveedor, T_Proveedor.Nombre_Proveedor,
+                    T_TipoEnlace.ID_Tipo_Enlace, T_TipoEnlace.Tipo_Enlace",   
+                
+                                        "");
+        $this->arreglo=$this->obj_data_provider->getArreglo();
+        $this->obj_data_provider->desconectar();
+        $this->resultado_operacion=true;
+    }
 }
 ?>
 

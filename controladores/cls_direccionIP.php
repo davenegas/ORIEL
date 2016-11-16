@@ -122,7 +122,8 @@ class cls_direccionIP{
         if($this->condicion==""){
             $this->arreglo=$this->obj_data_provider->trae_datos(
                     "T_DireccionIP
-			LEFT OUTER JOIN T_TipoIP ON T_DireccionIP.ID_Tipo_IP = T_TipoIP.ID_Tipo_IP", 
+			LEFT OUTER JOIN T_TipoIP ON T_DireccionIP.ID_Tipo_IP = T_TipoIP.ID_Tipo_IP
+                        LEFT OUTER JOIN T_PuntoBCRDireccionIP ON T_DireccionIP.ID_Direccion_IP = T_PuntoBCRDireccionIP.ID_Direccion_IP", 
                     "DISTINCT T_DireccionIP.*, T_TipoIP.ID_Tipo_IP, T_TipoIP.Tipo_IP ",
                     "");
             $this->arreglo=$this->obj_data_provider->getArreglo();

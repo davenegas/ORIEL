@@ -964,7 +964,6 @@
         
     }
     
-    
     // Paso de importación del prontuario que permite actualizar la tabla de personas en el sistema
     public function frm_importar_prontuario_paso_11(){
         
@@ -4744,6 +4743,36 @@
         } 
     }
     
+    ////////////////////////////////////////////////////////////////////////////
+    //////////Funciones para Enlace Telecomunicaciones//////////////////////////
+    ////////////////////////////////////////////////////////////////////////////
+    public function enlace_reporte() {
+        if(isset($_SESSION['nombre'])){
+            $obj_enlace = new cls_enlace_telecom();
+            $obj_ip = new cls_direccionIP();
+            
+            $obj_enlace->enlaces_reporte();
+            $telecom = $obj_enlace->getArreglo();
+            
+            $tam = count($telecom);
+            
+            for($i=0; $i<$tam;$i++){
+                $obj_ip->setCondicion("(T_TipoIP.ID_Tipo_IP = '7' OR  T_TipoIP.ID_Tipo_IP = '8') AND t_puntobcrdireccionip.ID_PuntoBCR='".$telecom[$i]['ID_PuntoBCR']."'");
+                $obj_ip->obtiene_direccionesIP();
+                $direcciones = $obj_ip->getArreglo();
+                //print_r($direcciones);
+                $params[]= array_merge($telecom[$i],[($direcciones[0]['Tipo_IP'])=>($direcciones[0]['Direccion_IP'])],[($direcciones[1]['Tipo_IP'])=>($direcciones[1]['Direccion_IP'])]);
+            }
+//            echo("<pre>");
+//            print_r($params);
+//            echo("</pre>");
+           require __DIR__ . '/../vistas/plantillas/rpt_enlace_telecom.php';
+        }else{
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }   
+    }
     ////////////////////////////////////////////////////////////////////////////
     //////////////////////////////Trazabilidad//////////////////////////////////
     /////////////////////FUNCIONES PARA EVENTOS/////////////////////////////////

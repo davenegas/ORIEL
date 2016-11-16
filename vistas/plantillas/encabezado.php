@@ -154,10 +154,14 @@
                      <li><a href="index.php?ctl=principal">Personal</a></li>
                 <?php }; ?>   
 
-                 <?php if ($_SESSION['modulos']['Reportes-Alertas']==1){ ?>
+                <?php if ($_SESSION['modulos']['Reportes-Alertas']==1){ ?>
                     <li><a href="index.php?ctl=principal">Alertas</a></li> 
-                <?php }; ?>   
+                <?php }; ?>
 
+                <?php if ($_SESSION['modulos']['Reportes-Enlaces Telecom']==1){ ?>
+                    <li><a href="index.php?ctl=enlace_reporte">Enlaces Telecom</a></li> 
+                <?php }; ?>
+                
                  <?php if ($_SESSION['modulos']['Reportes-Trazabilidad']==1){ ?>
                     <li><a href="index.php?ctl=frm_trazabilidad_listar">Trazabilidad</a></li> 
                 <?php }; ?>   
