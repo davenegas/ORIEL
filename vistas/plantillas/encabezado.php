@@ -135,7 +135,7 @@
            //************************************************Pinta Menu de Reportes***************************************************************
            if (($_SESSION['modulos']['Reportes-Eventos']==1)||($_SESSION['modulos']['Reportes-Oficinas']==1)||
                    ($_SESSION['modulos']['Reportes-Personal']==1)||($_SESSION['modulos']['Reportes-Alertas']==1)||
-                   ($_SESSION['modulos']['Reportes-Trazabilidad']==1)){ ?>
+                   ($_SESSION['modulos']['Reportes-Enlaces Telecom']==1)||($_SESSION['modulos']['Reportes-Trazabilidad']==1)){ ?>
 
             <li class="dropdown">
             <a class="dropdown-toggle" data-toggle="dropdown" href="#">Reportes

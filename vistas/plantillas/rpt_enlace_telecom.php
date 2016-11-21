@@ -51,18 +51,18 @@
         <table id="tabla" class="display" cellspacing="0" width="100%">   
             <thead> 
                 <tr>
-                <th style="text-align:center">Nombre</th>
-                <th style="text-align:center">Codigo</th>
-                <th style="text-align:center">Gateway</th>
-                <th style="text-align:center">Loopback</th>
-                <th style="text-align:center">Enlace</th>
-                <th style="text-align:center">Interface</th>
-                <th style="text-align:center">Línea</th>
-                <th style="text-align:center">Proveedor</th>
-                <th style="text-align:center">Tipo enlace</th>
-                <th style="text-align:center">Bandwidth(kbps)</th>
-                <th style="text-align:center">Medio enlace</th>
-                <th style="text-align:center">Observaciones</th>
+                    <th style="text-align:center">Nombre</th>
+                    <th style="text-align:center">Codigo</th>
+                    <th style="text-align:center">Gateway</th>
+                    <th style="text-align:center">Loopback</th>
+                    <th style="text-align:center">Enlace</th>
+                    <th style="text-align:center">Interface</th>
+                    <th style="text-align:center">Línea</th>
+                    <th style="text-align:center">Proveedor</th>
+                    <th style="text-align:center">Tipo enlace</th>
+                    <th style="text-align:center">Bandwidth(kbps)</th>
+                    <th style="text-align:center">Medio enlace</th>
+                    <th style="text-align:center">Observaciones</th>
                 </tr>
             </thead>
             <tbody>
@@ -93,7 +93,7 @@
             
         <table hidden id="enlaces_telecom" class="display" cellspacing="0" width="100%" border='2px'>   
             <thead> 
-                <tr>
+                <tr bgcolor="#58ACFA">
                     <th style="text-align:center">Nombre</th>
                     <th style="text-align:center">Codigo</th>
                     <th style="text-align:center">Gateway</th>
