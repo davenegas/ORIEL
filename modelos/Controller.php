@@ -1,117 +1,213 @@
 <?php
 
+//Definición de la clase Controller. Componente principal de la lógica del negocio. 
  class Controller{
+     
+     //Declaración de métodos que envuelven toda la funcionalidad del sistema
+     /*
+      * A través del componente index se llaman cada uno de los eventos de la clase 
+      * controller para que sean ejecutados según sea necesario.
+      */
+     
     /*Inicio del sitio web, llamada a la pantalla principal para inicio de sesion*/
     public function inicio(){
+        //Variables que muestran tipos de adventencia en pantalla según sea necesario
         $tipo_de_alerta="alert alert-info";
         $validacion="Verificación de Identidad";
+        //Llamada al formulario correspondiente de la vista
         require __DIR__ . '/../vistas/plantillas/frm_principal_publica.php';
-        //require __DIR__ . '/../vistas/plantillas/inicio_sesion.php'; 
     }
 
     ////////////////////////////////////////////////////////////////////////////
     //////////////Metodos de Acceso publico/////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////
+    //Lista el personal con nombre, extensión, teléfono BCR y departamento
     public function personal_listar_publico(){
+        //Creación del objeto personal
         $obj_personal=new cls_personal();
+        //Trae de la base de datos la lista de personas disponibles
         $obj_personal->obtiene_todo_el_personal_filtrado();
+        //Inicializa un vector con el total de registros de la base de datos
         $personas= $obj_personal->getArreglo();
+        //Llamada al formulario correspondiente de la vista
         require __DIR__ . '/../vistas/plantillas/frm_personal_listar_publico.php';
     }
-    
+    //Lista de puntos BCR con información general y pública para vista de todo el conglomerado BCR
     public function puntobcr_listar_publico(){
+        //Creación del objeto puntos BCR
         $obj_puntobcr= new cls_puntosBCR();
+        //Trae de la base de datos la lista de puntos BCR disponibles
         $obj_puntobcr->obtiene_todos_los_puntos_bcr_publico();
+        //Inicializa un vector con el total de registros de la base de datos
         $puntosbcr = $obj_puntobcr->getArreglo();
+        //Llamada al formulario correspondiente de la vista
         require __DIR__ . '/../vistas/plantillas/frm_puntobcr_listar_publico.php';
     }
     
+    //Muestra formulario de los números de contacto de la Gerencia de Seguridad
     public function frm_contacto_publico(){
+        //Llamada al formulario correspondiente de la vista
         require __DIR__ . '/../vistas/plantillas/frm_contacto_publico.php';
     }
     //////////////////////////
     /*Metodos relacionados del area de Modulos de Seguridad del Sistema*/
     //////////////////////////
      
+    // Metodo que llama al formulario correspondiente para validación de credenciales por parte del usuario
     public function iniciar_sesion(){
+        //Variables que muestran tipos de adventencia en pantalla según sea necesario
         $tipo_de_alerta="alert alert-info";
         $validacion="Verificación de Identidad";
+        //Llamada al formulario correspondiente de la vista
         require __DIR__ . '/../vistas/plantillas/inicio_sesion.php'; 
     }
     // Obtiene lista completa de roles del sistema
     
+    //Metodo que muestra el listado general de roles de seguridad establecidos en el sistema. Pantalla principal del mantenimiento.
     public function listar_roles(){
+        //Validación para verificar si el usuario está logeado en el sistema
         if(isset($_SESSION['nombre'])){
+            //Creación del objeto roles
             $obj_roles= new cls_roles();
+            //Trae de la base de datos la lista de roles disponibles
             $obj_roles->obtiene_todos_los_roles();
+            //Inicializa un vector con el total de registros de la base de datos
             $params = $obj_roles->getArreglo();
             require __DIR__.'/../vistas/plantillas/lista_de_roles.php';
         }else{
+              /*
+             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+             * En la última línea llama a la pagina de inicio de sesión.
+             */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }
     }    
 
-    // Obtiene lista completa de roles del sistema
+    // Metodo que realiza la llamada al formulario principal del sistema ORIEL
     public function principal(){
+        //Validación para verificar si el usuario está logeado en el sistema
         if(isset($_SESSION['nombre'])){
+            //Llamada al formulario correspondiente de la vista
            require __DIR__ . '/../vistas/plantillas/frm_principal.php';
         }else{
+              /*
+             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+             * En la última línea llama a la pagina de inicio de sesión.
+             */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            //Llamada al formulario correspondiente de la vista
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }
     }    
 
-    // Obtiene lista completa de roles del sistema
+     ////////////////////////////////////////////////////////////////////////////
+    ///Serie de metodos que permiten crear un utilitario de importación de personal BCR ////////
+    ////////////////////////////////////////////////////////////////////////////
+    
+    /*
+     * 
+     */
+    /*
+     * Paso del utilitario, pantalla de bienvendida, desde esta pantalla es posible 
+     * seleccionar el archivo csv correspondiente con el listado total de personas
+     * que pertenecen al conglomerado BCR. Este archivo es enviado de manera semanal
+     * por parte de personal de capital humano.
+     */
     public function frm_importar_prontuario_paso_1(){
+        //Validación para verificar si el usuario está logeado en el sistema
         if(isset($_SESSION['nombre'])){
+            //Llamada al formulario correspondiente de la vista
            require __DIR__ . '/../vistas/plantillas/frm_importar_prontuario_paso_1.php';
         }else{
+              /*
+             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+             * En la última línea llama a la pagina de inicio de sesión.
+             */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }
     }    
     
+    /*
+     * Este metodo, el cual constituye el paso 2 de la importación del prontuario, permite
+     * leer el contenido del archivo correspondiente (una vez sea validado) y pasarlo directamente a 
+     * un vector como estructura propia de PHP. Una vez hecho esto será posible manipular la información
+     * en los pasos siguientes del asistente.
+     */
     public function frm_importar_prontuario_paso_2(){
+        //Validación para verificar si el usuario está logeado en el sistema
         if(isset($_SESSION['nombre'])){
                
+            /*
+             * En la variable recepcion de archivo, recibe el estado en el que fue recibido el archivo desde el formulario anterior
+             */
             $recepcion_archivo=$_FILES['seleccionar_archivo']['error'];
             
+            //Valida que el tipo de archivo suministrado por el usuario sea del tipo CSV, delimitado por comas
             if (!($_FILES['seleccionar_archivo']['type']==="application/vnd.ms-excel")){
+                //En caso de que sea diferente, muestra una advertencia en pantalla para el usario y se sale del paso
                 echo "<script type=\"text/javascript\">alert('Debe Importar un archivo tipo CSV!!!!');history.go(-1);</script>";;
-                //echo 'Prueba';
                 exit();
             }
 
+            //Asigna a la variable el archivo abierto en modo lectura para recorrer la información contenida en el.
             $handle= fopen ($_FILES['seleccionar_archivo']['tmp_name'],"r");
             
+            //Contiene en las variables params y record, el total de regsitros del archivo mediante la funcion fgetcsv
             $params=$record = fgetcsv($handle);
-                    
+                
+            //Declara un vector, el cual contendrá de manera oficial toda la información del documento.
             $prontuario =array();
             
+            //Variable contador del ciclo
             $i=0;
+            
+            //Almacena en la variable record, cada registro mientras handle tenga lineas disponibles que recorrer
             while ($record = fgetcsv($handle,0,";")){
+                // a prontuario le va asignando cada uno de los registros del documento
                 $prontuario[]=$record;
+                // Va incrementado el contador
                 $i++;
             }
             
+           //Define una variable de sesión, que contiene el vector completo con la información completa del personal
+            //Esto permitirá usar el vector leido en cada una de las pantallas del asistente de importación para tenerlo disponible
            $_SESSION['prontuario']=$prontuario;    
+           
+           //Mediante el contador definido en el ciclo anterior, se envia una variable a la capa de presentación
+           // Que notifica cuantas personas fueron recibidas mediante el prontuario
            $mensaje="Fue recibida la información correspondiente a ".$i." personas."; 
             
+           //Llamada al formulario correspondiente de la vista
            require __DIR__ . '/../vistas/plantillas/frm_importar_prontuario_paso_2.php';
                           
         }else {
+              /*
+             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+             * En la última línea llama a la pagina de inicio de sesión.
+             */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            //Llamada al formulario correspondiente de la vista
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         } 
     }
     
     // Paso de importación del prontuario que permite actualizar la tabla de unidades ejecutoras en el sistema
     public function frm_importar_prontuario_paso_3(){
+        //Validación para verificar si el usuario está logeado en el sistema
         if(isset($_SESSION['nombre'])){
             
             //Crea objeto de tipo unidad ejecutora para administración de la tabla
@@ -120,15 +216,34 @@
             // Crea vector para almacenar las unidades ejecutoras que vienen en el prontuario pero en modo disctinct
             $unidades_ejecutoras=array();
             
+            /*
+             * Los siguientes vectores permiten definir un formato específico para la fecha que llevara en el nombre
+             * del archivo generado (xls) una vez se procese la información de las unidades ejecutoras. El reporte se
+             * descarga de manera automática en formato excel, una vez se complete el proceso.
+             * Se definen dos vectores, uno para los días de la semana y otro para los meses del año
+             */
+            
             $dias = array("Domingo","Lunes","Martes","Miercoles","Jueves","Viernes","Sábado");
             $meses = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
  
+            /*
+             * El vector de inconsistencias, por lo general dentro de los pasos del prontuario, almacenará cada
+             * uno de los registros o situaciones que valgan la pena recordar una vez se procese la información.
+             */
+            //Se agrega un título al vector de inconsistencias, el cual posteriormente se transformará en un documento de excel
             $vector_inconsistencias=array(array("Resumen general de actualizacion de unidades ejecutoras",$dias[date('w')]." ".date('d')." de ".$meses[date('n')-1]. " del ".date('Y').", ".date("H:i", time()) . " hrs"));
+            //Agrega línea en blanco en el vector
             $vector_inconsistencias[]=array ("","");
+            // Agrega nombres a las columnas principales del documento
             $vector_inconsistencias[]=array ("Valor Prontuario:","Valor en Base de Datos:");
+            //Agrega línea en blanco en el vector
             $vector_inconsistencias[]=array ("","");
             
             // Lee las unidades ejecutoras que se encuentran en el prontuario y las pasa a un vector separado en modo distinct
+            /*
+             * Para este proceso se utiliza el vector original de la sesión de usuario y un nuevo vector qu almacena las unidades ejecutoras
+             * y la información relevante e indispensable para procesar y actualizar en base de datos.           */
+            
             for ($i = 0; $i < count($_SESSION['prontuario']); $i++) {
                 if (count($unidades_ejecutoras)>0){
                     $bandera=0;
@@ -152,21 +267,38 @@
             $nuevas=0;
             $editadas=0;
             
+            /*
+             * Este proceso permite unificar las unidades ejecutoras, ya que en ocasiones se encuentran duplicadas, omisas o con un nombre erroneo
+             */
+            
             for ($i = 0; $i < count($unidades_ejecutoras); $i++){
+                //Realiza una busqueda a nivel de base de datos, lo que permite traer registros de ue con nombre parecido al del vector de trabajo
                 $obj_unidades_ejecutoras->setCondicion("Departamento Like '".substr($unidades_ejecutoras[$i],0,strpos($unidades_ejecutoras[$i],"-")+1)."%'");
+                //Ejecuta la sentencia SQL
                 $obj_unidades_ejecutoras->obtener_unidades_ejecutoras();
             
-                
+                //Verifica si la consulta ha traido resultados
                 if (count($obj_unidades_ejecutoras->getArreglo())>1){
                     
+                    //Variable temporal que va almacenando información de unidades duplicadas
                     $temporal_inconsistencias="UNIDADES DUPLICADAS:";
+                    //Establece el numero de la unidad ejecutora al objeto correspondiente
                     $obj_unidades_ejecutoras->setNumero_ue(substr($unidades_ejecutoras[$i],0,strpos($unidades_ejecutoras[$i],"-")-1));
+                    //Establece el nombre de la unidad ejecutora
                     $obj_unidades_ejecutoras->setDepartamento($unidades_ejecutoras[$i]);
+                    //Establece las observaciones
                     $obj_unidades_ejecutoras->setObservaciones("");
+                    //Establece el estado a 1, el cual es activo
                     $obj_unidades_ejecutoras->setEstado("1");
+                    //Agregar unidad ejecutora a la base de datos, en caso requerido se edita la información en lugar de agregarla
                     $obj_unidades_ejecutoras->agregar_nueva_ue_para_prontuario();
+                    //Obtiene el id de la unidad ejecutora recien ingresada
                     $obj_unidades_ejecutoras->obtiene_id_ultima_ue_ingresada();
                     
+                    /*
+                     * El siguiente ciclo edita la unidad ejecutora de las personas y sitios que 
+                     * corresponden.
+                     */
                     for ($x = 0; $x < count($obj_unidades_ejecutoras->getArreglo()); $x++) {
                         $obj_unidades_ejecutoras->setCondicion("ID_Unidad_Ejecutora=".$obj_unidades_ejecutoras->getArreglo()[$x]['ID_Unidad_Ejecutora']);
                         $obj_unidades_ejecutoras->edita_ue_de_personas_para_prontuario();
@@ -175,13 +307,20 @@
                         $unidades_ejecutoras_duplicadas=$obj_unidades_ejecutoras->getArreglo()[$x].",";
                         $temporal_inconsistencias.=Encrypter::quitar_tildes($unidades_ejecutoras_duplicadas);
                     }
+                    //Variable que cuenta cuantas unidades ejecutoras son editadas.
                     $editadas++;
                     $unidad_prontuario=$unidades_ejecutoras[$i];
+                    // Inserta una línea en el vector de inconsistencias con información de las unidades duplicadas
                     $vector_inconsistencias[]=array ("UE DUPLICADAS, Modificacion: ".Encrypter::quitar_tildes($unidad_prontuario),$temporal_inconsistencias);
+                    //Inserta una línea en el vector
                     $vector_inconsistencias[]=array ("","");
                 }
+                //En caso de que el resultado de la consulta arroje solo un registro, se procede a editar la información de la unidad en la base de datos
                 if (count($obj_unidades_ejecutoras->getArreglo())==1){
                     if (!($obj_unidades_ejecutoras->getArreglo()[0]['Departamento']==$unidades_ejecutoras[$i])){
+                        /*
+                         * Agrega la información respectiva a la unidad ejecutora en el objeto correspondiente
+                         */
                         $obj_unidades_ejecutoras->setNumero_ue(substr($unidades_ejecutoras[$i],0,strpos($unidades_ejecutoras[$i],"-")-1));
                         $obj_unidades_ejecutoras->setDepartamento($unidades_ejecutoras[$i]);
                         $obj_unidades_ejecutoras->setObservaciones("");
@@ -190,12 +329,20 @@
                         $obj_unidades_ejecutoras->edita_ue_para_prontuario();
                         $unidad_prontuario=$unidades_ejecutoras[$i];
                         $unidad_base_datos=$obj_unidades_ejecutoras->getArreglo()[0]['Departamento'];
+                        /*
+                         * Agrega el registro al arreglo que exportará en el archivo de excel la información correspondiente.
+                         */
                         $vector_inconsistencias[]=array ("EDICION, se identifica informacion distinta de unidad ejecutora: ".Encrypter::quitar_tildes($unidad_prontuario),Encrypter::quitar_tildes($unidad_base_datos));
                         $vector_inconsistencias[]=array ("","");
+                        //Variable que cuenta cuantas unidades ejecutoras son editadas.
                         $editadas++;
                     }
                 }
+                /*
+                 * Si la consulta no arroja resultados, se procede a ingresar como una nueva unidad ejecutora.
+                 */
                 if ($obj_unidades_ejecutoras->getArreglo()==null){
+                    //Asigna la información respectiva a la nueva unidad ejecutora
                     $obj_unidades_ejecutoras->setNumero_ue(substr($unidades_ejecutoras[$i],0,strpos($unidades_ejecutoras[$i],"-")-1));
                     $obj_unidades_ejecutoras->setDepartamento($unidades_ejecutoras[$i]);
                     $obj_unidades_ejecutoras->setObservaciones("");
@@ -203,42 +350,62 @@
                     $obj_unidades_ejecutoras->agregar_nueva_ue_para_prontuario();
                     $unidad_prontuario=$unidades_ejecutoras[$i];
                     $unidad_base_datos=$obj_unidades_ejecutoras->getArreglo()[0]['Departamento'];
+                    //Detalla la información de la inserción en el vector que exporta excel.
                     $vector_inconsistencias[]=array ("INSERCION, se identifica nueva unidad ejecutora: ".Encrypter::quitar_tildes($unidad_prontuario),"Se ingresa a la Base de Datos de Oriel");
+                    //Nueva linea en el vector que exporta a excel
                     $vector_inconsistencias[]=array ("","");
+                    //Variable que cuenta cuantas unidades ejecutoras son agregadas.
                     $nuevas++;
                 }    
             }
+            //Consulta para verificar cuantas unidades ejecutoras no son utilizadas ni en personal ni en sitios BCR.
             $obj_unidades_ejecutoras->setCondicion("Not ID_Unidad_Ejecutora In (Select ID_Unidad_Ejecutora From t_personal)and not ID_Unidad_Ejecutora In (Select ID_Unidad_Ejecutora From t_ue_puntobcr)");
+            //Obtiene el resultado
             $obj_unidades_ejecutoras->obtener_unidades_ejecutoras();
-            
+            // Valida el resultado
             if (count($obj_unidades_ejecutoras->getArreglo())==null){
                 $cuenta_ue_inactivas=0;
             }else{
                 $cuenta_ue_inactivas=count($obj_unidades_ejecutoras->getArreglo());
             }
            
+            // Variables para pintar resultados en pantalla al usuarios
+            /*
+             * Resumen de total de UE, nuevas UE, unidades inactivas y editadas.
+             */
             $total_unidades_ejecutoras="Se identificaron un total de ".count($unidades_ejecutoras)." unidades ejecutoras en el prontuario adjunto.";
             $nuevas_unidades_ejecutoras="Se agregaron un total de ".$nuevas." unidades ejecutoras nuevas al sistema.";
             $unidades_inactivas="Se identificaron un total de ".$cuenta_ue_inactivas." unidades ejecutoras no ligadas a ninguna persona ni punto BCR (probablemente estan en desuso o inactivas).";
             $unidades_editadas="Se editaron un total de ".$editadas." unidades ejecutoras";
             
+            /*
+             * Termina de cerrar el vector con la información correspondiente.
+             */
             $vector_inconsistencias[]=array ("","");
             $vector_inconsistencias[]=array (Encrypter::quitar_tildes($total_unidades_ejecutoras),"");
             $vector_inconsistencias[]=array (Encrypter::quitar_tildes($nuevas_unidades_ejecutoras),"");
             $vector_inconsistencias[]=array (Encrypter::quitar_tildes($unidades_inactivas),"");
             $vector_inconsistencias[]=array (Encrypter::quitar_tildes($unidades_editadas),"");
-                   
+                 
+            //Llamada al formulario correspondiente para mostrar el resultado del paso.
            require __DIR__ . '/../vistas/plantillas/frm_importar_prontuario_paso_3.php';
      
         }else {
+              /*
+             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+             * En la última línea llama a la pagina de inicio de sesión.
+             */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         } 
     }
      
-    // Paso de importación del prontuario que permite actualizar la tabla de puestos en el sistema
+    //Paso de importación del prontuario que permite actualizar la tabla de puestos en el sistema
     public function frm_importar_prontuario_paso_4(){
+        //Validación para verificar si el usuario está logeado en el sistema
         if(isset($_SESSION['nombre'])){
             
             //Crea objeto de tipo puestos para administración de la tabla
@@ -271,180 +438,295 @@
             $nuevos=0;
             $editados=0;
             
+            //Vector que permite comparar los puestos del documento suministrado, con la información de la base de datos
             for ($i = 0; $i < count($arreglo_puestos); $i++){
+                //Busca el puesto en específico en la base de datos
                 $obj_puestos->setCondicion("Puesto='".$arreglo_puestos[$i]."'");
+                //Ejecuta la consulta
                 $obj_puestos->obtener_puestos();
             
+                //Establece el valor del puesto en cuestion
                  $obj_puestos->setPuesto($arreglo_puestos[$i]);
+                 //Establece las observaciones
                  $obj_puestos->setObservaciones("");
+                 //Establece el estado, 1 como activo
                  $obj_puestos->setEstado("1");
                     
+                // Verifica que la consulta haya devuelto algún resultado, en caso de haber varios 
+                //registros, se procede a agregar uno nuevo y borrar los duplicados, además reasigna personas al puesto nuevo
                 if (count($obj_puestos->getArreglo())>1){
                    
+                    //Agrega el puesto en cuestión
                     $obj_puestos->agregar_nuevo_puesto_para_prontuario();
+                    //Obtiene el id del puesto agregado
                     $obj_puestos->obtiene_id_ultimo_puesto_ingresado();
                     
+                    //Recorre cada uno de los puestos duplicados para editar las personas asignadas al nuevo puesto ingresado
                     for ($x = 0; $x < count($obj_puestos->getArreglo()); $x++) {
+                        //Realiza la busqueda del puesto respectivo
                         $obj_puestos->setCondicion("ID_Puesto=".$obj_puestos->getArreglo()[$x]['ID_Puesto']);
+                        // Edita las personas asignadas al puesto a eliminar
                         $obj_puestos->edita_puesto_de_personas_para_prontuario();
+                        //Elimina los puestos duplicados
                         $obj_puestos->eliminar_puestos_sobrantes_para_prontuario();
                     }
+                    //Lleva el conteo de registros editados
                     $editados++;
                 }
+                //Si el resultado de la consulta inicial = 1, procede a editar los datos del puesto
                 if (count($obj_puestos->getArreglo())==1){
+                    //Si el nombre del puesto varia en el nombre, procede a editarlo
                     if (!($obj_puestos->getArreglo()[0]['Puesto']==$arreglo_puestos[$i])){
                         
+                        //Establece la condicion y edita el nombre con el que tiene el documento actual
                         $obj_puestos->setCondicion("ID_Puesto=".$obj_puestos->getArreglo()[0]['ID_Puesto']);
+                        
+                        //Procede a editarlo
                         $obj_puestos->edita_puesto_para_prontuario();
+                        //Contabiliza la variable de puestos editados
                         $editados++;
                     }
                 }
+                //En caso de que la consulta no retorne resultados, procede a agregar un puesto nuevo en la bd.
                 if ($obj_puestos->getArreglo()==null){
                     
+                    //Inserción mediante el objeto de clase
                     $obj_puestos->agregar_nuevo_puesto_para_prontuario();
+                    //Contabiliza los nuevos registros.
                     $nuevos++;
                 }
                 
             }
+            //Verifica cuantos puestos quedaron sin relación de personas.
             $obj_puestos->setCondicion("Not ID_Puesto In (Select ID_Puesto From t_personal)");
+            //Obtiene el resultado de la consulta
             $obj_puestos->obtener_puestos();
             
+            //Verifica si existen resultados.
             if (count($obj_puestos->getArreglo())==null){
                 $cuenta_puestos_inactivos=0;
             }else{
                 $cuenta_puestos_inactivos=count($obj_puestos->getArreglo());
             }
+            
+             // Variables para pintar resultados en pantalla al usuarios
+            /*
+             * Resumen de total de puestos, nuevos puestos, puestos inactivos y editados.
+             */
             $total_puestos="Se identificaron un total de ".count($arreglo_puestos)." puestos en el prontuario adjunto.";
             $nuevos_puestos="Se agregaron un total de ".$nuevos." puestos nuevos al sistema.";
             $puestos_inactivos="Se identificaron un total de ".$cuenta_puestos_inactivos." puestos no ligados a ninguna persona.";
             $puestos_editados="Se editaron un total de ".$editados." puestos.";
-            
+            //Llamada al formulario correspondiente para mostrar el resultado del paso.
            require __DIR__ . '/../vistas/plantillas/frm_importar_prontuario_paso_4.php';
      
         }else {
+              /*
+             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+             * En la última línea llama a la pagina de inicio de sesión.
+             */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            //Llamada al formulario correspondiente para mostrar el resultado del paso.
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         } 
     }
         
     // Paso de importación del prontuario que permite actualizar la tabla de personas en el sistema
     public function frm_importar_prontuario_paso_5(){
-        
+        //Validación para verificar si el usuario está logeado en el sistema
         if(isset($_SESSION['nombre'])){
 
-            //Crea objeto de tipo puestos para administración de la tabla
+            //Crea objeto de tipo personal para administración de la tabla
             $obj_personal = new cls_personal();
+            //Crea objeto de tipo puesto para administración de la tabla
             $obj_puesto = new cls_puestos();
+            //Crea objeto de tipo ue para administración de la tabla
             $obj_ue = new cls_unidad_ejecutora();
             
+             /*
+             * Los siguientes vectores permiten definir un formato específico para la fecha que llevara en el nombre
+             * del archivo generado (xls) una vez se procese la información de inconsistencias en personal. El reporte se
+             * descarga de manera automática en formato excel, una vez se complete el proceso.
+             * Se definen dos vectores, uno para los días de la semana y otro para los meses del año
+             */
             $dias = array("Domingo","Lunes","Martes","Miercoles","Jueves","Viernes","Sábado");
             $meses = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
  
             // Arreglo que almacena las personas que cambian de puesto en el sistema
             $vector_cambios_de_puesto=array();
+            //Variable contenedora de la fecha en el formato requerido
             $fecha_completa=$dias[date('w')]." ".date('d')." de ".$meses[date('n')-1]. " del ".date('Y').", ".date("H:i", time()) . " hrs";
+            
+            /*
+             * vector que almacena el registro de inconsistencias a nivel de personal y permite
+             * exportarlo en un excel desde la interfaz de usuario correspondiente.
+             */
+            //Título del documento
             $vector_cambios_de_puesto[]=array("Resumen general de cambios de puesto en personal",$fecha_completa,"","","");
+            //Línea  en blanco en el vector
             $vector_cambios_de_puesto[]=array ("","","","","");
+            //Titulos de las columnas del documento
             $vector_cambios_de_puesto[]=array ("Nombre Persona:","Cedula:","Puesto Anterior:","Puesto Nuevo:","Unidad Ejecutora:");
+            //Línea  en blanco en el vector
             $vector_cambios_de_puesto[]=array ("","","","","");
             
              // Arreglo que almacena las personas que cambian de unidad ejecutora en el sistema
             $vector_cambios_de_ue=array();
+            //Titulos de las columnas del documento
             $vector_cambios_de_ue[]=array("Resumen general de cambios de unidad ejecutora en personal",$fecha_completa,"","","");
+            //Línea  en blanco en el vector
             $vector_cambios_de_ue[]=array ("","","","","");
+            //Titulos de las columnas del documento
             $vector_cambios_de_ue[]=array ("Nombre Persona:","Cedula:","Unidad Ejecutora Anterior:","Nueva Unidad Ejecutora","");
+            //Línea  en blanco en el vector
             $vector_cambios_de_ue[]=array ("","","","","");
             
-            // Crea vector para almacenar los puestos que vienen en el prontuario pero en modo disctinct
+            // Crea vector para almacenar las personas que vienen en el prontuario pero en modo disctinct
             $arreglo_personal=array();
             
-            // Lee los puestos que se encuentran en el prontuario y los pasa a un vector separado en modo distinct
+            // Lee las personas que se encuentran en el prontuario y los pasa a un vector separado en modo distinct
             for ($i = 0; $i < count($_SESSION['prontuario']); $i++) {
-                
+                    //Va agregando cada línea a la estructura correspondiente
                     $arreglo_personal[]=array($_SESSION['prontuario'][$i][0],$_SESSION['prontuario'][$i][1],$_SESSION['prontuario'][$i][3],$_SESSION['prontuario'][$i][4],$_SESSION['prontuario'][$i][7],$_SESSION['prontuario'][$i][8]);
                
             }
             
-            // Mediante este ciclo se edita la tabla puestos completamente, nuevos, duplicados, modificados
-            
+           
+            // Variables de control para mostrar en pantalla un informe final de los resultados posterior al proceso en ejecución
             $nuevos=0;
             $editados=0;
             $eliminadas=0;
             $cambios_de_puesto=0;
             $cambios_de_ue=0;
             
+            
+             // Mediante este ciclo se edita la tabla personal, se revisa contra el documento de trabajo, si la persona existe 
+            //no existe o si hubiera que editarla
             for ($i = 0; $i < count($arreglo_personal); $i++){
 
+                //Establece el criterio de busqueda por numero de cedula del empleado BCR
                 $obj_personal->setCondicion("Cedula='".$arreglo_personal[$i][1]."' and ID_Empresa=1");
+                //Ejecuta la consulta
                 $obj_personal->obtener_personas_prontuario();
             
+                //Establece el apellido de la persona en cuestión
                 $obj_personal->setApellidonombre($arreglo_personal[$i][0]);
                     
+                //Estable el puesto
                 $obj_puesto->setPuesto($arreglo_personal[$i][2]);
+                //Busca el id del puesto asignado
                 $obj_puesto->obtiene_id_puesto_por_nombre();
+                //Establece la llave foranea del puesto
                 $obj_personal->setId_puesto($obj_puesto->getId());
                 
+                //Verifica si la consulta devolvió resultados, en este caso si es iguala uno, quiere decir que la persona si existe en la bd
                 if (count($obj_personal->getArreglo())==1){  
+                    
+                    //Compara si tiene el mismo puesto asignado
 
                    if (!(strcmp($obj_puesto->getId(), $obj_personal->getArreglo()[0]['ID_Puesto']))==0){
+                       //En caso de que la comparación se de con puestos diferentes procede a buscar la información del puesto a actualizar
                         $obj_puesto->setCondicion("ID_Puesto=".$obj_personal->getArreglo()[0]['ID_Puesto']);
+                        //Obtiene los puestos por medio de la consulta sql
                         $obj_puesto->obtener_puestos();
+                        //Registra en el vector correspondiente, el cambio para respaldarlo posteriormente por medio de excel
                         $vector_cambios_de_puesto[]=array ($arreglo_personal[$i][0],$arreglo_personal[$i][1],$obj_puesto->getArreglo()[0]['Puesto'],$arreglo_personal[$i][2],$arreglo_personal[$i][4]);
+                        //Agrega un espacio en blanco en el vector
                         $vector_cambios_de_puesto[]=array ("","","","","");
+                        //Incrementa la variable de control
                         $cambios_de_puesto++;
                    }
                     
                 }
+                
+                //Establece el numero de cedula al objeto
 
                 $obj_personal->setCedula($arreglo_personal[$i][1]);
 
+                //Establece el nombre de la ue
                 $obj_ue->setDepartamento($arreglo_personal[$i][4]);
+                //Busca el id de la ue
                 $obj_ue->obtiene_id_ue_por_nombre();
+                //Establece el id de la ue
                 $obj_personal->setId_unidad_ejecutora($obj_ue->getId());
                 
+                //Verifica si la consulta arrojó algun registro
                 if (count($obj_personal->getArreglo())==1){  
 
+                    //Compara las unidades ejecutoras (tanto la del documento de trabajo, como la que se encuentra en la bd)
                    if (!(strcmp($obj_ue->getId(), $obj_personal->getArreglo()[0]['ID_Unidad_Ejecutora']))==0){
+                       
+                       //define una condicion de busqueda en caso de que la ue del empleado sea diferente a la que trae el documento
                         $obj_ue->setCondicion("ID_Unidad_Ejecutora=".$obj_personal->getArreglo()[0]['ID_Unidad_Ejecutora']);
+                        //Ejecuta la consulta SQL
                          $obj_ue->obtener_unidades_ejecutoras();
+                         //Registra el cambio en el vector correspondiente para exportación a excel
                         $vector_cambios_de_ue[]=array ($arreglo_personal[$i][0],$arreglo_personal[$i][1],$obj_ue->getArreglo()[0]['Departamento'],$arreglo_personal[$i][4],"");
+                        //Agrega un espacio en blanco en el vector
                         $vector_cambios_de_ue[]=array ("","","","","");
+                        //Incrementa la variable de control 
                         $cambios_de_ue++;
                    }
                     
                 }
                 
-
+                //Estable el correo electrónico en el objeto personal
                 $obj_personal->setCorreo($arreglo_personal[$i][3]);
+                //Establece la dirección suministrada por el documento
                 $obj_personal->setDireccion($arreglo_personal[$i][5]);
+                
+                //Establece el link de la foto
 
                 $obj_personal->setLinkfoto("http://bcr0157uco01/foto/".$arreglo_personal[$i][1].".jpg?rnd=7055");
+                
+                //Establece la empresa, que en este caso 1 es para BCR
                 $obj_personal->setId_empresa("1");
 
+                //Observaciones lo establece vacio
                 $obj_personal->setObservaciones("");
+                //Estado activo
                 $obj_personal->setEstado("1");
                 
+                /*
+                 * En caso de que el arreglo arroje más de un resultado, lo cual es atípico, procede a eliminar los registros correspondientes
+                 * y a agregar nuevamente a la persona con la información que viene del documento.
+                 */
                 if (count($obj_personal->getArreglo())>1){
                    
+                    //Agrega la persona con la información que ha venido incluyendo dentro de todo este metodo
                     $obj_personal->agregar_nueva_persona_para_prontuario();
+                    //Obtiene el id de la ultima persona ingresada
                     $obj_personal->obtiene_id_ultima_persona_ingresada();
                     
+                    //Este ciclo procede a cambiar los telefonos asociados a las personas repetidas, con el nuevo y unico id de la persona ingresada
                     for ($x = 0; $x < count($obj_personal->getArreglo()); $x++) {
+                        //Busca telefonos de cada persona repetida
                         $obj_personal->setCondicion("(ID=".$obj_personal->getArreglo()[$x]['ID_Persona'].") AND (ID_Tipo_Telefono=2 or ID_Tipo_Telefono=3 or ID_Tipo_Telefono=4 or ID_Tipo_Telefono=27)");
+                        //Edita el id de estos telefonos
                         $obj_personal->edita_id_persona_en_tabla_telefonos_para_prontuario();
+                        // Edita ID en la tabla de gerentes de zona
                         $obj_personal->setCondicion("ID_Persona=".$obj_personal->getArreglo()[$x]['ID_Persona']);
+                        //Procede editar la información
                         $obj_personal->edita_id_persona_en_tabla_gerente_zona_bcr_para_prontuario();
+                        //Elimina las personas repetidas
                         $obj_personal->eliminar_personas_sobrantes_para_prontuario();
                     }
+                    //Incrementa la variable de control
                     $editados++;
                 }
+                //Si la consulta inicial arroja un solo resultado, edita la información de la persona
                 if (count($obj_personal->getArreglo())==1){
 
                     $obj_personal->edita_persona_para_prontuario();
+                    //Incrementa la variable de control
                     $editados++;
                     
                 }
+                
+                //En caso de que la consulta no tenga resultados, agrega una persona nueva a la bd
                 if ($obj_personal->getArreglo()==null){
                     
                     $obj_personal->agregar_nueva_persona_para_prontuario();
@@ -453,41 +735,65 @@
                 
             }
           
+            //Agrega una linea nueva en el vector de registro de cambios
             $vector_cambios_de_puesto[]=array ("","","","","");
+            //Informe final en el vector
             $vector_cambios_de_puesto[]=array ("Se identificaron un total de ".$cambios_de_puesto." personas que cambiaron de puesto en el sistema","","","","");
-            
+            //Agrega una linea nueva en el vector de registro de cambios
             $vector_cambios_de_ue[]=array ("","","","","");
+            //Informe final en el vector
             $vector_cambios_de_ue[]=array ("Se identificaron un total de ".$cambios_de_ue." personas que cambiaron de unidad ejecutora en el sistema","","","","");
             
+            //Informe final en la variable de control
             $total_personas="Se identificaron un total de ".count($arreglo_personal)." personas en el prontuario adjunto.";
+            //Informe final en la variable de control
             $nuevas_personas="Se agregaron un total de ".$nuevos." personas nuevas al sistema.";
+            //Informe final en la variable de control
             $personas_editadas="Se revisó a nivel general la información de ".$editados." personas. Fue actualizado solo lo pertinente.";
             
+            //Llamada al formulario correspondiente de la vista
             require __DIR__ . '/../vistas/plantillas/frm_importar_prontuario_paso_5.php';
      
         }else {
+              /*
+             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+             * En la última línea llama a la pagina de inicio de sesión.
+             */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            //Llamada al formulario correspondiente de la vista
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         } 
     }
     
-    // Paso de importación del prontuario que permite actualizar la tabla de personas en el sistema
+    // Paso de importación del prontuario que permite actualizar la tabla de personas en el sistema, elimina personas que no pertenecen ya al BCR
     public function frm_importar_prontuario_paso_6(){
-        
+        //Validación para verificar si el usuario está logeado en el sistema
         if(isset($_SESSION['nombre'])){
             
+            //Define el vector que lleva el registro de personas eliminadas de la base de datos, como respaldo del proceso a realizar
             $vector_personas_eliminadas=array();
             
-            //Crea objeto de tipo puestos para administración de la tabla
+            //Crea objeto de tipo personal para administración de la tabla
             $obj_personal = new cls_personal();
             
+             /*
+             * Los siguientes vectores permiten definir un formato específico para la fecha que llevara en el nombre
+             * del archivo generado (xls) una vez se procese la información de inconsistencias en personal. El reporte se
+             * descarga de manera automática en formato excel, una vez se complete el proceso.
+             * Se definen dos vectores, uno para los días de la semana y otro para los meses del año
+             */
             $dias = array("Domingo","Lunes","Martes","Miercoles","Jueves","Viernes","Sábado");
             $meses = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
  
-            // Arreglo que almacena las personas que cambian de puesto en el sistema
+            // Arreglo que almacena las personas eliminadas del sistema
             $vector_personas_eliminadas=array();
+            //Variable que arma la fecha en el formato requerido
             $fecha_completa=$dias[date('w')]." ".date('d')." de ".$meses[date('n')-1]. " del ".date('Y').", ".date("H:i", time()) . " hrs";
+            
+            //Agrega al vector los futuros titulos y columnas del documento
             $vector_personas_eliminadas[][]=array("ID_Persona" => "Resumen general de funcionarios BCR eliminados de la Base de Datos","Cedula" => $fecha_completa,"Apellido_Nombre" => "","ID_Unidad_Ejecutora" => "","ID_Puesto" => "","Correo" => "","Numero_Gafete" => "","Direccion" => "","Link_Foto" => "","ID_Empresa" => "","Observaciones" => "","Estado" => "","Departamento" => "","Empresa" => "","Tipo_Telefono" => "","ID_Tipo_Telefono" => "","Numero" => "","ID_Telefono" => "","Observaciones_Tel" => "","Puesto" => "");
             $vector_personas_eliminadas[][]=array("ID_Persona" => "","Cedula" => "","Apellido_Nombre" => "","ID_Unidad_Ejecutora" => "","ID_Puesto" => "","Correo" => "","Numero_Gafete" => "","Direccion" => "","Link_Foto" => "","ID_Empresa" => "","Observaciones" => "","Estado" => "","Departamento" => "","Empresa" => "","Tipo_Telefono" => "","ID_Tipo_Telefono" => "","Numero" => "","ID_Telefono" => "","Observaciones_Tel" => "","Puesto" => "");
             $vector_personas_eliminadas[][]=array("ID_Persona" => "ID Persona:","Cedula" => "Cedula:","Apellido_Nombre" => "Nombre:","ID_Unidad_Ejecutora" => "ID_UE:","ID_Puesto" => "ID_Puesto:","Correo" => "Correo:","Numero_Gafete" => "Gafete:","Direccion" => "Direccion:","Link_Foto" => "Link_Foto:","ID_Empresa" => "ID_Empresa:","Observaciones" => "Observaciones:","Estado" => "Estado:","Departamento" => "Departamento:","Empresa" => "Empresa:","Tipo_Telefono" => "Tipo Telefono:","ID_Tipo_Telefono" => "ID Tipo Telefono:","Numero" => "Numero:","ID_Telefono" => "ID_Telefono:","Observaciones_Tel" => "Observaciones_Tel:","Puesto" => "Puesto:");
@@ -496,61 +802,89 @@
             // Crea vector para almacenar los puestos que vienen en el prontuario pero en modo disctinct
             $arreglo_personal=array();
             
-            // Lee los puestos que se encuentran en el prontuario y los pasa a un vector separado en modo distinct
+            // Lee las personas que se encuentran en el prontuario y los pasa a un vector separado en modo distinct
             for ($i = 0; $i < count($_SESSION['prontuario']); $i++) {
                 
                     $arreglo_personal[]=array($_SESSION['prontuario'][$i][0],$_SESSION['prontuario'][$i][1],$_SESSION['prontuario'][$i][3],$_SESSION['prontuario'][$i][7],$_SESSION['prontuario'][$i][8]);
                
             }
             
+            //Variables de control del proceso
             $personas_eliminadas=0;
             $excepciones="";
             
+            //Trae de la base de datos, las personas que trabajan para el BCR
             $obj_personal->setCondicion("ID_Empresa=1");
+            //Ejecuta la consulta SQL
             $obj_personal->obtener_personas_prontuario();
+            //Obtiene el resultado de la consulta en un arreglo
             $params=$obj_personal->getArreglo();
 
+            //Ciclo principal del proceso que permite encontrar las personas que salieron del BCR según la ultima actualización del prontuario.
             for ($i = 0; $i < count($params); $i++){
                     
+                //Variable bandera que permite controlar si se encuentra la persona trabajando para el BCR o si no
                 $bandera=0;
+                
+                //Si encuentra la persona y coincide en ambos vectores, asigna 1 a la variable bandera de control
                 for ($x = 0; $x < count($arreglo_personal); $x++) {
                     
+                    //Busca por numero de cedula
                     if ($params[$i]['Cedula']==$arreglo_personal[$x][1]){
                        $bandera=1;
                     }   
                 }
+                //Si la persona no es encontrada y no coincide en ambas fuentes, empieza el proceso de borrado correspondiente.
                 if ($bandera==0){                   
                     $obj_personal->setCondicion("ID_Persona=".$params[$i]['ID_Persona']);
+                    //Antes de eliminar al funcionario es importante validar si tiene función de Gerente de Zona, de ser así no podria eliminarse de la base de datos
                     if ($obj_personal->verifica_si_la_persona_es_gerente_zona_bcr()) {
+                        //Registra la excepción para notificar al usuario mediante el resultado del asistente
                        $excepciones.="La persona con nombre:". $params[$i]['Apellido_Nombre']." y número de cédula: ".$params[$i]['Cedula']." no pudo ser borrada de la base de datos, ya que está asignada como Gerente de Zona BCR. Proceda antes a actualizar este cargo con otro miembro del personal. <br>";
                     }else{
+                        //Incrementa la variable de control
                         $personas_eliminadas++;
+                        //Establece la condición de borrado
                         $obj_personal->setCondicion("T_Personal.ID_Persona=".$params[$i]['ID_Persona']);
+                        //Crea una consulta con los datos completo de la persona, para registrarlo antes de eliminarlo
                         $obj_personal->obtiene_todo_el_personal_modulo_personas();
+                        //Agrega la información de la persona en el vector de personas que se exportará a excel antes de ser eliminada de la base de datos, así queda respaldada.
                         $vector_personas_eliminadas[]=$obj_personal->getArreglo();
+                        //Agrega un espacio en blanco en el vector de datos
                         $vector_personas_eliminadas[][]=array("ID_Persona" => "","Cedula" => "","Apellido_Nombre" => "","ID_Unidad_Ejecutora" => "","ID_Puesto" => "","Correo" => "","Numero_Gafete" => "","Direccion" => "","Link_Foto" => "","ID_Empresa" => "","Observaciones" => "","Estado" => "","Departamento" => "","Empresa" => "","Tipo_Telefono" => "","ID_Tipo_Telefono" => "","Numero" => "","ID_Telefono" => "","Observaciones_Tel" => "","Puesto" => "");
+                        //Establece una condicion para proceder a eliminar telefonos de la persona
                         $obj_personal->setCondicion("ID=".$params[$i]['ID_Persona']);
+                        //Llama al procedimiento que elimina la persona
                         $obj_personal->eliminar_telefonos_personas_bcr_fuera_de_prontuario_para_prontuario();
                         $obj_personal->setCondicion("ID_Persona=".$params[$i]['ID_Persona']);
                         $obj_personal->eliminar_personas_bcr_fuera_de_prontuario_para_prontuario();
                     }
                 }
                 
-            }                    
+            }                
+            //Construye las variables para mostrar el resultado del paso en pantalla
             $personas_fuera="Se eliminaron un total de ".$personas_eliminadas." personas de la base de datos.";
+            //Agrega espacios en blanco en el vector
             $vector_personas_eliminadas[][]=array("ID_Persona" => "","Cedula" => "","Apellido_Nombre" => "","ID_Unidad_Ejecutora" => "","ID_Puesto" => "","Correo" => "","Numero_Gafete" => "","Direccion" => "","Link_Foto" => "","ID_Empresa" => "","Observaciones" => "","Estado" => "","Departamento" => "","Empresa" => "","Tipo_Telefono" => "","ID_Tipo_Telefono" => "","Numero" => "","ID_Telefono" => "","Observaciones_Tel" => "","Puesto" => "");
             $vector_personas_eliminadas[][]=array("ID_Persona" => $personas_fuera,"Cedula" => "","Apellido_Nombre" => "","ID_Unidad_Ejecutora" => "","ID_Puesto" => "","Correo" => "","Numero_Gafete" => "","Direccion" => "","Link_Foto" => "","ID_Empresa" => "","Observaciones" => "","Estado" => "","Departamento" => "","Empresa" => "","Tipo_Telefono" => "","ID_Tipo_Telefono" => "","Numero" => "","ID_Telefono" => "","Observaciones_Tel" => "","Puesto" => "");
            
+            //Llamada al formulario correspondiente de la vista
             require __DIR__ . '/../vistas/plantillas/frm_importar_prontuario_paso_6.php';
      
         }else {
+              /*
+             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+             * En la última línea llama a la pagina de inicio de sesión.
+             */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         } 
     }
 
-     // Paso de importación del prontuario que permite actualizar la tabla de personas en el sistema
+     // Paso de importación del prontuario que permite actualizar la tabla de celulares en el sistema
     public function frm_importar_prontuario_paso_7(){
         
         if(isset($_SESSION['nombre'])){
@@ -564,14 +898,26 @@
             
             $numeros_actualizados=0;
             
+            /*
+             * Los siguientes vectores permiten definir un formato específico para la fecha que llevara en el nombre
+             * del archivo generado (xls) una vez se procese la información de inconsistencias en personal. El reporte se
+             * descarga de manera automática en formato excel, una vez se complete el proceso.
+             * Se definen dos vectores, uno para los días de la semana y otro para los meses del año
+             */
+            
             $dias = array("Domingo","Lunes","Martes","Miercoles","Jueves","Viernes","Sábado");
             $meses = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
+            
+            // Vector que registra las inconsistencias y diferencias entre numeros de celulares encontrados en el prontuario contra la bd.
             $vector_inconsistencias=array(array("Resumen general de inconsistencias al actualizar numeros de celular de personas en el sistema:",$dias[date('w')]." ".date('d')." de ".$meses[date('n')-1]. " del ".date('Y').", ".date("H:i", time()) . " hrs"));
+            // Agrega linea en blanco en el vector
             $vector_inconsistencias[]=array ("","");
+            //Agrega columnas al documento
             $vector_inconsistencias[]=array ("Valor Prontuario:","Valor en Base de Datos:");
+            // Agrega linea en blanco en el vector
             $vector_inconsistencias[]=array ("","");
             
-            // Lee los puestos que se encuentran en el prontuario y los pasa a un vector separado en modo distinct
+            // Lee el registro total de personas que se encuentran en el prontuario
             for ($i = 0; $i < count($_SESSION['prontuario']); $i++) {
                 
                     $arreglo_telefonos_celulares[]=array($_SESSION['prontuario'][$i][1],str_replace (" ","",str_replace ("-","",$_SESSION['prontuario'][$i][10])));
@@ -646,6 +992,12 @@
            require __DIR__ . '/../vistas/plantillas/frm_importar_prontuario_paso_7.php';
      
         }else {
+              /*
+             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+             * En la última línea llama a la pagina de inicio de sesión.
+             */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
@@ -808,6 +1160,12 @@
            require __DIR__ . '/../vistas/plantillas/frm_importar_prontuario_paso_8.php';
      
         }else {
+              /*
+             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+             * En la última línea llama a la pagina de inicio de sesión.
+             */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
@@ -842,6 +1200,12 @@
            require __DIR__ . '/../vistas/plantillas/frm_importar_prontuario_paso_9.php';
      
         }else {
+              /*
+             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+             * En la última línea llama a la pagina de inicio de sesión.
+             */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
@@ -957,6 +1321,12 @@
            
      
         }else {
+              /*
+             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+             * En la última línea llama a la pagina de inicio de sesión.
+             */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
@@ -972,6 +1342,12 @@
            require __DIR__ . '/../vistas/plantillas/frm_importar_prontuario_paso_11.php';
      
         }else {
+              /*
+             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+             * En la última línea llama a la pagina de inicio de sesión.
+             */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
@@ -1081,6 +1457,12 @@
                     require __DIR__ . '/../vistas/plantillas/frm_Cambio_Clave.php';
                 }
             }else {
+                  /*
+             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+             * En la última línea llama a la pagina de inicio de sesión.
+             */
                 $tipo_de_alerta="alert alert-danger";
                 $validacion="Es necesario completar la infornación requerida para cambiar la contraseña";
                 require __DIR__ . '/../vistas/plantillas/frm_Cambio_Clave.php';
@@ -1107,6 +1489,12 @@
              }
                
       }else{
+            /*
+             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+             * En la última línea llama a la pagina de inicio de sesión.
+             */
           $tipo_de_alerta="alert alert-warning";
           $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
           require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
@@ -1129,6 +1517,12 @@
             $obj_general->obtener_notas();
             $notas= $obj_general->getArreglo(); 
         }else{
+              /*
+             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+             * En la última línea llama a la pagina de inicio de sesión.
+             */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
@@ -1142,6 +1536,12 @@
             $obj_general->setNota($_POST['nota']);
             $obj_general->guardar_nota();            
         }else{
+              /*
+             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+             * En la última línea llama a la pagina de inicio de sesión.
+             */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
@@ -1160,6 +1560,12 @@
                     }
             }
         }else{
+              /*
+             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+             * En la última línea llama a la pagina de inicio de sesión.
+             */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
@@ -1205,6 +1611,12 @@
         require __DIR__ . '/../vistas/plantillas/lista_de_roles.php';
                
         }else{
+              /*
+             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+             * En la última línea llama a la pagina de inicio de sesión.
+             */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
@@ -1234,6 +1646,12 @@
             require __DIR__ . '/../vistas/plantillas/gestion_roles.php';
                
         }   else    {
+              /*
+             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+             * En la última línea llama a la pagina de inicio de sesión.
+             */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
@@ -1248,6 +1666,12 @@
             $params= $obj_modulos->getArreglo();
             require __DIR__ . '/../vistas/plantillas/lista_de_modulos.php';
         }else{
+              /*
+             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+             * En la última línea llama a la pagina de inicio de sesión.
+             */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
@@ -1290,6 +1714,12 @@
             }
             require __DIR__ . '/../vistas/plantillas/lista_de_modulos.php';
         }   else    {
+              /*
+             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+             * En la última línea llama a la pagina de inicio de sesión.
+             */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
@@ -1313,6 +1743,12 @@
                 }
             }
         }else{
+              /*
+             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+             * En la última línea llama a la pagina de inicio de sesión.
+             */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
@@ -1332,6 +1768,12 @@
             }
             require __DIR__ . '/../vistas/plantillas/gestion_modulos.php';
         }   else    {
+              /*
+             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+             * En la última línea llama a la pagina de inicio de sesión.
+             */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
@@ -1346,6 +1788,12 @@
             require __DIR__.'/../vistas/plantillas/lista_de_usuarios.php';
         }
         else {
+              /*
+             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+             * En la última línea llama a la pagina de inicio de sesión.
+             */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
@@ -1391,6 +1839,12 @@
 
             require __DIR__ . '/../vistas/plantillas/gestion_usuarios.php';
         }   else   {
+              /*
+             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+             * En la última línea llama a la pagina de inicio de sesión.
+             */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
@@ -1445,6 +1899,12 @@
             }
             
         } else    {
+              /*
+             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+             * En la última línea llama a la pagina de inicio de sesión.
+             */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
@@ -1477,6 +1937,12 @@
                 }
             }    
         }else   {
+              /*
+             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+             * En la última línea llama a la pagina de inicio de sesión.
+             */
             $tipo_de_alerta="alert alert-danger";
             $validacion="Es necesario iniciar sesión para ingresar al sistema";
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
@@ -1497,6 +1963,12 @@
             }
         }
         else{
+              /*
+             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+             * En la última línea llama a la pagina de inicio de sesión.
+             */
             $tipo_de_alerta="alert alert-danger";
             $validacion="Es necesario iniciar sesión para ingresar al sistema";
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
@@ -1525,6 +1997,12 @@
                     require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
              }else
                  {
+                   /*
+             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+             * En la última línea llama a la pagina de inicio de sesión.
+             */
                     $tipo_de_alerta="alert alert-danger";
                     $validacion="Debe digitar un nombre de usuario válido para recordar el password";  
                     require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
@@ -1603,6 +2081,12 @@
             }
         }else
         {
+              /*
+             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+             * En la última línea llama a la pagina de inicio de sesión.
+             */
             $tipo_de_alerta="alert alert-danger";
             $validacion="Es necesario iniciar sesión para ingresar al sistema";
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
@@ -1664,6 +2148,12 @@
             }
 
         }   else   {
+              /*
+             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+             * En la última línea llama a la pagina de inicio de sesión.
+             */
             $tipo_de_alerta="alert alert-danger";
             $validacion="Es necesario iniciar sesión para ingresar al sistema";
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
@@ -1724,6 +2214,12 @@
         require __DIR__.'/../vistas/plantillas/frm_eventos_listar.php';
         }
         else {
+              /*
+             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+             * En la última línea llama a la pagina de inicio de sesión.
+             */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
@@ -1799,6 +2295,12 @@
         require __DIR__.'/../vistas/plantillas/frm_eventos_listar.php';
         }
         else {
+              /*
+             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+             * En la última línea llama a la pagina de inicio de sesión.
+             */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
@@ -1875,6 +2377,12 @@
             require __DIR__.'/../vistas/plantillas/frm_eventos_lista_cerrados.php';
         }
         else {
+              /*
+             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+             * En la última línea llama a la pagina de inicio de sesión.
+             */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
@@ -1974,6 +2482,12 @@
                 
             }else
             {
+                  /*
+             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+             * En la última línea llama a la pagina de inicio de sesión.
+             */
                 $tipo_de_alerta="alert alert-warning";
                 $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
                 require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
@@ -2001,6 +2515,12 @@
                     exit;
                 }
             }else {
+                  /*
+             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+             * En la última línea llama a la pagina de inicio de sesión.
+             */
                $tipo_de_alerta="alert alert-warning";
                $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
                require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
@@ -2092,12 +2612,16 @@
                 //require __DIR__.'/../vistas/plantillas/frm_trazabilidad_listar.php';
                 echo $html;
             }else {
+                  /*
+             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+             * En la última línea llama a la pagina de inicio de sesión.
+             */
                $tipo_de_alerta="alert alert-warning";
                $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
                require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
-            }
-       
-       
+            } 
         
     }
     
@@ -2262,6 +2786,12 @@
                 //require __DIR__.'/../vistas/plantillas/frm_trazabilidad_listar.php';
                 echo $html;
             }else {
+                  /*
+             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+             * En la última línea llama a la pagina de inicio de sesión.
+             */
                $tipo_de_alerta="alert alert-warning";
                $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
                require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
@@ -2334,6 +2864,12 @@
                 }    
 
             }else {
+                  /*
+             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+             * En la última línea llama a la pagina de inicio de sesión.
+             */
                $tipo_de_alerta="alert alert-warning";
                $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
                require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
@@ -2371,6 +2907,12 @@
                       
             }
         }else {
+              /*
+             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+             * En la última línea llama a la pagina de inicio de sesión.
+             */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
@@ -2418,6 +2960,12 @@
                 }
             }
         }else {
+              /*
+             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+             * En la última línea llama a la pagina de inicio de sesión.
+             */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
@@ -2478,6 +3026,12 @@
                 }
             }
         }else {
+              /*
+             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+             * En la última línea llama a la pagina de inicio de sesión.
+             */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
@@ -2515,6 +3069,12 @@
                 echo $exc->getTraceAsString();
             }
         } else {
+              /*
+             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+             * En la última línea llama a la pagina de inicio de sesión.
+             */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
@@ -3012,6 +3572,12 @@
             
                    
         }else {
+              /*
+             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+             * En la última línea llama a la pagina de inicio de sesión.
+             */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
@@ -3038,6 +3604,12 @@
             
             require __DIR__ . '/../vistas/plantillas/frm_puntos_bcr_padron_fotografico.php';
         }else {
+              /*
+             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+             * En la última línea llama a la pagina de inicio de sesión.
+             */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
@@ -3148,6 +3720,12 @@
             
                    
         }else {
+              /*
+             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+             * En la última línea llama a la pagina de inicio de sesión.
+             */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
@@ -3167,6 +3745,12 @@
             $params= $obj_eventos->getArreglo();
             require __DIR__ . '/../vistas/plantillas/frm_tipo_eventos_listar.php';
         }else{
+              /*
+             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+             * En la última línea llama a la pagina de inicio de sesión.
+             */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
@@ -3189,6 +3773,12 @@
             }
             require __DIR__ . '/../vistas/plantillas/frm_tipo_eventos_gestion.php';
         }   else    {
+              /*
+             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+             * En la última línea llama a la pagina de inicio de sesión.
+             */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
@@ -3209,6 +3799,12 @@
                 //$this->tipo_eventos_listar();
             }
         } else    {
+              /*
+             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+             * En la última línea llama a la pagina de inicio de sesión.
+             */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
@@ -3232,6 +3828,12 @@
             header ("location:/ORIEL/index.php?ctl=tipo_eventos_listar");
             //$this->tipo_eventos_listar();
         } else    {
+              /*
+             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+             * En la última línea llama a la pagina de inicio de sesión.
+             */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
@@ -3245,6 +3847,12 @@
             $params= $obj_puntosbcr->getArreglo();
             require __DIR__ . '/../vistas/plantillas/frm_puntos_bcr_listar.php';
         }else{
+              /*
+             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+             * En la última línea llama a la pagina de inicio de sesión.
+             */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
@@ -3296,6 +3904,12 @@
              echo $html;
              
         }else{
+              /*
+             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+             * En la última línea llama a la pagina de inicio de sesión.
+             */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
@@ -3310,6 +3924,12 @@
             $params= $obj_empresas->getArreglo();
             require __DIR__ . '/../vistas/plantillas/frm_empresas_listar.php';
         }else{
+              /*
+             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+             * En la última línea llama a la pagina de inicio de sesión.
+             */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
@@ -3331,6 +3951,12 @@
             }
             require __DIR__ . '/../vistas/plantillas/frm_empresas_editar.php';
         }   else    {
+              /*
+             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+             * En la última línea llama a la pagina de inicio de sesión.
+             */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
@@ -3351,6 +3977,12 @@
             }
             
         } else    {
+              /*
+             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+             * En la última línea llama a la pagina de inicio de sesión.
+             */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
@@ -3377,6 +4009,12 @@
                 }
             }
         }else{
+              /*
+             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+             * En la última línea llama a la pagina de inicio de sesión.
+             */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
@@ -3580,6 +4218,12 @@
             }
             
         }   else    {
+              /*
+             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+             * En la última línea llama a la pagina de inicio de sesión.
+             */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
@@ -3601,6 +4245,12 @@
             }        
             echo $html;
         }else{
+              /*
+             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+             * En la última línea llama a la pagina de inicio de sesión.
+             */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
@@ -3622,6 +4272,12 @@
             }        
             echo $html;
         }else{
+              /*
+             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+             * En la última línea llama a la pagina de inicio de sesión.
+             */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
@@ -3647,6 +4303,12 @@
             }        
             echo $html;
         }else{
+              /*
+             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+             * En la última línea llama a la pagina de inicio de sesión.
+             */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
@@ -3677,6 +4339,12 @@
             header ("location:/ORIEL/index.php?ctl=puntos_bcr_listar");
             //$this->puntos_bcr_listar();
         }else{
+              /*
+             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+             * En la última línea llama a la pagina de inicio de sesión.
+             */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
@@ -3691,6 +4359,12 @@
             $obj_telefono->eliminar_telefono();
 
         }else{
+              /*
+             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+             * En la última línea llama a la pagina de inicio de sesión.
+             */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
@@ -3705,6 +4379,12 @@
             $obj_unidad_ejecutora->eliminar_relacion_puntobcr_ue();
 
         }else{
+              /*
+             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+             * En la última línea llama a la pagina de inicio de sesión.
+             */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
@@ -3719,6 +4399,12 @@
             $obj_unidad_ejecutora->agregar_puntobcr_ue();
             
         }else{
+              /*
+             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+             * En la última línea llama a la pagina de inicio de sesión.
+             */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
@@ -3737,6 +4423,12 @@
             $obj_puntobcr->actualizar_informacion_general_puntobcr();
             //echo 'Se actualizó la ubicacion del PuntoBCR';
         }else{
+              /*
+             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+             * En la última línea llama a la pagina de inicio de sesión.
+             */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
@@ -3752,6 +4444,12 @@
             $obj_puntobcr->actualizar_ubicacion_puntobcr();
             //echo 'Se actualizó la informacion general del PuntoBCR';
         }else{
+              /*
+             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+             * En la última línea llama a la pagina de inicio de sesión.
+             */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
@@ -3771,6 +4469,12 @@
                 header("location:/ORIEL/index.php?ctl=gestion_punto_bcr&id=".$_POST['ID_PuntoBCR']);
             }
         }   else    {
+              /*
+             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+             * En la última línea llama a la pagina de inicio de sesión.
+             */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
@@ -3791,6 +4495,12 @@
                 echo "El Area de Apoyo ya se encuentra asignada al PuntoBCR";
             }
         }else{
+              /*
+             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+             * En la última línea llama a la pagina de inicio de sesión.
+             */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
@@ -3806,6 +4516,12 @@
             $obj_area_apoyo->eliminar_puntobcr_area_apoyo();
             
         }else{
+              /*
+             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+             * En la última línea llama a la pagina de inicio de sesión.
+             */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
@@ -3821,6 +4537,12 @@
             $obj_direccion->eliminar_puntobcr_direccion_ip();
             
         }else{
+              /*
+             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+             * En la última línea llama a la pagina de inicio de sesión.
+             */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
@@ -3842,6 +4564,12 @@
                 echo "La dirección IP ya se encuentra asignada al PuntoBCR";
             }
         }else{
+              /*
+             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+             * En la última línea llama a la pagina de inicio de sesión.
+             */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
@@ -3877,6 +4605,12 @@
             
             header("location:/ORIEL/index.php?ctl=gestion_punto_bcr&id=".$_POST['ID_PuntoBCR']);
         }else{
+              /*
+             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+             * En la última línea llama a la pagina de inicio de sesión.
+             */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
@@ -3895,6 +4629,12 @@
             $obj_puntobcr->actualizar_informacion_adicional_puntobcr();
             //echo 'Se actualizó la ubicacion del PuntoBCR';
         }else{
+              /*
+             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+             * En la última línea llama a la pagina de inicio de sesión.
+             */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
@@ -3919,6 +4659,12 @@
                 }
             }
         }else{
+              /*
+             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+             * En la última línea llama a la pagina de inicio de sesión.
+             */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
@@ -3932,6 +4678,12 @@
             $obj_horario->setCondicion("ID_PuntoBCR='".$_POST['id_puntobcr']."'");
             $obj_horario->asignar_horario_puntobcr();  
         }else{
+              /*
+             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+             * En la última línea llama a la pagina de inicio de sesión.
+             */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
@@ -3944,6 +4696,12 @@
             $obj_horario->setCondicion("ID_PuntoBCR='".$_POST['id_puntobcr']."'");
             $obj_horario->eliminar_horario_puntobcr(); 
         }else{
+              /*
+             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+             * En la última línea llama a la pagina de inicio de sesión.
+             */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
@@ -3980,6 +4738,12 @@
             
             header("location:/ORIEL/index.php?ctl=gestion_punto_bcr&id=".$_POST['ID_PuntoBCR']);
         }else{
+              /*
+             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+             * En la última línea llama a la pagina de inicio de sesión.
+             */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
@@ -4012,6 +4776,12 @@
             $personas= $obj_personal->getArreglo();
             require __DIR__ . '/../vistas/plantillas/frm_personal_listar.php';
         }else{
+              /*
+             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+             * En la última línea llama a la pagina de inicio de sesión.
+             */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
@@ -4036,6 +4806,12 @@
                 }
             }
         }else{
+              /*
+             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+             * En la última línea llama a la pagina de inicio de sesión.
+             */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
@@ -4078,6 +4854,12 @@
             require __DIR__ . '/../vistas/plantillas/frm_personal_detalle.php';
             
         }else{
+              /*
+             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+             * En la última línea llama a la pagina de inicio de sesión.
+             */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
@@ -4092,6 +4874,12 @@
             $obj_telefono->eliminar_telefono();
 
         }else{
+              /*
+             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+             * En la última línea llama a la pagina de inicio de sesión.
+             */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
@@ -4120,6 +4908,12 @@
                 header("location:/ORIEL/index.php?ctl=personal_gestion&id=".$_POST['ID_Persona']);
             }
         }   else    {
+              /*
+             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+             * En la última línea llama a la pagina de inicio de sesión.
+             */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
@@ -4135,6 +4929,12 @@
             $obj_persona->cambiar_ue_persona();
             
         }else{
+              /*
+             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+             * En la última línea llama a la pagina de inicio de sesión.
+             */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
@@ -4150,6 +4950,12 @@
             $obj_persona->cambiar_puesto_persona();
             
         }else{
+              /*
+             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+             * En la última línea llama a la pagina de inicio de sesión.
+             */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
@@ -4172,6 +4978,12 @@
             $obj_persona->actualizar_informacion_general_persona();
             
         }else{
+              /*
+             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+             * En la última línea llama a la pagina de inicio de sesión.
+             */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
@@ -4190,6 +5002,12 @@
             
             require __DIR__ . '/../vistas/plantillas/frm_areas_apoyo_listar.php';
         }else{
+              /*
+             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+             * En la última línea llama a la pagina de inicio de sesión.
+             */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
@@ -4240,6 +5058,12 @@
             
             header("location:/ORIEL/index.php?ctl=gestion_punto_bcr&id=".$_POST['ID_PuntoBCR']);
         }else{
+              /*
+             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+             * En la última línea llama a la pagina de inicio de sesión.
+             */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
@@ -4291,6 +5115,12 @@
             }
             require __DIR__ . '/../vistas/plantillas/frm_areas_apoyo_gestion.php';
         }else{
+              /*
+             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+             * En la última línea llama a la pagina de inicio de sesión.
+             */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
@@ -4305,6 +5135,12 @@
             $obj_telefono->eliminar_telefono();
 
         }else{
+              /*
+             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+             * En la última línea llama a la pagina de inicio de sesión.
+             */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
@@ -4329,7 +5165,13 @@
                 }
                 header("location:/ORIEL/index.php?ctl=area_apoyo_gestion&id=".$_POST['ID_Area_Apoyo']);
             }
-        }   else    {
+        }   else{
+              /*
+             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+             * En la última línea llama a la pagina de inicio de sesión.
+             */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
@@ -4367,6 +5209,12 @@
             
             header("location:/ORIEL/index.php?ctl=areas_apoyo_listar");
         }else{
+              /*
+             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+             * En la última línea llama a la pagina de inicio de sesión.
+             */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
@@ -4386,6 +5234,12 @@
             
             require __DIR__ . '/../vistas/plantillas/frm_direcciones_ip_listar.php';
         }else{
+              /*
+             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+             * En la última línea llama a la pagina de inicio de sesión.
+             */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
@@ -4405,6 +5259,12 @@
             
             require __DIR__ . '/../vistas/plantillas/frm_horario_lista.php';
         }else{
+              /*
+             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+             * En la última línea llama a la pagina de inicio de sesión.
+             */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
@@ -4427,6 +5287,12 @@
             }
             require __DIR__ . '/../vistas/plantillas/frm_horario_gestion.php';
         }else{
+              /*
+             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+             * En la última línea llama a la pagina de inicio de sesión.
+             */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
@@ -4538,6 +5404,12 @@
             
             header("location:/ORIEL/index.php?ctl=horario_listar");
         }else{
+              /*
+             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+             * En la última línea llama a la pagina de inicio de sesión.
+             */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
@@ -4554,6 +5426,12 @@
            $params = $obj_proveedor->getArreglo();
            require __DIR__ . '/../vistas/plantillas/frm_proveedor_enlace_catalogo.php';
         }else{
+              /*
+             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+             * En la última línea llama a la pagina de inicio de sesión.
+             */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
@@ -4581,6 +5459,12 @@
            $params = $obj_proveedor->getArreglo();
            require __DIR__ . '/../vistas/plantillas/frm_proveedor_enlace_catalogo.php';
         }else{
+              /*
+             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+             * En la última línea llama a la pagina de inicio de sesión.
+             */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
@@ -4605,6 +5489,12 @@
            $params = $obj_proveedor->getArreglo();
            require __DIR__ . '/../vistas/plantillas/frm_proveedor_enlace_catalogo.php';
         }else{
+              /*
+             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+             * En la última línea llama a la pagina de inicio de sesión.
+             */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
@@ -4621,6 +5511,12 @@
            $params = $obj_tipo_enlace->getArreglo();
            require __DIR__ . '/../vistas/plantillas/frm_tipo_enlace_catalogo.php';
         }else{
+              /*
+             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+             * En la última línea llama a la pagina de inicio de sesión.
+             */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
@@ -4648,6 +5544,12 @@
            $params = $obj_tipo_enlace->getArreglo();
            require __DIR__ . '/../vistas/plantillas/frm_tipo_enlace_catalogo.php';
         }else{
+              /*
+             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+             * En la última línea llama a la pagina de inicio de sesión.
+             */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
@@ -4671,6 +5573,12 @@
            $params = $obj_tipo_enlace->getArreglo();
            require __DIR__ . '/../vistas/plantillas/frm_tipo_enlace_catalogo.php';
         }else{
+              /*
+             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+             * En la última línea llama a la pagina de inicio de sesión.
+             */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
@@ -4687,6 +5595,12 @@
            $params = $obj_medio->getArreglo();
            require __DIR__ . '/../vistas/plantillas/frm_medio_enlace_catalogo.php';
         }else{
+              /*
+             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+             * En la última línea llama a la pagina de inicio de sesión.
+             */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
@@ -4714,6 +5628,12 @@
            $params = $obj_medio->getArreglo();
            require __DIR__ . '/../vistas/plantillas/frm_medio_enlace_catalogo.php';
         }else{
+              /*
+             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+             * En la última línea llama a la pagina de inicio de sesión.
+             */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
@@ -4737,6 +5657,12 @@
            $params = $obj_medio->getArreglo();
            require __DIR__ . '/../vistas/plantillas/frm_medio_enlace_catalogo.php';
         }else{
+              /*
+             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+             * En la última línea llama a la pagina de inicio de sesión.
+             */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
@@ -4768,6 +5694,12 @@
 //            echo("</pre>");
            require __DIR__ . '/../vistas/plantillas/rpt_enlace_telecom.php';
         }else{
+              /*
+             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+             * En la última línea llama a la pagina de inicio de sesión.
+             */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
@@ -4791,6 +5723,12 @@
             require __DIR__.'/../vistas/plantillas/frm_trazabilidad_listar.php';
         }
         else {
+              /*
+             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+             * En la última línea llama a la pagina de inicio de sesión.
+             */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
@@ -4810,6 +5748,12 @@
             require __DIR__.'/../vistas/plantillas/frm_unidad_ejecutora_catalogo.php';
         }
         else {
+              /*
+             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+             * En la última línea llama a la pagina de inicio de sesión.
+             */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
@@ -4837,6 +5781,12 @@
             require __DIR__.'/../vistas/plantillas/frm_unidad_ejecutora_catalogo.php';
         }
         else {
+              /*
+             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+             * En la última línea llama a la pagina de inicio de sesión.
+             */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
@@ -4863,6 +5813,12 @@
             require __DIR__.'/../vistas/plantillas/frm_unidad_ejecutora_catalogo.php';
         }
         else {
+            /*
+             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+             * En la última línea llama a la pagina de inicio de sesión.
+             */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';

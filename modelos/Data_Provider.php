@@ -1,5 +1,4 @@
       <?php
-
 /*
  * Clase DataProvider, parte de la capa modelo de acceso a los datos
  * Clase principal para interactuar con la base de datos BD_Gerencia_Seguridad de MySQL
@@ -163,7 +162,6 @@ class Data_Provider{
        }
        
    }
-
    //Metodo de conexión a la base de datos, 
    public function conectar(){
     try{
@@ -295,8 +293,7 @@ class Data_Provider{
         $consulta=$this->conexion->query($detalle_sql);
         //echo ($detalle_sql);
         //estable la variable de control a true
-        $this->resultado_operacion=true;
-          
+        $this->resultado_operacion=true;       
    }    
    
    //Método utilizado para ejecutar procedimiento almacenado que inserta datos en la BD

@@ -1,36 +1,95 @@
 <?php
+//Inicio de sesión de usuario para el control de la seguridad
+/*
+ * El manejo de sesiones permite establecer la seguridad y manejo de usuarios dentro del sistema,
+ * trabaja de la mano y en conjunto con los roles, módulos y usuarios del sistema.
+ */
 session_start();
  // carga del modelo y los controladores
+//Controlador requerido para la capa de datos
+/*
+ En este momento y mediante la llamada del index, se realiza una sola vez la importación de todas
+ * las librerías, componentes y elementos que el sitio requerirá dentro de toda su funcionalidad.
+ * Para esto se utiliza la variable reservada DIR, haciendo referencia al directorio raíz contenedor
+ * del proyecto ORIEL. La instrucción require_once importa la clase o el componente dentro del proyecto
+ * para su futura utilización.
+ */
 require_once __DIR__ . '/modelos/Data_Provider.php';
+//Libreria de clases --> Control de usuarios
 require_once __DIR__ . '/controladores/cls_usuarios.php';
+//Libreria de clases --> Control de roles de usuarios
 require_once __DIR__ . '/controladores/cls_roles.php';
+//Libreria de clases --> Control de módulos y funcionalidades de seguridad
 require_once __DIR__ . '/controladores/cls_modulos.php';
+//Libreria de clases --> Control de eventos de bitácora
 require_once __DIR__ . '/controladores/cls_eventos.php';
+//Libreria de clases --> Control de áreas de apoyo
 require_once __DIR__ . '/controladores/cls_areasapoyo.php';
+//Libreria de clases --> Control de Puntos BCR
 require_once __DIR__ . '/controladores/cls_puntosBCR.php';
+//Libreria de clases --> Control de Empresas
 require_once __DIR__ . '/controladores/cls_empresa.php';
+//Libreria de clases --> Control de personal(interno y externo)
 require_once __DIR__ . '/controladores/cls_personal.php';
+//Libreria de clases --> Control de horarios
 require_once __DIR__ . '/controladores/cls_horario.php';
+//Libreria de clases --> Control de direcciones IP
 require_once __DIR__ . '/controladores/cls_direccionIP.php';
+//Libreria de clases --> Control de trazabilidad (seguimiento a la actividad de usarios dentro del sistema)
 require_once __DIR__ . '/controladores/cls_trazabilidad.php';
+//Libreria de clases --> Control de elementos y funcionalidades generales 
 require_once __DIR__ . '/controladores/cls_general.php';
+//Libreria de clases --> Control de teléfonos 
 require_once __DIR__ . '/controladores/cls_telefono.php';
+//Libreria de clases --> Control de unidades ejecutoras
 require_once __DIR__ . '/controladores/cls_unidad_ejecutora.php';
+//Libreria de clases --> Control de puestos 
 require_once __DIR__ . '/controladores/cls_puestos.php';
+//Libreria de clases --> Control de horarios
 require_once __DIR__ . '/controladores/cls_proveedor_enlace.php';
+//Libreria de clases --> Control de tipos de enlaces en el sistema
 require_once __DIR__ . '/controladores/cls_tipo_enlace.php';
+//Libreria de clases --> Control de medios de enlace
 require_once __DIR__ . '/controladores/cls_medio_enlace.php';
+//Libreria de clases --> Control de padrones fotográficos para puntos BCR
 require_once __DIR__ . '/controladores/cls_padron_fotografico_puntosbcr.php';
+//Libreria de clases --> Control de enlaces del departamento de telecomunicaciones
 require_once __DIR__ . '/controladores/cls_enlace_telecom.php';
+/*
+ * El elemento controller, constituye la base y esencia de toda la lógica del negocio, en este
+ * se almacenan cada una de las funcionales de ORIEl. El archivo en sí, se compone de "n" cantidad
+ * de eventos de clase que son llamados según las necesidades del usuario y el sistema en si.
+ */
 require_once __DIR__ . '/modelos/Controller.php';
+/*
+ * Componente que permite realizar funciones especiales dentro del sistema, dentro de las cuales
+ * están: encriptar información sensible, quitar tíldes, caracteres especiales, etc.
+ */
 require_once __DIR__ . '/modelos/Encrypter.php';
+// Librería open source para el manejo y transacción de correos electrónicos.
 require_once __DIR__ . '/modelos/PHPMailerAutoload.php';
+/*
+ * // Librería open source para el manejo y transacción de correos electrónicos. Trabaja en conjunto con
+ * la anterior.
+ */
 require_once __DIR__ . '/modelos/class.phpmailer.php';
+/*
+ * // Librería open source para el manejo y transacción de correos electrónicos. Trabaja en conjunto con
+ * la anterior.
+ */
 require_once __DIR__ . '/modelos/class.smtp.php';
+/*
+ * Librería de clase, para el manejo y envío de correos electrónicos, hecha exclusivamente para el proyecto
+ * ORIEL. Integra las tres librerías OPEN SOURCE anteriormente citadas.
+ */
 require_once __DIR__ . '/modelos/Mail_Provider.php';
 
-
-// enrutamiento
+/*
+ * Dentro del concepto de modelo vista controlador, se maneja el siguiente vector de nombres  de eventos de la clase controlador.
+ * Permite declarar cada funcionalidad definida en el controlador para su correcta utilización. Si no se declara el nombre del evento
+ * en este vector, no será posible utilizar su definición dentro del sistema ORIEL. 
+ */
+// enrutamiento, se enlistan cada una de las funcionalidades del controller entre comillas, tanto al inicio como al final de la línea (deben de coincidir)
 $map = array(
     //Controlador General
     'inicio' => array('controller' =>'Controller', 'action' =>'inicio'),
@@ -187,7 +246,7 @@ $map = array(
     'frm_importar_prontuario_paso_10'=>array('controller'=>'Controller','action'=> 'frm_importar_prontuario_paso_10'),
     'frm_importar_prontuario_paso_11'=>array('controller'=>'Controller','action'=> 'frm_importar_prontuario_paso_11'),
 
-    //Controlador de Usuarios
+    //Controlador de Usuarios 
     'listar_usuarios'=> array('controller'=>'Controller','action'=>'listar_usuarios'),
     'gestion_usuarios' => array('controller'=> 'Controller','action'=>'gestion_usuarios'),
     'guardar_usuario' => array('controller'=> 'Controller','action'=>'guardar_usuario'),
@@ -202,6 +261,17 @@ $map = array(
  
 
  // Parseo de la ruta
+/*
+ * Todo el manejo de llamada y uso de funcionalidades del sistema, se usa por medio de una variable que se utiliza dentro del 
+ * método GET de cada llamada a los formularios de la capa de vista o interfaz gráfica. Esta variable lleva el nombre  de CTL
+ * Esta siguiente validación comprueba si el sistema está arrancando o si ya es una llamada subsecuente a la primera (por ejemplo
+ * segunda, tercera, etc). 
+ * En este caso, si la variable CTL está definida, agrega a la ruta el valor que trar CTL (en este caso la funcionalida especifica
+ * del sistema que se está requiriendo), siempre y cuando se encuentre en el vector de funcionalidaes definido anteriormente 
+ * dentro de este archivo, de lo contrario muestra un error indicando que la ruta del controlador no existe. Si la variable CTL
+ * no está definida, indica que está iniciando el sistema por lo que ruta queda asignada a inicio para mostrar la pantalla principal
+ * del sistema.
+ */
 if (isset($_GET['ctl'])) {
     if (isset($map[$_GET['ctl']])) {
         $ruta = $_GET['ctl'];
@@ -216,13 +286,23 @@ if (isset($_GET['ctl'])) {
     $ruta = 'inicio';
 }
 
+// Una vez verificado lo que se ocupa mostrar en pantalla, asigna la posición del vector correspondiente a la variable controlador
+// Esto para llamar al evento respectivo.
 $controlador = $map[$ruta];
 // Ejecución del controlador asociado a la ruta
+
+/*
+ * Utlizando la verificacion reservada de PHP (method_exists), valida que el metodo que se ocupa llamar exista en el 
+ * componente Controller.php, si es así lo ejecuta por medio de la funcionalidad reservada de PHP llamada call_user_func
+ * de lo contrario mostrará un mensaje de error en pantalla.
+ */
 
 if (method_exists($controlador['controller'],$controlador['action'])) {
     call_user_func(array(new $controlador['controller'], $controlador['action']));
 } else {
+    //Muestra error en pantalla para indicar que no encontró el elemento
     header('Status: 404 Not Found');
+    //Arma el mensaje de error, mostrando posteriormente en pantalla.
     echo '<html><body><h1>Error 404: El controlador <i>' .
             $controlador['controller'] .
             '->' .
