@@ -1488,11 +1488,15 @@
             //Agrega nombres a las columnas principales del documento.
             $vector_personas_con_numeros_en_cero[][]=array("Apellido_Nombre" => "","Cedula" => "","ID_Persona" => "");
             
-            //Obtiene el vector completo de inconsistencias generado por la consulta.
+            //Obtiene el vector completo de inconsistencias generado por la consult a y lo anexa al vector actual.
             $vector_personas_con_numeros_en_cero[]=$obj_personal->getArreglo();
+            
+            //Agrega nombres a las columnas del vector de personas con numero en cero.
             $vector_personas_con_numeros_en_cero[][]=array("Apellido_Nombre" => "","Cedula" => "","ID_Persona" => "");
             
+            //Obtiene el total de registros que trajo la consulta.
             $numero_personas_cero=count($obj_personal->getArreglo());
+            //Agrega summary al vector de personas con numero en cero.
             $vector_personas_con_numeros_en_cero[][]=array("Apellido_Nombre" => "Se encontraron un toal de ".$numero_personas_cero. " personas que tienen numeros de telefono en cero.","Cedula" => "","ID_Persona" => "");
               
             //Llamada al formulario correspondiente de la vista
@@ -1515,11 +1519,11 @@
         
     }
     
-    // Paso de importación del prontuario que permite actualizar la tabla de personas en el sistema
+    // Ultimo paso de importación del prontuario que confirma que el proceso se realizó correctamente.
     public function frm_importar_prontuario_paso_11(){
-        
+        //Validación para verificar si el usuario está logeado en el sistema
         if(isset($_SESSION['nombre'])){
-                                 
+           //Llamada al formulario correspondiente de la vista                    
            require __DIR__ . '/../vistas/plantillas/frm_importar_prontuario_paso_11.php';
      
         }else {
@@ -1531,6 +1535,7 @@
              */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            //Llamada al formulario correspondiente de la vista
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         } 
     }
@@ -1539,102 +1544,162 @@
     public function cambiar_password(){   
         $usuario = "";       
         $clave = "";  
+        //Variables que muestran un tipo de alerta específico en el formulario, dependiendo de la condición y solicitud del usuario
         $tipo_de_alerta="alert alert-info";
         $validacion="En proceso de cambio de clave";
+        //Llamada al formulario correspondiente de la vista
         require __DIR__ . '/../vistas/plantillas/frm_Cambio_Clave.php';
     }
  
+    //Metodo que permite realizar el cambio de clave a un usuario registrado en el sistema.
     public function cambia_clave_usuario_post(){
+        //Inicializa las variables de utilizacion en el metodo.
         $usuario = "";       
         $clave = "";  
+        //Variables que muestran un tipo de alerta específico en el formulario, dependiendo de la condición y solicitud del usuario
         $tipo_de_alerta="alert alert-info";
         $validacion="En proceso de cambio de clave";
 
-        $obj_usuarios= new cls_usuarios();         
+        //Crea un objeto de tipo usuarios del sistema, para el manejo en la tabla de la bd.
+        $obj_usuarios= new cls_usuarios();       
+        //Verifica el envío de información mediante el evento post del formulario.
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            //obtiene el usuario del formulario anterior.
             $usuario = $_POST['usu'];
+            // obtiene el password anterior
             $clave= $_POST['password_antiguo'];
+            //obtiene el nuevo password.
             $clave_nueva=$_POST['password_nuevo'];
+            //Recibe la confirmación de la nueva clave.
             $confirmacion_clave=$_POST['confirmacion_password'];
+            // Crea un objeto de tipo modulo de seguridad. 
             $obj_modulos = new cls_modulos();
             
+            //verifica que la variable usuario traiga datos
             if (strlen($usuario)>0){
+                //Valida que el usuario que requiere cambiar la clave, exista en la base de datos.
                 if ($obj_usuarios->existe_usuario($usuario)){
+                    //Verifica que el password sea correcto de acuerdo a la base de datos
                     if ($obj_usuarios->valida_password_de_usuario($usuario, $clave)){
+                        //verifica si el usuario realizando el tramite está activo
                         if ($obj_usuarios->el_usuario_esta_activo($usuario, $clave)){
+                            //Verifica que las nuevas claves tengan informacion
                             if ((strlen($clave_nueva)>0) && (strlen($confirmacion_clave)>0)){
+                                //Verifica que la nueva clave y la confirmación sean iguales.
                                 if ($clave_nueva===$confirmacion_clave){
+                                    //Verifica que la clave vieja sea diferente sea de la nueva.
                                     if ($clave_nueva!=$clave){
+                                        //Define variables de sesión, por ejemplo: nombre, rol, name, apellido, id y modulos.
                                         $_SESSION['nombre']=$usuario;
+                                        //Metodo que permite obtener el rol del usuario en cuestión.
                                         $obj_usuarios->obtiene_rol_nombre_apellido_de_usuario($usuario);
+                                        //Variables de sesión que funcionan durante todo el recorrido del usuario en el sitio web.
                                         $_SESSION['rol']=$obj_usuarios->getRol();
                                         $_SESSION['name']=$obj_usuarios->getNombre();
                                         $_SESSION['apellido']=$obj_usuarios->getApellido();
                                         $_SESSION['id']=$obj_usuarios->getId();
+                                        //Establece el atributo nombre del objeto
                                         $obj_usuarios->setNombre($usuario);
+                                        //Establece la nueva clave  en el objeto respectivo. 
                                         $obj_usuarios->setClave($clave_nueva);
+                                        //Procede a editar el password  del usuario.
                                         $obj_usuarios->edita_passsword();
+                                        //Define un vector de sesión, para almacenar todos los modulos o funcionalidades del sitio asignadas al usuario.
                                         $_SESSION['modulos']=array();
-                                        
+                                        //Obtiene todos los modulos del sistema
                                         $obj_modulos->obtiene_todos_los_modulos();
+                                        //Define un vector para asignar el resultado de la consulta SQL.
                                         $modulos= $obj_modulos->getArreglo();
+                                        //Ejecuta la función para ver que módulos tiene asignado el rol del usuario.
                                         $obj_modulos->obtiene_lista_de_modulos_por_rol($obj_usuarios->getRol());
+                                        //asigna a la variable roles, el vector de resultados de la consulta desde la bd.
                                         $roles = $obj_modulos->getArreglo();
+                                        //asigna a la variable la cantidad de modulos que trajo la consulta SQL.
                                         $tam = count($modulos);
+                                        //asigna a la variable la cantidad de roles que trajo la consulta SQL.
                                         $tam2 = count($roles);
+                                        //Asigna inactivo a la variable estado.
                                         $estado=0;
+                                        //Este ciclo permite agregar el vector de modulos o funcionalidades que tiene el usuario en la sesión.
                                         for($i=0; $i<$tam;$i++){
                                             for($c=0;$c<$tam2;$c++){
+                                                //Agrega un nuevo elemento al vector de modulos, con la descripcion del modulo desde base  de datos,
+                                                //Utilizado para efectos de seguridad.
+                                                //Si el rol tiene el módulo del sistema, procede a definir la variable estado a 1 y sale del bucle.
                                                 if($modulos[$i]['Descripcion']==$roles[$c]['Descripcion']){
                                                     $estado = 1;
                                                     break;
                                                 }
                                             }
+                                            //Va agregando al vector de modulos en la sesión de usuario, las funcionalidades que tiene asignadas de acuerdo al rol correspondiente.
                                             $_SESSION['modulos']= array_merge($_SESSION['modulos'],[($modulos[$i]['Descripcion'])=>($estado)]);
+                                            //Inicializa la variable en cero.
                                             $estado= 0;
                                         }
-                                        
+                                        //Llamada al formulario correspondiente de la vista
                                         require __DIR__ . '/../vistas/plantillas/frm_principal.php';
 
                                     }else{
+                                        //Muestra un mensaje de error, de que la contraseña nueva y la vieja son iguales.
+                                        //Inicializa las variables de trabajo del metodo.
                                         $validacion="La nueva contraseña debe ser diferente a la contraseña actual. Proceda a revisar.";
                                         $tipo_de_alerta="alert alert-danger";
+                                        //Llamada al formulario correspondiente de la vista
                                         require __DIR__ . '/../vistas/plantillas/frm_Cambio_Clave.php'; 
                                     }
                                     }else{
+                                        //Le muestra un mensaje de error que al usuario de que las contraseñas no coinciden.
+                                        //Inicializa las variables de trabajo del metodo.
                                         $validacion="La nueva contraseña y confirmación no coinciden. Proceda a revisar.";
                                         $tipo_de_alerta="alert alert-danger";
+                                        //Llamada al formulario correspondiente de la vista
                                         require __DIR__ . '/../vistas/plantillas/frm_Cambio_Clave.php'; 
                                     }
                                    
                                 }else{
+                                    //Le muestra un mensaje de error al usuario de que el largo de la contraseña y de la confirmación no coincide.
+                                    //Inicializa las variables de trabajo del metodo.
                                     $validacion="Recuerde que los espacios para nueva clave y confirmación, no pueden quedar vacíos";
                                     $tipo_de_alerta="alert alert-danger";
+                                    //Llamada al formulario correspondiente de la vista
                                     require __DIR__ . '/../vistas/plantillas/frm_Cambio_Clave.php'; 
                                 }
                             }else{
+                                //Informa que el usuario no esta activo, por lo que no podrá realizarse el cambio de contraseña.
+                                //Inicializa las variables de trabajo del metodo.
                                 $validacion="Usuario Inactivo, contacte al administrador del sistema!!!";
                                 $tipo_de_alerta="alert alert-danger";
+                                //Llamada al formulario correspondiente de la vista
                                 require __DIR__ . '/../vistas/plantillas/frm_Cambio_Clave.php'; 
                             }
                         }else{
+                            //De lo contrario notifica que la contraseña actual suministrada no es correcta de acuerdo a la bd.
+                            //Inicializa las variables de trabajo del metodo.
                             $validacion="La Contraseña actual del usuario no es correcta";
                             $tipo_de_alerta="alert alert-danger";
                             $clave="";
+                            //Llamada al formulario correspondiente de la vista
                             require __DIR__ . '/../vistas/plantillas/frm_Cambio_Clave.php'; 
                         }
                     }else{
+                        // De lo contrario notifica que este usuario no existe en la base de datos y define las variables de error correspondientes.
                         $validacion="El usuario no se encuentra registrado en la base de datos";
                         $tipo_de_alerta="alert alert-danger";
+                        //Inicializa las variables de trabajo del metodo.
                         $usuario="";
                         $clave="";
+                        //Llamada al formulario correspondiente de la vista
                         require __DIR__ . '/../vistas/plantillas/frm_Cambio_Clave.php';
                     }
+                    
                 }else {
+                    // De lo contrario notifica al usuario que es necesario ingresar el numero de cedula y define las variables de error correspondientes.
                     $tipo_de_alerta="alert alert-danger";
                     $validacion="Debe completar el espacio de usuario para poder continuar con el proceso";
+                    //Inicializa las variables de trabajo del metodo.
                     $usuario="";
                     $clave="";
+                    //Llamada al formulario correspondiente de la vista
                     require __DIR__ . '/../vistas/plantillas/frm_Cambio_Clave.php';
                 }
             }else {
@@ -1646,25 +1711,35 @@
              */
                 $tipo_de_alerta="alert alert-danger";
                 $validacion="Es necesario completar la infornación requerida para cambiar la contraseña";
+                //Llamada al formulario correspondiente de la vista
                 require __DIR__ . '/../vistas/plantillas/frm_Cambio_Clave.php';
             }
     }  
 
     // Cambia estado del rol (activo/inactivo)
     public function cambiar_estado_rol(){
+        //Validación para verificar si el usuario está logeado en el sistema
         if(isset($_SESSION['nombre'])){
+            //Verifica si la variable id fue enviada por el url de la solicitud.
             if (isset($_GET['id'])) {
+                //Verifica si la variable estado fue enviada por el url de la solicitud.
                 if (isset($_GET['estado'])) {
+                    //Crea un objeto de tipo roles.
                     $obj_roles=new cls_roles();
+                    // Estable el id del rol, enviado via get por el url.
                     $obj_roles->setId($_GET['id']);
+                    // Estable el estado del rol, enviado via get por el url.
                     $obj_roles->setEstado($_GET['estado']);
+                    //Procede a cambiar el estado del rol mediante el metodo.
                     $obj_roles->edita_estado_rol();
                     
-                    //$obj_roles->desactivar_usuario_rol_inactivo();
+                    //Redefine nuevamente el objeto de tipo rol
                     $obj_roles=new cls_roles();
+                    //Obtiene el listado completado de roles del sistema.
                     $obj_roles->obtiene_todos_los_roles();
+                    // asigna el resultado de la consulta sql, al vector de parametros.
                     $params= $obj_roles->getArreglo();
-                    
+                    //Llamada al formulario correspondiente de la vista
                     require __DIR__ . '/../vistas/plantillas/lista_de_roles.php';
                 }
              }
@@ -1678,6 +1753,7 @@
              */
           $tipo_de_alerta="alert alert-warning";
           $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+          //Llamada al formulario correspondiente de la vista
           require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
       }
     }
@@ -1688,14 +1764,21 @@
        //Envia un tipo de alerta de información, indicando que el sistema cerró la sesion actual
        $tipo_de_alerta="alert alert-info";
        $validacion="Verificación de Identidad";
+       //Llamada al formulario correspondiente de la vista
        require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+       //Función de PHP que permite destruir la sesión actual del usuario.
        session_destroy();
     }
     
+    // Metodo que permite obtener las notas del sistema, a nivel del rol de coordinacion de Z1.
     public function nota_obtener() {
+        //Validación para verificar si el usuario está logeado en el sistema
         if(isset($_SESSION['nombre'])){
+            //Crea un objeto de la clase general.
             $obj_general = new cls_general();
+            //Procede a ejecutar la consulta SQL para traer todas las notas contenidas en la bd.
             $obj_general->obtener_notas();
+            //Obtener el vector de la consulta
             $notas= $obj_general->getArreglo(); 
         }else{
               /*
@@ -1706,15 +1789,22 @@
              */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            //Llamada al formulario correspondiente de la vista
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }  
     }
     
+    //Evento que guarda en caliente las notas que se  agregan en la ventana dinamica. 
     public function nota_guardar() {
+        //Validación para verificar si el usuario está logeado en el sistema
         if(isset($_SESSION['nombre'])){
+            //Creación de objeto de tipo general para gestionar las notas.
             $obj_general = new cls_general();
+            // Establece el id de la nota, para editarla 
             $obj_general->setId($_POST['id']);
+            //Establecer el contenido de la noa.
             $obj_general->setNota($_POST['nota']);
+            //Guarda la nota en bd
             $obj_general->guardar_nota();            
         }else{
               /*
@@ -1725,18 +1815,27 @@
              */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            //Llamada al formulario correspondiente de la vista
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }    
     }
     
+    //Metodo que permite almacenar un nuevo modulo (funcionalidad) a nivel de seguridad en el sistema
     public function guardar_modulo_rol($id_Rol){
+        //Validación para verificar si el usuario está logeado en el sistema
         if(isset($_SESSION['nombre'])){
+            //Verifica si la variable lista esta definida por medio del evento post del formulario html
             if (isset($_POST["lista"])){
+                //Obtiene el listado de modulos que viene desde el formulario html
                 $listaModulos = $_POST["lista"];
+                // Crea un objeto de la clase roles
                 $obj_roles = new cls_roles();
+                //verifica que se haya recibido un id valido por parametro en el metodo.
                 if($id_Rol!=0){
+                    //Llama al metodo que permite insertar una cantidad x de modulos asignado a un rol.
                     $obj_roles->insertar_rolesModulo($id_Rol,$listaModulos);
                 }   else{
+                    //De lo contrario muestra un mensaje en pantalla.
                     echo ($id_Rol).'No se ingresaron los modulos';
                     }
             }
@@ -1749,13 +1848,16 @@
              */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            //Llamada al formulario correspondiente de la vista
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }
     }
     
     // Guarda un nuevo Rol del sistema
-    public function guardar_rol(){         
+    public function guardar_rol(){       
+        //Validación para verificar si el usuario está logeado en el sistema
         if(isset($_SESSION['nombre'])){
+            //Verificar si la solicitud trae información por el metodo post del formulario HTML
            if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 $obj_roles=new cls_roles();
                 $obj_roles->setDescripcion($_POST['descripcion']);
