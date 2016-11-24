@@ -1859,38 +1859,62 @@
         if(isset($_SESSION['nombre'])){
             //Verificar si la solicitud trae información por el metodo post del formulario HTML
            if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+               //Crea un objeto de tipo roles
                 $obj_roles=new cls_roles();
+                //agrega descripcion al rol, la cual viene del formulario html
                 $obj_roles->setDescripcion($_POST['descripcion']);
+                //Establece el estado 
                 $obj_roles->setEstado($_POST['estado']);
               
+                //En caso de que el id enviado sea cero, procede a incluir un nuevo rol
                 if ($_GET['id']==0){
+                    //Ejecuta la sentencia SQL para traer todos lo roles establecidos por bd
                     $obj_roles->obtiene_todos_los_roles();
+                    //Inicializa un vector con la consulta y el listado de roles
                     $validacion = $obj_roles->getArreglo();
+                    //Extrae la cantidad de registros de la consulta
                     $tam = count($validacion);
+                    //Variable bandera para verificar si la descrupción del módulo ya existe en la bd
                     $correcto=0;
+                    //Recorre el listado general de roles del sistema
                     for($i=0; $i<$tam;$i++){
+                        //Valida si la descripcion del rol en bd es igual a la que trae el formulario html.
                         if($_POST['descripcion']==$validacion[$i]['Descripcion']){
-                        $correcto=1;
-                        echo '<script>alert("Este Rol ya se encuentra registrado en el sistema");</script>';
+                            //en caso de que sea correcto, asigna a la variable bandera el valor de 1
+                            $correcto=1;
+                            //Envía una alerta indicando que este rol ya se encuentra en la base de datos con la misma descripción.
+                            echo '<script>alert("Este Rol ya se encuentra registrado en el sistema");</script>';
                         }
                     }
+                    //Si la variable bandera se mantiene en el valor inicial, procede a guardar la información del nuevo rol.
                     if($correcto==0){
+                        //Ingresa el rol en bd
                         $obj_roles->inserta_rol();
+                        //Obtiene el id del rol recien ingresado
                         $obj_roles->obtiene_id_ultimo_rol_ingresado();
+                        //Asigna el id a una var iable
                         $id_ult_rol=$obj_roles->getId_ultimo_rol_ingresado();
+                        //Procede a guardar los modulos relacionados al rol, enviando por parametro el id del rol
                         $this->guardar_modulo_rol($id_ult_rol);
                     }   else    {
+                        //Caso contrario vuelve a la pantalla de gestion del rol
                          header ("location:/ORIEL/index.php?ctl=gestion_roles");
-                        //$this->gestion_roles();
-                    }
+                        }
+                    //En caso de que el id enviado sea diferente a cero, procede a modificar un rol
                 }   else    {
+                    //Establece el atributo del objeto con la información enviada desde el formulario html.
                     $obj_roles->setId($_GET['id']);
+                    //Guarda el rol modificado en base de datos
                     $obj_roles->edita_rol();
+                    //Guarda el modulo modificado en base de datos
                     $this->guardar_modulo_rol($_GET['id']);
                 }
+                //Vuelve a traer la lista completa de roles de seguridad presentes en la bd
                 $obj_roles->obtiene_todos_los_roles();
+                //Asigna a una variable el vector de registros de la consulta SQL.
                 $params = $obj_roles->getArreglo();
         }
+        //Llamada al formulario correspondiente de la vista
         require __DIR__ . '/../vistas/plantillas/lista_de_roles.php';
                
         }else{
@@ -1902,30 +1926,47 @@
              */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            //Llamada al formulario correspondiente de la vista
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }
     }
-     
+    
+    //Metodo que permite guardar nuevos o modificar roles en el modulo de seguridad del sistema
     public function gestion_roles(){
+        //Validación para verificar si el usuario está logeado en el sistema
         if(isset($_SESSION['nombre'])){
+            //Si el id enviado por parámetro es cero, procede a ingresar un nuevo rol.
             if ($_GET['id']==0){
+                //Inicializa variables para presentarlas en pantalla
                 $desc="";
                 $esta=1;
                 $ide=$_GET['id'];
+                //Inicializa un vector de lista de roles
                 $lista= array();
+                
+                //Modifica un rol existente
             }   else   {
+                //Inicializa las variables para presentarlas en pantalla
                 $ide=$_GET['id'];
                 $desc=$_GET['descripcion'];
                 $esta=$_GET['estado']; 
             
+                //Crea un objeto de tipo roles del sistema
                 $obj_roles= new cls_roles();
+                //Ejecuta la sentencia SQL para traer todos los modulos por rol de seguridad
                 $obj_roles->obtiene_todos_los_modulos_por_rol($ide);
+                //Inicializa los valores  a un vector 
                 $lista= $obj_roles->getArreglo();
             }
+            //Crea un objeto de tipo modulos
             $obj_modulos=new cls_modulos();
+            //Establece una condicion para traer solamente modulos activos en el sistema
             $obj_modulos->setCondicion("Estado=1");
+            //Ejecuta la sentencia SQL
             $obj_modulos->obtiene_todos_los_modulos();
+            // Asigna el resultado a un vector
             $params= $obj_modulos->getArreglo();
+            //Llamada al formulario correspondiente de la vista
             require __DIR__ . '/../vistas/plantillas/gestion_roles.php';
                
         }   else    {
@@ -1937,16 +1978,22 @@
              */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            //Llamada al formulario correspondiente de la vista
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }
     }     
     
     //Trae la lista completa de modulos del sistema
-    public function modulos_listar(){      
+    public function modulos_listar(){     
+        //Validación para verificar si el usuario está logeado en el sistema
         if(isset($_SESSION['nombre'])){
+            //Crea un objeto de tipo modulos
             $obj_modulos=new cls_modulos();
+            //Ejecuta la sentencia SQL
             $obj_modulos->obtiene_todos_los_modulos();
+            //Inicializa el vector correspondiente 
             $params= $obj_modulos->getArreglo();
+            //Llamada al formulario correspondiente de la vista
             require __DIR__ . '/../vistas/plantillas/lista_de_modulos.php';
         }else{
               /*
@@ -1957,44 +2004,69 @@
              */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            //Llamada al formulario correspondiente de la vista
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         } 
     }
      
     //Ingresa un nuevo módulo de seguridad en la base de datos
     public function modulos_guardar(){
+        //Validación para verificar si el usuario está logeado en el sistema
         if(isset($_SESSION['nombre'])){   
+            //Verifica si trae variables de formulario HTML vía metodo POST
             if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+                //Crea un objeto de tipo modulos para manipular la tabla de bd
                 $obj_modulos=new cls_modulos();
+                //Inicializa la descripcion como atributo del objeto
                 $obj_modulos->setDescripcion($_POST['descripcion']);
+                //Inicializa el estado como atributo del objeto
                 $obj_modulos->setEstado($_POST['estado']);
               
+                //Si el id recibido por la url es cero, procede a ingresar un nuevo modulo
                 if ($_GET['id']==0){
+                    //Ejecuta la sentencia SQL para traer la lista de modulos
                     $obj_modulos->obtiene_todos_los_modulos();
+                    //Inicializa una variable con el listado de modulos
                     $validacion= $obj_modulos->getArreglo();
+                    //Tamaño de registros del vector
                     $tam = count($validacion);
+                    //Variable bandera para verificar que el nuevo modulo no exista en bd
                     $correcto=0;
+                    //Este bucle compara el lista de todos los modulos con el nuevo por ingresar para descartar que este repetido
                     for($i=0; $i<$tam;$i++){
+                        //Valida si ya existe la descripcion del nuevo modulo en alguno de los ya existentes.
                         if($_POST['descripcion']==$validacion[$i]['Descripcion']){
-                        $correcto=1;
-                        echo '<script>alert("Este Modulo ya se encuentra registrado en el sistema");</script>';
+                            //En caso de ser así, cambia el valor de la bandera
+                            $correcto=1;
+                            //Notifica al usuario final que ya este modulo se encuentra en bd
+                            echo '<script>alert("Este Modulo ya se encuentra registrado en el sistema");</script>';
                         }
                     }
+                    //En caso de no encontra  repetidos, procede a ingresarlo
                     if($correcto==0){
+                        //Guarda en bd
                         $obj_modulos->inserta_modulo();
+                        //Obtiene el id del modulo ingresado
                         $ultimo_modulo = $obj_modulos->getArreglo();
+                        //Procede a ingresar los modulos del rol correspondiente
                         $obj_modulos->insertar_rolesModulo("1", $ultimo_modulo[0]['ID_Modulo']);
                     }   else    {
+                        //Llamada al formulario correspondiente de la vista
                         header ("location:/ORIEL/index.php?ctl=modulos_gestion");
-                        //$this->modulos_gestion();
-                    }
+                                            }
+                //En caso de que el id sea diferente de cero, procede a editar un modulo
                 }   else   {
+                    //Inicializa los atributos del objeto correspondiente
                     $obj_modulos->setId($_GET['id']);
+                    //Guarda la nueva información en bd
                     $obj_modulos->edita_modulo();
                 }
+                //Procede a generar nuevamente la consulta de todos los modulos de seguridad que se encuentran en bd
                 $obj_modulos->obtiene_todos_los_modulos();
+                //Inicializa una variable con el total de registros traidos en la consulta desde la bd
                 $params= $obj_modulos->getArreglo();
             }
+            //Llamada al formulario correspondiente de la vista
             require __DIR__ . '/../vistas/plantillas/lista_de_modulos.php';
         }   else    {
               /*
@@ -2005,11 +2077,13 @@
              */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            //Llamada al formulario correspondiente de la vista
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }
     }
     
     public function modulos_cambiar_estado(){
+        //Validación para verificar si el usuario está logeado en el sistema
         if(isset($_SESSION['nombre'])){
             if (isset($_GET['id'])) {
                 if (isset($_GET['estado'])) { 
@@ -2034,6 +2108,7 @@
              */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            //Llamada al formulario correspondiente de la vista
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }
     }
