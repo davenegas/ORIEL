@@ -930,65 +930,102 @@
                     $obj_telefono->eliminar_telefonos_para_prontuario();
                     
                     ///////////////////////////Generar inconsistencias del sistema
+                    
+                    //Esta validación permite comprobar que el numero de telefono a analizar cumpla los estandares minimos para celulares
+                    //Por ejemplo 8 digitos, que sean numeros, etc.
                    
                     if ((strlen($arreglo_telefonos_celulares[$i][1])==8)&&(is_numeric($arreglo_telefonos_celulares[$i][1]))){
                                 
+                        //Verifica si tiene numeros de telefono diferentes en bd al celular que viene en prontuario
                         $obj_telefono->setCondicion("(ID=".$obj_personal->getId().") AND (ID_Tipo_Telefono=3 or ID_Tipo_Telefono=27) AND (Numero<>'".$arreglo_telefonos_celulares[$i][1]."')");
-                        //echo "(ID=".$obj_personal->getId().") AND (ID_Tipo_Telefono=3 or ID_Tipo_Telefono=27) AND (Numero<>'".$arreglo_telefonos_celulares[$i][1]."')"."<br>";
+                        
+                        //Ejecuta la consulta SQL
                         $obj_telefono->obtiene_telefonos_por_criterio_para_prontuario();
                         
+                        //Esta validación permite verificar si el funcionario tiene un numero de celular distinto al que viene en el prontuario y lo registra para el reporte de excel.
                         if (count($obj_telefono->getArreglo())>0){
                             $valor_prontuario="El funcionario (a) con cedula: ".$arreglo_telefonos_celulares[$i][0]." tiene el el numero de celular: ".$arreglo_telefonos_celulares[$i][1]." a nivel de prontuario.";
+                            //Variable que va armando la cadena de telefonos registrados en base de datos para crear el comparativo
                             $valor_base_datos="Numeros de telefono celular registrados en la base de datos de Oriel: ";
                              for ($x = 0; $x < count($obj_telefono->getArreglo()); $x++) {
                                  
+                                 //Acumula cada registro en la variable correspondiente para armar una sola sentencia
                                 $valor_base_datos.=$obj_telefono->getArreglo()[$x]['Numero'].", ";
                                 
                              }
+                             //Agrega el registro de inconsistencias generado para este funcionario al vector general para el reporte de excel
                              $vector_inconsistencias[]=array ($valor_prontuario,$valor_base_datos);
+                             //Agrega espacio en blanco en el vector
                              $vector_inconsistencias[]=array ("","");
                         }  
                     }
                                      
                     ///////////////////////////////////////////////////////////////
                     
+                    /*
+                     * Consulta y criterio que permite traer los numeros de telefonos asignados a un funcionario BCR
+                     */
                     $obj_telefono->setCondicion("(ID=".$obj_personal->getId().") AND (ID_Tipo_Telefono=2 or ID_Tipo_Telefono=3 or ID_Tipo_Telefono=4 or ID_Tipo_Telefono=27 or ID_Tipo_Telefono=28) ");
+                    //ejecuta la sentencia SQL correspondiente según el criterio establecido en la linea anterior
                     $obj_telefono->obtiene_telefonos_por_criterio_para_prontuario();
                     
+                    //Establece los atributos del objeto de tipo telefono, id2 se refiere al id de la persona en cuestión
                     $obj_telefono->setid2($obj_personal->getId());
+                    //Asigna tipo de telefono 3 = celular 
                     $obj_telefono->setTipo_telefono("3");
+                    //Observaciones del campo en vacío
                     $obj_telefono->setObservaciones("");
+                    //Establece el estado como activo
                     $obj_telefono->setEstado("1");
-                                        
+                                     
+                    //Verifica si la persona tiene numeros de telefono asociados
                     if (count($obj_telefono->getArreglo())>0){
+                        //Valida si tiene el mismo numero de telefono registrado en el prontuario
                         $obj_telefono->setCondicion("(ID=".$obj_personal->getId().") AND (ID_Tipo_Telefono=2 or ID_Tipo_Telefono=3 or ID_Tipo_Telefono=4 or ID_Tipo_Telefono=27 or ID_Tipo_Telefono=28) AND Numero='".$arreglo_telefonos_celulares[$i][1]."'");
+                        //Ejecuta la consulta SQL segun el criterio establecido 
                         $obj_telefono->obtiene_telefonos_por_criterio_para_prontuario();
+                        // En caso de que el resultado de la consulta sea cero, procede a ingresarlo inmediatamente
                         if (count($obj_telefono->getArreglo())==0){
+                            //Valida que el telefono celular a ingresar sea valido 
                             if ((strlen($arreglo_telefonos_celulares[$i][1])==8)&&(is_numeric($arreglo_telefonos_celulares[$i][1]))){
+                                //Establece el numero en el atributo del objeto correspondiente
                                 $obj_telefono->setNumero($arreglo_telefonos_celulares[$i][1]);
+                                //Guarda el numero
                                 $obj_telefono->guardar_telefono_para_prontuario();
+                                //Incrementa la variable de control de nuevos numeros ingresados
                                 $numeros_actualizados++;
                             }
                         }
                     }else{
+                        //En caso de que la consulta general no haya devuelto numeros de telefonos asociados al funcionario, procede a guardarlo verificando los estandares minimos
                        if ((strlen($arreglo_telefonos_celulares[$i][1])==8)&&(is_numeric($arreglo_telefonos_celulares[$i][1]))){
+                           //Establece el valor de numero al atributo correspondiente
                            $obj_telefono->setNumero($arreglo_telefonos_celulares[$i][1]);
+                           //Guardar el registro en la bd
                            $obj_telefono->guardar_telefono_para_prontuario();
+                           //Incrementa la variable de control
                            $numeros_actualizados++;
                        }else{
+                           //En caso de que el numero no cumpla con los estandares de tamaño y tipo de dato, se procede a guardar un numero cero, para que permita relacionar al menos un registro al funcionario
                            $obj_telefono->setNumero("0");
+                           //Tipo de telefono asignado es 3 = celular
                            $obj_telefono->setTipo_telefono("3");
+                           //Guarda el telefono en base de datos
                            $obj_telefono->guardar_telefono_para_prontuario();
                            //$numeros_actualizados++;
                        }
                     }
             }
             
+            //Define las variables de resultados para mostrar el summary en pantalla
             $resultados= "Fueron actualizados un total de: ".$numeros_actualizados." números de celular.";
+            //Agrega espacios en blanco al vector general de cambios
             $vector_inconsistencias[]=array ("","");
             $vector_inconsistencias[]=array ("","");
+            //Resumen final agregado al vector
             $vector_inconsistencias[]=array (Encrypter::quitar_tildes($resultados),"");  
             
+            //Llamada al formulario correspondiente de la vista
            require __DIR__ . '/../vistas/plantillas/frm_importar_prontuario_paso_7.php';
      
         }else {
@@ -1000,151 +1037,215 @@
              */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            //Llamada al formulario correspondiente de la vista
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         } 
     }
     
-    // Paso de importación del prontuario que permite actualizar la tabla de personas en el sistema
+    // Paso de importación del prontuario que permite actualizar la tabla de personas y telefonos de extensiones en el sistema
     public function frm_importar_prontuario_paso_8(){
-        
+        //Validación para verificar si el usuario está logeado en el sistema
         if(isset($_SESSION['nombre'])){
             
-            //Crea objeto de tipo puestos para administración de la tabla
+            //Crea objeto de tipo personal para administración de la tabla
             $obj_personal = new cls_personal();
+            //Crea objeto de tipo telefono para administración de la tabla
             $obj_telefono= new cls_telefono();
              
-            // Crea vector para almacenar los puestos que vienen en el prontuario pero en modo disctinct
+            // Crea vector para almacenar las extensiones telefonicas que vienen en el prontuario pero en modo disctinct
             $arreglo_telefonos_extensiones=array();
             
+             /*
+             * Los siguientes vectores permiten definir un formato específico para la fecha que llevara en el nombre
+             * del archivo generado (xls) una vez se procese la información de inconsistencias en personal. El reporte se
+             * descarga de manera automática en formato excel, una vez se complete el proceso.
+             * Se definen dos vectores, uno para los días de la semana y otro para los meses del año
+             */
             $dias = array("Domingo","Lunes","Martes","Miercoles","Jueves","Viernes","Sábado");
             $meses = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
             
+            //Empieza a armar el vector general de inconsistencias que se  presentarán en este paso, con el fin de que sea exportada la información mediante excel
             $vector_inconsistencias=array(array("Resumen general de inconsistencias al actualizar numeros de extensiones de personas en el sistema:",$dias[date('w')]." ".date('d')." de ".$meses[date('n')-1]. " del ".date('Y').", ".date("H:i", time()) . " hrs"));
+            //Agrega espacio en blanco en el vector
             $vector_inconsistencias[]=array ("","");
+            //Agrega nombres para las columnas principales del documento
             $vector_inconsistencias[]=array ("Valor Prontuario:","Valor en Base de Datos:");
+            //Agrega espacio en blanco en el vector
             $vector_inconsistencias[]=array ("","");
             
+            //Variables de control de la actualización
             $numeros_actualizados=0;
             $nuevos_guardados=0;
                         
-            // Lee los puestos que se encuentran en el prontuario y los pasa a un vector separado en modo distinct
+            // Lee las personas y numeros de extension en el prontuario y los pasa a un vector separado en modo distinct
             for ($i = 0; $i < count($_SESSION['prontuario']); $i++) {
+                    // Arma registro por registro el vector de analisis con base en la información que viene en el prontuario
                     $arreglo_telefonos_extensiones[]=array($_SESSION['prontuario'][$i][1],str_replace (" ","",str_replace ("-","",$_SESSION['prontuario'][$i][5])),str_replace (".","",$_SESSION['prontuario'][$i][6]));
                     
+                    //Criterio y consulta que permiten obtener el id de la persona con base en la cedula 
                     $obj_personal->setCondicion("Cedula='".$arreglo_telefonos_extensiones[$i][0]."'");
                     $obj_personal->obtiene_id_de_persona_para_prontuario();
-                    /*$obj_telefono->setCondicion("(ID=".$obj_personal->getId().") AND (ID_Tipo_Telefono=2 or ID_Tipo_Telefono=3 or ID_Tipo_Telefono=4 or ID_Tipo_Telefono=27 or ID_Tipo_Telefono=28) AND (Numero='0')");
-                    $obj_telefono->eliminar_telefonos_para_prontuario();*/
-                    
+                   
                   ///////////////////////////Generar inconsistencias del sistema
                     
+                    //variable bandera que permite determinar inconsistencias en los datos
                     $bandera=0;
                     $contador=0;
 
+                    //Valida el formato y tamaño de la extensión telefónica
                     if ((strlen($arreglo_telefonos_extensiones[$i][1])==8)&&(is_numeric($arreglo_telefonos_extensiones[$i][1]))){
+                        //Verifica si la extensión esta asociada a los numeros de las centrales del BCR
                                 if (($arreglo_telefonos_extensiones[$i][1]=="22111111")||($arreglo_telefonos_extensiones[$i][1]=="22879000")){
+                                    //Verifica que la extensión sea valida, es decir, con un numero mayor a 4 digitos de acuerdo al estandar del banco
                                     if (strlen($arreglo_telefonos_extensiones[$i][2])>4){
                                       
+                                        //Variable bandera asignada a 1, para verificar mas adelante que entró en esta parte
+                                        //En caso de entrar en esta parte se sobre entiende que la extensión es IP de 5 digitos
                                         $bandera=1;
                                        
                                     }
                                 }else{
+                                    //En caso de entrar en esta parte, se entiende que esta extensión no es IP y que requiere tambien de un numero
+                                    // fijo de 8 digitos
                                     if (strlen($arreglo_telefonos_extensiones[$i][2])>0){
                                        
+                                        //Asigna a la variable bandera el valor de 2
                                         $bandera=2;
                                        
                                        
                                     }else{
+                                        //De lo contrario asigna valor de 3, indicando que la extensión que viene en el documento no es valida
                                         
                                         $bandera=3;
                                        
                                     }
                                 }
-                                    
+                            //Si el numero fijo de contacto al funcionario que trae el prontuario no es valido de acuerdo a los estandares   
+                                //será necesario verificar solo la extensión sin contemplar numero fijo.
                             }else{
+                                //verifica si la extensión tiene 5 digitos, de lo contrario no la contempla para ingresarla en la bd
                                 if (strlen($arreglo_telefonos_extensiones[$i][2])==5){
-                                  
+                                    //asigna valor 4 a la bandera
                                     $bandera=4;
                                    
                                 }
                     }
                   
+                    //De acuerdo a la verificacion anterior, se trabaja con el valor asignado a la bandera
+                    //Si el valor de la bandera es igual al de la inicialización, no hace nada
                     if ((!($bandera==0))){
                            
- 
+                        //En caso de que la bandera tenga un valor diferente a cero, verifica que la persona ya no tenga registrado el numero del prontuario en la base de datos.
                         $obj_telefono->setCondicion("(ID=".$obj_personal->getId().") AND (ID_Tipo_Telefono=4) AND (Numero<>'".$arreglo_telefonos_extensiones[$i][2]."' AND Numero<>'".$arreglo_telefonos_extensiones[$i][1]."' AND Numero<>'".$arreglo_telefonos_extensiones[$i][1]." ext ".$arreglo_telefonos_extensiones[$i][2]."')");
-                        //echo "(ID=".$obj_personal->getId().") AND (ID_Tipo_Telefono=3 or ID_Tipo_Telefono=27) AND (Numero<>'".$arreglo_telefonos_celulares[$i][1]."')"."<br>";
+                        //Ejecuta la consulta SQL
                         $obj_telefono->obtiene_telefonos_por_criterio_para_prontuario();
                         
+                        //Si la persona tiene 2 o más numeros de extensión, se procede a insertar en el reporte de inconsistencias, para su revisión  y correción
                         if (count($obj_telefono->getArreglo())>0){
+                            //En caso de ser 1, contempla solamente la extension telefonica
                             if ($bandera==1){
                                 $valor_prontuario="El funcionario (a) con cedula: ".$arreglo_telefonos_extensiones[$i][0]." tiene el numero de oficina o extension: ".$arreglo_telefonos_extensiones[$i][2]." a nivel de prontuario.";
                             }
+                            //En caso de ser 2, contempla el numero directo mas la extension telefonica
                             if ($bandera==2){
                                 $valor_prontuario="El funcionario (a) con cedula: ".$arreglo_telefonos_extensiones[$i][0]." tiene el numero de oficina o extension: ".$arreglo_telefonos_extensiones[$i][1]." ext ".$arreglo_telefonos_extensiones[$i][2]." a nivel de prontuario.";
                             }
+                            //En caso de ser 3, contempla solamente la extension telefonica
                              if ($bandera==3){
                                 $valor_prontuario="El funcionario (a) con cedula: ".$arreglo_telefonos_extensiones[$i][0]." tiene el numero de oficina o extension: ".$arreglo_telefonos_extensiones[$i][1]." a nivel de prontuario.";
                             }
+                            //En caso de ser 4, contempla solamente la extension telefonica
                              if ($bandera==4){
                                 $valor_prontuario="El funcionario (a) con cedula: ".$arreglo_telefonos_extensiones[$i][0]." tiene el numero de oficina o extension: ".$arreglo_telefonos_extensiones[$i][1]." a nivel de prontuario.";
                             }
+                            // Aqui agrega en una variable cadena cada una de las extensiones que tiene asignada la persona en bd
                              $valor_base_datos="Numeros de extension registrados en la base de datos de Oriel: ";
                              for ($x = 0; $x < count($obj_telefono->getArreglo()); $x++) {
 
+                                 //variable temporal que va almacenando cada uno de los registros de la bd
                                     $valor_base_datos.=$obj_telefono->getArreglo()[$x]['Numero'].", ";
 
                              }
+                             //Agrega un nuevo registro en el vector de inconsistencias, para que sea exportado a excel.
                              $vector_inconsistencias[]=array ($valor_prontuario,$valor_base_datos);
+                             //Agrega un espacio en blanco en el vector
                              $vector_inconsistencias[]=array ("","");
                         }  
                         
                     }
                                  
                     ///////////////////////////////////////////////////////////////
-                                        
+                     
+                    /*
+                     * Consulta que trae los numeros de telefono de la persona en cuestión
+                     */
                     $obj_telefono->setCondicion("(ID=".$obj_personal->getId().") AND (ID_Tipo_Telefono=2 or ID_Tipo_Telefono=3 or ID_Tipo_Telefono=4 or ID_Tipo_Telefono=27 or ID_Tipo_Telefono=28) ");
+                    //Ejecuta la consulta SQL
                     $obj_telefono->obtiene_telefonos_por_criterio_para_prontuario();
                     
+                    //Establece el atributo ID2 con el id de la persona en cuestión
                     $obj_telefono->setid2($obj_personal->getId());
+                    //Tipo de telefono establecido como extension personas
                     $obj_telefono->setTipo_telefono("4");
+                    //Observaciones se inicializa en vacio
                     $obj_telefono->setObservaciones("");
+                    //Estado activo
                     $obj_telefono->setEstado("1");
-                                        
+                          
+                    /*
+                     * Si la persona ya tiene telefonos procede con la revisión
+                     */
                     if (count($obj_telefono->getArreglo())>0){
+                        // Vuelve a verificar si alguno de los telefonos que hay en base de datos, coincide con el del prontuario
                         $obj_telefono->setCondicion("(ID=".$obj_personal->getId().") AND (ID_Tipo_Telefono=2 or ID_Tipo_Telefono=3 or ID_Tipo_Telefono=4 or ID_Tipo_Telefono=27 or ID_Tipo_Telefono=28) AND (Numero='".$arreglo_telefonos_extensiones[$i][2]."' or Numero='".$arreglo_telefonos_extensiones[$i][1]."' or Numero='".$arreglo_telefonos_extensiones[$i][1]." ext ".$arreglo_telefonos_extensiones[$i][2]."')");
+                        //ejecuta la consulta SQL
                         $obj_telefono->obtiene_telefonos_por_criterio_para_prontuario();
+                        //Si el resultado de la consulta =0, entonces el prontuario trae un numero diferente al de la base de datos, por lo que es necesario validar los estándares y en caso positvo se guarda en bd
                         if (count($obj_telefono->getArreglo())==0){
+                            //Valida que el telefono cumpla los estandaresde  tamaño y formato
                             if ((strlen($arreglo_telefonos_extensiones[$i][1])==8)&&(is_numeric($arreglo_telefonos_extensiones[$i][1]))){
+                                //En caso de tener de numero fijo la central del BCR, no será tomada en cuenta
                                 if (($arreglo_telefonos_extensiones[$i][1]=="22111111")||($arreglo_telefonos_extensiones[$i][1]=="22879000")){
+                                    //Valida que la extensión sea mayor a 4 caracteres
                                     if (strlen($arreglo_telefonos_extensiones[$i][2])>4){
+                                        //Inicializa el atributo del objeto telefono
                                         $obj_telefono->setNumero($arreglo_telefonos_extensiones[$i][2]);
+                                        //Guarda la información en base de datos
                                         $obj_telefono->guardar_telefono_para_prontuario();
-                                        //echo $arreglo_telefonos_extensiones[$i][0]. " ". $arreglo_telefonos_extensiones[$i][1] . " " . $arreglo_telefonos_extensiones[$i][2];
+                                        // Incrementa variable de control 
                                         $nuevos_guardados++;
                                     }
                                 }else{
+                                    //En caso de que el numero fijo no sea la central del  banco, procede a valorar tanto la extensión como el numero fijo.
                                     if (strlen($arreglo_telefonos_extensiones[$i][2])>0){
+                                        //Establece el numero de extension al objeto de la clase
                                         $obj_telefono->setNumero($arreglo_telefonos_extensiones[$i][1]." ext ".$arreglo_telefonos_extensiones[$i][2]);
+                                        // Almacena la información en base de datos
                                         $obj_telefono->guardar_telefono_para_prontuario();
-                                        //echo $arreglo_telefonos_extensiones[$i][0]. " ". $arreglo_telefonos_extensiones[$i][1] . " " . $arreglo_telefonos_extensiones[$i][2];
+                                        //Incrementa la variable de control
                                         $nuevos_guardados++;
                                     }else{
+                                        //Procede a valorar solamente la extensión del prontuario
                                          $obj_telefono->setNumero($arreglo_telefonos_extensiones[$i][1]);
+                                        //Almacena en base de datos
                                          $obj_telefono->guardar_telefono_para_prontuario();
-                                         //echo $arreglo_telefonos_extensiones[$i][0]. " ". $arreglo_telefonos_extensiones[$i][1] . " " . $arreglo_telefonos_extensiones[$i][2];
+                                        //Incrementa la variable de control
                                          $nuevos_guardados++;
                                     }
                                 }
                                     
                             }else{
+                                //Verifica que la extensión esté compuesta por 5 digitos
                                 if (strlen($arreglo_telefonos_extensiones[$i][2])==5){
+                                    // Establece el numero al atributo del objeto
                                     $obj_telefono->setNumero($arreglo_telefonos_extensiones[$i][2]);
+                                    // Almacena en base de datos
                                     $obj_telefono->guardar_telefono_para_prontuario();
-                                    //echo $arreglo_telefonos_extensiones[$i][0]. " ". $arreglo_telefonos_extensiones[$i][1] . " " . $arreglo_telefonos_extensiones[$i][2];
+                                    // Incrementa la variable de control
                                     $nuevos_guardados++;
                                 }
                             }
+                            //Incrementa la variable de control
                             $numeros_actualizados++;
                             
                         }
@@ -1152,11 +1253,14 @@
                     }
             }
   
+            //Variable que realiza el summary correspondiente para mostrarlo al usuario final que está corriendo el proceso
             $resultados='Se actualizaron un total de '.$nuevos_guardados.' extensiones telefónicas en la bd.';
+            //Asigna espacios en blanco al vector de reporte de inconsistencias
             $vector_inconsistencias[]=array ("","");
             $vector_inconsistencias[]=array ("","");
+            //Agrega el summary al vector como una linea nueva
             $vector_inconsistencias[]=array (Encrypter::quitar_tildes($resultados),"");  
-            
+            //Llamada al formulario correspondiente de la vista
            require __DIR__ . '/../vistas/plantillas/frm_importar_prontuario_paso_8.php';
      
         }else {
@@ -1168,35 +1272,49 @@
              */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            //Llamada al formulario correspondiente de la vista
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         } 
     }
     
-    // Paso de importación del prontuario que permite actualizar la tabla de personas en el sistema
+    // Paso de importación del prontuario que permite actualizar ls tabla de puestos y unidades ejecutoras
+    //Eliminando las que se encuentran solas sin relación con personas o puntos bcr
     public function frm_importar_prontuario_paso_9(){
-        
+        //Validación para verificar si el usuario está logeado en el sistema
         if(isset($_SESSION['nombre'])){
             
-            //Crea objeto de tipo puestos para administración de la tabla
+            //Crea objeto de tipo puestos y unidades ejecutoras para administración de la tabla
             $obj_unidades_ejecutoras = new cls_unidad_ejecutora();
             $obj_puestos= new cls_puestos();
                   
+            //Variables de control del proceso inicializadas
             $unidades_eliminadas=0;
             $puestos_eliminados=0;
             
+            //Establece condicion para determinar cuantas unidades ejecutoras están sin relaciones
             $obj_unidades_ejecutoras->setCondicion("Not ID_Unidad_Ejecutora In (Select ID_Unidad_Ejecutora From t_personal) and not ID_Unidad_Ejecutora In (Select ID_Unidad_Ejecutora From t_ue_puntobcr)");
+            //Ejecuta la sentencia SQL
             $obj_unidades_ejecutoras->obtener_unidades_ejecutoras();
+            //Cuenta cuantas unidades ejecutoras serán eliminadas, y las registra en la variable respectiva.
             $unidades_eliminadas= count($obj_unidades_ejecutoras->getArreglo());
+            //Procede a eliminar las unidades ejecutoras en cuestión.
             $obj_unidades_ejecutoras->eliminar_ue_sobrantes_para_prontuario();
             
+            //Procede a buscar los puestos sin relación en la bd
             $obj_puestos->setCondicion("Not ID_Puesto In (Select ID_Puesto From t_personal)");
+            //Ejecuta la sentecia SQL
             $obj_puestos->obtener_puestos();
+            //Cuenta cuantos puestos se van a eliminar
             $puestos_eliminados= count($obj_puestos->getArreglo());
+            //Procede a eliminar los puestos en cuestión.
             $obj_puestos->eliminar_puestos_sobrantes_para_prontuario();
             
+            //Arma el summary para mostrar al usuario el resultado del proceso
             $ue_eliminadas="Fueron eliminadas un total de ".$unidades_eliminadas." unidades ejecutoras sin uso de la base de datos.";
+            
             $puestos="Fueron eliminados un total de ".$puestos_eliminados." puestos sin uso de la base de datos.";
                                      
+            //Llamada al formulario correspondiente de la vista
            require __DIR__ . '/../vistas/plantillas/frm_importar_prontuario_paso_9.php';
      
         }else {
@@ -1208,114 +1326,176 @@
              */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            //Llamada al formulario correspondiente de la vista
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         } 
     }
     
-    // Paso de importación del prontuario que permite actualizar la tabla de personas en el sistema
+    // Paso de importación del prontuario que permite actualizar la tabla de telefonos, con los telefonos de residencia de cada funcionario
+    //Información que proviene desde el prontuario de capital humano.
     public function frm_importar_prontuario_paso_10(){
+        //Validación para verificar si el usuario está logeado en el sistema
          if(isset($_SESSION['nombre'])){
             
-            //Crea objeto de tipo puestos para administración de la tabla
+            //Crea objeto de tipo personal y telefono para administración de la tabla
             $obj_personal = new cls_personal();
             $obj_telefono= new cls_telefono();
              
-            // Crea vector para almacenar los puestos que vienen en el prontuario pero en modo disctinct
+            // Crea vector para almacenar los telefonos de residencia que vienen en el prontuario pero en modo disctinct
             $arreglo_telefonos_casa=array();
             
+            //Variable de control de lo que se realiza en el proceso.
             $numeros_actualizados=0;
             
+             /*
+             * Los siguientes vectores permiten definir un formato específico para la fecha que llevara en el nombre
+             * del archivo generado (xls) una vez se procese la información de inconsistencias en personal. El reporte se
+             * descarga de manera automática en formato excel, una vez se complete el proceso.
+             * Se definen dos vectores, uno para los días de la semana y otro para los meses del año
+             */
+
             $dias = array("Domingo","Lunes","Martes","Miercoles","Jueves","Viernes","Sábado");
             $meses = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
+            
+            //Declaración del vector de inconsistencias presentadas durante el proceso, esto con el fin de poder exportarlo en modo excel
+            // y darle seguimiento por parte de los encargados.
             $vector_inconsistencias=array(array("Resumen general de inconsistencias al actualizar numeros de casa de habitacion de personas en el sistema:",$dias[date('w')]." ".date('d')." de ".$meses[date('n')-1]. " del ".date('Y').", ".date("H:i", time()) . " hrs"));
+            //Inserta linea en blanco en el vector
             $vector_inconsistencias[]=array ("","");
+            //Indica los títulos de las columnas en el vector
             $vector_inconsistencias[]=array ("Valor Prontuario:","Valor en Base de Datos:");
+            //Inserta linea en blanco en el vector
             $vector_inconsistencias[]=array ("","");
             
-            // Lee los puestos que se encuentran en el prontuario y los pasa a un vector separado en modo distinct
+            // Lee los telefonos que se encuentran en el prontuario y los pasa a un vector separado en modo distinct
             for ($i = 0; $i < count($_SESSION['prontuario']); $i++) {
+                    //Va sasando del prontuario la información que se requiere y la pasa al vector de trabajo.
                     $arreglo_telefonos_casa[]=array($_SESSION['prontuario'][$i][1],str_replace (" ","",str_replace ("-","",$_SESSION['prontuario'][$i][9])));
-                                       
+                         
+                    //Establece condicion para obtener el id de la persona que se está trabajando actualmente.
                     $obj_personal->setCondicion("Cedula='".$arreglo_telefonos_casa[$i][0]."'");
+                    //Ejecuta la sentencia SQL
                     $obj_personal->obtiene_id_de_persona_para_prontuario();
                                       
                     ///////////////////////////Generar inconsistencias del sistema
                    
+                    // Valida que el telefono que trae el prontuario cumpla con los estandares de tamaño y formatos correspondientes.
                     if ((strlen($arreglo_telefonos_casa[$i][1])==8)&&(is_numeric($arreglo_telefonos_casa[$i][1]))){
                                 
+                        //Busca los telefonos de la persona en bd, que sean diferentes al que trae el prontuario.
                         $obj_telefono->setCondicion("(ID=".$obj_personal->getId().") AND (ID_Tipo_Telefono=2) AND (Numero<>'".$arreglo_telefonos_casa[$i][1]."')");
-                        //echo "(ID=".$obj_personal->getId().") AND (ID_Tipo_Telefono=3 or ID_Tipo_Telefono=27) AND (Numero<>'".$arreglo_telefonos_casa[$i][1]."')"."<br>";
+                        //Ejecuta la sentencia SQL.
                         $obj_telefono->obtiene_telefonos_por_criterio_para_prontuario();
                         
+                        //Verifica si la consulta trae algun resultado
                         if (count($obj_telefono->getArreglo())>0){
+                            //En caso de que el funcionario tenga telefonos de casa diferentes al que viene en el prontuario, procede a registrarlo como una linea en el vector de inconsistencias.
                             $valor_prontuario="El funcionario (a) con cedula: ".$arreglo_telefonos_casa[$i][0]." tiene el numero de casa de habitacion: ".$arreglo_telefonos_casa[$i][1]." a nivel de prontuario.";
                             $valor_base_datos="Numeros de telefono casa de habitacion registrados en la base de datos de Oriel: ";
-                             for ($x = 0; $x < count($obj_telefono->getArreglo()); $x++) {
-                                 
+                            //Mediante este ciclo recorre todos los telefonos registrados en bd como casa de habitación de este funcionario. 
+                            for ($x = 0; $x < count($obj_telefono->getArreglo()); $x++) {
+                                 //Variable cadena que se va incrementando paso a paso al recorrer cada registro que devolvió la consulta SQL.
                                 $valor_base_datos.=$obj_telefono->getArreglo()[$x]['Numero'].", ";
                                 
                              }
+                             //Agrega la linea completa al vector de inconsistencias.
                              $vector_inconsistencias[]=array ($valor_prontuario,$valor_base_datos);
+                             //Agrega una línea en blanco al vector de inconsistencias.
                              $vector_inconsistencias[]=array ("","");
                         }  
                     }
                                      
                     ///////////////////////////////////////////////////////////////
                     
-                 
+                    //Estable condición para correr una consulta SQL, en este caso trae todos los telefonos asociados a una persona en específico.
                     $obj_telefono->setCondicion("(ID=".$obj_personal->getId().") AND (ID_Tipo_Telefono=2 or ID_Tipo_Telefono=3 or ID_Tipo_Telefono=4 or ID_Tipo_Telefono=27 or ID_Tipo_Telefono=28) ");
+                    //Ejecuta la sentencia SQL
                     $obj_telefono->obtiene_telefonos_por_criterio_para_prontuario();
                     
+                    //Inicializa el id de la persona en el atributo id del objeto telefono
                     $obj_telefono->setid2($obj_personal->getId());
+                    //Define el tipo telefono como 2, que corresponde a casa de habitación.
                     $obj_telefono->setTipo_telefono("2");
+                    //Inicializa las observaciones del objeto en vacio.
                     $obj_telefono->setObservaciones("");
+                    //Define el estado 1, es decir como activo
                     $obj_telefono->setEstado("1");
-                                        
+                             
+                    
+                    //En caso de que la consulta traiga resultados, es decir si la persona tiene telefonos asignados procede a entrar al proceso.
                     if (count($obj_telefono->getArreglo())>0){
+                        
+                        //Busca si la persona ya cuenta en bd con el numero de residencia que viene en el prontuario de capital humano.
                         $obj_telefono->setCondicion("(ID=".$obj_personal->getId().") AND (ID_Tipo_Telefono=2 or ID_Tipo_Telefono=3 or ID_Tipo_Telefono=4 or ID_Tipo_Telefono=27 or ID_Tipo_Telefono=28) AND Numero='".$arreglo_telefonos_casa[$i][1]."'");
+                        //Ejecuta la sentecia SQL.
                         $obj_telefono->obtiene_telefonos_por_criterio_para_prontuario();
+                        //Si la consulta no tiene resultados, procede a verificar el numero de prontuario de acuerdo a los estandares de formato y tamaño.
                         if (count($obj_telefono->getArreglo())==0){
                             if ((strlen($arreglo_telefonos_casa[$i][1])==8)&&(is_numeric($arreglo_telefonos_casa[$i][1]))){
+                                //Agrega el numero de telefono al atributo del objeto respectivo
                                 $obj_telefono->setNumero($arreglo_telefonos_casa[$i][1]);
+                                //Procede a almacenar en base de datos el numero de telefono
                                 $obj_telefono->guardar_telefono_para_prontuario();
+                                //Incrementa la variable de control
                                 $numeros_actualizados++;
                             }
                         }
                     }else{
+                        //Verifica que el numero sea correcto.
                        if ((strlen($arreglo_telefonos_casa[$i][1])==8)&&(is_numeric($arreglo_telefonos_casa[$i][1]))){
+                           //Establece el numero al atributo del objeto.
                            $obj_telefono->setNumero($arreglo_telefonos_casa[$i][1]);
+                           //Almacena en base de datos la información correspondiente
                            $obj_telefono->guardar_telefono_para_prontuario();
+                           //Incrementa la variable de control.
                            $numeros_actualizados++;
                        }else{
+                           //En caso de que el numero no cumpla con los estandares, es decir que no sea correcto, procede  a agregar un cero en el numero a guardar
                            $obj_telefono->setNumero("0");
+                           //Tipo de telefono cero, es decir de residencia o casa de habitación.
                            $obj_telefono->setTipo_telefono("2");
+                           //Almacena en bd
                            $obj_telefono->guardar_telefono_para_prontuario();
+                           //Incrementa la variable de control.
                            $numeros_actualizados++;
                        }
                     }
             }
             
+            //Arma las variables del summary para mostrar al usuario en pantalla.
             $resultados= "Fueron actualizados un total de: ".$numeros_actualizados." números de residencia.";
+            //Agrega lineas en blanco al vector de inconsistencias.
             $vector_inconsistencias[]=array ("","");
             $vector_inconsistencias[]=array ("","");
+            //Agrega el summary al vector de inconsistencias.
             $vector_inconsistencias[]=array (Encrypter::quitar_tildes($resultados),"");
             
+            //Este proceso agrega extensiones en cero, a todos aquellos funcionarios que no tengan ningun telefono asociado, esto
+            //con el fin de que las consultas de personal puedan mostrar el total de personas que se encuentran en la bd.
             $obj_telefono->agrega_extension_cero_en_personas_sin_telefonos_asociados_para_prontuario();
             
+            //Consulta que permite saber cuantas personas quedaron con numero de telefono en cero dentro de la bd.
             $obj_personal->setCondicion("ID_Persona In (Select ID From t_telefono where ID_Tipo_Telefono in(2,3,4,27,28) and Numero='0') and ID_Empresa=1");
+            //Ejecuta la consulta SQL.
             $obj_personal->obtener_personas_con_numeros_en_cero_para_prontuario();
             
+            //Crea un vector para registrar el listado de personas con extensiones en cero.
             $vector_personas_con_numeros_en_cero=array();
+            //Formatea la fecha actual en una variable.
             $fecha_completa=$dias[date('w')]." ".date('d')." de ".$meses[date('n')-1]. " del ".date('Y').", ".date("H:i", time()) . " hrs";
+            //Agrega título al documento de inconsistencias
             $vector_personas_con_numeros_en_cero[][]=array("Apellido_Nombre" => "Resumen general de funcionarios BCR con numeros de telefono en cero en la BD","Cedula" => $fecha_completa,"ID_Persona" => "");
+            //Agrega nombres a las columnas principales del documento.
             $vector_personas_con_numeros_en_cero[][]=array("Apellido_Nombre" => "","Cedula" => "","ID_Persona" => "");
             
+            //Obtiene el vector completo de inconsistencias generado por la consulta.
             $vector_personas_con_numeros_en_cero[]=$obj_personal->getArreglo();
             $vector_personas_con_numeros_en_cero[][]=array("Apellido_Nombre" => "","Cedula" => "","ID_Persona" => "");
             
             $numero_personas_cero=count($obj_personal->getArreglo());
             $vector_personas_con_numeros_en_cero[][]=array("Apellido_Nombre" => "Se encontraron un toal de ".$numero_personas_cero. " personas que tienen numeros de telefono en cero.","Cedula" => "","ID_Persona" => "");
               
+            //Llamada al formulario correspondiente de la vista
            require __DIR__ . '/../vistas/plantillas/frm_importar_prontuario_paso_10.php';
             
            
@@ -1329,6 +1509,7 @@
              */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            //Llamada al formulario correspondiente de la vista
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         } 
         
