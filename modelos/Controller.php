@@ -1,4 +1,4 @@
-<?php
+ <?php
 
 //Definición de la clase Controller. Componente principal de la lógica del negocio. 
  class Controller{
@@ -2082,20 +2082,33 @@
         }
     }
     
+    /*
+     * Metodo que permite cambiar el estado de un modulo (activo/inactivo)
+     */
     public function modulos_cambiar_estado(){
         //Validación para verificar si el usuario está logeado en el sistema
         if(isset($_SESSION['nombre'])){
+            //Valida que se haya enviado por url el id del modulo a gestionar
             if (isset($_GET['id'])) {
+                //Verifica que se haya enviado por url el estado nuevo del modulo
                 if (isset($_GET['estado'])) { 
+                    //Crea un objeto de clase correspondiente
                     $obj_modulos=new cls_modulos();
+                    //Establece el atributo id del modulo
                     $obj_modulos->setId($_GET['id']);
+                    // Establece el atributo estado del modulo
                     $obj_modulos->setEstado($_GET['estado']);
+                    //Procede a ejecutar el cambio de estado en el modulo correspondiente
                     $obj_modulos->edita_estado_modulo();
-              
+                    //Reinicia la instancia del objeto de la clase modulos
                     $obj_modulos=new cls_modulos();
+                    //Obtiene la lista completa de modulos de segurida del sistema
                     $obj_modulos->obtiene_todos_los_modulos();
+                    //Asigna el resultado a una variable de tipo vector
                     $params= $obj_modulos->getArreglo();
+                    // Procede a eliminar los modulos asignados a un rol en especifico
                     $obj_modulos->eliminar_modulos_roles($_GET['id']);
+                    //Llamada al formulario correspondiente de la vista
                 require __DIR__ . '/../vistas/plantillas/lista_de_modulos.php';
                 }
             }
@@ -2113,17 +2126,30 @@
         }
     }
 
+    /*
+     * Permite agregar o modificar modulos de seguridad del sistema
+     */
     public function modulos_gestion(){
+        //Validación para verificar si el usuario está logeado en el sistema
         if(isset($_SESSION['nombre'])){
+            // Verifica si el id enviado por la url, esta en cero o no
             if ($_GET['id']==0){
+                //Establece la variable de control a vacio
                 $desc="";
+                //Asigna activo a la variable estado
                 $esta=1;
+                //Obtiene el valor de id enviado por url
                 $ide=$_GET['id'];
+                
             }   else   {
+                //Obtiene el valor de id enviado por url
                 $ide=$_GET['id'];
+                //Establece la variable de control a vacio
                 $desc=$_GET['descripcion'];
+                //Asigna el estado a la variable de control
                 $esta=$_GET['estado'];
             }
+            //Llamada al formulario correspondiente de la vista
             require __DIR__ . '/../vistas/plantillas/gestion_modulos.php';
         }   else    {
               /*
@@ -2134,15 +2160,23 @@
              */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            //Llamada al formulario correspondiente de la vista
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }
     }
-    
+    /*
+     * Metodo que permite traer de bd el listado total de usuarios del sistema 
+     */
     public function listar_usuarios(){
+        //Validación para verificar si el usuario está logeado en el sistema
         if(isset($_SESSION['nombre'])){
+            //Crea una instancia de la clase usuarios
             $obj_usuarios= new cls_usuarios();
+            //Metodo que ejecuta la sentecia SQL para traer todos los usuarios
             $obj_usuarios ->obtiene_todos_los_usuarios();
+            //Inicializa una variable con el vector total de registros de la bd
             $params= $obj_usuarios->getArreglo();
+            //Llamada al formulario correspondiente de la vista
             require __DIR__.'/../vistas/plantillas/lista_de_usuarios.php';
         }
         else {
@@ -2154,20 +2188,34 @@
              */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            //Llamada al formulario correspondiente de la vista
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }
     }
      
+    /*
+     * Metodo que permite el mantenimiento de usuarios de seguridad del sistema
+     */
     public function gestion_usuarios(){
+        //Validación para verificar si el usuario está logeado en el sistema
         if(isset($_SESSION['nombre'])){
+            //Inicializa la variable params
             $params="";
+            //Crea una instancia de la clase roles
             $obj_roles= new cls_roles();
+            //Establece una condicion de consulta, que permita traer los roles activos del sistema
             $obj_roles->setCondicion("Estado=1");
+            //Procede a ejecutar la consulta correspondiente, bajo el criterio especificado
             $obj_roles->obtiene_todos_los_roles();
+            //Obtiene el arreglo de registros del sistema
             $roles = $obj_roles->getArreglo();
             
+            //Si el id que viene via url es cero, procde a inicializar las posiciones del vector de control a vacio 
             if ($_GET['id']==0){
+                //Inicializa a cero el id de la gestion
                 $ide=0;
+                
+                //Inicializacion de los elementos del vector a vacio, ya que se ingresará un nuevo usuario del sistema
                 $params[0]['Nombre']="";
                 $params[0]['Apellido']="";
                 $params[0]['Cedula']="";
@@ -2177,8 +2225,11 @@
                 $params[0]['Estado']="1";
 
             }
+                //En caso de que el id venga inicializado a -1, procede a inicializar los elementos del vector con los parametros enviados desde el formulario HTML
             if($_GET['id']==-1){
+                //inicializa la variable ide en cero
                 $ide=0;
+                //Inicializa los elementos del vector con los parametros enviados por post desde el formulario HTML
                 $params[0]['Nombre']=$_POST['Nombre'];
                 $params[0]['Apellido']=$_POST['Apellido'];
                 $params[0]['Cedula']=$_POST['Cedula'];
@@ -2187,14 +2238,20 @@
                 $params[0]['Observaciones']=$_POST['Observaciones'];
                 $params[0]['Estado']="1";
             }
+            //En caso de que el id sea diferente a -1 y 0, procede a buscar el usuario en bd y enviar el vector correspondiente a la capa de presentacion del sistema
             else    {
+                //Inicializa la variable ide con el parametro enviado por url desde el formulario html
                 $ide=$_GET['id'];
+                //Crea una instancia de la clase usuarios
                 $obj_usuario = new cls_usuarios();
+                //Establece condicion de busqueda en la bd
                 $obj_usuario->setCondicion("ID_Usuario=$ide");
+                //Ejecuta el metodo que trae la lista de usuarios de acuerdo a la condicion
                 $obj_usuario->obtiene_todos_los_usuarios();
+                //Inicializa el vector con el resultado de la busqueda
                 $params= $obj_usuario->getArreglo();
             }
-
+            //Llamada al formulario correspondiente de la vista
             require __DIR__ . '/../vistas/plantillas/gestion_usuarios.php';
         }   else   {
               /*
@@ -2205,38 +2262,67 @@
              */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            //Llamada al formulario correspondiente de la vista
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }
     }
 
+    /*
+     * Metodo que permite realizar el mantenimiento general de la tabla de usuarios del sistema
+     */
     public function guardar_usuario(){
+        //Validación para verificar si el usuario está logeado en el sistema
         if(isset($_SESSION['nombre'])){
+            // Crea una instancia de la clase usuarios
             $obj_usuarios= new cls_usuarios();
+            //Verifica si vienen datos por medio del metodo post, es decir usando un formulario html
             if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-                //Validar información 
+                //Validar información para ver si el usuario en cuestion existe en la bd
                 $obj_usuarios->setCondicion("ID_Usuario<>".$_GET['id']);
+                //Ejecuta el metodo para correr la sentencia SQL segun criterio
                 $obj_usuarios->obtiene_todos_los_usuarios();
+                //Inicializa una variable con el vector de resultados
                 $validacion = $obj_usuarios->getArreglo();
+                //Inicializa una variable con la cantidad de registros recibidos
                 $tam = count($validacion);
+                //Variable bandera para validar la no repetición de usuarios en el sistema
                 $correcto=0;
+                    //Recorre el vector de registros que trae la consulta
                     for($i=0; $i<$tam;$i++){
+                        //Valida si la cedula del registro actual es igual que está en gestión
                         if($_POST['Cedula']==$validacion[$i]['Cedula']){
+                            //Cambia el estado de la variable bandera
                             $correcto=1;
+                            //Envia notificacion de la validacion al usuario en cuestion
                             echo '<script>alert("Esta Cedula ya se encuentra registrada en el sistema");</script>';
+                            //Inicializa la variable post del formulario a vacio para que se vuelva a ingresar
                             $_POST['Cedula']="";
+                            //Inicializa la variable post del formulario a -1 para el control correspondiente
                             $_GET['id']=-1;
                         }
+                        //Valida la información del correo suministrada por el usuario que está utilizando el modulo
+                        //Tanto en contenido como que sea diferente de los que se encuentran en bd
                         if($_POST['Correo']!="" && $_POST['Correo']==$validacion[$i]['Correo']){
+                            //Cambia el valor de la varuable bandera
                             $correcto=1;
+                            //Notifica al usuario del error.
                             echo '<script>alert("Este correo ya se encuentra registrado en el sistema");</script>';
+                            //Inicializa la variable del formulario a vacio para su nuevo ingreso
                             $_POST['Correo']="";
+                             //Inicializa la variable post del formulario a -1 para el control correspondiente
                             $_GET['id']=-1;
                         }
+                        //Validacion del correo cuando sea vacio
                         if($_POST['Correo']==""){
                             $correcto=0;
                         }
                     }
+                    //Si la variable bandera es igual a cero, procede a gestionar la actualizacion en base de datos
                 if($correcto==0){
+                    /*
+                     * Establece los diferentes atributos del objeto de la clase, con la información proveniente 
+                     * desde el formulario html via post
+                     */
                     $obj_usuarios->setId($_GET['id']);
                     $obj_usuarios->setNombre($_POST['Nombre']);
                     $obj_usuarios->setApellido($_POST['Apellido']);
@@ -2245,14 +2331,22 @@
                     $obj_usuarios->setObservaciones($_POST['Observaciones']);
                     $obj_usuarios->setRol($_POST['Rol']);
                     $obj_usuarios->setEstado($_POST['Estado']);
+                    //Guarda la informacion en base de datos
                     $obj_usuarios->guardar_usuario();
+                    //Obtiene todos los usuarios posterior a la actualizacion de datos
                     $obj_usuarios->obtiene_todos_los_usuarios();
+                    // Inicializa el vector con los resultados de la consulta a la bd
                     $params = $obj_usuarios->getArreglo();
+                    //Llamada al formulario correspondiente de la vista
                     header ("location:/ORIEL/index.php?ctl=listar_usuarios");
-                    //$this->listar_usuarios();
+                   
                  }   else    {
-                    //header ("location:/ORIEL/index.php?ctl=gestion_usuarios");
-                    $this->gestion_usuarios();
+                   //Llama al metodo de la clase controller. 
+                   //Se cambió por el header, en caso de error, volver a colocar la llamada directa al metodo de la clase
+                    //$this->gestion_usuarios();***
+                     
+                     //Llamada al formulario correspondiente de la vista
+                     header ("location:/ORIEL/index.php?ctl=gestion_usuarios");                    
                 }
             }
             
@@ -2265,32 +2359,52 @@
              */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            //Llamada al formulario correspondiente de la vista
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }
     }
-
+    /*
+     * Metodo que permite cambiar de estado un usuario en la bd (activo/inactivo)
+     */
     public function cambiar_estado_usuario(){
+        //Creacion de una instancia de la clase roles
         $obj_roles= new cls_roles();
+        //Creacion de una instancia de la clase usuario
         $obj_usuario= new cls_usuarios(); 
+        //Validación para verificar si el usuario está logeado en el sistema
         if(isset($_SESSION['nombre'])){
-             
+             //Valida que el id haya sido enviado via url por el metodo get
             if (isset($_GET['id'])) {
+                //Valida que el estado haya sido enviado via url por el metodo get
                 if (isset($_GET['estado'])){
+                    //Establece condicion para verificar antes cual es el estado del rol al que pertenece el usuario en cuestion
                     $obj_roles->setCondicion("ID_Rol=".$_GET['rol']);
+                    //Ejecuta la sentecia sql 
                     $obj_roles->obtiene_todos_los_roles();
+                    //Asigna a la variable el arreglo con la consulta correspondiente
                     $rolusuario=($obj_roles->getArreglo());
+                    //Si el estado del rol de usuario está activo, procede a realizar la actualización en la información del estado del usuario
                     if($rolusuario[0]['Estado']==1){
+                        //Establece el atributo id del objeto de clase
                         $obj_usuario->setId($_GET['id']);
+                        //Establece el atributo estado del objeto de la clase
                         $obj_usuario->setEstado($_GET['estado']);
+                        //Procede a editar el estado del usuario
                         $obj_usuario->edita_estado_usuario();
+                        //Genera la consulta con el listado completo de usuarios del sistema
                         $obj_usuario->obtiene_todos_los_usuarios();
+                        // Obtiene el listado de usuarios en la variable corrrespondiente
                         $params= $obj_usuario->getArreglo();
                     }
                     else{
+                        //Muestra un warning al usuario, indicando que el rol está desactivado
                         echo '<script>alert("Rol Desactivado");</script>';
+                        //Procede a ejecutar la consulta para traer todos los usuarios
                         $obj_usuario->obtiene_todos_los_usuarios();
+                        // Inicializa la variable con el vector correspondiente.
                         $params= $obj_usuario->getArreglo();
                     }
+                    //Llamada al formulario correspondiente de la vista
                 require __DIR__ . '/../vistas/plantillas/lista_de_usuarios.php';
                 }
             }    
@@ -2303,20 +2417,34 @@
              */
             $tipo_de_alerta="alert alert-danger";
             $validacion="Es necesario iniciar sesión para ingresar al sistema";
+            //Llamada al formulario correspondiente de la vista
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }
     }
      
+    /*
+     * Metodo que permite resetear la clave de un usuario en especifico, por parte de un usuario administrador.
+     * El nuevo password queda de manera momentánea, con la cedula o SSN para ingresar nuevamente.
+     */
     public function reset_password(){ 
+        //Validación para verificar si el usuario está logeado en el sistema
         if(isset($_SESSION['nombre'])){
+            //Validación para verificar si el usuario está logeado en el sistema
             if (isset($_GET['id'])) {
+                //Creación de una instancia del objto usuario
                 $obj_usuario= new cls_usuarios();
+                //Establece los atributos del objeto desde los parametros 
+                //Id del usuario=cedula
                 $obj_usuario->setId($_GET['id']);
+                //Establece la clave del usario con el valor del numero de cedula
                 $obj_usuario->setClave($_GET['cedula']);
+                //Procede a cambiar el password con el nuevo valor
                 $obj_usuario->reset_password_usuario();
+                //Procede a traer la lista actualizada de usuarios del sistema
                 $obj_usuario->obtiene_todos_los_usuarios();
+                //Asigna el resultado de la consulta a una variable de tipo arreglo
                 $params= $obj_usuario->getArreglo();
-                
+                //Llamada al formulario correspondiente de la vista
                 require __DIR__ . '/../vistas/plantillas/lista_de_usuarios.php';
             }
         }
@@ -2329,29 +2457,47 @@
              */
             $tipo_de_alerta="alert alert-danger";
             $validacion="Es necesario iniciar sesión para ingresar al sistema";
+            //Llamada al formulario correspondiente de la vista
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }
     }
 
+    /*
+     * Metodo que permite recordar el password de un usuario mediante el envio de la información por correo 
+     */
     public function recordar_password(){
+        //Inicializa la variable para notificar al usuario del resultado de la operacion
         $validacion="";
+        //Creacion de una instancia de la clase usuarios
         $obj_usuarios= new cls_usuarios();
+        //Creacion de una instancia del clase mail provider, para envio de correos
         $obj_correo=new Mail_Provider();
          
+        //Verifica que la llamada de este metodo haya sido por invocando el metodo GET=URL
         if ($_SERVER['REQUEST_METHOD'] == 'GET') {
+            //Obtiene la cedula del usuario enviada por parametro
              $usuario = $_GET['nom'];
                    
+             //Verifica que el usuario exista.
              if ($obj_usuarios->existe_usuario($usuario)){
+                 //Metodo que va a la bd con el nombre de usuario para traer el correo electrónico y la clave del mismo
                     $obj_usuarios->obtiene_correo_y_password_de_usuario($usuario);   
+                    //Asigna correo a una variable
                     $correo=$obj_usuarios->getCorreo();
+                    //Asigna la clave a una variable de este metodo
                     $pass=$obj_usuarios->getClave();
-                    
+                    //Agrega el asunto del correo para envio al usuario realizando la solicitud
                     $obj_correo->agregar_asunto_de_correo("Recordatorio Clave Sistema Oriel");
+                    //Agrega detalle de correo
                     $obj_correo->agregar_detalle_de_correo("Este es un mensaje automático, favor no responderlo.</br> Su clave del sistema Oriel es: ".$pass);
+                    //Agrega direccion de correo del destinatario
                     $obj_correo->agregar_direccion_de_correo($correo, $usuario);
+                    //Procede a enviar el correo
                     $obj_correo->enviar_correo();
+                    //Inicializa variables para notificar al usuario en pantalla del resultado
                     $tipo_de_alerta="alert alert-info";
                     $validacion="Se ha enviado un recordatorio de password a su correo electrónico";  
+                    //Llamada al formulario correspondiente de la vista
                     require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
              }else
                  {
@@ -2363,78 +2509,125 @@
              */
                     $tipo_de_alerta="alert alert-danger";
                     $validacion="Debe digitar un nombre de usuario válido para recordar el password";  
+                    //Llamada al formulario correspondiente de la vista
                     require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
                  }
         }
     }
     
+    /*
+     * Este es uno de los metodos principales del sistema, permite hacer la validacion inicial de credenciales del usuario a nivel de seguridad
+     * para hacer ingreso a la parte privada del sistema. En este metodo se inicializan las variables de sesión del usuario, las cuales permiten
+     * navegar dentro de todas las funcionalidades de ORIEL.
+     * 
+     */
+    
     public function listar(){
+        //Inicializa las variables de control para notificar al usuario del resultado del proceso
         $validacion="";
+        //Creacion de una instancia de la clase usuario
         $obj_usuarios= new cls_usuarios();
+        //Creacion de una instancia de la clase modulos
         $obj_modulos = new cls_modulos();
 
+        
+        //Verifica que el envio de parametros sea por medio del metodo post=formulario HTML
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            
+            //Obtiene la información del usuario
             $usuario = $_POST['nombre'];
+            //Obtiene la información de la contraseña del usuario
             $clave= $_POST['password'];
         
+            //Verifica si el usuario existe
             if ($obj_usuarios->existe_usuario($usuario)){
+                //Valida el password del usuario que sea correcto
                 if ($obj_usuarios->valida_password_de_usuario($usuario, $clave)){
+                    //Verifica si el usuario está activo en el sistema
                     if ($obj_usuarios->el_usuario_esta_activo($usuario, $clave)){        
+                        //Valida si es la primera vez que ingresa al sistema o si tiene clave por defecto para dirigirlo al formulario de cambio correspondiente.
                         if (!$obj_usuarios->tiene_clave_por_defecto($usuario,$clave)){
+                            //Ejecuta el metodo que trae todos los usuarios del sistema. 
                             $obj_usuarios->obtiene_todos_los_usuarios();
+                            //Obtiene el resultado de la consulta en una variable
                             $params=$obj_usuarios->getArreglo();
+                            //Asigna el numero de cedula a la variable de sesion
                             $_SESSION['nombre']=$usuario;
+                            //Metodo que permite obtener el rol, nombre, y apellido del usuario
                             $obj_usuarios->obtiene_rol_nombre_apellido_de_usuario($usuario);
+                            //Asigna a la variable de sesion, el rol del usuario
                             $_SESSION['rol']=$obj_usuarios->getRol();
+                            //Asigna a la variable de sesion, el nombre del usuario
                             $_SESSION['name']=$obj_usuarios->getNombre();
+                            //Asigna a la variable de sesion, el apellido del usuario
                             $_SESSION['apellido']=$obj_usuarios->getApellido();
+                            //Asigna a la variable de sesion, el id del usuario
                             $_SESSION['id']=$obj_usuarios->getId();
                             
+                            //Crea una variable de sesion de tipo vector para acumular el total de modulos del sistema
                             $_SESSION['modulos']=array();
+                            //Obtiene todos los modulos de seguridad registrados en la bd
                             $obj_modulos->obtiene_todos_los_modulos();
+                            //Asigna a la variable modulos, el total de registros de modulos del sistema
                             $modulos= $obj_modulos->getArreglo();
+                            //Obtiene los modulos de seguridad asignados al rol del usuario en especifico
                             $obj_modulos->obtiene_lista_de_modulos_por_rol($obj_usuarios->getRol());
+                            //Obtiene los modulos asignados al rol del usuario
                             $roles = $obj_modulos->getArreglo();
+                            // Tamaño del arreglo de modulos de seguridad del sistema
                             $tam = count($modulos);
+                            // Tamaño del arreglo de modulos de seguridad asignados al usuario
                             $tam2 = count($roles);
+                            //Variable bandera para controlar cuales modulos tiene asignado un usuario especifico
                             $estado=0;
+                            //Recorre el total de registros contenidos en el vector de modulos de seguridad del sistema
                             for($i=0; $i<$tam;$i++){
                                 for($c=0;$c<$tam2;$c++){
+                                    //Valida los modulos del sistema contra los modulos de seguridad asignados al usuario
                                     if($modulos[$i]['Descripcion']==$roles[$c]['Descripcion']){
+                                        //En caso de que el usuario tenga asignado un modulo de seguridad, procede a cambiar el estado de la variable bandera
                                         $estado = 1;
+                                        //Detiene el recorrido.
                                         break;
                                     }
                                 }
+                                //Al vector instanciado como variable de sesión, le empieza aagregar cada uno de los modulos de seguridad con el estado correspondiente para validar si el usuario tiene privilegios.
                                 $_SESSION['modulos']= array_merge($_SESSION['modulos'],[($modulos[$i]['Descripcion'])=>($estado)]);
+                                //Inicializa la variable bandera para continuar con el recorrido del vector de modulos de seguridad.
                                 $estado= 0;
                             }
-//                            echo "<pre>";
-//                            print_r($_SESSION['modulos']);
-//                            echo "</pre>";
-                            
+                            //Llamada al formulario correspondiente de la vista
                             require __DIR__ . '/../vistas/plantillas/frm_principal.php';
 
                         }else{
+                            //Define las variables de notificacion en pantalla para el usuario, en caso de que la clave y el usuario sean el mismo.
                             $tipo_de_alerta="alert alert-info";
                             $validacion="Es necesario cambiar su clave para poder ingresar al sistema";   
+                            //Llamada al formulario correspondiente de la vista
                             require __DIR__ . '/../vistas/plantillas/frm_Cambio_Clave.php';
                         }
                         
                     }else{
+                        //Define las variables de notificacion en pantalla para el usuario, en caso de que el usuario esté inactivo.
                         $validacion="Usuario Inactivo, contacte al administrador del sistema!!!";
                         $tipo_de_alerta="alert alert-danger";
+                        //Llamada al formulario correspondiente de la vista
                         require __DIR__ . '/../vistas/plantillas/inicio_sesion.php'; 
                     }
                       
                 }else {
+                    //Define las variables de notificacion en pantalla para el usuario, en caso de que la clave sea incorrecta.
                     $validacion="Contraseña Incorrecta, vuelva a intentarlo";
                     $tipo_de_alerta="alert alert-danger";
+                    //Llamada al formulario correspondiente de la vista
                     require __DIR__ . '/../vistas/plantillas/inicio_sesion.php'; 
                 }
             }    
             else{
+                //Define las variables de notificacion en pantalla para el usuario, en caso de que el usuario no exista en la bd.
                 $validacion="El usuario no se encuentra registrado en la base de datos";
                 $tipo_de_alerta="alert alert-danger";
+                //Llamada al formulario correspondiente de la vista
                 require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
             }
         }else
@@ -2447,61 +2640,106 @@
              */
             $tipo_de_alerta="alert alert-danger";
             $validacion="Es necesario iniciar sesión para ingresar al sistema";
+            //Llamada al formulario correspondiente de la vista
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }
     }
      
+    /*
+     * Metodo que permite iniciar el ingreso a la parte privada del sistema, cambiando la clave.
+     */
     public function iniciar_sistema_cambiando_clave(){
+        //Inicializa la variable de control para informar al usuario del resultado del proceso.
         $validacion="";
+        //Creación de una instancia de la clase usuarios.
         $obj_usuarios= new cls_usuarios();
+        //Verifica que los parametros hayan sido enviados mediante el evento post.
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            //Asigna a una variable la cedula del usuario.
             $usuario = $_POST['nombre'];
+            //Asigna a una variable la clave del usuario.
             $clave= $_POST['password'];
+            //Creacion de una instancia de la clase modulos.
             $obj_modulos =  new cls_modulos();
+            //Verifica si el usuario existe mediante el numero de cedula.
             if ($obj_usuarios->existe_usuario($usuario)){
+                //Verifica que el password del usuario sea correcto
                 if ($obj_usuarios->valida_password_de_usuario($usuario, $clave)){
+                    //Verifica que el usuario este activo en el sistema.
                     if ($obj_usuarios->el_usuario_esta_activo($usuario, $clave)){
+                        //obtiene el listado completo de usuarios 
                         $obj_usuarios->obtiene_todos_los_usuarios();
+                        //Asigna a una variable el arreglo de usuarios del sistema
                         $params=$obj_usuarios->getArreglo();
+                        //asigna a la variable de sesion correspondiente, la cedula del usuario.
                         $_SESSION['nombre']=$usuario;
+                        //Obtiene la información de seguridad especifica del usuario
                         $obj_usuarios->obtiene_rol_nombre_apellido_de_usuario($usuario);
+                        //Asigna el rol del usuario a la variable de sesion 
                         $_SESSION['rol']=$obj_usuarios->getRol();
+                        //Asigna el nombre del usuario a la variable de sesion 
                         $_SESSION['name']=$obj_usuarios->getNombre();
+                        //Asigna el apellido del usuario a la variable de sesion 
                         $_SESSION['apellido']=$obj_usuarios->getApellido();
+                        //Asigna el id del usuario a la variable de sesion 
                         $_SESSION['id']=$obj_usuarios->getId();
+                        //Crea un vector de sesion con la cantidad de modulos de seguridad del sistema.
                         $_SESSION['modulos']=array();
+                        // Obtiene todos los modulos de seguridad del sistema.
                         $obj_modulos->obtiene_todos_los_modulos();
+                        //Obtiene el arreglo completo de modulos de seguridad del sistema
                         $modulos= $obj_modulos->getArreglo();
+                        //Obtiene la lista de modulos de seguridad que tiene un usuario por medio del rol correspondiente.
                         $obj_modulos->obtiene_lista_de_modulos_por_rol($obj_usuarios->getRol());
+                        //Obtiene en una variable, el listado de roles que tiene asignado el usuario.
                         $roles = $obj_modulos->getArreglo();
+                        //Obtiene el tamaño total de modulos de seguridad del sistema
                         $tam = count($modulos);
+                        //Obtiene el tamaño total de modulos de seguridad asignados a un usuario.
                         $tam2 = count($roles);
+                        //Variable bandera para verificar que modulos de seguridad del total, tiene asignado el usuario en cuestión.
                         $estado=0;
+                        //Bucle que permite recorrer y comparar cuales modulos de seguridad tiene el usuario
                         for($i=0; $i<$tam;$i++){
                             for($c=0;$c<$tam2;$c++){
+                                //En caso de que el usuario cuente con el modulo, procede a cambiar el estado de la variable bandera.
                                 if($modulos[$i]['Descripcion']==$roles[$c]['Descripcion']){
+                                    //Cambia el estado del bucle
                                     $estado = 1;
+                                    //Sale del ciclo
                                     break;
                                 }
                             }
+                            //Construye el vector de sesion que almacena el total de modulos de seguridad que se encuentran en bd
                             $_SESSION['modulos']= array_merge($_SESSION['modulos'],[($modulos[$i]['Descripcion'])=>($estado)]);
+                            //Inicializa el estado de la variable bandera
                             $estado= 0;
                         }    
+                        //Llamada al formulario correspondiente de la vista
                         require __DIR__ . '/../vistas/plantillas/frm_principal.php';
                     }   else{
+                        //Notifica al usuario que se encuentra inactivo
                         $validacion="Usuario Inactivo, contacte al administrador del sistema!!!";
+                        //Cambia el estado de las variables de notificacion al usuario
                         $tipo_de_alerta="alert alert-danger";
+                        //Llamada al formulario correspondiente de la vista
                         require __DIR__ . '/../vistas/plantillas/inicio_sesion.php'; 
                     }
                       
                 }   else   {
+                    //Notifica al usuario que la contraseña es incorrecta
                     $validacion="Contraseña Incorrecta, vuelva a intentarlo";
+                    //Cambia el estado de las variables de notificacion al usuario
                     $tipo_de_alerta="alert alert-danger";
+                     //Llamada al formulario correspondiente de la vista
                     require __DIR__ . '/../vistas/plantillas/inicio_sesion.php'; 
                 }
             }    else   {
+                //Notifica al usuario que el usuario no se encuentra en la base de datos
                 $validacion="El usuario no se encuentra registrado en la base de datos";
+                //Cambia el estado de las variables de notificacion al usuario
                 $tipo_de_alerta="alert alert-danger";
+                 //Llamada al formulario correspondiente de la vista
                 require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
             }
 
@@ -2513,30 +2751,47 @@
              * En la última línea llama a la pagina de inicio de sesión.
              */
             $tipo_de_alerta="alert alert-danger";
+             //Cambia el estado de las variables de notificacion al usuario
             $validacion="Es necesario iniciar sesión para ingresar al sistema";
+             //Llamada al formulario correspondiente de la vista
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }
 
     }
     
 //FUNCIONES PARA EVENTOS
+    
+    /*
+     * Metodo que permite listar los eventos de bitácora que están activos o en atención.
+     */
     public function frm_eventos_listar(){
+        //Validación para verificar si el usuario está logeado en el sistema
         if(isset($_SESSION['nombre'])){
+            //Creacion de objeto de clase eventos
             $obj_eventos = new cls_eventos();
+            //Establece el criterio de filtrado correspondiente para buscar los eventos.
             $obj_eventos->setCondicion("T_Evento.ID_EstadoEvento<>3 AND T_Evento.ID_EstadoEvento<>5");
+            //Ejecuta la sentencia SQL
             $obj_eventos ->obtiene_todos_los_eventos(); 
+            //Obtiene el vector de registros correspondientes
             $params= $obj_eventos->getArreglo();
             $puesto_enviado=0;
             //Implementación para obtener el último seguimiento de cada evento, además del último usuario que lo agregó
             
+            //Saca el tamaño del vector de registros 
         $tam=count($params);
+        //verifica que hayan eventos devueltos en la consulta.
         if (count($params)>0){
+            //Empieza a recorrer registro por registro
             for ($i = 0; $i <$tam; $i++) {
+                //Criterio de busqueda que permite traer todos los seguimientos del evento en cuestion
                 $obj_eventos->setCondicion("T_DetalleEvento.ID_Evento=".$params[$i]['ID_Evento']." order by T_DetalleEvento.Fecha desc,T_DetalleEvento.Hora desc");
                 //Obtiene los seguimientos del evento seleccionado, si los hubiere
                 $obj_eventos->obtiene_detalle_evento();
 
+                //Verifica que hayan seguimientos
                 if(count($obj_eventos->getArreglo())>0){
+                    //Construye el vector de seguimientos asociados al evento que se está analizando.
                     if ($i==0){
                         $todos_los_seguimientos_juntos=$obj_eventos->getArreglo();
                     }else{
@@ -2544,31 +2799,36 @@
                     }
                 }
                 
+                //Trae el seguimiento asociado a un evento en especifico, solo el mas viejo, lo cual permite determinar quien hizo el ultimo seguimiento en el evento.
                 $obj_eventos->setCondicion("T_DetalleEvento.ID_Evento=".$params[$i]['ID_Evento']." order by T_DetalleEvento.Fecha desc,T_DetalleEvento.Hora desc limit 0,1");
                 //Obtiene los seguimientos del evento seleccionado, si los hubiere
                 $obj_eventos->obtiene_detalle_evento();
+                //asigna el resultado de la consulta aun objeto de tipo arreglo
                 $ultimo_seguimiento_asociado= $obj_eventos->getArreglo();
 
                 //Verifica si existen seguimientos asociados al evento actual
                 if(count($ultimo_seguimiento_asociado)>0){
+                    //Arma el vector de seguimientos asociados a un evento en específico
                     if ($i==0){
+                        //Arma el vector con el detalle y el ultimo usuario que registro un seguimiento en el evento de bitacora
                         $detalle_y_ultimo_usuario= array(['Detalle'=>"Fecha: ".date_format(date_create($ultimo_seguimiento_asociado[0]['Fecha']), 'd/m/Y').".Hora: ".$ultimo_seguimiento_asociado[0]['Hora'].". ".$ultimo_seguimiento_asociado[0]['Detalle']]+['Usuario'=>$ultimo_seguimiento_asociado[0]['Nombre_Usuario']." ".$ultimo_seguimiento_asociado[0]['Apellido']]);
                     }else{
+                        //Concatena al vector la nueva linea de información del seguimiento.
                         $detalle_y_ultimo_usuario = array_merge($detalle_y_ultimo_usuario,array(['Detalle'=>"Fecha: ".date_format(date_create($ultimo_seguimiento_asociado[0]['Fecha']), 'd/m/Y').".Hora: ".$ultimo_seguimiento_asociado[0]['Hora'].". ".$ultimo_seguimiento_asociado[0]['Detalle']]+['Usuario'=>$ultimo_seguimiento_asociado[0]['Nombre_Usuario']." ".$ultimo_seguimiento_asociado[0]['Apellido']]));  
                     }
                 }else{
+                    //En caso de que no hayan seguimientos asociados, procede a registrar las validación correspondiente.
                     if ($i==0){
+                        //Con el primer elemento del vector, utiliza esta linea de codigo
                         $detalle_y_ultimo_usuario= array(['Detalle'=>"No hay seguimientos asociados a este evento. Para agregar uno oprima el link:'Gestionar Seguimiento de la fila respectiva.'"]+['Usuario'=>$params[$i]['Nombre_Usuario']." ".$params[$i]['Apellido']]);
                     }else{
+                        //Con el resto de lineas del vector, usa esta otra programación.
                         $detalle_y_ultimo_usuario = array_merge($detalle_y_ultimo_usuario,array(['Detalle'=>"No hay seguimientos asociados a este evento. Para agregar uno oprima el link:'Gestionar Seguimiento de la fila respectiva.'"]+['Usuario'=>$params[$i]['Nombre_Usuario']." ".$params[$i]['Apellido']]));
                     }
                 }
             }
-//            echo '<pre>';
-//            print_r($detalle_y_ultimo_usuario);
-//            echo '</pre>';
         } 
-       
+       //Llamada al formulario correspondiente de la vista
         require __DIR__.'/../vistas/plantillas/frm_eventos_listar.php';
         }
         else {
@@ -2580,76 +2840,113 @@
              */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            //Llamada al formulario correspondiente de la vista
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }
     }
     
+    /*
+     * Este metodo es llamado desde codigo javascript, especificamente en la pantalla que lista los eventos abiertos de bitácora. Tiene como proposito
+     * ordenar o visualizar en pantalla los eventos por puesto de monitoreo del centro de control Z1. Esto permite facilidad a la hora de realizar
+     * auditorías por puesto por parte del coordinador a cargo, así como enfocar el trabajo de cada operador de monitoreo.
+     */
     public function eventos_listar_filtrado(){
+        //Validación para verificar si el usuario está logeado en el sistema
         if(isset($_SESSION['nombre'])){
+            //Creación de una instancia de un objeto de la clase eventos.
             $obj_eventos = new cls_eventos();
+            //Verifica para cual puesto de monitoreo fue realizada la solicitud, esto mediante el metodo post 
             if($_POST['puesto']==1){
+                //Variable de control del puesto a visualizar
                 $puesto_enviado=1;
+                //Establecer la condición de filtrado por puesto para la consulta SQL a la base de datos
                 $obj_eventos->setCondicion("T_Evento.ID_EstadoEvento<>3 AND T_Evento.ID_EstadoEvento<>5 AND (T_Evento.ID_Provincia=4 OR T_Evento.ID_Provincia=5 OR T_Evento.ID_Provincia=6) AND (T_Evento.ID_Tipo_Punto<>3 AND T_Evento.ID_Tipo_Punto<>4)");
             }
+            //Verifica para cual puesto de monitoreo fue realizada la solicitud, esto mediante el metodo post 
             if($_POST['puesto']==2){
+                //Variable de control del puesto a visualizar
                 $puesto_enviado=2;
+                //Establecer la condición de filtrado por puesto para la consulta SQL a la base de datos
                 $obj_eventos->setCondicion("T_Evento.ID_EstadoEvento<>3 AND T_Evento.ID_EstadoEvento<>5 AND T_Evento.ID_Provincia=1 AND (T_Evento.ID_Tipo_Punto<>3 AND T_Evento.ID_Tipo_Punto<>4)");
             }
+            //Verifica para cual puesto de monitoreo fue realizada la solicitud, esto mediante el metodo post 
             if($_POST['puesto']==3){
+                //Variable de control del puesto a visualizar
                 $puesto_enviado=3;
+                //Establecer la condición de filtrado por puesto para la consulta SQL a la base de datos
                 $obj_eventos->setCondicion("T_Evento.ID_EstadoEvento<>3 AND T_Evento.ID_EstadoEvento<>5 AND (T_Evento.ID_Tipo_Punto=3 OR T_Evento.ID_Tipo_Punto=4)");
             }
+            //Verifica para cual puesto de monitoreo fue realizada la solicitud, esto mediante el metodo post 
             if($_POST['puesto']==4){
+                //Variable de control del puesto a visualizar
                 $puesto_enviado=4;
+                //Establecer la condición de filtrado por puesto para la consulta SQL a la base de datos
                 $obj_eventos->setCondicion("T_Evento.ID_EstadoEvento<>3 AND T_Evento.ID_EstadoEvento<>5 AND (T_Evento.ID_Provincia=2 OR T_Evento.ID_Provincia=3 OR T_Evento.ID_Provincia=7) AND (T_Evento.ID_Tipo_Punto<>3 AND T_Evento.ID_Tipo_Punto<>4)");
-            }if($_POST['puesto']==0){
+            }
+            //Verifica para cual puesto de monitoreo fue realizada la solicitud, esto mediante el metodo post 
+            if($_POST['puesto']==0){
+                //Variable de control del puesto a visualizar
                 $puesto_enviado=0;
+                //Establecer la condición de filtrado por puesto para la consulta SQL a la base de datos
                 $obj_eventos->setCondicion("T_Evento.ID_EstadoEvento<>3 AND T_Evento.ID_EstadoEvento<>5");
             }
+            //Ejecuta la consulta SQL con el filtro correspondiente
             $obj_eventos ->obtiene_todos_los_eventos(); 
+            //Asigna el resultado a una variable tipo vector.
             $params= $obj_eventos->getArreglo();
             
             //Implementación para obtener el último seguimiento de cada evento, además del último usuario que lo agregó
-            
+        
+        //Saca el tamaño del vector de registros 
         $tam=count($params);
+        //verifica que hayan eventos devueltos en la consulta.
         if (count($params)>0){
+            //Empieza a recorrer registro por registro
             for ($i = 0; $i <$tam; $i++) {
+                //Criterio de busqueda que permite traer todos los seguimientos del evento en cuestion
                 $obj_eventos->setCondicion("T_DetalleEvento.ID_Evento=".$params[$i]['ID_Evento']." order by T_DetalleEvento.Fecha desc,T_DetalleEvento.Hora desc");
                 //Obtiene los seguimientos del evento seleccionado, si los hubiere
                 $obj_eventos->obtiene_detalle_evento();
-
+                //Verifica que hayan seguimientos
                 if(count($obj_eventos->getArreglo())>0){
-                    if ($i==0){
+                    //Construye el vector de seguimientos asociados al evento que se está analizando.
+                    if ($i==0){                      
                         $todos_los_seguimientos_juntos=$obj_eventos->getArreglo();
                     }else{
                         $todos_los_seguimientos_juntos = array_merge($todos_los_seguimientos_juntos,$obj_eventos->getArreglo());                 
                     }
                 }
-                
+                //Trae el seguimiento asociado a un evento en especifico, solo el mas viejo, lo cual permite determinar quien hizo el ultimo seguimiento en el evento.
                 $obj_eventos->setCondicion("T_DetalleEvento.ID_Evento=".$params[$i]['ID_Evento']." order by T_DetalleEvento.Fecha desc,T_DetalleEvento.Hora desc limit 0,1");
                 //Obtiene los seguimientos del evento seleccionado, si los hubiere
                 $obj_eventos->obtiene_detalle_evento();
+                //asigna el resultado de la consulta aun objeto de tipo arreglo
                 $ultimo_seguimiento_asociado= $obj_eventos->getArreglo();
 
                 //Verifica si existen seguimientos asociados al evento actual
                 if(count($ultimo_seguimiento_asociado)>0){
+                    //Arma el vector de seguimientos asociados a un evento en específico
                     if ($i==0){
+                        //Arma el vector con el detalle y el ultimo usuario que registro un seguimiento en el evento de bitacora
                         $detalle_y_ultimo_usuario= array(['Detalle'=>"Fecha: ".date_format(date_create($ultimo_seguimiento_asociado[0]['Fecha']), 'd/m/Y').".Hora: ".$ultimo_seguimiento_asociado[0]['Hora'].". ".$ultimo_seguimiento_asociado[0]['Detalle']]+['Usuario'=>$ultimo_seguimiento_asociado[0]['Nombre_Usuario']." ".$ultimo_seguimiento_asociado[0]['Apellido']]);
                     }else{
+                        //Concatena al vector la nueva linea de información del seguimiento.
                         $detalle_y_ultimo_usuario = array_merge($detalle_y_ultimo_usuario,array(['Detalle'=>"Fecha: ".date_format(date_create($ultimo_seguimiento_asociado[0]['Fecha']), 'd/m/Y').".Hora: ".$ultimo_seguimiento_asociado[0]['Hora'].". ".$ultimo_seguimiento_asociado[0]['Detalle']]+['Usuario'=>$ultimo_seguimiento_asociado[0]['Nombre_Usuario']." ".$ultimo_seguimiento_asociado[0]['Apellido']]));  
                     }
                 }else{
+                    //En caso de que no hayan seguimientos asociados, procede a registrar las validación correspondiente.
                     if ($i==0){
+                        //Con el primer elemento del vector, utiliza esta linea de codigo
                         $detalle_y_ultimo_usuario= array(['Detalle'=>"No hay seguimientos asociados a este evento. Para agregar uno oprima el link:'Gestionar Seguimiento de la fila respectiva.'"]+['Usuario'=>$params[$i]['Nombre_Usuario']." ".$params[$i]['Apellido']]);
                     }else{
+                        //Con el resto de lineas del vector, usa esta otra programación.
                         $detalle_y_ultimo_usuario = array_merge($detalle_y_ultimo_usuario,array(['Detalle'=>"No hay seguimientos asociados a este evento. Para agregar uno oprima el link:'Gestionar Seguimiento de la fila respectiva.'"]+['Usuario'=>$params[$i]['Nombre_Usuario']." ".$params[$i]['Apellido']]));
                     }
                 }
             }
-//            echo '<pre>';
-//            print_r($detalle_y_ultimo_usuario);
-//            echo '</pre>';
+//          
         } 
+        //Llamada al formulario correspondiente de la vista
         require __DIR__.'/../vistas/plantillas/frm_eventos_listar.php';
         }
         else {
@@ -2661,23 +2958,34 @@
              */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            //Llamada al formulario correspondiente de la vista
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }
     }
     
+    /*
+     * Metodo del contralador que permite listar los eventos cerrados en pantalla de la bitacora digital.
+     */
     public function frm_eventos_lista_cerrados(){
-        
+        //Validación para verificar si el usuario está logeado en el sistema
         if(isset($_SESSION['nombre'])){
+            //Creación de un objeto de clase eventos
             $obj_eventos = new cls_eventos();
+            //Establece la condición de busqueda de eventos cerrados del modulo de bitacora digital.
             $obj_eventos->setCondicion("(T_Evento.ID_EstadoEvento=3 OR T_Evento.ID_EstadoEvento=5) AND T_Evento.Fecha='".date("Y-m-d")."'");
+            //Ejecuta la sentecia SQL
             $obj_eventos ->obtiene_todos_los_eventos(); 
+            //Asigna al vector correspondiente el resultado de la consulta SQL
             $params= $obj_eventos->getArreglo();
             
+            //Metodo de la clase que permite obtener todas las provincias que se encuentran listadas en el sistema.
             $obj_eventos->obtener_todas_las_provincias();
+            //Asigna el resultado a un vector
             $lista_provincias=$obj_eventos->getArreglo();
             
             //Obtiene todos lps tipos de puntos BCR que se encuentran activos en la base de datos
             $obj_eventos->obtener_todos_los_tipos_de_puntos_BCR();
+            //Asigna el resultado de la consulta a un vector
             $lista_tipos_de_puntos_bcr=$obj_eventos->getArreglo();
             
             //Obtiene las oficinas de san jose
@@ -2685,53 +2993,66 @@
             $obj_eventos->setTipo_punto("1");
             $obj_eventos->setProvincia("1");
             
+            //Metodo que filtra los puntos BCR para uso de la bitacora digital
             $obj_eventos->filtra_sitios_bcr_bitacora();
+            //Obtiene el resultado de la consulta en una variable vector.
             $lista_puntos_bcr_oficinas_sj=$obj_eventos->getArreglo(); 
             
+            //Extrae la cantidad de registros en el vector que almacena la consulta
             $tamano=count($params);
+            //Verifica que hayan registros 
             if (count($params)>0){
-                        
+                //Recorre el listado de registros
                 for ($x = 0; $x <$tamano; $x++) {
-
+                    //Establece el criterio de busqueda correspondiente,para extraer los seguimientos asignados a un evento en especifico
                     $obj_eventos->setCondicion("T_DetalleEvento.ID_Evento=".$params[$x]['ID_Evento']." order by T_DetalleEvento.Fecha desc,T_DetalleEvento.Hora desc");
                     //Obtiene los seguimientos del evento seleccionado, si los hubiere
                     $obj_eventos->obtiene_detalle_evento();
 
-
+                    //Verifica que hayan seguimientos asociados
                     if(count($obj_eventos->getArreglo())>0){
                         if ($x==0){
+                            //Arma el vector de seguimientos por cada evento cerrado del sistema
                             $todos_los_seguimientos_juntos=$obj_eventos->getArreglo();
-    //                     
+                        
                         }else{
+                            //Arma el vector de seguimientos por cada evento cerrado del sistema
                             $todos_los_seguimientos_juntos = array_merge($todos_los_seguimientos_juntos,$obj_eventos->getArreglo());
-    //                      
+                          
                         }
                     }
                     
+                // trae la fecha y ultimo seguimiento del evento en cuestion
                 $obj_eventos->setCondicion("T_DetalleEvento.ID_Evento=".$params[$x]['ID_Evento']." order by T_DetalleEvento.Fecha desc,T_DetalleEvento.Hora desc limit 0,1");
                 //Obtiene los seguimientos del evento seleccionado, si los hubiere
                 $obj_eventos->obtiene_detalle_evento();
+                //asigna el vector a una variable para posteriormente utilizarlo.
                 $ultimo_seguimiento_asociado= $obj_eventos->getArreglo();
                 
                 
                 //Verifica si existen seguimientos asociados al evento actual
                 if(count($ultimo_seguimiento_asociado)>0){
+                    //Arma el vector de seguimientos asociados
                     if ($x==0){
                         $detalle_y_ultimo_usuario= array(['Detalle'=>"Fecha: ".date_format(date_create($ultimo_seguimiento_asociado[0]['Fecha']), 'd/m/Y').".Hora: ".$ultimo_seguimiento_asociado[0]['Hora'].". ".$ultimo_seguimiento_asociado[0]['Detalle']]+['Usuario'=>$ultimo_seguimiento_asociado[0]['Nombre_Usuario']." ".$ultimo_seguimiento_asociado[0]['Apellido']]);
 //                     
                     }else{
+                        //Arma el vector de seguimientos asociados
                         $detalle_y_ultimo_usuario = array_merge($detalle_y_ultimo_usuario,array(['Detalle'=>"Fecha: ".date_format(date_create($ultimo_seguimiento_asociado[0]['Fecha']), 'd/m/Y').".Hora: ".$ultimo_seguimiento_asociado[0]['Hora'].". ".$ultimo_seguimiento_asociado[0]['Detalle']]+['Usuario'=>$ultimo_seguimiento_asociado[0]['Nombre_Usuario']." ".$ultimo_seguimiento_asociado[0]['Apellido']]));
 //                      
                     }
                 }else{
                     if ($x==0){
+                        //Valida el vector en caso de que no hayan seguimientos asociados al evento en cuestion
                         $detalle_y_ultimo_usuario= array(['Detalle'=>"No hay seguimientos asociados a este evento. Para agregar uno oprima el link:'Gestionar Seguimiento de la fila respectiva.'"]+['Usuario'=>$params[$x]['Nombre_Usuario']." ".$params[$x]['Apellido']]);
                     }else{
+                        //Valida el vector en caso de que no hayan seguimientos asociados al evento en cuestion
                         $detalle_y_ultimo_usuario = array_merge($detalle_y_ultimo_usuario,array(['Detalle'=>"No hay seguimientos asociados a este evento. Para agregar uno oprima el link:'Gestionar Seguimiento de la fila respectiva.'"]+['Usuario'=>$params[$x]['Nombre_Usuario']." ".$params[$x]['Apellido']]));
                     }
                 }
                 }
             }
+            //Llamada al formulario correspondiente de la vista
             require __DIR__.'/../vistas/plantillas/frm_eventos_lista_cerrados.php';
         }
         else {
@@ -2743,12 +3064,19 @@
              */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            //Llamada al formulario correspondiente de la vista
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }
     }
     
+    /*
+     * Metodo del controler que permite agregar un nuevo evento al modulo de la bitacora digital del centro de control
+     */
+    
     public function frm_eventos_agregar(){
+        //Valida errores durante el procedimiento realizado
         try {
+            //Validación para verificar si el usuario está logeado en el sistema
             if(isset($_SESSION['nombre'])){
                 $params="";
                 //Vector que almacena la lista completa de tipos de evento para cargarla en el dropdownlistbox correspondiente
@@ -2761,27 +3089,35 @@
                 //Vector que almacena la lista completa de puntos bcr con tipo oficina y de san josé (cuando se agrega un nuevo evento) para cargarla en el dropdownlistbox correspondiente
                 $lista_puntos_bcr_oficinas_sj="";
                 
+                //Verifica el valor del parametro id enviado por el url, con esto se determina si se está agregando un evento 
+                //o si por el contrario se está editando.
                 if ($_GET['id']==0){
                   
+                    //Establece e inicializa una variable a cero
                     $ide=0;
                     
                     //Crea objeto de tipo eventos para cargar las listas correspondientes
                     $obj_eventos = new cls_eventos();
+                    
                     $params[0]['Nombre']=null;
                     //Obtiene todos los tipos de eventos que se encuentran activos en la base de datos
                     $obj_eventos->obtener_todos_los_tipos_eventos();
+                    //asigna el resultado de la sentecia SQL, a una variable tipo vector
                     $lista_tipos_de_eventos=$obj_eventos->getArreglo();
                     
                     //Obtiene todas las provincias que se encuentran activas en la base de datos
                     $obj_eventos->obtener_todas_las_provincias();
+                    //Asigna la lista de provincias a un arreglo
                     $lista_provincias=$obj_eventos->getArreglo();
                     
-                    //Obtiene todos lps tipos de puntos BCR que se encuentran activos en la base de datos
+                    //Obtiene todos los tipos de puntos BCR que se encuentran activos en la base de datos
                     $obj_eventos->obtener_todos_los_tipos_de_puntos_BCR();
+                    //Asignado el listado a una variable tipo vector
                     $lista_tipos_de_puntos_bcr=$obj_eventos->getArreglo();
                     
                     //Obtiene los diferentes seguimientos
                     $obj_eventos->obtener_seguimientos();
+                    //Obtiene el listado de seguimientos asociados a un evento en especifico
                     $estadoEventos = $obj_eventos->getArreglo();
                     
                     //Obtiene las oficinas de san jose
@@ -2789,28 +3125,34 @@
                     $obj_eventos->setTipo_punto("1");
                     $obj_eventos->setProvincia("1");
 
+                    //Filtra los sitios que se utilizan dentro del modulo de bitacora
                     $obj_eventos->filtra_sitios_bcr_bitacora();
+                    //Obtiene la lista de sitios en una variable tipo vector
                     $lista_puntos_bcr_oficinas_sj=$obj_eventos->getArreglo(); 
-                    
-                    /*echo "<pre>";
-                    
-                    print_r($lista_puntos_bcr_oficinas_sj);
-                    
-                    echo "</pre>";*/
-                    
+                       
+                    //Llamada al formulario correspondiente de la vista
                     require __DIR__ . '/../vistas/plantillas/frm_eventos_agregar.php';
                     
                 }else{   
+                    //En caso de que el id corresponda a algun evento en especifico, corre este procedimiento
                     $ide=$_GET['id'];
+                    //Crea un objeto del tipo puntos bcr
                     $obj_Puntobcr = new cls_puntosBCR();
+                    //Crea un objeto de tipo eventos de bitacora
                     $obj_eventos = new cls_eventos();
 
+                    //Establece una condicion de busqueda por punto BCR en específico
                     $obj_Puntobcr->setCondicion("T_PuntoBCR.ID_PuntoBCR=".$_GET['id']);
+                    //Ejecuta el filtrado
                     $obj_Puntobcr->obtiene_todos_los_puntos_bcr();
+                    //Obtiene los resultados de la consulta.
                     $params= $obj_Puntobcr->getArreglo();
                     
+                    //Establece la condicion a vacio
                     $obj_eventos->setCondicion("");
+                    //Obtiene todos los tipos de eventos de bitacora
                     $obj_eventos->obtener_todos_los_tipos_eventos();
+                    //Los asigna a una variable de tipo vector
                     $lista_tipos_de_eventos=$obj_eventos->getArreglo();
                     
                     //Obtiene Distrito->Cantón->Provincia
@@ -2827,14 +3169,21 @@
                     $obj_Puntobcr->obtiene_provincias();
                     $lista_provincias = array_merge(array(['ID_Provincia'=>0]+['Nombre_Provincia'=>""]),$obj_Puntobcr->getArreglo());
                     
+                    //Obtener tipos de puntos BCR: oficinas, ATMs, etc
                     $obj_eventos->setCondicion("");
+                    //Ejecuta la sentencia 
                     $obj_eventos->obtener_todos_los_tipos_de_puntos_BCR();
+                    //Asigna el resultado a una variable de tipo vector
                     $lista_tipos_de_puntos_bcr=$obj_eventos->getArreglo();
                     
+                    //Busca los eventos de un punto BCR en especifico
                     $obj_eventos->setCondicion("T_Evento.ID_PuntoBCR=".$ide);
+                    //Obtiene los eventos
                     $obj_eventos->obtiene_todos_los_eventos();
+                    //Recibe el resultado de la busqueda
                     $eventos_relacionados=$obj_eventos->getArreglo();
                     
+                    //Llamada al formulario correspondiente de la vista
                     require __DIR__ . '/../vistas/plantillas/frm_eventos_agregar.php';
                 }
                 
@@ -2848,78 +3197,114 @@
              */
                 $tipo_de_alerta="alert alert-warning";
                 $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+                //Llamada al formulario correspondiente de la vista
                 require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
             }
+        //Recolecta los errores
         }catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }  
     }
        
+    /*
+     * Metodo que permite notificar al usuario en pantalla cuando va a ingresar un tipo de evento en un punto bcr que ya se encuentra abierto
+     */
     public function alerta_en_vivo_mismo_punto_bcr_y_evento(){
                 
+        //Verifica que los parametros del metodo post estén definidos y hayan sido enviados al metodo
         if(isset($_POST['id_punto_bcr'])&& (isset($_POST['id_tipo_evento']))){
             
+            //Validación para verificar si el usuario está logeado en el sistema
             if(isset($_SESSION['nombre'])){
+            // Creacion de una instancia de la clase eventos
             $obj_eventos= new cls_eventos();
+            //Define el atributo de la clase tipo de evento
             $obj_eventos->setTipo_evento($_POST['id_tipo_evento']);
+            //Define el atributo de la clase punto bcr
             $obj_eventos->setPunto_bcr($_POST['id_punto_bcr']);
-            
+                //Verifica que no exista este tipo de evento abierto para este punto bcr
                 if ($obj_eventos->existe_abierto_este_tipo_de_evento_en_este_sitio()){
+                    //Mensaje de notificacion en pantalla
                     echo "Ya existe abierto este tipo de evento para este punto BCR. Proceda a cerrarlo o ingrese un seguimiento!!!";
                     exit;
                 }else
                 {
-                    //echo "false";
                     exit;
                 }
             }else {
                   /*
-             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+             * Esta es la validación contraria a que la sesión de usuario esté definida  y abierta.
              * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
              * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
              * En la última línea llama a la pagina de inicio de sesión.
              */
                $tipo_de_alerta="alert alert-warning";
                $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+               //Validación para verificar si el usuario está logeado en el sistema
                require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
            }
+           //En caso de que no estén definidos los parámetros, procede a sacarlo del metodo de ejecución.
         }   else   {
-            //echo "false";
             exit;
         }
     }
    
+    /*
+     * Este metodo permite actualizar en pantalla el listado de eventos de trazabilidad de acuerdo a los 
+     * parametros de busqueda suministrados por el usuario de consulta. Entre los parametros se encuentran,
+     * nombre de usuario, fecha, tabla, etc.
+     */
+    
     public function actualiza_en_vivo_reporte_trazabilidad(){
+            //Realiza una pausa de 2 segundos
             sleep(2);       
+            //verifica que la variable de sesión nombre esté establecida.
             if(isset($_SESSION['nombre'])){
-                
+                //Toma la fecha inicial para establecer los parametros de busqueda
                 $fecha_inicial=$_POST['fecha_inicial'];
+                //Toma la fecha final para establecer los parametros de busqueda
                 $fecha_final=$_POST['fecha_final'];
+                //Recibe el usuario en caso de que se haya definido dentro de los parametros de busqueda
                 $usuario=$_POST['usuario'];
+                //Recibe la tabla de base de datos que se requiere consultar.
                 $tabla_afectada=$_POST['tabla'];
-                
+                //Estable la sintaxis del sql para definir los parametros de fecha
                 $condicion="t_traza.Fecha between '".$fecha_inicial."' AND '".$fecha_final."' ";
                 
+                /*
+                 * verifica si se eligió un usuario en especifico para filtrar la información del reporte.
+                 */
                 if (!$usuario=="0"){
                     $condicion.="AND t_traza.ID_Usuario=".$usuario." ";
                 }
                 
+                /*
+                 * Verifica si se eligió alguna tabla en específico o si por el contrario la búsqueda se realizará sobre todas las tablas
+                 */
                 if ($tabla_afectada!="todas"){
                     $condicion.="AND t_traza.Tabla_Afectada='".$tabla_afectada."'";
                 }
                   
+                // Crea un objeto de tipo trazabilidad
                 $obj_trazabilidad= new cls_trazabilidad();
+                //Establece la condición de búsqueda de registros de trazabilidad
                 $obj_trazabilidad->setCondicion($condicion);
+                //Ejecuta la sentecia SQL
                 $obj_trazabilidad->obtiene_trazabilidad();
+                //Asigna el resultado de la búsqueda a una variable de tipo vector
                 $params=$obj_trazabilidad->getArreglo();
 
+                //Verifica que hayan resultados
                 if (count($params)>0){
                     
-                    //$html="<h2>Listado de Eventos Relacionados a este Punto BCR</h2>";
+                    //Dibuja desde PHP mediante una variable cadena, el resultado de datos en formato HTML que se mostrará en pantalla
+                    //Tabla HTML
                     $html="<table id='tabla' class='display2'>";
-                    //$html.="<h2 id='titulo'>Movimientos de acuerdo a parámetros:</h2>";
+                    //Cuerpo de la tabla
                     $html.="<thead>";   
+                    //Fila
                     $html.="<tr>";
+                    //Columnas o cabeceras
                     $html.="<th>ID_Traza</th>";
                     $html.="<th>Fecha</th>";
                     $html.="<th>Hora</th>";
@@ -2928,22 +3313,29 @@
                     $html.="<th>Tabla Afectada</th>";
                     $html.="<th>Dato Actualizado</th>";
                     $html.="<th>Dato Anterior</th>";
+                    //Finaliza la linea
                     $html.="</tr>";
+                    //Finalizan las cabeceras
                     $html.="</thead>";
                     
+                    //Cuerpo de la tabla
                     $html.="<tbody id='cuerpo'>";
+                    //Tamaño del vector de resultados
                     $tam=count($params);
-
-                    //$html="";
-                    
+                    //Ciclo que permite recorrer cada registro
                     for ($i = 0; $i <$tam; $i++) {
            
+                        //Establece líneas de registros de información
                         $html.="<tr>";
            
+                        //Establece una variable fecha para almacenar el campo del vector
                         $fecha_evento = date_create($params[$i]['Fecha']);
+                        //Fecha del día
                         $fecha_actual = date_create(date("d-m-Y"));
+                        //Establece diferencia en días entre ambas fechas
                         $dias_abierto= date_diff($fecha_evento, $fecha_actual);
             
+                        //Pinta cada uno de los campos del vector
                         $html.="<td>".$params[$i]['ID_Traza']."</td>";
                         $html.="<td>".date_format($fecha_evento, 'd/m/Y')."</td>";
                         $html.="<td>".$params[$i]['Hora']."</td>";
@@ -2953,21 +3345,28 @@
                         $html.="<td>".$params[$i]['Dato_Actualizado']."</td>";
                         $html.="<td>".$params[$i]['Dato_Anterior']."</td>";
                         
+                        //Cierra la línea
                         $html.="</tr>";
                          }
-            
+                    //Cierra el cuerpor la tabla
                     $html.="</tbody>";
 
+                    //Cierra la tabla
                     $html.=" </table>";
                     
+                    //Manda a pintar la tabla completa al formulario
                     echo $html;
+                    //Sale del metodo de la clase
                     exit;
+                    //En caso de que la consulta no devuelva registros, muestra en pantalla un mensaje informativo
                 }else{
+                    //
                      $html="<h4>No se encontraron eventos para este filtro.</h4>";
                      echo $html;
+                     //Sale del metodo de la clase
                      exit;
                 }    
-                //require __DIR__.'/../vistas/plantillas/frm_trazabilidad_listar.php';
+                // Imprime el html en pantalla
                 echo $html;
             }else {
                   /*
@@ -2978,82 +3377,110 @@
              */
                $tipo_de_alerta="alert alert-warning";
                $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+               //Llamada al formulario correspondiente de la vista
                require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
             } 
         
     }
     
+    /*
+     * Muestra en pantalla un reportes de eventos cerrados, de acuerdo a parametros de busqueda específicos, como fecha, sitio, etc.
+     */
     public function actualiza_en_vivo_reporte_cerrados(){
+        //Espera 2 segundos antes de iniciar la ejecución del método, para mostrar un gift de espera en pantalla
             sleep(2);       
+            //Validación para verificar si el usuario está logeado en el sistema
             if(isset($_SESSION['nombre'])){
-                
+                //Creación de un nuevo objeto de la clase eventos
                 $obj_eventos = new cls_eventos();
                 
+                //Recibe la fecha inicial del reporte
                 $fecha_inicial=$_POST['fecha_inicial'];
+                //Recibe la fecha final del reporte
                 $fecha_final=$_POST['fecha_final'];
+                //Obtiene el id del punto bcr a consultar
                 $id_punto_bcr=$_POST['id_punto_bcr'];
                                
+                //Establece la condición SQL para definir el rango de fechas del reporte
                 $condicion="(T_Evento.Fecha between '".$fecha_inicial."' AND '".$fecha_final."') AND (T_Evento.ID_EstadoEvento=3 OR T_Evento.ID_EstadoEvento=5) AND T_Evento.ID_PuntoBCR=".$id_punto_bcr;
                             
+                //Establece la condicion de la consulta
                 $obj_eventos->setCondicion($condicion);
+                //Obtiene los eventos de acuerdo a la condicion.
                 $obj_eventos ->obtiene_todos_los_eventos(); 
+                //Obtiene el arreglo de resultados
                 $params= $obj_eventos->getArreglo();
+                //Define una variable cadena a vacio
                 $todos_los_seguimientos_juntos="";
-                
+                //Obtiene el tamaño del vector de resultados
                 $tamano=count($params);
                 
+                //Verifica que la consulta haya encontrado algo
                 if (count($params)>0){
 
+                    //Bucle que recorre la cantidad de registros de la consulta uno por uno
                     for ($x = 0; $x <$tamano; $x++) {
 
+                        //Esta condicion trae los seguimientos del evento en cuestion, para pintarlos ocultos en el HTML
                         $obj_eventos->setCondicion("T_DetalleEvento.ID_Evento=".$params[$x]['ID_Evento']." order by T_DetalleEvento.Fecha desc,T_DetalleEvento.Hora desc");
                         //Obtiene los seguimientos del evento seleccionado, si los hubiere
                         $obj_eventos->obtiene_detalle_evento();
 
+                        //Verifica que la consulta haya traido resultados
                         if(count($obj_eventos->getArreglo())>0){
                             if ($x==0){
+                                //Va concatenando los resultados de la consulta de seguimientos, en una variable 
                                 $todos_los_seguimientos_juntos=$obj_eventos->getArreglo();
         //                     
                             }else{
+                                //En caso de que ya tenga datos, adjunta el vector con lo que tenga actualmente
                                 $todos_los_seguimientos_juntos = array_merge($todos_los_seguimientos_juntos,$obj_eventos->getArreglo());
         //                      
                             }
                         }
-                        
+                        //Obtiene la fecha y usuario del ultimo seguimiento que tenga el evento
                         $obj_eventos->setCondicion("T_DetalleEvento.ID_Evento=".$params[$x]['ID_Evento']." order by T_DetalleEvento.Fecha desc,T_DetalleEvento.Hora desc limit 0,1");
                         //Obtiene los seguimientos del evento seleccionado, si los hubiere
                         $obj_eventos->obtiene_detalle_evento();
+                        //Obtiene los datos del ultimo seguimiento asociado
                         $ultimo_seguimiento_asociado= $obj_eventos->getArreglo();
 
 
                         //Verifica si existen seguimientos asociados al evento actual
                         if(count($ultimo_seguimiento_asociado)>0){
                             if ($x==0){
+                                //Agrega el resultado de la consulta a una variable específica
                                 $detalle_y_ultimo_usuario= array(['Detalle'=>"Fecha: ".date_format(date_create($ultimo_seguimiento_asociado[0]['Fecha']), 'd/m/Y').".Hora: ".$ultimo_seguimiento_asociado[0]['Hora'].". ".$ultimo_seguimiento_asociado[0]['Detalle']]+['Usuario'=>$ultimo_seguimiento_asociado[0]['Nombre_Usuario']." ".$ultimo_seguimiento_asociado[0]['Apellido']]);
         //                     
                             }else{
+                                //En caso de que la variable ya contenga datos, procede a concatenar el resultado obtenido
                                 $detalle_y_ultimo_usuario = array_merge($detalle_y_ultimo_usuario,array(['Detalle'=>"Fecha: ".date_format(date_create($ultimo_seguimiento_asociado[0]['Fecha']), 'd/m/Y').".Hora: ".$ultimo_seguimiento_asociado[0]['Hora'].". ".$ultimo_seguimiento_asociado[0]['Detalle']]+['Usuario'=>$ultimo_seguimiento_asociado[0]['Nombre_Usuario']." ".$ultimo_seguimiento_asociado[0]['Apellido']]));
         //                      
                             }
                         }else{
+                            //En caso de que no existan registros, agrega la validación correspondiente y un mensaje informativo al respecto para el usuario
                             if ($x==0){
                                 $detalle_y_ultimo_usuario= array(['Detalle'=>"No hay seguimientos asociados a este evento. Para agregar uno oprima el link:'Gestionar Seguimiento de la fila respectiva.'"]+['Usuario'=>$params[$x]['Nombre_Usuario']." ".$params[$x]['Apellido']]);
                             }else{
+                             //En caso de que la variable ya contenga información, procede a concatenar el vector de resultados
                                 $detalle_y_ultimo_usuario = array_merge($detalle_y_ultimo_usuario,array(['Detalle'=>"No hay seguimientos asociados a este evento. Para agregar uno oprima el link:'Gestionar Seguimiento de la fila respectiva.'"]+['Usuario'=>$params[$x]['Nombre_Usuario']." ".$params[$x]['Apellido']]));
                             }
                         }   
                         
                     }
                 }
-
+                //verifica que hayan resultados en la consulta, para empezar a pintar la tabla HTML que se mostrará en pantalla al formulario
                 if (count($params)>0){
                     
-                    //$html="<h2>Listado de Eventos Relacionados a este Punto BCR</h2>";
+                    //Creación de la tabla
                     $html="<table id='tabla' class='display2'>";
-                    //$html.="<h2 id='titulo'>Movimientos de acuerdo a parámetros:</h2>";
-                    $html.="<thead>";   
+                    //Creación de la cabecera de la tabla
+                    $html.="<thead>";
+                    //Creación de la fila de títulos de la tabla
                     $html.="<tr>";
+                    //Columna id evento, la cual está oculta en la tabla
                     $html.="<th hidden='true'>ID_Evento</th>";
+                    //Resto de columnas de la tabla, de acuerdo a lo requerido en la consulta SQL
                     $html.="<th>Fecha</th>";
                     $html.="<th>Hora</th>";
                     $html.="<th>Provincia</th>";
@@ -3063,29 +3490,40 @@
                     $html.="<th>Tipo de Evento</th>";
                     $html.="<th>Estado del Evento</th>";
                     $html.="<th>Cerrado Por</th>";
+                    //Dependiendo del rol del usuario en cuestión, mostrará el botón de gestión de los eventos.
                     if ($_SESSION['rol']!=2){  
                         $html.="<th>Gestión</th>";
                     }
+                    //Resto de columnas
                     $html.="<th>Consulta</th>";
+                    //Columna para agregar la tabla de seguimientos de cada evento
                     $html.="<th hidden='true'>Seguimientos</th> ";
+                    //termina la fila de cabeceras
                     $html.="</tr>";
+                    //termina la cabecera de la tabla
                     $html.="</thead>";
                     
+                    //Inicializa el cuerpo de la tabla
                     $html.="<tbody id='cuerpo'>";
+                    //Retorna el tamaño del vector que almacena la consulta sql
                     $tam=count($params);
-
-                    //$html="";
                     
+                    //Vector que recorre registro por registros de la consulta SQL
                     for ($i = 0; $i <$tam; $i++) {
            
+                        //Agrega a la fila de cada evento, un comentario interno con el detalle del último seguimiento
                         $html.="<tr data-toggle='tooltip' title='".$detalle_y_ultimo_usuario[$i]['Detalle']."'>";
            
+                        //Establece la fecha del evento
                         $fecha_evento = date_create($params[$i]['Fecha']);
+                        //Establece la fecha actual
                         $fecha_actual = date_create(date("d-m-Y"));
+                        //Establece la diferencia en dias entre ambas fechas
                         $dias_abierto= date_diff($fecha_evento, $fecha_actual);
             
-                        
+                        //Pinta y oculta el id del evento 
                         $html.="<td hidden='true'>".$params[$i]['ID_Evento']."</td>";
+                        //Pinta las columnas correspondientes al reporte de eventos
                         $html.="<td>".date_format($fecha_evento, 'd/m/Y')."</td>";   
                         $html.="<td>".$params[$i]['Hora']."</td>";
                         $html.="<td>".$params[$i]['Nombre_Provincia']."</td>";
@@ -3093,55 +3531,63 @@
                         $html.="<td>".$params[$i]['Nombre']."</td>";
                         $html.="<td>".$params[$i]['Codigo']."</td>";
                         $html.="<td>".$params[$i]['Evento']."</td>";
-                        $html.="<td>".$params[$i]['Estado_Evento']."</td>";                
+                        $html.="<td>".$params[$i]['Estado_Evento']."</td>";       
+                        //Muestra el último usuario que realizó seguimiento en el evento
                         $html.="<td>".$detalle_y_ultimo_usuario[$i]['Usuario']."</td>";
-                        //$html.="<td>".$params[$i]['Nombre_Usuario']." ".$params[$i]['Apellido']."</td>";
                         
+                        //Dependiendo del rol del usuario, muestra en pantalla la opción de recuperar eventos
                         if ($_SESSION['rol']!=2){  
+                            //Asigna la función de javascript que ejecuta la recuperación en vivo del evento, para que sea reabierto
                             $html.="<td align='center'><a onclick='recuperar_evento(".$params[$i]['ID_Evento'].",".$params[$i]['ID_PuntoBCR'].",".$params[$i]['ID_Tipo_Evento'].")'>Recuperar Evento</a></td>";
                         }   
+                        //Link para ver el detalle de un evento
                         $html.="<td align='center'><a href='index.php?ctl=frm_eventos_editar&accion=consulta_cerrados&id=".$params[$i]['ID_Evento']."'>Ver detalle</a></td>";
                         
-//                        $html.="<table id='segunda'>";
-//                        $html.="<thead>";
-//                        $html.="<tr>";
-//                        $html.="<th>Fecha de Seguimiento</th>";
-//                        $html.="<th>Detalle del Seguimiento</th>";
-//                        $html.="</tr>";
-//                        $html.="</thead>";
-//                        $html.="<tbody>";
-//                        
+                        //Saca el tamaño del vector que tiene todos los seguimientos de los eventos
                         $tama=count($todos_los_seguimientos_juntos);
+                        //Inicializa la variable cadena
                         $cadena="";
+                        //Bucle que recorre el vector de seguimientos
                         for ($j = 0; $j <$tama; $j++) {
                         
-                            //$html.="<tr>";
+                            //Extrae la fecha del evento
                             $fecha_evento = date_create($todos_los_seguimientos_juntos[$j]['Fecha']);
+                            //Extrae la fecha actual
                             $fecha_actual = date_create(date("d-m-Y"));
+                            // Define los días abiertos que tiene el evento
                             $dias_abierto= date_diff($fecha_evento, $fecha_actual);
+                            //extrae los seguimiento por cada evento, y los concatena en una variable para colocarlos en una de las columnas de la tabla
                             if ($params[$i]['ID_Evento']==$todos_los_seguimientos_juntos[$j]['ID_Evento']){
+                                //va concatenando cada seguimiento en una variable
                                $cadena.=date_format($fecha_evento, 'd/m/Y')." ".$todos_los_seguimientos_juntos[$j]['Detalle']."\n";
                             }
                         }
+                        //Esconde y pinta la columna correspondiente
                         $html.="<td hidden='true'>".$cadena."</td>";
-//                        $html.="</tbody>";
-//                        $html.="</table>";
-//                        $html.="</td>";
+
+                        //Cierra la fila del registro del evento en cuestión.
                         $html.="</tr>";
                     }
 
+                    //Finaliza el cuerpo de la tabla
                     $html.="</tbody>";
 
+                    //Culmina la tabla
                     $html.=" </table>";
                     
+                    //Imprime en pantalla el codigo html estructurado en este metodo
                     echo $html;
+                    //Sale del metodo
                     exit;
                 }else{
+                    //En caso de que no hayan resultados, muestra la información correspondiente.
                      $html="<h4>No se encontraron eventos para este filtro.</h4>";
+                     //Imprime la variable html
                      echo $html;
+                     //Sale del metodo
                      exit;
                 }    
-                //require __DIR__.'/../vistas/plantillas/frm_trazabilidad_listar.php';
+                //Imprime la variable html y sale del metodo
                 echo $html;
             }else {
                   /*
@@ -3152,27 +3598,40 @@
              */
                $tipo_de_alerta="alert alert-warning";
                $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+               //Llamada al formulario correspondiente de la vista
                require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
             }
     }
     
+    /*
+     * Metodo utilizado desde javascript para el pintado de eventos relacionados a un sitio bcr, en el momento de ingresar un nuevo
+     * evento de bitacora digital. Esto con el fin de que el usuario pueda valorar la historia de un sitio antes de ingresar la información.
+     */
     public function dibuja_tabla_eventos_relacionados_a_punto_bcr(){
                 
+       //valida si fue enviado el id del punto bcr mediante el evento post del formulario html
        if(isset($_POST['id_punto_bcr'])){
-            
+            //Validación para verificar si el usuario está logeado en el sistema
             if(isset($_SESSION['nombre'])){
+                //Creacion de una instancia de la clase eventos
                 $obj_eventos= new cls_eventos();
-                //$obj_eventos->setCondicion("T_Evento.ID_PuntoBCR=".$_POST['id_punto_bcr']." Limit 0,5");
+                //Establece la condición de búsqueda de acuerdo al id del sitio.
                 $obj_eventos->setCondicion("T_Evento.ID_PuntoBCR=".$_POST['id_punto_bcr']);
+                //ejecuta la sentencia SQL
                 $obj_eventos->obtiene_todos_los_eventos();
+                //Obtiene el resultado en una variable 
                 $params=$obj_eventos->getArreglo();
 
+                //Verifica si la consulta produjo resultados
                 if (count($params)>0){
                     
-                    //$html="<h2>Listado de Eventos Relacionados a este Punto BCR</h2>";
+                    //Establece La cabecera de la tabla
                     $html="<thead>";   
+                    //Linea de los titulos de las columnas
                     $html.="<tr>";
+                    //Columna fecha 
                     $html.="<th align='center'>Fecha</th>";
+                    //Definición de las columnas de la tabla de acuerdo a la consulta SQL
                     $html.="<th>Hora</th>";
                     $html.="<th>Lapso</th>";
                     $html.="<th>Provincia</th>";
@@ -3182,20 +3641,29 @@
                     $html.="<th>Estado del Evento</th>";
                     $html.="<th>Ingresado Por</th>";
                     $html.="<th>Consulta</th>";
+                    //Cierra la fila
                     $html.="</tr>";
+                    // Cierre de las cabeceras
                     $html.="</thead>";
-                    
+                    //Cierre del cuerpo de la tabla
                     $html.="<tbody>";
+                    
+                    //Obtiene el tamaño de la variable parametros que almacena la consulta
                     $tam=count($params);
 
+                    //Bucle que permite recorrer el vector que almacena la consulta de registros.
                     for ($i = 0; $i <$tam; $i++) {
            
+                        //Creacion de una nueva linea en la tabla
                         $html.="<tr>";
            
+                        //Campos de fecha dentro de la tabla
                         $fecha_evento = date_create($params[$i]['Fecha']);
                         $fecha_actual = date_create(date("d-m-Y"));
+                        //Diferencia de dias entre una fecha y otra
                         $dias_abierto= date_diff($fecha_evento, $fecha_actual);
             
+                        //Definición de los campos de la tabla, con respecto al vector que almacena los datos.
                         $html.="<td align='center'>".date_format($fecha_evento, 'd/m/Y')."</td>";
                         $html.="<td>".$params[$i]['Hora']."</td>";
                         $html.="<td align='center'>".$dias_abierto->format('%a')."</td>";
@@ -3205,19 +3673,24 @@
                         $html.="<td>".$params[$i]['Evento']."</td>";
                         $html.="<td>".$params[$i]['Estado_Evento']."</td>";
                         $html.="<td>".$params[$i]['Nombre_Usuario']." ".$params[$i]['Apellido']."</td>";
+                        //Link que muestra el detalle de los eventos
                         $html.="<td align='center'><a href='index.php?ctl=frm_eventos_editar&accion=consulta_relacionados&id=".$params[$i]['ID_Evento']."'>Ver detalle</a></td>";
+                        //Culmina la linea  de datos
                         $html.="</tr>";
                          }
-            
+                    //Culmina el cuerpo de la tabla
                     $html.="</tbody>";
-
-                    //$html.=" </table>";
                     
+                    //Imprime en pantalla el html construido
                     echo $html;
+                    //sale del metodo
                     exit;
                 }else{
+                    // En caso de que no hayan resultados, muestra en pantalla la información
                      $html="<h4>No se encontraron eventos para este sitio.</h4>";
+                     //Imprime la variable html construida
                      echo $html;
+                     //Sale del metodo
                      exit;
                 }    
 
@@ -3230,15 +3703,16 @@
              */
                $tipo_de_alerta="alert alert-warning";
                $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+               //Llamada al formulario correspondiente de la vista
                require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
             }
         }else
         {
+            //Imprime nulo en caso de no cumplir con las validaciones  de id correspondientes
             echo "";
+            //Sale del metodo
             exit;
-        }
-       
-        
+        }     
     }
     
     
@@ -3248,6 +3722,8 @@
             $obj_padron_fotografico= new cls_padron_fotografico_puntosbcr();
             if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 $obj_padron_fotografico->setCondicion("ID_padron_puntobcr=".$_POST['id_imagen']);
+                $obj_padron_fotografico->obtener_imagenes_puntosbcr();
+                $params=$obj_padron_fotografico->getArreglo();
                 $obj_padron_fotografico->eliminar_imagen_puntobcr();
                 
                 $raiz=$_SERVER['DOCUMENT_ROOT'];
@@ -3258,8 +3734,9 @@
 
 
                 //$ruta=  $raiz."Padron_Fotografico_Puntos_BCR/20161110111422Entrada Principal.jpg";
-               $ruta=  $raiz."Padron_Fotografico_Puntos_BCR/".$_POST['ruta_imagen'];
-
+               //$ruta=  $raiz."Padron_Fotografico_Puntos_BCR/".$_POST['ruta_imagen'];
+                $ruta=  $raiz."Padron_Fotografico_Puntos_BCR/".$params[0]['Nombre_Ruta'];
+                
                // echo $ruta;
                 unlink($ruta);
                       
@@ -3273,6 +3750,7 @@
              */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            //Llamada al formulario correspondiente de la vista
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }
     }

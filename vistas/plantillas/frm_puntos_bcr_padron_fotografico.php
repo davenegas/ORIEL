@@ -22,7 +22,7 @@
             id=id_imagen;
             
             var ruta_imagen=document.getElementsByTagName("td")[5].innerHTML;
-            //alert(variable);
+            //alert(id_imagen);
           
             $.confirm({
             title: 'Confirmación!',
@@ -76,7 +76,7 @@
                 
                 <div class="col-xs-4">
                     <label for="Descripcion">Descripción</label>
-                    <textarea type="text" required=”required” class="form-control" id="Descripcion" name="Descripcion" value="" maxlength="500" minlength="5" placeholder="Máximo 500 caracteres por seguimiento"></textarea>
+                    <textarea type="text" required=”required” class="form-control" id="Descripcion" name="Descripcion" value="" maxlength="500" minlength="2" placeholder="Máximo 500 caracteres por seguimiento"></textarea>
                 </div>
                 
                 <div class="col-xs-4 espacio-abajo">
