@@ -3715,29 +3715,39 @@
         }     
     }
     
-    
+    /*
+     * Metodo que permite eliminar una imagen del padron fotografico de puntos BCR
+     */
     public function eliminar_imagen_padron_puntobcr(){
-        //echo "<script type=\"text/javascript\">alert('Evento recuperado con Éxito!!!');</script>";
+      //Validación para verificar si el usuario está logeado en el sistema  
         if(isset($_SESSION['nombre'])){
+            //Creacion de una instancia de la clase padron fotografico
             $obj_padron_fotografico= new cls_padron_fotografico_puntosbcr();
+            //Verifica que el envión de información haya sido realizado mediante el metodo post )formulario HTML)
             if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+                //Busca el registro correspondiente mediante el id llave de la tabla
                 $obj_padron_fotografico->setCondicion("ID_padron_puntobcr=".$_POST['id_imagen']);
+                //Ejecuta el metodo que obtiene las imagenes correspondientes
                 $obj_padron_fotografico->obtener_imagenes_puntosbcr();
+                //Obtiene el arreglo correspondiente
                 $params=$obj_padron_fotografico->getArreglo();
+                //Elimina la imagen de la base de datos
                 $obj_padron_fotografico->eliminar_imagen_puntobcr();
                 
+                //Obtiene la ruta del directorio raiz de oriel mediante la variable reservada correspondiente
                 $raiz=$_SERVER['DOCUMENT_ROOT'];
     
+                //Formatea la ruta para verificar si tiene la cantidad adecuada de /
                 if (substr($raiz,-1)!="/"){
                     $raiz.="/";
                 }
 
-
                 //$ruta=  $raiz."Padron_Fotografico_Puntos_BCR/20161110111422Entrada Principal.jpg";
                //$ruta=  $raiz."Padron_Fotografico_Puntos_BCR/".$_POST['ruta_imagen'];
+                //Establece la ruta completa de la imagen, incluyendo el nombre y la extensión de la misma
                 $ruta=  $raiz."Padron_Fotografico_Puntos_BCR/".$params[0]['Nombre_Ruta'];
                 
-               // echo $ruta;
+               //Borra el archivo fisico del disco duro
                 unlink($ruta);
                       
             }
@@ -3755,12 +3765,19 @@
         }
     }
     
+    /*
+     * Metodo que permite recuperar un evento en estado cerrado o abierto por error.
+     */
+    
     public function frm_eventos_recuperar(){
-        //echo "<script type=\"text/javascript\">alert('Evento recuperado con Éxito!!!');</script>";
+        //Validación para verificar si el usuario está logeado en el sistema
         if(isset($_SESSION['nombre'])){
+            //Crea una instancia de la clase eventos
             $obj_eventos= new cls_eventos();
+            //Verifica que el envio de datos se haya realizado mediante el metodo post de html
             if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 
+                //Establece los atributos del objeto evento, con la información del formulario HTML
                 $obj_eventos->setFecha(date("Y-m-d")); 
                 $obj_eventos->setHora(date("H:i", time()));
                 $obj_eventos->setTipo_evento($_POST['id_tipo_evento']);
@@ -3768,29 +3785,27 @@
                 $obj_eventos->setEstado_evento("1");
                 $obj_eventos->setId_usuario($_SESSION['id']);
                 $obj_eventos->setEstado(1);
-                //echo "1 ingresa";
-                
+                  
+                //Verifica si el evento no está abierto para proceder con el tramite 
                 if (!$obj_eventos->existe_abierto_este_tipo_de_evento_en_este_sitio()){
-                    //$obj_eventos->ingresar_evento();
-                    //echo "2 guarda evento";
-                    
-                    //echo 'alert("si entro")'; 
+                   //Agrega un detalle para registrar el procedimiento mediante un seguimiento al evento
                     $obj_eventos->setDetalle("Evento re-abierto (recuperado) por ".$_SESSION['name']." ".$_SESSION['apellido']);
+                    //Estable el id a cero para agregar un nuevo seguimiento
                     $obj_eventos->setId2(0);
                     $obj_eventos->setId($_POST['id_evento']);
                     $obj_eventos->edita_estado_evento("1");
                     $obj_eventos->setAdjunto("N/A");
+                    //Inserta en bd un nuevo seguimiento
                     $obj_eventos->ingresar_seguimiento_evento();  
-                    
-                    //echo "<script type=\"text/javascript\">alert('Evento recuperado con Éxito!!!');history.go(-1);</script>";
-                    
+                    //Llama a la pantalla del listado de eventos cerrados
                     header ("location:/ORIEL/index.php?ctl=frm_eventos_lista_cerrados");
+                    //Devuelve un cero en la variable de impresión para javascript, para validar lo que se hizo en el metodo
                     echo "0";
-                    //$this->frm_eventos_lista_cerrados();
+                    
                 }else{
-                    //echo '<script>alert("Ya existe este evento abierto para este punto BCR. Proceda a cerrarlo o agregue un seguimiento!!!")</script>';
-                    //require __DIR__ . '/../vistas/plantillas/frm_eventos_agregar.php';
+                   //Devuelve un uno en la variable de impresión para javascript, para validar lo que se hizo en el metodo
                     echo "1";
+                    //Sale del metodo de la clase.
                     exit;
                      
                 }
@@ -3804,29 +3819,44 @@
              */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            //Validación para verificar si el usuario está logeado en el sistema
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }
     }
-    
+    /*
+     * Metodo que permite guardar un nuevo evento de bitacora digital
+     */
     public function guardar_evento(){
+        //Validación para verificar si el usuario está logeado en el sistema
         if(isset($_SESSION['nombre'])){
+            //Creacion de una instancia de la clase eventos
             $obj_eventos= new cls_eventos();
+            //Verifica que la información enviada sea por medio del metodo post de html
             if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+                //Formatea la fecha, para definir este atributo correctamente en el objeto de la clase.
                 $fecha_seguimiento = strtotime($_POST['fecha']);
                 $fecha_seguimiento = date("Y-m-d", $fecha_seguimiento);
 
+                //Validaciones de la fecha ingresada para el evento, caso negativo muestra una advertencia en pantalla
                 if ($fecha_seguimiento >  date("Y-m-d")){
+                    //Muestra modal en pantalla
                     echo "<script type=\"text/javascript\">alert('No es posible ingresar eventos futuros!!!!');history.go(-1);</script>";;
+                    //Sale del metodo
                     exit();
+                    //Verifica que la fecha sea de hoy
                 }if($fecha_seguimiento == date("Y-m-d")){
                      $hora_seguimiento = strtotime($_POST['hora']);
                      $hora_seguimiento = date("H:i", $hora_seguimiento);
 
+                     //Valida que no se ingresen eventos en tiempo futuro
                      if ($hora_seguimiento >  date("H:i", time())){
+                         //Muestra mensaje en pantalla para advertir al usuario
                         echo "<script type=\"text/javascript\">alert('No es posible ingresar eventos futuros!!!!');history.go(-1);</script>";;
+                        //Sale del metodo
                         exit();
                      }
                 }
+                //Establece los atributos de la clase para el ingreso del evento
                 $obj_eventos->setFecha($_POST['fecha']); 
                 $obj_eventos->setHora($_POST['hora']);
                 $obj_eventos->setTipo_evento($_POST['tipo_evento']);
@@ -3836,27 +3866,32 @@
                 $obj_eventos->setEstado_evento($_POST['estado_evento']);
                 $obj_eventos->setId_usuario($_SESSION['id']);
                 $obj_eventos->setEstado(1);
-                //echo "1 ingresa";
-                
+               
+                //Verifica que no exista este tipo de evento abierto para este punto BCR
                 if (!$obj_eventos->existe_abierto_este_tipo_de_evento_en_este_sitio()){
+                    //Ingresa el evento mediante el metodo de la clase
                     $obj_eventos->ingresar_evento();
-                    //echo "2 guarda evento";
+                   
+                    //Si el evento trae algun seguimiento procede a guardarlo tambien
                     if(isset($_POST['seguimiento'])&&($_POST['seguimiento']!="")){
-                       //echo 'alert("si entro")'; 
+                       //Establece los atributos de la clase, con la información que viene desde el formulario
                        $obj_eventos->setDetalle($_POST['seguimiento']);
                        $obj_eventos->setId2(0);
+                       //Obtiene el id del ultimo seguimiento para incluirlo en el nuevo
                        $obj_eventos->obtiene_id_ultimo_evento_ingresado(); 
+                       //Establece el id correspondiente
                        $obj_eventos->setId($obj_eventos->getId_ultimo_evento_ingresado());
                        $obj_eventos->setAdjunto("N/A");
+                       //Ingresa el seguimiento
                        $obj_eventos->ingresar_seguimiento_evento();  
                        //echo "3 guarda seguimiento";
                     }
-                    //$this->frm_eventos_listar();
+                    //Llama al listado principal de eventos abiertos o pendientes
                     header ("location:/ORIEL/index.php?ctl=frm_eventos_listar");
                 }else{
-                    //echo '<script>alert("Ya existe este evento abierto para este punto BCR. Proceda a cerrarlo o agregue un seguimiento!!!")</script>';
-                    //require __DIR__ . '/../vistas/plantillas/frm_eventos_agregar.php';
+                    //Alerta al usuario en pantalla mediante un modal de que este tipo de evento ya está abierto para este punto bcr
                     echo "<script type=\"text/javascript\">alert('Ya existe este evento abierto para este punto BCR. Proceda a cerrarlo o agregue un seguimiento!!!');history.go(-1);</script>";
+                    //Sale del metodo
                     exit;
                      
                 }
@@ -3870,37 +3905,52 @@
              */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            //Validación para verificar si el usuario está logeado en el sistema
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }
     }
-    
+    /*
+     * Permite agregar un seguimiento para un evento o cerrar uno
+     */
     public function frm_eventos_editar(){
+        //Validación para verificar si el usuario está logeado en el sistema
         if(isset($_SESSION['nombre'])){
+            //Controlador de errores
             try {
+                //Obtiene el id del evento en cuestión mediante el metodo post del url
                 $ide=$_GET['id'];
+                //Crea una instancia de la clase eventos
                 $obj_eventos = new cls_eventos();
-                //Obtiene el evento que se muesta en la ventana
+                //Establece la condición para buscar la información del evento en la tabla de bd
                 $obj_eventos->setCondicion("ID_Evento=$ide");
+                //Obtiene el evento que se muesta en la ventana
                 $obj_eventos->obtiene_todos_los_eventos();
+                //Obtiene el arreglo de resultados
                 $params= $obj_eventos->getArreglo();
                 
+                //Verifica que haya traido la información correspondiente
                 if (count($params)>0){
+                    // Toma el estado del evento
                      $estado_evento=$params[0]['Estado_Evento']; 
-                     //echo $estado_evento;
+                     //Establece el tipo de evento
                      $obj_eventos->setTipo_evento($params[0]['ID_Tipo_Evento']);
+                     //Obtiene la prioridad del evento en cuestión
                      $prioridad_evento=$obj_eventos->obtiene_prioridad_de_tipo_de_evento();
                      
                 }
-               
+               //Obtiene los seguimientos del evento
                 $obj_eventos->setCondicion("ID_Evento=$ide"." "."order by T_DetalleEvento.Fecha desc,T_DetalleEvento.Hora desc");
                 //Obtiene los detalles del evento seleccionado
                 $obj_eventos->obtiene_detalle_evento();
+                //Asigna el resultado a un vector
                 $detalleEvento= $obj_eventos->getArreglo();
                 //Obtiene los diferentes seguimientos
                 $obj_eventos->obtener_seguimientos();
+                //Obtiene el estado del evento
                 $estadoEventos = $obj_eventos->getArreglo();
-                
+                //Llamada al formulario correspondiente de la vista
                 require __DIR__ . '/../vistas/plantillas/frm_eventos_editar.php';
+                //Controlador de errores.
             } catch (Exception $exc) {
                 echo $exc->getTraceAsString();
             }
@@ -3913,397 +3963,594 @@
              */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            //Llamada al formulario correspondiente de la vista
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }
     }
     
+    /*
+     *Metodo de la clase que permite contar los ingresos a puntos bcr publico.
+     */
      public function cuenta_visitas_a_puntos_bcr_publico(){
         
+           //Extrae el directorio raiz del proyecto oriel
            $raiz=$_SERVER['DOCUMENT_ROOT'];
              
+           //Obtiene la hora actual
             $time = time();
 
+            //Formatea la ruta de acceso al proyecto oriel
             if (substr($raiz,-1)!="/"){
                 $raiz.="/";
             }
-            
+            //Establece la ruta completa para almacenar mediantes archivos de texto el ingreso y el uso de las funcionalidades del sistema oriel
             $ruta=  $raiz."Cuenta_Visitas_Oriel/Consulta_Publica_Puntos_BCR/".date("Ymd", $time)." Visitas_a_Puntos_BCR_Publico.txt";
             
+            //Abre el archivo del día y en caso de que no exista lo crea en la carpeta correspondiente.
             $fp = fopen($ruta,"a+");
+            //Cierra el archivo
             fclose($fp);
             
+            //Obtiene la ip del equipo remoto que está utilizando Oriel
             $ip = $_SERVER['REMOTE_ADDR'];
+            //Obtiene el nombre del equipo remoto que está utilizando Oriel
             $nombre_host = gethostbyaddr($_SERVER['REMOTE_ADDR']);
+            //Concatena la ip con el nombre de la maquina.
             $ip=$ip."-->".$nombre_host;
             
+            //Variable bandera para verificar si ya esta registrada la ip y el nombre de la maquina
             $existe = 0;
+            //Vector para recorrer la información del archivo txt
             $visitas = array();
                        
+            //Abre el archivo correspondente
             $fp = fopen($ruta,"r"); 
+            //La variable establecida a vacio
             $ips="";
            
+            //Recorre el archivo y concatena la información de cada registro en una variable
             while($ip2 = fgets($fp)){
                 $ips .= $ip2;
                
             }
             
+            //Cierra el archivo
             fclose($fp);
             
+            //Define una cadena a vacio
             $cadena_de_direcciones="";
+            //Cuenta las visitas realizadas
             $total_visitas=0;
+            //Verifica que la variable ips tenga información
             if (strlen($ips)>0){
+                //Convierte la cadena en un vector de información
                 $total_direcciones=  explode(",", $ips); 
                 
+                //Recorre el vector y va contando las visitas que han habido durante el día
                 for ($i = 0; $i < count($total_direcciones)-1; $i++) {
                     $total_visitas++;
+                    //Cadena que almacena todas las direcciones que se encuentran en el archivo
                     $cadena_de_direcciones.=$total_direcciones[$i].",";
                 }
-                //$cadena_de_direcciones.=$ip.",";
+                //incrementa la variable que cuenta las visitas
                 $total_visitas++;
+                //Agrega a la cadena de direcciones, la ip actual 
                 $cadena_de_direcciones.=$ip.",";
+                //Abre el archivo para escribirle datos
                 $fp = fopen($ruta,"w+"); //no olvidar crear al archivo visitantes.txt y poner el path correcto
+                //Escribe en el archivo la cadena correspondiente y borra antes lo que tenga
                 fwrite($fp, $cadena_de_direcciones);
+                //Cierra el archivo
                 fclose($fp);
+            //Si el archivo no contiene datos, procede a escribir la información actual solamente
             }else{
+                //Abre el archivo
                 $fp = fopen($ruta,"w+"); //no olvidar crear al archivo visitantes.txt y poner el path correcto
+                //escribe la información de la ip en el archivo
                 fwrite($fp, $ip.",");
+                //Incrementa las visitas
                 $total_visitas++;
+                //Cierra el archivo
                 fclose($fp);
             }        
-
+            //Establece la ruta nuevamente para localizar el archivo
             $ruta=  $raiz."Cuenta_Visitas_Oriel/Consulta_Publica_Puntos_BCR/".date("Ymd", $time)." Total_de_Visitas_Puntos_BCR_Publico.txt";
             
+            //Abre el archivo para escrirle información
             $fp = fopen($ruta,"w+");
 
+            //Escribe el summary final de las visitas
             fwrite($fp, "Total de consultas a la tabla puntos BCR desde la parte publica ".date("Ymd", $time).":".$total_visitas);
+            //Cierra el archivo
             fclose($fp);
 
     }
-    
+    /*
+     * Metodo de la clase que permite contar las visitas a puntos bcr area limitada por nombre de usuario y contraseña.
+     */
     public function cuenta_visitas_a_puntos_bcr_privado(){
         
+           // Extrae el directorio raiz del proyecto ORIEL
            $raiz=$_SERVER['DOCUMENT_ROOT'];
              
+           //Extrae la hora actual
             $time = time();
 
+            //Formatea el directorio raiz del proyecto ORIEL con los \ necesarios
             if (substr($raiz,-1)!="/"){
                 $raiz.="/";
             }
             
+            //Arma la ruta completa del archivo que registrara las visitas a la consulta privada de puntos BCR
             $ruta=  $raiz."Cuenta_Visitas_Oriel/Consulta_Privada_Puntos_BCR/".date("Ymd", $time)." Visitas_a_Puntos_BCR_Privado.txt";
             
+            //Abre el archivo, en caso de que no lo encuentre lo crea
             $fp = fopen($ruta,"a+");
+            //Lo cierra
             fclose($fp);
             
+            //Obtiene la ip de la maquina cliente que está usando ORIEL
             $ip = $_SERVER['REMOTE_ADDR'];
+            //Obtiene nombre del equipo cliente que está usando ORIEL
             $nombre_host = gethostbyaddr($_SERVER['REMOTE_ADDR']);
+            //Concatena ip con el nombre del equipo
             $ip=$ip."-->".$nombre_host;
             
+            //Variable bandera que verifica si la ip ya se encuentra registrada
             $existe = 0;
+            //Vector que almacena todas las visitas a la funcionalidad
             $visitas = array();
                        
+            //Abre el archivo en modo lectura
             $fp = fopen($ruta,"r"); 
+            //Inicializa la variable cadena
             $ips="";
            
+            //Recorre las lineas  del archivo, siempre y cuando tenga
             while($ip2 = fgets($fp)){
+                //Concatena la información en la variable correspondiente
                 $ips .= $ip2;
                
             }
             
+            //Cierra el archivo
             fclose($fp);
             
+            //inicializa la variable cadena
             $cadena_de_direcciones="";
+            //Inicializa la variable entera
             $total_visitas=0;
+            //Verifica que la variable ips tenga información,
             if (strlen($ips)>0){
+                //Obtiene mediante la funcion explode, un vector a partir de la cadena
                 $total_direcciones=  explode(",", $ips); 
                 
+                //Recorre el vector de datos
                 for ($i = 0; $i < count($total_direcciones)-1; $i++) {
+                    //Incrementa la variable de visitas a la funcionalidad
                     $total_visitas++;
+                    //Concatena la información del vector en una variable de tipo cadena
                     $cadena_de_direcciones.=$total_direcciones[$i].",";
                 }
-                //$cadena_de_direcciones.=$ip.",";
+                //Incrementa la variable con la visita actual
                 $total_visitas++;
+                //Concatena el contenido del archivo con la nueva información de la visita
                 $cadena_de_direcciones.=$ip.",";
+                //Abre el archivo para escritura nueva y borrado del contenido actual
                 $fp = fopen($ruta,"w+"); //no olvidar crear al archivo visitantes.txt y poner el path correcto
+                //Escribe en el archivo
                 fwrite($fp, $cadena_de_direcciones);
+                //Cierra el archivo
                 fclose($fp);
             }else{
+                //Abre el archivo en modo escritura nueva
                 $fp = fopen($ruta,"w+"); //no olvidar crear al archivo visitantes.txt y poner el path correcto
+                //Escribe la dirección ip actual en el archivo
                 fwrite($fp, $ip.",");
+                //incrementa la variable visitas
                 $total_visitas++;
+                //Cierra el archivo
                 fclose($fp);
             }        
 
-             
+            //Establece nuevamente la ruta del archivo
             $ruta=  $raiz."Cuenta_Visitas_Oriel/Consulta_Privada_Puntos_BCR/".date("Ymd", $time)." Total_de_Visitas_Puntos_BCR_Privado.txt";
-            
+            //Lo abre en modo escritura que agregue a lo actual
             $fp = fopen($ruta,"w+");
-
+            // Escribe un summary del total de visitas al final del archivo
             fwrite($fp, "Total de consultas a la tabla puntos BCR desde la parte privada ".date("Ymd", $time).":".$total_visitas);
+            //Cierra el archivo
             fclose($fp);
 
     }
-    
+    /*
+     * Metodo que permite contar todas las visitas del dia que se hacen al modulo de bitacora digital de ORIEL
+     */
     
     public function cuenta_visitas_a_bitacora_digital(){
         
+        // Obtiene la raiz del directorio donde esta localizado oriel
            $raiz=$_SERVER['DOCUMENT_ROOT'];
              
+           //Obtiene la hora actual
             $time = time();
 
+            //Formatea la ruta del directorio raiz
             if (substr($raiz,-1)!="/"){
                 $raiz.="/";
             }
             
+            //Crea la ruta con el nombre del archivo para registro de las visitas
             $ruta=  $raiz."Cuenta_Visitas_Oriel/Consulta_Privada_Bitacora_Digital/".date("Ymd", $time)." Visitas_a_Bitacora_Digital.txt";
             
+            //Abre el archivo, si no existe lo crea
             $fp = fopen($ruta,"a+");
+            //Cierra el archivo
             fclose($fp);
             
+            //Obtiene la direccion ip del cliente que está utilizando el modulo
             $ip = $_SERVER['REMOTE_ADDR'];
+            //Obtiene el nombre del equipo
             $nombre_host = gethostbyaddr($_SERVER['REMOTE_ADDR']);
+            // Concatena la direccion ip con el nombre del equipo cliente
             $ip=$ip."-->".$nombre_host;
             
+            //variable bandera que permite verificar si el equipo ya utilizó la funcionalidad en este día
             $existe = 0;
+            //Vector que permite almacenar todas las visitas registradas en el archivo de texto plano
             $visitas = array();
-                       
+                    
+            //Abre el archivo en modo lectura
             $fp = fopen($ruta,"r"); 
+            //Inicializa a vacio la variable ips
             $ips="";
            
+            //Recorre cada uno de los registros contenidos en el archivo y los pasa a una variable
             while($ip2 = fgets($fp)){
+                //Va concatenando el contenido del archivo en una variable
                 $ips .= $ip2;
                
             }
             
+            //Cierra el archivo
             fclose($fp);
             
+            //Variable inicializada en vacio 
             $cadena_de_direcciones="";
+            //Cuenta las visitas realizadas al modulo
             $total_visitas=0;
+            //Verifica que haya información para evaluar
             if (strlen($ips)>0){
+                //Convierte el contenido de la variable ips en un vector para administrarlo
                 $total_direcciones=  explode(",", $ips); 
                 
+                //Recorre el vector para contar el total de visitas y la cantidad de direcciones registradas en el archivo
                 for ($i = 0; $i < count($total_direcciones)-1; $i++) {
+                    //Incrementa la variable de visitas
                     $total_visitas++;
+                    //Concatena cada una de las direcciones que encuentra en el vector
                     $cadena_de_direcciones.=$total_direcciones[$i].",";
                 }
-                //$cadena_de_direcciones.=$ip.",";
+                //Incrementa la variable total de visitas con la visita actual 
                 $total_visitas++;
+                //Le agrega a la variable la direccion ip actual
                 $cadena_de_direcciones.=$ip.",";
+                //Abre el archivo en modo escritura borrando lo que actualmente tiene
                 $fp = fopen($ruta,"w+"); //no olvidar crear al archivo visitantes.txt y poner el path correcto
+                //Escribe en el archivo el contenido actualizado
                 fwrite($fp, $cadena_de_direcciones);
+                //Cierre el archivo
                 fclose($fp);
             }else{
+                //En caso de que el archivo no contenga nada, abre y escribe directamente en el archivo
                 $fp = fopen($ruta,"w+"); //no olvidar crear al archivo visitantes.txt y poner el path correcto
+                //Escribe en el archivo
                 fwrite($fp, $ip.",");
+                //Incrementa la variable que lleva el total de visitas
                 $total_visitas++;
+                //Cierra el archivo correspondiente
                 fclose($fp);
             }        
 
-             
+            //Establece la ruta para crear el archivo que resume el total de visitas
             $ruta=  $raiz."Cuenta_Visitas_Oriel/Consulta_Privada_Bitacora_Digital/".date("Ymd", $time)." Total_de_Visitas_Bitacora_Digital.txt";
             
+            //Abre el archivo y borra el contenido
             $fp = fopen($ruta,"w+");
 
+            //Escribe el resumen general con el total de consultas
             fwrite($fp, "Total de consultas a la tabla bitacora digital ".date("Ymd", $time).":".$total_visitas);
+            //Cierra el archivo
             fclose($fp);
 
     }
     
+    /*
+     * Metodo que permite registrar las visitas al modulo de personal privado de ORIEL
+     */
     public function cuenta_visitas_a_personal_privado(){
         
+        //Obtiene la ruta del directorio raiz del proyecto ORIEL
            $raiz=$_SERVER['DOCUMENT_ROOT'];
              
+           //Obtiene la hora actual
             $time = time();
 
+            //Formatea la ruta 
             if (substr($raiz,-1)!="/"){
                 $raiz.="/";
             }
             
+            //Define la ruta completa del archivo que almacenará la información de las visitas a la consulta privada de personal
             $ruta=  $raiz."Cuenta_Visitas_Oriel/Consulta_Privada_Personal/".date("Ymd", $time)." Visitas_a_Personal_Privado.txt";
             
+            //Abre el archivo, en caso de que no exista lo crea
             $fp = fopen($ruta,"a+");
+            //Cierra el archivo
             fclose($fp);
             
+            //Obtiene la ip remota del cliente que esta usando el modulo
             $ip = $_SERVER['REMOTE_ADDR'];
+            //Obtiene el nombre del equipo remoto que accede al modulo
             $nombre_host = gethostbyaddr($_SERVER['REMOTE_ADDR']);
+            //Concatena la ip con el nombre de la maquina
             $ip=$ip."-->".$nombre_host;
             
+            //Variable bandera para controlar si el equipo ya ingresó durante el día a la funcionalidad
             $existe = 0;
+            //Crea un arreglo que almacenará todas las visitas 
             $visitas = array();
-                       
+                 
+            //Abre el archivo en modo lectura
             $fp = fopen($ruta,"r"); 
+            //Inicializa la variable bandera
             $ips="";
            
+            //Recorre la información del archivo y la concatena en una variable
             while($ip2 = fgets($fp)){
                 $ips .= $ip2;
                
             }
             
+            //Cierra el archivo
             fclose($fp);
             
+            //Inicializa la variable que almacena las direcciones de visitas
            $cadena_de_direcciones="";
+           //Inicializa la variable que cuenta visitas
             $total_visitas=0;
+            //Verifica si el archivo tiene información
             if (strlen($ips)>0){
+                //A la variable le asigna el vector de visitas al modulo
                 $total_direcciones=  explode(",", $ips); 
                 
+                //Recorre el vector y va incrementando el contador de visitas al modulo
                 for ($i = 0; $i < count($total_direcciones)-1; $i++) {
+                    //Incrementa la variable
                     $total_visitas++;
+                    //Concatena la información de cada visita en una variable tipo cadena
                     $cadena_de_direcciones.=$total_direcciones[$i].",";
                 }
-                //$cadena_de_direcciones.=$ip.",";
+                //Incrementa la variable de visitas con la visita actual
                 $total_visitas++;
+                //Agrega a la variable la información del cliente que visito el modulo
                 $cadena_de_direcciones.=$ip.",";
+                //Abre el archivo en modo escritura y limpia lo que tenga
                 $fp = fopen($ruta,"w+"); //no olvidar crear al archivo visitantes.txt y poner el path correcto
+                //Escribe en el archivo la información contenida en la variable correspondiente
                 fwrite($fp, $cadena_de_direcciones);
+                //Cierra el archivo
                 fclose($fp);
+            
+            // En caso de  no tener información, escribe la información actual del cliente que visita el modulo
             }else{
+                //Abre el archivo
                 $fp = fopen($ruta,"w+"); //no olvidar crear al archivo visitantes.txt y poner el path correcto
+                //Escribe la información en el archivo
                 fwrite($fp, $ip.",");
+                //Incrementa la variable de visitas
                 $total_visitas++;
+                //Cierra el archivo
                 fclose($fp);
             }        
-             
+            //Crea el archivo que contiene el total general de visitas al modulo
             $ruta=  $raiz."Cuenta_Visitas_Oriel/Consulta_Privada_Personal/".date("Ymd", $time)." Total_de_Visitas_Personal_Privado.txt";
-            
+            //Abre el archivo para escribirle 
             $fp = fopen($ruta,"w+");
-
+            //Escribe la información correspondiente en el archivo
             fwrite($fp, "Total de consultas a la tabla personal desde la parte privada ".date("Ymd", $time).":".$total_visitas);
+            //Cierra el archivo
             fclose($fp);
 
     }
     
-    
+    /*
+     * Modulo del sistema que permite contar  la cantidad de veces que se utiliza el área de consulta de personal en vista publica
+     */
     public function cuenta_visitas_a_personal_publico(){
-        
+           //Obitne el directorio raiz donde está alojado el proyecto ORIEL
            $raiz=$_SERVER['DOCUMENT_ROOT'];
-             
+             //Obtiene la hora actual del sistema
             $time = time();
-
+            //Formatea la ruta del proyecto ORIEL
             if (substr($raiz,-1)!="/"){
                 $raiz.="/";
             }
-            
+            //Establece la ruta del archivo txt que almacenará la información de las visitas
             $ruta=  $raiz."Cuenta_Visitas_Oriel/Consulta_Publica_Personal/".date("Ymd", $time)." Visitas_a_Personal_Publico.txt";
-            
+            //Abre el archivo 
             $fp = fopen($ruta,"a+");
+            //Cierra el archivo
             fclose($fp);
-            
+            //Obtiene la dirección ip del cliente que está utilizando el modulo
             $ip = $_SERVER['REMOTE_ADDR'];
+            //Obtiene el nombre del equipo del cliente que está usando el modulo
             $nombre_host = gethostbyaddr($_SERVER['REMOTE_ADDR']);
+            //Concatena la direccion ip con el nombre del equipo
             $ip=$ip."-->".$nombre_host;
-            
+            //Variable bandera que controla si la visita ya se ha realizado anteriormente durante el día
             $existe = 0;
+            //Vector que almacena las visitas de todos los clientes durante el día
             $visitas = array();
-                       
+            //Abre el archivo en modo lectura           
             $fp = fopen($ruta,"r"); 
+            //Inicializa la variable a vacio
             $ips="";
            
+            //Recorre el archivo para sacar todas las visitas realizadas durante el día.
             while($ip2 = fgets($fp)){
+                //Concatena la información que se  va leyendo una variable tipo cadena
                 $ips .= $ip2;
                
             }
-            
+            //Cierra el archivo
             fclose($fp);
-            
+            //Inicializa la variable cadena a vacio
             $cadena_de_direcciones="";
+            //Inicializa la variable de cantidad de visitas
             $total_visitas=0;
+            //Verifica que haya información en el archivo
             if (strlen($ips)>0){
+                //Convierte la información en un vector
                 $total_direcciones=  explode(",", $ips); 
-                
+                // Recorre la información del vector 
                 for ($i = 0; $i < count($total_direcciones)-1; $i++) {
+                    //Va incrementando la variable que cuenta las visitas
                     $total_visitas++;
+                    //Toma la información de cada visita en una variable cadena
                     $cadena_de_direcciones.=$total_direcciones[$i].",";
                 }
-                //$cadena_de_direcciones.=$ip.",";
+                //Incrementa la variable visitas con la visita actual
                 $total_visitas++;
+                //Concatena la información de la visita actual a la variable contenedora
                 $cadena_de_direcciones.=$ip.",";
+                //Abre el archivo para escribirle 
                 $fp = fopen($ruta,"w+"); //no olvidar crear al archivo visitantes.txt y poner el path correcto
+                //Escribe en el archivo
                 fwrite($fp, $cadena_de_direcciones);
+                //Cierra el archivo
                 fclose($fp);
             }else{
+                //En caso de que no haya información en el archivo, escribe el dato actual
                 $fp = fopen($ruta,"w+"); //no olvidar crear al archivo visitantes.txt y poner el path correcto
+                //Escribe en el archivo
                 fwrite($fp, $ip.",");
+                //Incrementa la variable cuenta visitas
                 $total_visitas++;
+                //Cierra el archivo
                 fclose($fp);
             }        
              
+            //Establece la ruta del archivo que lleva el total general de visitas al modulo
             $ruta=  $raiz."Cuenta_Visitas_Oriel/Consulta_Publica_Personal/".date("Ymd", $time)." Total_de_Visitas_Personal_Publico.txt";
-            
+            //Abre el archivo en modo escritura.
             $fp = fopen($ruta,"w+");
-
+            //Escribe la información correspondiente en el archivo
             fwrite($fp, "Total de consultas a la tabla personal desde la parte publica ".date("Ymd", $time).":".$total_visitas);
+            //Cierra el archivo
             fclose($fp);
 
     }
-    
+    /*
+     * Metodo que permite registrar el conteo de visitas al sitio web ORIEL
+     */
     public function cuenta_visitas_a_la_pagina(){
-        
+           //Obtiene el directorio raiz donde se encuentra localizado el proyecto ORIEL
            $raiz=$_SERVER['DOCUMENT_ROOT'];
              
+           //Obtiene la hora actual del sistema
             $time = time();
 
+            //Formatea la ruta del directorio raiz del proyecto ORIEL
             if (substr($raiz,-1)!="/"){
                 $raiz.="/";
             }
-            
+            //Establece la ruta del archivo txt que lleva el control de visitas  a la pagina
             $ruta=  $raiz."Cuenta_Visitas_Oriel/Ingreso_al_Sitio/".date("Ymd", $time)." Visitas_al_Sitio.txt";
             
+            //Abre el archivo , lo crea si no lo encuentra
             $fp = fopen($ruta,"a+");
+            //Cierra el archivo
             fclose($fp);
             
+            //Obtiene la direccion ip del cliente que está utilizando el modulo
             $ip = $_SERVER['REMOTE_ADDR'];
+            //Obtiene el nombre del equipo cliente desde donde se está utilizando el modulo
             $nombre_host = gethostbyaddr($_SERVER['REMOTE_ADDR']);
+            //Concatena la direccion ip en conjunto con el nombre del equipo
             $ip=$ip."-->".$nombre_host;
-            
+            //Variable bandera que permite determinar si una visita ya fue realizada durante el dia
             $existe = 0;
+            //Arreglo que permite almacenar las direcciones de los equipos que visitaron el sistema durante el día actual
             $visitas = array();
-                       
+            //Abre el archivo en solo lectura           
             $fp = fopen($ruta,"r"); 
+            //Variable cadena que se inicializa en vacio
             $ips="";
-           
+            //Recorre los registros contenidos en el archivo
             while($ip2 = fgets($fp)){
+                //Concatena en una variable cada uno de los registros del archivo
                 $ips .= $ip2;
                
             }
-            
+            //Cierra el archivo
             fclose($fp);
-            
+            //Variable bandera que permite determinar si el cliente ya visitó el día de hoy el módulo
             $bandera=0;
+            //Inicializa la variable cadena a vacio
             $cadena_de_direcciones="";
+            //Inicializa la variable de conteo de visitas
             $total_visitas=0;
+            //Verifica que haya información en el archivo
             if (strlen($ips)>0){
+                //Asigna a la variable, un vector con todas las visitas realizadas al sitio
                 $total_direcciones=  explode(",", $ips); 
-                
+                //Recorre el vector de visitas
                 for ($i = 0; $i < count($total_direcciones)-1; $i++) {
-                   
+                   // Verifica si la información contenida en el archivo concuerda con la información del cliente actual que está visitando el modulo
                     if ($ip==$total_direcciones[$i]){
+                        //En caso de encontrarla, cambia el valor de la variable bandera
                         $bandera=1;
                     }else{
+                        //Incrementa la variable visitas
                         $total_visitas++;
                     }
+                    //Agrega la información de la posicion actual del vector, a la variable que almacena toda la información.
                     $cadena_de_direcciones.=$total_direcciones[$i].",";
                 }
+            // En caso de que no haya información en el archivo, procede a escribir la información del cliente actual
             }else{
+                //Abre el archivo en modo escritura y borra la información que tenga.
                 $fp = fopen($ruta,"w+"); //no olvidar crear al archivo visitantes.txt y poner el path correcto
+                //Escribe la información en el archivo
                 fwrite($fp, $ip);
+                //Cierra el archivo
                 fclose($fp);
             }        
          
+            //Si la bandera es cero, procede a escribir en el archivo la información del cliente actual que visia el modulo
             if($bandera == 0){
+                //Incrementa la variable que cuenta las visitas totales
                 $total_visitas++;
+                //Agrega la información del cliente a la variable actual
                 $cadena_de_direcciones.=$ip.",";
+                //Abre el archivo en modo escritura agregando al final del archivo
                 $fp = fopen($ruta,"w+"); //no olvidar crear al archivo visitantes.txt y poner el path correcto
+                //Escribe en el archivo
                 fwrite($fp, $cadena_de_direcciones);
+                //Cierra el archivo
                 fclose($fp);
              }else{
+                 //Incrementa el total de visitas realizadas al sitio
                  $total_visitas++;
              }
-             
+             //Establece la ruta del archivo que lleva el total de visitas al sitio
             $ruta=  $raiz."Cuenta_Visitas_Oriel/Ingreso_al_Sitio/".date("Ymd", $time)." Total_de_Visitas_al_Sitio.txt";
-            
+            //Abre el archivo en modo escritura
             $fp = fopen($ruta,"w+");
-
+            //Escribe la información en el archivo
             fwrite($fp, "Total de visitas registradas el día ".date("Ymd", $time).":".$total_visitas);
+            //Cierra el archivo
             fclose($fp);
 
     }
@@ -4339,13 +4586,9 @@
             $detalle= str_replace('"','',$detalle);
             $obj_eventos->setDetalle($detalle);
             $obj_eventos->setId_usuario($_SESSION['id']);
-            
-            //$this->frm_eventos_listar();
-            
+          
             $recepcion_archivo=$_FILES['archivo_adjunto']['error'];
             
-            //echo basename($_FILES['archivo_adjunto']['tmp_name']);
-            //echo basename($_FILES['archivo_adjunto']['type']);
             $date=new DateTime(); //this returns the current date time
             $result = $date->format('Y-m-d-H-i-s');
             //echo $result;
@@ -4416,6 +4659,7 @@
              */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            //Llamada al  formulario de la vista.
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         } 
     }
