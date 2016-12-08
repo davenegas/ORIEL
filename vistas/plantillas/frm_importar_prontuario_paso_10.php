@@ -22,6 +22,19 @@
             tmpElemento.download = 'Inconsistencias-Telefonos Casa de Habitacion '+f.getDate() + "/" + (f.getMonth() +1) + "/" + f.getFullYear()+'.xls';
             // Simulamos el click al elemento creado para descargarlo
             tmpElemento.click();
+            
+            //Código para generar documento excel a partir de una tabla
+            tmpElemento = document.createElement('a');
+            // obtenemos la información desde el div que lo contiene en el html
+            // Obtenemos la información de la tabla
+            data_type = 'data:application/vnd.ms-excel;';
+            tabla_div = document.getElementById('tabla_extensiones_cero');
+            tabla_html = tabla_div.outerHTML.replace(/ /g, '%20');
+            tmpElemento.href = data_type + ', ' + tabla_html;
+            //Asignamos el nombre a nuestro EXCEL
+            tmpElemento.download = 'Personas con extensiones en cero-Reporte Actualizacion '+f.getDate() + "/" + (f.getMonth() +1) + "/" + f.getFullYear()+'.xls';
+            // Simulamos el click al elemento creado para descargarlo
+            tmpElemento.click();
           });
 
         </script>
@@ -51,6 +64,27 @@
                 </tr>     
                     
             <?php } ?>
+          </tbody>
+        </table>
+        </div>
+        
+         <div class="container">
+             <table hidden="hidden" id="tabla_extensiones_cero" cellspacing="0" width="100%">   
+          <tbody>
+            <?php  $tam=count($vector_personas_con_numeros_en_cero);
+
+            for ($i = 0; $i <$tam; $i++) { 
+                $tam2=count($vector_personas_con_numeros_en_cero[$i]);
+                for ($j = 0; $j <$tam2; $j++) {  ?>
+                    <tr>
+                    <td><?php echo $vector_personas_con_numeros_en_cero[$i][$j]['Apellido_Nombre'];?></td>
+                    <td><?php echo $vector_personas_con_numeros_en_cero[$i][$j]['Cedula'];?></td>
+                    <td><?php echo $vector_personas_con_numeros_en_cero[$i][$j]['ID_Persona'];?></td>
+                    </tr>     
+                    
+            <?php 
+                }
+                } ?>
           </tbody>
         </table>
         </div>

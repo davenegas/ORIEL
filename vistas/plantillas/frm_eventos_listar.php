@@ -9,15 +9,38 @@
           $(document).ready(function () {
             $.post("index.php?ctl=cuenta_visitas_a_bitacora_digital");
           });
+          $(document).ready(function () {
+              puestoenviado=<?php echo $puesto_enviado ?>;
+            $("#puesto option[value="+puestoenviado+"]").attr("selected",true);
+          });
+        function validar_puesto(pst){
+            puesto = pst;
+            document.getElementById('puestos').submit();
+        }
         </script>
     </head>
     <body>
         <?php require_once 'encabezado.php';?>
         <div class="container animated fadeIn">
-        <h2>Listado de Eventos</h2>
-        <!--<p>A continuación se detallan los diferentes roles que están registrados en el sistema:</p>-->            
-        <a href="index.php?ctl=frm_eventos_agregar&id=0" class="btn btn-default espacio-abajo" role="button">Agregar Nuevo Evento de Bitácora</a>
-        <a href="index.php?ctl=frm_eventos_lista_cerrados" class="btn btn-default espacio-abajo" role="button">Eventos Cerrados</a> 
+        <div class="col-md-5">
+            <h2>Listado de Eventos</h2>
+            <!--<p>A continuación se detallan los diferentes roles que están registrados en el sistema:</p>-->            
+            <a href="index.php?ctl=frm_eventos_agregar&id=0" class="btn btn-default espacio-abajo" role="button">Agregar Nuevo Evento de Bitácora</a>
+            <a href="index.php?ctl=frm_eventos_lista_cerrados" class="btn btn-default espacio-abajo quitar-float" role="button">Eventos Cerrados</a> 
+        </div>
+        <div class="col-md-2" style="margin-top: 35px;">
+            <form id="puestos" method="POST" name="form" action="index.php?ctl=eventos_listar_filtrado">
+            <label for="puesto">Puesto</label>
+            <select class="form-control" id="puesto" name="puesto" onchange="validar_puesto(value);"> 
+                <option value="0">Todos</option>
+                <option value="1">Puesto 1</option>
+                <option value="2">Puesto 2</option>
+                <option value="3">Puesto 3</option>
+                <option value="4">Puesto 4</option>
+            </select>
+            </form>
+        </div>
+        
         <table id="tabla" class="display">
           <thead>
             <tr>

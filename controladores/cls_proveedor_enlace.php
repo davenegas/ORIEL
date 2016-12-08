@@ -110,6 +110,14 @@ class cls_proveedor_enlace{
             $this->resultado_operacion=true;
         }
     }
+    
+    public function cambiar_estado_proveedor() {
+        $this->obj_data_provider->conectar();
+        //Llama al metodo que realiza la consulta a la bd
+        $this->obj_data_provider->edita_datos("T_Proveedor", "Estado='".$this->estado."'", $this->condicion);
+        $this->obj_data_provider->desconectar();
+        $this->resultado_operacion=true;
+    }
 }
 ?>
 

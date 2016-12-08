@@ -145,7 +145,7 @@
                         <td style="text-align:center"><?php echo $params[$i]['Numero'];?></td>
                         <td style="text-align:center"><?php echo $params[$i]['Observaciones_Tel'];?></td>
                         <?php if($_SESSION['modulos']['Editar- Personal']==1){  ?>
-                            <td style="text-align:center"><a class="btn azul" role="button" onclick="Editar_telefono(<?php echo $params[$i]['ID_Telefono'];?>,<?php echo $params[$i]['ID_Tipo_Telefono'];?>,<?php echo $params[$i]['Numero'];?>,'<?php echo $params[$i]['Observaciones_Tel'];?>')">
+                            <td style="text-align:center"><a class="btn azul" role="button" onclick="Editar_telefono(<?php echo $params[$i]['ID_Telefono'];?>,<?php echo $params[$i]['ID_Tipo_Telefono'];?>,'<?php echo $params[$i]['Numero'];?>','<?php echo $params[$i]['Observaciones_Tel'];?>')">
                                 Editar</a></td> 
                             <td style="text-align:center"><a class="btn rojo" role="button" onclick="eliminar_telefono(<?php echo $params[$i]['ID_Telefono'];?>);">
                                 Eliminar</a></td>
@@ -218,8 +218,8 @@
                         </select>
                     <label for="numero">Número de Teléfono</label>
                     <input class="form-control espacio-abajo" maxlength="8" required id="numero" name="numero" placeholder="Número de teléfono - 8 digitos" type="text">
-                    <label for="Observaciones">Observaciones</label>
-                    <textarea class="form-control espacio-abajo" id="Observaciones" name="Observaciones" placeholder="Observaciones del número"></textarea>
+                    <label for="observaciones_tel">Observaciones</label>
+                    <textarea class="form-control espacio-abajo" id="observaciones_tel" name="observaciones_tel" placeholder="Observaciones del número"></textarea>
                     <button><a href="javascript:%20check_empty()" id="submit">Guardar</a></button>
                 </form>
             </div>
