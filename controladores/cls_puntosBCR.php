@@ -204,22 +204,15 @@ class cls_puntosBCR{
 			LEFT OUTER JOIN T_Empresa ON T_PuntoBCR.ID_Empresa = T_Empresa.ID_Empresa
 			LEFT OUTER JOIN T_Distrito ON T_PuntoBCR.ID_Distrito = T_Distrito.ID_Distrito
 			LEFT OUTER JOIN T_UE_PuntoBCR ON T_PuntoBCR.ID_PuntoBCR= T_UE_PuntoBCR.ID_PuntoBCR
-			LEFT OUTER JOIN T_UnidadEjecutora ON T_UE_PuntoBCR.ID_Unidad_Ejecutora = T_UnidadEjecutora.ID_Unidad_Ejecutora
-			LEFT OUTER JOIN T_PuntoBCREnlace ON T_PuntoBCREnlace.ID_PuntoBCR = T_PuntoBCR.ID_PuntoBCR
-			LEFT OUTER JOIN T_EnlaceTelecomunicaciones ON T_EnlaceTelecomunicaciones.ID_Enlace = T_PuntoBCREnlace.ID_Enlace
-			LEFT OUTER JOIN T_PuntoBCRDireccionIP ON T_PuntoBCRDireccionIP.ID_PuntoBCR = T_PuntoBCR.ID_PuntoBCR
-			LEFT OUTER JOIN T_DireccionIP ON T_DireccionIP.ID_Direccion_IP = T_PuntoBCRDireccionIP.ID_Direccion_IP
-			GROUP by T_PuntoBCR.ID_PuntoBCR", 
+			LEFT OUTER JOIN T_UnidadEjecutora ON T_UE_PuntoBCR.ID_Unidad_Ejecutora = T_UnidadEjecutora.ID_Unidad_Ejecutora", 
                     "T_PuntoBCR.ID_PuntoBCR, T_PuntoBCR.Nombre, T_PuntoBCR.Direccion, T_PuntoBCR.Codigo, 
-			T_PuntoBCR.Cuenta_SIS, T_PuntoBCR.Observaciones as Observaciones_Punto, 
-                        T_PuntoBCR.Estado as Estado_Punto, T_PuntoBCR.ID_Gerente_Zona, T_PuntoBCR.ID_Supervisor_Zona,
+			T_PuntoBCR.Cuenta_SIS, T_PuntoBCR.Observaciones as Observaciones_Punto, T_PuntoBCR.Estado, 
+                        T_PuntoBCR.ID_Gerente_Zona, T_PuntoBCR.ID_Supervisor_Zona,
 			T_Horario.*, 
 			T_TipoPuntoBCR.ID_Tipo_Punto, T_TipoPuntoBCR.Tipo_Punto,
 			T_Empresa.ID_Empresa, T_Empresa.Empresa,
 			T_Distrito.ID_Distrito, T_Distrito.Nombre_Distrito,
-			T_UnidadEjecutora.ID_Unidad_Ejecutora, T_UnidadEjecutora.Departamento,
-			GROUP_CONCAT(char(10),T_EnlaceTelecomunicaciones.Numero_Linea) as Numero_Linea,
-                        GROUP_CONCAT(char(10),T_DireccionIP.Direccion_IP) as Direccion_IP",
+			T_UnidadEjecutora.ID_Unidad_Ejecutora, T_UnidadEjecutora.Departamento",
                     "");
             $this->arreglo=$this->obj_data_provider->getArreglo();
             $this->obj_data_provider->desconectar();
@@ -233,18 +226,15 @@ class cls_puntosBCR{
 			LEFT OUTER JOIN T_Empresa ON T_PuntoBCR.ID_Empresa = T_Empresa.ID_Empresa
 			LEFT OUTER JOIN T_Distrito ON T_PuntoBCR.ID_Distrito = T_Distrito.ID_Distrito
 			LEFT OUTER JOIN T_UE_PuntoBCR ON T_PuntoBCR.ID_PuntoBCR= T_UE_PuntoBCR.ID_PuntoBCR
-			LEFT OUTER JOIN T_UnidadEjecutora ON T_UE_PuntoBCR.ID_Unidad_Ejecutora = T_UnidadEjecutora.ID_Unidad_Ejecutora
-			LEFT OUTER JOIN T_PuntoBCREnlace ON T_PuntoBCREnlace.ID_PuntoBCR = T_PuntoBCR.ID_PuntoBCR
-			LEFT OUTER JOIN T_EnlaceTelecomunicaciones ON T_EnlaceTelecomunicaciones.ID_Enlace = T_PuntoBCREnlace.ID_Enlace", 
+			LEFT OUTER JOIN T_UnidadEjecutora ON T_UE_PuntoBCR.ID_Unidad_Ejecutora = T_UnidadEjecutora.ID_Unidad_Ejecutora", 
                     "T_PuntoBCR.ID_PuntoBCR, T_PuntoBCR.Nombre, T_PuntoBCR.Direccion, T_PuntoBCR.Codigo, 
-			T_PuntoBCR.Cuenta_SIS, T_PuntoBCR.Observaciones as Observaciones_Punto, 
-                        T_PuntoBCR.Estado as Estado_Punto, T_PuntoBCR.ID_Gerente_Zona, T_PuntoBCR.ID_Supervisor_Zona,
-			T_Horario.*, 
+			T_PuntoBCR.Cuenta_SIS, T_PuntoBCR.Observaciones as Observaciones_Punto, T_PuntoBCR.Estado,
+                        T_PuntoBCR.ID_Gerente_Zona, T_PuntoBCR.ID_Supervisor_Zona,
+			T_Horario.*,
 			T_TipoPuntoBCR.ID_Tipo_Punto, T_TipoPuntoBCR.Tipo_Punto,
 			T_Empresa.ID_Empresa, T_Empresa.Empresa,
 			T_Distrito.ID_Distrito, T_Distrito.Nombre_Distrito,
-			T_UnidadEjecutora.ID_Unidad_Ejecutora, T_UnidadEjecutora.Departamento,
-			T_EnlaceTelecomunicaciones.Numero_Linea",
+			T_UnidadEjecutora.ID_Unidad_Ejecutora, T_UnidadEjecutora.Departamento",
                     $this->condicion);
             $this->arreglo=$this->obj_data_provider->getArreglo();
             $this->obj_data_provider->desconectar();

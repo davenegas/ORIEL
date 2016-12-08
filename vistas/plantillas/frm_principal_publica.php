@@ -2,7 +2,6 @@
 <html lang="en">
 <head>
   <title>Principal ORIEL</title>
-  <!--<meta http-equiv="refresh" content="10">-->
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <?php require_once 'frm_librerias_head.html';?>
@@ -17,28 +16,6 @@
 </head>
 <body>
 <br>
-
- <?php 
- 
-   /* $ip="192.168.43.15";
-    //$output=  shell_exec("ping $ip");
-    $output=  shell_exec("ping -n 1 $ip");
-    
-    if (strpos($output,"tiempo<")){
-         echo "Ip positiva";
-    }else{
-        echo "Ip negativa";
-    }*/
-    
-   
- 
-    /*$ip="192.168.43.152";
-    exec("ping -n 1 $ip",$output,$status);
-    echo "<pre>";
-    print_r($output);
-    echo "</pre>";*/
-    
-?>
      <center><img src="vistas/Imagenes/Banner_Centro_de_Control.jpg" alt=""/></center>
      <br>  
 <nav class="navbar navbar-default">

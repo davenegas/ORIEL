@@ -124,13 +124,12 @@ function ocultar_elemento(){
     document.getElementById('asignar_area').style.display = "none";
     document.getElementById('asignar_direccion_IP').style.display = "none";
     document.getElementById('asignar_horario').style.display = "none";
-    document.getElementById('formulario_oculto_1').style.display = "none";
 }
 
 ///////////////////////////////////////////////////////
 //Funciones para ventana oculta de Agregar Número PuntoBCR
 function check_empty() {
-    if (document.getElementById('numero_telefono').value == "") {
+    if (document.getElementById('numero').value == "") {
         alert("Digita un número de teléfono !");
     } else {
         //alert("Form Submitted Successfully...");
@@ -139,11 +138,6 @@ function check_empty() {
     }
 }
 function mostrar_agregar_telefono() {
-    $("#Tipo_Telefono option[value=1]").attr("selected",true);
-    document.getElementById('ID_Telefono').value="0";
-    document.getElementById('numero_telefono').value="";
-    document.getElementById('observaciones_telefono').value="";
-    
     document.getElementById('agregar_telefono').style.display = "block";
 }
 function eliminar_telefono(ide){
@@ -159,15 +153,7 @@ function eliminar_telefono(ide){
                 //$.alert('Canceled!')
         }
     });
-}
-function editar_telefono(id_tel, tipo_tel, num, obser){
-    $("#Tipo_Telefono option[value="+tipo_tel+"]").attr("selected",true);
-    document.getElementById('ID_Telefono').value=id_tel;
-    document.getElementById('numero_telefono').value=num;
-    document.getElementById('observaciones_telefono').value=obser;
-    
-    document.getElementById('agregar_telefono').style.display = "block";
-}
+};
 
 ////////////////////////////////////////////////////
 //Funciones para UE
@@ -240,10 +226,6 @@ function eliminar_area(ide){
 ///////////////////////////////////////////////
 //Funciones para agregar o asignar Direccion IP
 function mostrar_direccion_IP(){
-    document.getElementById('ID_Direccion_IP').value = "0";
-    document.getElementById('lista_direcciones').hidden=false;
-    document.getElementById('direccion_ip').value = "";
-    document.getElementById('observaciones_ip').value = "";
     document.getElementById('asignar_direccion_IP').style.display = "block";
 }
 function asignar_ip(id){
@@ -278,14 +260,7 @@ function validar_direccion_ip(){
         document.getElementById('asignar_direccion_IP').style.display = "none";
     } 
 }
-function editar_ip(ide, tipo, direc, obser){
-    document.getElementById('lista_direcciones').hidden=true;
-    document.getElementById('ID_Direccion_IP').value = ide;
-    $("#tipo_ip option[value="+tipo+"]").attr("selected",true);
-    document.getElementById('direccion_ip').value = direc;
-    document.getElementById('observaciones_ip').value = obser;
-    document.getElementById('asignar_direccion_IP').style.display = "block";
-}
+
 ///////////////////////////////////////////////////////////
 //Funciones para asignar Horario al Punto BCR
 function mostrar_horario(){
@@ -299,70 +274,4 @@ function asignar_horario(id_hora){
             //alert (data);
             location.reload();
           });
-}
-function eliminar_horario(){
-    $.confirm({title: 'Confirmación!', content: 'Desea eliminar el Horario del Punto?', 
-        confirm: function(){
-            id_puntobcr = document.getElementById('ID_PuntoBCR').value;
-            $.post("index.php?ctl=puntobcr_eliminar_horario", { id_puntobcr:id_puntobcr }, function(data){
-                location.reload();
-                //alert (data);
-              });
-        },
-        cancel: function(){
-                //$.alert('Canceled!')
-        }
-    });
-}
-
-///////////////////////////////////////////////
-//Funciones para agregar o editar enlaces de telecomunicaciones
-function mostrar_enlace_telecom(){
-    document.getElementById('ID_Enlace').value="0";
-    $("#enlace option[value=1]").attr("selected",true);
-    document.getElementById('interface').value="";
-    document.getElementById('linea').value="";
-    document.getElementById('bandwidth').value="";
-    $("#medio_enlace option[value=1]").attr("selected",true);
-    $("#proveedor_enlace option[value=1]").attr("selected",true);
-    $("#tipo_enlace option[value=1]").attr("selected",true);
-    document.getElementById('observaciones_enlace').value="";
-    document.getElementById('formulario_oculto_1').style.display = "block";
-}
-function mostrar_editar_enlace(id, enlace, interf, linea,provee, tipo, bandw, medio, obser ){
-    document.getElementById('ID_Enlace').value=id;
-    $("#enlace option[value='"+enlace+"']").attr("selected",true);
-    document.getElementById('interface').value=interf;
-    document.getElementById('linea').value=linea;
-    document.getElementById('bandwidth').value=bandw;
-    $("#medio_enlace option[value="+medio+"]").attr("selected",true);
-    $("#proveedor_enlace option[value="+provee+"]").attr("selected",true);
-    $("#tipo_enlace option[value="+tipo+"]").attr("selected",true);
-    document.getElementById('observaciones_enlace').value=obser;
-    document.getElementById('formulario_oculto_1').style.display = "block";
-}
-function eliminar_enlace(ide){
-    id_enlace= ide;
-    $.confirm({title: 'Confirmación!', content: 'Desea eliminar el enlace de Telecomunicaciones?', 
-        confirm: function(){
-            id_puntobcr = document.getElementById('ID_PuntoBCR').value;
-            $.post("index.php?ctl=puntobcr_eliminar_enlace", { id_enlace: id_enlace, id_puntobcr:id_puntobcr }, function(data){
-                location.reload();
-                alert (data);
-              });
-        },
-        cancel: function(){
-                //$.alert('Canceled!')
-        }
-    });
-}
-function validar_enlace(){
-   if (document.getElementById('interface').value == "" ||document.getElementById('linea').value==""
-           ||document.getElementById('bandwidth').value=="") {
-        alert("Completa la información del enlace !");
-    } else {
-        //alert("Form Submitted Successfully...");
-        document.getElementById('frm_enlace_guardar').submit();
-        document.getElementById('formulario_oculto_1').style.display = "none";
-    }  
 }

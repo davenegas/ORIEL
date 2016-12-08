@@ -27,11 +27,8 @@ $(document).ready(function(){
                     $.post("index.php?ctl=alerta_en_vivo_mismo_punto_bcr_y_evento", { id_punto_bcr: id_punto_bcr,id_tipo_evento:id_tipo_evento }, function(data){
                         //$(document).html(data);
                        // alert("_"+data+"_");
-                    var str = data;
-                    var n = str.search("BCR");
-                    
-                    if (n!=-1){
-                         alert(data.trim());
+                    if (data!="      "){
+                         alert(data);
                     }
 
                     }); 
@@ -52,12 +49,9 @@ $(document).ready(function(){
                     $.post("index.php?ctl=alerta_en_vivo_mismo_punto_bcr_y_evento", { id_punto_bcr: id_punto_bcr,id_tipo_evento:id_tipo_evento }, function(data){
                         //$(document).html(data);
                          //alert("_"+data+"_");
-                    var str = data;
-                    var n = str.search("BCR");
-                    
-                    if (n!=-1){
-                         alert(data.trim());
-                    }
+                    if (data!="      "){
+                         alert(data);
+                     }
                     });    
                     $.post("index.php?ctl=actualiza_en_vivo_estado_evento", { id_tipo_evento: id_tipo_evento}, function(data){
                         $("#estado_evento").html(data);
@@ -108,8 +102,6 @@ $(document).ready(function(){
                     });   
                 }
            });
-           
-           
         });
     
 

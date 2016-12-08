@@ -1,4 +1,5 @@
       <?php
+
 /*
  * Clase DataProvider, parte de la capa modelo de acceso a los datos
  * Clase principal para interactuar con la base de datos BD_Gerencia_Seguridad de MySQL
@@ -22,9 +23,9 @@ class Data_Provider{
    private $arreglo;
    //Variable que almacena el string SQL que se va a utilizar
    private $consulta;
-   // Variable controladora del resultado de la operación, si se ejecutó con éxito o no
+   //Variable controladora del resultado de la operación, si se ejecutó con éxito o no
    private $resultado_operacion;
-   // Variable que almacena el ID de la última inserción realizada en una tabla en específico
+   //Variable que almacena el ID de la última inserción realizada en una tabla en específico
    private $ultimo_id_ingresado;
    
    //Método que retorna el valor del último ID ingresado
@@ -148,42 +149,43 @@ class Data_Provider{
             //Inicializa el nombre del usuario que puede acceder la base de datos
             $this->mvc_bd_usuario  = "root";
             //Inicializa la clave de acceso a la base de datos
-            $this->mvc_bd_clave    = "eda198319871983oriel";
+            $this->mvc_bd_clave    = "";
             //Es capaz de representar cualquier carácter Unicode a nivel de base de datos
             $this->consulta="SET NAMES 'utf8'";
 
             
-            //Acapara los errores que se puedan presentar y muestra en pantalla lo correspondiente
+           //Acapara los errores que se puedan presentar y muestra en pantalla lo correspondiente
        }catch (Exception $e){
            //Muestra en pantalla un mensaje de error
-           echo 'Hubo un problema al inicializar las variables de conexión';
+           //echo 'Hubo un problema al inicializar las variables de conexión';
            //Asigna a falso el valor de la variable resultado de la operación.
            $this->resultado_operacion=false;
        }
        
    }
+
    //Metodo de conexión a la base de datos, 
    public function conectar(){
     try{
-       // Crea un objeto conexión con los parámetros necesarios de enlace a la base de datos Gerencia_Seguridad 
+       //Crea un objeto conexión con los parámetros necesarios de enlace a la base de datos Gerencia_Seguridad 
        $this->conexion=new mysqli($this->mvc_bd_hostname,$this->mvc_bd_usuario,$this->mvc_bd_clave, $this->mvc_bd_nombre);
        //Permite ejecutar una consulta debntro de la base de datos
        $this->conexion->query($this->consulta);
-       // Lleva el control del resultado de la operación ejecuta en la bd
+       //Lleva el control del resultado de la operación ejecuta en la bd
        $this->resultado_operacion=true;
     }catch (Exception $e){
            //Notifica de un error al conectarse a la base de datos
-           echo 'Hubo un problema al realizar la conexión a la base de datos';
+           //echo 'Hubo un problema al realizar la conexión a la base de datos';
            //Asigna a falso el valor de la variable resultado de la operación.
             $this->resultado_operacion=false;
        }
    }
    
-   // Método que permite destruir la conexión establecida con la base de datos
+   //Método que permite destruir la conexión establecida con la base de datos
    public function desconectar(){
        //Cierra la conexión
        mysqli_close($this->conexion);
-       // Asigna verdadero al resultado de la operación
+       //Asigna verdadero al resultado de la operación
        $this->resultado_operacion=true;
    }
    
@@ -195,7 +197,7 @@ class Data_Provider{
         // Elimina la instancia del arreglo
         unset($this->arreglo);
        
-        // Verifica si la consulta SQL tiene una condición de búsqueda
+        //Verifica si la consulta SQL tiene una condición de búsqueda
         if ($condicion==""){
             //En caso de no tener condición, agrega campos y nombre de la tabla solamente
             $consulta=$this->conexion->query("select ".$campos." from ".$table.";");
@@ -208,22 +210,22 @@ class Data_Provider{
         
         //echo "select ".$campos." from ".$table." where ".$condicion.";";
         
-        // Una vez ejecutada la consulta verifica si trae resultados,
+        //Una vez ejecutada la consulta verifica si trae resultados,
         if ($consulta!=null){
-            // De tener resultados, agrega cada registro dentro del vector arreglo
+            //De tener resultados, agrega cada registro dentro del vector arreglo
             while($filas=$consulta->fetch_assoc()){
                 //Crea una nueva fila por cada registro encontrado en la consulta
                 $this->arreglo[]=$filas;   
             }
 
-            // Si el arreglo no está establecido, lo inicializa en null
+            //Si el arreglo no está establecido, lo inicializa en null
             if (!(isset($this->arreglo))){
                 //Inicializa en null
                 $this->arreglo=null;
                 //Establece la variable de control en falso
                 $this->resultado_operacion=false;
             }else{
-                // De lo contrario establece la variable de control a true
+                //De lo contrario establece la variable de control a true
                 $this->resultado_operacion=true;
             }
         }else{
@@ -233,10 +235,10 @@ class Data_Provider{
         }
    }
    
-   // Método ABC SQL que permite ingresar información en las tablas de la bd
+   //Método ABC SQL que permite ingresar información en las tablas de la bd
    public function inserta_datos($table,$campos,$valores){
             
-        // Gestión de insercion del metodo de la clase
+       //Gestión de insercion del metodo de la clase
        //Arma el insert SQL, de acuerdo a los parámetros recibidos por usuario
        
         $consulta=$this->conexion->query("insert into ".$table."(".$campos.") values(".$valores.");");
@@ -245,12 +247,12 @@ class Data_Provider{
         $this->resultado_operacion=true;
         
         
-         //Registro de la trazabilidad del sistema
-        // Define una variable cadena que almacenará la consulta SQL, Quita mediante la función replace las comas (coloca guiones en su lugar), para no tener conflictos en el momeno de insertar la variable al campo de la tabla traza
+        //Registro de la trazabilidad del sistema
+        //Define una variable cadena que almacenará la consulta SQL, Quita mediante la función replace las comas (coloca guiones en su lugar), para no tener conflictos en el momeno de insertar la variable al campo de la tabla traza
         $cadena_sql=str_replace(","," - ","insert into ".$table."(".$campos.") values(".$valores.");");
         //Reemplaza las comillas con espacios en blanco
         $cadena_sql=str_replace("'"," ",$cadena_sql);
-        // Reemplaza los paréntesis redondos con cuadrados
+        //Reemplaza los paréntesis redondos con cuadrados
         $cadena_sql = str_replace("(","[",$cadena_sql);
         //Reemplaza los paréntesis redondos con cuadradps
         $cadena_sql = str_replace(")","]",$cadena_sql);
@@ -260,10 +262,10 @@ class Data_Provider{
         
    }    
    
-   // Método ABC SQL que permite ingresar información en las tablas de la bd
+   //Método ABC SQL que permite ingresar información en las tablas de la bd
    public function inserta_datos_para_prontuario($table,$campos,$valores){
             
-        // Gestión de insercion del metodo de la clase
+       //Gestión de insercion del metodo de la clase
        //Arma el insert SQL, de acuerdo a los parámetros recibidos por usuario
        
         $consulta=$this->conexion->query("insert into ".$table."(".$campos.") values(".$valores.");");
@@ -273,27 +275,15 @@ class Data_Provider{
   
    }    
    
-    // Método ABC SQL que permite ingresar información en las tablas de la bd
-   public function inserta_datos_para_prontuario_especial($table,$campos,$valores){
-            
-        // Gestión de insercion del metodo de la clase
-       //Arma el insert SQL, de acuerdo a los parámetros recibidos por usuario
-       
-        $consulta=$this->conexion->query("insert into ".$table."(".$campos.") ".$valores.";");
-        //echo ("insert into ".$table."(".$campos.") values(".$valores.");");
-        //Establece a true el resultado de operación
-        $this->resultado_operacion=true;
-  
-   }    
-   
    //Método utilizado para insertar datos en la tabla traza, para consultas ABC mediante procedimientos almacenados
    public function inserta_datos_para_uso_de_trazabilidad($detalle_sql){
             
-        // Gestión de insercion del metodo de la clase, recibe el string SQL completo a ejecutar
+        //Gestión de insercion del metodo de la clase, recibe el string SQL completo a ejecutar
         $consulta=$this->conexion->query($detalle_sql);
         //echo ($detalle_sql);
         //estable la variable de control a true
-        $this->resultado_operacion=true;       
+        $this->resultado_operacion=true;
+          
    }    
    
    //Método utilizado para ejecutar procedimiento almacenado que inserta datos en la BD
@@ -306,7 +296,7 @@ class Data_Provider{
    }
 
    //Metodo de la clase que permite editar datos en la bd, administrado también por trazabilidad
-   // Recibe información de la tabla, los campos y la condición para encontrar el registro
+   //Recibe información de la tabla, los campos y la condición para encontrar el registro
    public function edita_datos($table,$campos_valores,$condicion){
        
         //Primero trae los datos actuales del registro a modificar para guardarlos en la tabla traza como valor antiguo o anterior
@@ -316,29 +306,29 @@ class Data_Provider{
         //Valida que la consulta haya traido algún dato
         if (count($this->getArreglo())>0){
             //Mediante la función implode, convierte a string el valor del registro traido por la consulta
-            // Implode tambien muesta la estructura del vector, con los nombres de los campos
+            //Implode tambien muesta la estructura del vector, con los nombres de los campos
             $valores_iniciales= $valores_iniciales ." ". implode(" - ",$this->getArreglo()[0]);
         }
-        // Agrega también los valores del vector sin los nombres de los campos
+        //Agrega también los valores del vector sin los nombres de los campos
         $valores_iniciales=$valores_iniciales . "\nA continuacion valores anteriores de la tabla formato arreglo:\n ";
-        // la función serialize trae los valores del vector
+        //la función serialize trae los valores del vector
         $valores_iniciales=$valores_iniciales . serialize($this->getArreglo()[0]);
         
-        // Ejecuta la edición de datos en la tabla correspondiente.
+        //Ejecuta la edición de datos en la tabla correspondiente.
         $consulta=$this->conexion->query("update ".$table." set ".$campos_valores." where ".$condicion.";");
         //echo("update ".$table." set ".$campos_valores." where ".$condicion.";");
         //Estable a true la variable de control
         $this->resultado_operacion=true;
         
         
-         //Registro de la trazabilidad del sistema
-        // Define una variable cadena que almacenará la consulta SQL, Quita mediante la función replace las comas (coloca guiones en su lugar), para no tener conflictos en el momeno de insertar la variable al campo de la tabla traza
+        //Registro de la trazabilidad del sistema
+        //Define una variable cadena que almacenará la consulta SQL, Quita mediante la función replace las comas (coloca guiones en su lugar), para no tener conflictos en el momeno de insertar la variable al campo de la tabla traza
         $cadena_sql=str_replace(","," - ","update ".$table." set ".$campos_valores." where ".$condicion.";");
         //Reemplaza las comillas con espacios en blanco
         $cadena_sql=str_replace("'"," ",$cadena_sql);
-        // Reemplaza los paréntesis redondos con cuadrados
+        //Reemplaza los paréntesis redondos con cuadrados
         $cadena_sql = str_replace("(","[",$cadena_sql);
-        // Reemplaza los paréntesis redondos con cuadrados
+        //Reemplaza los paréntesis redondos con cuadrados
         $cadena_sql = str_replace(")","]",$cadena_sql);
         
         //Inserta el registro de trazabilidad del sistema con el id de usuario, fecha, hora, valores nuevos y antiguos, etc.
@@ -346,11 +336,11 @@ class Data_Provider{
         
    }
    
-    //Metodo de la clase que permite editar datos en la bd, administrado también por trazabilidad
+   //Metodo de la clase que permite editar datos en la bd, administrado también por trazabilidad
    // Recibe información de la tabla, los campos y la condición para encontrar el registro
    public function edita_datos_para_prontuario($table,$campos_valores,$condicion){
        
-        // Ejecuta la edición de datos en la tabla correspondiente.
+        //Ejecuta la edición de datos en la tabla correspondiente.
         $consulta=$this->conexion->query("update ".$table." set ".$campos_valores." where ".$condicion.";");
         //echo("update ".$table." set ".$campos_valores." where ".$condicion.";");
         //Estable a true la variable de control
@@ -361,17 +351,16 @@ class Data_Provider{
    //Método que permite eliminar registros de la BD
    public function eliminar_datos($table,$condicion){
 
-       //echo "delete from ".$table." where ".$condicion.";";
-       // Trae los datos de la bd que se van a eliminar, mediante la condición, nombre de la tabla, y todos los registros
+       //Trae los datos de la bd que se van a eliminar, mediante la condición, nombre de la tabla, y todos los registros
        $this->trae_datos($table, "*", $condicion);
        //Establece una variable cadena para armar los datos iniciales que se encuentran en la base de datos
         $valores_iniciales="Eliminacion - Valores anteriores de la tabla formato SELECT:\n ";
         //Verifica que haya sido encontrado el registro a eliminar
         if (count($this->getArreglo())>0){
-            // Agrega a la varaible valores iniciales la estructura completa del vector convertida a string
+            //Agrega a la varaible valores iniciales la estructura completa del vector convertida a string
             $valores_iniciales= $valores_iniciales ." ". implode(" - ",$this->getArreglo()[0]);
         }
-        // Agrega parte de la presentación para el campo correspondiente de la traza
+        //Agrega parte de la presentación para el campo correspondiente de la traza
         $valores_iniciales=$valores_iniciales . "\nA continuacion valores anteriores de la tabla formato arreglo:\n ";
         //Agrega a la variable los valores de cada uno de los campos del registro en cuestión
         $valores_iniciales=$valores_iniciales . serialize($this->getArreglo()[0]);
@@ -390,10 +379,10 @@ class Data_Provider{
             $cadena_sql=str_replace(","," - ","delete from ".$table." where ".$condicion.";");
             //echo("delete from ".$table." where ".$condicion.";");
        }    
-       //echo $consulta;
+        //echo $consulta;
         //Registro de la trazabilidad del sistema
         
-       //Reemplaza las comillas con espacios en blanco
+        //Reemplaza las comillas con espacios en blanco
         $cadena_sql=str_replace("'"," ",$cadena_sql);
         //Remplaza los paréntesis con paréntesis cuadrados
         $cadena_sql = str_replace("(","[",$cadena_sql);
@@ -407,7 +396,7 @@ class Data_Provider{
    //Método que permite eliminar registros de la BD
    public function eliminar_datos_para_prontuario($table,$condicion){
 
-       // Trae los datos de la bd que se van a eliminar, mediante la condición, nombre de la tabla, y todos los registros
+       //Trae los datos de la bd que se van a eliminar, mediante la condición, nombre de la tabla, y todos los registros
        $this->trae_datos($table, "*", $condicion);
               
         //Verifica si existe alguna condición de búsqueda

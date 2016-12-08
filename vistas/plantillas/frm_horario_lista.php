@@ -9,6 +9,9 @@
     <body>
         <?php require_once 'encabezado.php';?>
         <section class='container'>
+            <pre>
+                <?php print_r($horarios)?>
+            </pre>
             <h2>Listado General de Horarios</h2>
             <p>A continuación se detallan los diferentes horario registrados en el sistema</p>
             <table id="tabla5" class="display" cellspacing="0" width="100%">

@@ -128,18 +128,12 @@ class cls_telefono{
     }
     
     public function guardar_telefono(){
-        if($this->condicion==""){
-            $this->obj_data_provider->conectar();
-            $this->estado="1";
-            $this->obj_data_provider->inserta_datos("T_Telefono","Numero,ID_Tipo_Telefono, ID, Observaciones, Estado","'".$this->numero."','".$this->tipo_telefono."','".$this->id2."','".$this->observaciones."','".$this->estado."'");
-            $this->obj_data_provider->desconectar();
-            $this->resultado_operacion=$this->obj_data_provider->getResultado_operacion();  
-        }else{
-            $this->obj_data_provider->conectar();
-            $this->obj_data_provider->edita_datos("T_Telefono", "Numero='".$this->numero."', ID_Tipo_Telefono='".$this->tipo_telefono."', Observaciones='".$this->observaciones."'",$this->condicion);
-            $this->obj_data_provider->desconectar();
-            $this->resultado_operacion=true;
-        }
+        
+        $this->obj_data_provider->conectar();
+        $this->estado="1";
+         $this->obj_data_provider->inserta_datos("T_Telefono","Numero,ID_Tipo_Telefono, ID, Observaciones, Estado","'".$this->numero."','".$this->tipo_telefono."','".$this->id2."','".$this->observaciones."','".$this->estado."'");
+        $this->obj_data_provider->desconectar();
+        $this->resultado_operacion=$this->obj_data_provider->getResultado_operacion();  
     }
     
     
@@ -147,14 +141,6 @@ class cls_telefono{
         $this->obj_data_provider->conectar();
         $this->estado="1";
          $this->obj_data_provider->inserta_datos_para_prontuario("T_Telefono","Numero,ID_Tipo_Telefono, ID, Observaciones, Estado","'".$this->numero."','".$this->tipo_telefono."','".$this->id2."','".$this->observaciones."','".$this->estado."'");
-        $this->obj_data_provider->desconectar();
-        $this->resultado_operacion=$this->obj_data_provider->getResultado_operacion();  
-    }
-    
-     public function agrega_extension_cero_en_personas_sin_telefonos_asociados_para_prontuario(){
-        $this->obj_data_provider->conectar();
-        $this->estado="1";
-         $this->obj_data_provider->inserta_datos_para_prontuario_especial("t_telefono","Numero,ID_Tipo_Telefono,ID,Observaciones,Estado","Select 0,4,ID_Persona,'',1 From t_personal where not ID_Persona In (Select ID From t_telefono where ID_Tipo_Telefono in(4,27))");
         $this->obj_data_provider->desconectar();
         $this->resultado_operacion=$this->obj_data_provider->getResultado_operacion();  
     }

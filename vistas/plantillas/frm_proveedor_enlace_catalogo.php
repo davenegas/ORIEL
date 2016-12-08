@@ -1,4 +1,3 @@
-<!DOCTYPE HTML>
 <html lang="es">
     <head>
         <meta charset="utf-8"/>
@@ -8,7 +7,7 @@
         <script>
             //Funcion para ocultar ventana de mantenimiento de proveedor
             function ocultar_elemento(){
-                document.getElementById('formulario_oculto_1').style.display = "none";
+                document.getElementById('agregar_proveedor').style.display = "none";
             }
             //Valida informacion completa de formulario de proveedor
             function check_empty() {
@@ -18,7 +17,7 @@
                     //alert("Form Submitted Successfully...");
                     //Envia el formulario y lo oculta
                     document.getElementById('ventana').submit();
-                    document.getElementById('formulario_oculto_1').style.display = "none";
+                    document.getElementById('agregar_proveedor').style.display = "none";
                 }
             }
             //Funcion para agregar un nuevo proveedor- formulario en blanco
@@ -26,14 +25,14 @@
                 document.getElementById('ID_Proveedor').value="0";
                 document.getElementById('nombre').value=null;
                 document.getElementById('observaciones').value=null;
-                document.getElementById('formulario_oculto_1').style.display = "block";
+                document.getElementById('agregar_proveedor').style.display = "block";
             }
             //Funcion para editar informacion de proveedor
             function Editar_proveedor(id_prov,nomb, obser){
                 document.getElementById('ID_Proveedor').value=id_prov;
                 document.getElementById('nombre').value=nomb;
                 document.getElementById('observaciones').value=obser;
-                document.getElementById('formulario_oculto_1').style.display = "block";
+                document.getElementById('agregar_proveedor').style.display = "block";
             };
         </script>
     </head>
@@ -68,7 +67,7 @@
                 <?php }else {?>  
                     <td>Inactivo</td>
                 <?php }?>
-                <td><a href="index.php?ctl=proveedor_enlace_cambiar_estado&ide=<?php echo $params[$i]['ID_Proveedor']?>&estado=<?php echo $params[$i]['Estado']?>"> Activar/Desactivar</a></td>
+                <td><a> Activar/Desactivar</a></td>
                 <td><a role="button" onclick="Editar_proveedor(<?php echo $params[$i]['ID_Proveedor'];?>,'<?php echo $params[$i]['Nombre_Proveedor'];?>','<?php echo $params[$i]['Observaciones'];?>')"> 
                        Editar</a></td>
             </tr>     
@@ -80,10 +79,10 @@
             <?php require 'vistas/plantillas/pie_de_pagina.php' ?>
         
         <!--agregar o editar proveedor-->
-        <div id="formulario_oculto_1"> 
+        <div id="agregar_proveedor"> 
             <div id="popupventana">
                 <!--Formulario para proveedor de enlaces de telecomunicaciones-->
-                <form id="ventana" method="POST" name="form" action="index.php?ctl=proveedor_enlace_guardar">
+                <form id="ventana" method="POST" name="form" action="index.php?ctl=proveedor_enlace_catalogo">
                     <img id="close" src='vistas/Imagenes/cerrar.png' width="25" onclick ="ocultar_elemento()">
                     <h2>Proveedor de enlaces</h2>
                     <hr>

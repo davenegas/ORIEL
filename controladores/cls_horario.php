@@ -283,10 +283,4 @@ class cls_horario{
                 "', Observaciones='".$this->observaciones."', Estado='".$this->estado."'",$this->condicion);
         $this->obj_data_provider->desconectar();
     }
-    
-    public function eliminar_horario_puntobcr(){
-        $this->obj_data_provider->conectar();
-        $this->obj_data_provider->edita_datos("T_PuntoBCR", "ID_Horario=null", $this->condicion);
-        $this->obj_data_provider->desconectar();
-    }
 }

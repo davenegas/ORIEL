@@ -80,8 +80,7 @@
                 <td style="text-align:center"><?php echo $personas[$i]['Apellido_Nombre'];?></td>
                 <td style="text-align:center"><?php echo $personas[$i]['Departamento'];?></td>
                 <td style="text-align:center"><?php echo $personas[$i]['Numero'];?></td>
-                <td style="text-align:center"><a href="mailto:<?php echo $personas[$i]['Correo'];?>" title="Enviar correo electrónico"><?php echo $personas[$i]['Correo'];?></a></td>
-                <!--<td style="text-align:center"><?php echo $personas[$i]['Correo'];?></td>-->
+                <td style="text-align:center"><?php echo $personas[$i]['Correo'];?></td>
                 <td hidden><?php echo $personas[$i]['Observaciones'];?></td>
                 <td hidden><?php echo $personas[$i]['Observaciones_UE'];?></td>
             </tr>     
