@@ -41,8 +41,7 @@
                     <select class="form-control" id="Empresa" disabled name="Empresa"> 
                         <?php
                         $tam = count($empresas);
-                        for($i=0; $i<$tam;$i++)
-                        {
+                        for($i=0; $i<$tam;$i++){
                             if($empresas[$i]['ID_Empresa']==$params[0]['ID_Empresa']){
                                ?> <option value="<?php echo $empresas[$i]['ID_Empresa']?>" selected="selected"><?php echo $empresas[$i]['Empresa']?></option><?php
                             }   
@@ -51,189 +50,129 @@
                         <?php } }  ?>
                     </select>
                 </div>
-                <div class="col-md-8 espacio-abajo quitar-float">
+                <div class="col-md-12 espacio-abajo quitar-float">
                     <label for="nombre">Nombre y Apellidos</label>
-                    <input type="text" required readonly class="form-control" ALIGN="right" id="nombre" name="nombre" value="<?php echo $params[0]['Apellido_Nombre'];?>">
+                    <input type="text" class="form-control" ALIGN="right" id="nombre" name="nombre" value="<?php echo $params[0]['Apellido_Nombre'];?>">
                 </div>
                 <div class="col-md-4 espacio-abajo">
-                    <label for="observaciones">Observaciones</label>
-                    <input type="text" required readonly class="form-control" id="observaciones" name="observaciones" value="<?php echo $params[0]['Observaciones'];?>">
+                    <label for="fecha_nacimiento">Fecha de Nacimiento</label>
+                    <input type="text" class="form-control" ALIGN="right" id="fecha_nacimiento" name="fecha_nacimiento" value="<?php echo $params[0]['Apellido_Nombre'];?>">
                 </div>
-                <div class="col-md-8 espacio-abajo quitar-float">
-                    <label for="unidad_ejecutora">Unidad Ejecutora
-                        <?php if($_SESSION['modulos']['Editar- Personal']==1){ ?>
-                            <a id="popup" onclick="mostrar_lista_ue()" class="btn azul" role="button">- Editar</a>
-                        <?php } ?>
-                    </label>
-                    <input  type="text" required readonly class="form-control" id="nombre" name="nombre" value="<?php echo $params[0]['Departamento'];?>">
+                <div class="col-md-4 espacio-abajo">
+                    <label for="fecha_ingreso">Fecha de Ingreso</label>
+                    <input type="text" class="form-control" ALIGN="right" id="fecha_ingreso" name="fecha_ingreso" value="<?php echo $params[0]['Apellido_Nombre'];?>">
                 </div>
-                <div class="col-md-8 espacio-abajo">
-                    <label for="puesto">Puesto
-                         <?php if($_SESSION['modulos']['Editar- Personal']==1){ ?>
-                        <a id="popup" onclick="mostrar_lista_puesto()" class="btn azul" role="button">- Editar</a>
-                        <?php } ?>
-                    </label>
-                    <input type="text" required readonly class="form-control" id="nombre" name="nombre" value="<?php echo $params[0]['Puesto'];?>">
+                <div class="col-md-4 espacio-abajo">
+                    <label for="fecha_salida">Fecha de Ingreso</label>
+                    <input type="text" class="form-control" ALIGN="right" id="fecha_salida" name="fecha_salida" value="<?php echo $params[0]['Apellido_Nombre'];?>">
                 </div>
-                <div class="col-md-4 espacio-abajo espacio-arriba-15">
-                    <label for="numero_gafete">Número de Carné</label>
-                    <input type="text" required readonly class="form-control" id="numero_gafete" name="numero_gafete" value="<?php echo $params[0]['Numero_Gafete'];?>">
-                </div>                
-                <div class="col-md-8 espacio-abajo">
-                    <label for="direccion">Dirección</label>
-                    <input type="text" required readonly class="form-control" id="direccion" name="direccion" value="<?php echo $params[0]['Direccion'];?>">
+                <div class="col-md-4 espacio-abajo">
+                    <label for="fecha_residencia">Fecha de vencimiento Residencia</label>
+                    <input type="text" class="form-control" ALIGN="right" id="fecha_residencia" name="fecha_residencia" value="<?php echo $params[0]['Apellido_Nombre'];?>">
+                </div>
+                <div class="col-md-4 espacio-abajo">
+                    <label for="fecha_portacion">Fecha de vencimiento Portación</label>
+                    <input type="text" class="form-control" ALIGN="right" id="fecha_portacion" name="fecha_portacion" value="<?php echo $params[0]['Apellido_Nombre'];?>">
                 </div>
                 <div class="col-md-4 espacio-abajo">
                     <label for="correo">Correo</label>
-                    <input type="email" required readonly class="form-control" id="correo" name="correo" value="<?php echo $params[0]['Correo'];?>">
+                    <input type="text" class="form-control" ALIGN="right" id="correo" name="correo" value="<?php echo $params[0]['Apellido_Nombre'];?>">
                 </div>
-            </div>
-        </section>
-        
-        <!--Información de Número de teléfono de la persona-->
-        <section class="container bordegris">
-            <?php if($_SESSION['modulos']['Editar- Personal']==1){ ?>
-                <h3 class="quitar-float">Información de telefonos <a id="popup" onclick="mostrar_agregar_telefono()" class="btn azul" role="button">Agregar número</a></h3> 
-            <?php } else {?>
-                <h3 class="quitar-float">Información de telefonos</h3>
-            <?php } ?>
-            <table class="display col-md-12 table-striped quitar-float espacio-abajo" id="telefonos">
-                <thead> 
-                    <th style="text-align:center">Tipo de Teléfono</th>
-                    <th style="text-align:center">Número teléfono</th>
-                    <th style="text-align:center">Observaciones</th>
-                    <?php if($_SESSION['modulos']['Editar- Personal']==1){ ?>
-                    <th style="text-align:center" colspan="2">Opciones número</th>
-                    <?php } ?>
-                </thead>
-                <tbody>
-                    <?php 
-                    $tam=count($params);
-                    for ($i = 0; $i <$tam; $i++) {
-                    ?>
-                    <tr>
-                        <td style="text-align:center"><?php echo $params[$i]['Tipo_Telefono'];?></td>
-                        <td style="text-align:center"><?php echo $params[$i]['Numero'];?></td>
-                        <td style="text-align:center"><?php echo $params[$i]['Observaciones_Tel'];?></td>
-                        <?php if($_SESSION['modulos']['Editar- Personal']==1){  ?>
-                            <td style="text-align:center"><a class="btn azul" role="button" id="prueba" name="prueba" 
-                                    onclick="Editar_telefono(<?php echo $params[$i]['ID_Telefono'];?>,<?php echo $params[$i]['ID_Tipo_Telefono'];?>,<?php echo $params[$i]['Numero'];?>,'<?php echo $params[$i]['Observaciones_Tel'];?>')">
-                                Editar</a></td> 
-                            <td style="text-align:center"><a class="btn rojo" role="button" id="prueba" name="prueba" onclick="eliminar_telefono(<?php echo $params[$i]['ID_Telefono'];?>);">
-                                Eliminar</a></td>
-                               
-                        <?php } ?>
-                    </tr>
-                    <?php } ?>
-                </tbody> 
-            </table>
-            <a href="index.php?ctl=personal_listar" class="btn btn-default espacio-arriba" role="button">Volver</a>
-            <?php require_once 'pie_de_pagina.php' ?>
-        </section>
-        
-        
-        <!--agregar teléfono a la Persona-->
-        <div id="agregar_telefono"> 
-            <div id="popupventana">
-                <!--Formulario para ingresar nuevos números de teléfono-->
-                <form id="ventana" method="POST" name="form" action="index.php?ctl=personal_numero_telefono_guardar">
-                    <img id="close" src='vistas/Imagenes/cerrar.png' width="25" onclick ="ocultar_elemento()">
-                    <h2>Agregar número de teléfono</h2>
-                    <hr>
-                    <input hidden id="ID_Telefono" name="ID_Telefono" type="text">
-                    <input hidden id="ID_Persona" name="ID_Persona" type="text" value="<?php echo $params[0]['ID_Persona']; ?>">
-                    
-                    <label for="Tipo_Telefono">Tipo de Telefono</label>
-                        <select class="form-control espacio-abajo" id="Tipo_Telefono" name="Tipo_Telefono"> 
-                        <?php
-                        $tam = count($tipo_telefono);
-                        for($i=0; $i<$tam;$i++)
-                        {  
-                            if($tipo_telefono[$i]['ID_Tipo_Telefono']==27||$tipo_telefono[$i]['ID_Tipo_Telefono']==2||
-                                    $tipo_telefono[$i]['ID_Tipo_Telefono']==3||$tipo_telefono[$i]['ID_Tipo_Telefono']==4){?>
-                                <option value="<?php echo $tipo_telefono[$i]['ID_Tipo_Telefono']?>" ><?php echo $tipo_telefono[$i]['Tipo_Telefono']?></option>   
+                
+                <div class="col-md-4">
+                <label for="Provincia">Provincia</label>
+                    <select class="form-control" disabled id="Provincia" name="Provincia" > 
+                    <?php
+                        $tam = count($provincias);
+                        for($i=0; $i<$tam;$i++) {
+                            if($provincias[$i]['ID_Provincia']==$cantones[$distritos[$params[0]['ID_Distrito']]['ID_Canton']]['ID_Provincia']){
+                                ?><option value="<?php echo $provincias[$i]['ID_Provincia']?>" selected="selected"><?php echo $provincias[$i]['Nombre_Provincia']?></option><?php
+                            }   else    {?>
+                                <option value="<?php echo $provincias[$i]['ID_Provincia']?>" ><?php echo $provincias[$i]['Nombre_Provincia']?></option>   
+                            <?php }}  ?>
+                    </select>
+                </div>
+                
+                <div class="col-md-4">
+                <label for="Canton">Cantón</label>
+                    <select class="form-control" disabled id="Canton" name="Canton" > 
+                    <?php
+                    $tam = count($cantones);
+
+                    for($i=0; $i<$tam;$i++){
+                        if($cantones[$i]['ID_Canton']==$distritos[$params[0]['ID_Distrito']]['ID_Canton']){
+                           ?> <option value="<?php echo $cantones[$i]['ID_Canton']?>" selected="selected"><?php echo $cantones[$i]['Nombre_Canton']?></option><?php
+                        }
+                        else {?>
+                            <option value="<?php echo $cantones[$i]['ID_Canton']?>" ><?php echo $cantones[$i]['Nombre_Canton']?></option>   
+                    <?php }}  ?>
+                    </select>
+                </div>
+            
+                <div class="col-md-4">
+                    <label for="Distrito">Distrito</label>
+                    <select class="form-control" disabled id="Distrito" name="Distrito" > 
+                    <?php
+                    $tam = count($distritos);
+                    for($i=0; $i<$tam;$i++){
+                        if($distritos[$i]['ID_Distrito']==$params[0]['ID_Distrito']){
+                           ?> <option value="<?php echo $distritos[$i]['ID_Distrito']?>" selected="selected"><?php echo $distritos[$i]['Nombre_Distrito']?></option><?php
+                        }   else    {?>
+                            <option value="<?php echo $distritos[$i]['ID_Distrito']?>" ><?php echo $distritos[$i]['Nombre_Distrito']?></option>   
                         <?php }}  ?>
-                        </select>
-                    <label for="numero">Número de Teléfono</label>
-                    <input class="form-control espacio-abajo" maxlength="8" required id="numero" name="numero" placeholder="Número de teléfono - 8 digitos" type="text">
+                    </select>
+                </div>
+                <div class="col-md-12 espacio-abajo">
+                  <label for="Direccion">Direccion</label>
+                  <input type="text" required="required" readonly class="form-control" id="Direccion" name="Direccion" value="<?php echo $params[0]['Direccion'];?>">
+                </div>
+                <div class="col-md-4 espacio-abajo">
+                    <label for="estado_civil">Estado Civil</label>
+                    <select class="form-control" id="estado_civil" disabled name="estado_civil"> 
+                        <?php
+                        $tam = count($empresas);
+                        for($i=0; $i<$tam;$i++){
+                            if($empresas[$i]['ID_Empresa']==$params[0]['ID_Empresa']){
+                               ?> <option value="<?php echo $empresas[$i]['ID_Empresa']?>" selected="selected"><?php echo $empresas[$i]['Empresa']?></option><?php
+                            }   
+                            else { ?>
+                                <option value="<?php echo $empresas[$i]['ID_Empresa']?>" ><?php echo $empresas[$i]['Empresa']?></option>   
+                        <?php } }  ?>
+                    </select>
+                </div>
+                <div class="col-md-4 espacio-abajo">
+                    <label for="nacionalidad">Nacionalidad</label>
+                    <select class="form-control" id="nacionalidad" disabled name="nacionalidad"> 
+                        <?php
+                        $tam = count($empresas);
+                        for($i=0; $i<$tam;$i++){
+                            if($empresas[$i]['ID_Empresa']==$params[0]['ID_Empresa']){
+                               ?> <option value="<?php echo $empresas[$i]['ID_Empresa']?>" selected="selected"><?php echo $empresas[$i]['Empresa']?></option><?php
+                            }   
+                            else { ?>
+                                <option value="<?php echo $empresas[$i]['ID_Empresa']?>" ><?php echo $empresas[$i]['Empresa']?></option>   
+                        <?php } }  ?>
+                    </select>
+                </div>
+                <div class="col-md-4 espacio-abajo">
+                    <label for="nivel_academico">Nivel Academico</label>
+                    <select class="form-control" id="nivel_academico" disabled name="nivel_academico"> 
+                        <?php
+                        $tam = count($empresas);
+                        for($i=0; $i<$tam;$i++){
+                            if($empresas[$i]['ID_Empresa']==$params[0]['ID_Empresa']){
+                               ?> <option value="<?php echo $empresas[$i]['ID_Empresa']?>" selected="selected"><?php echo $empresas[$i]['Empresa']?></option><?php
+                            }   
+                            else { ?>
+                                <option value="<?php echo $empresas[$i]['ID_Empresa']?>" ><?php echo $empresas[$i]['Empresa']?></option>   
+                        <?php } }  ?>
+                    </select>
+                </div>
+                <div class="col-md-12 espacio-abajo">
                     <label for="observaciones">Observaciones</label>
-                    <textarea class="form-control espacio-abajo" id="observaciones" name="observaciones" placeholder="Observaciones del número"></textarea>
-                    <button><a href="javascript:%20check_empty()" id="submit">Guardar</a></button>
-                </form>
-            </div>
-        <!--Cierre agregar teléfono a Punto BCR-->
-        </div>
-        
-        <!--Asignar UE a la Persona-->
-        <div id="asignar_ue">
-            <div id="popupventana2">
-                <div id="ventana2">
-                <img id="close" src='vistas/Imagenes/cerrar.png' width="25" onclick ="ocultar_elemento()"> 
-                    <!--Tabla con la lista de Unidades Ejecutoras-->
-                    <table id="tabla2" class="display" cellspacing="0" width="100%">
-                    <thead>
-                      <tr>
-                        <th style="text-align:center">Unidad Ejecutora</th>
-                        <th style="text-align:center">Departamento</th>
-                        <th style="text-align:center">Observaciones</th>
-                        <th style="text-align:center">Opciones</th>
-                      </tr>
-                    </thead>
-
-                    <tbody>
-                      <?php 
-                      $tam=count($todas_ue);
-                      for ($i = 0; $i <$tam; $i++) { ?>  
-                        
-                      <tr>
-                        <td style="text-align:center"><?php echo $todas_ue[$i]['Numero_UE'];?></td>
-                        <td style="text-align:center"><?php echo $todas_ue[$i]['Departamento'];?></td>
-                        <td style="text-align:center"><?php echo $todas_ue[$i]['Observaciones'];?></td>
-                        <td style="text-align:center"><a class="btn" role="button" onclick="cambiar_ue(<?php echo $todas_ue[$i]['ID_Unidad_Ejecutora'];?>);">
-                                    Seleccionar UE</a></td>
-                      </tr>
-                      <?php } ?>
-                     </tbody>
-                  </table>
+                    <input type="text" class="form-control" ALIGN="right" id="observaciones" name="observaciones" value="<?php echo $params[0]['Apellido_Nombre'];?>">
                 </div>
             </div>
-        <!--Cierre Asignar UE a Punto BRC-->
-        </div> 
-        
-        <!--Asignar Puesto a la persona-->
-        <div id="asignar_area">
-            <div id="popupventana2">
-                <div id="ventana2">
-                <img id="close" src='vistas/Imagenes/cerrar.png' width="25" onclick ="ocultar_elemento()"> 
-                    <!--Tabla con la lista de Unidades Ejecutoras-->
-                    <table id="tabla3" class="display" cellspacing="0" width="100%">
-                    <thead>
-                      <tr>
-                        <th style="text-align:center">ID Puesto</th>
-                        <th style="text-align:center">Puesto</th>
-                        <th style="text-align:center">Observaciones</th>
-                        <th style="text-align:center">Opciones</th>
-                      </tr>
-                    </thead>
-
-                    <tbody>
-                      <?php 
-                      $tam=count($puestos);
-                      for ($i = 0; $i <$tam; $i++) { ?>  
-                        
-                      <tr>
-                        <td style="text-align:center"><?php echo $puestos[$i]['ID_Puesto'];?></td>
-                        <td style="text-align:center"><?php echo $puestos[$i]['Puesto'];?></td>
-                        <td style="text-align:center"><?php echo $puestos[$i]['Observaciones'];?></td>
-                        <td style="text-align:center"><a class="btn" role="button" onclick="cambiar_puesto(<?php echo $puestos[$i]['ID_Puesto'];?>);">
-                                    Seleccionar Puesto</a></td>
-                      </tr>
-                      <?php } ?>
-                     </tbody>
-                  </table>
-                </div>
-            </div>
-        <!--Cierre Asignar UE a Punto BRC-->
-        </div>
+        </section>
     </body>
 </html>

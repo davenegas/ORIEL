@@ -5540,11 +5540,16 @@
         if(isset($_SESSION['nombre'])){   
             if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 $obj_telefono = new cls_telefono();
-                $obj_telefono->setId($_POST['ID_Tipo_Telefono']);
+                $obj_telefono->setId($_POST['ID_Telefono']);
                 $obj_telefono->setId2($_POST['ID_PuntoBCR']);
                 $obj_telefono->setTipo_telefono($_POST['Tipo_Telefono']);
-                $obj_telefono->setNumero($_POST['numero']);
-                $obj_telefono->setObservaciones($_POST['observaciones']);
+                $obj_telefono->setNumero($_POST['numero_telefono']);
+                $obj_telefono->setObservaciones($_POST['observaciones_telefono']);
+                if($_POST['ID_Telefono']==0){
+                    $obj_telefono->setCondicion("");
+                }   else {
+                    $obj_telefono->setCondicion("ID_Telefono='".$_POST['ID_Telefono']."'");
+                }
                 $obj_telefono->guardar_telefono();
                 header("location:/ORIEL/index.php?ctl=gestion_punto_bcr&id=".$_POST['ID_PuntoBCR']);
             }

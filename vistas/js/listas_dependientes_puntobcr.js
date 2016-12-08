@@ -130,7 +130,7 @@ function ocultar_elemento(){
 ///////////////////////////////////////////////////////
 //Funciones para ventana oculta de Agregar Número PuntoBCR
 function check_empty() {
-    if (document.getElementById('numero').value == "") {
+    if (document.getElementById('numero_telefono').value == "") {
         alert("Digita un número de teléfono !");
     } else {
         //alert("Form Submitted Successfully...");
@@ -139,6 +139,11 @@ function check_empty() {
     }
 }
 function mostrar_agregar_telefono() {
+    $("#Tipo_Telefono option[value=1]").attr("selected",true);
+    document.getElementById('ID_Telefono').value="0";
+    document.getElementById('numero_telefono').value="";
+    document.getElementById('observaciones_telefono').value="";
+    
     document.getElementById('agregar_telefono').style.display = "block";
 }
 function eliminar_telefono(ide){
@@ -155,8 +160,13 @@ function eliminar_telefono(ide){
         }
     });
 }
-function editar_telefono(){
+function editar_telefono(id_tel, tipo_tel, num, obser){
+    $("#Tipo_Telefono option[value="+tipo_tel+"]").attr("selected",true);
+    document.getElementById('ID_Telefono').value=id_tel;
+    document.getElementById('numero_telefono').value=num;
+    document.getElementById('observaciones_telefono').value=obser;
     
+    document.getElementById('agregar_telefono').style.display = "block";
 }
 
 ////////////////////////////////////////////////////

@@ -91,7 +91,7 @@
                         <td style="text-align:center"><?php echo $telefonos[$i]['Numero'];?></td>
                         <td style="text-align:center"><?php echo $telefonos[$i]['Observaciones'];?></td>
                         <?php if($_SESSION['modulos']['Editar- Puntos BCR']==1){ ?>
-                            <td style="text-align:center"><a class="btn azul" role="button" onclick="editar_telefono(<?php echo $telefonos[$i]['ID_Telefono'];?>,'<?php echo $telefonos[$i]['ID_Tipo_Telefono'];?>',
+                            <td style="text-align:center"><a class="btn azul" role="button" onclick="editar_telefono(<?php echo $telefonos[$i]['ID_Telefono'];?>,<?php echo $telefonos[$i]['ID_Tipo_Telefono'];?>,
                                         '<?php echo $telefonos[$i]['Numero'];?>','<?php echo $telefonos[$i]['Observaciones'];?>');">
                                 Editar</a></td>
                             <td style="text-align:center"><a class="btn rojo" role="button" onclick="eliminar_telefono(<?php echo $telefonos[$i]['ID_Telefono'];?>);">
@@ -505,7 +505,7 @@
                     <img id="close" src='vistas/Imagenes/cerrar.png' width="25" onclick ="ocultar_elemento()">
                     <h2>Agregar número de Punto BCR</h2>
                     <hr>
-                    <input hidden id="ID_Tipo_Telefono" name="ID_Tipo_Telefono" type="text" value="0">
+                    <input hidden id="ID_Telefono" name="ID_Telefono" type="text" value="0">
                     <input hidden id="ID_PuntoBCR" name="ID_PuntoBCR" type="text" value="<?php echo $params[0]['ID_PuntoBCR']; ?>">
                     <label for="Tipo_Telefono">Tipo de Telefono</label>
                         <select class="form-control espacio-abajo" id="Tipo_Telefono" name="Tipo_Telefono"> 
@@ -519,10 +519,10 @@
                                 <option value="<?php echo $tipo_telefono[$i]['ID_Tipo_Telefono']?>" ><?php echo $tipo_telefono[$i]['Tipo_Telefono']?></option>   
                         <?php }}  ?>
                         </select>
-                    <label for="numero">Número de Teléfono</label>
-                    <input class="form-control espacio-abajo" maxlength="8" required id="numero" name="numero" placeholder="Número de teléfono - 8 digitos" type="text">
-                    <label for="numero">Observaciones</label>
-                    <textarea class="form-control espacio-abajo" id="observaciones" name="observaciones" placeholder="Observaciones del número"></textarea>
+                    <label for="numero_telefono">Número de Teléfono</label>
+                    <input class="form-control espacio-abajo" maxlength="8" required id="numero_telefono" name="numero_telefono" placeholder="Número de teléfono - 8 digitos" type="text">
+                    <label for="observaciones_telefono">Observaciones</label>
+                    <textarea class="form-control espacio-abajo" id="observaciones_telefono" name="observaciones_telefono" placeholder="Observaciones del número"></textarea>
                     <button><a href="javascript:%20check_empty()" id="submit">Guardar</a></button>
                     </form>
                 </div>
