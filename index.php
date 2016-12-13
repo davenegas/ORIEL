@@ -31,6 +31,7 @@ require_once __DIR__ . '/controladores/cls_puntosBCR.php';
 require_once __DIR__ . '/controladores/cls_empresa.php';
 //Libreria de clases --> Control de personal(interno y externo)
 require_once __DIR__ . '/controladores/cls_personal.php';
+require_once __DIR__ . '/controladores/cls_personal_externo.php';
 //Libreria de clases --> Control de horarios
 require_once __DIR__ . '/controladores/cls_horario.php';
 //Libreria de clases --> Control de direcciones IP
@@ -39,10 +40,18 @@ require_once __DIR__ . '/controladores/cls_direccionIP.php';
 require_once __DIR__ . '/controladores/cls_trazabilidad.php';
 //Libreria de clases --> Control de elementos y funcionalidades generales 
 require_once __DIR__ . '/controladores/cls_general.php';
+//Libreria de clases --> Control de Gerentes de Zona
+require_once __DIR__ . '/controladores/cls_gerente_zona.php';
 //Libreria de clases --> Control de teléfonos 
 require_once __DIR__ . '/controladores/cls_telefono.php';
 //Libreria de clases --> Control de unidades ejecutoras
 require_once __DIR__ . '/controladores/cls_unidad_ejecutora.php';
+//Libreria de clases --> Controladores de tipo telefono
+require_once __DIR__ . '/controladores/cls_tipo_telefono.php';
+//Libreria de clases --> Controladores de tipo punto
+require_once __DIR__ . '/controladores/cls_tipo_punto.php';
+//Libreria de clases --> Controladores supervisor de zona
+require_once __DIR__ . '/controladores/cls_supervisor_zona.php';
 //Libreria de clases --> Control de puestos 
 require_once __DIR__ . '/controladores/cls_puestos.php';
 //Libreria de clases --> Control de horarios
@@ -54,7 +63,15 @@ require_once __DIR__ . '/controladores/cls_medio_enlace.php';
 //Libreria de clases --> Control de padrones fotográficos para puntos BCR
 require_once __DIR__ . '/controladores/cls_padron_fotografico_puntosbcr.php';
 //Libreria de clases --> Control de enlaces del departamento de telecomunicaciones
-require_once __DIR__ . '/controladores/cls_enlace_telecom.php';
+require_once __DIR__ . '/controladores/cls_estado_civil.php';
+//
+require_once __DIR__ . '/controladores/cls_estado_persona.php';
+//
+require_once __DIR__ . '/controladores/cls_nacionalidad.php';
+//
+require_once __DIR__ . '/controladores/cls_nivel_academico.php';
+//
+require_once __DIR__ . '/controladores/cls_personal_externo.php';
 /*
  * El elemento controller, constituye la base y esencia de toda la lógica del negocio, en este
  * se almacenan cada una de las funcionales de ORIEl. El archivo en sí, se compone de "n" cantidad
@@ -137,6 +154,28 @@ $map = array(
     'unidad_ejecutora_guardar'=>array('controller'=>'Controller', 'action'=>'unidad_ejecutora_guardar'),
     'unidad_ejecutora_cambiar_estado'=>array('controller'=>'Controller', 'action'=>'unidad_ejecutora_cambiar_estado'),
    
+    //Controlador de Supervisor de Zona
+    'supervisor_zona_listar'=>array('controller'=>'Controller', 'action'=>'supervisor_zona_listar'),
+    'supervisor_zona_guardar'=>array('controller'=>'Controller', 'action'=>'supervisor_zona_guardar'),
+    'supervisor_zona_editar'=>array('controller'=>'Controller','action'=>'supervisor_zona_editar'),
+    'supervisor_zona_cambiar_estado'=>array('controller'=>'Controller', 'action'=>'supervisor_zona_cambiar_estado'),
+    
+    //Controlador de telefonos
+    'tipo_telefono_listar'=>array('controller'=>'Controller', 'action'=>'tipo_telefono_listar'),
+    'tipo_telefono_guardar'=>array('controller'=>'Controller', 'action'=>'tipo_telefono_guardar'),
+    'tipo_telefono_cambiar_estado'=>array('controller'=>'Controller', 'action'=>'tipo_telefono_cambiar_estado'),
+    
+    //Controlador de gerentes de zona
+    'gerente_zona_listar'=>array('controller'=>'Controller', 'action'=>'gerente_zona_listar'),
+    'gerente_zona_guardar'=>array('controller'=>'Controller', 'action'=>'gerente_zona_guardar'),
+    'gerente_zona_editar'=>array('controller'=>'Controller','action'=>'gerente_zona_editar'),
+    'gerente_zona_cambiar_estado'=>array('controller'=>'Controller', 'action'=>'gerente_zona_cambiar_estado'),
+    
+    //Controlador de Punto
+    'tipo_punto_listar'=>array('controller'=>'Controller', 'action'=>'tipo_punto_listar'),
+    'tipo_punto_guardar'=>array('controller'=>'Controller', 'action'=>'tipo_punto_guardar'),
+    'tipo_punto_cambiar_estado'=>array('controller'=>'Controller', 'action'=>'tipo_punto_cambiar_estado'),
+
     //Controlador de Horarios
     'horario_listar'=>array('controller'=>'Controller', 'action'=>'horario_listar'),
     'horario_gestion'=>array('controller'=>'Controller', 'action'=>'horario_gestion'),
@@ -184,7 +223,9 @@ $map = array(
     'area_apoyo_numero_telefono_guardar'=>array('controller'=>'Controller','action'=> 'area_apoyo_numero_telefono_guardar'),  
     
     //Controlador de Direcciones ip 
-    'direcciones_ip_listar'=>array('controller'=>'Controller','action'=> 'direcciones_ip_listar'), 
+    'direcciones_ip_listar'=>array('controller'=>'Controller','action'=> 'direcciones_ip_listar'),
+    'direcciones_ip_guardar'=>array('controller'=>'Controller', 'action'=>'direcciones_ip_guardar'),
+    'direcciones_ip_cambiar_estado'=>array('controller'=>'Controller', 'action'=>'direcciones_ip_cambiar_estado'),
     
     //Trazabilidad
     'frm_trazabilidad_listar'=>array('controller'=>'Controller','action'=> 'frm_trazabilidad_listar'),
@@ -217,13 +258,13 @@ $map = array(
     'eliminar_imagen_padron_puntobcr'=>array('controller'=>'Controller','action'=> 'eliminar_imagen_padron_puntobcr'), 
     'puntobcr_eliminar_horario'=>array('controller'=>'Controller','action'=> 'puntobcr_eliminar_horario'), 
    
-    //Empresas
+    //Controlador de Empresas
     'empresas_listar'=>array('controller'=>'Controller','action'=> 'empresas_listar'),
     'empresa_gestion'=>array('controller'=>'Controller','action'=> 'empresa_gestion'),
     'empresa_guardar'=>array('controller'=>'Controller','action'=> 'empresa_guardar'),
     'empresa_cambiar_estado'=>array('controller'=>'Controller','action'=> 'empresa_cambiar_estado'),
     
-    //Personal
+    //Controlador de Personal
     'personal_listar'=>array('controller'=>'Controller','action'=> 'personal_listar'), 
     'personal_cambiar_estado'=>array('controller'=>'Controller','action'=> 'personal_cambiar_estado'),
     'personal_gestion'=>array('controller'=>'Controller','action'=> 'personal_gestion'),
@@ -232,6 +273,10 @@ $map = array(
     'personal_cambiar_ue'=>array('controller'=>'Controller','action'=> 'personal_cambiar_ue'),
     'personal_cambiar_puesto'=>array('controller'=>'Controller','action'=> 'personal_cambiar_puesto'),
     'persona_guardar_informacion_general'=>array('controller'=>'Controller','action'=> 'persona_guardar_informacion_general'),
+    
+    //Controlador de Personal Externo
+    'personal_externo_listar'=>array('controller'=>'Controller','action'=> 'personal_externo_listar'), 
+    'personal_externo_gestion'=>array('controller'=>'Controller','action'=> 'personal_externo_gestion'), 
     
     //Importación de Prontuario
     'frm_importar_prontuario_paso_1'=>array('controller'=>'Controller','action'=> 'frm_importar_prontuario_paso_1'),

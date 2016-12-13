@@ -1,5 +1,5 @@
 <?php
- class cls_unidad_ejecutora{
+ class cls_tipo_punto{
     public $id;
     public $id2;
     public $obj_data_provider;
@@ -8,9 +8,9 @@
     private$condicion;
     public $estado;
     public $observaciones;
-    public $departamento;
-    public $numero_ue; 
-    public $id_ultima_ue_ingresada;
+    public $tipo;
+    public $numero_tp; 
+    public $id_ultima_tp_ingresada;
     
     
     function getArreglo2() {
@@ -21,12 +21,12 @@
         $this->arreglo2 = $arreglo2;
     }
 
-        function getId_ultima_ue_ingresada() {
-        return $this->id_ultima_ue_ingresada;
+        function getId_ultima_tp_ingresada() {
+        return $this->id_ultima_tp_ingresada;
     }
 
-    function setId_ultima_ue_ingresada($id_ultima_ue_ingresada) {
-        $this->id_ultima_ue_ingresada = $id_ultima_ue_ingresada;
+    function setId_ultima_tp_ingresada($id_ultima_tp_ingresada) {
+        $this->id_ultima_tp_ingresada = $id_ultima_tp_ingresada;
     }
     
     function getId() {
@@ -57,12 +57,12 @@
         return $this->observaciones;
     }
 
-    function getDepartamento() {
-        return $this->departamento;
+    function getTipo_Punto() {
+        return $this->tipo;
     }
 
-    function getNumero_ue() {
-        return $this->numero_ue;
+    function getID_Tipo_Punto() {
+        return $this->numero_tp;
     }
 
     function setId($id) {
@@ -93,12 +93,12 @@
         $this->observaciones = $observaciones;
     }
 
-    function setDepartamento($departamento) {
-        $this->departamento = $departamento;
+    function setTipo_Punto($tipo) {
+        $this->tipo = $tipo;
     }
 
-    function setNumero_ue($numero_ue) {
-        $this->numero_ue = $numero_ue;
+    function setID_Tipo_Punto($numero_tp) {
+        $this->numero_tp = $numero_tp;
     }
 
     public function __construct() {
@@ -110,23 +110,23 @@
         $this->obj_data_provider=new Data_Provider();
         $this->observaciones="";
         $this->estado="";
-        $this->departamento="";
-        $this->numero_ue=""; 
+        $this->tipo="";
+        $this->numero_tp=""; 
     }
     
     //Obtener el último id de evento para saber que se debe ingresar
-    function obtiene_id_ue_por_nombre(){
+    function obtiene_id_tp_por_nombre(){
     //Establece la conexión con la bd
       $this->obj_data_provider->conectar();
       
-      $this->obj_data_provider->trae_datos("t_unidadejecutora","ID_Unidad_Ejecutora","Departamento='".$this->departamento."'");
+      $this->obj_data_provider->trae_datos("t_tipopuntobcr","ID_Tipo_Punto","Tipo_Punto='".$this->tipo."'");
       
       $this->arreglo=$this->obj_data_provider->getArreglo();
      
       $this->obj_data_provider->desconectar();
       
       if (count($this->arreglo)>0){
-          $this->setId($this->arreglo[0]['ID_Unidad_Ejecutora']);
+          $this->setId($this->arreglo[0]['ID_Tipo_Punto']);
          
       }else
       {
@@ -134,11 +134,11 @@
       }   
   }
     
-    public function obtener_unidades_ejecutoras() {
+    public function obtener_tipo_punto() {
         $this->obj_data_provider->conectar();
         if($this->condicion==""){
             $this->arreglo=$this->obj_data_provider->trae_datos(
-                    "T_UnidadEjecutora", 
+                    "T_TipoPuntoBCR", 
                     "*",
                     "");
             $this->arreglo=$this->obj_data_provider->getArreglo();
@@ -147,7 +147,7 @@
         }
         else{
             $this->arreglo=$this->obj_data_provider->trae_datos(
-                    "T_UnidadEjecutora", 
+                    "T_TipoPuntoBCR", 
                     "*",
                     $this->condicion);
             $this->arreglo=$this->obj_data_provider->getArreglo();
@@ -156,131 +156,129 @@
         }
     }
     
-    public function agregar_puntobcr_ue(){
+    public function agregar_puntobcr_tp(){
         $this->obj_data_provider->conectar();
-        $this->obj_data_provider->inserta_datos("T_UE_PuntoBCR", "ID_PuntoBCR, ID_Unidad_Ejecutora", "'".$this->id2."','".$this->id."'");
+        $this->obj_data_provider->inserta_datos("T_TT_PuntoBCR", "ID_PuntoBCR, ID_Tipo_Punto", "'".$this->id2."','".$this->id."'");
         $this->obj_data_provider->desconectar();
     }
-    public function eliminar_relacion_puntobcr_ue(){
+    public function eliminar_relacion_puntobcr_tp(){
         $this->obj_data_provider->conectar();
-        $this->obj_data_provider->eliminar_datos("T_UE_PuntoBCR", "ID_PuntoBCR='".$this->id2."' AND ID_Unidad_Ejecutora='".$this->id."'");
-        $this->obj_data_provider->desconectar();
-    }
-    
-     public function agregar_nueva_ue(){
-        $this->obj_data_provider->conectar();
-        $this->obj_data_provider->inserta_datos("t_unidadejecutora", "Numero_UE, Departamento, Observaciones,Estado", "'".$this->numero_ue."','".$this->departamento."','".$this->observaciones."','".$this->estado."'");
+        $this->obj_data_provider->eliminar_datos("T_TT_PuntoBCR", "ID_PuntoBCR='".$this->id2."' AND ID_Tipo_Punto='".$this->id."'");
         $this->obj_data_provider->desconectar();
     }
     
-    public function agregar_nueva_ue_para_prontuario(){
+     public function agregar_nueva_tp(){
         $this->obj_data_provider->conectar();
-        $this->obj_data_provider->inserta_datos_para_prontuario("t_unidadejecutora", "Numero_UE, Departamento, Observaciones,Estado", "'".$this->numero_ue."','".$this->departamento."','".$this->observaciones."','".$this->estado."'");
+        $this->obj_data_provider->inserta_datos("t_tipopuntobcr", "ID_Tipo_Punto, Tipo_Punto, Observaciones, Estado", "null,'".$this->tipo."','".$this->observaciones."','".$this->estado."'");
+        $this->obj_data_provider->desconectar();
+    }
+    
+    public function agregar_nueva_tp_para_prontuario(){
+        $this->obj_data_provider->conectar();
+        $this->obj_data_provider->inserta_datos_para_prontuario("t_tipopuntobcr", "ID_Tipo_Punto, Tipo_Punto, Observaciones, Estado", "null,'".$this->tipo."','".$this->observaciones."','".$this->estado."'");
         $this->obj_data_provider->desconectar();
     }
     
     //Este metodo realiza la modificación del estado del modulo, de activo a inactivo o viceversa en la bd
-    function edita_ue(){
+    function edita_tp(){
         $this->obj_data_provider->conectar();
-        
         //Llama al metodo para editar los datos correspondientes
-        $this->obj_data_provider->edita_datos("t_unidadejecutora","Numero_UE='".$this->numero_ue."',Departamento='".$this->departamento."',Observaciones='".$this->observaciones."',Estado='".$this->estado."'",$this->condicion);
+        $this->obj_data_provider->edita_datos("t_tipopuntobcr","Tipo_Punto='".$this->tipo."',Observaciones='".$this->observaciones."',Estado='".$this->estado."'",$this->condicion);
         //Metodo de la clase data provider que desconecta la sesión con la base de datos
         $this->obj_data_provider->desconectar();
        
     }
     
     //Este metodo realiza la modificación del estado del modulo, de activo a inactivo o viceversa en la bd
-    function edita_ue_para_prontuario(){
+    function edita_tp_para_prontuario(){
         $this->obj_data_provider->conectar();
         
         //Llama al metodo para editar los datos correspondientes
-        $this->obj_data_provider->edita_datos_para_prontuario("t_unidadejecutora","Numero_UE='".$this->numero_ue."',Departamento='".$this->departamento."',Observaciones='".$this->observaciones."',Estado='".$this->estado."'",$this->condicion);
+        $this->obj_data_provider->edita_datos_para_prontuario("t_tipopuntobcr","ID_Tipo_Punto='".$this->numero_tt."',Tipo='".$this->tipo."',Observaciones='".$this->observaciones."',Estado='".$this->estado."'",$this->condicion);
         //Metodo de la clase data provider que desconecta la sesión con la base de datos
         $this->obj_data_provider->desconectar();
        
     }
 
      //Obtener el último id de evento para saber que se debe ingresar
-    function obtiene_id_ultima_ue_ingresada(){
+    function obtiene_id_ultima_tp_ingresada(){
       //Establece la conexión con la bd
       $this->obj_data_provider->conectar();
       
-      $this->obj_data_provider->trae_datos("t_unidadejecutora","max(ID_Unidad_Ejecutora) ID_Unidad_Ejecutora","");
+      $this->obj_data_provider->trae_datos("t_tipopuntobcr","max(ID_Tipo_Punto) ID_Tipo_Punto","");
       
       $this->arreglo2=$this->obj_data_provider->getArreglo();
      
       $this->obj_data_provider->desconectar();
       
       if (count($this->arreglo2)>0){
-          $this->setId_ultima_ue_ingresada($this->arreglo2[0]['ID_Unidad_Ejecutora']);
+          $this->setId_ultima_tp_ingresada($this->arreglo2[0]['ID_Tipo_Punto']);
          
       }else
       {
-          $this->setId_ultima_ue_ingresada(0);
+          $this->setId_ultima_tp_ingresada(0);
       }   
   }
      //Este metodo realiza la modificación del estado del modulo, de activo a inactivo o viceversa en la bd
-    function edita_ue_de_personas(){
+    function edita_tp_de_personas(){
         $this->obj_data_provider->conectar();
         
         //Llama al metodo para editar los datos correspondientes
-        $this->obj_data_provider->edita_datos("t_personal","ID_Unidad_Ejecutora=".$this->id_ultima_ue_ingresada,$this->condicion);
+        $this->obj_data_provider->edita_datos("t_personal","ID_Tipo_Punto=".$this->id_ultima_tp_ingresada,$this->condicion);
         //Metodo de la clase data provider que desconecta la sesión con la base de datos
         $this->obj_data_provider->desconectar();
        
     }
     
      //Este metodo realiza la modificación del estado del modulo, de activo a inactivo o viceversa en la bd
-    function edita_ue_de_personas_para_prontuario(){
+    function edita_tp_de_personas_para_prontuario(){
         $this->obj_data_provider->conectar();
-        
         //Llama al metodo para editar los datos correspondientes
-        $this->obj_data_provider->edita_datos_para_prontuario("t_personal","ID_Unidad_Ejecutora=".$this->id_ultima_ue_ingresada,$this->condicion);
+        $this->obj_data_provider->edita_datos_para_prontuario("t_personal","ID_Tipo_Punto=".$this->id_ultima_tp_ingresada,$this->condicion);
         //Metodo de la clase data provider que desconecta la sesión con la base de datos
         $this->obj_data_provider->desconectar();
        
     }
     
       //Este metodo realiza la modificación del estado del modulo, de activo a inactivo o viceversa en la bd
-    function edita_ue_de_sitios_bcr(){
+    function edita_tp_de_sitios_bcr(){
         $this->obj_data_provider->conectar();
         
         //Llama al metodo para editar los datos correspondientes
-        $this->obj_data_provider->edita_datos("t_ue_puntobcr","ID_Unidad_Ejecutora=".$this->id_ultima_ue_ingresada,$this->condicion);
+        $this->obj_data_provider->edita_datos("t_tt_puntobcr","ID_Tipo_Punto=".$this->id_ultima_tp_ingresada,$this->condicion);
         //Metodo de la clase data provider que desconecta la sesión con la base de datos
         $this->obj_data_provider->desconectar();
        
     }
     
       //Este metodo realiza la modificación del estado del modulo, de activo a inactivo o viceversa en la bd
-    function edita_ue_de_sitios_bcr_para_prontuario(){
+    function edita_tp_de_sitios_bcr_para_prontuario(){
         $this->obj_data_provider->conectar();
         
         //Llama al metodo para editar los datos correspondientes
-        $this->obj_data_provider->edita_datos_para_prontuario("t_ue_puntobcr","ID_Unidad_Ejecutora=".$this->id_ultima_ue_ingresada,$this->condicion);
+        $this->obj_data_provider->edita_datos_para_prontuario("t_tt_puntobcr","ID_Tipo_Punto=".$this->id_ultima_tp_ingresada,$this->condicion);
         //Metodo de la clase data provider que desconecta la sesión con la base de datos
         $this->obj_data_provider->desconectar();
        
     }
-     function eliminar_ue_sobrantes_para_prontuario(){
+     function eliminar_tp_sobrantes_para_prontuario(){
           
         $this->obj_data_provider->conectar();
-        $this->obj_data_provider->eliminar_datos_para_prontuario("t_unidadejecutora", $this->condicion);
+        $this->obj_data_provider->eliminar_datos_para_prontuario("t_tipopuntobcr", $this->condicion);
         $this->obj_data_provider->desconectar();
   
     }
-    function eliminar_ue_sobrantes(){
+    function eliminar_tp_sobrantes(){
           
         $this->obj_data_provider->conectar();
-        $this->obj_data_provider->eliminar_datos("t_unidadejecutora", $this->condicion);
+        $this->obj_data_provider->eliminar_datos("t_tipopuntobcr", $this->condicion);
         $this->obj_data_provider->desconectar();
   
     }
-    function cambiar_estado_ue(){
+    function cambiar_estado_tp(){
         
         $this->obj_data_provider->conectar();
-        $this->obj_data_provider->edita_datos("t_unidadejecutora","Estado='".$this->estado."'",$this->condicion);
+        $this->obj_data_provider->edita_datos("t_tipopuntobcr","Estado='".$this->estado."'",$this->condicion);
         $this->obj_data_provider->desconectar();
     }
  }?>

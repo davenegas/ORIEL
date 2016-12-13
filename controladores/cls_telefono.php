@@ -128,12 +128,18 @@ class cls_telefono{
     }
     
     public function guardar_telefono(){
-        
-        $this->obj_data_provider->conectar();
-        $this->estado="1";
-         $this->obj_data_provider->inserta_datos("T_Telefono","Numero,ID_Tipo_Telefono, ID, Observaciones, Estado","'".$this->numero."','".$this->tipo_telefono."','".$this->id2."','".$this->observaciones."','".$this->estado."'");
-        $this->obj_data_provider->desconectar();
-        $this->resultado_operacion=$this->obj_data_provider->getResultado_operacion();  
+        if($this->condicion==""){
+            $this->obj_data_provider->conectar();
+            $this->estado="1";
+            $this->obj_data_provider->inserta_datos("T_Telefono","Numero,ID_Tipo_Telefono, ID, Observaciones, Estado","'".$this->numero."','".$this->tipo_telefono."','".$this->id2."','".$this->observaciones."','".$this->estado."'");
+            $this->obj_data_provider->desconectar();
+            $this->resultado_operacion=$this->obj_data_provider->getResultado_operacion();  
+        }else{
+            $this->obj_data_provider->conectar();
+            $this->obj_data_provider->edita_datos("T_Telefono", "Numero='".$this->numero."', ID_Tipo_Telefono='".$this->tipo_telefono."', Observaciones='".$this->observaciones."'",$this->condicion);
+            $this->obj_data_provider->desconectar();
+            $this->resultado_operacion=true;
+        }
     }
     
     

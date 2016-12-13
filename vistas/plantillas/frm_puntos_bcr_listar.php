@@ -26,7 +26,7 @@
         <table id="tabla" class="display" cellspacing="0" width="100%">
             <thead>
                 <tr>
-                    <th style="text-align:center">ID Punto</th>
+                    <th hidden style="text-align:center">ID Punto</th>
                     <th style="text-align:center">Nombre</th>
                     <th style="text-align:center">Unidad Ejecutora</th>
                     <th style="text-align:center">Codigo</th>
@@ -53,7 +53,7 @@
                 if($_SESSION['modulos']['Editar Estado- Puntos BCR']==1||$params[$i]['Estado_Punto']==1){    
                 ?>
                 <tr>
-                    <td style="text-align:center"><?php echo $params[$i]['ID_PuntoBCR'];?></td>
+                    <td hidden style="text-align:center"><?php echo $params[$i]['ID_PuntoBCR'];?></td>
                     <td style="text-align:center"><?php echo $params[$i]['Nombre'];?></td>
                     <td style="text-align:center"><?php echo $params[$i]['Departamento'];?></td>
                     <td style="text-align:center"><?php echo $params[$i]['Codigo'];?></td>
