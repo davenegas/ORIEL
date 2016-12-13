@@ -58,7 +58,7 @@
                         <th style="text-align:center" >Tipo de Direccion IP</th>
                         <th style="text-align:center" >Direccion IP</th>
                         <th style="text-align:center" >Observaciones</th>
-                        <th style="text-align:center" >Mantenimiento</th>
+                        <th style="text-align:center" >Editar Direccion IP</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -68,14 +68,14 @@
                         ?>
                         <tr>
                             
-                           <td style="text-align:center"><?php echo $params[$i]['Tipo_IP']; ?></td>
-                           <td style="text-align:center"><?php echo $params[$i]['Direccion_IP']; ?></td>
-                           <td style="text-align:center"><?php echo $params[$i]['Observaciones']; ?></td> 
+                            <td style="text-align:center"><?php echo $params[$i]['Tipo_IP']; ?></td>
+                            <td style="text-align:center"><?php echo $params[$i]['Direccion_IP']; ?></td>
+                            <td style="text-align:center"><?php echo $params[$i]['Observaciones']; ?></td> 
 
-                           <td style="text-align:center"><a role="button" onclick="edita_ip('<?php echo $params[$i]['ID_Direccion_IP'];?>','<?php echo $params [$i]['ID_Tipo_IP'];?>',
+                            <td><a role="button" onclick="edita_ip('<?php echo $params[$i]['ID_Direccion_IP'];?>','<?php echo $params [$i]['ID_Tipo_IP'];?>',
                            '<?php echo $params [$i]['Direccion_IP'];?>','<?php echo $params [$i]['Observaciones'];?>')">
                     
-                    Editar IP</a></td>
+                    Editar</a></td>
                     
                         </tr>     
 
