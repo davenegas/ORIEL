@@ -5,7 +5,7 @@
     public $obj_data_provider;
     public $arreglo;
     public $arreglo2;
-    private$condicion;
+    private $condicion;
     public $estado;
     public $observaciones;
     public $departamento;
@@ -102,7 +102,6 @@
     }
 
     public function __construct() {
-        
         $this->id="";
         $this->id2="";
         $this->condicion="";
@@ -118,19 +117,15 @@
     function obtiene_id_ue_por_nombre(){
     //Establece la conexión con la bd
       $this->obj_data_provider->conectar();
-      
       $this->obj_data_provider->trae_datos("t_unidadejecutora","ID_Unidad_Ejecutora","Departamento='".$this->departamento."'");
-      
       $this->arreglo=$this->obj_data_provider->getArreglo();
-     
       $this->obj_data_provider->desconectar();
       
       if (count($this->arreglo)>0){
-          $this->setId($this->arreglo[0]['ID_Unidad_Ejecutora']);
-         
+        $this->setId($this->arreglo[0]['ID_Unidad_Ejecutora']);
       }else
       {
-          $this->setId(0);
+        $this->setId(0);
       }   
   }
     
@@ -280,7 +275,9 @@
     function cambiar_estado_ue(){
         
         $this->obj_data_provider->conectar();
+        //Llama al metodo para editar los datos correspondientes
         $this->obj_data_provider->edita_datos("t_unidadejecutora","Estado='".$this->estado."'",$this->condicion);
+        //Metodo de la clase data provider que desconecta la sesión con la base de datos
         $this->obj_data_provider->desconectar();
     }
  }?>

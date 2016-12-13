@@ -60,6 +60,8 @@ require_once __DIR__ . '/controladores/cls_proveedor_enlace.php';
 require_once __DIR__ . '/controladores/cls_tipo_enlace.php';
 //Libreria de clases --> Control de medios de enlace
 require_once __DIR__ . '/controladores/cls_medio_enlace.php';
+//Libreria de clases --> Control de enlace de Telecom
+require_once __DIR__ . '/controladores/cls_enlace_telecom.php';
 //Libreria de clases --> Control de padrones fotográficos para puntos BCR
 require_once __DIR__ . '/controladores/cls_padron_fotografico_puntosbcr.php';
 //Libreria de clases --> Control de enlaces del departamento de telecomunicaciones

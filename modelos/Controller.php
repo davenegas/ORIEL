@@ -372,7 +372,7 @@ class Controller{
             // Variables para pintar resultados en pantalla al usuarios
             /*
              * Resumen de total de UE, nuevas UE, unidades inactivas y editadas.
-             */
+             */       
             $total_unidades_ejecutoras="Se identificaron un total de ".count($unidades_ejecutoras)." unidades ejecutoras en el prontuario adjunto.";
             $nuevas_unidades_ejecutoras="Se agregaron un total de ".$nuevas." unidades ejecutoras nuevas al sistema.";
             $unidades_inactivas="Se identificaron un total de ".$cuenta_ue_inactivas." unidades ejecutoras no ligadas a ninguna persona ni punto BCR (probablemente estan en desuso o inactivas).";
