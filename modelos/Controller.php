@@ -1,7 +1,7 @@
  <?php
-
+ 
 //Definición de la clase Controller. Componente principal de la lógica del negocio. 
- class Controller{
+class Controller{
      
      //Declaración de métodos que envuelven toda la funcionalidad del sistema
      /*
