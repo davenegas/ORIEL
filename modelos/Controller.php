@@ -49,9 +49,9 @@
         //Llamada al formulario correspondiente de la vista
         require __DIR__ . '/../vistas/plantillas/frm_contacto_publico.php';
     }
-    //////////////////////////
+    /////////////////////////////////////////////////////////////////////
     /*Metodos relacionados del area de Modulos de Seguridad del Sistema*/
-    //////////////////////////
+    /////////////////////////////////////////////////////////////////////
      
     // Metodo que llama al formulario correspondiente para validación de credenciales por parte del usuario
     public function iniciar_sesion(){
@@ -4814,9 +4814,9 @@
     }
     
     
-    //////////////////////////
+    /////////////////////////////////////////////////////////////////////////////
     /*Metodos relacionados del area de Tipos de Evento de Seguridad del Sistema*/
-    //////////////////////////
+    /////////////////////////////////////////////////////////////////////////////
     
     public function tipo_eventos_listar(){      
         if(isset($_SESSION['nombre'])){
@@ -6316,19 +6316,40 @@
             $obj_direcciones->setCondicion("");
             $obj_direcciones->obtiene_direccionesIP();
             $params= $obj_direcciones->getArreglo();
+            $obj_direcciones->obtiene_tipo_direcciones_ip();
+            $tipo_IP = $obj_direcciones->getArreglo();
+            
             
             require __DIR__ . '/../vistas/plantillas/frm_direcciones_ip_listar.php';
         }else{
-              /*
-             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
-             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
-             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
-             * En la última línea llama a la pagina de inicio de sesión.
-             */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         } 
+    }
+   public function direcciones_ip_guardar() {
+          if(isset($_SESSION['nombre'])){
+               $obj_tipo_ip = new cls_direccionIP();
+               $obj_tipo_ip->setTipo_IP($_POST['nombre']);
+               $obj_tipo_ip->setDireccionIP($_POST['numero']); 
+               $obj_tipo_ip->setObservaciones($_POST['observaciones']);
+               
+              if ($_POST['ID_Direccion_IP']==0){
+                   $obj_tipo_ip->agregar_direccion_ip();
+                }else{
+                           $obj_tipo_ip->setCondicion("ID_Direccion_IP='".$_POST['ID_Direccion_IP']."'");
+                           $obj_tipo_ip->edita_ip();
+                }       
+                   
+           $obj_tipo_ip->setCondicion("");    
+           $obj_tipo_ip->obtiene_direccionesIP();
+           $params =$obj_tipo_ip->getArreglo();
+           require __DIR__.'/../vistas/plantillas/frm_direcciones_ip_listar.php';
+        }else {
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }  
     }
     
     ////////////////////////////////////////////////////////////////////////////
@@ -6820,94 +6841,389 @@
         }
     }
 
+     ////////////////////////////////////////////////////////////////////////////
+    ///////////////////////Funciones de Unidades Ejecutoras/////////////////////          
     ////////////////////////////////////////////////////////////////////////////
-    /////////////////////Funciones para Unidades Ejecutoras/////////////////////
-    ////////////////////////////////////////////////////////////////////////////
-    
-    public function unidad_ejecutora_listar(){
+    public function unidad_ejecutora_listar() {
        if(isset($_SESSION['nombre'])){
-            $obj_unidad_ejecutora = new cls_unidad_ejecutora();
-            $obj_unidad_ejecutora->obtener_unidades_ejecutoras();
-            $params = $obj_unidad_ejecutora->getArreglo();
-            
+           $obj_unidad_ejecutora = new cls_unidad_ejecutora();
+           $obj_unidad_ejecutora->obtener_unidades_ejecutoras();
+           $params =$obj_unidad_ejecutora->getArreglo();
+           
             require __DIR__.'/../vistas/plantillas/frm_unidad_ejecutora_catalogo.php';
         }
         else {
-              /*
-             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
-             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
-             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
-             * En la última línea llama a la pagina de inicio de sesión.
-             */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
-        } 
+        }  
     }
-    
     public function unidad_ejecutora_guardar() {
-        if(isset($_SESSION['nombre'])){
-            $obj_unidad_ejecutora = new cls_unidad_ejecutora();
-            $obj_unidad_ejecutora->setNumero_ue($_POST['numero']);
-            $obj_unidad_ejecutora->setDepartamento($_POST['nombre']);
-            $obj_unidad_ejecutora->setObservaciones($_POST['observaciones']);            
-            
-            if($_POST['ID_Unidad_Ejecutora']==0){
-                $obj_unidad_ejecutora->setEstado(1);
-                $obj_unidad_ejecutora->agregar_nueva_ue();
-            }else{
-                $obj_unidad_ejecutora->setEstado($_POST['estado']);
-                $obj_unidad_ejecutora->setCondicion("ID_Unidad_Ejecutora='".$_POST['ID_Unidad_Ejecutora']."'");
-                $obj_unidad_ejecutora->edita_ue();
-            }
-            $obj_unidad_ejecutora->setCondicion("");
-            $obj_unidad_ejecutora->obtener_unidades_ejecutoras();
-            $params = $obj_unidad_ejecutora->getArreglo();
-            require __DIR__.'/../vistas/plantillas/frm_unidad_ejecutora_catalogo.php';
+          if(isset($_SESSION['nombre'])){
+               $obj_unidad_ejecutora = new cls_unidad_ejecutora();
+               $obj_unidad_ejecutora->setDepartamento($_POST['nombre']);
+               $obj_unidad_ejecutora->setNumero_ue($_POST['numero']); 
+               $obj_unidad_ejecutora->setObservaciones($_POST['observaciones']);
+               
+                if ($_POST['ID_Unidad_Ejecutora']==0){
+                   $obj_unidad_ejecutora->setEstado(1);
+                   $obj_unidad_ejecutora->agregar_nueva_ue();
+                }else{
+                           $obj_unidad_ejecutora->setEstado($_POST['estado']);
+                           $obj_unidad_ejecutora->setCondicion("ID_Unidad_Ejecutora='".$_POST['ID_Unidad_Ejecutora']."'");
+                           $obj_unidad_ejecutora->edita_ue();
+                   
+                }       
+           $obj_unidad_ejecutora->setCondicion("");    
+           $obj_unidad_ejecutora->obtener_unidades_ejecutoras();
+           $params =$obj_unidad_ejecutora->getArreglo();
+           require __DIR__.'/../vistas/plantillas/frm_unidad_ejecutora_catalogo.php';
         }
         else {
-              /*
-             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
-             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
-             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
-             * En la última línea llama a la pagina de inicio de sesión.
-             */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
-        }
+        }  
     }
-    
-    public function unidad_ejecutora_cambiar_estado() {
-         if(isset($_SESSION['nombre'])){
-            $obj_unidad_ejecutora = new cls_unidad_ejecutora();
-            //Valida el estado que envia por parametro y lo invierta para almacernarlo en BD
-            if($_GET['estado']==1){
+     public function unidad_ejecutora_cambiar_estado() {
+       if(isset($_SESSION['nombre'])){
+           $obj_unidad_ejecutora = new cls_unidad_ejecutora();
+           
+           if ($_GET['estado']==1){
+               
                $obj_unidad_ejecutora->setEstado("0");
-            } else{
-                $obj_unidad_ejecutora->setEstado("1");
-            }
-            //Condición para editar estado de unidad ejecutora
-            $obj_unidad_ejecutora->setCondicion("ID_Unidad_Ejecutora='".$_GET['ide']."'");
-            $obj_unidad_ejecutora->cambia_estado_ue();           
-            
-            //Carga nuevamente la lista de unidades ejecutoras
-            $obj_unidad_ejecutora->setCondicion("");
-            $obj_unidad_ejecutora->obtener_unidades_ejecutoras();
-            $params = $obj_unidad_ejecutora->getArreglo();
+               
+           }else {
+               
+               $obj_unidad_ejecutora->setestado("1");
+           }
+           $obj_unidad_ejecutora->setCondicion("ID_Unidad_Ejecutora='".$_GET['id']."'");
+           $obj_unidad_ejecutora->cambiar_estado_ue();
+           $obj_unidad_ejecutora->setCondicion("");    
+           $obj_unidad_ejecutora->obtener_unidades_ejecutoras();
+           $params =$obj_unidad_ejecutora->getArreglo();
             require __DIR__.'/../vistas/plantillas/frm_unidad_ejecutora_catalogo.php';
         }
         else {
-            /*
-             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
-             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
-             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
-             * En la última línea llama a la pagina de inicio de sesión.
-             */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
-        }    
+        }  
     }
+////////////////////////////////////////////////////////////////////////////
+    ///////////////////////Funciones de Tipo Telefono/////////////////////          
+    ////////////////////////////////////////////////////////////////////////////
+    public function tipo_telefono_listar() {
+       if(isset($_SESSION['nombre'])){
+           $obj_tipo_telefono = new cls_tipo_telefono();
+           $obj_tipo_telefono->obtener_tipo_telefono();
+           $params =$obj_tipo_telefono->getArreglo();
+           
+            require __DIR__.'/../vistas/plantillas/frm_tipo_telefono_catalogo.php';
+        }
+        else {
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }  
+    }  public function tipo_telefono_guardar() {
+          if(isset($_SESSION['nombre'])){
+               $obj_tipo_telefono = new cls_tipo_telefono();
+               $obj_tipo_telefono->setTipo_Telefono($_POST['nombre']); 
+               $obj_tipo_telefono->setObservaciones($_POST['observaciones']);
+               
+                if ($_POST['ID_Tipo_Telefono']==0){
+                   $obj_tipo_telefono->setEstado(1);
+                   $obj_tipo_telefono->agregar_nueva_tt();
+                }else{
+                           $obj_tipo_telefono->setEstado($_POST['estado']);
+                           $obj_tipo_telefono->setCondicion("ID_Tipo_Telefono='".$_POST['ID_Tipo_Telefono']."'");
+                           $obj_tipo_telefono->edita_tt();
+                   
+                }       
+           $obj_tipo_telefono->setCondicion("");    
+           $obj_tipo_telefono->obtener_tipo_telefono();
+           $params =$obj_tipo_telefono->getArreglo();
+           require __DIR__.'/../vistas/plantillas/frm_tipo_telefono_catalogo.php';
+        }
+        else {
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }  
+    }
+     public function tipo_telefono_cambiar_estado() {
+       if(isset($_SESSION['nombre'])){
+           $obj_tipo_telefono = new cls_tipo_telefono();
+           
+           if ($_GET['estado']==1){
+               
+               $obj_tipo_telefono->setEstado("0");
+               
+           }else {
+               
+               $obj_tipo_telefono->setestado("1");
+           }
+           $obj_tipo_telefono->setCondicion("ID_Tipo_Telefono='".$_GET['id']."'");
+           $obj_tipo_telefono->cambiar_estado_tt();
+           $obj_tipo_telefono->setCondicion("");    
+           $obj_tipo_telefono->obtener_tipo_telefono();
+           $params =$obj_tipo_telefono->getArreglo();
+            require __DIR__.'/../vistas/plantillas/frm_tipo_telefono_catalogo.php';
+        }
+        else {
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }  
+    }
+    ////////////////////////////////////////////////////////////////////////////
+    ///////////////////////Funciones de Tipo Punto/////////////////////          
+    ////////////////////////////////////////////////////////////////////////////
+    public function tipo_punto_listar() {
+       if(isset($_SESSION['nombre'])){
+           $obj_tipo_punto = new cls_tipo_punto();
+           $obj_tipo_punto->obtener_tipo_punto();
+           $params =$obj_tipo_punto->getArreglo();
+           
+            require __DIR__.'/../vistas/plantillas/frm_tipo_punto_bcr_catalogo.php';
+        }
+        else {
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }  
+    }  public function tipo_punto_guardar() {
+          if(isset($_SESSION['nombre'])){
+               $obj_tipo_punto = new cls_tipo_punto();
+               $obj_tipo_punto->setTipo_Punto($_POST['nombre']); 
+               $obj_tipo_punto->setObservaciones($_POST['observaciones']);
+               
+                if ($_POST['ID_Tipo_Punto']==0){
+                   $obj_tipo_punto->setEstado(1);
+                   $obj_tipo_punto->agregar_nueva_tp();
+                }else{
+                           $obj_tipo_punto->setEstado($_POST['estado']);
+                           $obj_tipo_punto->setCondicion("ID_Tipo_Punto='".$_POST['ID_Tipo_Punto']."'");
+                           $obj_tipo_punto->edita_tp();
+                   
+                }       
+           $obj_tipo_punto->setCondicion("");    
+           $obj_tipo_punto->obtener_tipo_punto();
+           $params =$obj_tipo_punto->getArreglo();
+           require __DIR__.'/../vistas/plantillas/frm_tipo_punto_bcr_catalogo.php';
+        }
+        else {
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }  
+    }
+     public function tipo_punto_cambiar_estado() {
+       if(isset($_SESSION['nombre'])){
+           $obj_tipo_punto = new cls_tipo_punto();
+           
+           if ($_GET['estado']==1){
+               
+               $obj_tipo_punto->setEstado("0");
+               
+           }else {
+               
+               $obj_tipo_punto->setestado("1");
+           }
+           $obj_tipo_punto->setCondicion("ID_Tipo_Punto='".$_GET['id']."'");
+           $obj_tipo_punto->cambiar_estado_tp();
+           $obj_tipo_punto->setCondicion("");    
+           $obj_tipo_punto->obtener_tipo_punto();
+           $params =$obj_tipo_punto->getArreglo();
+            require __DIR__.'/../vistas/plantillas/frm_tipo_punto_bcr_catalogo.php';
+        }
+        else {
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }  
+    }
+    ////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////Gerentes de Zona////////////////////////////////          
+    ////////////////////////////////////////////////////////////////////////////
     
-} 
+      public function gerente_zona_listar() {
+       if(isset($_SESSION['nombre'])){
+           $obj_gerentezona = new cls_gerente_zona();
+           $obj_gerentezona->setCondicion("");
+           $obj_gerentezona->obtiene_gerente_zona();
+           $params =$obj_gerentezona->getArreglo();
+           $numero =$obj_gerentezona->getArreglo();
+           $obj_gerentezona->obtener_nombre_gerente_zona();
+           $nombre =$obj_gerentezona->getArreglo();
+                   
+           require __DIR__.'/../vistas/plantillas/frm_gerente_zona_listar.php';
+        }
+        else {
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }  
+    } 
+    public function gerente_zona_guardar(){
+        if(isset($_SESSION['nombre'])){   
+            
+                $obj_gerentezona = new cls_gerente_zona();
+                $obj_gerentezona->setNombre($_POST['nombre2']);
+                $obj_gerentezona->setNumero($_POST['numero2']);
+                $obj_gerentezona->setObservaciones($_POST['observaciones2']);
+                $obj_gerentezona->setEstado($_POST['estado2']);
+                $obj_gerentezona->guardar_gerente_zona();
+                $obj_gerentezona->obtiene_gerente_zona();
+                $params =$obj_gerentezona->getArreglo();
+                require __DIR__.'/../vistas/plantillas/frm_gerente_zona_listar.php';
+           
+        }else{
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }  
+    }
+    public function gerente_zona_editar(){
+                if(isset($_SESSION['nombre'])){
+               $obj_gerentezona = new cls_gerente_zona();
+               $obj_gerentezona->setNombre($_POST['nombre']); 
+               $obj_gerentezona->setNumero($_POST['numero']); 
+               $obj_gerentezona->setObservaciones($_POST['observaciones']);
+               
+                if ($_POST['ID_Gerente_Zona']>=(1)){
+                    
+                   $obj_gerentezona->setEstado(1);
+                   $obj_gerentezona->setEstado($_POST['estado']);
+                   $obj_gerentezona->setCondicion("ID_Gerente_Zona='".$_POST['ID_Gerente_Zona']."'");
+                   $obj_gerentezona->editar_gerente_zona();
+                   
+                }       
+           $obj_gerentezona->setCondicion("");  
+           $obj_gerentezona->obtiene_gerente_zona();
+           $params =$obj_gerentezona->getArreglo();
+           require __DIR__.'/../vistas/plantillas/frm_gerente_zona_listar.php';
+        }else {
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }  
+    }
+    public function gerente_zona_cambiar_estado() {
+       if(isset($_SESSION['nombre'])){
+           $obj_gerentezona = new cls_gerente_zona();
+           
+           if ($_GET['estado']==1){
+               
+               $obj_gerentezona->setEstado("0");
+               
+           }else {
+               
+               $obj_gerentezona->setestado("1");
+           }
+           $obj_gerentezona->setCondicion("ID_Gerente_Zona='".$_GET['id']."'");
+           $obj_gerentezona->cambiar_estado_gerente_zona();
+           $obj_gerentezona->setCondicion("");    
+           $obj_gerentezona->obtiene_gerente_zona();
+           $params =$obj_gerentezona->getArreglo();
+            require __DIR__.'/../vistas/plantillas/frm_gerente_zona_listar.php';
+        }
+        else {
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }  
+    }
+    ////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////Supervisor de Zona//////////////////////////////      
+    ////////////////////////////////////////////////////////////////////////////
+    
+    public function supervisor_zona_listar() {
+       if(isset($_SESSION['nombre'])){
+           $obj_supervisorzona = new cls_supervisor_zona();
+           $obj_supervisorzona->setCondicion("");
+           $obj_supervisorzona->obtiene_supervisor_zona();
+           $params =$obj_supervisorzona->getArreglo();
+           $numero =$obj_supervisorzona->getArreglo();
+           $obj_supervisorzona->obtener_nombre_supervisor_zona();
+           $nombre =$obj_supervisorzona->getArreglo();
+                   
+           require __DIR__.'/../vistas/plantillas/frm_supervisor_zona_listar.php';
+        }
+        else {
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }  
+    } 
+    public function supervisor_zona_guardar(){
+        if(isset($_SESSION['nombre'])){   
+            
+                $obj_supervisorzona = new cls_supervisor_zona();
+                $obj_supervisorzona->setNombre($_POST['nombre2']);
+                $obj_supervisorzona->setNumero($_POST['numero2']);
+                $obj_supervisorzona->setObservaciones($_POST['observaciones2']);
+                $obj_supervisorzona->setEstado($_POST['estado2']);
+                $obj_supervisorzona->guardar_supervisor_zona();
+                $obj_supervisorzona->obtiene_supervisor_zona();
+                $params =$obj_supervisorzona->getArreglo();
+                require __DIR__.'/../vistas/plantillas/frm_supervisor_zona_listar.php';
+           
+        }else{
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }  
+    }
+    public function supervisor_zona_editar(){
+                if(isset($_SESSION['nombre'])){
+               $obj_supervisorzona = new cls_supervisor_zona();
+               $obj_supervisorzona->setNombre($_POST['nombre']); 
+               $obj_supervisorzona->setNumero($_POST['numero']); 
+               $obj_supervisorzona->setObservaciones($_POST['observaciones']);
+               
+                if ($_POST['ID_Supervisor_Zona']>=(1)){
+                    
+                   $obj_supervisorzona->setEstado(1);
+                   $obj_supervisorzona->setEstado($_POST['estado']);
+                   $obj_supervisorzona->setCondicion("ID_Supervisor_Zona='".$_POST['ID_Supervisor_Zona']."'");
+                   $obj_supervisorzona->editar_supervisor_zona();
+                   
+                }       
+           $obj_supervisorzona->setCondicion("");  
+           $obj_supervisorzona->obtiene_supervisor_zona();
+           $params =$obj_supervisorzona->getArreglo();
+           require __DIR__.'/../vistas/plantillas/frm_supervisor_zona_listar.php';
+        }else {
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }  
+    }
+  public function supervisor_zona_cambiar_estado() {
+       if(isset($_SESSION['nombre'])){
+           $obj_supervisorzona = new cls_supervisor_zona();
+           
+           if ($_GET['estado']==1){
+               
+               $obj_supervisorzona->setEstado("0");
+               
+           }else {
+               
+               $obj_supervisorzona->setestado("1");
+           }
+           $obj_supervisorzona->setCondicion("ID_Supervisor_Zona='".$_GET['id']."'");
+           $obj_supervisorzona->cambiar_estado_supervisorzona();
+           $obj_supervisorzona->setCondicion("");    
+           $obj_supervisorzona->obtiene_supervisor_zona();
+           $params =$obj_supervisorzona->getArreglo();
+            require __DIR__.'/../vistas/plantillas/frm_supervisor_zona_listar.php';
+        }
+        else {
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }  
+    }
+ }

@@ -39,10 +39,18 @@ require_once __DIR__ . '/controladores/cls_direccionIP.php';
 require_once __DIR__ . '/controladores/cls_trazabilidad.php';
 //Libreria de clases --> Control de elementos y funcionalidades generales 
 require_once __DIR__ . '/controladores/cls_general.php';
+//Libreria de clases --> Control de Gerentes de Zona
+require_once __DIR__ . '/controladores/cls_gerente_zona.php';
 //Libreria de clases --> Control de teléfonos 
 require_once __DIR__ . '/controladores/cls_telefono.php';
 //Libreria de clases --> Control de unidades ejecutoras
 require_once __DIR__ . '/controladores/cls_unidad_ejecutora.php';
+//Libreria de clases --> Controladores de tipo telefono
+require_once __DIR__ . '/controladores/cls_tipo_telefono.php';
+//Libreria de clases --> Controladores de tipo punto
+require_once __DIR__ . '/controladores/cls_tipo_punto.php';
+//Libreria de clases --> Controladores supervisor de zona
+require_once __DIR__ . '/controladores/cls_supervisor_zona.php';
 //Libreria de clases --> Control de puestos 
 require_once __DIR__ . '/controladores/cls_puestos.php';
 //Libreria de clases --> Control de horarios
@@ -137,6 +145,28 @@ $map = array(
     'unidad_ejecutora_guardar'=>array('controller'=>'Controller', 'action'=>'unidad_ejecutora_guardar'),
     'unidad_ejecutora_cambiar_estado'=>array('controller'=>'Controller', 'action'=>'unidad_ejecutora_cambiar_estado'),
    
+    //Controlador de Supervisor de Zona
+    'supervisor_zona_listar'=>array('controller'=>'Controller', 'action'=>'supervisor_zona_listar'),
+    'supervisor_zona_guardar'=>array('controller'=>'Controller', 'action'=>'supervisor_zona_guardar'),
+    'supervisor_zona_editar'=>array('controller'=>'Controller','action'=>'supervisor_zona_editar'),
+    'supervisor_zona_cambiar_estado'=>array('controller'=>'Controller', 'action'=>'supervisor_zona_cambiar_estado'),
+    
+    //Controlador de telefonos
+    'tipo_telefono_listar'=>array('controller'=>'Controller', 'action'=>'tipo_telefono_listar'),
+    'tipo_telefono_guardar'=>array('controller'=>'Controller', 'action'=>'tipo_telefono_guardar'),
+    'tipo_telefono_cambiar_estado'=>array('controller'=>'Controller', 'action'=>'tipo_telefono_cambiar_estado'),
+    
+    //Controlador de gerentes de zona
+    'gerente_zona_listar'=>array('controller'=>'Controller', 'action'=>'gerente_zona_listar'),
+    'gerente_zona_guardar'=>array('controller'=>'Controller', 'action'=>'gerente_zona_guardar'),
+    'gerente_zona_editar'=>array('controller'=>'Controller','action'=>'gerente_zona_editar'),
+    'gerente_zona_cambiar_estado'=>array('controller'=>'Controller', 'action'=>'gerente_zona_cambiar_estado'),
+    
+    //Controlador de Punto
+    'tipo_punto_listar'=>array('controller'=>'Controller', 'action'=>'tipo_punto_listar'),
+    'tipo_punto_guardar'=>array('controller'=>'Controller', 'action'=>'tipo_punto_guardar'),
+    'tipo_punto_cambiar_estado'=>array('controller'=>'Controller', 'action'=>'tipo_punto_cambiar_estado'),
+
     //Controlador de Horarios
     'horario_listar'=>array('controller'=>'Controller', 'action'=>'horario_listar'),
     'horario_gestion'=>array('controller'=>'Controller', 'action'=>'horario_gestion'),
@@ -184,7 +214,9 @@ $map = array(
     'area_apoyo_numero_telefono_guardar'=>array('controller'=>'Controller','action'=> 'area_apoyo_numero_telefono_guardar'),  
     
     //Controlador de Direcciones ip 
-    'direcciones_ip_listar'=>array('controller'=>'Controller','action'=> 'direcciones_ip_listar'), 
+    'direcciones_ip_listar'=>array('controller'=>'Controller','action'=> 'direcciones_ip_listar'),
+    'direcciones_ip_guardar'=>array('controller'=>'Controller', 'action'=>'direcciones_ip_guardar'),
+    'direcciones_ip_cambiar_estado'=>array('controller'=>'Controller', 'action'=>'direcciones_ip_cambiar_estado'),
     
     //Trazabilidad
     'frm_trazabilidad_listar'=>array('controller'=>'Controller','action'=> 'frm_trazabilidad_listar'),

@@ -1,4 +1,4 @@
-    <?php       
+   <?php       
     function nota_obtener() {
         $obj_general = new cls_general();
         $obj_general->obtener_notas();
@@ -83,41 +83,46 @@
             <a class="dropdown-toggle" data-toggle="dropdown" href="#">Catálogos
             <span class="caret"></span></a>
             <ul class="dropdown-menu">
-
-                <?php if ($_SESSION['modulos']['Catálogos-Empresas']==1){ ?>
+<?php if ($_SESSION['modulos']['Catálogos-Empresas']==1){ ?>
                     <li><a href="index.php?ctl=empresas_listar">Empresas</a></li>
                 <?php };?>   
 
                 <?php if ($_SESSION['modulos']['Catálogos-Tipo Evento']==1){ ?>
                     <li><a href="index.php?ctl=tipo_eventos_listar">Tipo Evento</a></li>
                 <?php }; ?>
-
+                    
                 <?php  if ($_SESSION['modulos']['Catálogos-Direcciones IP']==1){?>
                    <li><a href="index.php?ctl=direcciones_ip_listar">Direcciones IP's</a></li> 
                 <?php  }; ?>  
                    
                 <?php  if ($_SESSION['modulos']['Catálogos-Horarios']==1){?>
                    <li><a href="index.php?ctl=horario_listar">Horarios BCR</a></li> 
-                <?php  }; ?>    
-                   
+                <?php  }; ?>     
+
                 <?php  if ($_SESSION['modulos']['Catálogos-Horarios']==1){?>
-                   <li><a href="index.php?ctl=unidad_ejecutora_listar">Unidades Ejecutoras</a></li> 
-                <?php  }; ?>
-                   
-                <!--Catalogos de Enlace de Telecomunicaciones-->
-                <?php  if ($_SESSION['modulos']['Catálogos-Proveedor enlaces']==1){?>
                    <li><a href="index.php?ctl=proveedor_listar">Proveedores enlaces</a></li> 
                 <?php  }; ?> 
-                
-                <?php  if ($_SESSION['modulos']['Catálogos-Tipo enlaces']==1){?>
-                   <li><a href="index.php?ctl=tipo_enlace_listar">Tipos de enlaces</a></li> 
-                <?php  }; ?>
                    
-                <?php  if ($_SESSION['modulos']['Catálogos-Medio enlaces']==1){?>
-                   <li><a href="index.php?ctl=medio_enlace_listar">Medios de enlaces</a></li> 
-                <?php  }; ?>
+                <?php  if ($_SESSION['modulos']['Catálogos-Horarios']==1){?>
+                   <li><a href="index.php?ctl=unidad_ejecutora_listar">Unidades Ejecutoras</a></li>
+                <?php  }; ?> 
                    
-                <!--Catalogos Prontuario--> 
+                <?php  if ($_SESSION['modulos']['Catálogos-Horarios']==1){?>
+                   <li><a href="index.php?ctl=tipo_telefono_listar">Tipo Telefono</a></li>
+                <?php  }; ?> 
+                   
+                <?php  if ($_SESSION['modulos']['Catálogos-Horarios']==1){?>
+                   <li><a href="index.php?ctl=tipo_punto_listar">Tipo Punto</a></li>
+                <?php  }; ?>
+              
+                <?php  if ($_SESSION['modulos']['Catálogos-Horarios']==1){?>
+                   <li><a href="index.php?ctl=gerente_zona_listar">Gerentes de Zona</a></li>
+                <?php  }; ?> 
+                   
+                <?php  if ($_SESSION['modulos']['Catálogos-Horarios']==1){?>
+                   <li><a href="index.php?ctl=supervisor_zona_listar">Supervisor de Zona</a></li>
+                <?php  }; ?>
+                                     
                 <?php  if ($_SESSION['modulos']['Importar- Prontuario']==1){?>
                    <li><a href="index.php?ctl=frm_importar_prontuario_paso_1">Importar Prontuario</a></li> 
                 <?php  }; ?>  

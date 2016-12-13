@@ -46,12 +46,12 @@
         <table id="tabla" class="display" cellspacing="0">
           <thead>
             <tr>
-              <th>ID_Punto</th>
-              <th>Tipo de Punto</th>
-              <th>Observaciones</th>
-              <th>Estado</th>
-              <th>Cambiar Estado</th>
-              <th>Mantenmiento</th>
+              <td style="text-align:center">ID_Punto</th>
+              <td style="text-align:center">Tipo de Punto</th>
+              <td style="text-align:center">Observaciones</th>
+              <td style="text-align:center">Estado</th>
+              <td style="text-align:center">Cambiar Estado</th>
+              <td style="text-align:center">Mantenmiento</th>
             </tr>
           </thead>
     <tbody>
@@ -60,20 +60,20 @@
             for ($i = 0; $i <$tam; $i++) {
             ?>
             <tr>
-                <td><?php echo $params[$i]['ID_Tipo_Punto'];?></td>
+                <td style="text-align:center"><?php echo $params[$i]['ID_Tipo_Punto'];?></td>
                 <td><?php echo $params[$i]['Tipo_Punto'];?></td>
                 <td><?php echo $params[$i]['Observaciones'];?></td>
                 
                 <?php if ($params[$i]['Estado']==1){?>  
-                    <td>Activo</td>
+                    <td style="text-align:center">Activo</td>
                 <?php }else {?>  
-                    <td>Inactivo</td>
+                    <td style="text-align:center">Inactivo</td>
                 <?php }?>
            
-                <td><a href="index.php?ctl=tipo_punto_cambiar_estado&id=<?php echo $params[$i]['ID_Tipo_Punto']?>&estado=<?php echo $params[$i]['Estado']?>">
+                <td style="text-align:center"><a href="index.php?ctl=tipo_punto_cambiar_estado&id=<?php echo $params[$i]['ID_Tipo_Punto']?>&estado=<?php echo $params[$i]['Estado']?>">
                 Activar/Desactivar</a></td>
                 
-           <td><a role="button" onclick="Editar_TP('<?php echo $params[$i]['ID_Tipo_Punto'];?>','<?php echo $params [$i]['Tipo_Punto'];?>',
+           <td style="text-align:center"><a role="button" onclick="Editar_TP('<?php echo $params[$i]['ID_Tipo_Punto'];?>','<?php echo $params [$i]['Tipo_Punto'];?>',
              '<?php echo $params [$i]['Observaciones'];?>',<?php echo $params [$i]['Estado'];?>)">
                     
                     Editar</a></td>
