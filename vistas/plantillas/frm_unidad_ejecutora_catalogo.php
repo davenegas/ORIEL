@@ -49,13 +49,12 @@
         <table id="tabla" class="display" cellspacing="0">
           <thead>
             <tr>
-              <th>ID Unidad Ejecutora</th>
-              <th>Numero de UE</th>
-              <th>Nombre UE</th>
-              <th>Observaciones</th>
-              <th>Estado</th>
-              <th>Cambiar Estado</th>
-              <th>Mantenmiento</th>
+              <th style="text-align:center">ID Unidad Ejecutora</th>
+              <th style="text-align:center">Numero de UE</th>
+              <th style="text-align:center">Nombre UE</th>
+              <th style="text-align:center">Observaciones</th>
+              <th style="text-align:center">Estado</th>
+              <th style="text-align:center">Mantenmiento</th>
             </tr>
           </thead>
           <tbody>
@@ -64,18 +63,17 @@
             for ($i = 0; $i <$tam; $i++) {
             ?>
             <tr>
-                <td><?php echo $params[$i]['ID_Unidad_Ejecutora'];?></td>
-                <td><?php echo $params[$i]['Numero_UE'];?></td>
-                <td><?php echo $params[$i]['Departamento'];?></td>
-                <td><?php echo $params[$i]['Observaciones'];?></td>
+                <th style="text-align:center"><?php echo $params[$i]['ID_Unidad_Ejecutora'];?></td>
+                <th style="text-align:center"><?php echo $params[$i]['Numero_UE'];?></td>
+                <th><?php echo $params[$i]['Departamento'];?></td>
+                <th style="text-align:center"><?php echo $params[$i]['Observaciones'];?></td>
                 <?php if ($params[$i]['Estado']==1){?>  
-                    <td>Activo</td>
+                    <th style="text-align:center">Activo</td>
                 <?php }else {?>  
-                    <td>Inactivo</td>
+                    <th style="text-align:center">Inactivo</td>
                 <?php }?>
-                <td><a href="index.php?ctl=unidad_ejecutora_cambiar_estado&ide=<?php echo $params[$i]['ID_Unidad_Ejecutora']?>&estado=<?php echo $params[$i]['Estado']?>"> 
-                        Activar/Desactivar</a></td>
-                <td><a role="button" onclick="Editar_UE(<?php echo $params[$i]['ID_Unidad_Ejecutora'];?>,'<?php echo $params[$i]['Numero_UE'];?>',
+                
+                <th style="text-align:center"><a role="button" onclick="Editar_UE(<?php echo $params[$i]['ID_Unidad_Ejecutora'];?>,'<?php echo $params[$i]['Numero_UE'];?>',
                                                         '<?php echo $params[$i]['Departamento'];?>','<?php echo $params[$i]['Observaciones'];?>', <?php echo $params[$i]['Estado'];?>)"> 
                        Editar</a></td>
             </tr>     
