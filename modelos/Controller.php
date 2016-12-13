@@ -4554,97 +4554,141 @@
             fclose($fp);
 
     }
-    
+    /*
+     * Metedo que permite ingresar un nuevo seguimiento a un evento ya abierto
+     */
     
     public function guardar_seguimiento_evento(){
+        // Verifica que la sesión de usuario esté establecida
         if(isset($_SESSION['nombre'])){
+            //Crea un nuevo  objeto de la clase eventos 
             $obj_eventos = new cls_eventos();
+            //Estable el atributo id del objeto, con el parametro correspondiente enviado via url
             $obj_eventos->setId($_GET['id']);
+            //El id 2 lo inicializa en cero
             $obj_eventos->setId2(0);
-            
+            //Define la fecha del sistema
             $fecha_seguimiento = strtotime($_POST['Fecha']);
+            //Establece la fecha actual 
 	    $fecha_seguimiento = date("Y-m-d", $fecha_seguimiento);
-            
+            //Valida que la fecha del evento sea actual y no a futuro
             if ($fecha_seguimiento >  date("Y-m-d")){
+                //Muestra el mensaje de validacion correspondiente en pantalla
                 echo "<script type=\"text/javascript\">alert('No es posible ingresar eventos futuros!!!!');history.go(-1);</script>";;
+                //Sale del metodo de la clase
                 exit();
+                // Valida que la fecha sea la de hoy
             }if($fecha_seguimiento == date("Y-m-d")){
+                //Toma la hora del seguimiento enviada por parametro en la url
                 $hora_seguimiento = strtotime($_POST['Hora']);
+                //Formatea la hora de la forma requerida
                 $hora_seguimiento = date("H:i", $hora_seguimiento);
-                
+                //Valida la hora del seguimiento, para evitar eventos futuros
                 if ($hora_seguimiento >  date("H:i", time())){
+                    //Muestra mensaje en pantalla con la advertencia
                    echo "<script type=\"text/javascript\">alert('No es posible ingresar eventos futuros!!!!');history.go(-1);</script>";;
+                   //Sale del metodo
                    exit();
                 }
             }
-             
+            //Establece el atributo fecha del objeto
             $obj_eventos->setFecha(($_POST['Fecha']));
+            //Establece el atributo hora del objeto
             $obj_eventos->setHora(($_POST['Hora']));
-            //Validación de informacion en detalle de evento, elimina algunos caracteres especiales
+            //Obtiene la información del detalle del seguimiento enviado por url
             $detalle = $_POST['DetalleSeguimiento'];
+            //Validación de informacion en detalle de evento, elimina algunos caracteres especiales
             $detalle= str_replace("'","",$detalle);
             $detalle= str_replace('"','',$detalle);
+            //Establece el atributo detalle del objeto
             $obj_eventos->setDetalle($detalle);
+            //Establece el atributo id de usuario del objeto
             $obj_eventos->setId_usuario($_SESSION['id']);
-          
+            //Obtiene la variable de verificación de envio del archivo adjunto en el seguimiento del evento    
             $recepcion_archivo=$_FILES['archivo_adjunto']['error'];
-            
+            //Obtiene la fecha actual
             $date=new DateTime(); //this returns the current date time
+            //Formatea la fecha en la forma requerida
             $result = $date->format('Y-m-d-H-i-s');
-            //echo $result;
+            //Obtiene la información de la fecha, convertida a un vector donde cada posicion está dividida por -
             $krr = explode('-',$result);
+            //Convierte el vector en una variable cadena
             $result = implode("",$krr);
                        
+            //Obtiene la raiz del proyecto ORIEL
             $raiz=$_SERVER['DOCUMENT_ROOT'];
-                       
+               
+            //Formatea la dirección del directorio raiz
             if (substr($raiz,-1)!="/"){
                 $raiz.="/";
             }
-            
+            //Establece la ruta en el servidor donde se almacenará el archivo adjunto del seguimiento, elimina las tildes y caracteres especiales del nombre en caso de que hubieren
             $ruta=  $raiz."Adjuntos_Bitacora/".Encrypter::quitar_tildes($result.$_FILES['archivo_adjunto']['name']);
-            //$ruta=  $_SERVER['DOCUMENT_ROOT']."Adjuntos_Bitacora/".$result.$_FILES['archivo_adjunto']['name'];
-          
+            
+            //Criterio de elecciones, para verificar si trae adjunto o no
             switch ($recepcion_archivo) {
+                //En caso de que la variable sea cero, procede a guardar el archivo en la ubicación correspondiente
                 case 0:{
-                    
+                    //Valida que pueda guardar el archivo
                     if (move_uploaded_file($_FILES['archivo_adjunto']['tmp_name'], $ruta)){
+                        //Guarda el nombre del archivo adjunto en la base de datos
                         $obj_eventos->setAdjunto(Encrypter::quitar_tildes($result.$_FILES['archivo_adjunto']['name'])); 
+                        //Inserta en la base de datos el seguimiento correspondiente
                         $obj_eventos->ingresar_seguimiento_evento();
+                        //Edita el estado del evento con la información actualizada enviada por bd
                         $obj_eventos->edita_estado_evento($_POST['estado_del_evento']);
+                        //Llama al evento que permite listar los eventos
                         header ("location:/ORIEL/index.php?ctl=frm_eventos_listar");
                     }  else {
-                        //echo "<script type=\"text/javascript\">alert('Hubo un problema al subir el archivo al servidor!!!');history.go(-1);</script>";;
+                        //En caso de que no pueda mover el archivo, procede a guardar el seguimiento pero sin adjunto
                         $obj_eventos->setAdjunto("N/A");
+                        //Inserta la información en la base de datos
                         $obj_eventos->ingresar_seguimiento_evento();
+                        //Edita el estado del evento con el nuevo estado que se envia por url
                         $obj_eventos->edita_estado_evento($_POST['estado_del_evento']);
-                        header ("location:/ORIEL/index.php?ctl=frm_eventos_listar");
-                        //echo "<script type=\"text/javascript\">alert('No fue seleccionado ningun archivo!!!!');history.go(-1);</script>";;
+                        //Llama al metodo que lista los eventos abiertos de bitacora
+                        header ("location:/ORIEL/index.php?ctl=frm_eventos_listar");                        
                     }
+                    //Sale del metodo
                     break;
                 }
-                    
+                //En caso de que sea 2, es porque el tamaño del archivo excede 1 mb    
                 case 2:{
-                    echo "<script type=\"text/javascript\">alert('El archivo consume mayor espacio del permitido (1 mb) !!!!');history.go(-1);</script>";;
+                    //Muestra un mensaje en pantalla
+                    echo "<script type=\"text/javascript\">alert('El archivo consume mayor espacio del permitido (1 mb) !!!!');history.go(-1);</script>";
+                    //Sale del metodo
                     break;
                 }
+                //En caso de que sea 4, es porque no trae adjunto
                 case 4:{ 
+                    //Agrega al campo adjunto de la base de datos, un no aplica
                     $obj_eventos->setAdjunto("N/A");
+                    //Inserta en la base de datos
                     $obj_eventos->ingresar_seguimiento_evento();
+                    //Edita el estado del evento con la nueva información enviada por url
                     $obj_eventos->edita_estado_evento($_POST['estado_del_evento']);
+                    //Llama al metodo que lista todos los eventos pendientes de bitacora
                     header ("location:/ORIEL/index.php?ctl=frm_eventos_listar");
-                    //echo "<script type=\"text/javascript\">alert('No fue seleccionado ningun archivo!!!!');history.go(-1);</script>";;
+                    //Sale del metodo
                     break;
                 }
                  case 6:{
+                     //En caso de que sea 6, es por un problema de acceso a la carpeta
                     echo "<script type=\"text/javascript\">alert('El servidor no tiene acceso a la carpeta temporal de almacenamiento!!!!');history.go(-1);</script>";
+                    //Sale del metodo
                     break;
                  } 
                 case 7:{
+                    //En caso de que sea 7, es por un problema de escritura en la carpeta
                     echo "<script type=\"text/javascript\">alert('No es posible escribir en el disco duro del servidor!!!!');history.go(-1);</script>";;
+                    //Sale del metodo
                     break;
                 }  
+                //En caso de que sea 8, es por un error a nivel de PHP
                 case 8:{
+                    //Muestra un mensaje en pantalla al usuario
                     echo "<script type=\"text/javascript\">alert('Fue detenida la carga del archivo debido a una extension de PHP!!!!');history.go(-1);</script>";;
+                    //Sale del metodo
                     break;
                 }   
             }
@@ -4664,24 +4708,32 @@
         } 
     }
     
-    
+    /*
+     * Metodo que permite mostrar en pantalla el padron fotografico de un punto bcr
+     */
     
     public function frm_puntos_bcr_padron_fotografico(){
+        //Verifica que la sesión de usuario exista
         if(isset($_SESSION['nombre'])){
-            
+            //Verifica que se haya recibido el id del sitio correctamente para realizar la busqueda
             if (isset($_GET['id'])){
+                //Crea el objeto de tipo padron fotografico
                 $obj_padron_fotografico= new cls_padron_fotografico_puntosbcr();
-                $obj_padron_fotografico->setCondicion("ID_PuntoBCR=".$_GET['id']); 
+                //Establece la condición de busqueda mediante el id del punto bcr
+                $obj_padron_fotografico->setCondicion("ID_PuntoBCR=".$_GET['id']);
+                //Obtiene el listado de imagenes del punto bcr
                 $obj_padron_fotografico->obtener_imagenes_puntosbcr();
+                
+                //Asigna el resultado a una variable tipo vector
                 $params=$obj_padron_fotografico->getArreglo();
-                /*echo '<pre>';
-                print_r($params);
-                echo '</pre>';*/
+             
             }else{
+                //En caso de que no se reciba el id, procede a informar al usuario
                 echo "<script type=\"text/javascript\">alert('Se presentó un error inesperado, por favor vuelva a seleccionar el punto BCR');history.go(-1);</script>";;
+                //Sale del metodo
                 exit();
             }
-            
+            //Llama al formulario de la vista correspondiente
             require __DIR__ . '/../vistas/plantillas/frm_puntos_bcr_padron_fotografico.php';
         }else {
               /*
@@ -4692,107 +4744,147 @@
              */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            
+            //Llamada al formulario de vista al usuario
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         } 
     }
     
+    /*
+     * Metodo que permite guardar una nueva imagen del padron ligada a un punto bcr
+     */
     public function guardar_imagen_puntos_bcr(){
+        //verifica que la sesión de usuario exista
         if(isset($_SESSION['nombre'])){
+            //Verifica que el nombre de la imagen exista en los parametros enviados
               if (!(isset($_POST['Nombre']))){
+                  //Muestra advertencia en pantalla
                 echo "<script type=\"text/javascript\">alert('Es necesario ingresar un nombre de referencia para la imágen!');history.go(-1);</script>";;
+                //Sale del metodo
                 exit();
               }
-              
+              //Verifica que la descripcion de la imagen exista en los parametros enviados
               if (!(isset($_POST['Descripcion']))){
+                  //Muestra advertencia en pantalla
                 echo "<script type=\"text/javascript\">alert('Es necesario ingresar una descripción básica para la imágen!');history.go(-1);</script>";;
+                //Sale del metodo
                 exit();
               }
-              
+              //Verifica que la categoria de la imagen exista en los parametros enviados
                if (!(isset($_POST['Categoria']))){
+                   //Muestra advertencia en pantalla
                 echo "<script type=\"text/javascript\">alert('Es necesario elegir una categoría para la imágen!');history.go(-1);</script>";;
+                //Sale del metodo
                 exit();
               }
-              
+               //Verifica que el id del punto bcr exista en los parametros enviados
                if (!(isset($_POST['id_punto_bcr']))){
-                
+                //Sale del metodo
                 exit();
               }
               
+              //Elimina caracteres especiales del nombre de la imagen enviado desde el formulario html
               $nombre_imagen= str_replace('"','',str_replace("'","",$_POST['Nombre']));
+              //Obtiene la categoria de la imagen
               $categoria=$_POST['Categoria'];
+              //Reemplaza caracteres especiales en la descripcion
               $descripcion=str_replace("'","",$_POST['Descripcion']);
+              //Obtiene el id del punto bcr
               $id_punto_bcr=$_POST['id_punto_bcr'];
               
               
-              //Validación de informacion en detalle de evento, elimina algunos caracteres especiales
+              //Validación de informacion en descripcion de la imagen, elimina algunos caracteres especiales
               
               $descripcion= str_replace("'","",$descripcion);
               $descripcion= str_replace('"','',$descripcion);
 
+              //Obtiene el mensaje de verificacion del envio del archivo
               $recepcion_archivo=$_FILES['archivo_adjunto']['error'];
               
+              //Crea una nueva instancia de la clase padron
             $obj_padron_fotografico = new cls_padron_fotografico_puntosbcr();
+            //Asigna el atributo id
             $obj_padron_fotografico->setId_puntobcr($id_punto_bcr);
+            //Asigna el atributo nombre de la imagen
             $obj_padron_fotografico->setNombre_imagen($nombre_imagen);
-            $obj_padron_fotografico->setDescripcion($descripcion);
+            //Asigna el atributo descripcion
+            $obj_padron_fotografico->setDescipcion($descripcion);
+            //Asigna el atributo categoria
             $obj_padron_fotografico->setCategoria($categoria);
-                       
+            
+            //Obtiene el mensaje de verificacion del envio del archivo
             $recepcion_archivo=$_FILES['archivo_adjunto']['error'];
         
+            //Obtiene la fecha actual
             $date=new DateTime(); //this returns the current date time
+            //Obtiene la fecha actual
             $result = $date->format('Y-m-d-H-i-s');
-            //echo $result;
+            //Formatea la fecha actual sin -
             $krr = explode('-',$result);
+            //Obtiene en una variable la fecha actua ya formateada
             $result = implode("",$krr);
-                       
+            //Obtiene el directorio raiz donde está localizado ORIEL           
             $raiz=$_SERVER['DOCUMENT_ROOT'];
-                       
+            //Formatea la raiz de la ruta donde se localiza ORIEL
             if (substr($raiz,-1)!="/"){
                 $raiz.="/";
             }
-            
+            //Establece la ruta donde almacenará el archivo
             $ruta=  str_replace('"','',str_replace("'","",$raiz."Padron_Fotografico_Puntos_BCR/".Encrypter::quitar_tildes($id_punto_bcr."-".$result."-".$_FILES['archivo_adjunto']['name'])));
-                      
+            //Formatea el nombre del archivo a almacenar
             $nombre_ruta=str_replace('"','',str_replace("'","",Encrypter::quitar_tildes($id_punto_bcr."-".$result."-".$_FILES['archivo_adjunto']['name'])));
             
-            
+            //Validación de como llegó el archivo adjunto desde el formulario html
             switch ($recepcion_archivo) {
+                //En caso de que sea cero, procede a almacenar la imagen
                 case 0:{
+                    //Verifica que el formato y extensión del archivo sean de imagen
                     if ((basename($_FILES['archivo_adjunto']['type'])==="jpeg")||(basename($_FILES['archivo_adjunto']['type'])==="gif")||(basename($_FILES['archivo_adjunto']['type'])==="png")||(basename($_FILES['archivo_adjunto']['type'])==="bmp")||(basename($_FILES['archivo_adjunto']['type'])==="tiff")||(basename($_FILES['archivo_adjunto']['type'])==="jpg")){
+                    //Verifica que el archivo se pueda trasladar a la ubicación correspondiente.
                         if (move_uploaded_file($_FILES['archivo_adjunto']['tmp_name'], $ruta)){
+                            //Establece el nombre de la imagen a guardar
                             $obj_padron_fotografico->setNombre_ruta(Encrypter::quitar_tildes($nombre_ruta));
+                            //Establece el formato de la imagen
                             $obj_padron_fotografico->setFormato(basename($_FILES['archivo_adjunto']['type']));
+                            //Define la condición a vacio, para que agregue un nuevo registro
                             $obj_padron_fotografico->setCondicion("");
+                            //Inserta en bd
                             $obj_padron_fotografico->guardar_imagen_puntobcr();
+                            //Llama al formulario correspondiente
                             header ("location:/ORIEL/index.php?ctl=frm_puntos_bcr_padron_fotografico&id=".$obj_padron_fotografico->getId_puntobcr());
                         }else{
+                            //Muestra en pantalla que se presentó un error al subir el archivo
                             echo "<script type=\"text/javascript\">alert('Hubo un problema al subir el archivo al servidor!!!');history.go(-1);</script>";;
                         }
                     }else{
+                        //Muestra en pantalla que el formato del archivo no es correcto
                         echo "<script type=\"text/javascript\">alert('El archivo no corresponde a un formato valido de imagenes !!!!');history.go(-1);</script>";;
                     }
                     break;
                 }
-                    
+                //Envia un mensaje al usuario porque el archivo es mas grande de lo previsto    
                 case 2:{
                     echo "<script type=\"text/javascript\">alert('El archivo consume mayor espacio del permitido (2 mb) !!!!');history.go(-1);</script>";;
                     break;
                 }
                 case 4:{ 
-                    
+                    //Envia un mensaje al usuario indicando que es necesario seleccionar un archivo para adjuntar
                     echo "<script type=\"text/javascript\">alert('No fue seleccionado ningun archivo!!!!');history.go(-1);</script>";;
                                        
                     break;
                 }
                  case 6:{
+                     //Envia al usuario un mensaje indicando que hay problemas para acceder a la carpeta temporal
                     echo "<script type=\"text/javascript\">alert('El servidor no tiene acceso a la carpeta temporal de almacenamiento!!!!');history.go(-1);</script>";
                     break;
                  } 
                 case 7:{
+                    //Envia un mensaje al usuario indicando que hay problemas para escribir en el disco duro del server
                     echo "<script type=\"text/javascript\">alert('No es posible escribir en el disco duro del servidor!!!!');history.go(-1);</script>";;
                     break;
                 }  
                 case 8:{
+                    //Envia  mensaje al usuario debido a un error de PHP
                     echo "<script type=\"text/javascript\">alert('Fue detenida la carga del archivo debido a una extension de PHP!!!!');history.go(-1);</script>";;
                     break;
                 }   
@@ -4808,6 +4900,7 @@
              */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            //Llamada al formulario de la vista para el usuario
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
          }  
          
@@ -4818,11 +4911,19 @@
     /*Metodos relacionados del area de Tipos de Evento de Seguridad del Sistema*/
     //////////////////////////
     
+    /*
+     * Metodo que permite listar eventos de bitacora digital
+     */
     public function tipo_eventos_listar(){      
+        //Verifica que la sesión de usuario esté activa
         if(isset($_SESSION['nombre'])){
+            //Creacion de una instancia de la clase eventos
             $obj_eventos=new cls_eventos();
+            //Obtiene todos los eventos de bitacora
             $obj_eventos->obtener_los_tipos_de_eventos();
+            //Asigna el resultado a una variable de tipo vector
             $params= $obj_eventos->getArreglo();
+            //Llamada a la vista de usuario correspondiente
             require __DIR__ . '/../vistas/plantillas/frm_tipo_eventos_listar.php';
         }else{
               /*
@@ -4833,24 +4934,39 @@
              */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            //Llamada al formulario de la vista de usuario
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         } 
     }
-    
+    /*
+     * Metodo que permite editar un tipo de evento en específico
+     */
     public function tipo_eventos_gestion(){
+        //Verifica que la sesión de usuario este activa
         if(isset($_SESSION['nombre'])){
+            //Verifica el valor del id enviado por url, en este caso agrega un nuevo tipo de evento
             if ($_GET['id']==0){
+                //Inicializa la variable a vacio
                 $observaciones="";
+                //Inicializa la variable a 1
                 $estado=1;
+                //Inicializa la variable con el valor del id enviado por parametro
                 $ide=$_GET['id'];
+                //Inicializa la variable a vacio
                 $evento="";
-            }   else   {
+            }   else   { //En este caso edita un tipo de evento existente
+                //Obtiene el id del tipo de evento
                 $ide=$_GET['id'];
+                //Obtiene el nombre del tipo de evento
                 $evento=$_GET['evento'];
+                //Obtiene las observaciones 
                 $observaciones=$_GET['observaciones'];
+                //Obtiene la prioridad
                 $prioridad = $_GET['prioridad'];
+                //Obtiene el estado
                 $estado=$_GET['estado'];
             }
+            //Llama a la vista para gestion de tipos de eventos
             require __DIR__ . '/../vistas/plantillas/frm_tipo_eventos_gestion.php';
         }   else    {
               /*
@@ -4861,22 +4977,36 @@
              */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            //Llamada a la vista de usuario correspondiente
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }
     }
     
+    /*
+     * Metodo que permite guardar la información referente a un tipo de evento de bitacora en base de datos
+     */
     public function tipo_eventos_guardar(){
+        // Verifica que la sesión de usuario este activa
         if(isset($_SESSION['nombre'])){
+            //Crea un nuevo objeto de la clase eventos 
             $obj_eventos = new cls_eventos();
+            //Verifica que el envio de información haya sido realizado por medio del formulario html
             if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+                //Establece el id del objeto
                 $obj_eventos->setId($_GET['id']);
+                //Establece el tipo de evento
                 $obj_eventos->setTipo_evento($_POST['evento']);
+                //Establece las observaciones del objeto
                 $obj_eventos->setObservaciones($_POST['observaciones']);
+                //Establece el estado
                 $obj_eventos->setEstado($_POST['estado']);
+                //Establece la prioridad
                 $obj_eventos->setPrioridad($_POST['prioridad']);
+                //Guarda el evento en base de datos
                 $obj_eventos->guardar_tipo_evento();
+                //Muestra en pantalla la lista de tipos de evento
                 header ("location:/ORIEL/index.php?ctl=tipo_eventos_listar");
-                //$this->tipo_eventos_listar();
+                
             }
         } else    {
               /*
@@ -4887,26 +5017,40 @@
              */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            //Muestra vista de usuario en pantalla
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }      
     }
-    
+    /*
+     * Metodo que permite cambiar el estado activo/inactivo de un tipo de evento
+     */
     public function tipo_eventos_cambiar_estado() {
+        //Verifica que la sesión de usuario esté activa
       if(isset($_SESSION['nombre'])){
+          //Creación de una instancia de la clase eventos
             $obj_eventos = new cls_eventos();
+            //Establece el atributo del objeto con el parametro enviado vía url
             $obj_eventos->setId($_GET['id']);
+            //Establece el atributo del objeto con el parametro enviado vía url
             $obj_eventos->setTipo_evento($_GET['evento']);
+            //Establece el atributo del objeto con el parametro enviado vía url
             $obj_eventos->setObservaciones($_GET['observaciones']);
+            //Establece el atributo del objeto con el parametro enviado vía url
             $obj_eventos->setEstado($_GET['estado']);
+            //Establece el atributo del objeto con el parametro enviado vía url
             $obj_eventos->setPrioridad($_GET['prioridad']);
+            //Verifica el valor del estado enviado por url
+            //En caso de ser 1, procede a invertir el valor para actualizarlo en bd
             if($_GET['estado']==1){
                 $obj_eventos->setEstado("0");
-            }   else    {
+            }   else    { //En caso de ser 0, lo establece como 1
                 $obj_eventos->setEstado("1");
             }
+            //Llama al metodo de la clase que escribe en bd
             $obj_eventos->guardar_tipo_evento();
+            //Muestra el formulario vista correspondiente al usuario
             header ("location:/ORIEL/index.php?ctl=tipo_eventos_listar");
-            //$this->tipo_eventos_listar();
+            
         } else    {
               /*
              * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
@@ -4916,15 +5060,23 @@
              */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            //Muestra el formulario vista correspondiente al usuario
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }  
     }
-       
+     /*
+      * Metodo que permite listar los puntos bcr almacenados en la base de datos
+      */  
     public function puntos_bcr_listar(){
+        //Verifica que la sesión de usuario se encuentre activa
         if(isset($_SESSION['nombre'])){
+            //Crea un nuevo objeto de la clase puntos BCR
             $obj_puntosbcr=new cls_puntosBCR();
+            //Llama al metodo de la clase que trae la información de los puntos bcr
             $obj_puntosbcr->obtiene_todos_los_puntos_bcr();
+            //Asigna el resultado a una variable tipo vector
             $params= $obj_puntosbcr->getArreglo();
+            //Llama a la vista de usuario correspondiente
             require __DIR__ . '/../vistas/plantillas/frm_puntos_bcr_listar.php';
         }else{
               /*
@@ -4935,6 +5087,7 @@
              */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            //Llama a la vista de usuario correspondiente
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }
     }
@@ -4946,41 +5099,54 @@
   // Metodo que permite actualizar en tiempo real la lista de estado de evento de bitacora dependiendo
     // de la prioridad del tipo de evento y rol de usuario que esté manipulando la información
     public function actualiza_en_vivo_estado_evento(){
-        
+        //verifica que la sesion del usuario se encuentre activa
         if(isset($_SESSION['nombre'])){
-        
+             //Crea un nuevo objeto de la clase eventos
              $obj_even = new cls_eventos();
-        
+             //Obtiene el valor del id tipo evento enviado por medio del formulario html
              $id_tipo_evento= $_POST['id_tipo_evento'];
-             
+             //Establece el atributo tipo de evento en el objeto de la clase
              $obj_even->setTipo_evento($id_tipo_evento);
+             //Realiza una consulta a la base de datos, con el fin de identificar la prioridad del tipo de evento seleccionado por el usuario
              $prioridad_tipo_evento= $obj_even->obtiene_prioridad_de_tipo_de_evento();
-             
+             //Obtiene seguimientos asociados al evento
              $obj_even->obtener_seguimientos();
+             //Asigna el resultado de la consulta a un vector 
              $estadoEven = $obj_even->getArreglo(); 
-      
+             //Extrae la cantidad de filas que contiene el vector
              $tam = count($estadoEven);
-
+             //Procede a recorrer los registros del vector
              for($i=0; $i<$tam;$i++){
-                //if($estadoEventos[$i]['Estado_Evento']==$params[0]['Estado_Evento']){
+                //Verifica si el estado del evento es abierto por error
                 if ($estadoEven[$i]['Estado_Evento']!="Abierto por Error"){
+                    //Verifica el rol del usuario y dependiendo de esto, carga las opciones de la lista desplegable
                     if ($_SESSION['rol']==2){
+                        //Condiciones que permiten determinar la prioridad del evento
                       if ($prioridad_tipo_evento!=1){ 
+                          //Verifica el estado del evento, para determinar que no esté cerrado
                           if ($estadoEven[$i]['Estado_Evento']!="Cerrado"){
+                              //Agrega los elementos correspondientes al drop down list
                             $html .= '<option value="'.$estadoEven[$i]['ID_EstadoEvento'].'">'.$estadoEven[$i]['Estado_Evento'].'</option>';
                           }
+                          //En caso de que tenga un nivel de prioridad mas alto ejecuta el siguiente bloque de codigo
                       }else{
+                          //Verifica que el estado del evento sea diferente de solicitar cierre
                           if ($estadoEven[$i]['Estado_Evento']!="Solicitar Cierre"){
+                            //Agrega el elemento a la lista desplegable
                             $html .= '<option value="'.$estadoEven[$i]['ID_EstadoEvento'].'">'.$estadoEven[$i]['Estado_Evento'].'</option>';
                           }                       
                       }
+                      //Si el rol es diferente de 2, ejecuta las siguientes lineas de codigo
                     }else{
+                        //Verifica que el estado sea diferente de Solicitar Cierre
                         if ($estadoEven[$i]['Estado_Evento']!="Solicitar Cierre"){
+                            //Agrega el elemento correspondiente a la lista desplegable
                             $html .= '<option value="'.$estadoEven[$i]['ID_EstadoEvento'].'">'.$estadoEven[$i]['Estado_Evento'].'</option>';
                           }     
                     }
                  }      
              }
+             //imprime en pantalla la variable con el html construido
              echo $html;
              
         }else{
@@ -4992,16 +5158,24 @@
              */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            //Llama a la vista de usuario correspondiente
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }
        
     }
-    
+    /*
+     * Permite listar las empresas que se encuentran registradas en base de datos
+     */
     public function empresas_listar(){
+        //Verifica que la sesión de usuario se encuentre activa
         if(isset($_SESSION['nombre'])){
+            //Crea el objeto de la clase empresa
             $obj_empresas=new cls_empresa();
+            //Ejecuta el metodo que llama a todas las empresas 
             $obj_empresas->obtiene_todas_las_empresas();
+            //Obtiene el resultado en una variable de tipo vector
             $params= $obj_empresas->getArreglo();
+            //Llama a la vista de la clase correspondiente
             require __DIR__ . '/../vistas/plantillas/frm_empresas_listar.php';
         }else{
               /*
@@ -5012,23 +5186,37 @@
              */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            //Llamada a la vista de usuario correspondiente
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }
     }
-    
+    /*
+     * Metodo que permite actualizar información en la clase empresas
+     */
     public function empresa_gestion(){
+        //Verifica que la sesion de usuario se encuentre activa
         if(isset($_SESSION['nombre'])){
+            //Verifica si el parametro id enviado por url es cero, en este caso significa que se debe agregar una nueva empresa en la base de datos
             if ($_GET['id']==0){
+                //Establece las observaciones a vacio
                 $observaciones="";
+                //Establece el estado a activo
                 $estado=1;
+                //Obtiene el id enviado por parametro
                 $ide=$_GET['id'];
+                //Establece el nombre de la empresa a vacio por tratarse de una nueva empresa
                 $empresa="";
-            }   else   {
+            }   else   {//Caso contrario se refiere a una empresa ya existente
+                //Obtiene el id de la empresa en cuestion
                 $ide=$_GET['id'];
+                //Establece las obervaciones enviadas por parametro
                 $observaciones=$_GET['observaciones'];
+                //Establece el estado enviado por parametro
                 $estado=$_GET['estado'];
+                //Establece el nombre de la empresa enviado por parametro
                 $empresa=$_GET['empresa'];
             }
+            //Llamada a la vista de usuario correspondiente
             require __DIR__ . '/../vistas/plantillas/frm_empresas_editar.php';
         }   else    {
               /*
@@ -5039,21 +5227,33 @@
              */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            //Llamada a la vista de usuario correspondiente
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }
     }
-    
+    /*
+     * Metodo que permite guardar en bd la información de una empresa 
+     */
     public function empresa_guardar(){
+        //Verifica que la sesion de usuario se encuentre activa
         if(isset($_SESSION['nombre'])){
+            //Crea un nuevo objeto de la clase empresa
             $obj_empresas = new cls_empresa();
+            //Verifica si viene información desde el formulario html
             if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+                //Establece el parametro del objeto con la información enviada desde el formulario html
                 $obj_empresas->setId($_GET['id']);
+                //Establece el parametro del objeto con la información enviada desde el formulario html
                 $obj_empresas->setEmpresa($_POST['empresa']);
+                //Establece el parametro del objeto con la información enviada desde el formulario html
                 $obj_empresas->setObservaciones($_POST['observaciones']);
+                //Establece el parametro del objeto con la información enviada desde el formulario html
                 $obj_empresas->setEstado($_POST['estado']);
+                //Guarda la información de la empresa en bd
                 $obj_empresas->guardar_empresa();
+                //Llamada a la vista de usuario correspondiente
                 header ("location:/ORIEL/index.php?ctl=empresas_listar");
-                //$this->empresas_listar();
+              
             }
             
         } else    {
@@ -5065,27 +5265,42 @@
              */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            //Llamada a la vista de usuario correspondiente
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }      
     }
-    
+    /*
+     * Metodo que permite cambiar el estado activo/inactivo de una empresa en especifico
+     */
     public function empresa_cambiar_estado() {
+        //Verifica que la sesion de usuario se encuentre activa
         if(isset($_SESSION['nombre'])){
+            //Verifica que se haya enviado el parametro id por medio de la url
             if (isset($_GET['id'])) {
+                //Verifica que se haya enviado la información del estado
                 if (isset($_GET['estado'])) { 
+                    //Crea un objeto de la clase empresas
                     $obj_empresas = new cls_empresa();
+                    //Establece el atributo del objeto con la información enviada por medio de url
                     $obj_empresas->setId($_GET['id']);
+                    //Establece el atributo del objeto con la información enviada por medio de url
                     $obj_empresas->setEmpresa($_GET['empresa']);
+                    //Establece el atributo del objeto con la información enviada por medio de url
                     $obj_empresas->setObservaciones($_GET['observaciones']);
+                    //Verifica el estado enviado por url
+                    //En caso de que sea 1, lo invierte para cambiarlo en bd
                     if($_GET['estado']==1){
                         $obj_empresas->setEstado("0");
                     }
+                    //En caso de que sea 0, lo invierte para cambiarlo en bd
                     else {
                         $obj_empresas->setEstado("1");
                     }
+                    //Guarda en la bd la información de la empresa
                     $obj_empresas->guardar_empresa();
+                    //Llama a la vista de usuario correspondiente
                     header ("location:/ORIEL/index.php?ctl=empresas_listar");
-                    //$this->empresas_listar();
+                    
                 }
             }
         }else{
@@ -5097,6 +5312,7 @@
              */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            //Llama a la vista de usuario correspondiente
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }
     }
@@ -5104,24 +5320,41 @@
     ////////////////////////////////////////////////////////////////////////////
     //Editar Punto BCR, información completa 
     ////////////////////////////////////////////////////////////////////////////
+    /*
+     * Metodo que permite cambiar la información de un punto bcr en especifico o agregar uno nuevo
+     */
     public function gestion_punto_bcr(){
+        //Verifica que la sesion de usuario esté activa
         if(isset($_SESSION['nombre'])){
+            //Crea una instancia de la clase puntos bcr
             $obj_Puntobcr = new cls_puntosBCR();
+            //Crea una instancia de la clase personal
             $obj_Personal = new cls_personal();
+            //Crea una instancia de la clase areas de apoyo
             $obj_areasapoyo = new cls_areasapoyo();
+            //Crea una instancia de la clase empresa
             $obj_empresa = new cls_empresa();
+            //Crea una instancia de la clase horario
             $obj_horario = new cls_horario();
+            //Crea una instancia de la clase direccion ip
             $obj_direccionIP = new cls_direccionIP();
+            //Crea una instancia de la clase telefono
             $obj_telefono = new cls_telefono();
+            //Crea una instancia de la clase unidad ejecutora
             $obj_unidad_ejecutora = new cls_unidad_ejecutora();
+            //Crea una instancia de la clase enlace telecom
             $obj_enlace_telecom = new cls_enlace_telecom();
+            //Crea una instancia de la clase medio enlace
             $obj_medio_enlace = new cls_medio_enlace();
+            //Crea una instancia de la clase proveedor enlace
             $obj_proveedor_enlace = new cls_proveedor_enlace();
+            //Crea una instancia de la clase tipo de enlace
             $obj_tipo_enlace = new cls_tipo_enlace();
-            
+            //Verifica si el id enviado por url es igual a 0
             if ($_GET['id']==0){
-                
+                //Inicializa los elemntos de un vector para mostrar la información que corresponde en pantalla
                 $ide=0;
+                //Inicializa cada campo a vació o con lo minimo requerido
                 $params[0]['Codigo']="";
                 $params[0]['Cuenta_SIS']="BCR-";
                 $params[0]['Nombre']="";
@@ -5129,171 +5362,238 @@
                 $params[0]['Observaciones']="";
                 $params[0]['Estado']=1;
                 
-                //Obtiene todos los tipos de puntos BCR para listarlos
+                //Obtiene todos los tipos de puntos BCR para listarlos (condicion vacia sin filtro)
                 $obj_Puntobcr->setCondicion("");
+                //Ejecuta la consulta
                 $obj_Puntobcr->obtiene_los_tipo_puntos();
+                //Obtiene el resultado de la consulta y lo asigna a una variable tipo vector
                 $tipo_puntos = $obj_Puntobcr->getArreglo();
                 
                 //Obtiene Distrito->Cantón->Provincia
                     //Distritos
                 $obj_Puntobcr->setCondicion("");
+                //Ejecuta la consulta
                 $obj_Puntobcr->obtiene_distritos();
+                //Obtiene el resultado en una variable tipo vector
                 $distritos = $obj_Puntobcr->getArreglo();
+                
                     //Cantones
                 $obj_Puntobcr->setCondicion("");
+                //Ejecuta la consulta
                 $obj_Puntobcr->obtiene_cantones();
+                //Obtiene el resultado en una variable tipo vector
                 $cantones = $obj_Puntobcr->getArreglo();
                     //Provincias
                 $obj_Puntobcr->setCondicion("");
+                //Ejecuta la consulta
                 $obj_Puntobcr->obtiene_provincias();
+                //Obtiene la información en una variable tipo vector
                 $provincias = $obj_Puntobcr->getArreglo();
                 
                 //Obtiene empresa remesera
                 $obj_empresa->setCondicion("");
+                //Ejecuta la consulta en base de datos
                 $obj_empresa->obtiene_todas_las_empresas();
+                //Obtiene el resultado en una variable tipo vector
                 $empresas= $obj_empresa->getArreglo();           
-                
+                //Llamada a la vista de usuario correspondiente 
                 require __DIR__ . '/../vistas/plantillas/frm_puntos_bcr_nuevo.php';
             }   else    {
-                
+                //En caso de que el id sea diferente de cero, es porque se va a actualizar la información de un punto bcr ya existente
                 $ide=$_GET['id'];
                 //Obtiene la informacion del PuntoBCR
                 $ide=$_GET['id'];
+                //Establece la condición o filtro de busqueda
                 $obj_Puntobcr->setCondicion("T_PuntoBCR.ID_PuntoBCR='".$_GET['id']."'");
+                //Ejecuta la consulta SQL
                 $obj_Puntobcr->obtiene_todos_los_puntos_bcr();
+                //Asigna el resultado a una variable tipo vector
                 $params= $obj_Puntobcr->getArreglo();
                 
                 //Obtiene todos los tipos de puntos BCR para listarlos
                 $obj_Puntobcr->setCondicion("");
+                //Ejecuta la consulta
                 $obj_Puntobcr->obtiene_los_tipo_puntos();
+                //Asigna el resultado a una variable tipo vecto
                 $tipo_puntos = $obj_Puntobcr->getArreglo();
                 
                 //Obtiene los telefonos del PuntoBCR
                 $obj_telefono->setCondicion("T_Telefono.ID='".$_GET['id']."'");
+                //Ejecuta la consulta
                 $obj_telefono->obtiene_telefonos_puntoBCR();
+                //Asigna el resultado a una variable tipo vector
                 $telefonos= $obj_telefono->getArreglo();
                 
                 //Obtiene Unidades Ejecutoras asignadas al Punto BCR
                 $obj_Puntobcr->setCondicion("T_UE_PuntoBCR.ID_PuntoBCR='".$_GET['id']."'");
+                //Ejecuta la consulta SQL
                 $obj_Puntobcr->obtiene_unidades_ejecutoras();
+                //Obtiene el resultado en variable tipo vector
                 $unidad_ejecutora= $obj_Puntobcr->getArreglo();
                 
                 //Obtiene Distrito->Cantón->Provincia
                     //Distritos
                 $obj_Puntobcr->setCondicion("");
+                //Ejecuta la consulta SQL
                 $obj_Puntobcr->obtiene_distritos();
+                //Asigna el resultado a una variable tipo vector
                 $distritos = array_merge(array(['ID_Distrito'=>0]+['Nombre_Distrito'=>""]),$obj_Puntobcr->getArreglo());
                     //Cantones
                 $obj_Puntobcr->setCondicion("");
+                //Ejecuta la consulta SQL
                 $obj_Puntobcr->obtiene_cantones();
+                //Obtiene el resultado en una variable tipo vector
                 $cantones   = array_merge(array(['ID_Canton'=>0]+['Nombre_Canton'=>""]),$obj_Puntobcr->getArreglo());
                     //Provincias
                 $obj_Puntobcr->setCondicion("");
+                //Ejecuta la consulta
                 $obj_Puntobcr->obtiene_provincias();
+                //Asigna el resultado a una variable tipo vector
                 $provincias = array_merge(array(['ID_Provincia'=>"0"]+['Nombre_Provincia'=>""]),$obj_Puntobcr->getArreglo());
                 
                 //obtiene las areas de apoyo del sitio
                 $obj_areasapoyo->setCondicion("T_PuntoBCRAreaApoyo.ID_PuntoBCR='".$_GET['id']."'");
+                //Ejecuta la consulta SQL
                 $obj_areasapoyo->obtiene_todos_las_areas_apoyo();
+                //Obtiene el resultado en una variable tipo vector
                 $areas_apoyo =$obj_areasapoyo->getArreglo();
                 
                 //Obtiene la informacion del personal
                 $obj_Personal->setCondicion("");
+                //Asigna vacio a una variable cadena
                 $condicion="";                
+                //Extrae la cantidad de registros del vector unidades ejecutoras
                 $tam=count($unidad_ejecutora);
                 if($tam>0){
+                    //Recorre el vector de unidades ejecutoras
                     for ($i = 0; $i <$tam; $i++) {
+                        //Arma la condicion de busqueda de personas por unidades ejecutoras
                         $condicion=$condicion."T_UnidadEjecutora.Numero_UE='".$unidad_ejecutora[$i]['Numero_UE']."'";
+                        //Verifica el tamaño del arreglo para verificar si la condición ocupa varias clausulas para buscar
                         if($tam>$i && $tam-1<>$i)
                         {
+                            //Agrega or a la sentencia SQL
                             $condicion=$condicion." OR ";
                         }
                     }
+                    //Agrega la condición al objeto personal
                     $obj_Personal->setCondicion($condicion);
+                    //Busca las personas relacionadas al punto bcr por unidades ejecutoras
                     $obj_Personal->obtiene_todo_el_personal();
+                    //Asigna el resultado a una variable tipo vector
                     $personal = $obj_Personal->getArreglo();
                 }
-                else{
+                else{//En caso de que el punto no tenga unidades ejecutoras relacionadas,establece a nulo el objeto personal
+                    //
                     $personal=null;
                 }
                 
                 //Obtiene empresa remesera
                 $obj_empresa->setCondicion("");
+                //Ejecuta la consulta en la bd
                 $obj_empresa->obtiene_todas_las_empresas();
+                //Asigna el resultado a una variable tipo vector
                 $empresas= $obj_empresa->getArreglo();
                 
                 //Obtiene todos los Horarios
                 $obj_horario->setCondicion("");
+                //Ejecuta la consulta en la bd
                 $obj_horario->obtiene_todos_los_horarios();
+                //Asigna el resultado a una variable tipo vector
                 $horarios= $obj_horario->getArreglo();
                 
                 //Obtiene horario de oficina
                 $obj_horario->setCondicion("ID_Horario='".$params[0]['ID_Horario']."'");
+                //Ejecuta la consulta en la bd
                 $obj_horario->obtiene_todos_los_horarios();
+                //Asigna el resultado a una variable tipo vector
                 $horariopunto= $obj_horario->getArreglo();
                 
                 //Obtiene Direcciones IP del sitio
                 $obj_direccionIP->setCondicion("T_PuntoBCRDireccionIP.ID_PuntoBCR='".$_GET['id']."'");
+                //Ejecuta la consulta en la bd
                 $obj_direccionIP->obtiene_direccionesIP();
+                //Asigna el resultado a una variable tipo vector
                 $direccionIP = $obj_direccionIP->getArreglo();
                 
                 //Obtiene los tipos de telefono
                 $obj_telefono->setCondicion("");
+                //Ejecuta la consulta en la bd
                 $obj_telefono->obtiene_tipo_telefonos();
+                //Asigna el resultado a una variable tipo vector
                 $tipo_telefono= $obj_telefono->getArreglo();
                 
                 //Obtiene Unidades Ejecutoras
                 $obj_unidad_ejecutora->setCondicion("");
+                //Ejecuta la consulta en la bd
                 $obj_unidad_ejecutora->obtener_unidades_ejecutoras();
+                //Asigna el resultado a una variable tipo vector
                 $todas_ue = $obj_unidad_ejecutora->getArreglo();
 
                 //Obtiene los tipos de area de apoyo
                 $obj_areasapoyo->setCondicion("");
+                //Ejecuta la consulta en la bd
                 $obj_areasapoyo->obtiene_tipo_area_apoyo();
+                //Asigna el resultado a una variable tipo vector
                 $tipos_areas_apoyo= $obj_areasapoyo->getArreglo();
                 
                 //Obtiene todas las areas de apoyo
                 $obj_areasapoyo->setCondicion("");
+                //Ejecuta la consulta en la bd
                 $obj_areasapoyo->obtiene_todos_las_areas_apoyo();
+                //Asigna el resultado a una variable tipo vector
                 $todas_areas_apoyo =$obj_areasapoyo->getArreglo();
                 
                 //Obtiene todas las direcciones IP
                 $obj_direccionIP->setCondicion("");
+                //Ejecuta la consulta en la bd
                 $obj_direccionIP->obtiene_direccionesIP();
+                //Asigna el resultado a una variable tipo vector
                 $todas_direccionIP=$obj_direccionIP->getArreglo();
                 
                 //Obtiene todos los tipos de Direcciones IP
                 $obj_direccionIP->setCondicion("");
+                //Ejecuta la consulta en la bd
                 $obj_direccionIP->obtiene_tipo_direcciones_ip();
+                //Asigna el resultado a una variable tipo vector
                 $tipos_direccion_ip= $obj_direccionIP->getArreglo();
                 
                 //Obtiene todos los gerente de zona del BCR
                 $obj_Personal->setCondicion("");
+                //Ejecuta la consulta en la bd
                 $obj_Personal->obtener_gerentes_zona_bcr();
+                //Asigna el resultado a una variable tipo vector
                 $gerente_zona_bcr= $obj_Personal->getArreglo();
                 
                 //Obtiene todos los supervisores
                 $obj_Personal->setCondicion("");
+                //Ejecuta la consulta en la bd
                 $obj_Personal->obtener_supervisor_zona();
+                //Asigna el resultado a una variable tipo vector
                 $supervisor_zona_externo = $obj_Personal->getArreglo();
                 
                 //Obtiene la información de telecom
                 $obj_enlace_telecom->setCondicion("T_PuntoBCREnlace.ID_PuntoBCR='".$_GET['id']."'");
+                //Ejecuta la consulta en la bd
                 $obj_enlace_telecom->obtener_todos_enlaces();
+                //Asigna el resultado a una variable tipo vector
                 $telecom = $obj_enlace_telecom->getArreglo();
                 
                 //Obtiene la información de medios de enlace
                 $obj_medio_enlace->obtener_medio_enlaces();
+                //Asigna el resultado a una variable tipo vector
                 $medio_enlace = $obj_medio_enlace->getArreglo();
                 
                 //Obtiene la informacion de tipos de enlace
                 $obj_tipo_enlace->obtener_tipo_enlaces();
+                //Asigna el resultado a una variable tipo vector
                 $tipo_enlace =  $obj_tipo_enlace->getArreglo();
                 
                 //Obtiene la informacion de proveedor de enlaces
                 $obj_proveedor_enlace->obtener_proveedores();
+                //Asigna el resultado a una variable tipo vector
                 $proveedor_enlace= $obj_proveedor_enlace->getArreglo();
-                
+                //Muestra la vista de usuario correspondiente
                 require __DIR__ . '/../vistas/plantillas/frm_puntos_bcr_editar.php';
             }
             
@@ -5306,23 +5606,35 @@
              */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            //Muestra la vista de usuario correspondiente
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }
     }
     
     // Metodo que permite actualizar en tiempo real la lista de cantones
     public function actualiza_en_vivo_canton(){
+        //Valida que la sesión del usuario este activa
         if(isset($_SESSION['nombre'])){
+            //Crea objeto de la clase puntos bcr
             $obj_puntos_bcr = new cls_puntosBCR();
+            //Obtiene el id de provincia enviado desde el formulario HTML
             $id_provincia= $_POST['id_provincia'];
+            //Establece la condicion para buscar cantones por medio del id de provincia
             $obj_puntos_bcr->setCondicion("ID_Provincia=".$id_provincia);
+            //Ejecuta la sentencia SQL
             $obj_puntos_bcr->obtiene_cantones();
+            //Obtiene los resultados mediante una variable tipo vector
             $cantones=$obj_puntos_bcr->getArreglo(); 
+            //Extrae la cantidad de registros del vector
             $tam = count($cantones);
+            //Empieza a construir la lista desplegable de cantones
             $html .= '<option value="0"></option>';   
+            //Mediante un ciclo recorre todos los registros del vector
             for($i=0; $i<$tam;$i++){
+                //Va agregando elementos a la lista
                 $html .= '<option value="'.$cantones[$i]['ID_Canton'].'">'.$cantones[$i]['Nombre_Canton'].'</option>';            
             }        
+            //Envia la estructura html construida 
             echo $html;
         }else{
               /*
@@ -5333,23 +5645,35 @@
              */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            //Llamada a la vista de usuario correspondiente
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }
     }
-    
+    /*
+     * Metodo que permite actualizar en tiempo real la lista de distritos de acuerdo a un canton en especifico
+     */
     public function actualiza_en_vivo_distrito(){
+        //Valida que la sesión del usuario este activa
         if(isset($_SESSION['nombre'])){
+            //Crea un objeto de tipo puntos bcr
             $obj_puntos_bcr = new cls_puntosBCR();
+            //Obtiene el id del canton seleccionado
             $id_canton= $_POST['id_canton'];
+            //Establece la condicion de busqueda de distritos de acuerdo al id del canton
             $obj_puntos_bcr->setCondicion("ID_Canton=".$id_canton);
+            //Ejecuta la sentencia SQL
             $obj_puntos_bcr->obtiene_distritos();
+            //Obtiene el resultado en una variable tipo vector
             $distritos=$obj_puntos_bcr->getArreglo(); 
+            //Extra la cantidad de registros que tiene el vector
             $tam = count($distritos);
             
-            //$html .= '<option value="0"></option>';
+            //Recorre registro por registro
             for($i=0; $i<$tam;$i++){
+                //Va construyendo los elementos de la lista de distritos
                 $html .= '<option value="'.$distritos[$i]['ID_Distrito'].'">'.$distritos[$i]['Nombre_Distrito'].'</option>';            
-            }        
+            }     
+            //Envia la estructura HTML
             echo $html;
         }else{
               /*
@@ -5360,27 +5684,36 @@
              */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            //Llama a la vista de usuario correspondiente
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }
     }
     // Metodo que permite actualizar en tiempo real la lista de puntos bcr
     public function actualiza_en_vivo_punto_bcr(){
+        //Verifica que la sesion de usuario este definida
         if(isset($_SESSION['nombre'])){
-            
+            //Crea un objeto de la clase eventos
             $obj_ev =new cls_eventos();
+            //Obtiene el id del punto bcr enviado por metodo post
             $id_tipo_punto_bcr= $_POST['id_tipo_punto_bcr'];
+            //Obtiene el id de la provincia seleccionada
             $id_provincia= $_POST['id_provincia'];
-            
+            //Establece el atributo tipo de punto 
             $obj_ev->setTipo_punto($id_tipo_punto_bcr);
+            //Establece el atributo provincia
             $obj_ev->setProvincia($id_provincia);
-            
+            //Ejecuta la consulta SQL
             $obj_ev->filtra_sitios_bcr_bitacora();
+            //Obtiene los resultados en una variable tipo vector 
             $sitios=$obj_ev->getArreglo(); 
+            //Obtiene El tamaño del vector de resultados
             $tam = count($sitios);
-            
+            //recorre el vector de resultados
             for($i=0; $i<$tam;$i++){
+                //Construye la lista desplegable con los sitios de la consulta
                 $html .= '<option value="'.$sitios[$i]['ID_PuntoBCR'].'">'.$sitios[$i]['Nombre'].'</option>';            
-            }        
+            }       
+            //Envia la estrcutura HTML como respuesta al formulario
             echo $html;
         }else{
               /*
@@ -5391,33 +5724,51 @@
              */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            //Llamada a la vista del usuario correspondiente
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }
     }
-    
+    /*
+     * Metodo que permite guardar la información de un punto bcr
+     */
     public function punto_bcr_guardar() {
+        //Verifica que la sesion de usuario esté activa
         if(isset($_SESSION['nombre'])){
+            //Crea un objeto de la clase puntos BCR
             $obj_Puntobcr = new cls_puntosBCR();
+            //Verifica que se haya enviado información desde el formulario html
             if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-                
+                //Imprime el id enviado via url
                 echo ($_GET['id']);
+                //Establece el atributo del objeto con el parametro enviado via url
                 $obj_Puntobcr->setId($_GET['id']);
+                //Establece el atributo del objeto con el parametro enviado via formulario html
                 $obj_Puntobcr->setCodigo($_POST['Codigo']);
+                //Establece el atributo del objeto con el parametro enviado via formulario html
                 $obj_Puntobcr->setCuentasis($_POST['Cuenta_SIS']);
+                //Establece el atributo del objeto con el parametro enviado via formulario html
                 $obj_Puntobcr->setNombre($_POST['Nombre']);
+                //Establece el atributo del objeto con el parametro enviado via formulario html
                 $obj_Puntobcr->setDireccion($_POST['Direccion']);
+                //Establece el atributo del objeto con el parametro enviado via formulario html
                 $obj_Puntobcr->setObservaciones($_POST['Observaciones']);
+                //Establece el atributo del objeto con el parametro enviado via formulario html
                 $obj_Puntobcr->setEstado($_POST['Estado']);
+                 //Establece el atributo del objeto con el parametro enviado via formulario html
                 $obj_Puntobcr->setTipo_punto($_POST['Tipo_Punto']);
+                 //Establece el atributo del objeto con el parametro enviado via formulario html
                 $obj_Puntobcr->setDistrito($_POST['Distrito']);
+                 //Establece el atributo del objeto con el parametro enviado via formulario html
                 $obj_Puntobcr->setEmpresa($_POST['Empresa']);
+                 //Establece el atributo del objeto con el parametro enviado via formulario html
                 $obj_Puntobcr->sethoraslaborales("1");
-
+                //Guarda en base de datos la información del punto bcr
                 $obj_Puntobcr->guardar_punto_bcr();
 
             }
+            //Llamada a la vista de usuario correspondiente
             header ("location:/ORIEL/index.php?ctl=puntos_bcr_listar");
-            //$this->puntos_bcr_listar();
+        
         }else{
               /*
              * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
@@ -5427,15 +5778,23 @@
              */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            //Llamada a la vista de usuario correspondiente
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }  
     }
-    
+    /*
+     * Metodo que permite desligar un telefono de un punto bcr
+     */
     public function puntobcr_desligar_telefono(){
+        //Verifica que la sesion de usuario este activa
         if(isset($_SESSION['nombre'])){
+            //Crea un objeto de tipo telefono
             $obj_telefono = new cls_telefono();
+            //Establece el atributo del objeto mediante el parametro enviado por el formulario html
             $obj_telefono->setId($_POST['id_telefono']);
+            //Establece la condicion para buscar el telefono
             $obj_telefono->setCondicion("ID_Telefono='".$_POST['id_telefono']."'");
+            //Desliga el telefono del punto bcr
             $obj_telefono->eliminar_telefono();
 
         }else{
@@ -5447,15 +5806,23 @@
              */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            //Llamada a la vista de usuario correspondiente.
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         } 
     }
-    
+    /*
+     * Metodo que permite desligar una unidad ejecutora de un punto bcr
+     */
     public function puntobcr_desligar_ue(){
+        //Verifica que la sesion de usuario esté activa
         if(isset($_SESSION['nombre'])){
+            //Crea un objeto de la clase unidad ejecutora
             $obj_unidad_ejecutora = new cls_unidad_ejecutora();
+            //Establece el atributo de la clase por medio del parametro enviado
             $obj_unidad_ejecutora->setId($_POST['id_unidad_ejecutora']);
+            //Establece el atributo de la clase por medio del parametro enviado
             $obj_unidad_ejecutora->setId2($_POST['id_puntobcr']);
+            //Desliga la unidad ejecutora del punto bcr
             $obj_unidad_ejecutora->eliminar_relacion_puntobcr_ue();
 
         }else{
@@ -5467,15 +5834,23 @@
              */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            //Muestra la vista de usuario correspondiente
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }
     }
-    
+    /*
+     * Metodo que permite ligar unidades ejecutoras a puntos BCR
+     */
     public function puntobcr_agregar_ue(){
+        //Verifica que la sesion de usuario este activa
         if(isset($_SESSION['nombre'])){
+            //Crea un objeto de tipo unidad ejecutora
             $obj_unidad_ejecutora = new cls_unidad_ejecutora();
+            //Establece el atributo de la clase por medio del parametro enviado
             $obj_unidad_ejecutora->setId($_POST['id_unidad_ejecutora']);
+            //Establece el atributo de la clase por medio del parametro enviado
             $obj_unidad_ejecutora->setId2($_POST['id_puntobcr']);
+            //Liga la unidad ejecutora al punto BCR
             $obj_unidad_ejecutora->agregar_puntobcr_ue();
             
         }else{
@@ -5487,21 +5862,31 @@
              */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            //Muestra la vista de usuario correspondiente
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         } 
     }
-    
+    /*
+     * Metodo que permite guardar la informacion general de puntos bcr
+     */
     public function puntoBCR_guardar_informacion_general(){
+        //Verifica que la sesion de usuario esté activa
         if(isset($_SESSION['nombre'])){
+            //Crea un objeto de la clase puntos bcr
             $obj_puntobcr = new cls_puntosBCR();
+            //Establece la condicion de la consulta SQL, para editar la información
             $obj_puntobcr->setCondicion("ID_PuntoBCR='".$_POST['id_puntobcr']."'");
-            
+            //Establece el atributo del objeto mediante el parametro correspondiente
             $obj_puntobcr->setCodigo($_POST['codigo']);
+            //Establece el atributo del objeto mediante el parametro correspondiente
             $obj_puntobcr->setCuentasis($_POST['cuenta']);
+            //Establece el atributo del objeto mediante el parametro correspondiente
             $obj_puntobcr->setNombre($_POST['nombre']);
+            //Establece el atributo del objeto mediante el parametro correspondiente
             $obj_puntobcr->setId($_POST['tipo_punto']);
+            //Actualiza la información del punto bcr en bd
             $obj_puntobcr->actualizar_informacion_general_puntobcr();
-            //echo 'Se actualizó la ubicacion del PuntoBCR';
+            
         }else{
               /*
              * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
@@ -5511,18 +5896,27 @@
              */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            //Llamada a la vista de usuario correspondiente
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }
     }
-    
+    /*
+     * Metodo que permite guardar y actualizar la información de localización del punto bcr
+     */
     public function distrito_PuntoBCR_guardar(){
+        //Verifica que la sesión de usuario este activa 
         if(isset($_SESSION['nombre'])){
+            //Crea un objeto de la clase puntos bcr
             $obj_puntobcr = new cls_puntosBCR();
+            //Establece la condicion para saber que punto bcr editar 
             $obj_puntobcr->setCondicion("ID_PuntoBCR='".$_POST['id_puntobcr']."'");
+            //Establece el atributo del objeto mediante el parametro correspondiente
             $obj_puntobcr->setId($_POST['id_distrito']);
+            //Establece el atributo del objeto mediante el parametro correspondiente
             $obj_puntobcr->setDireccion($_POST['direccion']);
+            //Guarda la información actualizada en bd
             $obj_puntobcr->actualizar_ubicacion_puntobcr();
-            //echo 'Se actualizó la informacion general del PuntoBCR';
+            
         }else{
               /*
              * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
@@ -5532,20 +5926,33 @@
              */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            //Llamada a la vista de usuario correspondiente
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }
     }
-    
+     /*
+     * Metodo que permite guardar y actualizar la información de numero de telefono del punto bcr
+     */
     public function puntobcr_numero_telefono_guardar(){
+        //Verifica que la sesión de usuario este activa 
         if(isset($_SESSION['nombre'])){   
+            //Verifica que se haya enviado información desde el formulario html
             if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+                //Creacion del objeto de clase telefono
                 $obj_telefono = new cls_telefono();
+                //Establece el atributo del objeto mediante el parametro correspondiente
                 $obj_telefono->setId($_POST['ID_Tipo_Telefono']);
+                //Establece el atributo del objeto mediante el parametro correspondiente
                 $obj_telefono->setId2($_POST['ID_PuntoBCR']);
+                //Establece el atributo del objeto mediante el parametro correspondiente
                 $obj_telefono->setTipo_telefono($_POST['Tipo_Telefono']);
+                //Establece el atributo del objeto mediante el parametro correspondiente
                 $obj_telefono->setNumero($_POST['numero']);
+                //Establece el atributo del objeto mediante el parametro correspondiente
                 $obj_telefono->setObservaciones($_POST['observaciones']);
+                //Guarda la información en la base de datos
                 $obj_telefono->guardar_telefono();
+                //Llamada a la vista de usuario correspondiente
                 header("location:/ORIEL/index.php?ctl=gestion_punto_bcr&id=".$_POST['ID_PuntoBCR']);
             }
         }   else    {
@@ -5557,21 +5964,32 @@
              */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            //Llamada a la vista de usuario correspondiente
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }
     }
-    
+    /*
+     * Metodo que permite asignar areas de apoyo a un punto bcr
+     */
     public function puntobcr_asignar_area_apoyo(){
+        //Verifica que la sesion de usuario este activa
         if(isset($_SESSION['nombre'])){
+            //Crea el objeto de la clase areas de apoyo
             $obj_area_apoyo = new cls_areasapoyo();
+            //Establece el atributo del objeto mediante el parametro correspondiente
             $obj_area_apoyo->setId($_POST['id_area_apoyo']);
+            //Establece el atributo del objeto mediante el parametro correspondiente
             $obj_area_apoyo->setId2($_POST['id_puntobcr']);
+            //Establece la condicion para identificar el punto bcr a actualizar 
             $obj_area_apoyo->setCondicion("T_PuntoBCRAreaApoyo.ID_PuntoBCR='".$_POST['id_puntobcr']."' AND T_PuntoBCRAreaApoyo.ID_Area_Apoyo='".$_POST['id_area_apoyo']."'");
             $obj_area_apoyo->obtiene_todos_las_areas_apoyo();
+            //Obtiene el resultado de la consulta en una variable tipo vector
             $areas_apoyo =$obj_area_apoyo->getArreglo();
+            //Verifica si la variable areas de apoyo es igual a vacio
             if($areas_apoyo==""){
+                //procede a ligar el area de apoyo al punto bcr
                 $obj_area_apoyo->agregar_PuntoBCR_AreaApoyo();
-            }   else    {
+            }   else    {//de lo contrario alerta al usuario al respecto
                 echo "El Area de Apoyo ya se encuentra asignada al PuntoBCR";
             }
         }else{
@@ -5583,16 +6001,25 @@
              */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+             //Llamada a la vista de usuario correspondiente
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }
     }
-     
+     /*
+      * Metodo que desliga areas de apoyo de un punto bcr en especifico
+      */
     public function puntobcr_desligar_area_apoyo(){
+        //Verifica que la sesion de usuario este activa
         if(isset($_SESSION['nombre'])){
+            //Crea objeto de la clase area de apoyo
             $obj_area_apoyo = new cls_areasapoyo();
+            //Establece el atributo del objeto mediante el parametro correspondiente
             $obj_area_apoyo->setId($_POST['id_area_apoyo']);
+            //Establece el atributo del objeto mediante el parametro correspondiente
             $obj_area_apoyo->setId2($_POST['id_puntobcr']);
+            //Establece la condicion a vacio
             $obj_area_apoyo->setCondicion("");
+            //Desliga el area de apoyo del punto bcr
             $obj_area_apoyo->eliminar_puntobcr_area_apoyo();
             
         }else{
@@ -5604,16 +6031,25 @@
              */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+             //Llamada a la vista de usuario correspondiente
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }
     }
-    
+    /*
+     * Metodo que desliga la direccion ip del punto bcr
+     */
     public function puntobcr_desligar_direccion_ip(){
+        //Verifica que la sesion de usuario esté inactiva
         if(isset($_SESSION['nombre'])){
+            //Crea objeto de la clase direccion ip
             $obj_direccion = new cls_direccionIP();
+             //Establece el atributo del objeto mediante el parametro correspondiente
             $obj_direccion->setId($_POST['id_direccion_ip']);
+             //Establece el atributo del objeto mediante el parametro correspondiente
             $obj_direccion->setId2($_POST['id_puntobcr']);
+             //Establece la condicion a vacio
             $obj_direccion->setCondicion("");
+            //Desliga una direccion ip de un punto bcr
             $obj_direccion->eliminar_puntobcr_direccion_ip();
             
         }else{
@@ -5625,22 +6061,33 @@
              */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            //Llamada a la vista de usuario correspondiente
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }
     }
-    
+    /*
+     * Metodo que permite ligar una direccion ip a un punto bcr en especifico
+     */
     public function puntobcr_asignar_direccion_ip(){
+        //Verifica si la sesión de usuario se encuentra activa 
         if(isset($_SESSION['nombre'])){
+            //Crea un nuevo objeto de la clase direccion ip
             $obj_direccion = new cls_direccionIP();
+            //Establece el atributo del objeto mediante el parametro correspondiente
             $obj_direccion->setId($_POST['id_direccion_ip']);
+            //Establece el atributo del objeto mediante el parametro correspondiente
             $obj_direccion->setId2($_POST['id_puntobcr']);
+            //Establece la condicion para asignar la ip a la direccion ip especifica 
             $obj_direccion->setCondicion("T_puntoBCRDireccionIP.ID_PuntoBCR='".$_POST['id_puntobcr']."' AND T_puntoBCRDireccionIP.ID_Direccion_IP='".$_POST['id_direccion_ip']."'");
-            
+            //Ejecuta la sentencia SQL correspondiente
             $obj_direccion->obtiene_direccionesIP();
+            //Obtiene el resultado de la consulta
             $direcciones_ip =$obj_direccion->getArreglo();
+            //Verifica si hubieron resultados
             if($direcciones_ip==""){
+                //Caso positivo agrega la direccion ip al punto bcr
                 $obj_direccion->agregar_PuntoBCR_direccionIP();
-            }   else    {
+            }   else    {//De lo contrario alerta al usuario al respecto
                 echo "La dirección IP ya se encuentra asignada al PuntoBCR";
             }
         }else{
@@ -5652,37 +6099,54 @@
              */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            //Llamada a la vista de usuario correspondiente
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }
     }
-    
+    /*
+     * Metodo que permite agregar una direccion ip
+     */
     public function direccionIP_agregar(){
+        //Verifica que la sesion de usuario este activa
         if(isset($_SESSION['nombre'])){
-            //echo "<script>alert('test msgbox')</script>";
+            //Crea un objeto de la clase direccion ip
             $obj_direccion_ip = new cls_direccionIP();
             //Crea nueva area de apoyo
+            //Establece el atributo del objeto mediante el parametro correspondiente
             $obj_direccion_ip->setId($_POST['ID_Direccion_IP']);
+            //Establece el atributo del objeto mediante el parametro correspondiente
             $obj_direccion_ip->setTipo_IP($_POST['tipo_ip']);
+            //Establece el atributo del objeto mediante el parametro correspondiente
             $obj_direccion_ip->setDireccionIP($_POST['direccion_ip']);
+            //Establece el atributo del objeto mediante el parametro correspondiente
             $obj_direccion_ip->setObservaciones($_POST['observaciones_ip']);
+            //Establece la condicion a vacio
             $obj_direccion_ip->setCondicion("");
+            //Guarda la direccion en bd
             $obj_direccion_ip->agregar_direccion_ip();
-            
+            //Otiene el arreglo de resultados con la direccion ip
             $nueva_ip= $obj_direccion_ip->getArreglo();
             
             //Asigna el area de apoyo al puntoBCR
+            //Establece el atributo del objeto mediante el parametro correspondiente
             $obj_direccion_ip->setId($nueva_ip[0]['ID_Direccion_IP']);
+            //Establece el atributo del objeto mediante el parametro correspondiente
             $obj_direccion_ip->setId2($_POST['ID_PuntoBCR']);
+            //Establece la condicion correspondiente para la consulta SQL
             $obj_direccion_ip->setCondicion("T_puntoBCRDireccionIP.ID_PuntoBCR='".$_POST['ID_PuntoBCR']."' AND T_puntoBCRDireccionIP.ID_Direccion_IP='".$nueva_ip[0]['ID_Direccion_IP']."'");
-            
+            //Obtiene las direcciones ip relacionadas al punto bcr
             $obj_direccion_ip->obtiene_direccionesIP();
+            //Obtiene el arreglo de resultados de acuerdo a la consulta SQL
             $direcciones_ip =$obj_direccion_ip->getArreglo();
+            //Verifica si hay resultados en la consulta
             if($direcciones_ip==""){
+                //Agrega la direccion ip para el punto bcr
                 $obj_direccion_ip->agregar_PuntoBCR_direccionIP();
             }   else    {
+                //De lo contrario alerta al usuario en pantalla
                 echo "La dirección IP ya se encuentra asignada al PuntoBCR";
             }
-            
+            //Llamada a la vista de usuario correspondiente
             header("location:/ORIEL/index.php?ctl=gestion_punto_bcr&id=".$_POST['ID_PuntoBCR']);
         }else{
               /*
@@ -5693,21 +6157,31 @@
              */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            //Llamada a la vista de usuario correspondiente
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }
     }
-    
+    /*
+     * Metodo que permite actualizar la información adicional del punto bcr 
+     */
     public function PuntoBCR_actualiza_informacion_adicional(){
+        //Verifica que la sesion de usuario este activa 
         if(isset($_SESSION['nombre'])){
+            //Crea un nuevo objeto de tipo puntos bcr
             $obj_puntobcr = new cls_puntosBCR();
+            //Establece la condicion de busqueda de punto bcr
             $obj_puntobcr->setCondicion("ID_PuntoBCR='".$_POST['id_puntobcr']."'");
-            
+            //Establece el atributo del objeto mediante el parametro correspondiente
             $obj_puntobcr->setEmpresa($_POST['id_empresa']);
+            //Establece el atributo del objeto mediante el parametro correspondiente
             $obj_puntobcr->setObservaciones($_POST['observaciones']);
+            //Establece el atributo del objeto mediante el parametro correspondiente
             $obj_puntobcr->setGerente($_POST['id_gerente']);
+            //Establece el atributo del objeto mediante el parametro correspondiente
             $obj_puntobcr->setSupervisor($_POST['id_supervisor']);
+            //Guarda la información en base de datos
             $obj_puntobcr->actualizar_informacion_adicional_puntobcr();
-            //echo 'Se actualizó la ubicacion del PuntoBCR';
+            
         }else{
               /*
              * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
@@ -5717,24 +6191,35 @@
              */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            //Llamada a la vista de usuario correspondiente
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }
     }
-    
+    /*
+     * Metodo que permite cambiar el estado activo/inactivo de un punto bcr
+     */
     public function punto_bcr_cambiar_estado(){
+        //Verificar que la sesion de usuario este activa
         if(isset($_SESSION['nombre'])){
+            //Verificar que se haya enviado el id por medio de la url
             if (isset($_GET['id'])) {
+                //Verificar que se haya enviado el estado por medio de la url
                 if (isset($_GET['estado'])) { 
                     $obj_puntobcr = new cls_puntosBCR();
-                    
+                    //Verifica el estado enviado por medio de la url, para invertirlo según el valor actual
                     if($_GET['estado']==1){
+                        //En caso de estar en valor actual 1, lo pasa a 0
                         $obj_puntobcr->setEstado("0");
                     }
                     else {
+                        //En caso de estar en valor actual 0, lo pasa a 1
                         $obj_puntobcr->setEstado("1");
                     }
+                    //Establece la condicion de busqueda para editar el punto bcr
                     $obj_puntobcr->setCondicion("ID_PuntoBCR='".$_GET['id']."'");
+                    //Actualiza el estado actual
                     $obj_puntobcr->actualizar_estado_puntobcr();
+                    //Llamada a la vista de usuario correspondiente
                     header ("location:/ORIEL/index.php?ctl=puntos_bcr_listar");
                 }
             }
@@ -5747,15 +6232,23 @@
              */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            //Llamada a la vista de usuario correspondiente
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }
     }
-    
+    /*
+     * Metodo que permite asignar un horario a un punto bcr en especifico
+     */
     public function puntobcr_asignar_horario() {
+        //Verifica que la sesion de usuario esté activa
         if(isset($_SESSION['nombre'])){
+            //Creacion de un objeto de tipo horario
             $obj_horario = new cls_horario();
+            //Establece el atributo id de la clase 
             $obj_horario->setId($_POST['id_horario']);
+            //Establece la condicion de busqueda del sitio bcr
             $obj_horario->setCondicion("ID_PuntoBCR='".$_POST['id_puntobcr']."'");
+            // Asigna el horario correspondiente al punto bcr
             $obj_horario->asignar_horario_puntobcr();  
         }else{
               /*
@@ -5766,14 +6259,21 @@
              */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            //Muestra la vista de usuario correspondiente
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }
     }
-    
+    /*
+     * Metodo que permite desligar un horario de un punto bcr en especifico
+     */
     public function puntobcr_eliminar_horario() {
+        //Verifica que la sesion de usuario esté establecida y activa
         if(isset($_SESSION['nombre'])){
+            //Crea un objeto de la clase horario
             $obj_horario = new cls_horario();
+            //Establece la condición de busqueda del punto bcr en cuestion
             $obj_horario->setCondicion("ID_PuntoBCR='".$_POST['id_puntobcr']."'");
+            //Elimina la asignación del horario al punto bcr
             $obj_horario->eliminar_horario_puntobcr(); 
         }else{
               /*
@@ -5784,21 +6284,36 @@
              */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            //Llamada a la vista de usuario correspondiente
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }
     }
-    
+    /*
+     * Metodo que permite guardar un enlace de telecomunicaciones a un punto bcr en especifico
+     */
     public function enlace_puntobcr_guardar() {
+        //Verifica que la sesion de usuario esté activa
         if(isset($_SESSION['nombre'])){
+            //Creacion de un objeto de tipo enlace telecom
             $obj_enlace = new cls_enlace_telecom();  
             //Obtiene la información enviada por el formulario por POST
+            //Establece cada uno de los atributos de la clase
+            
+            //Enlace
             $obj_enlace->setEnlace($_POST['enlace']);
+            //Interface
             $obj_enlace->setInterface($_POST['interface']);
+            //Linea
             $obj_enlace->setLinea($_POST['linea']);
+            //Bandwidth
             $obj_enlace->setBandwidth($_POST['bandwidth']);
+            //Medio de enlace
             $obj_enlace->setMedio_enlace($_POST['medio_enlace']);
+            //Proveedor
             $obj_enlace->setProveedor($_POST['proveedor_enlace']);
+            //Tipo de enlace
             $obj_enlace->setTipo_enlace($_POST['tipo_enlace']);
+            //Observaciones
             $obj_enlace->setObservaciones($_POST['observaciones_enlace']);
             //Valida si es un enlace nuevo o actualizacion y genera la condicion
             if($_POST['ID_Enlace']=="0"){
@@ -5813,9 +6328,11 @@
             $ultimo= $ultimo[0]['ID_Enlace'];
             //Guarda relacion entre enlace y punto
             $obj_enlace->setId($ultimo);
+            //Establece el id del punto bcr
             $obj_enlace->setId2($_POST['ID_PuntoBCR']);
+            //Ejecuta el guardado en la bd
             $obj_enlace->guardar_puntobcr_enlace();
-            
+            //Llamada a la vista del usuario
             header("location:/ORIEL/index.php?ctl=gestion_punto_bcr&id=".$_POST['ID_PuntoBCR']);
         }else{
               /*
@@ -5826,22 +6343,36 @@
              */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            //Llamada a la vista del usuario
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }
     }
-    
+    /*
+     * Metodo que permite desligar un enlace de un punto bcr 
+     */
     public function puntobcr_eliminar_enlace(){
+        //Verifica que la sesion de usuario esté activa
         if(isset($_SESSION['nombre'])){
+            //Creación de un objeto de la clase enlace telecom
             $obj_enlace = new cls_enlace_telecom();
             //Elimina la relacion entre PuntoBCR y el enlace
             $obj_enlace->setCondicion("ID_PuntoBCR=".$_POST['id_puntobcr']." and ID_Enlace=".$_POST['id_enlace']);
+            //Elimina la relación con el punto bcr
             $obj_enlace->eliminar_enlace_entre_puntobcr_telecom();
             //Elimina el enlace de la base de datos
             $obj_enlace->setCondicion("ID_Enlace=".$_POST['id_enlace']);
+            //Elimina el enlace de la bd
             $obj_enlace->eliminar_enlace_telecomunicaciones();
         }else{
+             /*
+             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+             * En la última línea llama a la pagina de inicio de sesión.
+             */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            //Llamada a la vista de usuario correspondiente
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }
     }
@@ -5849,11 +6380,19 @@
     ////////////////////////////////////////////////////////////////////////////
     /////////////////////////MANTENIMIENTO DE PERSONAL//////////////////////////
     ////////////////////////////////////////////////////////////////////////////
+    /*
+     * Metodo que permite listar el personal bcr en pantalla
+     */
     public function personal_listar(){
+        //Verifica que la sesion de usuario esté activa
         if(isset($_SESSION['nombre'])){
+            //Creación de un objeto de la clase personal
             $obj_personal=new cls_personal();
+            //Metodo que permite obtener el personal que se encuentra registrado en bd
             $obj_personal->obtiene_todo_el_personal_modulo_personas();
+            //Asigna el resultado a una variable tipo vector
             $personas= $obj_personal->getArreglo();
+            //Llamada a la vista de usuario correspondiente
             require __DIR__ . '/../vistas/plantillas/frm_personal_listar.php';
         }else{
               /*
@@ -5864,24 +6403,36 @@
              */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            //Llamada a la vista de usuario correspondiente
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }
     }
-    
+    /*
+     * Metodo que permite cambiar el estado de una persona BCR en específico
+     */
     public function personal_cambiar_estado(){
+        //Verifica que la sesión de usuario esté activa
         if(isset($_SESSION['nombre'])){
+            //Verifica que se haya enviado el id del usuario en cuestion via url
             if (isset($_GET['id'])) {
+                //Verifica que se haya enviado el estado actual de la persona en bd
                 if (isset($_GET['estado'])) { 
+                    //Creación de un objeto de tipo personal
                     $obj_personal = new cls_personal();
-                    
+                    //Verifica el estado actual para invertirlo segun sea el caso
                     if($_GET['estado']==1){
+                        //En caso de ser 1, lo cambia a 0
                         $obj_personal->setEstado("0");
                     }
                     else {
+                        //En caso de ser 0, lo cambia a 1
                         $obj_personal->setEstado("1");
                     }
+                    //Establece la condición de busqueda SQL mediante el id de la persona
                     $obj_personal->setCondicion("ID_Persona='".$_GET['id']."'");
+                    //Ejecuta el cambio en bd
                     $obj_personal->actualizar_estado_persona();
+                    //Llamada a la vista de usuario correspondiente
                     header ("location:/ORIEL/index.php?ctl=personal_listar");
                 }
             }
@@ -5894,43 +6445,62 @@
              */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            //Llamada a la vista de usuario correspondiente
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }
     }
-    
+    /*
+     * Metodo que permite actualizar información de personal en bd, carga la información correspondiente en pantalla segun sea el caso
+     */
     public function personal_gestion(){
+        //Verifica que la sesión de usuario esté activa
         if(isset($_SESSION['nombre'])){
+            //Creacion de un objeto de la clase personal
             $obj_personal=new cls_personal();
+            //creacion de un objeto de la clase empresa
             $obj_empresa = new cls_empresa();
+            //Creacion de un objeto de la clase unidad ejecutora
             $obj_unidad_ejecutora = new cls_unidad_ejecutora();
+            //Creacion de un objeto de la clase telefono
             $obj_telefono = new cls_telefono();
             
-            
+            //Obtiene via url el id de la persona en cuestion
             $ide=$_GET['id'];
+            //Establece la condicion SQL para buscar la persona
             $obj_personal->setCondicion("T_Personal.ID_Persona='".$_GET['id']."'");
+            //Busca la persona en base de datos
             $obj_personal->obtiene_todo_el_personal_modulo_personas();
+            //Asigna el resultado a una variable de tipo vector
             $params= $obj_personal->getArreglo();
             
             //Obtiene empresa remesera
             $obj_empresa->setCondicion("");
+            //Ejecuta la consulta en bd
             $obj_empresa->obtiene_todas_las_empresas();
+            //Obtiene el resultado y lo asigna a una variable tipo vector
             $empresas= $obj_empresa->getArreglo();
 				
             //Obtiene Unidades Ejecutoras
             $obj_unidad_ejecutora->setCondicion("");
+            //Ejecuta la busqueda en bd
             $obj_unidad_ejecutora->obtener_unidades_ejecutoras();
+            //Obtiene el resultado en una variable de tipo vector
             $todas_ue = $obj_unidad_ejecutora->getArreglo();
             
             //Obtiene todos los Puestos
             $obj_personal->setCondicion("");
+            //Ejecuta la sentencia SQL
             $obj_personal->obtener_todos_puestos();
+            //Obtiene el resultado en una variable tipo vector
             $puestos= $obj_personal->getArreglo();
             
             //Obtiene los tipos de telefono
             $obj_telefono->setCondicion("");
+            //Ejecuta la sentecia SQL
             $obj_telefono->obtiene_tipo_telefonos();
+            //Obtiene el resultado en una variable tipo vector
             $tipo_telefono = $obj_telefono->getArreglo();
-            
+            //Llamada a la vista de usuario correspondiente
             require __DIR__ . '/../vistas/plantillas/frm_personal_detalle.php';
             
         }else{
@@ -5942,15 +6512,23 @@
              */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            //Llamada a la vista de usuario correspondiente
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }
     }
-    
+   /*
+    * Metodo que permite eliminar telefonos de la base de datos
+    */             
     public function personal_eliminar_telefono(){
+        //Verifica que la sesion de usuario esté activa
        if(isset($_SESSION['nombre'])){
+           //Crear objeto de la clase telefono
             $obj_telefono = new cls_telefono();
+            //Establece el id del telefono en cuestion
             $obj_telefono->setId($_POST['id_telefono']);
+            //Procede a armar la condicion de busqueda del SQL
             $obj_telefono->setCondicion("ID_Telefono='".$_POST['id_telefono']."'");
+            //Elimina el telefono de la base de datos
             $obj_telefono->eliminar_telefono();
 
         }else{
@@ -5962,29 +6540,42 @@
              */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            //Muestra la vista de usuario correspondiente
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }  
     }
-    
+    /*
+     * Metodo que permite asignar un numero de telefono a una persona en especifico
+     */
     public function personal_numero_telefono_guardar(){
+        //Verifica que la sesion de usuario esté activa 
         if(isset($_SESSION['nombre'])){   
+            //Verifica que el metodo de envio de datos sea por medio del formulario html
             if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+                //Creacion del objeto de la clase telefono
                 $obj_telefono = new cls_telefono();
-                //echo '<script>alert("Ingresa");</script>';
+                //Establece los parametros requeridos para el objeto de la clase
+                //ID del telefono
                 $obj_telefono->setId($_POST['ID_Telefono']);
+                //Id de la persona
                 $obj_telefono->setId2($_POST['ID_Persona']);
+                //Tipo de telefono
                 $obj_telefono->setTipo_telefono($_POST['Tipo_Telefono']);
+                //Establece el numero
                 $obj_telefono->setNumero($_POST['numero']);
+                //Define las observaciones
                 $obj_telefono->setObservaciones($_POST['observaciones']);
+                //Dependiendo del numero de id que se reciba, se guarda un nuevo telefono o se edita el existente
                 if($_POST['ID_Telefono']==0){
-                    //echo '<script>alert("Nuevo Numero");</script>';
                     $obj_telefono->guardar_telefono();
                 }
                 else{
-                    //echo '<script>alert("Actualiza Numero");</script>';
+                    //Establece la condicion de busqueda para editar el telefono
                     $obj_telefono->setCondicion("ID_Telefono='".$_POST['ID_Telefono']."'");
+                    //Ejecuta la edicion de los datos
                     $obj_telefono->actualizar_telefono();
                 }
+                //Muestra la vista de usuario correspondiente
                 header("location:/ORIEL/index.php?ctl=personal_gestion&id=".$_POST['ID_Persona']);
             }
         }   else    {
@@ -5996,16 +6587,23 @@
              */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            //Muestra la vista de usuario correspondiente
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }
     }
-    
+    /*
+     * Metodo que permite editar la unidad ejecutora de una persona en especifico
+     */
     public function personal_cambiar_ue(){
+        //verifica que la sesion de usuario esté activa
         if(isset($_SESSION['nombre'])){
+            //Creacion  de un objeto de la clase persona
             $obj_persona = new cls_personal();
-            
+            //Establece el id de la unidad ejecutora en cuestion
             $obj_persona->setId2($_POST['id_unidad_ejecutora']);
+            //Establece la condicion de busqueda en bd
             $obj_persona->setCondicion("ID_Persona='".$_POST['id_persona']."'");
+            //Procede a cambiar la información.
             $obj_persona->cambiar_ue_persona();
             
         }else{
@@ -6017,16 +6615,23 @@
              */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            //Llama a la vista de usuario correspondiente
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }
     }
-    
+    /*
+     * Metodo de la clase que permite cambiar el puesto de una persona BCR
+     */
     public function personal_cambiar_puesto() {
+        //Verifica que la sesion de usuario esté activa
         if(isset($_SESSION['nombre'])){
+            //Crea un objeto de la clase personal
             $obj_persona = new cls_personal();
-            
+            //Establece el atributo id de puesto del objeto
             $obj_persona->setId2($_POST['id_puesto']);
+            //Establece la condición para modificar el puesto de la persona
             $obj_persona->setCondicion("ID_Persona='".$_POST['id_persona']."'");
+            //Procede a cambiar la información
             $obj_persona->cambiar_puesto_persona();
             
         }else{
@@ -6038,14 +6643,19 @@
              */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            //Llama a la vista de usuario correspondiente
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }
     }
-    
+    /*
+     * Metodo que permite guardar la información general correspondiente a una persona
+     */
     public function persona_guardar_informacion_general(){
+        //Verifica que la sesión de usuario esté establecida
         if(isset($_SESSION['nombre'])){
+            //Crear objeto de la clase personal
             $obj_persona = new cls_personal();
-            
+            //Establece los atributos de la clase: tales como cedula, empresa, observaciones, gafete, etc
             $obj_persona->setCedula($_POST['cedula']);
             $obj_persona->setApellidonombre($_POST['nombre']);
             $obj_persona->setEmpresa($_POST['empresa']);
@@ -6053,8 +6663,9 @@
             $obj_persona->setGafete($_POST['numero_gafete']);
             $obj_persona->setCorreo($_POST['correo']);
             $obj_persona->setDireccion($_POST['direccion']);
-            
+            //Establece la condicion de busqueda SQL
             $obj_persona->setCondicion("ID_Persona='".$_POST['id_persona']."'");
+            //Ejecuta el cambio en base de datos
             $obj_persona->actualizar_informacion_general_persona();
             
         }else{
@@ -6066,6 +6677,7 @@
              */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            //Llama a la vista de usuario correspondiente
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }
     }
@@ -6073,13 +6685,21 @@
     ////////////////////////////////////////////////////////////////////////////
     /////////////Funciones para Areas de Apoyo//////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////
+    /*
+     * Metodo que permite listar las areas de apoyo almacenadas en la base de datos
+     */
     public function areas_apoyo_listar(){
+        //Verifica que la sesion de usuario este activa
         if(isset($_SESSION['nombre'])){
+            //Crea un nuevo objeto de la clase areas de apoyo
             $obj_areasApoyo=new cls_areasapoyo();
+            //Establece la condicion de busqueda, en este caso vacio
             $obj_areasApoyo->setCondicion("");
+            //Obtiene las áreas de apoyo almacenadas en base de datos
             $obj_areasApoyo->obtiene_todos_las_areas_apoyo();
+            //Asigna el resultado a una variable tipo vector
             $params= $obj_areasApoyo->getArreglo();
-            
+            //Muestra la vista de usuario correspondiente
             require __DIR__ . '/../vistas/plantillas/frm_areas_apoyo_listar.php';
         }else{
               /*
@@ -6090,17 +6710,22 @@
              */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            //Muestra la vista de usuario correspondiente
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }
     }    
 
     //Función para agregar area de apoyo nueva desde Formulario de Punto BCR
     public function Area_apoyo_agregar(){
+        //Verifica que la sesion de usuario esté activa
         if(isset($_SESSION['nombre'])){
+            //Crea un objeto de la clase areas de apoyo
             $obj_area_apoyo= new cls_areasapoyo();
+            //Crea un objeto de la clase telefono
             $obj_telefono = new cls_telefono();
             //Obtiene la información enviada por el formulario POST
             $obj_area_apoyo->setId(null);
+            //Establece los atributos del objeto mediante los parametros enviados por el metodo post
             $obj_area_apoyo->setTipo_area($_POST['Tipo_Area_Apoyo']);
             $obj_area_apoyo->setDistrito($_POST['distrito']);
             $obj_area_apoyo->setNombre_area($_POST['nombre']);
@@ -6108,6 +6733,7 @@
             $obj_area_apoyo->setObservaciones($_POST['observaciones']);
             //agrega el area de apoyo nueva
             $obj_area_apoyo->setCondicion("");
+            //Guarda en base de datos
             $obj_area_apoyo->agregar_area_apoyo();
             //Luego de agregar el area de apoyo devuelve el ID del area agregada
             $area_apoyo = $obj_area_apoyo->getArreglo();
@@ -6117,25 +6743,33 @@
             }   else    {
                 //Crea el número del area de apoyo nueva
                 $obj_telefono->setId(null);
+                //Establece los atributos del objeto con la información enviada por parametros del formulario html
                 $obj_telefono->setNumero($_POST['numero']);
                 $obj_telefono->setTipo_telefono($_POST['Tipo_Telefono']);
                 $obj_telefono->setId2($area_apoyo[0]['ID_Area_Apoyo']); 
                 $obj_telefono->setObservaciones("");
+                //Guarda la informacion en la base de datos
                 $obj_telefono->guardar_telefono();
             }
             //Asigna el area de apoyo al puntoBCR
             $obj_area_apoyo = new cls_areasapoyo();
             $obj_area_apoyo->setId($area_apoyo[0]['ID_Area_Apoyo']);
             $obj_area_apoyo->setId2($_POST['ID_PuntoBCR']);
+            //Establece la condicion para buscar si el area de apoyo ya está asignada al punto bcr
             $obj_area_apoyo->setCondicion("T_PuntoBCRAreaApoyo.ID_PuntoBCR='".$_POST['id_puntobcr']."' AND T_PuntoBCRAreaApoyo.ID_Area_Apoyo='".$_POST['id_area_apoyo']."'");
+            //Ejecuta la consulta sobre la bd
             $obj_area_apoyo->obtiene_todos_las_areas_apoyo();
+            //Obtiene el arreglo correspondiente
             $areas_apoyo =$obj_area_apoyo->getArreglo();
+            //Verifica si el arreglo devolvió información
             if($areas_apoyo==""){
+                //Agrega la relacion de punto bcr / area de apoyo a la base de datos
                 $obj_area_apoyo->agregar_PuntoBCR_AreaApoyo();
             }   else    {
+                //valida si ya existe la relacion en la base de datos
                 echo "El Area de Apoyo ya se encuentra asignada al PuntoBCR";
             }
-            
+            //Muestra la vista de usuario correspondiente
             header("location:/ORIEL/index.php?ctl=gestion_punto_bcr&id=".$_POST['ID_PuntoBCR']);
         }else{
               /*
@@ -6146,53 +6780,73 @@
              */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            //Muestra la vista de usuario correspondiente
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }
     }
     
-    //Carga información de area seleccionda o formulario en blanco para crear una nueva
+    //Carga información de area seleccionada o formulario en blanco para crear una nueva
     public function area_apoyo_gestion(){
+        //Verifica que la sesion de usuario este activa
         if(isset($_SESSION['nombre'])){
+            //Crea objeto de la clase areas de apoyo
             $obj_area_apoyo= new cls_areasapoyo();
+            //Crea objeto de la clase telefono
             $obj_telefono = new cls_telefono();
+            //Crea objeto de la clase puntos bcr
             $obj_Puntobcr = new cls_puntosBCR();
             
-            //Obtiene los tipos de teléfonos
+            //Obtiene los tipos de areas de apoyo
             $obj_area_apoyo->obtiene_tipo_area_apoyo();
+            //Asigna las areas de apoyo al vector 
             $tipo_area = $obj_area_apoyo->getArreglo();
             
             //Obtiene los tipos de telefono
             $obj_telefono->setCondicion("");
+            //Asigna el resultado a un vector
             $obj_telefono->obtiene_tipo_telefonos();
+            //asigna el resultado a una variable de tipo vector
             $tipo_telefono = $obj_telefono->getArreglo();
             
             //Obtiene Distrito->Cantón->Provincia
             //Distritos
             $obj_Puntobcr->setCondicion("");
+            //Ejecuta la consulta SQL
             $obj_Puntobcr->obtiene_distritos();
+            //Asigna el vector a una variable 
             $distritos = array_merge(array(['ID_Distrito'=>0]+['Nombre_Distrito'=>""]),$obj_Puntobcr->getArreglo());
             //Cantones
             $obj_Puntobcr->setCondicion("");
+            //Obtiene los cantones 
             $obj_Puntobcr->obtiene_cantones();
+            //Asigna el resultado a un vector
             $cantones   = array_merge(array(['ID_Canton'=>0]+['Nombre_Canton'=>""]),$obj_Puntobcr->getArreglo());
             //Provincias
             $obj_Puntobcr->setCondicion("");
+            //Obtiene las provincias
             $obj_Puntobcr->obtiene_provincias();
+            //Lo asigna a una variable el resultado
             $provincias = array_merge(array(['ID_Provincia'=>0]+['Nombre_Provincia'=>""]),$obj_Puntobcr->getArreglo());
             
+            //Verifica si el id enviado por parametro es cero o diferente de cero
             if($_GET['id']==0){
+                //Establece a vacio los campos requeridos del vector para mostrar en pantalla
                 $params[0]['ID_Area_Apoyo']=0;
                 $params[0]['Nombre_Area']="";
                 $params[0]['Direccion']="";
                 $params[0]['Observaciones']="";
                 $params[0]['Estado']=1;
             } else {
+                //Caso contrario busca la información del area de apoyo en base de datos
                 $obj_area_apoyo->setId($_GET['id']);
+                //Establece la condicion de busqueda
                 $obj_area_apoyo->setCondicion("T_AreasApoyo.ID_Area_Apoyo='".$_GET['id']."'");
-                
+                //Trae la información de base de datos
                 $obj_area_apoyo->obtiene_todos_las_areas_apoyo();
+                //Asigna el resultado de la consulta a una variable tipo vector
                 $params = $obj_area_apoyo->getArreglo();
             }
+            //Llama a la vista de usuario correspondiente
             require __DIR__ . '/../vistas/plantillas/frm_areas_apoyo_gestion.php';
         }else{
               /*
@@ -6203,15 +6857,23 @@
              */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            //Llama a la vista de usuario correspondiente
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }
     }
-    
+    /*
+     * Metodo que permite eliminar un telefono asignado a un area de apoyo especifica
+     */
     public function area_apoyo_eliminar_telefono(){
+        //Verifica que la sesion de usuario esté activa
         if(isset($_SESSION['nombre'])){
+            //Crea un nuevo objeto de la clase telefono
             $obj_telefono = new cls_telefono();
+            //Establece el atributo id de la clase
             $obj_telefono->setId($_POST['id_telefono']);
+            //Define la condicion de busqueda en la bd
             $obj_telefono->setCondicion("ID_Telefono='".$_POST['id_telefono']."'");
+            //Elimina el telefono de la base de datos
             $obj_telefono->eliminar_telefono();
 
         }else{
@@ -6223,26 +6885,41 @@
              */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            //Llama a la vista de usuario correspondiente
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }  
     }
-    
+    /*
+     * Metodo que permite asignarle un numero de telefono a un area de apoyo en especifico
+     */
     public function area_apoyo_numero_telefono_guardar(){
+        //Verifica que la sesión de usuario esté activa
         if(isset($_SESSION['nombre'])){   
+            //Verifica que el envio de información haya sido realizado mediante el metodo post del formulario html
             if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+                //Creacion de un objeto de la clase telefono
                 $obj_telefono = new cls_telefono();
+                //Establece el atributo id telefono del objeto
                 $obj_telefono->setId($_POST['ID_Telefono']);
+                //Establece el atributo id de area de apoyo en el objeto
                 $obj_telefono->setId2($_POST['ID_Area_Apoyo']);
+                //Establece el atributo tipo de telefono en el objeto
                 $obj_telefono->setTipo_telefono($_POST['Tipo_Telefono']);
+                //Establece el numero de telefono del area de apoyo
                 $obj_telefono->setNumero($_POST['numero']);
+                //Establece las observaciones del objeto telefono
                 $obj_telefono->setObservaciones($_POST['observaciones_tel']);
+                //Verifica si se va a insertar un nuevo numero o si se refiere a editar datos
                 if($_POST['ID_Telefono']==0){
                     $obj_telefono->guardar_telefono();
                 }
                 else{
+                    //En caso de referirse a editar datos, procede a establecer la condicion de SQL
                     $obj_telefono->setCondicion("ID_Telefono='".$_POST['ID_Telefono']."'");
+                    //Actualiza la información en base de datos
                     $obj_telefono->actualizar_telefono();
                 }
+                //Llamada a la vista de usuario correspondiente
                 header("location:/ORIEL/index.php?ctl=area_apoyo_gestion&id=".$_POST['ID_Area_Apoyo']);
             }
         }   else{
@@ -6254,39 +6931,59 @@
              */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            //Llamada a la vista de usuario correspondiente
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }
     }
-    
+    /*
+     * Mtodo que permite agregar una nueva area de apoyo en el sistema
+     */
     public function Area_apoyo_nueva(){
+        //verifica que la sesión de usuario se encuentre activa
         if(isset($_SESSION['nombre'])){
+            //Crea un nuevo objeto de clase areas de apoyo
             $obj_area_apoyo= new cls_areasapoyo();
+            //Crea un nuevo objeto de la clase telefonos
             $obj_telefono = new cls_telefono();
             //Obtiene la información enviada por el formulario POST
+            //Id null para identificar que es agregar un nuevo registro de base de datos
             $obj_area_apoyo->setId(null);
+            //Datos del tipo de area de apoyo        
             $obj_area_apoyo->setTipo_area($_POST['tipo_area']);
+            //Datos del distrito
             $obj_area_apoyo->setDistrito($_POST['Distrito']);
+            //Nombre del area de apoyo
             $obj_area_apoyo->setNombre_area($_POST['Nombre']);
+            //Establece la direccion del sitio
             $obj_area_apoyo->setDireccion($_POST['direccion']);
+            //Establece las observaciones            
             $obj_area_apoyo->setObservaciones($_POST['observaciones']);
             //agrega el area de apoyo nueva
             $obj_area_apoyo->setCondicion("");
+            //Inserta en bd mediante el metodo de la clase respectiva
             $obj_area_apoyo->agregar_area_apoyo();
             //Luego de agregar el area de apoyo devuelve el ID del area agregada
             $area_apoyo = $obj_area_apoyo->getArreglo();
             //Valida que el arreglo tenga información
+            //Verifica que el area de apoyo no exista en la base de datos
             if($area_apoyo==""){
                 echo 'Error al traer area de apoyo nueva';
             }   else    {
                 //Crea el número del area de apoyo nueva
                 $obj_telefono->setId(null);
+                //Establece los atributos de la clase para poder insertar en bd lo requerido
+                //Numero de telefono
                 $obj_telefono->setNumero($_POST['numero']);
+                //Tipo de telefono
                 $obj_telefono->setTipo_telefono($_POST['Tipo_Telefono']);
+                //Id del area de apoyo
                 $obj_telefono->setId2($area_apoyo[0]['ID_Area_Apoyo']); 
+                //Observaciones
                 $obj_telefono->setObservaciones("");
+                //Ejecuta el guardado en base de datos
                 $obj_telefono->guardar_telefono();
             }
-            
+            //Llamada a la vista de usuario correspondiente
             header("location:/ORIEL/index.php?ctl=areas_apoyo_listar");
         }else{
               /*
@@ -6297,6 +6994,7 @@
              */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            //Llamada a la vista de usuario correspondiente
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }
     }
@@ -6305,13 +7003,19 @@
     ////////////////////////////////////////////////////////////////////////////
     /////////////Funciones para Direeciones IP's////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////
+    //Metodo que permite listar las direcciones ip registradas en la base de datos
     public function direcciones_ip_listar(){
+        //Verifica si la sesion de usuario se encuentra activa
        if(isset($_SESSION['nombre'])){
+           //Crea una nueva instancia de la clase direccion IP
             $obj_direcciones=new cls_direccionIP();
+            //Define la condicion a vacio
             $obj_direcciones->setCondicion("");
+            //Obtiene las direcciones IP que se encuentran en base  de datos
             $obj_direcciones->obtiene_direccionesIP();
+            //Asigna el resultado de la consulta a una variable de tipo vector
             $params= $obj_direcciones->getArreglo();
-            
+            //Llamada a la vista de usuario correspondiente
             require __DIR__ . '/../vistas/plantillas/frm_direcciones_ip_listar.php';
         }else{
               /*
@@ -6322,6 +7026,7 @@
              */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            //Llamada a la vista de usuario correspondiente
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         } 
     }
@@ -6329,14 +7034,17 @@
     ////////////////////////////////////////////////////////////////////////////
     /////////////Funciones para Horarios ///////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////
+    //Metodo que permite listar los diferentes horarios que se encuentran en el sistema 
     public function horario_listar(){
+        //Verifica que la sesion de usuario se encuentre activa
         if(isset($_SESSION['nombre'])){
+            //Crea un nuevo objeto de la clase horario
             $obj_horario = new cls_horario();
-            
+            //Obtiene todos los horarios contenidos en base de datos
             $obj_horario->obtiene_todos_los_horarios();
-            
+            //Obtiene el resultado en una variable de tipo vector
             $horarios= $obj_horario->getArreglo();
-            
+            //Llamada a la vista de usuario correspondiente
             require __DIR__ . '/../vistas/plantillas/frm_horario_lista.php';
         }else{
               /*
@@ -6347,24 +7055,34 @@
              */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            //Llamada a la vista de usuario correspondiente
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         } 
     }
-    
+    //Metodo de la clase que permite actualizar horarios en la base de datos
     public function horario_gestion(){
+        //Verifica si la sesion de usuario está activa
         if(isset($_SESSION['nombre'])){
+            //Crea un nuevo objeto de la clase horario
             $obj_horario = new cls_horario();
+            //Verifica si el id enviado es cero, en caso de serlo se refiere a una insercion nueva de datos
             if($_GET['ide']==0){
+                //Establece los parametros en vacio para ingresar un nuevo registro
                 $params[0]['ID_Horario']="0";
                 $params[0]['Dia_Laboral']="";
                 $params[0]['Hora_Laboral']="";
                 $params[0]['Observaciones']="";
                 $params[0]['Estado']="1";
+                //De lo contrario deberá traer los datos correspondientes desde la bd
             }  else  {
+                //Establece la condicion de busqueda de datos
                 $obj_horario->setCondicion("ID_Horario='".$_GET['ide']."'");
+                //ejecuta la consulta
                 $obj_horario->obtiene_todos_los_horarios();
+                //Asigna el resultado a una variable tipo vector
                 $params= $obj_horario->getArreglo();
             }
+            //Llamada a la vista de usuario correspondiente
             require __DIR__ . '/../vistas/plantillas/frm_horario_gestion.php';
         }else{
               /*
@@ -6375,13 +7093,19 @@
              */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            //Llamada a la vista de usuario correspondiente
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         } 
     }
-    
+    /*
+     * Metodo de la clase que permite guardar en bd la información de un horario de oficina
+     */
     public function horario_guardar() {
+        //Verifica si la sesión de usuario está activa
         if(isset($_SESSION['nombre'])){
+            //Crea un nuevo objeto de la clase horario
             $obj_horario = new cls_horario();
+            //Establece el id del horario
             $obj_horario->setId($_GET['id']); 
             //Valida informacion enviada por el formulario
             //cuando la hora es 00:00 se agregará null
@@ -6470,18 +7194,21 @@
             }else {
                 $obj_horario->setHora_cierre_sabado($_POST['salida_sabado']);
             }
+            //Establece las observaciones del objeto
             $obj_horario->setObservaciones($_POST['observaciones']);
+            //Establece el estado del registro de horario
             $obj_horario->setEstado($_POST['estado']);
             
             //valida si es Horario nuevo o actualizacion
             if($_GET['id']==0){
                 $obj_horario->agregar_horario();
             } else {
-                //echo "edita";
+                //Establece una condicion de busqueda de la información en base de datos
                 $obj_horario->setCondicion("ID_Horario='".$_GET['id']."'");
+                //Ejecuta el guardado de los datos en base de datos
                 $obj_horario->actualizar_horario();
             }
-            
+            //Llamada a la vista de usuario correspondiente
             header("location:/ORIEL/index.php?ctl=horario_listar");
         }else{
               /*
@@ -6492,6 +7219,7 @@
              */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            //Llamada a la vista de usuario correspondiente
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         } 
     }
@@ -6499,11 +7227,17 @@
     ////////////////////////////////////////////////////////////////////////////
     //////////Funciones para proveedores de enlaces BCR/////////////////////////
     ////////////////////////////////////////////////////////////////////////////
+    //Metodo que permite listar los proveedores de servicio que se encuentran en bd
     public function proveedor_listar(){
+        //Verifica si la sesión de usuario se encuentra activa
        if(isset($_SESSION['nombre'])){
+           //Crea un objeto de la clase proveedor de enlace 
            $obj_proveedor = new cls_proveedor_enlace();
+           //Obtiene la lista de proveedores desde la base de datos
            $obj_proveedor->obtener_proveedores();
+           //Asigna el resultado a la variable tipo vector
            $params = $obj_proveedor->getArreglo();
+           //Llamada a la vista de usuario correspondiente
            require __DIR__ . '/../vistas/plantillas/frm_proveedor_enlace_catalogo.php';
         }else{
               /*
@@ -6514,29 +7248,39 @@
              */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            //Llamada a la vista de usuario correspondiente
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         } 
     }
     //Funcion permite actualizar o crear un proveedor de enlaces
     public function proveedor_enlace_guardar() {
+        //Verifica que la sesión de usuario este activa
         if(isset($_SESSION['nombre'])){
+            //Crea un objeto de la clase proveedor de enlace
            $obj_proveedor = new cls_proveedor_enlace();
            //Obtiene informacion enviada por el formulario
            $obj_proveedor->setNombre($_POST['nombre']);
+           //Establece el atributo de la clase 
            $obj_proveedor->setObservaciones($_POST['observaciones']);
-           //Valida si el un nuevo proveedor o actualizar uno existente
+           //Valida si es un nuevo proveedor o actualiza uno existente
            if($_POST['ID_Proveedor']==0){
+               //Establece el estado del proveedor
                $obj_proveedor->setEstado("1");
+               //Establece la condición a vacio 
                $obj_proveedor->setCondicion("");
            } else{
+               //En caso de que el id sea difente de cero, procede a editar el existente
                $obj_proveedor->setCondicion("ID_Proveedor='".$_POST['ID_Proveedor']."'");
            }
            //agrega o actualiza el proveedor de enlaces
            $obj_proveedor->agregar_proveedor();
            //Carga nuevamente la ventana de proveedores
            $obj_proveedor->setCondicion("");
+           //Obtiene la lista de proveedores
            $obj_proveedor->obtener_proveedores();
+           //Asigna el resultado de la consulta a una variable tipo vector
            $params = $obj_proveedor->getArreglo();
+           //Llamada a la vista de usuario correspondiente
            require __DIR__ . '/../vistas/plantillas/frm_proveedor_enlace_catalogo.php';
         }else{
               /*
@@ -6547,12 +7291,17 @@
              */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            //Llamada a la vista de usuario correspondiente
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         } 
     }
-    
+    /*
+     * Metodo de la clase que permite cambiar el estado del proveedor del enlace: activo/inactivo
+     */
     public function proveedor_enlace_cambiar_estado(){
+        //Verifica que la sesion de usuario se encuentre activa
         if(isset($_SESSION['nombre'])){
+            //Crea un objeto de la clase proveedor de enlace
            $obj_proveedor = new cls_proveedor_enlace();
            //Invierte el estado enviado por el formulario
            if($_GET['estado']==0){
@@ -6560,13 +7309,17 @@
            }else {
                $obj_proveedor->setEstado("0");
            }
-           //agrega la condicion y actualiza el estado en BD
+           //Agrega la condicion y actualiza el estado en BD
            $obj_proveedor->setCondicion("ID_Proveedor='".$_GET['ide']."'");
+           //Cambia el estado en bd
            $obj_proveedor->cambiar_estado_proveedor();
            //Carga nuevamente la lista de proveedores
            $obj_proveedor->setCondicion("");
+           //Obtiene la lista de proveedores
            $obj_proveedor->obtener_proveedores();
+           //Asigna el resultado a la variable tipo vector
            $params = $obj_proveedor->getArreglo();
+            //Llamada a la vista de usuario correspondiente
            require __DIR__ . '/../vistas/plantillas/frm_proveedor_enlace_catalogo.php';
         }else{
               /*
@@ -6577,6 +7330,7 @@
              */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+             //Llamada a la vista de usuario correspondiente
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         } 
     }
@@ -6584,11 +7338,20 @@
     ////////////////////////////////////////////////////////////////////////////
     /////////////Funciones para Tipos de enlaces BCR////////////////////////////
     ////////////////////////////////////////////////////////////////////////////
+    
+    /*
+     * Metodo que permite listar los tipos de enlaces disponibles en la base de datos
+     */
     public function tipo_enlace_listar() {
+        //Verifica que la sesión de usuario se encuentre activa
         if(isset($_SESSION['nombre'])){
+            //Crea un objeto de la clase tipo de enlace
            $obj_tipo_enlace = new cls_tipo_enlace();
+           //Obtiene la lista de tipos de enlaces 
            $obj_tipo_enlace->obtener_tipo_enlaces();
+           //Asigna el resultado a una variable de tipo vector
            $params = $obj_tipo_enlace->getArreglo();
+           //Llama a la vista de usuario correspondiente
            require __DIR__ . '/../vistas/plantillas/frm_tipo_enlace_catalogo.php';
         }else{
               /*
@@ -6599,15 +7362,21 @@
              */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            //Llama a la vista de usuario correspondiente
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         } 
     }
-    
+   /*
+    * Metodo que permite guardar el tipo de enlace de comunicación en la bd 
+    */ 
     public function tipo_enlace_guardar() {
+        //Verifica que la sesión de usuario esté activa 
         if(isset($_SESSION['nombre'])){
+            //Crea un nuevo objeto de la clase tipo de enlace 
            $obj_tipo_enlace = new cls_tipo_enlace();
            //Obtiene informacion enviada por el formulario (frm_tipo_enlace_catalogo)
            $obj_tipo_enlace->setNombre($_POST['nombre']);
+           //Inicializa el atributo observaciones de la clase
            $obj_tipo_enlace->setObservaciones($_POST['observaciones']);
            //Valida si el un nuevo tipo de enlace o actualizar uno existente
            if($_POST['ID_Tipo_Enlace']==0){
@@ -6620,7 +7389,9 @@
            $obj_tipo_enlace->guardar_tipo_enlaces();
            //Carga nuevamente la ventana de tipos de enlace
            $obj_tipo_enlace->setCondicion("");
+           //Obtiene el listado actualizado de tipos de enlace
            $obj_tipo_enlace->obtener_tipo_enlaces();
+           //Asigna el resultado a una variable tipo vector
            $params = $obj_tipo_enlace->getArreglo();
            require __DIR__ . '/../vistas/plantillas/frm_tipo_enlace_catalogo.php';
         }else{
