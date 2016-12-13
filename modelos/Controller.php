@@ -7841,8 +7841,74 @@ class Controller{
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }  
     }
+    ////////////////////////////////////////////////////////////////////////////
+    ///////////////////////Funciones de Tipo Punto//////////////////////////////          
+    ////////////////////////////////////////////////////////////////////////////   
+       public function tipo_punto_listar() {
+       if(isset($_SESSION['nombre'])){
+           $obj_tipo_punto = new cls_tipo_punto();
+           $obj_tipo_punto->obtener_tipo_punto();
+           $params =$obj_tipo_punto->getArreglo();
+           
+            require __DIR__.'/../vistas/plantillas/frm_tipo_punto_bcr_catalogo.php';
+        }
+        else {
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }  
+    }  public function tipo_punto_guardar() {
+          if(isset($_SESSION['nombre'])){
+               $obj_tipo_punto = new cls_tipo_punto();
+               $obj_tipo_punto->setTipo_Punto($_POST['nombre']); 
+               $obj_tipo_punto->setObservaciones($_POST['observaciones']);
+               
+                if ($_POST['ID_Tipo_Punto']==0){
+                   $obj_tipo_punto->setEstado(1);
+                   $obj_tipo_punto->agregar_nueva_tp();
+                }else{
+                           $obj_tipo_punto->setEstado($_POST['estado']);
+                           $obj_tipo_punto->setCondicion("ID_Tipo_Punto='".$_POST['ID_Tipo_Punto']."'");
+                           $obj_tipo_punto->edita_tp();
+                   
+                }       
+           $obj_tipo_punto->setCondicion("");    
+           $obj_tipo_punto->obtener_tipo_punto();
+           $params =$obj_tipo_punto->getArreglo();
+           require __DIR__.'/../vistas/plantillas/frm_tipo_punto_bcr_catalogo.php';
+        }
+        else {
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }  
+    }
+     public function tipo_punto_cambiar_estado() {
+       if(isset($_SESSION['nombre'])){
+           $obj_tipo_punto = new cls_tipo_punto();
+           
+           if ($_GET['estado']==1){
+               
+               $obj_tipo_punto->setEstado("0");
+               
+           }else {
+               
+               $obj_tipo_punto->setestado("1");
+           }
+           $obj_tipo_punto->setCondicion("ID_Tipo_Punto='".$_GET['id']."'");
+           $obj_tipo_punto->cambiar_estado_tp();
+           $obj_tipo_punto->setCondicion("");    
+           $obj_tipo_punto->obtener_tipo_punto();
+           $params =$obj_tipo_punto->getArreglo();
+            require __DIR__.'/../vistas/plantillas/frm_tipo_punto_bcr_catalogo.php';
+        }
+        else {
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }  
+    }
+    }
         
-    
-        
-}
+
 
