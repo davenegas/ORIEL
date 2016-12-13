@@ -192,24 +192,28 @@
                 <?php }; ?>
 
                 <?php  if ($_SESSION['modulos']['Módulo-MRI BCR']==1){ ?>
-                     <!--<li><a href="#">MRI-BCR</a></li>-->
+                    <!--<li><a href="#">MRI-BCR</a></li>-->
                 <?php }; ?>
 
                 <?php if ($_SESSION['modulos']['Módulo-PuntosBCR']==1){ ?>
-                     <li><a href="index.php?ctl=puntos_bcr_listar">Puntos BCR</a></li>
+                    <li><a href="index.php?ctl=puntos_bcr_listar">Puntos BCR</a></li>
                 <?php }; ?>
 
                 <?php if ($_SESSION['modulos']['Módulo-Personal']==1){ ?>
-                     <li><a href="index.php?ctl=personal_listar">Personal</a></li>
+                    <li><a href="index.php?ctl=personal_listar">Personal</a></li>
                 <?php }; ?>
 
                 <?php if ($_SESSION['modulos']['Módulo-Áreas de Apoyo']==1){ ?>
-                     <li><a href="index.php?ctl=areas_apoyo_listar">Áreas de Apoyo</a></li>
+                    <li><a href="index.php?ctl=areas_apoyo_listar">Áreas de Apoyo</a></li>
                 <?php }; ?>  
 
-                 <?php if ($_SESSION['modulos']['Módulo-Control de Video']==1){?>
-                    <!--<li><a href="#">Controles de Video</a></li>--> 
-               <?php }; ?>   
+                <?php if ($_SESSION['modulos']['Módulo-PuntosBCR']==1){?>
+                    <li><a href="index.php?ctl=personal_externo_listar">Personal Externo</a></li>
+                <?php }; ?>
+                    
+                <?php if ($_SESSION['modulos']['Módulo-Control de Video']==1){?>
+                    <li><a href="#">Controles de Video</a></li>
+                <?php }; ?>   
 
             </ul>
             </li>

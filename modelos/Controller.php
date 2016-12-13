@@ -6790,6 +6790,7 @@
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }   
     }
+    
     ////////////////////////////////////////////////////////////////////////////
     //////////////////////////////Trazabilidad//////////////////////////////////
     /////////////////////FUNCIONES PARA EVENTOS/////////////////////////////////
@@ -6823,7 +6824,6 @@
     ////////////////////////////////////////////////////////////////////////////
     /////////////////////Funciones para Unidades Ejecutoras/////////////////////
     ////////////////////////////////////////////////////////////////////////////
-    
     public function unidad_ejecutora_listar(){
        if(isset($_SESSION['nombre'])){
             $obj_unidad_ejecutora = new cls_unidad_ejecutora();
@@ -6910,4 +6910,97 @@
         }    
     }
     
+    ////////////////////////////////////////////////////////////////////////////
+    ////////////////////MANTENIMIENTO DE PERSONAL EXTERNO///////////////////////
+    ////////////////////////////////////////////////////////////////////////////
+    public function personal_externo_listar(){
+        if(isset($_SESSION['nombre'])){
+            $obj_personal=new cls_personal_externo();
+            $obj_personal->obtiene_todo_el_personal_externo();
+            $params= $obj_personal->getArreglo();
+            
+            require __DIR__ . '/../vistas/plantillas/frm_personal_externo_listar.php';
+        }else{
+              /*
+             * Esta es la validación contraria que la sesión de usuario esté definida y abierta.
+             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+             * a la pantalla de inicio de sesión con el mensaje de "warning" correspondiente.
+             * En la última línea llama a la pagina de inicio de sesión.
+             */
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }
+    }
+    
+    public function personal_externo_gestion(){
+        if(isset($_SESSION['nombre'])){
+            $obj_personal=new cls_personal_externo();
+            $obj_empresa = new cls_empresa();
+            $obj_estado_civil = new cls_estado_civil();
+            $obj_estado_persona = new cls_estado_persona();
+            $obj_nacionalidad = new cls_nacionalidad();
+            $obj_nivel_academico = new cls_nivel_academico();
+            $obj_telefono = new cls_telefono();
+            $obj_Puntobcr = new cls_puntosBCR(); 
+            
+            $ide=$_GET['id'];
+            echo ($_GET['id']);
+            $obj_personal->setCondicion("T_PersonalExterno.ID_Persona_Externa='".$_GET['id']."'");
+            $obj_personal->obtiene_todo_el_personal_externo();
+            $params= $obj_personal->getArreglo();
+            
+            //Obtiene empresa 
+            $obj_empresa->setCondicion("");
+            $obj_empresa->obtiene_todas_las_empresas();
+            $empresas= $obj_empresa->getArreglo();
+		
+            //Obtiene Distrito->Cantón->Provincia
+            //Distritos
+            $obj_Puntobcr->setCondicion("");
+            $obj_Puntobcr->obtiene_distritos();
+            $distritos = $obj_Puntobcr->getArreglo();
+            //Cantones
+            $obj_Puntobcr->setCondicion("");
+            $obj_Puntobcr->obtiene_cantones();
+            $cantones = $obj_Puntobcr->getArreglo();
+            //Provincias
+            $obj_Puntobcr->setCondicion("");
+            $obj_Puntobcr->obtiene_provincias();
+            $provincias = $obj_Puntobcr->getArreglo();
+                
+            //Obtiene Estado Civil
+            $obj_estado_civil->setCondicion("");
+            $obj_estado_civil->obtener_estado_civil_todos();
+            $estado_civil = $obj_estado_civil->getArreglo();
+            
+            //Obtiene Nacionalidad
+            $obj_nacionalidad->setCondicion("");
+            $obj_nacionalidad->obtener_todas_nacionalidades();
+            $nacionalidad = $obj_nacionalidad->getArreglo();
+            
+            //Obtiene nivel academico
+            $obj_nivel_academico->setCondicion("");
+            $obj_nivel_academico->obtener_todos_niveles_academicos();
+            $nivel_academico= $obj_nivel_academico->getArreglo();
+            
+            //Obtiene el estado de la persona
+            $obj_estado_persona->setCondicion("");
+            $obj_estado_persona->obtener_todos_estados_personas();
+            $estado_persona = $obj_estado_persona->getArreglo();
+            
+            require __DIR__ . '/../vistas/plantillas/frm_personal_externo_detalle.php';
+            
+        }else{
+              /*
+             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+             * En la última línea llama a la pagina de inicio de sesión.
+             */
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }
+    }
 } 
