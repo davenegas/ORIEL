@@ -72,7 +72,7 @@
                             <td style="text-align:center"><?php echo $params[$i]['Direccion_IP']; ?></td>
                             <td style="text-align:center"><?php echo $params[$i]['Observaciones']; ?></td> 
 
-                            <td><a role="button" onclick="edita_ip('<?php echo $params[$i]['ID_Direccion_IP'];?>','<?php echo $params [$i]['ID_Tipo_IP'];?>',
+                            <td style="text-align:center"><a role="button" onclick="edita_ip('<?php echo $params[$i]['ID_Direccion_IP'];?>','<?php echo $params [$i]['ID_Tipo_IP'];?>',
                            '<?php echo $params [$i]['Direccion_IP'];?>','<?php echo $params [$i]['Observaciones'];?>')">
                     
                     Editar</a></td>
