@@ -7773,4 +7773,76 @@ class Controller{
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }
     }
-} 
+    ///////////////////////////////////////////////////////////////////////////////////////////////
+    /////////////////////////Funciones de Tipo Telefono//////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////////////////////////
+    
+    public function tipo_telefono_listar() {
+       if(isset($_SESSION['nombre'])){
+           $obj_tipo_telefono = new cls_tipo_telefono();
+           $obj_tipo_telefono->obtener_tipo_telefono();
+           $params =$obj_tipo_telefono->getArreglo();
+           
+            require __DIR__.'/../vistas/plantillas/frm_tipo_telefono_catalogo.php';
+        }
+        else {
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }  
+    }  public function tipo_telefono_guardar() {
+          if(isset($_SESSION['nombre'])){
+               $obj_tipo_telefono = new cls_tipo_telefono();
+               $obj_tipo_telefono->setTipo_Telefono($_POST['nombre']); 
+               $obj_tipo_telefono->setObservaciones($_POST['observaciones']);
+               
+                if ($_POST['ID_Tipo_Telefono']==0){
+                   $obj_tipo_telefono->setEstado(1);
+                   $obj_tipo_telefono->agregar_nueva_tt();
+                }else{
+                           $obj_tipo_telefono->setEstado($_POST['estado']);
+                           $obj_tipo_telefono->setCondicion("ID_Tipo_Telefono='".$_POST['ID_Tipo_Telefono']."'");
+                           $obj_tipo_telefono->edita_tt();
+                   
+                }       
+           $obj_tipo_telefono->setCondicion("");    
+           $obj_tipo_telefono->obtener_tipo_telefono();
+           $params =$obj_tipo_telefono->getArreglo();
+           require __DIR__.'/../vistas/plantillas/frm_tipo_telefono_catalogo.php';
+        }
+        else {
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }  
+    }
+     public function tipo_telefono_cambiar_estado() {
+       if(isset($_SESSION['nombre'])){
+           $obj_tipo_telefono = new cls_tipo_telefono();
+           
+           if ($_GET['estado']==1){
+               
+               $obj_tipo_telefono->setEstado("0");
+               
+           }else {
+               
+               $obj_tipo_telefono->setestado("1");
+           }
+           $obj_tipo_telefono->setCondicion("ID_Tipo_Telefono='".$_GET['id']."'");
+           $obj_tipo_telefono->cambiar_estado_tt();
+           $obj_tipo_telefono->setCondicion("");    
+           $obj_tipo_telefono->obtener_tipo_telefono();
+           $params =$obj_tipo_telefono->getArreglo();
+            require __DIR__.'/../vistas/plantillas/frm_tipo_telefono_catalogo.php';
+        }
+        else {
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }  
+    }
+        
+    
+        
+}
+
