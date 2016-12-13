@@ -238,7 +238,7 @@ class Data_Provider{
             
         // Gestión de insercion del metodo de la clase
        //Arma el insert SQL, de acuerdo a los parámetros recibidos por usuario
-       
+       // echo "insert into ".$table."(".$campos.") values(".$valores.");";
         $consulta=$this->conexion->query("insert into ".$table."(".$campos.") values(".$valores.");");
         //echo ("insert into ".$table."(".$campos.") values(".$valores.");");
         //Establece a true el resultado de operación

@@ -7546,9 +7546,7 @@ class Controller{
                 //print_r($direcciones);
                 $params[]= array_merge($telecom[$i],[($direcciones[0]['Tipo_IP'])=>($direcciones[0]['Direccion_IP'])],[($direcciones[1]['Tipo_IP'])=>($direcciones[1]['Direccion_IP'])]);
             }
-//            echo("<pre>");
-//            print_r($params);
-//            echo("</pre>");
+
            require __DIR__ . '/../vistas/plantillas/rpt_enlace_telecom.php';
         }else{
               /*
