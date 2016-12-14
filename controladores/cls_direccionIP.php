@@ -156,20 +156,20 @@ class cls_direccionIP{
     }
     
     public function agregar_direccion_ip(){
-        if($this->id=="0"){
-            $this->obj_data_provider->conectar();
-            $this->obj_data_provider->inserta_datos("T_DireccionIP", "ID_Tipo_IP, Direccion_IP, Observaciones","'".$this->tipo_IP."','".$this->direccionIP."','".$this->observaciones."'");
-            $this->arreglo= $this->obj_data_provider->trae_datos("T_DireccionIP ORDER BY `ID_Direccion_IP` DESC LIMIT 1", "*", $this->condicion);
-            $this->arreglo=$this->obj_data_provider->getArreglo();
-            $this->obj_data_provider->desconectar();
-            $this->resultado_operacion=true;
-         } else {
-            $this->obj_data_provider->conectar();
-            $this->obj_data_provider->edita_datos("T_DireccionIP", "ID_Tipo_IP='".$this->tipo_IP."', Direccion_IP='".$this->direccionIP."', Observaciones='".$this->observaciones."'", "ID_Direccion_IP=".$this->id);
-            $this->obj_data_provider->desconectar();
-        }
+        $this->obj_data_provider->conectar();
+        $this->obj_data_provider->inserta_datos("T_DireccionIP","ID_Direccion_IP,ID_Tipo_IP,Direccion_IP,Observaciones","null,'".$this->tipo_IP."','".$this->direccionIP."','".$this->observaciones."'");
+        $this->arreglo= $this->obj_data_provider->trae_datos("T_DireccionIP ORDER BY `ID_Direccion_IP` DESC LIMIT 1", "*", $this->condicion);
+        $this->arreglo=$this->obj_data_provider->getArreglo();
+        $this->obj_data_provider->desconectar();
+        $this->resultado_operacion=true;
     }
-    
+    function edita_ip(){
+        $this->obj_data_provider->conectar();
+        //Llama al metodo para editar los datos correspondientes
+        $this->obj_data_provider->edita_datos("T_DireccionIP","ID_Tipo_IP='".$this->tipo_IP."',Direccion_IP='".$this->direccionIP."',Observaciones='".$this->observaciones."'",$this->condicion);
+        //Metodo de la clase data provider que desconecta la sesión con la base de datos
+        $this->obj_data_provider->desconectar();
+    }
     public function obtiene_tipo_direcciones_ip(){
         $this->obj_data_provider->conectar();
         if($this->condicion==""){

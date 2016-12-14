@@ -7004,39 +7004,51 @@ class Controller{
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }
     }
-    
-    
     ////////////////////////////////////////////////////////////////////////////
     /////////////Funciones para Direeciones IP's////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////
     //Metodo que permite listar las direcciones ip registradas en la base de datos
-    public function direcciones_ip_listar(){
-        //Verifica si la sesion de usuario se encuentra activa
+   public function direcciones_ip_listar(){
        if(isset($_SESSION['nombre'])){
-           //Crea una nueva instancia de la clase direccion IP
             $obj_direcciones=new cls_direccionIP();
-            //Define la condicion a vacio
             $obj_direcciones->setCondicion("");
-            //Obtiene las direcciones IP que se encuentran en base  de datos
             $obj_direcciones->obtiene_direccionesIP();
-            //Asigna el resultado de la consulta a una variable de tipo vector
             $params= $obj_direcciones->getArreglo();
-            //Llamada a la vista de usuario correspondiente
+            $obj_direcciones->obtiene_tipo_direcciones_ip();
+            $tipo_IP = $obj_direcciones->getArreglo();
+            
+            
             require __DIR__ . '/../vistas/plantillas/frm_direcciones_ip_listar.php';
         }else{
-              /*
-             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
-             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
-             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
-             * En la última línea llama a la pagina de inicio de sesión.
-             */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
-            //Llamada a la vista de usuario correspondiente
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         } 
     }
-    
+   public function direcciones_ip_guardar() {
+          if(isset($_SESSION['nombre'])){
+               $obj_tipo_ip = new cls_direccionIP();
+               $obj_tipo_ip->setTipo_IP($_POST['nombre']);
+               $obj_tipo_ip->setDireccionIP($_POST['numero']); 
+               $obj_tipo_ip->setObservaciones($_POST['observaciones']);
+               
+              if ($_POST['ID_Direccion_IP']==0){
+                   $obj_tipo_ip->agregar_direccion_ip();
+                }else{
+                           $obj_tipo_ip->setCondicion("ID_Direccion_IP='".$_POST['ID_Direccion_IP']."'");
+                           $obj_tipo_ip->edita_ip();
+                }       
+                   
+           $obj_tipo_ip->setCondicion("");    
+           $obj_tipo_ip->obtiene_direccionesIP();
+           $params =$obj_tipo_ip->getArreglo();
+           require __DIR__.'/../vistas/plantillas/frm_direcciones_ip_listar.php';
+        }else {
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }  
+    }
     ////////////////////////////////////////////////////////////////////////////
     /////////////Funciones para Horarios ///////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////
