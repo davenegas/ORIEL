@@ -7798,6 +7798,12 @@ class Controller{
             require __DIR__.'/../vistas/plantillas/frm_tipo_telefono_catalogo.php';
         }
         else {
+             /*
+             * Esta es la validación contraria que la sesión de usuario esté definida y abierta.
+             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+             * a la pantalla de inicio de sesión con el mensaje de "warning" correspondiente.
+             * En la última línea llama a la pagina de inicio de sesión.
+             */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
@@ -7865,6 +7871,12 @@ class Controller{
             require __DIR__.'/../vistas/plantillas/frm_tipo_punto_bcr_catalogo.php';
         }
         else {
+             /*
+             * Esta es la validación contraria que la sesión de usuario esté definida y abierta.
+             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+             * a la pantalla de inicio de sesión con el mensaje de "warning" correspondiente.
+             * En la última línea llama a la pagina de inicio de sesión.
+             */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
@@ -7937,6 +7949,12 @@ class Controller{
            require __DIR__.'/../vistas/plantillas/frm_gerente_zona_listar.php';
         }
         else {
+             /*
+             * Esta es la validación contraria que la sesión de usuario esté definida y abierta.
+             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+             * a la pantalla de inicio de sesión con el mensaje de "warning" correspondiente.
+             * En la última línea llama a la pagina de inicio de sesión.
+             */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
@@ -8028,6 +8046,12 @@ class Controller{
            require __DIR__.'/../vistas/plantillas/frm_supervisor_zona_listar.php';
         }
         else {
+             /*
+             * Esta es la validación contraria que la sesión de usuario esté definida y abierta.
+             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+             * a la pantalla de inicio de sesión con el mensaje de "warning" correspondiente.
+             * En la última línea llama a la pagina de inicio de sesión.
+             */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
