@@ -4798,8 +4798,8 @@ class Controller{
               $descripcion= str_replace("'","",$descripcion);
               $descripcion= str_replace('"','',$descripcion);
 
-              //Obtiene el mensaje de verificacion del envio del archivo
-              $recepcion_archivo=$_FILES['archivo_adjunto']['error'];
+            //Obtiene el mensaje de verificacion del envio del archivo
+            $recepcion_archivo=$_FILES['archivo_adjunto']['error'];
               
               //Crea una nueva instancia de la clase padron
             $obj_padron_fotografico = new cls_padron_fotografico_puntosbcr();

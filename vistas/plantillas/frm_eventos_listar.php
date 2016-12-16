@@ -17,6 +17,52 @@
             puesto = pst;
             document.getElementById('puestos').submit();
         }
+        
+        function cambiar_estado_boton_resumen(codigo){
+ 
+            identificador='btn'+codigo;
+           
+            var objetoSPAN = document.getElementById(identificador); 
+                        
+            if (objetoSPAN.innerHTML =='+'){
+                objetoSPAN.innerHTML = '-'; 
+            } else {
+                 objetoSPAN.innerHTML = '+'; 
+            }
+            
+           
+            
+//            else {
+//             alert('entra');
+//                if (objetoSPAN.innerHTML ='-'){
+//                    
+//                    objetoSPAN.innerHTML = "+"; 
+//                }
+//             }
+            //alert(document.getElementById('btn').value);
+            //var prueba ='btn';
+            
+            //var objetoSPAN = document.getElementById(prueba); 
+            // objetoSPAN.innerHTML = "hola"; 
+             
+            //if(objetoSPAN.innerHTML=="+") 
+           
+            //else 
+            //objetoSPAN.innerHTML = "ESTE ES UN TEXTO DE PRUEBA"	
+            //return true; 
+            //alert(document.getElementById('btn').);
+           // $('btn').html('prueba');
+//            if (document.getElementById('btn').value="+"){
+//                document.getElementById('btn').textContentvalue='-';
+//                document.getElementById('btn').value='-';
+//                $get('btn').value = 'Cerrar'; 
+//                $get('btn').textContentvalue = 'Cerrar'; 
+//                
+//            }else{
+//                
+//            }
+        }
+        
         </script>
     </head>
     <body>
@@ -56,7 +102,8 @@
               <th>Estado del Evento</th>
               <th>Último Seguimiento</th>
               <th>Editar Evento</th>
-              <th hidden="true">Seguimientos</th>
+              <th>Resumen</th>
+              <th id="demo1" hidden="hidden">Seguimientos</th>
             </tr>
           </thead>
           <tbody>
@@ -84,12 +131,15 @@
             <td><?php echo $detalle_y_ultimo_usuario[$i]['Usuario'] ?></td>
             <td align="center"><a href="index.php?ctl=frm_eventos_editar&accion=editar_abiertos&id=
                <?php echo $params[$i]['ID_Evento']?>">Gestionar Seguimiento</a></td>
-            <td hidden="true">
-                <table>
+            <td style="text-align:center"><button data-toggle="collapse" data-target="#<?php echo $params[$i]['ID_Evento'];?>" id="btn<?php echo $params[$i]['ID_Evento'];?>" onclick="cambiar_estado_boton_resumen(<?php echo $params[$i]['ID_Evento'];?>);">+</button></td>
+            <td id="<?php echo $params[$i]['ID_Evento'];?>" hidden="hidden">
+                <table class="table-condensed">
             <thead>
                 <tr>
                   <th>Fecha de Seguimiento</th>
+                  <th>Hora de Seguimiento</th>
                   <th>Detalle del Seguimiento</th>
+                  <th>Ingresado Por</th>
                </tr>
             </thead>
                 <tbody>
@@ -106,13 +156,15 @@
                 ?>
                 
                 <td><?php echo date_format($fecha_evento, 'd/m/Y');?></td>
+                <td><?php echo $todos_los_seguimientos_juntos[$j]['Hora'];?></td>
                 <td><?php echo $todos_los_seguimientos_juntos[$j]['Detalle'];?></td>
-                               
+                <td><?php echo $todos_los_seguimientos_juntos[$j]['Nombre_Usuario']." ".$todos_los_seguimientos_juntos[$j]['Apellido'] ?></td>               
                 <?php }} ?>
                 </tbody>
             </table>  
             </td>
             </tr>
+            
             
             <?php }
             ?>
