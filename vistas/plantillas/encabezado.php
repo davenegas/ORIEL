@@ -222,7 +222,7 @@
                     <li><a href="index.php?ctl=areas_apoyo_listar">Áreas de Apoyo</a></li>
                 <?php }; ?>  
 
-                <?php if ($_SESSION['modulos']['Módulo-PuntosBCR']==1){?>
+                <?php if ($_SESSION['modulos']['Módulo-Personal Externo']==1){?>
                     <li><a href="index.php?ctl=personal_externo_listar">Personal Externo</a></li>
                 <?php }; ?>
                     

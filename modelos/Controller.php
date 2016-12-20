@@ -2811,10 +2811,10 @@ class Controller{
                     //Arma el vector de seguimientos asociados a un evento en específico
                     if ($i==0){
                         //Arma el vector con el detalle y el ultimo usuario que registro un seguimiento en el evento de bitacora
-                        $detalle_y_ultimo_usuario= array(['Detalle'=>"Fecha: ".date_format(date_create($ultimo_seguimiento_asociado[0]['Fecha']), 'd/m/Y').".Hora: ".$ultimo_seguimiento_asociado[0]['Hora'].". ".$ultimo_seguimiento_asociado[0]['Detalle']]+['Usuario'=>$ultimo_seguimiento_asociado[0]['Nombre_Usuario']." ".$ultimo_seguimiento_asociado[0]['Apellido']]);
+                        $detalle_y_ultimo_usuario= array(['Detalle'=>"Último seguimiento ingresado-->Fecha: ".date_format(date_create($ultimo_seguimiento_asociado[0]['Fecha']), 'd/m/Y').".Hora: ".$ultimo_seguimiento_asociado[0]['Hora'].". ".$ultimo_seguimiento_asociado[0]['Detalle']]+['Usuario'=>$ultimo_seguimiento_asociado[0]['Nombre_Usuario']." ".$ultimo_seguimiento_asociado[0]['Apellido']]);
                     }else{
                         //Concatena al vector la nueva linea de información del seguimiento.
-                        $detalle_y_ultimo_usuario = array_merge($detalle_y_ultimo_usuario,array(['Detalle'=>"Fecha: ".date_format(date_create($ultimo_seguimiento_asociado[0]['Fecha']), 'd/m/Y').".Hora: ".$ultimo_seguimiento_asociado[0]['Hora'].". ".$ultimo_seguimiento_asociado[0]['Detalle']]+['Usuario'=>$ultimo_seguimiento_asociado[0]['Nombre_Usuario']." ".$ultimo_seguimiento_asociado[0]['Apellido']]));  
+                        $detalle_y_ultimo_usuario = array_merge($detalle_y_ultimo_usuario,array(['Detalle'=>"Último seguimiento ingresado-->Fecha: ".date_format(date_create($ultimo_seguimiento_asociado[0]['Fecha']), 'd/m/Y').".Hora: ".$ultimo_seguimiento_asociado[0]['Hora'].". ".$ultimo_seguimiento_asociado[0]['Detalle']]+['Usuario'=>$ultimo_seguimiento_asociado[0]['Nombre_Usuario']." ".$ultimo_seguimiento_asociado[0]['Apellido']]));  
                     }
                 }else{
                     //En caso de que no hayan seguimientos asociados, procede a registrar las validación correspondiente.
@@ -4808,7 +4808,7 @@ class Controller{
             //Asigna el atributo nombre de la imagen
             $obj_padron_fotografico->setNombre_imagen($nombre_imagen);
             //Asigna el atributo descripcion
-            $obj_padron_fotografico->setDescipcion($descripcion);
+            $obj_padron_fotografico->setDescripcion($descripcion);
             //Asigna el atributo categoria
             $obj_padron_fotografico->setCategoria($categoria);
             
@@ -7881,7 +7881,8 @@ class Controller{
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }  
-    }  public function tipo_punto_guardar() {
+    }  
+    public function tipo_punto_guardar() {
           if(isset($_SESSION['nombre'])){
                $obj_tipo_punto = new cls_tipo_punto();
                $obj_tipo_punto->setTipo_Punto($_POST['nombre']); 
@@ -7907,6 +7908,32 @@ class Controller{
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }  
     }
+    
+     public function notas_coordinacion_bitacora_guardar() {
+          if(isset($_SESSION['nombre'])){
+               $obj_eventos = new cls_eventos();
+               
+               $obj_eventos->setObservaciones_supervision($_POST['observaciones']);
+               $obj_eventos->setId($_POST['ID_Evento']);
+               
+                if (strcmp ($_POST['observaciones'],"Sin Anotaciones")==0){
+                    $obj_eventos->setFecha_notas_supervision("1983-04-09");
+                }else
+                {
+                    $obj_eventos->setFecha_notas_supervision(date("Y-m-d"));
+                }
+               
+                $obj_eventos->edita_notas_supervision_evento();
+                
+                header ("location:/ORIEL/index.php?ctl=frm_eventos_listar");
+        }
+        else {
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }  
+    }
+    
      public function tipo_punto_cambiar_estado() {
        if(isset($_SESSION['nombre'])){
            $obj_tipo_punto = new cls_tipo_punto();

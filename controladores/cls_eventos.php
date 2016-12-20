@@ -21,6 +21,25 @@ class cls_eventos{
     public $observaciones;
     public $prioridad;
     public $adjunto;
+    public $observaciones_supervision;
+    public $fecha_notas_supervision;
+    
+    function getObservaciones_supervision() {
+        return $this->observaciones_supervision;
+    }
+
+    function setObservaciones_supervision($observaciones_supervision) {
+        $this->observaciones_supervision = $observaciones_supervision;
+    }
+
+    function getFecha_notas_supervision() {
+        return $this->fecha_notas_supervision;
+    }
+
+    function setFecha_notas_supervision($fecha_notas_supervision) {
+        $this->fecha_notas_supervision = $fecha_notas_supervision;
+    }
+
     
     function getAdjunto() {
         return $this->adjunto;
@@ -201,6 +220,8 @@ class cls_eventos{
         $this->observaciones="";
         $this->prioridad="";
         $this->adjunto="";
+        $this->observaciones_supervision="";
+        $this->fecha_notas_supervision="";
         ;
     }
     
@@ -209,6 +230,16 @@ class cls_eventos{
       $this->obj_data_provider->conectar();
       //Llama al metodo para editar los datos correspondientes
       $this->obj_data_provider->edita_datos("T_Evento","ID_EstadoEvento=".$nuevo_estado,"ID_Evento=".$this->id);
+      //Metodo de la clase data provider que desconecta la sesión con la base de datos
+      $this->obj_data_provider->desconectar();
+      $this->resultado_operacion=$this->obj_data_provider->getResultado_operacion();
+  }
+  
+    //Este metodo realiza la modificación del estado del modulo, de activo a inactivo o viceversa en la bd
+  function edita_notas_supervision_evento(){
+      $this->obj_data_provider->conectar();
+      //Llama al metodo para editar los datos correspondientes
+      $this->obj_data_provider->edita_datos("T_Evento","Observaciones_Evento='".$this->observaciones_supervision."',Fecha_Observaciones='".$this->fecha_notas_supervision."'","ID_Evento=".$this->id);
       //Metodo de la clase data provider que desconecta la sesión con la base de datos
       $this->obj_data_provider->desconectar();
       $this->resultado_operacion=$this->obj_data_provider->getResultado_operacion();
@@ -282,7 +313,7 @@ class cls_eventos{
                         LEFT OUTER JOIN T_Usuario ON T_Evento.ID_Usuario = T_Usuario.ID_Usuario
                         LEFT OUTER JOIN T_TipoEvento ON T_Evento.ID_Tipo_Evento = T_TipoEvento.ID_Tipo_Evento
                         LEFT OUTER JOIN T_EstadoEvento ON T_Evento.ID_EstadoEvento = T_EstadoEvento.ID_EstadoEvento", 
-                    "T_Evento.ID_Evento, T_Evento.Fecha, T_Evento.Hora, 
+                    "T_Evento.ID_Evento, T_Evento.Fecha, T_Evento.Hora, T_Evento.Observaciones_Evento, T_Evento.Fecha_Observaciones,
                         T_Provincia.Nombre_Provincia, T_Provincia.ID_Provincia,
                         T_TipoPuntoBCR.Tipo_Punto, T_TipoPuntoBCR.ID_Tipo_Punto ,
                         T_PuntoBCR.Nombre, T_PuntoBCR.ID_PuntoBCR,T_PuntoBCR.Codigo,
@@ -303,7 +334,7 @@ class cls_eventos{
                         LEFT OUTER JOIN T_Usuario ON T_Evento.ID_Usuario = T_Usuario.ID_Usuario
                         LEFT OUTER JOIN T_TipoEvento ON T_Evento.ID_Tipo_Evento = T_TipoEvento.ID_Tipo_Evento
                         LEFT OUTER JOIN T_EstadoEvento ON T_Evento.ID_EstadoEvento = T_EstadoEvento.ID_EstadoEvento", 
-                    "T_Evento.ID_Evento, T_Evento.Fecha, T_Evento.Hora, 
+                    "T_Evento.ID_Evento, T_Evento.Fecha, T_Evento.Hora, T_Evento.Observaciones_Evento, T_Evento.Fecha_Observaciones,
                         T_Provincia.Nombre_Provincia, T_Provincia.ID_Provincia,
                         T_TipoPuntoBCR.Tipo_Punto, T_TipoPuntoBCR.ID_Tipo_Punto ,
                         T_PuntoBCR.Nombre, T_PuntoBCR.ID_PuntoBCR,T_PuntoBCR.Codigo,
