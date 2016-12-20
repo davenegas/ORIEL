@@ -280,6 +280,9 @@ $map = array(
     //Controlador de Personal Externo
     'personal_externo_listar'=>array('controller'=>'Controller','action'=> 'personal_externo_listar'), 
     'personal_externo_gestion'=>array('controller'=>'Controller','action'=> 'personal_externo_gestion'), 
+    'personal_externo_numero_telefono_guardar'=>array('controller'=>'Controller','action'=> 'personal_externo_numero_telefono_guardar'), 
+    'personal_externo_eliminar_telefono'=>array('controller'=>'Controller','action'=> 'personal_externo_eliminar_telefono'), 
+    'persona_externa_guardar_informacion'=>array('controller'=>'Controller','action'=> 'persona_externa_guardar_informacion'), 
     
     //Importación de Prontuario
     'frm_importar_prontuario_paso_1'=>array('controller'=>'Controller','action'=> 'frm_importar_prontuario_paso_1'),

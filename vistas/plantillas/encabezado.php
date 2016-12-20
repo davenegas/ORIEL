@@ -217,15 +217,20 @@
                 <?php if ($_SESSION['modulos']['Módulo-Personal']==1){ ?>
                     <li><a href="index.php?ctl=personal_listar">Personal</a></li>
                 <?php }; ?>
-
+                    
                 <?php if ($_SESSION['modulos']['Módulo-Áreas de Apoyo']==1){ ?>
                     <li><a href="index.php?ctl=areas_apoyo_listar">Áreas de Apoyo</a></li>
                 <?php }; ?>  
 
-                <?php if ($_SESSION['modulos']['Módulo-Personal Externo']==1){?>
+                <?php if ($_SESSION['modulos']['Módulo-PuntosBCR']==1){?>
+
                     <li><a href="index.php?ctl=personal_externo_listar">Personal Externo</a></li>
                 <?php }; ?>
                     
+                <?php if ($_SESSION['modulos']['Módulo-Áreas de Apoyo']==1){ ?>
+                    <li><a href="index.php?ctl=areas_apoyo_listar">Áreas de Apoyo</a></li>
+                <?php }; ?>  
+
                 <?php if ($_SESSION['modulos']['Módulo-Control de Video']==1){?>
                     <li><a href="#">Controles de Video</a></li>
                 <?php }; ?>   
@@ -271,10 +276,11 @@
 
                 <?php if ($_SESSION['modulos']['Controles de Video']==1){ ?>
                     <li><a href="http://10.170.5.80/Operaciones_de_Seguridad/ctrlvideo/consulta.html">Controles de Video</a></li>
+                    <!--<li><a href="vistas/plantillas/pagina_en_mantenimiento.php">Nombre de Página</a></li>-->
                 <?php }; ?>
 
                 <?php if ($_SESSION['modulos']['Oficiales']==1){ ?>
-                    <li><a href="http://10.170.5.80/Operaciones_de_Seguridad">Oficiales</a></li>
+                    <li><a href="vistas/plantillas/pagina_en_mantenimiento.php">Oficiales</a></li>
                 <?php }; ?>
 
                 <?php if ($_SESSION['modulos']['Padrón Fotográfico']==1){ ?>

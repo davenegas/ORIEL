@@ -57,7 +57,7 @@
             ?>
             </tbody>
         </table>
-        <a href="index.php?ctl=frm_personal_gestion&id=0" class="btn btn-default" role="button">Agregar Nueva Persona</a>
+        <a href="index.php?ctl=personal_externo_gestion&id=0" class="btn btn-default" role="button">Agregar Nueva Persona</a>
         </div>
             <?php require 'vistas/plantillas/pie_de_pagina.php' ?>
     </body>
