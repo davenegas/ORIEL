@@ -50,7 +50,7 @@ class Controller{
         require __DIR__ . '/../vistas/plantillas/frm_contacto_publico.php';
     }
     //////////////////////////
-    /*Metodos relacionados del area de Modulos de Seguridad del Sistema*/
+    //Metodos relacionados del area de Modulos de Seguridad del Sistema//
     //////////////////////////
      
     // Metodo que llama al formulario correspondiente para validación de credenciales por parte del usuario
@@ -4908,7 +4908,7 @@ class Controller{
     
     
     //////////////////////////
-    /*Metodos relacionados del area de Tipos de Evento de Seguridad del Sistema*/
+    //Metodos relacionados del area de Tipos de Evento de Seguridad del Sistema
     //////////////////////////
     
     /*
@@ -5093,7 +5093,7 @@ class Controller{
     }
 
     //////////////////////////
-    /*Metodos relacionados del area de Empresas de Seguridad del Sistema*/
+    //Metodos relacionados del area de Empresas de Seguridad del Sistema
     //////////////////////////
 
   // Metodo que permite actualizar en tiempo real la lista de estado de evento de bitacora dependiendo
@@ -7726,12 +7726,37 @@ class Controller{
             $obj_telefono = new cls_telefono();
             $obj_Puntobcr = new cls_puntosBCR(); 
             
-            $ide=$_GET['id'];
-            echo ($_GET['id']);
-            $obj_personal->setCondicion("T_PersonalExterno.ID_Persona_Externa='".$_GET['id']."'");
-            $obj_personal->obtiene_todo_el_personal_externo();
-            $params= $obj_personal->getArreglo();
-            
+            //Validación si carga informacion de persona o formulario en blanco
+            if($_GET['id']<>0){
+                $obj_personal->setCondicion("T_PersonalExterno.ID_Persona_Externa='".$_GET['id']."'");
+                $obj_personal->obtiene_todo_el_personal_externo();
+                $params= $obj_personal->getArreglo();
+            } else {
+                $params[0]['ID_Persona_Externa'] = 0;
+                $params[0]['Identificacion'] ="";
+                $params[0]['Apellido'] ="";
+                $params[0]['Nombre'] ="";
+                $params[0]['Fecha_Nacimiento'] ="";
+                $params[0]['Fecha_Vencimiento_Residencia'] ="";
+                $params[0]['Fecha_Vencimiento_Portacion'] ="";
+                $params[0]['Fecha_Ingreso'] ="";
+                $params[0]['Fecha_Salida'] ="";
+                $params[0]['Correo'] ="";
+                $params[0]['Genero'] ="";
+                $params[0]['Direccion'] ="";
+                $params[0]['ID_Distrito']  ="";
+                $params[0]['ID_Estado_Civil'] ="";
+                $params[0]['ID_Nacionalidad'] ="";
+                $params[0]['ID_Nivel_Academico'] ="";
+                $params[0]['ID_Empresa'] ="";
+                $params[0]['ID_Estado_Persona'] ="";
+                $params[0]['Validado'] ="";
+                $params[0]['Observaciones'] ="";
+                $params[0]['Ocupacion'] ="";
+                $params[0]['Nombre_Estado'] ="";
+                $params[0]['Descripcion'] ="";
+                $params[0]['Empresa'] ="";
+            }
             //Obtiene empresa 
             $obj_empresa->setCondicion("");
             $obj_empresa->obtiene_todas_las_empresas();
@@ -7771,6 +7796,19 @@ class Controller{
             $obj_estado_persona->obtener_todos_estados_personas();
             $estado_persona = $obj_estado_persona->getArreglo();
             
+            //Obtiene telefonos realacionados al personal externo
+            $obj_telefono->setCondicion("ID='".$_GET['id']."'");
+            $obj_telefono->obtiene_telefonos_personal_externo();
+            $num_telefono= $obj_telefono->getArreglo();
+            
+            //Obtiene los tipos de telefono
+            $obj_telefono->setCondicion("");
+            $obj_telefono->obtiene_tipo_telefonos();
+            $tipo_telefono = $obj_telefono->getArreglo();
+            
+            //Obtiene fotos del personal
+            $fotos;
+            
             require __DIR__ . '/../vistas/plantillas/frm_personal_externo_detalle.php';
             
         }else{
@@ -7785,10 +7823,139 @@ class Controller{
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }
     }
-    ///////////////////////////////////////////////////////////////////////////////////////////////
-    /////////////////////////Funciones de Tipo Telefono//////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////////////////////////////
     
+    public function personal_externo_numero_telefono_guardar(){
+        //Verifica que la sesion de usuario esté activa 
+        if(isset($_SESSION['nombre'])){   
+            //Verifica que el metodo de envio de datos sea por medio del formulario html
+            if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+                //Creacion del objeto de la clase telefono
+                $obj_telefono = new cls_telefono();
+                //Establece los parametros requeridos para el objeto de la clase
+                //ID del telefono
+                $obj_telefono->setId($_POST['ID_Telefono']);
+                //Id de la persona
+                $obj_telefono->setId2($_POST['ID_Persona']);
+                //Tipo de telefono
+                $obj_telefono->setTipo_telefono($_POST['Tipo_Telefono']);
+                //Establece el numero
+                $obj_telefono->setNumero($_POST['numero']);
+                //Define las observaciones
+                echo '<script>alert("Prueba");</script>';
+                $obj_telefono->setObservaciones($_POST['observaciones_tel']);
+                //Dependiendo del numero de id que se reciba, se guarda un nuevo telefono o se edita el existente
+                if($_POST['ID_Telefono']==0){
+                    $obj_telefono->guardar_telefono();
+                }   else    {
+                    //Establece la condicion de busqueda para editar el telefono
+                    $obj_telefono->setCondicion("ID_Telefono='".$_POST['ID_Telefono']."'");
+                    //Ejecuta la edicion de los datos
+                    $obj_telefono->actualizar_telefono();
+                }
+                //Muestra la vista de usuario correspondiente
+                header("location:/ORIEL/index.php?ctl=personal_externo_gestion&id=".$_POST['ID_Persona']);
+            }
+        }   else    {
+              /*
+             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+             * En la última línea llama a la pagina de inicio de sesión.
+             */
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            //Muestra la vista de usuario correspondiente
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }
+    }
+    
+    public function personal_externo_eliminar_telefono(){
+        //Verifica que la sesion de usuario esté activa
+       if(isset($_SESSION['nombre'])){
+           //Crear objeto de la clase telefono
+            $obj_telefono = new cls_telefono();
+            //Establece el id del telefono en cuestion
+            $obj_telefono->setId($_POST['id_telefono']);
+            //Procede a armar la condicion de busqueda del SQL
+            $obj_telefono->setCondicion("ID_Telefono='".$_POST['id_telefono']."'");
+            //Elimina el telefono de la base de datos
+            $obj_telefono->eliminar_telefono();
+        }else{
+              /*
+             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+             * En la última línea llama a la pagina de inicio de sesión.
+             */
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            //Muestra la vista de usuario correspondiente
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }  
+    }
+    
+    //Metodo que permite guardar la información correspondiente a una persona externa
+    public function persona_externa_guardar_informacion(){
+        //Verifica que la sesión de usuario esté establecida
+        if(isset($_SESSION['nombre'])){
+            //Crear objeto de la clase personal
+            $obj_persona = new cls_personal_externo ();
+            //Establece los atributos de la clase: tales como identificacion, nombre, empresa, etc
+            $obj_persona->setIdentificacion($_POST['identificacion']);
+            $obj_persona->setEmpresa($_POST['empresa']);
+            $obj_persona->setNombre($_POST['nombre']);
+            $obj_persona->setApellido($_POST['apellido']);
+            $obj_persona->setFecha_nacimiento($_POST['fecha_nacimiento']);
+            $obj_persona->setFecha_ingreso($_POST['fecha_ingreso']);
+            $obj_persona->setFecha_salida($_POST['fecha_salida']);
+            $obj_persona->setNacionalidad($_POST['nacionalidad']);
+            $obj_persona->setFecha_residencia($_POST['fecha_residencia']);
+            $obj_persona->setFecha_portacion($_POST['fecha_portacion']);
+            $obj_persona->setDistrito($_POST['Distrito']);
+            $obj_persona->setDireccion($_POST['Direccion']);
+            $obj_persona->setEstado_civil($_POST['estado_civil']);
+            $obj_persona->setCorreo($_POST['correo']);
+            $obj_persona->setNivel_academico($_POST['nivel_academico']);
+            $obj_persona->setObservaciones($_POST['observaciones']);
+            $obj_persona->setEstado_persona($_POST['estado_persona']);
+            $obj_persona->setGenero($_POST['genero']);
+            $obj_persona->setValidado($_POST['validado']);
+            $obj_persona->setOcupacion($_POST['ocupacion']);
+            //Valida si es una persona nueva o editar una exsitente
+            if($_POST['id_persona']==0){
+                $obj_persona->setCondicion("");
+            }   else {
+                //Establece la condicion de busqueda SQL
+                $obj_persona->setCondicion("ID_Persona_Externa='".$_POST['id_persona']."'");
+            }
+            
+            //Ejecuta el cambio en base de datos
+            $obj_persona->guardar_informacion_persona_externa();
+            
+            if($_POST['id_persona']==0){
+                $ultimo=$obj_persona->getArreglo();
+                $nueva_persona=$ultimo[0]['ID_Persona_Externa'];
+            } else {
+                $nueva_persona=$_POST['id_persona'];
+            }
+            echo $nueva_persona;
+        }else{
+              /*
+             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+             * En la última línea llama a la pagina de inicio de sesión.
+             */
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            //Llama a la vista de usuario correspondiente
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }
+    }
+    
+    ////////////////////////////////////////////////////////////////////////////
+    /////////////////////////Funciones de Tipo Telefono/////////////////////////
+    /////////////////////////////////////////////////////////////////////////////
     public function tipo_telefono_listar() {
        if(isset($_SESSION['nombre'])){
            $obj_tipo_telefono = new cls_tipo_telefono();
@@ -7808,7 +7975,9 @@ class Controller{
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }  
-    }  public function tipo_telefono_guardar() {
+    } 
+    
+    public function tipo_telefono_guardar() {
           if(isset($_SESSION['nombre'])){
                $obj_tipo_telefono = new cls_tipo_telefono();
                $obj_tipo_telefono->setTipo_Telefono($_POST['nombre']); 
@@ -7834,7 +8003,8 @@ class Controller{
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }  
     }
-     public function tipo_telefono_cambiar_estado() {
+    
+    public function tipo_telefono_cambiar_estado() {
        if(isset($_SESSION['nombre'])){
            $obj_tipo_telefono = new cls_tipo_telefono();
            
@@ -7859,10 +8029,11 @@ class Controller{
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }  
     }
+    
     ////////////////////////////////////////////////////////////////////////////
     ///////////////////////Funciones de Tipo Punto//////////////////////////////          
     ////////////////////////////////////////////////////////////////////////////   
-       public function tipo_punto_listar() {
+    public function tipo_punto_listar() {
        if(isset($_SESSION['nombre'])){
            $obj_tipo_punto = new cls_tipo_punto();
            $obj_tipo_punto->obtener_tipo_punto();
@@ -7881,7 +8052,9 @@ class Controller{
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }  
-    }  public function tipo_punto_guardar() {
+    }  
+    
+    public function tipo_punto_guardar() {
           if(isset($_SESSION['nombre'])){
                $obj_tipo_punto = new cls_tipo_punto();
                $obj_tipo_punto->setTipo_Punto($_POST['nombre']); 
@@ -7907,7 +8080,8 @@ class Controller{
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }  
     }
-     public function tipo_punto_cambiar_estado() {
+    
+    public function tipo_punto_cambiar_estado() {
        if(isset($_SESSION['nombre'])){
            $obj_tipo_punto = new cls_tipo_punto();
            
@@ -7932,11 +8106,11 @@ class Controller{
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }  
     }
+    
     ////////////////////////////////////////////////////////////////////////////
     ////////////////////////////Gerentes de Zona////////////////////////////////          
     ////////////////////////////////////////////////////////////////////////////
-    
-      public function gerente_zona_listar() {
+    public function gerente_zona_listar() {
        if(isset($_SESSION['nombre'])){
            $obj_gerentezona = new cls_gerente_zona();
            $obj_gerentezona->setCondicion("");
@@ -7960,6 +8134,7 @@ class Controller{
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }  
     } 
+    
     public function gerente_zona_guardar(){
         if(isset($_SESSION['nombre'])){   
             
@@ -7979,6 +8154,7 @@ class Controller{
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }  
     }
+    
     public function gerente_zona_editar(){
                 if(isset($_SESSION['nombre'])){
                $obj_gerentezona = new cls_gerente_zona();
@@ -8004,6 +8180,7 @@ class Controller{
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }  
     }
+    
     public function gerente_zona_cambiar_estado() {
        if(isset($_SESSION['nombre'])){
            $obj_gerentezona = new cls_gerente_zona();
@@ -8029,10 +8206,10 @@ class Controller{
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }  
     }
+    
     ////////////////////////////////////////////////////////////////////////////
     ////////////////////////////Supervisor de Zona//////////////////////////////      
     ////////////////////////////////////////////////////////////////////////////
-    
     public function supervisor_zona_listar() {
        if(isset($_SESSION['nombre'])){
            $obj_supervisorzona = new cls_supervisor_zona();
@@ -8057,6 +8234,7 @@ class Controller{
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }  
     } 
+    
     public function supervisor_zona_guardar(){
         if(isset($_SESSION['nombre'])){   
             
@@ -8076,6 +8254,7 @@ class Controller{
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }  
     }
+    
     public function supervisor_zona_editar(){
                 if(isset($_SESSION['nombre'])){
                $obj_supervisorzona = new cls_supervisor_zona();
@@ -8101,7 +8280,8 @@ class Controller{
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }  
     }
-  public function supervisor_zona_cambiar_estado() {
+    
+    public function supervisor_zona_cambiar_estado() {
        if(isset($_SESSION['nombre'])){
            $obj_supervisorzona = new cls_supervisor_zona();
            

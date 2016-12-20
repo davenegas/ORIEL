@@ -28,7 +28,8 @@
               <th style="text-align:center">Cedula</th>
               <!--<th>Direccion</th>-->
               <th style="text-align:center">Departamento</th>
-              <th style="text-align:center">Empresa</th>
+              <th style="text-align:center">Puesto</th>
+              <!--<th style="text-align:center">Empresa</th>-->
               <!--<th>Tipo Telefono</th>-->
               <th style="text-align:center">Telefonos</th>
               <!--<th>Observaciones</th>-->
@@ -50,38 +51,33 @@
                 <td style="text-align:center"><?php echo $personas[$i]['Cedula'];?></td>
                 <!--<td>//<?php echo $personas[$i]['Direccion'];?></td>-->
                 <td style="text-align:center"><?php echo $personas[$i]['Departamento'];?></td>
-                <td style="text-align:center"><?php echo $personas[$i]['Empresa'];?></td>
+                <td style="text-align:center"><?php echo $personas[$i]['Puesto'];?></td>
+                <!--<td style="text-align:center"><?php echo $personas[$i]['Empresa'];?></td>-->
                 <!--<td><?php echo $personas[$i]['Tipo_Telefono'];?></td>-->
                 <td style="text-align:center"><?php echo $personas[$i]['Numero'];?></td>
                 <!--<td><?php echo $personas[$i]['Observaciones'];?></td>-->
                 <?php if($_SESSION['modulos']['Editar- Personal']==1){
-                if ($personas[$i]['Estado']==1){
-                  ?>  
-                    <td style="text-align:center">Activo</td>
-                   <?php 
-                }else
-                {?>  
-                    <td style="text-align:center">Inactivo</td>
-                <?php 
-                }
-                ?>
-
-               <td style="text-align:center"><a href="index.php?ctl=personal_cambiar_estado&id=
-                   <?php echo $personas[$i]['ID_Persona']?>&estado=<?php echo $personas[$i]['Estado']?>">
-                Activar/Desactivar</a></td> <?php }?>
+                    if ($personas[$i]['Estado']==1){?>  
+                        <td style="text-align:center">Activo</td>
+                    <?php }  else    {?>  
+                        <td style="text-align:center">Inactivo</td>
+                    <?php   }   ?>
+                    <td style="text-align:center"><a href="index.php?ctl=personal_cambiar_estado&id=
+                            <?php echo $personas[$i]['ID_Persona']?>&estado=<?php echo $personas[$i]['Estado']?>">
+                            Activar/Desactivar</a></td> 
+                <?php }?>
 <!--               <td style="text-align:center"><a href="index.php?ctl=personal_gestion&id=
-                  <?php echo $personas[$i]['ID_Persona']?>&estado=<?php echo $personas[$i]['Estado']?>&descripcion=<?php echo $personas[$i]['Observaciones']?>">
+                <?php echo $personas[$i]['ID_Persona']?>&estado=<?php echo $personas[$i]['Estado']?>&descripcion=<?php echo $personas[$i]['Observaciones']?>">
                        Detalle</a></td>-->
-                    <td style="text-align:center"><a href="index.php?ctl=personal_gestion&id=
-                  <?php echo $personas[$i]['ID_Persona']?>&estado=<?php echo $personas[$i]['Estado']?>">
+                <td style="text-align:center"><a href="index.php?ctl=personal_gestion&id=
+                        <?php echo $personas[$i]['ID_Persona']?>&estado=<?php echo $personas[$i]['Estado']?>">
                        Detalle</a></td>
             </tr>     
                     
-            <?php }
-            ?>
+            <?php } ?>
             </tbody>
         </table>
-        <a href="index.php?ctl=frm_personal_gestion&id=0" class="btn btn-default" role="button">Agregar Nueva Persona</a>
+        <!--<a href="index.php?ctl=frm_personal_gestion&id=0" class="btn btn-default" role="button">Agregar Nueva Persona</a>-->
         </div>
             <?php require 'vistas/plantillas/pie_de_pagina.php' ?>
     </body>

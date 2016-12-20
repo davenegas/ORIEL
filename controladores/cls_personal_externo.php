@@ -296,20 +296,14 @@ class cls_personal_externo{
             $this->resultado_operacion=true;
         }
     }
-    
+    /*
     public function agregar_nueva_persona(){
         $this->obj_data_provider->conectar();
         $this->obj_data_provider->inserta_datos("t_personal", "Cedula,Apellido_Nombre,ID_Unidad_Ejecutora,ID_Puesto,Direccion,Link_Foto,ID_Empresa,Observaciones,Estado", "'".$this->cedula."','".$this->apellidonombre."',".$this->id_unidad_ejecutora.",".$this->id_puesto.",'".$this->direccion."','".$this->linkfoto."',".$this->id_empresa.",'".$this->observaciones."','".$this->estado."'");
         $this->obj_data_provider->desconectar();
     }   
        
-    function edita_persona(){
-        $this->obj_data_provider->conectar();
-        //Llama al metodo para editar los datos correspondientes
-        $this->obj_data_provider->edita_datos("t_personal","Cedula='".$this->cedula."',Apellido_Nombre='".$this->apellidonombre."',ID_Unidad_Ejecutora=".$this->id_unidad_ejecutora.",ID_Puesto=".$this->id_puesto.",Direccion='".$this->direccion."',Link_Foto='".$this->linkfoto."',ID_Empresa=".$this->id_empresa.",Observaciones='".$this->observaciones."',Estado='".$this->estado."'",$this->condicion);
-        //Metodo de la clase data provider que desconecta la sesión con la base de datos
-        $this->obj_data_provider->desconectar();
-    }
+    
   
     //Obtener el último id de evento para saber que se debe ingresar
     function obtiene_id_ultima_persona_ingresada(){
@@ -330,5 +324,26 @@ class cls_personal_externo{
         $this->obj_data_provider->edita_datos("T_Personal", "Estado='".$this->estado."'",$this->condicion);
         $this->obj_data_provider->desconectar();
         $this->resultado_operacion=true;
+    }*/
+    
+    function guardar_informacion_persona_externa(){
+        //Valida si el formulario tiene condición, enviada desde el controlador
+        //Si tiene condición editará una persona
+        //Si no, creará una persona nueva
+        if($this->condicion==""){
+            $this->obj_data_provider->conectar();
+            $this->obj_data_provider->inserta_datos("T_PersonalExterno", "`ID_Persona_Externa`, `Identificacion`, `Apellido`, `Nombre`, `Fecha_Nacimiento`, `Fecha_Vencimiento_Residencia`, `Fecha_Vencimiento_Portacion`, `Fecha_Ingreso`, `Fecha_Salida`, `Correo`, `Genero`, `Direccion`, `ID_Distrito`, `ID_Estado_Civil`, `ID_Nacionalidad`, `ID_Nivel_Academico`, `ID_Empresa`, `ID_Estado_Persona`, `Validado`, `Observaciones`, `Ocupacion`", 
+                                                "null,'".$this->identificacion."','".$this->apellido."','".$this->nombre."','".$this->fecha_nacimiento."','".$this->fecha_residencia."','".$this->fecha_portacion."','".$this->fecha_ingreso."','".$this->fecha_salida."','".$this->correo."','".$this->genero."','".$this->direccion."','".$this->distrito."','".$this->estado_civil."','".$this->nacionalidad."','".$this->nivel_academico."','".$this->empresa."','".$this->estado_persona."','".$this->validado."','".$this->observaciones."','".$this->ocupacion."'");
+            $this->obj_data_provider->trae_datos("T_PersonalExterno","max(ID_Persona_Externa) ID_Persona_Externa","");
+            $this->arreglo=$this->obj_data_provider->getArreglo();
+            $this->obj_data_provider->desconectar();
+        }   else {
+            $this->obj_data_provider->conectar();
+            //Llama al metodo para editar los datos correspondientes
+            $this->obj_data_provider->edita_datos("T_PersonalExterno","Identificacion='".$this->identificacion."',Apellido='".$this->apellido."',Nombre='".$this->nombre."',Fecha_Nacimiento='".$this->fecha_nacimiento."',Fecha_Vencimiento_Residencia='".$this->fecha_residencia."',Fecha_Vencimiento_Portacion='".$this->fecha_portacion."',Fecha_Ingreso='".$this->fecha_ingreso."',Fecha_Salida='".$this->fecha_salida."',Correo='".$this->correo."', Genero='".$this->genero.
+                    "', Direccion='".$this->direccion."', ID_Distrito='".$this->distrito."', ID_Estado_Civil='".$this->estado_civil."', ID_Nacionalidad='".$this->nacionalidad."', ID_Nivel_Academico='".$this->nivel_academico."', ID_Empresa='".$this->empresa."', ID_Estado_Persona='".$this->estado_persona."', Validado='".$this->validado."', Observaciones='".$this->observaciones."', Ocupacion='".$this->ocupacion."'",$this->condicion);
+            //Metodo de la clase data provider que desconecta la sesión con la base de datos
+            $this->obj_data_provider->desconectar();
+        }
     }
 }?>

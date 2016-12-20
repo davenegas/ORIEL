@@ -76,8 +76,18 @@
                     <?php }else{ ?> 
                         <td style="text-align:center">ATM: <?php echo $params[$i]['Codigo'];?></td>
                     <?php }?> 
-                    <td style="text-align:center"><?php echo $params[$i]['Gateway principal'];?></td>
-                    <td style="text-align:center"><?php echo $params[$i]['Loopback'];?></td>
+                        <!--Valida si tiene Gateway principal de lo contrario escribe NA-->
+                    <?php if(isset($params[$i]['Gateway principal'])){?>
+                        <td style="text-align:center"><?php echo $params[$i]['Gateway principal'];?></td>
+                    <?php } else {?>
+                        <td style="text-align:center">NA</td>
+                    <?php }?>
+                        <!--Valida si tiene Loopback de lo contrario escribe NA-->
+                    <?php if(isset($params[$i]['Loopback'])){?>
+                        <td style="text-align:center"><?php echo $params[$i]['Loopback'];?></td>
+                    <?php } else {?>   
+                        <td style="text-align:center">NA</td>
+                    <?php }?>
                     <td style="text-align:center"><?php echo $params[$i]['Enlace'];?></td>
                     <td style="text-align:center"><?php echo $params[$i]['Interface_Enlace'];?></td>
                     <td style="text-align:center"><?php echo $params[$i]['Numero_Linea'];?></td>
