@@ -153,16 +153,16 @@
                 <?php 
                 if (strcmp($params[$i]['Fecha_Observaciones'], "1983-04-09")==0) {
                     ?>
-                    <td style="text-align:center" data-toggle="tooltip" title="<?php echo $params[$i]['Observaciones_Evento'];?>"><a href="javascript:void(null)"><img src="vistas/Imagenes/Agregar Nota.jpg" class="img-rounded" alt="Cinque Terre" width="25" height="25" onClick="editar_notas_supervision('<?php echo $params[$i]['ID_Evento'];?>','<?php echo $params[$i]['Observaciones_Evento'];?>')"></a></td>
+            <td style="text-align:center" data-toggle="tooltip" title="<?php echo $params[$i]['Observaciones_Evento'];?>"><a href="javascript:void(null)" style="color:#FFFFFF">3<img src="vistas/Imagenes/Agregar Nota.jpg" class="img-rounded" alt="Cinque Terre" width="25" height="25" onClick="editar_notas_supervision('<?php echo $params[$i]['ID_Evento'];?>','<?php echo $params[$i]['Observaciones_Evento'];?>')"></a></td>
                     <?php 
                 }else{
                     if (strcmp($params[$i]['Fecha_Observaciones'], date("Y-m-d"))==0) {
                     ?>
-                    <td style="text-align:center" data-toggle="tooltip" title="<?php echo $params[$i]['Observaciones_Evento'];?>"><a href="javascript:void(null)"><img src="vistas/Imagenes/Nota de Hoy.png" class="img-rounded" alt="Cinque Terre" width="25" height="25" onClick="editar_notas_supervision('<?php echo $params[$i]['ID_Evento'];?>','<?php echo $params[$i]['Observaciones_Evento'];?>')"></a></td>
+                    <td style="text-align:center" data-toggle="tooltip" title="<?php echo $params[$i]['Observaciones_Evento'];?>"><a href="javascript:void(null)" style="color:#FFFFFF">1<img src="vistas/Imagenes/Nota de Hoy.png" class="img-rounded" alt="Cinque Terre" width="25" height="25" onClick="editar_notas_supervision('<?php echo $params[$i]['ID_Evento'];?>','<?php echo $params[$i]['Observaciones_Evento'];?>')"></a></td>
                     <?php 
                     }else{
                 ?>
-                    <td style="text-align:center" data-toggle="tooltip" title="<?php echo $params[$i]['Observaciones_Evento'];?>"><a href="javascript:void(null)"><img src="vistas/Imagenes/Editar Nota.png" class="img-rounded" alt="Cinque Terre" width="25" height="25" onClick="editar_notas_supervision('<?php echo $params[$i]['ID_Evento'];?>','<?php echo $params[$i]['Observaciones_Evento'];?>')"></a></td>
+                    <td style="text-align:center" data-toggle="tooltip" title="<?php echo $params[$i]['Observaciones_Evento'];?>"><a href="javascript:void(null)" style="color:#FFFFFF">2<img src="vistas/Imagenes/Editar Nota.png" class="img-rounded" alt="Cinque Terre" width="25" height="25" onClick="editar_notas_supervision('<?php echo $params[$i]['ID_Evento'];?>','<?php echo $params[$i]['Observaciones_Evento'];?>')"></a></td>
                 <?php     }
                 }
                 ?>
