@@ -55,9 +55,11 @@
                 document.getElementById('ventana_oculta_1').style.display = "none";
             }
             //Funcion para editar notas de supervisión
+            
            function editar_notas_supervision(id_eve,notas) {
                 document.getElementById('ID_Evento').value=id_eve;
-                if(notas=="Sin Anotaciones"){
+                //alert("_"+notas+"_");
+                if(notas=='Sin Anotaciones'){
                     document.getElementById('observaciones').value="";
                 }else{
                     document.getElementById('observaciones').value=notas;
