@@ -120,7 +120,7 @@
                         <td style="text-align:center"><?php echo $params[$i]['Observaciones_Tel'];?></td>
                         <?php if($_SESSION['modulos']['Editar- Personal']==1){  ?>
                             <td style="text-align:center"><a class="btn azul" role="button" id="prueba" name="prueba" 
-                                    onclick="Editar_telefono(<?php echo $params[$i]['ID_Telefono'];?>,<?php echo $params[$i]['ID_Tipo_Telefono'];?>,<?php echo $params[$i]['Numero'];?>,'<?php echo $params[$i]['Observaciones_Tel'];?>')">
+                                    onclick="Editar_telefono(<?php echo $params[$i]['ID_Telefono'];?>,<?php echo $params[$i]['ID_Tipo_Telefono'];?>,'<?php echo $params[$i]['Numero'];?>','<?php echo $params[$i]['Observaciones_Tel'];?>')">
                                 Editar</a></td> 
                             <td style="text-align:center"><a class="btn rojo" role="button" id="prueba" name="prueba" onclick="eliminar_telefono(<?php echo $params[$i]['ID_Telefono'];?>);">
                                 Eliminar</a></td>

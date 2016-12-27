@@ -18,9 +18,9 @@
                     <a href="index.php?ctl=personal_gestion&id=<?php echo $params[0]['ID_Persona']+1?>;"><img src='vistas/Imagenes/boton-siguiente.png' width="25"></a>
                 <?php }?>
             </h2>
-            <pre>
+<!--            <pre>
                 <?php print_r($params); ?>
-            </pre>
+            </pre>-->
             <div>
                 <h3>Información General
                 <?php if($_SESSION['modulos']['Editar- Personal']==1){ ?>
@@ -28,9 +28,9 @@
                 <?php }?>
                 </h3>
                 <!--Información del personal Externo-->
-                <div class="col-md-4 espacio-abajo">
+                <div class="col-md-12 espacio-abajo">
                     <label for="ID_Persona">ID Persona</label>
-                    <input type="text" required="ID_Persona" readonly class="form-control" id="ID_Persona" name="ID_Persona" value="<?php echo $params[0]['ID_Persona_Externa'];?>">
+                    <input hidden="hidden" type="text" required="ID_Persona" readonly class="form-control" id="ID_Persona" name="ID_Persona" value="<?php echo $params[0]['ID_Persona_Externa'];?>">
                 </div>
                 <div class="col-md-4 espacio-abajo">
                     <label for="identificacion">Identificación</label>
@@ -49,6 +49,10 @@
                                 <option value="<?php echo $empresas[$i]['ID_Empresa']?>" ><?php echo $empresas[$i]['Empresa']?></option>   
                         <?php } }  ?>
                     </select>
+                </div>
+                <div class="col-md-4 espacio-abajo">
+                    <label for="carnet">Número de Gafete</label>
+                    <input type="text" required="carnet" readonly class="form-control" id="carnet" name="ID_Persona" value="<?php echo $params[0]['ID_Persona_Externa'];?>">
                 </div>
                 <div class="col-md-4 espacio-abajo">
                     <label for="nombre">Nombre</label>
@@ -85,7 +89,7 @@
                     </select>
                 </div>
                 <div class="col-md-4 espacio-abajo">
-                    <label for="fecha_residencia">Fecha de vencimiento Residencia</label>
+                    <label for="fecha_residencia">Fecha de vencimiento Identificación/Residencia</label>
                     <input type="date" class="form-control" readonly ALIGN="right" id="fecha_residencia" name="fecha_residencia" value="<?php echo $params[0]['Fecha_Vencimiento_Residencia'];?>">
                 </div>
                 <div class="col-md-4 espacio-abajo">
@@ -292,10 +296,10 @@
                             <td style="text-align:center"><?php echo $fotos[$i]['Categoria'];?></td>
                             <td style="text-align:center"><?php echo $fotos[$i]['Nombre_Imagen'];?></td>
                             <td style="text-align:center"><?php echo $fotos [$i]['Descripcion'];?></td>
-                            <td style="text-align:center"><a class="fancybox-button" rel="fancybox-button" href="../../../Padron_Fotografico_Puntos_BCR/<?php echo $fotos[$i]['Nombre_Ruta'];?>" title="<?php echo $fotos[$i]['Nombre_Imagen'].' ('.$fotos[$i]['Descripcion'].')';?>">
-                                <img src="../../../Padron_Fotografico_Puntos_BCR/<?php echo $fotos[$i]['Nombre_Ruta'];?>" alt="" width="200px"/></a></td>
+                            <td style="text-align:center"><a class="fancybox-button" rel="fancybox-button" href="../../../Padron_Fotografico_Personal_externo/<?php echo $fotos[$i]['Nombre_Ruta'];?>" title="<?php echo $fotos[$i]['Nombre_Imagen'].' ('.$fotos[$i]['Descripcion'].')';?>">
+                                <img src="../../../Padron_Fotografico_Personal_externo/<?php echo $fotos[$i]['Nombre_Ruta'];?>" alt="" width="200px"/></a></td>
                             <?php if($_SESSION['modulos']['Editar- Padrón Fotográfico Puntos BCR']==1){ ?>
-                            <td align="center"><a onclick="eliminar_imagen(<?php echo $fotos[$i]['ID_Padron_PuntoBCR'];?>);">Eliminar</a></td>    
+                            <td align="center"><a onclick="eliminar_imagen(<?php echo $fotos[$i]['ID_Padron_Personal'];?>);">Eliminar</a></td>    
                             <?php } ?>
                             <td style="text-align:center" hidden="hidden"><?php echo $fotos [$i]['Nombre_Ruta'];?></td>
                         </tr>   
@@ -303,7 +307,6 @@
                     </tbody>
                 </table>
             </div>
-            
         <a href="index.php?ctl=personal_listar" class="btn btn-default espacio-arriba" role="button">Volver</a> 
         </section>
         <?php require_once 'pie_de_pagina.php' ?>
@@ -341,6 +344,51 @@
                 </form>
             </div>
         <!--Cierre agregar teléfono -->
+        </div>
+        
+        <!--Agregar foto al personal externo-->
+        <div id="formulario_oculto_1">
+            <div id="popupventana2">
+                <div id="ventana2">
+                <img id="close" src='vistas/Imagenes/cerrar.png' width="25" onclick ="ocultar_elemento()">
+                    <h2>Fotos de Personal</h2>
+                    <h4>Agregar nueva foto a la persona</h4>
+                    <!--Formulario para ingresar areas de apoyo-->
+                    <!--Agregar nuevo detalle o seguimiento del evento-->
+                    <form class="form-horizontal"  id="guardar_foto" role="form" enctype="multipart/form-data" method="POST" action="index.php?ctl=guardar_imagen_persona_externa">
+                        <div class="col-xs-12 quitar-float espacio-abajo">
+                            <label for="archivo_adjunto">Adjuntar Archivo: </label>
+                            <input type="hidden" name="MAX_FILE_SIZE" value="2000000">
+                            <input type="file" name="archivo_adjunto" id="seleccionar_archivo" class="btn btn-default">
+                        </div> 
+                        
+                        <div class="col-xs-4">
+                            <label for="Nombre">Nombre</label>
+                            <input type="text" required=”required” class="form-control" id="Nombre" name="Nombre" >
+                        </div>
+              
+                        <div hidden="hidden" class="col-xs-4">
+                            <label for="ID_Persona">ID_Persona</label>
+                            <input type="text" class="form-control" id="ID_Persona" name="ID_Persona" value="<?php echo $params[0]['ID_Persona_Externa'];?>">
+                        </div>
+                
+                        <div class="col-xs-4">
+                            <label for="Descripcion">Descripción</label>
+                            <textarea type="text" required=”required” class="form-control" id="Descripcion" name="Descripcion" value="" maxlength="500" minlength="2" placeholder="Máximo 500 caracteres por seguimiento"></textarea>
+                        </div>
+                
+                        <div class="col-xs-4 espacio-abajo">
+                            <label for="Categoria">Categoría</label>
+                            <select class="form-control espacio-abajo" id="Categoria" name="Categoria" required=”required”> 
+                                <option value="Rostro" >Rostro</option>  
+                                <option value="Cuerpo completo" >Cuerpo entero</option>  
+                                <option value="Documentos" >Documentos</option>
+                            </select>
+                        </div>
+                        <button><a href="javascript:%20valida_foto()" id="submit">Guardar Imágen</a></button>
+                    </form>
+                </div>
+            </div>
         </div>
         
     </body>

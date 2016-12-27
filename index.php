@@ -283,6 +283,8 @@ $map = array(
     'personal_externo_numero_telefono_guardar'=>array('controller'=>'Controller','action'=> 'personal_externo_numero_telefono_guardar'), 
     'personal_externo_eliminar_telefono'=>array('controller'=>'Controller','action'=> 'personal_externo_eliminar_telefono'), 
     'persona_externa_guardar_informacion'=>array('controller'=>'Controller','action'=> 'persona_externa_guardar_informacion'), 
+    'guardar_imagen_persona_externa'=>array('controller'=>'Controller','action'=> 'guardar_imagen_persona_externa'), 
+    'eliminar_imagen_personal_externo'=>array('controller'=>'Controller','action'=> 'eliminar_imagen_personal_externo'), 
     
     //Importación de Prontuario
     'frm_importar_prontuario_paso_1'=>array('controller'=>'Controller','action'=> 'frm_importar_prontuario_paso_1'),

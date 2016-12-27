@@ -4889,8 +4889,6 @@ class Controller{
                     break;
                 }   
             }
-            
-                   
         }else {
               /*
              * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
@@ -6733,7 +6731,8 @@ class Controller{
             $obj_area_apoyo->setId(null);
             //Establece los atributos del objeto mediante los parametros enviados por el metodo post
             $obj_area_apoyo->setTipo_area($_POST['Tipo_Area_Apoyo']);
-            $obj_area_apoyo->setDistrito($_POST['distrito']);
+            echo ($_POST['Tipo_Area_Apoyo']);
+            $obj_area_apoyo->setDistrito($_POST['distrito2']);
             $obj_area_apoyo->setNombre_area($_POST['nombre']);
             $obj_area_apoyo->setDireccion($_POST['direccion']);
             $obj_area_apoyo->setObservaciones($_POST['observaciones']);
@@ -6762,7 +6761,7 @@ class Controller{
             $obj_area_apoyo->setId($area_apoyo[0]['ID_Area_Apoyo']);
             $obj_area_apoyo->setId2($_POST['ID_PuntoBCR']);
             //Establece la condicion para buscar si el area de apoyo ya está asignada al punto bcr
-            $obj_area_apoyo->setCondicion("T_PuntoBCRAreaApoyo.ID_PuntoBCR='".$_POST['id_puntobcr']."' AND T_PuntoBCRAreaApoyo.ID_Area_Apoyo='".$_POST['id_area_apoyo']."'");
+            $obj_area_apoyo->setCondicion("T_PuntoBCRAreaApoyo.ID_PuntoBCR='".$_POST['ID_PuntoBCR']."' AND T_PuntoBCRAreaApoyo.ID_Area_Apoyo='".$area_apoyo[0]['ID_Area_Apoyo']."'");
             //Ejecuta la consulta sobre la bd
             $obj_area_apoyo->obtiene_todos_las_areas_apoyo();
             //Obtiene el arreglo correspondiente
@@ -7725,6 +7724,7 @@ class Controller{
             $obj_nivel_academico = new cls_nivel_academico();
             $obj_telefono = new cls_telefono();
             $obj_Puntobcr = new cls_puntosBCR(); 
+            $obj_padron_fotografico= new cls_padron_fotografico_puntosbcr();
             
             //Validación si carga informacion de persona o formulario en blanco
             if($_GET['id']<>0){
@@ -7765,16 +7765,23 @@ class Controller{
             //Obtiene Distrito->Cantón->Provincia
             //Distritos
             $obj_Puntobcr->setCondicion("");
+            //Ejecuta la consulta SQL
             $obj_Puntobcr->obtiene_distritos();
-            $distritos = $obj_Puntobcr->getArreglo();
+            //Asigna el resultado a una variable tipo vector
+            $distritos = array_merge(array(['ID_Distrito'=>0]+['Nombre_Distrito'=>""]),$obj_Puntobcr->getArreglo());
             //Cantones
             $obj_Puntobcr->setCondicion("");
+            //Ejecuta la consulta SQL
             $obj_Puntobcr->obtiene_cantones();
-            $cantones = $obj_Puntobcr->getArreglo();
+            //Obtiene el resultado en una variable tipo vector
+            $cantones   = array_merge(array(['ID_Canton'=>0]+['Nombre_Canton'=>""]),$obj_Puntobcr->getArreglo());
             //Provincias
             $obj_Puntobcr->setCondicion("");
+            //Ejecuta la consulta
             $obj_Puntobcr->obtiene_provincias();
-            $provincias = $obj_Puntobcr->getArreglo();
+            //Asigna el resultado a una variable tipo vector
+            $provincias = array_merge(array(['ID_Provincia'=>"0"]+['Nombre_Provincia'=>""]),$obj_Puntobcr->getArreglo());
+                
                 
             //Obtiene Estado Civil
             $obj_estado_civil->setCondicion("");
@@ -7807,7 +7814,12 @@ class Controller{
             $tipo_telefono = $obj_telefono->getArreglo();
             
             //Obtiene fotos del personal
-            $fotos;
+            //Establece la condición de busqueda mediante el id del punto bcr
+            $obj_padron_fotografico->setCondicion("ID_Persona_Externa=".$_GET['id']);
+            //Obtiene el listado de imagenes del punto bcr
+            $obj_padron_fotografico->obtener_imagenes_personal_externo();
+            //Asigna el resultado a una variable tipo vector
+            $fotos=$obj_padron_fotografico->getArreglo();
             
             require __DIR__ . '/../vistas/plantillas/frm_personal_externo_detalle.php';
             
@@ -7952,6 +7964,204 @@ class Controller{
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }
     }
+    
+    public function guardar_imagen_persona_externa(){
+        if(isset($_SESSION['nombre'])){
+            //Verifica que el nombre de la imagen exista en los parametros enviados
+            if (!(isset($_POST['Nombre']))){
+                //Muestra advertencia en pantalla
+                echo "<script type=\"text/javascript\">alert('Es necesario ingresar un nombre de referencia para la imágen!');history.go(-1);</script>";;
+                //Sale del metodo
+                exit();
+            }
+            //Verifica que la descripcion de la imagen exista en los parametros enviados
+            if (!(isset($_POST['Descripcion']))){
+                //Muestra advertencia en pantalla
+                echo "<script type=\"text/javascript\">alert('Es necesario ingresar una descripción básica para la imágen!');history.go(-1);</script>";;
+                //Sale del metodo
+                exit();
+            } 
+            //Verifica que la categoria de la imagen exista en los parametros enviados
+            if (!(isset($_POST['Categoria']))){
+                //Muestra advertencia en pantalla
+                echo "<script type=\"text/javascript\">alert('Es necesario elegir una categoría para la imágen!');history.go(-1);</script>";;
+                //Sale del metodo
+                exit();
+            }
+            //Verifica que el id del punto bcr exista en los parametros enviados
+            if (!(isset($_POST['ID_Persona']))){
+                //Sale del metodo
+                exit();
+            }
+              
+            //Elimina caracteres especiales del nombre de la imagen enviado desde el formulario html
+            $nombre_imagen= str_replace('"','',str_replace("'","",$_POST['Nombre']));
+            //Obtiene la categoria de la imagen
+            $categoria=$_POST['Categoria'];
+            //Reemplaza caracteres especiales en la descripcion
+            $descripcion=$_POST['Descripcion'];
+            //Obtiene el id del punto bcr
+            $id_persona=$_POST['ID_Persona'];
+              
+              
+            //Validación de informacion en descripcion de la imagen, elimina algunos caracteres especiales
+              
+            $descripcion= str_replace("'","",$descripcion);
+            $descripcion= str_replace('"','',$descripcion);
+            //echo $descripcion;
+            //Obtiene el mensaje de verificacion del envio del archivo
+            $recepcion_archivo=$_FILES['archivo_adjunto']['error'];
+              
+            //Crea una nueva instancia de la clase padron
+            $obj_padron_fotografico = new cls_padron_fotografico_puntosbcr();
+            //Asigna el atributo id
+            $obj_padron_fotografico->setId_puntobcr($id_persona);
+            //Asigna el atributo nombre de la imagen
+            $obj_padron_fotografico->setNombre_imagen($nombre_imagen);
+            //Asigna el atributo descripcion
+            $obj_padron_fotografico->setDescripcion($descripcion);
+            //Asigna el atributo categoria
+            $obj_padron_fotografico->setCategoria($categoria);
+            
+            //Obtiene el mensaje de verificacion del envio del archivo
+            $recepcion_archivo=$_FILES['archivo_adjunto']['error'];
+        
+            //Obtiene la fecha actual
+            $date=new DateTime(); //this returns the current date time
+            //Obtiene la fecha actual
+            $result = $date->format('Y-m-d-H-i-s');
+            //Formatea la fecha actual sin -
+            $krr = explode('-',$result);
+            //Obtiene en una variable la fecha actua ya formateada
+            $result = implode("",$krr);
+            //Obtiene el directorio raiz donde está localizado ORIEL           
+            $raiz=$_SERVER['DOCUMENT_ROOT'];
+            //Formatea la raiz de la ruta donde se localiza ORIEL
+            if (substr($raiz,-1)!="/"){
+                $raiz.="/";
+            }
+            //Establece la ruta donde almacenará el archivo
+            $ruta=  str_replace('"','',str_replace("'","",$raiz."Padron_Fotografico_Personal_externo/".Encrypter::quitar_tildes($id_persona."-".$result."-".$_FILES['archivo_adjunto']['name'])));
+            //Formatea el nombre del archivo a almacenar
+            $nombre_ruta=str_replace('"','',str_replace("'","",Encrypter::quitar_tildes($id_persona."-".$result."-".$_FILES['archivo_adjunto']['name'])));
+            
+            //Validación de como llegó el archivo adjunto desde el formulario html
+            switch ($recepcion_archivo) {
+                //En caso de que sea cero, procede a almacenar la imagen
+                case 0:{
+                    //Verifica que el formato y extensión del archivo sean de imagen
+                    if ((basename($_FILES['archivo_adjunto']['type'])==="jpeg")||(basename($_FILES['archivo_adjunto']['type'])==="gif")||(basename($_FILES['archivo_adjunto']['type'])==="png")||(basename($_FILES['archivo_adjunto']['type'])==="bmp")||(basename($_FILES['archivo_adjunto']['type'])==="tiff")||(basename($_FILES['archivo_adjunto']['type'])==="jpg")){
+                    //Verifica que el archivo se pueda trasladar a la ubicación correspondiente.
+                        if (move_uploaded_file($_FILES['archivo_adjunto']['tmp_name'], $ruta)){
+                            //Establece el nombre de la imagen a guardar
+                            $obj_padron_fotografico->setNombre_ruta(Encrypter::quitar_tildes($nombre_ruta));
+                            //Establece el formato de la imagen
+                            $obj_padron_fotografico->setFormato(basename($_FILES['archivo_adjunto']['type']));
+                            //Define la condición a vacio, para que agregue un nuevo registro
+                            $obj_padron_fotografico->setCondicion("");
+                            //Inserta en bd
+                            $obj_padron_fotografico->guardar_imagen_personal_externo();
+                            //Llama al formulario correspondiente
+                            header ("location:/ORIEL/index.php?ctl=personal_externo_gestion&id=".$obj_padron_fotografico->getId_puntobcr());
+                            //echo ("Ingresada correctamente");
+                        }else{
+                            //Muestra en pantalla que se presentó un error al subir el archivo
+                            echo "<script type=\"text/javascript\">alert('Hubo un problema al subir el archivo al servidor!!!');history.go(-1);</script>";;
+                        }
+                    }else{
+                        //Muestra en pantalla que el formato del archivo no es correcto
+                        echo "<script type=\"text/javascript\">alert('El archivo no corresponde a un formato valido de imagenes !!!!');history.go(-1);</script>";;
+                    }
+                    break;
+                }
+                //Envia un mensaje al usuario porque el archivo es mas grande de lo previsto    
+                case 2:{
+                    echo "<script type=\"text/javascript\">alert('El archivo consume mayor espacio del permitido (2 mb) !!!!');history.go(-1);</script>";;
+                    break;
+                }
+                case 4:{ 
+                    //Envia un mensaje al usuario indicando que es necesario seleccionar un archivo para adjuntar
+                    echo "<script type=\"text/javascript\">alert('No fue seleccionado ningun archivo!!!!');history.go(-1);</script>";;
+                                       
+                    break;
+                }
+                 case 6:{
+                     //Envia al usuario un mensaje indicando que hay problemas para acceder a la carpeta temporal
+                    echo "<script type=\"text/javascript\">alert('El servidor no tiene acceso a la carpeta temporal de almacenamiento!!!!');history.go(-1);</script>";
+                    break;
+                 } 
+                case 7:{
+                    //Envia un mensaje al usuario indicando que hay problemas para escribir en el disco duro del server
+                    echo "<script type=\"text/javascript\">alert('No es posible escribir en el disco duro del servidor!!!!');history.go(-1);</script>";;
+                    break;
+                }  
+                case 8:{
+                    //Envia  mensaje al usuario debido a un error de PHP
+                    echo "<script type=\"text/javascript\">alert('Fue detenida la carga del archivo debido a una extension de PHP!!!!');history.go(-1);</script>";;
+                    break;
+                }   
+            }
+            
+        }else {
+              /*
+             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+             * En la última línea llama a la pagina de inicio de sesión.
+             */
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            //Llamada al formulario de la vista para el usuario
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+         }  
+    }
+    
+    public function eliminar_imagen_personal_externo(){
+        //Validación para verificar si el usuario está logeado en el sistema  
+        if(isset($_SESSION['nombre'])){
+            //Creacion de una instancia de la clase padron fotografico
+            $obj_padron_fotografico= new cls_padron_fotografico_puntosbcr();
+            //Verifica que el envión de información haya sido realizado mediante el metodo post )formulario HTML)
+            if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+                //Busca el registro correspondiente mediante el id llave de la tabla
+                $obj_padron_fotografico->setCondicion("ID_Padron_Personal=".$_POST['id_imagen']);
+                //Ejecuta el metodo que obtiene las imagenes correspondientes
+                $obj_padron_fotografico->obtener_imagenes_personal_externo();
+                //Obtiene el arreglo correspondiente
+                $params=$obj_padron_fotografico->getArreglo();
+                //Elimina la imagen de la base de datos
+                $obj_padron_fotografico->eliminar_imagen_personal_externo();
+                
+                //Obtiene la ruta del directorio raiz de oriel mediante la variable reservada correspondiente
+                $raiz=$_SERVER['DOCUMENT_ROOT'];
+    
+                //Formatea la ruta para verificar si tiene la cantidad adecuada de /
+                if (substr($raiz,-1)!="/"){
+                    $raiz.="/";
+                }
+
+                //$ruta=  $raiz."Padron_Fotografico_Puntos_BCR/20161110111422Entrada Principal.jpg";
+               //$ruta=  $raiz."Padron_Fotografico_Puntos_BCR/".$_POST['ruta_imagen'];
+                //Establece la ruta completa de la imagen, incluyendo el nombre y la extensión de la misma
+                $ruta=  $raiz."Padron_Fotografico_Personal_externo/".$params[0]['Nombre_Ruta'];
+                
+               //Borra el archivo fisico del disco duro
+                unlink($ruta);     
+            }
+        }else {
+              /*
+             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+             * En la última línea llama a la pagina de inicio de sesión.
+             */
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            //Llamada al formulario correspondiente de la vista
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }
+    }
+            
     
     ////////////////////////////////////////////////////////////////////////////
     /////////////////////////Funciones de Tipo Telefono/////////////////////////
