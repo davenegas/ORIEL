@@ -13,7 +13,7 @@
         <?php require_once 'encabezado.php';?>
         <section class="container bordegris">
             <h2>Detalle de Personas 
-                <?php if($_SESSION['modulos']['Editar- Personal']==1){ ?>
+                <?php if($_SESSION['modulos']['Editar- Personal Externo']==1){ ?>
                     <a href="index.php?ctl=personal_gestion&id=<?php echo $params[0]['ID_Persona']-1?>;"><img src='vistas/Imagenes/boton-antes.png' width="25"></a>
                     <a href="index.php?ctl=personal_gestion&id=<?php echo $params[0]['ID_Persona']+1?>;"><img src='vistas/Imagenes/boton-siguiente.png' width="25"></a>
                 <?php }?>
@@ -23,7 +23,7 @@
             </pre>-->
             <div>
                 <h3>Información General
-                <?php if($_SESSION['modulos']['Editar- Personal']==1){ ?>
+                <?php if($_SESSION['modulos']['Editar- Personal Externo']==1){ ?>
                     <input class="quitar-float" type="checkbox" id="chk_general" name="chk_general">
                 <?php }?>
                 </h3>
@@ -52,15 +52,15 @@
                 </div>
                 <div class="col-md-4 espacio-abajo">
                     <label for="carnet">Número de Gafete</label>
-                    <input type="text" required="carnet" readonly class="form-control" id="carnet" name="ID_Persona" value="<?php echo $params[0]['ID_Persona_Externa'];?>">
+                    <input type="text" required="carnet" readonly class="form-control" id="carnet" name="ID_Persona" value="">
                 </div>
                 <div class="col-md-4 espacio-abajo">
                     <label for="nombre">Nombre</label>
-                    <input type="text" class="form-control" readonly ALIGN="right" id="nombre" name="nombre" value="<?php echo $params[0]['Nombre'];?>">
+                    <input type="text" style="text-transform: uppercase" class="form-control" readonly ALIGN="right" id="nombre" name="nombre" value="<?php echo $params[0]['Nombre'];?>">
                 </div>
                 <div class="col-md-8 espacio-abajo">
                     <label for="apellido">Apellidos</label>
-                    <input type="text" class="form-control" readonly ALIGN="right" id="apellido" name="apellido" value="<?php echo $params[0]['Apellido'];?>">
+                    <input type="text" style="text-transform: uppercase" class="form-control" readonly ALIGN="right" id="apellido" name="apellido" value="<?php echo $params[0]['Apellido'];?>">
                 </div>
                 <div class="col-md-4 espacio-abajo">
                     <label for="fecha_nacimiento">Fecha de Nacimiento</label>
@@ -212,10 +212,10 @@
                     <label for="validado">Validado</label>
                     <select class="form-control" disabled id="validado" name="validado"> 
                         <?php if($params[0]['Validado']=='0'){?>
-                            <option value="0" selected>No Validado</option>
+                        <option value="0" selected style="color: red">No Validado</option>
                             <option value="1">Validado</option>
                         <?php } else { ?>
-                            <option value="0">No Validado</option>
+                            <option value="0" style="color: red">No Validado</option>
                             <option value="1" selected>Validado</option>
                         <?php }?>  
                     </select>
@@ -229,7 +229,7 @@
         
         <!--Sección para informacion de teléfonos-->
         <section class="container bordegris espacio-abajo">
-            <?php if($_SESSION['modulos']['Editar- Personal']==1){ ?>
+            <?php if($_SESSION['modulos']['Editar- Personal Externo']==1){ ?>
                 <h3 class="quitar-float">Información de teléfonos <a id="popup" onclick="mostrar_agregar_telefono()" class="btn azul" role="button">Agregar número</a></h3> 
             <?php } else {?>
                 <h3 class="quitar-float">Información de teléfonos</h3>
@@ -268,7 +268,7 @@
             
         <!--Sección para fotos del personal externo-->
         <section class="container">
-            <?php if($_SESSION['modulos']['Editar- Personal']==1){ ?>
+            <?php if($_SESSION['modulos']['Editar- Personal Externo']==1){ ?>
                 <h3 class="quitar-float">Fotos del personal <a id="popup" onclick="mostrar_agregar_foto()" class="btn azul" role="button">Agregar foto</a></h3> 
             <?php } else {?>
                 <h3 class="quitar-float">Fotos del personal</h3>
@@ -307,7 +307,7 @@
                     </tbody>
                 </table>
             </div>
-        <a href="index.php?ctl=personal_listar" class="btn btn-default espacio-arriba" role="button">Volver</a> 
+        <a href="index.php?ctl=personal_externo_listar" class="btn btn-default espacio-arriba" role="button">Volver</a> 
         </section>
         <?php require_once 'pie_de_pagina.php' ?>
         

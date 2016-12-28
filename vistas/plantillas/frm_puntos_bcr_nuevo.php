@@ -26,7 +26,7 @@
             </div>
             <div class="col-md-6 espacio-arriba">
               <label for="Nombre">Nombre</label>
-              <input type="text" required="required" class="form-control" placeholder="Nombre del Sitio, inicia con AG, ATM, CA" id="Nombre" name="Nombre" value="<?php echo $params[0]['Nombre'];?>">
+              <input type="text" style="text-transform: uppercase" required="required" class="form-control" placeholder="Nombre del Sitio, inicia con AG, ATM, CA" id="Nombre" name="Nombre" value="<?php echo $params[0]['Nombre'];?>">
             </div>
             <div class="col-md-6 espacio-arriba ">
                 <label for="Tipo_Punto">Tipo de Punto</label>

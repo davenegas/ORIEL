@@ -7007,7 +7007,7 @@ class Controller{
     /////////////Funciones para Direeciones IP's////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////
     //Metodo que permite listar las direcciones ip registradas en la base de datos
-   public function direcciones_ip_listar(){
+    public function direcciones_ip_listar(){
        if(isset($_SESSION['nombre'])){
             $obj_direcciones=new cls_direccionIP();
             $obj_direcciones->setCondicion("");
@@ -7024,7 +7024,8 @@ class Controller{
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         } 
     }
-   public function direcciones_ip_guardar() {
+    
+    public function direcciones_ip_guardar() {
           if(isset($_SESSION['nombre'])){
                $obj_tipo_ip = new cls_direccionIP();
                $obj_tipo_ip->setTipo_IP($_POST['nombre']);
@@ -7697,8 +7698,63 @@ class Controller{
     public function personal_externo_listar(){
         if(isset($_SESSION['nombre'])){
             $obj_personal=new cls_personal_externo();
+            //Muestra solamente información de oficiales VMA, rol 10 Seguridad Privada VMA
+            if($_SESSION['rol']==10){
+                $obj_personal->setCondicion("T_PersonalExterno.ID_Empresa=2");
+            }
+            //Muestra solamente información de personal externo G4S, rol 9 Seguridad Privada G4S
+            if($_SESSION['rol']==9){
+                $obj_personal->setCondicion("T_PersonalExterno.ID_Empresa=3");
+            } 
+            //Muestra solamente información de personal externo G4S y VMA, rol 16 Operaciones de Seguridad
+            if($_SESSION['rol']==16){
+                $obj_personal->setCondicion("T_PersonalExterno.ID_Empresa=3 OR T_PersonalExterno.ID_Empresa=2");
+            }
+            //Muestra solamente información de personal externo Qubo Digital Ltda(15) y Sistemas Contra Incendio OLPRA(16), rol 15 Defensa al Cliente
+            if($_SESSION['rol']==15){
+                $obj_personal->setCondicion("T_PersonalExterno.ID_Empresa=15 OR T_PersonalExterno.ID_Empresa=16");
+            }
+            //Muestra solamente información de personal externo NOVUS(8) y Correos de Costa Rica(9), rol 7 Servicios Auxiliar
+            if($_SESSION['rol']==7){
+                $obj_personal->setCondicion("T_PersonalExterno.ID_Empresa=8 OR T_PersonalExterno.ID_Empresa=9");
+            }
+            //Muestra solamente información de personal externo SELOSA SA(10), CLIMA TECNICA REFRIGERACIÓN INDUST(11),
+            //SCO MANTENIMIENTO INDUSTRIAL SA(12),ENFRION DEL NORTE SA(13),SERVICIOS TECNICOS Y COMERCIALES SA(14),
+            //FONT SERVICIOS ELECTROMECANICOS SA(17), MATRA(18),  rol 13 Obras Civiles
+            if($_SESSION['rol']==13){
+                $obj_personal->setCondicion("T_PersonalExterno.ID_Empresa=10 OR T_PersonalExterno.ID_Empresa=11 OR
+                        T_PersonalExterno.ID_Empresa=12 OR T_PersonalExterno.ID_Empresa=13 OR
+                       T_PersonalExterno.ID_Empresa=14 OR T_PersonalExterno.ID_Empresa=17 OR 
+                       T_PersonalExterno.ID_Empresa=18");
+            }
+            
             $obj_personal->obtiene_todo_el_personal_externo();
             $params= $obj_personal->getArreglo();
+            //Calcula proximas portaciones a vencer
+            $fecha_actual= getdate();
+            $fecha_actual= $fecha_actual['year']."-".$fecha_actual['mon']."-".$fecha_actual['wday'];
+            
+            $tam=count($params);
+            $cantidad=0;
+            for ($i = 0; $i <$tam; $i++) {
+                if($params[$i]['Fecha_Vencimiento_Portacion']<>"0000-00-00" && $params[$i]['ID_Estado_Persona']==1){
+                    $dias = (strtotime($params[$i]['Fecha_Vencimiento_Portacion'])-strtotime($fecha_actual))/86400;
+                    //echo ("Faltan ".$dias." para vencer portación de ".$params[$i]['Identificacion'])."<br>";
+                    if($dias<60){
+                        if($dias<0){
+                            $vencidos[$cantidad]['dias']=intval($dias);
+                            $vencidos[$cantidad]['mensaje']= ($params[$i]['Nombre']." ".$params[$i]['Apellido']." portación vencida hace <b>".(intval(-$dias)))."</b> días.";   
+                            
+                        }else{
+                            $vencidos[$cantidad]['dias']=intval($dias);
+                            $vencidos[$cantidad]['mensaje']= ($params[$i]['Nombre']." ".$params[$i]['Apellido']." portación vence en <b>".intval($dias)."</b> días.");
+                            
+                        }
+                        $cantidad++;
+                    }
+                }
+            }
+            sort($vencidos);
             
             require __DIR__ . '/../vistas/plantillas/frm_personal_externo_listar.php';
         }else{

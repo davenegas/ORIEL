@@ -194,8 +194,8 @@
             //************************************************Pinta Menu de Módulos***************************************************************
             if (($_SESSION['modulos']['Módulo-Bitácora Digital']==1)||($_SESSION['modulos']['Módulo-MRI BCR']==1)||
                     ($_SESSION['modulos']['Módulo-Control de Video']==1)||($_SESSION['modulos']['Módulo-PuntosBCR']==1)||
-                    ($_SESSION['modulos']['Módulo-Personal']==1)||($_SESSION['modulos']['Módulo-Áreas de Apoyo']==1)){
-            ?>
+                    ($_SESSION['modulos']['Módulo-Personal']==1)||($_SESSION['modulos']['Módulo-Áreas de Apoyo']==1||
+                     $_SESSION['modulos']['Módulo-Personal Externo']==1)){?>
 
             <li class="dropdown">
             <a class="dropdown-toggle" data-toggle="dropdown" href="#">Módulos
@@ -222,17 +222,12 @@
                     <li><a href="index.php?ctl=areas_apoyo_listar">Áreas de Apoyo</a></li>
                 <?php }; ?>  
 
-                <?php if ($_SESSION['modulos']['Módulo-PuntosBCR']==1){?>
-
+                <?php if ($_SESSION['modulos']['Módulo-Personal Externo']==1){?>
                     <li><a href="index.php?ctl=personal_externo_listar">Personal Externo</a></li>
                 <?php }; ?>
-                    
-                <?php if ($_SESSION['modulos']['Módulo-Áreas de Apoyo']==1){ ?>
-                    <li><a href="index.php?ctl=areas_apoyo_listar">Áreas de Apoyo</a></li>
-                <?php }; ?>  
 
                 <?php if ($_SESSION['modulos']['Módulo-Control de Video']==1){?>
-                    <li><a href="#">Controles de Video</a></li>
+                    <li><a href="http://10.170.5.80/Operaciones_de_Seguridad/ctrlvideo/consulta.html">Controles de Video</a></li>
                 <?php }; ?>   
 
             </ul>
@@ -260,46 +255,9 @@
            </ul>  
 
 
-
-          <ul class="nav navbar-nav navbar-right">
-              
-            <?php 
-            //************************************************Pinta Menu de Otros enlaces***************************************************************
-            if (($_SESSION['modulos']['Controles de Video']==1)||($_SESSION['modulos']['Oficiales']==1)||
-                   ($_SESSION['modulos']['Padrón Fotográfico']==1)||($_SESSION['modulos']['Personal Externo']==1)){
-            ?>
-
-            <li class="dropdown">
-            <a class="dropdown-toggle" data-toggle="dropdown" href="#">Otros Enlaces
-            <span class="caret"></span></a>
-            <ul class="dropdown-menu">
-
-                <?php if ($_SESSION['modulos']['Controles de Video']==1){ ?>
-                    <li><a href="http://10.170.5.80/Operaciones_de_Seguridad/ctrlvideo/consulta.html">Controles de Video</a></li>
-                    <!--<li><a href="vistas/plantillas/pagina_en_mantenimiento.php">Nombre de Página</a></li>-->
-                <?php }; ?>
-
-                <?php if ($_SESSION['modulos']['Oficiales']==1){ ?>
-                    <li><a href="vistas/plantillas/pagina_en_mantenimiento.php">Oficiales</a></li>
-                <?php }; ?>
-
-                <?php if ($_SESSION['modulos']['Padrón Fotográfico']==1){ ?>
-                    <li><a href="http://10.170.5.80/Operaciones_de_Seguridad/oficinas/consultaofic.htm">Padrón Fotográfico</a></li>
-                <?php }; ?>   
-
-                 <?php if ($_SESSION['modulos']['Personal Externo']==1){ ?>
-                    <li><a href="http://10.170.5.80/Operaciones_de_Seguridad/externos/index.php">Personal Externo</a></li> 
-                <?php }; ?>   
-
-            </ul>
-            </li>
-
-          <?php 
-          };
-          ?>
-            
+        <ul class="nav navbar-nav navbar-right">    
             <li><a href="index.php?ctl=principal"><span class="glyphicon glyphicon-th-large"></span><?php echo $_SESSION['name']." ".$_SESSION['apellido'];?></a></li>
-          <li><a href="index.php?ctl=cerrar_sesion"><span class="glyphicon glyphicon-log-in"></span>Cerrar Sesión</a></li>    
+            <li><a href="index.php?ctl=cerrar_sesion"><span class="glyphicon glyphicon-log-in"></span>Cerrar Sesión</a></li>    
         </ul>
 
       </div>
