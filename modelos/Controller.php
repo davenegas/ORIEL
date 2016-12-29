@@ -7814,4 +7814,325 @@
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }  
     }
- }
+    ////////////////////////////////////////////////////////////////////////////
+    /////////////////////////Asistencia de Personal/////////////////////////////  
+    ////////////////////////////////////////////////////////////////////////////
+    
+    public function marcas() {
+       if(isset($_SESSION['nombre'])){
+           $obj_marcas = new cls_usuarios();
+           $obj_marcas->setCondicion("");
+           $obj_marcas->obtiene_todos_los_usuarios();
+           $params =$obj_marcas->getArreglo();
+          
+           require __DIR__.'/../vistas/plantillas/frm_marcas.php';
+        }
+        else {
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }  
+    } 
+    public function editar_usuario(){
+        //echo($_GET['id']);
+        $obj_usuario= new cls_usuarios();
+        $obj_usuario->setCondicion("ID_Usuario=".$_GET['id']);
+        $obj_usuario->obtiene_todos_los_usuarios();
+        $vector=$obj_usuario->getArreglo();
+         $obj_turno= new cls_turno();
+        $obj_turno->obtiene_todos_los_turnos();
+        $vector_turno= $obj_turno->getArreglo();
+        
+                
+        require __DIR__ . '/../vista/plantillas/frm_editar_usuario.php';
+    }
+    public function obtiene_todos_los_usuarios(){
+        $obj_usuarios= new cls_usuarios();
+        if($_GET['id']=="0"){
+            $vector[0]['ID_Usuario']="0";
+            $vector[0]['Cedula']="";
+            $vector[0]['Apellido_Nombre']="";
+            $vector[0]['Observaciones']="";
+            $vector[0]['turno']="";
+            $vector[0]['Horario']="";
+            $vector[0]['Estado']=$_GET['Estado'];
+        }else{
+//            $vector[0]['ID_Usuario']=$_GET['id'];
+//            $vector[0]['Cedula']=$_GET['Cedula'];
+//            $vector[0]['apellido_nombre']=$_GET['Apellido_Nombre'];
+//            $vector[0]['Observaciones']=$_GET['Observaciones'];
+//            $vector[0]['turno']=$_GET['Turno'];
+//            $vector[0]['Horario']=$_GET['horario'];
+//            $vector[0]['Estado']=$_GET['Estado'];
+            $obj_usuarios->setCondicion("ID_Usuario=".$_GET['id']);
+            $obj_usuarios->obtiene_todos_los_usuarios();
+            $vector=$obj_usuarios->getArreglo();
+            
+        }
+        $obj_turno= new cls_turno();
+        $obj_turno->obtiene_todos_los_turnos();
+        $vector_turno= $obj_turno->getArreglo();
+        
+        $obj_horario= new cls_horario();
+        $obj_horario->obtiene_todos_los_horarios();
+        $vector_horario= $obj_horario->getArreglo();
+         
+        # $vector=$obj_turno->arreglo;
+//         echo "<pre>";
+//               print_r($vector);
+//         echo "</pre>";       
+        require __DIR__ . '/../vista/plantillas/frm_editar_usuario.php';
+    }
+    public function guardar_usuarios() {
+        $obj_usuarios= new cls_usuarios();
+        $obj_usuarios->setCedula($_POST['Cedula']);
+        $obj_usuarios->setNombre_Apellido($_POST['apellido_nombre']);
+        $obj_usuarios->setObservaciones($_POST['Observaciones']);        
+        $obj_usuarios->setEstado($_POST['Estado']);
+        $obj_usuarios->setID_Turno($_POST['turno']);
+        $obj_usuarios->setID_Horario($_POST['Horario']);
+        $obj_usuarios->setId($_POST['ID_Usuario']);
+        $obj_usuarios->guardar_usuario();
+        header("location:/Practica/index.php?ctl=obtiene_lista");
+    }
+    public function obtiene_todos_los_descansos(){
+        $obj_descansos= new cls_descansos();
+        if($_GET['id']=="0"){
+            $vector[0]['ID_Ajus_Descanso']="0";
+           
+            $vector[0]['Duracion']="";
+            $vector[0]['Observaciones']="";
+            $vector[0]['Estado']=$_GET['estado'];
+        }else{
+            $vector[0]['ID_Ajus_Descanso']=$_GET['id'];
+          
+            $vector[0]['Duracion']=$_GET['Duracion_Descanso'];
+            $vector[0]['Observaciones']=$_GET['Observaciones'];
+            $vector[0]['Estado']=$_GET['estado'];
+            
+        } 
+        # $vector=$obj_turno->arreglo;
+        require __DIR__ . '/../vista/plantillas/frm_ajustes_descansos.php';
+    }     
+    public function guardar_descansos() {
+        $obj_descansos= new cls_descansos();
+       
+        $obj_descansos->setEstado($_POST['Estado']);
+        $obj_descansos->setDuracion_descanso($_POST['Duracion']);
+        $obj_descansos->setObservaciones($_POST['Observaciones']);
+        $obj_descansos->setID_Ajus_Descanso($_POST['ID_Ajus_Descanso']);
+        $obj_descansos->guardar_descansos();
+        header("location:/Practica/index.php?ctl=obtiene_lista_descansos");
+    }
+    public function obtiene_lista_descansos() {
+        $obj_usuario= new cls_descansos();
+        $obj_usuario->obtiene_todos_los_descansos();
+        $vector= $obj_usuario->arreglo;
+        require __DIR__ . '/../vista/plantillas/frm_lista_descansos.php';
+    }
+    public function obtiene_todos_los_turnos() {
+        $obj_turno= new cls_turno();
+        if($_GET['id']=="0"){
+            $vector[0]['ID_Turno']="0";
+            $vector[0]['nombre']="";
+            $vector[0]['Observaciones']="";
+            $vector[0]['Estado']=$_GET['estado'];
+        }else{
+            $vector[0]['ID_Turno']=$_GET['id'];
+            $vector[0]['nombre']=$_GET['Turno'];
+            $vector[0]['Observaciones']=$_GET['obser'];
+            $vector[0]['Estado']=$_GET['estado'];
+            //echo $_GET['estado'];
+        } 
+        # $vector=$obj_turno->arreglo;
+        require __DIR__ . '/../vista/plantillas/frm_ajustes_turno.php';
+    }
+    public function guardar_turno() {
+        $obj_turno= new cls_turno();
+        $obj_turno->setTurno($_POST['nombre']);
+        $obj_turno->setObservaciones($_POST['observaciones']);
+        $obj_turno->setEstado($_POST['Estado']);
+        $obj_turno->setId__turno($_POST['ID_Turno']);
+        $obj_turno->guardar_turno();
+        header("location:/Practica/index.php?ctl=obtiene_lista_turno");
+    }
+    public function obtiene_lista_turno() {
+        $obj_usuario= new cls_turno();
+        $obj_usuario->obtiene_todos_los_turnos();
+        $vector= $obj_usuario->arreglo;
+        require __DIR__ . '/../vista/plantillas/frm_lista_turno.php';
+    }
+    public function obtiene_lista_horarios() {
+        $obj_usuario= new cls_horario();
+        $obj_usuario->obtiene_todos_los_horarios();
+        $vector= $obj_usuario->arreglo;
+        require __DIR__ . '/../vista/plantillas/fmr_lista_horario.php';
+    }
+    public function obtiene_todos_los_horarios() {
+        $obj_horario= new cls_horario();
+        if($_GET['id']=="0"){
+            $vector[0]['ID_Horario']="0";
+            $vector[0]['horario']="";
+            $vector[0]['Observaciones']="";
+            $vector[0]['Estado']=$_GET['Estado'];
+        }else{
+            $vector[0]['ID_Horario']=$_GET['id'];
+            $vector[0]['horario']=$_GET['Horario'];
+            $vector[0]['Observaciones']=$_GET['Obser'];
+            $vector[0]['Estado']=$_GET['Estado'];
+            //echo $_GET['id'];
+        } 
+        # $vector=$obj_turno->arreglo;
+        require __DIR__ . '/../vista/plantillas/frm_ajuste_horario.php';
+    }
+    public function guardar_horario() {
+        $obj_horario= new cls_horario();
+        $obj_horario->setHorario($_POST['horario']);
+        $obj_horario->setObservaciones($_POST['observaciones']);
+        $obj_horario->setEstado($_POST['Estado']);
+        $obj_horario->setId_horario($_POST['ID_Horario']);
+        $obj_horario->guardar_horario();
+        header("location:/Practica/index.php?ctl=obtiene_lista_horarios");
+    }
+    public function obtiene_lista() {
+        $obj_usuario= new cls_usuarios();
+        $obj_usuario->obtiene_todos_los_usuarios();
+        $vector= $obj_usuario->getArreglo();      
+        require __DIR__ . '/../vista/plantillas/frm_lista_usuario.php';
+       
+    }
+    public function obtiene_lista_marcas() {
+        $obj_marcas= new cls_marcas;
+        $obj_descanso= new cls_marcas_descanso();
+        $obj_ajus_descanso= new cls_descansos();
+        $obj_ajus_descanso->obtiene_todos_los_descansos();
+        $cantidad_descanso=$obj_ajus_descanso->getArreglo();
+        $tiempos_descanso[0]['ID_Descanso']=0;
+        
+            $tiempos_descanso[0]['Hora_Descanso_Salida']="";
+            $tiempos_descanso[0]['Justificar_Descanso']="";
+            $tiempos_descanso[0]['Hora_Descanso_Entrada']="";
+            $tiempos_descanso[0]['Total_Descanso']="";
+            $tiempos_descanso[0]['Fecha_Descanso']="";
+            
+        $obj_marcas->setCondicion("Hora_Salida_Turno='00:00:00'");
+        $obj_marcas->obtiene_todas_las_marcas();
+        $params=$obj_marcas->getArreglo();
+        
+        
+        if($params!=null){
+            $obj_descanso= new cls_marcas_descanso();
+           $obj_descanso->setCondicion("Hora_Descanso_Entrada='00:00:00'");
+           $obj_descanso->obtiene_todas_las_marcas_descansos();
+           $tiempos_descanso=$obj_descanso->getArreglo();
+            
+            if($descanso=null){
+             
+            $tiempos_descanso[0]['ID_Descanso']=0;
+            $tiempos_descanso[0]['Hora_Descanso_Salida']="";
+            $tiempos_descanso[0]['Justificar_Descanso']="";
+            $tiempos_descanso[0]['Hora_Descanso_Entrada']="";
+            $tiempos_descanso[0]['Total_Descanso']="";
+            $tiempos_descanso[0]['Fecha_Descanso']="";
+            
+            }
+        }else{
+            $params[0]['ID_Asistencia']=0;
+            $params[0]['Hora_Entrada_Turno']="";
+            $params[0]['Justificar_Entrada']="";
+            $params[0]['Hora_Salida_Turno']="";
+            $params[0]['Justificar_Salida']="";
+            $params[0]['Fecha']=Date('y-m-d');
+            $params[0]['Contador']="";
+            
+        }
+        $obj_marcas->setCondicion("");
+         $obj_marcas->obtiene_todas_las_marcas();
+         $marcas= $obj_marcas->getArreglo();
+         
+        $obj_descanso->setCondicion("");
+         $obj_descanso->obtiene_todas_las_marcas_descansos();
+         $descanso= $obj_descanso->getArreglo();
+//        echo '<pre>';
+//        print_r($descanso);
+//        
+//         echo '</pre>';
+        require __DIR__ . '/../vista/plantillas/frm_marcas.php';
+    }
+    public function obtiene_lista_marcas_reportes() {
+        $obj_marcas= new cls_marcas();
+        $obj_marcas->obtiene_todas_las_marcas();
+        $marcas=$obj_marcas->getArreglo();
+        $obj_descanso= new cls_marcas_descanso();
+        $obj_descanso->obtiene_todas_las_marcas_descansos();
+        $marcas_descanso=$obj_descanso->getArreglo();    
+        $obj_usuarios= new cls_usuarios();
+        $obj_usuarios->obtiene_todos_los_usuarios();
+        $usuarios=$obj_usuarios->getArreglo();
+        
+        
+        require __DIR__ . '/../vista/plantillas/frm_reportes.php';
+    }
+    public function guardar_marcas() {
+         //echo $_POST['justificar_entrada'];
+        $obj_marcas= new cls_marcas();
+       // echo $_POST['justificar_entrada'];
+        if($_POST['id_marcas']==0){
+            $obj_marcas->setId__usuario("1");
+            $obj_marcas->setHora_entrada_turno($_POST['hora_entrada']);
+            $obj_marcas->setFecha($_POST['fecha']);
+            $obj_marcas->setJustificar_entrada("");
+            $obj_marcas->setHora_salida_turno("");
+            $obj_marcas->setJustificar_salida("");
+            $obj_marcas->setCondicion("");
+        }
+        else{
+            $obj_marcas->setId__asistencia($_POST['id_marcas']);
+            $obj_marcas->setId__usuario("1");
+            
+            $obj_marcas->setJustificar_entrada($_POST['justificar_entrada']);
+            $obj_marcas->setHora_salida_turno($_POST['hora_salida']);
+            $obj_marcas->setJustificar_salida($_POST['justificar_salida']);
+            $obj_marcas->setCondicion("ID_Asistencia='".$_POST['id_marcas']."'");
+        }       
+        $obj_marcas->guardar_marcas();
+       
+            }
+ 
+        public function guardar_marcas_descanso() {
+                
+         $obj_descanso= new cls_marcas_descanso();
+         
+        if($_POST['id']==0){
+            $obj_descanso->setId_usuario("1");
+            $obj_descanso->setHora_descanso_salida($_POST['Hora_Descanso_Salida']);
+            $obj_descanso->setFecha_Descanso(Date('y-m-d'));
+            $obj_descanso->setJustificar_descanso("");
+            $obj_descanso->setHora_descanso_entrada("");
+             $obj_descanso->setTotal_descanso("");
+             $obj_descanso->setId_ajus_descanso($_POST['id_ajus_descanso']);
+            $obj_descanso->setCondicion("");
+        }
+        else{
+          //echo $_POST['justificar_descanso'];
+            $obj_descanso->setId_descanso($_POST['id']);
+            $obj_descanso->setId_usuario("1");
+           
+            $obj_descanso->setJustificar_descanso($_POST['justificar_descanso']);
+            $obj_descanso->setHora_descanso_entrada($_POST['Hora_Descanso_Entrada']);
+            $obj_descanso->setTotal_descanso($_POST['Total']);
+           
+            $obj_descanso->setCondicion("ID_Descanso='".$_POST['id']."'");
+            
+            $obj_contador= new cls_marcas;
+           
+            $obj_contador->setContador($_POST['contador']);
+            $obj_contador->setCondicion("ID_Asistencia='".$_POST['id_marcas']."'");
+            $obj_contador->guardar_contador();
+            
+        }       
+        $obj_descanso->guardar_marcas_descanso();   
+        }
+           
+} 
+

@@ -63,6 +63,9 @@ require_once __DIR__ . '/controladores/cls_medio_enlace.php';
 require_once __DIR__ . '/controladores/cls_padron_fotografico_puntosbcr.php';
 //Libreria de clases --> Control de enlaces del departamento de telecomunicaciones
 require_once __DIR__ . '/controladores/cls_enlace_telecom.php';
+//Libreria de clases -->
+require_once __DIR__ . '/controladores/cls_marcas.php';
+
 /*
  * El elemento controller, constituye la base y esencia de toda la lógica del negocio, en este
  * se almacenan cada una de las funcionales de ORIEl. El archivo en sí, se compone de "n" cantidad
@@ -184,7 +187,7 @@ $map = array(
     'cambiar_estado_rol' => array('controller' =>'Controller', 'action' =>'cambiar_estado_rol'),
     'gestion_roles'=>array('controller'=>'Controller', 'action'=>'gestion_roles'),
      
-     //Controlador de Eventos (Bitacora Digital)
+    //Controlador de Eventos (Bitacora Digital)
     'frm_eventos_listar' =>  array('controller'=>'Controller','action'=>'frm_eventos_listar'),
     'frm_eventos_agregar' =>  array('controller'=>'Controller','action'=>'frm_eventos_agregar'),
     'dibuja_tabla_eventos_relacionados_a_punto_bcr' =>  array('controller'=>'Controller','action'=>'dibuja_tabla_eventos_relacionados_a_punto_bcr'),
@@ -222,6 +225,12 @@ $map = array(
     //Trazabilidad
     'frm_trazabilidad_listar'=>array('controller'=>'Controller','action'=> 'frm_trazabilidad_listar'),
     'actualiza_en_vivo_reporte_trazabilidad'=>array('controller'=>'Controller','action'=> 'actualiza_en_vivo_reporte_trazabilidad'),
+    
+    //Asistencia de Personal
+    'marcas'=>array('controller'=>'Controller','action'=> 'marcas'),
+    'obtiene_todas_las_marcas'=>array('controller'=>'Controller','action'=> 'obtiene_todas_las_marcas'),
+    'guardar_marcas'=>array('controller'=>'Controller','action'=> 'guardar_marcas'),
+    'guardar_contador'=>array('controller'=>'Controller','action'=> 'guardar_contador'),
     
     //PuntosBCR
     'puntos_bcr_listar'=>array('controller'=>'Controller','action'=> 'puntos_bcr_listar'),
@@ -287,7 +296,7 @@ $map = array(
     'frm_importar_prontuario_paso_9'=>array('controller'=>'Controller','action'=> 'frm_importar_prontuario_paso_9'),
     'frm_importar_prontuario_paso_10'=>array('controller'=>'Controller','action'=> 'frm_importar_prontuario_paso_10'),
     'frm_importar_prontuario_paso_11'=>array('controller'=>'Controller','action'=> 'frm_importar_prontuario_paso_11'),
-
+ 
     //Controlador de Usuarios 
     'listar_usuarios'=> array('controller'=>'Controller','action'=>'listar_usuarios'),
     'gestion_usuarios' => array('controller'=> 'Controller','action'=>'gestion_usuarios'),
@@ -298,7 +307,7 @@ $map = array(
     'recordar_password'=>array('controller'=>'Controller', 'action'=>'recordar_password'),
     'iniciar_sistema_cambiando_clave'=>array('controller'=>'Controller', 'action'=>'iniciar_sistema_cambiando_clave'),
     'cambia_clave_usuario_post'=>array('controller'=>'Controller', 'action'=>'cambia_clave_usuario_post')
-
+    
     );
  
 

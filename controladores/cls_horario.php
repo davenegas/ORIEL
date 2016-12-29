@@ -4,6 +4,9 @@ class cls_horario{
     
     private $id;
     private $id2;
+    public $id_horario;
+    public $horario;
+    public $horas_laboradas;
     private $descripcion;
     private $observaciones;
     private $estado;
@@ -32,6 +35,18 @@ class cls_horario{
 
     function getId2() {
         return $this->id2;
+    }
+    
+    function getId_horario() {
+        return $this->id_horario;
+    }
+
+    function getHorario() {
+        return $this->horario;
+    }
+
+    function getHoras_laboradas() {
+        return $this->horas_laboradas;
     }
 
     function getDescripcion() {
@@ -130,6 +145,18 @@ class cls_horario{
         $this->id2 = $id2;
     }
 
+    function setId_horario($id_horario) {
+        $this->id_horario = $id_horario;
+    }
+
+    function setHorario($horario) {
+        $this->horario = $horario;
+    }
+
+    function setHoras_laboradas($horas_laboradas) {
+        $this->horas_laboradas = $horas_laboradas;
+   }
+
     function setDescripcion($descripcion) {
         $this->descripcion = $descripcion;
     }
@@ -214,6 +241,9 @@ class cls_horario{
     public function __construct() {
        $this->id="";
        $this->id2="";
+       $this->id_horario ="";
+       $this->horario ="";
+       $this->horas_laboradas ="" ;
        $this->descripcion="";
        $this->estado="";
        $this->dias_laborados="";
@@ -289,4 +319,19 @@ class cls_horario{
         $this->obj_data_provider->edita_datos("T_PuntoBCR", "ID_Horario=null", $this->condicion);
         $this->obj_data_provider->desconectar();
     }
+        public function guardar_horario() {
+        if($this->id_horario=="0"){
+       $this->obj_data_provider->conectar();
+       $this->arreglo=$this->obj_data_provider->inserta_datos("T_horario", "ID_Horario,Horario,Observaciones,Estado", "null,'".$this->horario."','".$this->observaciones."','".$this->estado."'");
+       $this->arreglo=$this->obj_data_provider->getArreglo();
+       $this->obj_data_provider->desconectar();
+       }else{
+           $this->obj_data_provider->conectar();
+       $this->arreglo=$this->obj_data_provider->edita_datos("T_horario", "Horario='".$this->horario."',Observaciones='".$this->observaciones."',Estado='".$this->estado."'", "ID_Horario=".$this->id_horario);
+       $this->arreglo=$this->obj_data_provider->getArreglo();
+       $this->obj_data_provider->desconectar();
+       }
+        
+    }
+
 }

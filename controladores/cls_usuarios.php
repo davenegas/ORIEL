@@ -14,8 +14,8 @@ class cls_usuarios{
   public $observaciones;
   public $estado;
   public $rol;
-
-  
+  public $id_turno;
+  public $id_horario;
   function getId() {
       return $this->id;
   }
@@ -103,11 +103,21 @@ class cls_usuarios{
   function setRol($rol) {
       $this->rol = $rol;
   }
+  function getID_Rol() {
+      return $this->id_rol;
+  }
+  function getID_Horario() {
+      return $this->id_horario;
+  }
+  function getID_Turno() {
+      return $this->id_turno;
+  }
 
       
   public function __construct() {
       $this->nombre="";
       $this->apellido="";
+      $this->nombre_apellido="";
       $this->email="";
       $this->clave="";
       $this->arreglo;
@@ -117,6 +127,8 @@ class cls_usuarios{
       $this->observaciones="";
       $this->estado="";
       $this->rol="";
+      $this->id_horario="";
+      $this->id_turno="";
       
   }
   
@@ -137,7 +149,7 @@ class cls_usuarios{
         $this->resultado_operacion=true;
       }
   }  
-  
+
   public function existe_usuario($nombre_de_usuario){
       
 
@@ -321,4 +333,19 @@ class cls_usuarios{
 
       }
   }
+  
+  public function guarda_usuario() {
+        if($this->id=="0"){
+       $this->obj_data_provider->conectar();
+       $this->arreglo=$this->obj_data_provider->inserta_datos("t_usuario", "ID_Usuario,Cedula,Apellido_Nombre,Observaciones,Estado,ID_Horario,ID_Turno", "null,'".$this->cedula."','".$this->nombre_apellido."','".$this->observaciones."','".$this->estado."','".$this->id_horario."','".$this->id_turno."'");
+       $this->arreglo=$this->obj_data_provider->getArreglo();
+       $this->obj_data_provider->desconectar();
+       }else{
+           $this->obj_data_provider->conectar();
+       $this->arreglo=$this->obj_data_provider->edita_datos("t_usuario", "Cedula='".$this->cedula."',Apellido_Nombre='".$this->nombre_apellido."',Observaciones='".$this->observaciones."',Estado='".$this->estado."',ID_Horario='".$this->id_horario."',ID_Turno='".$this->id_turno."'", "ID_Usuario='".$this->id."'");
+       $this->arreglo=$this->obj_data_provider->getArreglo();
+       $this->obj_data_provider->desconectar();
+       }
+        
+    }
 }
