@@ -87,10 +87,47 @@ $(document).ready(function(){
             });
         }
     });
+    
+    //Funcionalidad de carruzel de imagenes
+    $(document).ready(function() {
+            $(".fancybox-button").fancybox({
+                    prevEffect		: 'none',
+                    nextEffect		: 'none',
+                    closeBtn		: false,
+                    helpers		: {
+                            title	: { type : 'inside' },
+                            buttons	: {}
+                    }
+            });
+        });
+        
+    //Buscar Distritos al seleccionar cantón
+    $("#Provincia").change(function () {
+        $("#Provincia option:selected").each(function () {
+            id_provincia = $(this).val();
+            //id_tipo_punto_bcr=document.getElementById('tipo_punto').value;
+            $.post("index.php?ctl=actualiza_en_vivo_canton", { id_provincia: id_provincia}, function(data){
+                $("#Canton").html(data);
+            });            
+        });
+    });
+    
+    //Buscar Distritos al seleccionar cantón
+    $("#Canton").change(function () {
+        $("#Canton option:selected").each(function () {
+            id_canton = $(this).val();
+            //id_tipo_punto_bcr=document.getElementById('tipo_punto').value;
+            $.post("index.php?ctl=actualiza_en_vivo_distrito", { id_canton: id_canton}, function(data){
+                $("#Distrito").html(data);  
+            });            
+        });
+    });
+    
 });
 
 function ocultar_elemento(){
     document.getElementById('agregar_telefono').style.display = "none";
+    document.getElementById('formulario_oculto_1').style.display = "none";
 }
 
 /////////////////////////////////////////////////////////////////////
@@ -133,3 +170,39 @@ function Editar_telefono(id_tel, tipo_tel, num, obser){
     document.getElementById('agregar_telefono').style.display = "block";
 };
 
+////////////////////////////////////////////////////////////////////
+////////Funciones para agregar fotos de personal externo///////////
+function mostrar_agregar_foto(){
+    document.getElementById('formulario_oculto_1').style.display = "block";
+}
+function valida_foto(){
+    if (document.getElementById('Nombre').value == "" || document.getElementById('Descripcion').value == "") {
+        alert("Digita el nombre y la descripción de la foto !");
+    } else {
+        //alert("Form Submitted Successfully...");
+        document.getElementById('guardar_foto').submit();
+        document.getElementById('agregar_telefono').style.display = "none";
+    }
+}
+function eliminar_imagen(id_imagen){
+    id=id_imagen;
+    //alert(id_imagen);   
+    $.confirm({
+        title: 'Confirmación!',
+        content: 'Desea eliminar esta imagen?',
+        confirm: function(){
+        //alert (id_imagen );
+            $.post("index.php?ctl=eliminar_imagen_personal_externo", {id_imagen:id_imagen});//,function(data){
+                $.alert({
+                    title: 'Información!',
+                    content: 'Imágen eliminada con exito con éxito!!!',
+                            
+                });       
+            location.reload();  
+            },
+        cancel: function(){
+             
+        }
+    });
+            
+}  

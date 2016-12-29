@@ -15,12 +15,18 @@
         <table id="tabla" class="display" cellspacing="0">
           <thead>
             <tr>
-              <th>ID Empresa</th>
-              <th>Empresa</th>
-              <th>Observaciones</th>
-              <th>Estado</th>
-              <th>Cambiar Estado</th>
-              <th>Mantenmiento</th>
+              <th style="text-align:center">ID Empresa</th>
+              <th style="text-align:center">Empresa</th>
+              <th style="text-align:center">Cedula Juridica</th>
+              <th style="text-align:center">Teléfono Empresa</th>
+              <!--<th style="text-align:center">Dirección</th>-->
+              <th style="text-align:center">Tipo Empresa</th>
+              <th style="text-align:center">Fecha Inicio</th>
+              <th style="text-align:center">Fecha Final</th>
+              <th style="text-align:center">Observaciones</th>
+              <th style="text-align:center">Estado</th>
+              <th style="text-align:center">Cambiar Estado</th>
+              <th style="text-align:center">Mantenmiento</th>
             </tr>
           </thead>
           <tbody>
@@ -29,27 +35,33 @@
             for ($i = 0; $i <$tam; $i++) {
             ?>
             <tr>
-                <td><?php echo $params[$i]['ID_Empresa'];?></td>
-                <td><?php echo $params[$i]['Empresa'];?></td>
-                <td><?php echo $params[$i]['Observaciones'];?></td>
+                <td style="text-align:center"><?php echo $params[$i]['ID_Empresa'];?></td>
+                <td style="text-align:center"><?php echo $params[$i]['Empresa'];?></td>
+                <td style="text-align:center"><?php echo $params[$i]['Cedula_Juridica'];?></td>
+                <td style="text-align:center"><?php echo $params[$i]['Telefono_Empresa'];?></td>
+                <!--<td style="text-align:center"><?php echo $params[$i]['Direccion'];?></td>-->
+                <td style="text-align:center"><?php echo $params[$i]['Tipo_Empresa'];?></td>
+                <td style="text-align:center"><?php echo $params[$i]['Fecha_Inicio'];?></td>
+                <td style="text-align:center"><?php echo $params[$i]['Fecha_Final'];?></td>
+                <td style="text-align:center"><?php echo $params[$i]['Observaciones'];?></td>
             <?php 
             if ($params[$i]['Estado']==1){
               ?>  
-                <td>Activo</td>
+                <td style="text-align:center">Activo</td>
                <?php 
             }else
             {?>  
-                <td>Inactivo</td>
+                <td style="text-align:center">Inactivo</td>
             <?php 
             }
             ?>
                 
-           <td><a href="index.php?ctl=empresa_cambiar_estado&id=<?php echo $params[$i]['ID_Empresa']?>
+            <td style="text-align:center"><a href="index.php?ctl=empresa_cambiar_estado&id=<?php echo $params[$i]['ID_Empresa']?>
                     &estado=<?php echo $params[$i]['Estado']?>
                     &observaciones=<?php echo $params[$i]['Observaciones']?>
                     &empresa=<?php echo $params[$i]['Empresa']?>">
                 Activar/Desactivar</a></td>
-           <td><a href="index.php?ctl=empresa_gestion&id=<?php echo $params[$i]['ID_Empresa']?>
+            <td style="text-align:center"><a href="index.php?ctl=empresa_gestion&id=<?php echo $params[$i]['ID_Empresa']?>
                     &estado=<?php echo $params[$i]['Estado']?>
                     &observaciones=<?php echo $params[$i]['Observaciones']?>
                     &empresa=<?php echo $params[$i]['Empresa']?>">

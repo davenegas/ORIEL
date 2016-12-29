@@ -100,7 +100,7 @@ class cls_roles{
         if($this->condicion==""){
             $this->obj_data_provider->conectar();
             //Llama al metodo que realiza la consulta a la bd
-            $this->obj_data_provider->trae_datos("T_Rol", "*", "ID_Rol<>1");
+            $this->obj_data_provider->trae_datos("T_Rol", "*", "ID_Rol<>1 ORDER BY Descripcion");
             $this->arreglo_roles=$this->obj_data_provider->getArreglo();
             $this->obj_data_provider->desconectar();
             $this->resultado_operacion=true;
@@ -108,7 +108,7 @@ class cls_roles{
         else{
             $this->obj_data_provider->conectar();
             //Llama al metodo que realiza la consulta a la bd
-            $this->obj_data_provider->trae_datos("T_Rol", "*", $this->condicion." and ID_Rol<>1");
+            $this->obj_data_provider->trae_datos("T_Rol", "*", $this->condicion." and ID_Rol<>1 ORDER BY Descripcion");
             $this->arreglo_roles=$this->obj_data_provider->getArreglo();
             $this->obj_data_provider->desconectar();
             $this->resultado_operacion=true;

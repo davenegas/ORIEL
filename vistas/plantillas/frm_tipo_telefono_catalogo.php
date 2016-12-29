@@ -47,12 +47,12 @@
         <table id="tabla" class="display" cellspacing="0">
           <thead>
             <tr>
-              <td style="text-align:center">ID_Telefono</th>
-              <td style="text-align:center">Tipo de Telefono</th>
-              <td style="text-align:center">Observaciones</th>
-              <td style="text-align:center">Estado</th>
-              <td style="text-align:center">Cambiar Estado</th>
-              <td style="text-align:center">Mantenmiento</th>
+              <th>ID_Telefono</th>
+              <th>Tipo de Telefono</th>
+              <th>Observaciones</th>
+              <th>Estado</th>
+              <th>Cambiar Estado</th>
+              <th>Mantenmiento</th>
             </tr>
           </thead>
     <tbody>
@@ -61,20 +61,20 @@
             for ($i = 0; $i <$tam; $i++) {
             ?>
             <tr>
-                <td style="text-align:center"><?php echo $params[$i]['ID_Tipo_Telefono'];?></td>
+                <td><?php echo $params[$i]['ID_Tipo_Telefono'];?></td>
                 <td><?php echo $params[$i]['Tipo_Telefono'];?></td>
-                <td style="text-align:center"><?php echo $params[$i]['Observaciones'];?></td>
+                <td><?php echo $params[$i]['Observaciones'];?></td>
                 
                 <?php if ($params[$i]['Estado']==1){?>  
-                    <td style="text-align:center">Activo</td>
+                    <td>Activo</td>
                 <?php }else {?>  
-                    <td style="text-align:center">Inactivo</td>
+                    <td>Inactivo</td>
                 <?php }?>
            
-                  <td style="text-align:center"><a href="index.php?ctl=tipo_telefono_cambiar_estado&id=<?php echo $params[$i]['ID_Tipo_Telefono']?>&estado=<?php echo $params[$i]['Estado']?>">
+                  <td><a href="index.php?ctl=tipo_telefono_cambiar_estado&id=<?php echo $params[$i]['ID_Tipo_Telefono']?>&estado=<?php echo $params[$i]['Estado']?>">
                     Activar/Desactivar</a></td>
                 
-             <td style="text-align:center"><a role="button" onclick="Editar_TT('<?php echo $params[$i]['ID_Tipo_Telefono'];?>','<?php echo $params [$i]['Tipo_Telefono'];?>',
+             <td><a role="button" onclick="Editar_TT('<?php echo $params[$i]['ID_Tipo_Telefono'];?>','<?php echo $params [$i]['Tipo_Telefono'];?>',
              '<?php echo $params [$i]['Observaciones'];?>',<?php echo $params [$i]['Estado'];?>)">
                     
                     Editar</a></td>

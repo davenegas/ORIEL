@@ -147,6 +147,47 @@ class cls_padron_fotografico_puntosbcr{
         $this->obj_data_provider->desconectar();
        
     }
+    ////////////////////////Fotos Personal Externo///////////////////////
+    //Función para guardar las images del personal externo
+    public function guardar_imagen_personal_externo(){
+        if($this->condicion==""){
+            $this->obj_data_provider->conectar();
+            //Llama al metodo que realiza la consulta a la bd
+            $this->obj_data_provider->inserta_datos("T_PadronFotograficoPersonalExterno", "ID_Padron_Personal,ID_Persona_Externa, Nombre_Ruta, Nombre_Imagen, Descripcion,Categoria,Formato", 
+                    "null,".$this->id_puntobcr.",'".$this->nombre_ruta."','".$this->nombre_imagen."','".$this->descripcion."','".$this->categoria."','".$this->formato."'");
+            $this->obj_data_provider->desconectar();
+         
+        }   else    {
+            $this->obj_data_provider->conectar();
+            //Llama al metodo que realiza la consulta a la bd
+            $this->obj_data_provider->edita_datos("T_PadronFotograficoPersonalExterno", "ID_Persona_Externa=".$this->id_puntobcr.", Nombre_Ruta='".$this->nombre_ruta."', Nombre_Imagen='".$this->nombre_imagen."', Descripcion='".$this->descripcion."', Categoria='".$this->categoria."', Formato='".$this->formato."'", $this->condicion);
+            $this->obj_data_provider->desconectar();
+           
+        }
+    }
+    //Función para obtener las imagenes del personal externo
+    public function obtener_imagenes_personal_externo(){
+        if($this->condicion==""){
+            $this->obj_data_provider->conectar();
+            //Llama al metodo que realiza la consulta a la bd
+            $this->obj_data_provider->trae_datos("T_PadronFotograficoPersonalExterno", "*", "");
+            $this->arreglo=$this->obj_data_provider->getArreglo();
+            $this->obj_data_provider->desconectar();
+        }
+        else{
+            $this->obj_data_provider->conectar();
+            //Llama al metodo que realiza la consulta a la bd
+            $this->obj_data_provider->trae_datos("T_PadronFotograficoPersonalExterno", "*", $this->condicion);
+            $this->arreglo=$this->obj_data_provider->getArreglo();
+            $this->obj_data_provider->desconectar();
+        }
+    }
+    public function eliminar_imagen_personal_externo() {
+        $this->obj_data_provider->conectar();
+        $this->arreglo=$this->obj_data_provider->eliminar_datos("T_PadronFotograficoPersonalExterno", $this->condicion);
+        $this->obj_data_provider->desconectar();
+       
+    }
 }
 ?>
 

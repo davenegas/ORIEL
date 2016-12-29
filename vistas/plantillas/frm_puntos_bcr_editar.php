@@ -12,6 +12,7 @@
     <body>
         <?php require_once 'encabezado.php';?>
         <div class="container">
+            
         <header class="bordegris espacio-abajo">
             <h2>Gestión de Puntos BCR del Sistema
                 <?php if($_SESSION['modulos']['Editar- Puntos BCR']==1){ ?>

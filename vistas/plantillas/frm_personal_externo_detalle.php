@@ -12,33 +12,44 @@
     <body>
         <?php require_once 'encabezado.php';?>
         <section class="container bordegris">
+<!--            <pre>
+                //<?php print_r($puestos); ?>
+            </pre>-->
             <h2>Detalle de Personas 
-                <?php if($_SESSION['modulos']['Editar- Personal']==1){ ?>
+                <?php if($_SESSION['modulos']['Editar- Personal Externo']==1){ ?>
                     <a href="index.php?ctl=personal_gestion&id=<?php echo $params[0]['ID_Persona']-1?>;"><img src='vistas/Imagenes/boton-antes.png' width="25"></a>
                     <a href="index.php?ctl=personal_gestion&id=<?php echo $params[0]['ID_Persona']+1?>;"><img src='vistas/Imagenes/boton-siguiente.png' width="25"></a>
                 <?php }?>
             </h2>
-            <pre>
+<!--            <pre>
                 <?php print_r($params); ?>
-            </pre>
+            </pre>-->
             <div>
                 <h3>Información General
-                <?php if($_SESSION['modulos']['Editar- Personal']==1){ ?>
+                <?php if($_SESSION['modulos']['Editar- Personal Externo']==1){ ?>
                     <input class="quitar-float" type="checkbox" id="chk_general" name="chk_general">
                 <?php }?>
                 </h3>
                 <!--Información del personal Externo-->
-                <div class="col-md-4 espacio-abajo">
+                <div class="col-md-12 espacio-abajo">
                     <label for="ID_Persona">ID Persona</label>
+<<<<<<< HEAD
                     <input type="text" required="ID_Persona" readonly class="form-control" id="ID_Persona" name="ID_Persona" value="<?php echo $params[0]['ID_Persona_Externa'];?>">
+=======
+                    <input hidden="hidden" type="text" required="ID_Persona" readonly class="form-control" id="ID_Persona" name="ID_Persona" value="<?php echo $params[0]['ID_Persona_Externa'];?>">
+>>>>>>> origin/master
                 </div>
                 <div class="col-md-4 espacio-abajo">
                     <label for="identificacion">Identificación</label>
                     <input type="text" required="cedula" readonly class="form-control" id="identificacion" name="identificacion" value="<?php echo $params[0]['Identificacion'];?>">
                 </div>
-                <div class="col-md-4 col-xs-4 espacio-abajo">
+                <div class="col-md-4 espacio-abajo">
                     <label for="Empresa">Empresa</label>
+<<<<<<< HEAD
+                    <select class="form-control" id="Empresa" disabled name="Empresa"> 
+=======
                     <select class="form-control" disabled id="Empresa" name="Empresa"> 
+>>>>>>> origin/master
                         <?php
                         $tam = count($empresas);
                         for($i=0; $i<$tam;$i++){
@@ -50,13 +61,46 @@
                         <?php } }  ?>
                     </select>
                 </div>
+<<<<<<< HEAD
+                <div class="col-md-12 espacio-abajo quitar-float">
+                    <label for="nombre">Nombre y Apellidos</label>
+                    <input type="text" class="form-control" ALIGN="right" id="nombre" name="nombre" value="<?php echo $params[0]['Apellido_Nombre'];?>">
+                </div>
+                <div class="col-md-4 espacio-abajo">
+                    <label for="fecha_nacimiento">Fecha de Nacimiento</label>
+                    <input type="text" class="form-control" ALIGN="right" id="fecha_nacimiento" name="fecha_nacimiento" value="<?php echo $params[0]['Apellido_Nombre'];?>">
+                </div>
+                <div class="col-md-4 espacio-abajo">
+                    <label for="fecha_ingreso">Fecha de Ingreso</label>
+                    <input type="text" class="form-control" ALIGN="right" id="fecha_ingreso" name="fecha_ingreso" value="<?php echo $params[0]['Apellido_Nombre'];?>">
+                </div>
+                <div class="col-md-4 espacio-abajo">
+                    <label for="fecha_salida">Fecha de Ingreso</label>
+                    <input type="text" class="form-control" ALIGN="right" id="fecha_salida" name="fecha_salida" value="<?php echo $params[0]['Apellido_Nombre'];?>">
+                </div>
+                <div class="col-md-4 espacio-abajo">
+                    <label for="fecha_residencia">Fecha de vencimiento Residencia</label>
+                    <input type="text" class="form-control" ALIGN="right" id="fecha_residencia" name="fecha_residencia" value="<?php echo $params[0]['Apellido_Nombre'];?>">
+                </div>
+                <div class="col-md-4 espacio-abajo">
+                    <label for="fecha_portacion">Fecha de vencimiento Portación</label>
+                    <input type="text" class="form-control" ALIGN="right" id="fecha_portacion" name="fecha_portacion" value="<?php echo $params[0]['Apellido_Nombre'];?>">
+                </div>
+                <div class="col-md-4 espacio-abajo">
+                    <label for="correo">Correo</label>
+                    <input type="text" class="form-control" ALIGN="right" id="correo" name="correo" value="<?php echo $params[0]['Apellido_Nombre'];?>">
+=======
+                <div class="col-md-4 espacio-abajo">
+                    <label for="carnet">Número de Gafete</label>
+                    <input type="text" required="carnet" readonly class="form-control" id="carnet" name="ID_Persona" value="">
+                </div>
                 <div class="col-md-4 espacio-abajo">
                     <label for="nombre">Nombre</label>
-                    <input type="text" class="form-control" readonly ALIGN="right" id="nombre" name="nombre" value="<?php echo $params[0]['Nombre'];?>">
+                    <input type="text" style="text-transform: uppercase" class="form-control" readonly ALIGN="right" id="nombre" name="nombre" value="<?php echo $params[0]['Nombre'];?>">
                 </div>
                 <div class="col-md-8 espacio-abajo">
                     <label for="apellido">Apellidos</label>
-                    <input type="text" class="form-control" readonly ALIGN="right" id="apellido" name="apellido" value="<?php echo $params[0]['Apellido'];?>">
+                    <input type="text" style="text-transform: uppercase" class="form-control" readonly ALIGN="right" id="apellido" name="apellido" value="<?php echo $params[0]['Apellido'];?>">
                 </div>
                 <div class="col-md-4 espacio-abajo">
                     <label for="fecha_nacimiento">Fecha de Nacimiento</label>
@@ -85,14 +129,14 @@
                     </select>
                 </div>
                 <div class="col-md-4 espacio-abajo">
-                    <label for="fecha_residencia">Fecha de vencimiento Residencia</label>
+                    <label for="fecha_residencia">Fecha de vencimiento Identificación/Residencia</label>
                     <input type="date" class="form-control" readonly ALIGN="right" id="fecha_residencia" name="fecha_residencia" value="<?php echo $params[0]['Fecha_Vencimiento_Residencia'];?>">
                 </div>
                 <div class="col-md-4 espacio-abajo">
                     <label for="fecha_portacion">Fecha de vencimiento Portación</label>
                     <input type="date" class="form-control" readonly ALIGN="right" id="fecha_portacion" name="fecha_portacion" value="<?php echo $params[0]['Fecha_Vencimiento_Portacion'];?>">
+>>>>>>> origin/master
                 </div>
-               
                 
                 <div class="col-md-4">
                 <label for="Provincia">Provincia</label>
@@ -143,18 +187,27 @@
                 </div>
                 <div class="col-md-4 espacio-abajo">
                     <label for="estado_civil">Estado Civil</label>
+<<<<<<< HEAD
+                    <select class="form-control" id="estado_civil" disabled name="estado_civil"> 
+=======
                     <select class="form-control" disabled id="estado_civil" name="estado_civil"> 
+>>>>>>> origin/master
                         <?php
-                        $tam = count($estado_civil);
+                        $tam = count($empresas);
                         for($i=0; $i<$tam;$i++){
-                            if($estado_civil[$i]['ID_Estado_Civil']==$params[0]['ID_Estado_Civil']){
-                               ?> <option value="<?php echo $estado_civil[$i]['ID_Estado_Civil']?>" selected="selected"><?php echo $estado_civil[$i]['Estado_Civil']?></option><?php
+                            if($empresas[$i]['ID_Empresa']==$params[0]['ID_Empresa']){
+                               ?> <option value="<?php echo $empresas[$i]['ID_Empresa']?>" selected="selected"><?php echo $empresas[$i]['Empresa']?></option><?php
                             }   
                             else { ?>
-                                <option value="<?php echo $estado_civil[$i]['ID_Estado_Civil']?>" ><?php echo $estado_civil[$i]['Estado_Civil']?></option>   
+                                <option value="<?php echo $empresas[$i]['ID_Empresa']?>" ><?php echo $empresas[$i]['Empresa']?></option>   
                         <?php } }  ?>
                     </select>
                 </div>
+<<<<<<< HEAD
+                <div class="col-md-4 espacio-abajo">
+                    <label for="nacionalidad">Nacionalidad</label>
+                    <select class="form-control" id="nacionalidad" disabled name="nacionalidad"> 
+=======
                  <div class="col-md-4 espacio-abajo">
                     <label for="correo">Correo</label>
                     <input type="text" class="form-control" readonly ALIGN="right" id="correo" name="correo" value="<?php echo $params[0]['Correo'];?>">
@@ -163,17 +216,23 @@
                 <div class="col-md-4 espacio-abajo">
                     <label for="nivel_academico">Nivel Academico</label>
                     <select class="form-control" disabled id="nivel_academico" name="nivel_academico"> 
+>>>>>>> origin/master
                         <?php
-                        $tam = count($nivel_academico);
+                        $tam = count($empresas);
                         for($i=0; $i<$tam;$i++){
-                            if($nivel_academico[$i]['ID_Nivel_Academico']==$params[0]['ID_Nivel_Academico']){
-                               ?> <option value="<?php echo $nivel_academico[$i]['ID_Nivel_Academico']?>" selected="selected"><?php echo $nivel_academico[$i]['Nivel_Academico']?></option><?php
+                            if($empresas[$i]['ID_Empresa']==$params[0]['ID_Empresa']){
+                               ?> <option value="<?php echo $empresas[$i]['ID_Empresa']?>" selected="selected"><?php echo $empresas[$i]['Empresa']?></option><?php
                             }   
                             else { ?>
-                                <option value="<?php echo $nivel_academico[$i]['ID_Nivel_Academico']?>" ><?php echo $nivel_academico[$i]['Nivel_Academico']?></option>   
+                                <option value="<?php echo $empresas[$i]['ID_Empresa']?>" ><?php echo $empresas[$i]['Empresa']?></option>   
                         <?php } }  ?>
                     </select>
                 </div>
+<<<<<<< HEAD
+                <div class="col-md-4 espacio-abajo">
+                    <label for="nivel_academico">Nivel Academico</label>
+                    <select class="form-control" id="nivel_academico" disabled name="nivel_academico"> 
+=======
                 <div class="col-md-8 espacio-abajo">
                     <label for="observaciones">Observaciones</label>
                     <input type="text" class="form-control" readonly ALIGN="right" id="observaciones" name="observaciones" value="<?php echo $params[0]['Observaciones'];?>">
@@ -181,17 +240,26 @@
                 <div class="col-md-4 espacio-abajo">
                     <label for="estado_persona">Estado de la persona</label>
                     <select class="form-control" disabled id="estado_persona" name="estado_persona"> 
+>>>>>>> origin/master
                         <?php
-                        $tam = count($estado_persona);
+                        $tam = count($empresas);
                         for($i=0; $i<$tam;$i++){
-                            if($estado_persona[$i]['ID_Estado_Persona']==$params[0]['ID_Estado_Persona']){
-                               ?> <option value="<?php echo $estado_persona[$i]['ID_Estado_Persona']?>" selected="selected"><?php echo $estado_persona[$i]['Nombre_Estado']?></option><?php
+                            if($empresas[$i]['ID_Empresa']==$params[0]['ID_Empresa']){
+                               ?> <option value="<?php echo $empresas[$i]['ID_Empresa']?>" selected="selected"><?php echo $empresas[$i]['Empresa']?></option><?php
                             }   
                             else { ?>
-                                <option value="<?php echo $estado_persona[$i]['ID_Estado_Persona']?>" ><?php echo $estado_persona[$i]['Nombre_Estado']?></option>   
+                                <option value="<?php echo $empresas[$i]['ID_Empresa']?>" ><?php echo $empresas[$i]['Empresa']?></option>   
                         <?php } }  ?>
                     </select>
                 </div>
+<<<<<<< HEAD
+                <div class="col-md-12 espacio-abajo">
+                    <label for="observaciones">Observaciones</label>
+                    <input type="text" class="form-control" ALIGN="right" id="observaciones" name="observaciones" value="<?php echo $params[0]['Apellido_Nombre'];?>">
+                </div>
+            </div>
+        </section>
+=======
                 <div class="col-md-4 espacio-abajo">
                     <label for="genero">Genero</label>
                     <select class="form-control" disabled id="genero" name="genero"> 
@@ -208,10 +276,10 @@
                     <label for="validado">Validado</label>
                     <select class="form-control" disabled id="validado" name="validado"> 
                         <?php if($params[0]['Validado']=='0'){?>
-                            <option value="0" selected>No Validado</option>
+                        <option value="0" selected style="color: red">No Validado</option>
                             <option value="1">Validado</option>
                         <?php } else { ?>
-                            <option value="0">No Validado</option>
+                            <option value="0" style="color: red">No Validado</option>
                             <option value="1" selected>Validado</option>
                         <?php }?>  
                     </select>
@@ -225,7 +293,7 @@
         
         <!--Sección para informacion de teléfonos-->
         <section class="container bordegris espacio-abajo">
-            <?php if($_SESSION['modulos']['Editar- Personal']==1){ ?>
+            <?php if($_SESSION['modulos']['Editar- Personal Externo']==1){ ?>
                 <h3 class="quitar-float">Información de teléfonos <a id="popup" onclick="mostrar_agregar_telefono()" class="btn azul" role="button">Agregar número</a></h3> 
             <?php } else {?>
                 <h3 class="quitar-float">Información de teléfonos</h3>
@@ -264,7 +332,7 @@
             
         <!--Sección para fotos del personal externo-->
         <section class="container">
-            <?php if($_SESSION['modulos']['Editar- Personal']==1){ ?>
+            <?php if($_SESSION['modulos']['Editar- Personal Externo']==1){ ?>
                 <h3 class="quitar-float">Fotos del personal <a id="popup" onclick="mostrar_agregar_foto()" class="btn azul" role="button">Agregar foto</a></h3> 
             <?php } else {?>
                 <h3 class="quitar-float">Fotos del personal</h3>
@@ -292,10 +360,10 @@
                             <td style="text-align:center"><?php echo $fotos[$i]['Categoria'];?></td>
                             <td style="text-align:center"><?php echo $fotos[$i]['Nombre_Imagen'];?></td>
                             <td style="text-align:center"><?php echo $fotos [$i]['Descripcion'];?></td>
-                            <td style="text-align:center"><a class="fancybox-button" rel="fancybox-button" href="../../../Padron_Fotografico_Puntos_BCR/<?php echo $fotos[$i]['Nombre_Ruta'];?>" title="<?php echo $fotos[$i]['Nombre_Imagen'].' ('.$fotos[$i]['Descripcion'].')';?>">
-                                <img src="../../../Padron_Fotografico_Puntos_BCR/<?php echo $fotos[$i]['Nombre_Ruta'];?>" alt="" width="200px"/></a></td>
+                            <td style="text-align:center"><a class="fancybox-button" rel="fancybox-button" href="../../../Padron_Fotografico_Personal_externo/<?php echo $fotos[$i]['Nombre_Ruta'];?>" title="<?php echo $fotos[$i]['Nombre_Imagen'].' ('.$fotos[$i]['Descripcion'].')';?>">
+                                <img src="../../../Padron_Fotografico_Personal_externo/<?php echo $fotos[$i]['Nombre_Ruta'];?>" alt="" width="200px"/></a></td>
                             <?php if($_SESSION['modulos']['Editar- Padrón Fotográfico Puntos BCR']==1){ ?>
-                            <td align="center"><a onclick="eliminar_imagen(<?php echo $fotos[$i]['ID_Padron_PuntoBCR'];?>);">Eliminar</a></td>    
+                            <td align="center"><a onclick="eliminar_imagen(<?php echo $fotos[$i]['ID_Padron_Personal'];?>);">Eliminar</a></td>    
                             <?php } ?>
                             <td style="text-align:center" hidden="hidden"><?php echo $fotos [$i]['Nombre_Ruta'];?></td>
                         </tr>   
@@ -303,8 +371,7 @@
                     </tbody>
                 </table>
             </div>
-            
-        <a href="index.php?ctl=personal_listar" class="btn btn-default espacio-arriba" role="button">Volver</a> 
+        <a href="index.php?ctl=personal_externo_listar" class="btn btn-default espacio-arriba" role="button">Volver</a> 
         </section>
         <?php require_once 'pie_de_pagina.php' ?>
         
@@ -343,5 +410,51 @@
         <!--Cierre agregar teléfono -->
         </div>
         
+        <!--Agregar foto al personal externo-->
+        <div id="formulario_oculto_1">
+            <div id="popupventana2">
+                <div id="ventana2">
+                <img id="close" src='vistas/Imagenes/cerrar.png' width="25" onclick ="ocultar_elemento()">
+                    <h2>Fotos de Personal</h2>
+                    <h4>Agregar nueva foto a la persona</h4>
+                    <!--Formulario para ingresar areas de apoyo-->
+                    <!--Agregar nuevo detalle o seguimiento del evento-->
+                    <form class="form-horizontal"  id="guardar_foto" role="form" enctype="multipart/form-data" method="POST" action="index.php?ctl=guardar_imagen_persona_externa">
+                        <div class="col-xs-12 quitar-float espacio-abajo">
+                            <label for="archivo_adjunto">Adjuntar Archivo: </label>
+                            <input type="hidden" name="MAX_FILE_SIZE" value="2000000">
+                            <input type="file" name="archivo_adjunto" id="seleccionar_archivo" class="btn btn-default">
+                        </div> 
+                        
+                        <div class="col-xs-4">
+                            <label for="Nombre">Nombre</label>
+                            <input type="text" required=”required” class="form-control" id="Nombre" name="Nombre" >
+                        </div>
+              
+                        <div hidden="hidden" class="col-xs-4">
+                            <label for="ID_Persona">ID_Persona</label>
+                            <input type="text" class="form-control" id="ID_Persona" name="ID_Persona" value="<?php echo $params[0]['ID_Persona_Externa'];?>">
+                        </div>
+                
+                        <div class="col-xs-4">
+                            <label for="Descripcion">Descripción</label>
+                            <textarea type="text" required=”required” class="form-control" id="Descripcion" name="Descripcion" value="" maxlength="500" minlength="2" placeholder="Máximo 500 caracteres por seguimiento"></textarea>
+                        </div>
+                
+                        <div class="col-xs-4 espacio-abajo">
+                            <label for="Categoria">Categoría</label>
+                            <select class="form-control espacio-abajo" id="Categoria" name="Categoria" required=”required”> 
+                                <option value="Rostro" >Rostro</option>  
+                                <option value="Cuerpo completo" >Cuerpo entero</option>  
+                                <option value="Documentos" >Documentos</option>
+                            </select>
+                        </div>
+                        <button><a href="javascript:%20valida_foto()" id="submit">Guardar Imágen</a></button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+>>>>>>> origin/master
     </body>
 </html>
