@@ -83,7 +83,8 @@
             <a class="dropdown-toggle" data-toggle="dropdown" href="#">Catálogos
             <span class="caret"></span></a>
             <ul class="dropdown-menu">
-<?php if ($_SESSION['modulos']['Catálogos-Empresas']==1){ ?>
+                
+                <?php if ($_SESSION['modulos']['Catálogos-Empresas']==1){ ?>
                     <li><a href="index.php?ctl=empresas_listar">Empresas</a></li>
                 <?php };?>   
 
@@ -212,11 +213,11 @@
                      <li><a href="index.php?ctl=areas_apoyo_listar">Áreas de Apoyo</a></li>
                 <?php }; ?>  
 
-<<<<<<< HEAD
-                 <?php if ($_SESSION['modulos']['Módulo-Control de Video']==1){?>
+
+                <?php if ($_SESSION['modulos']['Módulo-Control de Video']==1){?>
                     <!--<li><a href="#">Controles de Video</a></li>--> 
-               <?php }; ?>   
-=======
+                <?php }; ?>   
+
                 <?php if ($_SESSION['modulos']['Módulo-Personal Externo']==1){?>
                     <li><a href="index.php?ctl=personal_externo_listar">Personal Externo</a></li>
                 <?php }; ?>
@@ -224,7 +225,7 @@
                 <?php if ($_SESSION['modulos']['Módulo-Control de Video']==1){?>
                     <li><a href="http://10.170.5.80/Operaciones_de_Seguridad/ctrlvideo/consulta.html">Controles de Video</a></li>
                 <?php }; ?>   
->>>>>>> origin/master
+
 
             </ul>
             </li>
