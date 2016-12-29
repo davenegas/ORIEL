@@ -95,9 +95,8 @@
  
                     </select>
                 </div>
-                    
+
                 <button type="submit" class="btn btn-default">Guardar Imágen</button>
-               
             </form>
         
        <?php }?>
@@ -108,8 +107,8 @@
             <h3>Visualización de Imágenes</h3>
             
             
-             <table id="tabla" class="display" cellspacing="0" width="100%">
-          <thead>
+            <table id="tabla" class="display" cellspacing="0" width="100%">
+            <thead>
             <tr>  
                 <th style="text-align:center">Categoría</th>
                 <th style="text-align:center">Nombre Imágen</th>
@@ -119,7 +118,6 @@
                 <th style="text-align:center">Gestión</th>
                 <?php } ?>
                 <th style="text-align:center" hidden="hidden">Nombre Ruta</th>
-
             </tr>
           </thead>
 

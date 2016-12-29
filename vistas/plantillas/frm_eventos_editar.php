@@ -6,12 +6,12 @@
         <?php require_once 'frm_librerias_head.html';?>
         <script language="javascript" src="vistas/js/valida_un_solo_click_en_formulario.js"></script>
         <script language="javascript">
-$(document).ready(function() {
+        $(document).ready(function() {
 	$(".botonExcel").click(function(event) {
 		$("#datos_a_enviar").val( $("<div>").append( $("#Exportar_a_Excel").eq(0).clone()).html());
 		$("#FormularioExportacion").submit();
-});
-});
+        });
+        });
 </script>
     </head>
     <body>

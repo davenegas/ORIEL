@@ -197,6 +197,7 @@ $map = array(
     'alerta_en_vivo_mismo_punto_bcr_y_evento'=>  array('controller'=>'Controller','action'=>  'alerta_en_vivo_mismo_punto_bcr_y_evento'),
     'actualiza_en_vivo_reporte_cerrados'=>  array('controller'=>'Controller','action'=>  'actualiza_en_vivo_reporte_cerrados'),
     'eventos_listar_filtrado'=>  array('controller'=>'Controller','action'=>  'eventos_listar_filtrado'),
+    'notas_coordinacion_bitacora_guardar'=>  array('controller'=>'Controller','action'=>  'notas_coordinacion_bitacora_guardar'),
     
     //Tipo de eventos
     'tipo_eventos_listar'=>array('controller'=>'Controller','action'=> 'tipo_eventos_listar'),
@@ -265,6 +266,18 @@ $map = array(
     'personal_cambiar_puesto'=>array('controller'=>'Controller','action'=> 'personal_cambiar_puesto'),
     'persona_guardar_informacion_general'=>array('controller'=>'Controller','action'=> 'persona_guardar_informacion_general'),
     
+<<<<<<< HEAD
+=======
+    //Controlador de Personal Externo
+    'personal_externo_listar'=>array('controller'=>'Controller','action'=> 'personal_externo_listar'), 
+    'personal_externo_gestion'=>array('controller'=>'Controller','action'=> 'personal_externo_gestion'), 
+    'personal_externo_numero_telefono_guardar'=>array('controller'=>'Controller','action'=> 'personal_externo_numero_telefono_guardar'), 
+    'personal_externo_eliminar_telefono'=>array('controller'=>'Controller','action'=> 'personal_externo_eliminar_telefono'), 
+    'persona_externa_guardar_informacion'=>array('controller'=>'Controller','action'=> 'persona_externa_guardar_informacion'), 
+    'guardar_imagen_persona_externa'=>array('controller'=>'Controller','action'=> 'guardar_imagen_persona_externa'), 
+    'eliminar_imagen_personal_externo'=>array('controller'=>'Controller','action'=> 'eliminar_imagen_personal_externo'), 
+    
+>>>>>>> origin/master
     //Importación de Prontuario
     'frm_importar_prontuario_paso_1'=>array('controller'=>'Controller','action'=> 'frm_importar_prontuario_paso_1'),
     'frm_importar_prontuario_paso_2'=>array('controller'=>'Controller','action'=> 'frm_importar_prontuario_paso_2'),

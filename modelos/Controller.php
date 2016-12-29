@@ -49,9 +49,15 @@
         //Llamada al formulario correspondiente de la vista
         require __DIR__ . '/../vistas/plantillas/frm_contacto_publico.php';
     }
+<<<<<<< HEAD
     /////////////////////////////////////////////////////////////////////
     /*Metodos relacionados del area de Modulos de Seguridad del Sistema*/
     /////////////////////////////////////////////////////////////////////
+=======
+    //////////////////////////
+    //Metodos relacionados del area de Modulos de Seguridad del Sistema//
+    //////////////////////////
+>>>>>>> origin/master
      
     // Metodo que llama al formulario correspondiente para validación de credenciales por parte del usuario
     public function iniciar_sesion(){
@@ -2811,10 +2817,10 @@
                     //Arma el vector de seguimientos asociados a un evento en específico
                     if ($i==0){
                         //Arma el vector con el detalle y el ultimo usuario que registro un seguimiento en el evento de bitacora
-                        $detalle_y_ultimo_usuario= array(['Detalle'=>"Fecha: ".date_format(date_create($ultimo_seguimiento_asociado[0]['Fecha']), 'd/m/Y').".Hora: ".$ultimo_seguimiento_asociado[0]['Hora'].". ".$ultimo_seguimiento_asociado[0]['Detalle']]+['Usuario'=>$ultimo_seguimiento_asociado[0]['Nombre_Usuario']." ".$ultimo_seguimiento_asociado[0]['Apellido']]);
+                        $detalle_y_ultimo_usuario= array(['Detalle'=>"Último seguimiento ingresado-->Fecha: ".date_format(date_create($ultimo_seguimiento_asociado[0]['Fecha']), 'd/m/Y').".Hora: ".$ultimo_seguimiento_asociado[0]['Hora'].". ".$ultimo_seguimiento_asociado[0]['Detalle']]+['Usuario'=>$ultimo_seguimiento_asociado[0]['Nombre_Usuario']." ".$ultimo_seguimiento_asociado[0]['Apellido']]);
                     }else{
                         //Concatena al vector la nueva linea de información del seguimiento.
-                        $detalle_y_ultimo_usuario = array_merge($detalle_y_ultimo_usuario,array(['Detalle'=>"Fecha: ".date_format(date_create($ultimo_seguimiento_asociado[0]['Fecha']), 'd/m/Y').".Hora: ".$ultimo_seguimiento_asociado[0]['Hora'].". ".$ultimo_seguimiento_asociado[0]['Detalle']]+['Usuario'=>$ultimo_seguimiento_asociado[0]['Nombre_Usuario']." ".$ultimo_seguimiento_asociado[0]['Apellido']]));  
+                        $detalle_y_ultimo_usuario = array_merge($detalle_y_ultimo_usuario,array(['Detalle'=>"Último seguimiento ingresado-->Fecha: ".date_format(date_create($ultimo_seguimiento_asociado[0]['Fecha']), 'd/m/Y').".Hora: ".$ultimo_seguimiento_asociado[0]['Hora'].". ".$ultimo_seguimiento_asociado[0]['Detalle']]+['Usuario'=>$ultimo_seguimiento_asociado[0]['Nombre_Usuario']." ".$ultimo_seguimiento_asociado[0]['Apellido']]));  
                     }
                 }else{
                     //En caso de que no hayan seguimientos asociados, procede a registrar las validación correspondiente.
@@ -4729,12 +4735,23 @@
               $descripcion= str_replace("'","",$descripcion);
               $descripcion= str_replace('"','',$descripcion);
 
+<<<<<<< HEAD
               $recepcion_archivo=$_FILES['archivo_adjunto']['error'];
+=======
+            //Obtiene el mensaje de verificacion del envio del archivo
+            $recepcion_archivo=$_FILES['archivo_adjunto']['error'];
+>>>>>>> origin/master
               
             $obj_padron_fotografico = new cls_padron_fotografico_puntosbcr();
             $obj_padron_fotografico->setId_puntobcr($id_punto_bcr);
             $obj_padron_fotografico->setNombre_imagen($nombre_imagen);
+<<<<<<< HEAD
             $obj_padron_fotografico->setDescripcion($descripcion);
+=======
+            //Asigna el atributo descripcion
+            $obj_padron_fotografico->setDescripcion($descripcion);
+            //Asigna el atributo categoria
+>>>>>>> origin/master
             $obj_padron_fotografico->setCategoria($categoria);
                        
             $recepcion_archivo=$_FILES['archivo_adjunto']['error'];
@@ -4797,8 +4814,6 @@
                     break;
                 }   
             }
-            
-                   
         }else {
               /*
              * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
@@ -4814,9 +4829,15 @@
     }
     
     
+<<<<<<< HEAD
     /////////////////////////////////////////////////////////////////////////////
     /*Metodos relacionados del area de Tipos de Evento de Seguridad del Sistema*/
     /////////////////////////////////////////////////////////////////////////////
+=======
+    //////////////////////////
+    //Metodos relacionados del area de Tipos de Evento de Seguridad del Sistema
+    //////////////////////////
+>>>>>>> origin/master
     
     public function tipo_eventos_listar(){      
         if(isset($_SESSION['nombre'])){
@@ -4940,7 +4961,7 @@
     }
 
     //////////////////////////
-    /*Metodos relacionados del area de Empresas de Seguridad del Sistema*/
+    //Metodos relacionados del area de Empresas de Seguridad del Sistema
     //////////////////////////
 
   // Metodo que permite actualizar en tiempo real la lista de estado de evento de bitacora dependiendo
@@ -6107,7 +6128,8 @@
             //Obtiene la información enviada por el formulario POST
             $obj_area_apoyo->setId(null);
             $obj_area_apoyo->setTipo_area($_POST['Tipo_Area_Apoyo']);
-            $obj_area_apoyo->setDistrito($_POST['distrito']);
+            echo ($_POST['Tipo_Area_Apoyo']);
+            $obj_area_apoyo->setDistrito($_POST['distrito2']);
             $obj_area_apoyo->setNombre_area($_POST['nombre']);
             $obj_area_apoyo->setDireccion($_POST['direccion']);
             $obj_area_apoyo->setObservaciones($_POST['observaciones']);
@@ -6132,7 +6154,13 @@
             $obj_area_apoyo = new cls_areasapoyo();
             $obj_area_apoyo->setId($area_apoyo[0]['ID_Area_Apoyo']);
             $obj_area_apoyo->setId2($_POST['ID_PuntoBCR']);
+<<<<<<< HEAD
             $obj_area_apoyo->setCondicion("T_PuntoBCRAreaApoyo.ID_PuntoBCR='".$_POST['id_puntobcr']."' AND T_PuntoBCRAreaApoyo.ID_Area_Apoyo='".$_POST['id_area_apoyo']."'");
+=======
+            //Establece la condicion para buscar si el area de apoyo ya está asignada al punto bcr
+            $obj_area_apoyo->setCondicion("T_PuntoBCRAreaApoyo.ID_PuntoBCR='".$_POST['ID_PuntoBCR']."' AND T_PuntoBCRAreaApoyo.ID_Area_Apoyo='".$area_apoyo[0]['ID_Area_Apoyo']."'");
+            //Ejecuta la consulta sobre la bd
+>>>>>>> origin/master
             $obj_area_apoyo->obtiene_todos_las_areas_apoyo();
             $areas_apoyo =$obj_area_apoyo->getArreglo();
             if($areas_apoyo==""){
@@ -6310,6 +6338,10 @@
     ////////////////////////////////////////////////////////////////////////////
     /////////////Funciones para Direeciones IP's////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////
+<<<<<<< HEAD
+=======
+    //Metodo que permite listar las direcciones ip registradas en la base de datos
+>>>>>>> origin/master
     public function direcciones_ip_listar(){
        if(isset($_SESSION['nombre'])){
             $obj_direcciones=new cls_direccionIP();
@@ -6327,7 +6359,8 @@
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         } 
     }
-   public function direcciones_ip_guardar() {
+    
+    public function direcciones_ip_guardar() {
           if(isset($_SESSION['nombre'])){
                $obj_tipo_ip = new cls_direccionIP();
                $obj_tipo_ip->setTipo_IP($_POST['nombre']);
@@ -6913,6 +6946,538 @@
 ////////////////////////////////////////////////////////////////////////////
     ///////////////////////Funciones de Tipo Telefono/////////////////////          
     ////////////////////////////////////////////////////////////////////////////
+<<<<<<< HEAD
+=======
+    ////////////////////MANTENIMIENTO DE PERSONAL EXTERNO///////////////////////
+    ////////////////////////////////////////////////////////////////////////////
+    public function personal_externo_listar(){
+        if(isset($_SESSION['nombre'])){
+            $obj_personal=new cls_personal_externo();
+            //Muestra solamente información de oficiales VMA, rol 10 Seguridad Privada VMA
+            if($_SESSION['rol']==10){
+                $obj_personal->setCondicion("T_PersonalExterno.ID_Empresa=2");
+            }
+            //Muestra solamente información de personal externo G4S, rol 9 Seguridad Privada G4S
+            if($_SESSION['rol']==9){
+                $obj_personal->setCondicion("T_PersonalExterno.ID_Empresa=3");
+            } 
+            //Muestra solamente información de personal externo G4S y VMA, rol 16 Operaciones de Seguridad
+            if($_SESSION['rol']==16){
+                $obj_personal->setCondicion("T_PersonalExterno.ID_Empresa=3 OR T_PersonalExterno.ID_Empresa=2");
+            }
+            //Muestra solamente información de personal externo Qubo Digital Ltda(15) y Sistemas Contra Incendio OLPRA(16), rol 15 Defensa al Cliente
+            if($_SESSION['rol']==15){
+                $obj_personal->setCondicion("T_PersonalExterno.ID_Empresa=15 OR T_PersonalExterno.ID_Empresa=16");
+            }
+            //Muestra solamente información de personal externo NOVUS(8) y Correos de Costa Rica(9), rol 7 Servicios Auxiliar
+            if($_SESSION['rol']==7){
+                $obj_personal->setCondicion("T_PersonalExterno.ID_Empresa=8 OR T_PersonalExterno.ID_Empresa=9");
+            }
+            //Muestra solamente información de personal externo SELOSA SA(10), CLIMA TECNICA REFRIGERACIÓN INDUST(11),
+            //SCO MANTENIMIENTO INDUSTRIAL SA(12),ENFRION DEL NORTE SA(13),SERVICIOS TECNICOS Y COMERCIALES SA(14),
+            //FONT SERVICIOS ELECTROMECANICOS SA(17), MATRA(18),  rol 13 Obras Civiles
+            if($_SESSION['rol']==13){
+                $obj_personal->setCondicion("T_PersonalExterno.ID_Empresa=10 OR T_PersonalExterno.ID_Empresa=11 OR
+                        T_PersonalExterno.ID_Empresa=12 OR T_PersonalExterno.ID_Empresa=13 OR
+                       T_PersonalExterno.ID_Empresa=14 OR T_PersonalExterno.ID_Empresa=17 OR 
+                       T_PersonalExterno.ID_Empresa=18");
+            }
+            
+            $obj_personal->obtiene_todo_el_personal_externo();
+            $params= $obj_personal->getArreglo();
+            //Calcula proximas portaciones a vencer
+            $fecha_actual= getdate();
+            $fecha_actual= $fecha_actual['year']."-".$fecha_actual['mon']."-".$fecha_actual['wday'];
+            
+            $tam=count($params);
+            $cantidad=0;
+            for ($i = 0; $i <$tam; $i++) {
+                if($params[$i]['Fecha_Vencimiento_Portacion']<>"0000-00-00" && $params[$i]['ID_Estado_Persona']==1){
+                    $dias = (strtotime($params[$i]['Fecha_Vencimiento_Portacion'])-strtotime($fecha_actual))/86400;
+                    //echo ("Faltan ".$dias." para vencer portación de ".$params[$i]['Identificacion'])."<br>";
+                    if($dias<60){
+                        if($dias<0){
+                            $vencidos[$cantidad]['dias']=intval($dias);
+                            $vencidos[$cantidad]['mensaje']= ($params[$i]['Nombre']." ".$params[$i]['Apellido']." portación vencida hace <b>".(intval(-$dias)))."</b> días.";   
+                            
+                        }else{
+                            $vencidos[$cantidad]['dias']=intval($dias);
+                            $vencidos[$cantidad]['mensaje']= ($params[$i]['Nombre']." ".$params[$i]['Apellido']." portación vence en <b>".intval($dias)."</b> días.");
+                            
+                        }
+                        $cantidad++;
+                    }
+                }
+            }
+            sort($vencidos);
+            
+            require __DIR__ . '/../vistas/plantillas/frm_personal_externo_listar.php';
+        }else{
+              /*
+             * Esta es la validación contraria que la sesión de usuario esté definida y abierta.
+             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+             * a la pantalla de inicio de sesión con el mensaje de "warning" correspondiente.
+             * En la última línea llama a la pagina de inicio de sesión.
+             */
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }
+    }
+    
+    public function personal_externo_gestion(){
+        if(isset($_SESSION['nombre'])){
+            $obj_personal=new cls_personal_externo();
+            $obj_empresa = new cls_empresa();
+            $obj_estado_civil = new cls_estado_civil();
+            $obj_estado_persona = new cls_estado_persona();
+            $obj_nacionalidad = new cls_nacionalidad();
+            $obj_nivel_academico = new cls_nivel_academico();
+            $obj_telefono = new cls_telefono();
+            $obj_Puntobcr = new cls_puntosBCR(); 
+            $obj_padron_fotografico= new cls_padron_fotografico_puntosbcr();
+            
+            //Validación si carga informacion de persona o formulario en blanco
+            if($_GET['id']<>0){
+                $obj_personal->setCondicion("T_PersonalExterno.ID_Persona_Externa='".$_GET['id']."'");
+                $obj_personal->obtiene_todo_el_personal_externo();
+                $params= $obj_personal->getArreglo();
+            } else {
+                $params[0]['ID_Persona_Externa'] = 0;
+                $params[0]['Identificacion'] ="";
+                $params[0]['Apellido'] ="";
+                $params[0]['Nombre'] ="";
+                $params[0]['Fecha_Nacimiento'] ="";
+                $params[0]['Fecha_Vencimiento_Residencia'] ="";
+                $params[0]['Fecha_Vencimiento_Portacion'] ="";
+                $params[0]['Fecha_Ingreso'] ="";
+                $params[0]['Fecha_Salida'] ="";
+                $params[0]['Correo'] ="";
+                $params[0]['Genero'] ="";
+                $params[0]['Direccion'] ="";
+                $params[0]['ID_Distrito']  ="";
+                $params[0]['ID_Estado_Civil'] ="";
+                $params[0]['ID_Nacionalidad'] ="";
+                $params[0]['ID_Nivel_Academico'] ="";
+                $params[0]['ID_Empresa'] ="";
+                $params[0]['ID_Estado_Persona'] ="";
+                $params[0]['Validado'] ="";
+                $params[0]['Observaciones'] ="";
+                $params[0]['Ocupacion'] ="";
+                $params[0]['Nombre_Estado'] ="";
+                $params[0]['Descripcion'] ="";
+                $params[0]['Empresa'] ="";
+            }
+            //Obtiene empresa 
+            $obj_empresa->setCondicion("");
+            $obj_empresa->obtiene_todas_las_empresas();
+            $empresas= $obj_empresa->getArreglo();
+		
+            //Obtiene Distrito->Cantón->Provincia
+            //Distritos
+            $obj_Puntobcr->setCondicion("");
+            //Ejecuta la consulta SQL
+            $obj_Puntobcr->obtiene_distritos();
+            //Asigna el resultado a una variable tipo vector
+            $distritos = array_merge(array(['ID_Distrito'=>0]+['Nombre_Distrito'=>""]),$obj_Puntobcr->getArreglo());
+            //Cantones
+            $obj_Puntobcr->setCondicion("");
+            //Ejecuta la consulta SQL
+            $obj_Puntobcr->obtiene_cantones();
+            //Obtiene el resultado en una variable tipo vector
+            $cantones   = array_merge(array(['ID_Canton'=>0]+['Nombre_Canton'=>""]),$obj_Puntobcr->getArreglo());
+            //Provincias
+            $obj_Puntobcr->setCondicion("");
+            //Ejecuta la consulta
+            $obj_Puntobcr->obtiene_provincias();
+            //Asigna el resultado a una variable tipo vector
+            $provincias = array_merge(array(['ID_Provincia'=>"0"]+['Nombre_Provincia'=>""]),$obj_Puntobcr->getArreglo());
+                
+                
+            //Obtiene Estado Civil
+            $obj_estado_civil->setCondicion("");
+            $obj_estado_civil->obtener_estado_civil_todos();
+            $estado_civil = $obj_estado_civil->getArreglo();
+            
+            //Obtiene Nacionalidad
+            $obj_nacionalidad->setCondicion("");
+            $obj_nacionalidad->obtener_todas_nacionalidades();
+            $nacionalidad = $obj_nacionalidad->getArreglo();
+            
+            //Obtiene nivel academico
+            $obj_nivel_academico->setCondicion("");
+            $obj_nivel_academico->obtener_todos_niveles_academicos();
+            $nivel_academico= $obj_nivel_academico->getArreglo();
+            
+            //Obtiene el estado de la persona
+            $obj_estado_persona->setCondicion("");
+            $obj_estado_persona->obtener_todos_estados_personas();
+            $estado_persona = $obj_estado_persona->getArreglo();
+            
+            //Obtiene telefonos realacionados al personal externo
+            $obj_telefono->setCondicion("ID='".$_GET['id']."'");
+            $obj_telefono->obtiene_telefonos_personal_externo();
+            $num_telefono= $obj_telefono->getArreglo();
+            
+            //Obtiene los tipos de telefono
+            $obj_telefono->setCondicion("");
+            $obj_telefono->obtiene_tipo_telefonos();
+            $tipo_telefono = $obj_telefono->getArreglo();
+            
+            //Obtiene fotos del personal
+            //Establece la condición de busqueda mediante el id del punto bcr
+            $obj_padron_fotografico->setCondicion("ID_Persona_Externa=".$_GET['id']);
+            //Obtiene el listado de imagenes del punto bcr
+            $obj_padron_fotografico->obtener_imagenes_personal_externo();
+            //Asigna el resultado a una variable tipo vector
+            $fotos=$obj_padron_fotografico->getArreglo();
+            
+            require __DIR__ . '/../vistas/plantillas/frm_personal_externo_detalle.php';
+            
+        }else{
+              /*
+             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+             * En la última línea llama a la pagina de inicio de sesión.
+             */
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }
+    }
+    
+    public function personal_externo_numero_telefono_guardar(){
+        //Verifica que la sesion de usuario esté activa 
+        if(isset($_SESSION['nombre'])){   
+            //Verifica que el metodo de envio de datos sea por medio del formulario html
+            if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+                //Creacion del objeto de la clase telefono
+                $obj_telefono = new cls_telefono();
+                //Establece los parametros requeridos para el objeto de la clase
+                //ID del telefono
+                $obj_telefono->setId($_POST['ID_Telefono']);
+                //Id de la persona
+                $obj_telefono->setId2($_POST['ID_Persona']);
+                //Tipo de telefono
+                $obj_telefono->setTipo_telefono($_POST['Tipo_Telefono']);
+                //Establece el numero
+                $obj_telefono->setNumero($_POST['numero']);
+                //Define las observaciones
+                echo '<script>alert("Prueba");</script>';
+                $obj_telefono->setObservaciones($_POST['observaciones_tel']);
+                //Dependiendo del numero de id que se reciba, se guarda un nuevo telefono o se edita el existente
+                if($_POST['ID_Telefono']==0){
+                    $obj_telefono->guardar_telefono();
+                }   else    {
+                    //Establece la condicion de busqueda para editar el telefono
+                    $obj_telefono->setCondicion("ID_Telefono='".$_POST['ID_Telefono']."'");
+                    //Ejecuta la edicion de los datos
+                    $obj_telefono->actualizar_telefono();
+                }
+                //Muestra la vista de usuario correspondiente
+                header("location:/ORIEL/index.php?ctl=personal_externo_gestion&id=".$_POST['ID_Persona']);
+            }
+        }   else    {
+              /*
+             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+             * En la última línea llama a la pagina de inicio de sesión.
+             */
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            //Muestra la vista de usuario correspondiente
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }
+    }
+    
+    public function personal_externo_eliminar_telefono(){
+        //Verifica que la sesion de usuario esté activa
+       if(isset($_SESSION['nombre'])){
+           //Crear objeto de la clase telefono
+            $obj_telefono = new cls_telefono();
+            //Establece el id del telefono en cuestion
+            $obj_telefono->setId($_POST['id_telefono']);
+            //Procede a armar la condicion de busqueda del SQL
+            $obj_telefono->setCondicion("ID_Telefono='".$_POST['id_telefono']."'");
+            //Elimina el telefono de la base de datos
+            $obj_telefono->eliminar_telefono();
+        }else{
+              /*
+             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+             * En la última línea llama a la pagina de inicio de sesión.
+             */
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            //Muestra la vista de usuario correspondiente
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }  
+    }
+    
+    //Metodo que permite guardar la información correspondiente a una persona externa
+    public function persona_externa_guardar_informacion(){
+        //Verifica que la sesión de usuario esté establecida
+        if(isset($_SESSION['nombre'])){
+            //Crear objeto de la clase personal
+            $obj_persona = new cls_personal_externo ();
+            //Establece los atributos de la clase: tales como identificacion, nombre, empresa, etc
+            $obj_persona->setIdentificacion($_POST['identificacion']);
+            $obj_persona->setEmpresa($_POST['empresa']);
+            $obj_persona->setNombre($_POST['nombre']);
+            $obj_persona->setApellido($_POST['apellido']);
+            $obj_persona->setFecha_nacimiento($_POST['fecha_nacimiento']);
+            $obj_persona->setFecha_ingreso($_POST['fecha_ingreso']);
+            $obj_persona->setFecha_salida($_POST['fecha_salida']);
+            $obj_persona->setNacionalidad($_POST['nacionalidad']);
+            $obj_persona->setFecha_residencia($_POST['fecha_residencia']);
+            $obj_persona->setFecha_portacion($_POST['fecha_portacion']);
+            $obj_persona->setDistrito($_POST['Distrito']);
+            $obj_persona->setDireccion($_POST['Direccion']);
+            $obj_persona->setEstado_civil($_POST['estado_civil']);
+            $obj_persona->setCorreo($_POST['correo']);
+            $obj_persona->setNivel_academico($_POST['nivel_academico']);
+            $obj_persona->setObservaciones($_POST['observaciones']);
+            $obj_persona->setEstado_persona($_POST['estado_persona']);
+            $obj_persona->setGenero($_POST['genero']);
+            $obj_persona->setValidado($_POST['validado']);
+            $obj_persona->setOcupacion($_POST['ocupacion']);
+            //Valida si es una persona nueva o editar una exsitente
+            if($_POST['id_persona']==0){
+                $obj_persona->setCondicion("");
+            }   else {
+                //Establece la condicion de busqueda SQL
+                $obj_persona->setCondicion("ID_Persona_Externa='".$_POST['id_persona']."'");
+            }
+            
+            //Ejecuta el cambio en base de datos
+            $obj_persona->guardar_informacion_persona_externa();
+            
+            if($_POST['id_persona']==0){
+                $ultimo=$obj_persona->getArreglo();
+                $nueva_persona=$ultimo[0]['ID_Persona_Externa'];
+            } else {
+                $nueva_persona=$_POST['id_persona'];
+            }
+            echo $nueva_persona;
+        }else{
+              /*
+             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+             * En la última línea llama a la pagina de inicio de sesión.
+             */
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            //Llama a la vista de usuario correspondiente
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }
+    }
+    
+    public function guardar_imagen_persona_externa(){
+        if(isset($_SESSION['nombre'])){
+            //Verifica que el nombre de la imagen exista en los parametros enviados
+            if (!(isset($_POST['Nombre']))){
+                //Muestra advertencia en pantalla
+                echo "<script type=\"text/javascript\">alert('Es necesario ingresar un nombre de referencia para la imágen!');history.go(-1);</script>";;
+                //Sale del metodo
+                exit();
+            }
+            //Verifica que la descripcion de la imagen exista en los parametros enviados
+            if (!(isset($_POST['Descripcion']))){
+                //Muestra advertencia en pantalla
+                echo "<script type=\"text/javascript\">alert('Es necesario ingresar una descripción básica para la imágen!');history.go(-1);</script>";;
+                //Sale del metodo
+                exit();
+            } 
+            //Verifica que la categoria de la imagen exista en los parametros enviados
+            if (!(isset($_POST['Categoria']))){
+                //Muestra advertencia en pantalla
+                echo "<script type=\"text/javascript\">alert('Es necesario elegir una categoría para la imágen!');history.go(-1);</script>";;
+                //Sale del metodo
+                exit();
+            }
+            //Verifica que el id del punto bcr exista en los parametros enviados
+            if (!(isset($_POST['ID_Persona']))){
+                //Sale del metodo
+                exit();
+            }
+              
+            //Elimina caracteres especiales del nombre de la imagen enviado desde el formulario html
+            $nombre_imagen= str_replace('"','',str_replace("'","",$_POST['Nombre']));
+            //Obtiene la categoria de la imagen
+            $categoria=$_POST['Categoria'];
+            //Reemplaza caracteres especiales en la descripcion
+            $descripcion=$_POST['Descripcion'];
+            //Obtiene el id del punto bcr
+            $id_persona=$_POST['ID_Persona'];
+              
+              
+            //Validación de informacion en descripcion de la imagen, elimina algunos caracteres especiales
+              
+            $descripcion= str_replace("'","",$descripcion);
+            $descripcion= str_replace('"','',$descripcion);
+            //echo $descripcion;
+            //Obtiene el mensaje de verificacion del envio del archivo
+            $recepcion_archivo=$_FILES['archivo_adjunto']['error'];
+              
+            //Crea una nueva instancia de la clase padron
+            $obj_padron_fotografico = new cls_padron_fotografico_puntosbcr();
+            //Asigna el atributo id
+            $obj_padron_fotografico->setId_puntobcr($id_persona);
+            //Asigna el atributo nombre de la imagen
+            $obj_padron_fotografico->setNombre_imagen($nombre_imagen);
+            //Asigna el atributo descripcion
+            $obj_padron_fotografico->setDescripcion($descripcion);
+            //Asigna el atributo categoria
+            $obj_padron_fotografico->setCategoria($categoria);
+            
+            //Obtiene el mensaje de verificacion del envio del archivo
+            $recepcion_archivo=$_FILES['archivo_adjunto']['error'];
+        
+            //Obtiene la fecha actual
+            $date=new DateTime(); //this returns the current date time
+            //Obtiene la fecha actual
+            $result = $date->format('Y-m-d-H-i-s');
+            //Formatea la fecha actual sin -
+            $krr = explode('-',$result);
+            //Obtiene en una variable la fecha actua ya formateada
+            $result = implode("",$krr);
+            //Obtiene el directorio raiz donde está localizado ORIEL           
+            $raiz=$_SERVER['DOCUMENT_ROOT'];
+            //Formatea la raiz de la ruta donde se localiza ORIEL
+            if (substr($raiz,-1)!="/"){
+                $raiz.="/";
+            }
+            //Establece la ruta donde almacenará el archivo
+            $ruta=  str_replace('"','',str_replace("'","",$raiz."Padron_Fotografico_Personal_externo/".Encrypter::quitar_tildes($id_persona."-".$result."-".$_FILES['archivo_adjunto']['name'])));
+            //Formatea el nombre del archivo a almacenar
+            $nombre_ruta=str_replace('"','',str_replace("'","",Encrypter::quitar_tildes($id_persona."-".$result."-".$_FILES['archivo_adjunto']['name'])));
+            
+            //Validación de como llegó el archivo adjunto desde el formulario html
+            switch ($recepcion_archivo) {
+                //En caso de que sea cero, procede a almacenar la imagen
+                case 0:{
+                    //Verifica que el formato y extensión del archivo sean de imagen
+                    if ((basename($_FILES['archivo_adjunto']['type'])==="jpeg")||(basename($_FILES['archivo_adjunto']['type'])==="gif")||(basename($_FILES['archivo_adjunto']['type'])==="png")||(basename($_FILES['archivo_adjunto']['type'])==="bmp")||(basename($_FILES['archivo_adjunto']['type'])==="tiff")||(basename($_FILES['archivo_adjunto']['type'])==="jpg")){
+                    //Verifica que el archivo se pueda trasladar a la ubicación correspondiente.
+                        if (move_uploaded_file($_FILES['archivo_adjunto']['tmp_name'], $ruta)){
+                            //Establece el nombre de la imagen a guardar
+                            $obj_padron_fotografico->setNombre_ruta(Encrypter::quitar_tildes($nombre_ruta));
+                            //Establece el formato de la imagen
+                            $obj_padron_fotografico->setFormato(basename($_FILES['archivo_adjunto']['type']));
+                            //Define la condición a vacio, para que agregue un nuevo registro
+                            $obj_padron_fotografico->setCondicion("");
+                            //Inserta en bd
+                            $obj_padron_fotografico->guardar_imagen_personal_externo();
+                            //Llama al formulario correspondiente
+                            header ("location:/ORIEL/index.php?ctl=personal_externo_gestion&id=".$obj_padron_fotografico->getId_puntobcr());
+                            //echo ("Ingresada correctamente");
+                        }else{
+                            //Muestra en pantalla que se presentó un error al subir el archivo
+                            echo "<script type=\"text/javascript\">alert('Hubo un problema al subir el archivo al servidor!!!');history.go(-1);</script>";;
+                        }
+                    }else{
+                        //Muestra en pantalla que el formato del archivo no es correcto
+                        echo "<script type=\"text/javascript\">alert('El archivo no corresponde a un formato valido de imagenes !!!!');history.go(-1);</script>";;
+                    }
+                    break;
+                }
+                //Envia un mensaje al usuario porque el archivo es mas grande de lo previsto    
+                case 2:{
+                    echo "<script type=\"text/javascript\">alert('El archivo consume mayor espacio del permitido (2 mb) !!!!');history.go(-1);</script>";;
+                    break;
+                }
+                case 4:{ 
+                    //Envia un mensaje al usuario indicando que es necesario seleccionar un archivo para adjuntar
+                    echo "<script type=\"text/javascript\">alert('No fue seleccionado ningun archivo!!!!');history.go(-1);</script>";;
+                                       
+                    break;
+                }
+                 case 6:{
+                     //Envia al usuario un mensaje indicando que hay problemas para acceder a la carpeta temporal
+                    echo "<script type=\"text/javascript\">alert('El servidor no tiene acceso a la carpeta temporal de almacenamiento!!!!');history.go(-1);</script>";
+                    break;
+                 } 
+                case 7:{
+                    //Envia un mensaje al usuario indicando que hay problemas para escribir en el disco duro del server
+                    echo "<script type=\"text/javascript\">alert('No es posible escribir en el disco duro del servidor!!!!');history.go(-1);</script>";;
+                    break;
+                }  
+                case 8:{
+                    //Envia  mensaje al usuario debido a un error de PHP
+                    echo "<script type=\"text/javascript\">alert('Fue detenida la carga del archivo debido a una extension de PHP!!!!');history.go(-1);</script>";;
+                    break;
+                }   
+            }
+            
+        }else {
+              /*
+             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+             * En la última línea llama a la pagina de inicio de sesión.
+             */
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            //Llamada al formulario de la vista para el usuario
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+         }  
+    }
+    
+    public function eliminar_imagen_personal_externo(){
+        //Validación para verificar si el usuario está logeado en el sistema  
+        if(isset($_SESSION['nombre'])){
+            //Creacion de una instancia de la clase padron fotografico
+            $obj_padron_fotografico= new cls_padron_fotografico_puntosbcr();
+            //Verifica que el envión de información haya sido realizado mediante el metodo post )formulario HTML)
+            if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+                //Busca el registro correspondiente mediante el id llave de la tabla
+                $obj_padron_fotografico->setCondicion("ID_Padron_Personal=".$_POST['id_imagen']);
+                //Ejecuta el metodo que obtiene las imagenes correspondientes
+                $obj_padron_fotografico->obtener_imagenes_personal_externo();
+                //Obtiene el arreglo correspondiente
+                $params=$obj_padron_fotografico->getArreglo();
+                //Elimina la imagen de la base de datos
+                $obj_padron_fotografico->eliminar_imagen_personal_externo();
+                
+                //Obtiene la ruta del directorio raiz de oriel mediante la variable reservada correspondiente
+                $raiz=$_SERVER['DOCUMENT_ROOT'];
+    
+                //Formatea la ruta para verificar si tiene la cantidad adecuada de /
+                if (substr($raiz,-1)!="/"){
+                    $raiz.="/";
+                }
+
+                //$ruta=  $raiz."Padron_Fotografico_Puntos_BCR/20161110111422Entrada Principal.jpg";
+               //$ruta=  $raiz."Padron_Fotografico_Puntos_BCR/".$_POST['ruta_imagen'];
+                //Establece la ruta completa de la imagen, incluyendo el nombre y la extensión de la misma
+                $ruta=  $raiz."Padron_Fotografico_Personal_externo/".$params[0]['Nombre_Ruta'];
+                
+               //Borra el archivo fisico del disco duro
+                unlink($ruta);     
+            }
+        }else {
+              /*
+             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+             * En la última línea llama a la pagina de inicio de sesión.
+             */
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            //Llamada al formulario correspondiente de la vista
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }
+    }
+            
+    
+    ////////////////////////////////////////////////////////////////////////////
+    /////////////////////////Funciones de Tipo Telefono/////////////////////////
+    /////////////////////////////////////////////////////////////////////////////
+>>>>>>> origin/master
     public function tipo_telefono_listar() {
        if(isset($_SESSION['nombre'])){
            $obj_tipo_telefono = new cls_tipo_telefono();
@@ -6926,7 +7491,9 @@
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }  
-    }  public function tipo_telefono_guardar() {
+    } 
+    
+    public function tipo_telefono_guardar() {
           if(isset($_SESSION['nombre'])){
                $obj_tipo_telefono = new cls_tipo_telefono();
                $obj_tipo_telefono->setTipo_Telefono($_POST['nombre']); 
@@ -6952,7 +7519,8 @@
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }  
     }
-     public function tipo_telefono_cambiar_estado() {
+    
+    public function tipo_telefono_cambiar_estado() {
        if(isset($_SESSION['nombre'])){
            $obj_tipo_telefono = new cls_tipo_telefono();
            
@@ -6977,9 +7545,15 @@
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }  
     }
+    
     ////////////////////////////////////////////////////////////////////////////
+<<<<<<< HEAD
     ///////////////////////Funciones de Tipo Punto/////////////////////          
     ////////////////////////////////////////////////////////////////////////////
+=======
+    ///////////////////////Funciones de Tipo Punto//////////////////////////////          
+    ////////////////////////////////////////////////////////////////////////////   
+>>>>>>> origin/master
     public function tipo_punto_listar() {
        if(isset($_SESSION['nombre'])){
            $obj_tipo_punto = new cls_tipo_punto();
@@ -6993,7 +7567,9 @@
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }  
-    }  public function tipo_punto_guardar() {
+    }  
+
+    public function tipo_punto_guardar() {
           if(isset($_SESSION['nombre'])){
                $obj_tipo_punto = new cls_tipo_punto();
                $obj_tipo_punto->setTipo_Punto($_POST['nombre']); 
@@ -7019,7 +7595,34 @@
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }  
     }
+    
+    public function notas_coordinacion_bitacora_guardar() {
+          if(isset($_SESSION['nombre'])){
+               $obj_eventos = new cls_eventos();
+               
+               $obj_eventos->setObservaciones_supervision($_POST['observaciones']);
+               $obj_eventos->setId($_POST['ID_Evento']);
+               
+                if (strcmp ($_POST['observaciones'],"Sin Anotaciones")==0){
+                    $obj_eventos->setFecha_notas_supervision("1983-04-09");
+                }else
+                {
+                    $obj_eventos->setFecha_notas_supervision(date("Y-m-d"));
+                }
+               
+                $obj_eventos->edita_notas_supervision_evento();
+                
+                header ("location:/ORIEL/index.php?ctl=frm_eventos_listar");
+        }
+        else {
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }  
+    }
+    
      public function tipo_punto_cambiar_estado() {
+
        if(isset($_SESSION['nombre'])){
            $obj_tipo_punto = new cls_tipo_punto();
            
@@ -7044,11 +7647,11 @@
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }  
     }
+    
     ////////////////////////////////////////////////////////////////////////////
     ////////////////////////////Gerentes de Zona////////////////////////////////          
     ////////////////////////////////////////////////////////////////////////////
-    
-      public function gerente_zona_listar() {
+    public function gerente_zona_listar() {
        if(isset($_SESSION['nombre'])){
            $obj_gerentezona = new cls_gerente_zona();
            $obj_gerentezona->setCondicion("");
@@ -7066,6 +7669,7 @@
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }  
     } 
+    
     public function gerente_zona_guardar(){
         if(isset($_SESSION['nombre'])){   
             
@@ -7085,6 +7689,7 @@
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }  
     }
+    
     public function gerente_zona_editar(){
                 if(isset($_SESSION['nombre'])){
                $obj_gerentezona = new cls_gerente_zona();
@@ -7110,6 +7715,7 @@
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }  
     }
+    
     public function gerente_zona_cambiar_estado() {
        if(isset($_SESSION['nombre'])){
            $obj_gerentezona = new cls_gerente_zona();
@@ -7135,10 +7741,10 @@
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }  
     }
+    
     ////////////////////////////////////////////////////////////////////////////
     ////////////////////////////Supervisor de Zona//////////////////////////////      
     ////////////////////////////////////////////////////////////////////////////
-    
     public function supervisor_zona_listar() {
        if(isset($_SESSION['nombre'])){
            $obj_supervisorzona = new cls_supervisor_zona();
@@ -7157,6 +7763,7 @@
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }  
     } 
+    
     public function supervisor_zona_guardar(){
         if(isset($_SESSION['nombre'])){   
             
@@ -7176,6 +7783,7 @@
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }  
     }
+    
     public function supervisor_zona_editar(){
                 if(isset($_SESSION['nombre'])){
                $obj_supervisorzona = new cls_supervisor_zona();
@@ -7201,7 +7809,8 @@
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }  
     }
-  public function supervisor_zona_cambiar_estado() {
+    
+    public function supervisor_zona_cambiar_estado() {
        if(isset($_SESSION['nombre'])){
            $obj_supervisorzona = new cls_supervisor_zona();
            

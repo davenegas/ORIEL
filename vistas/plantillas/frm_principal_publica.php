@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <title>Principal ORIEL</title>
-  <!--<meta http-equiv="refresh" content="10">-->
+  <!--<meta http-equiv="refresh" content="2">-->
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <?php require_once 'frm_librerias_head.html';?>
