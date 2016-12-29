@@ -49,15 +49,11 @@
         //Llamada al formulario correspondiente de la vista
         require __DIR__ . '/../vistas/plantillas/frm_contacto_publico.php';
     }
-<<<<<<< HEAD
-    /////////////////////////////////////////////////////////////////////
-    /*Metodos relacionados del area de Modulos de Seguridad del Sistema*/
-    /////////////////////////////////////////////////////////////////////
-=======
+
     //////////////////////////
     //Metodos relacionados del area de Modulos de Seguridad del Sistema//
     //////////////////////////
->>>>>>> origin/master
+
      
     // Metodo que llama al formulario correspondiente para validación de credenciales por parte del usuario
     public function iniciar_sesion(){
@@ -4735,23 +4731,19 @@
               $descripcion= str_replace("'","",$descripcion);
               $descripcion= str_replace('"','',$descripcion);
 
-<<<<<<< HEAD
-              $recepcion_archivo=$_FILES['archivo_adjunto']['error'];
-=======
+
             //Obtiene el mensaje de verificacion del envio del archivo
             $recepcion_archivo=$_FILES['archivo_adjunto']['error'];
->>>>>>> origin/master
+
               
             $obj_padron_fotografico = new cls_padron_fotografico_puntosbcr();
             $obj_padron_fotografico->setId_puntobcr($id_punto_bcr);
             $obj_padron_fotografico->setNombre_imagen($nombre_imagen);
-<<<<<<< HEAD
-            $obj_padron_fotografico->setDescripcion($descripcion);
-=======
+
             //Asigna el atributo descripcion
             $obj_padron_fotografico->setDescripcion($descripcion);
             //Asigna el atributo categoria
->>>>>>> origin/master
+
             $obj_padron_fotografico->setCategoria($categoria);
                        
             $recepcion_archivo=$_FILES['archivo_adjunto']['error'];
@@ -4828,17 +4820,11 @@
          
     }
     
-    
-<<<<<<< HEAD
+  
     /////////////////////////////////////////////////////////////////////////////
     /*Metodos relacionados del area de Tipos de Evento de Seguridad del Sistema*/
     /////////////////////////////////////////////////////////////////////////////
-=======
-    //////////////////////////
-    //Metodos relacionados del area de Tipos de Evento de Seguridad del Sistema
-    //////////////////////////
->>>>>>> origin/master
-    
+
     public function tipo_eventos_listar(){      
         if(isset($_SESSION['nombre'])){
             $obj_eventos=new cls_eventos();
@@ -6154,13 +6140,11 @@
             $obj_area_apoyo = new cls_areasapoyo();
             $obj_area_apoyo->setId($area_apoyo[0]['ID_Area_Apoyo']);
             $obj_area_apoyo->setId2($_POST['ID_PuntoBCR']);
-<<<<<<< HEAD
-            $obj_area_apoyo->setCondicion("T_PuntoBCRAreaApoyo.ID_PuntoBCR='".$_POST['id_puntobcr']."' AND T_PuntoBCRAreaApoyo.ID_Area_Apoyo='".$_POST['id_area_apoyo']."'");
-=======
+
             //Establece la condicion para buscar si el area de apoyo ya está asignada al punto bcr
             $obj_area_apoyo->setCondicion("T_PuntoBCRAreaApoyo.ID_PuntoBCR='".$_POST['ID_PuntoBCR']."' AND T_PuntoBCRAreaApoyo.ID_Area_Apoyo='".$area_apoyo[0]['ID_Area_Apoyo']."'");
             //Ejecuta la consulta sobre la bd
->>>>>>> origin/master
+
             $obj_area_apoyo->obtiene_todos_las_areas_apoyo();
             $areas_apoyo =$obj_area_apoyo->getArreglo();
             if($areas_apoyo==""){
@@ -6338,10 +6322,9 @@
     ////////////////////////////////////////////////////////////////////////////
     /////////////Funciones para Direeciones IP's////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////
-<<<<<<< HEAD
-=======
+
     //Metodo que permite listar las direcciones ip registradas en la base de datos
->>>>>>> origin/master
+
     public function direcciones_ip_listar(){
        if(isset($_SESSION['nombre'])){
             $obj_direcciones=new cls_direccionIP();
@@ -6946,8 +6929,7 @@
 ////////////////////////////////////////////////////////////////////////////
     ///////////////////////Funciones de Tipo Telefono/////////////////////          
     ////////////////////////////////////////////////////////////////////////////
-<<<<<<< HEAD
-=======
+
     ////////////////////MANTENIMIENTO DE PERSONAL EXTERNO///////////////////////
     ////////////////////////////////////////////////////////////////////////////
     public function personal_externo_listar(){
@@ -7477,7 +7459,7 @@
     ////////////////////////////////////////////////////////////////////////////
     /////////////////////////Funciones de Tipo Telefono/////////////////////////
     /////////////////////////////////////////////////////////////////////////////
->>>>>>> origin/master
+
     public function tipo_telefono_listar() {
        if(isset($_SESSION['nombre'])){
            $obj_tipo_telefono = new cls_tipo_telefono();
@@ -7547,13 +7529,10 @@
     }
     
     ////////////////////////////////////////////////////////////////////////////
-<<<<<<< HEAD
+
     ///////////////////////Funciones de Tipo Punto/////////////////////          
     ////////////////////////////////////////////////////////////////////////////
-=======
-    ///////////////////////Funciones de Tipo Punto//////////////////////////////          
-    ////////////////////////////////////////////////////////////////////////////   
->>>>>>> origin/master
+
     public function tipo_punto_listar() {
        if(isset($_SESSION['nombre'])){
            $obj_tipo_punto = new cls_tipo_punto();

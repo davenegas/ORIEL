@@ -266,8 +266,6 @@ $map = array(
     'personal_cambiar_puesto'=>array('controller'=>'Controller','action'=> 'personal_cambiar_puesto'),
     'persona_guardar_informacion_general'=>array('controller'=>'Controller','action'=> 'persona_guardar_informacion_general'),
     
-<<<<<<< HEAD
-=======
     //Controlador de Personal Externo
     'personal_externo_listar'=>array('controller'=>'Controller','action'=> 'personal_externo_listar'), 
     'personal_externo_gestion'=>array('controller'=>'Controller','action'=> 'personal_externo_gestion'), 
@@ -277,7 +275,6 @@ $map = array(
     'guardar_imagen_persona_externa'=>array('controller'=>'Controller','action'=> 'guardar_imagen_persona_externa'), 
     'eliminar_imagen_personal_externo'=>array('controller'=>'Controller','action'=> 'eliminar_imagen_personal_externo'), 
     
->>>>>>> origin/master
     //Importación de Prontuario
     'frm_importar_prontuario_paso_1'=>array('controller'=>'Controller','action'=> 'frm_importar_prontuario_paso_1'),
     'frm_importar_prontuario_paso_2'=>array('controller'=>'Controller','action'=> 'frm_importar_prontuario_paso_2'),
