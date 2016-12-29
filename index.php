@@ -31,7 +31,6 @@ require_once __DIR__ . '/controladores/cls_puntosBCR.php';
 require_once __DIR__ . '/controladores/cls_empresa.php';
 //Libreria de clases --> Control de personal(interno y externo)
 require_once __DIR__ . '/controladores/cls_personal.php';
-require_once __DIR__ . '/controladores/cls_personal_externo.php';
 //Libreria de clases --> Control de horarios
 require_once __DIR__ . '/controladores/cls_horario.php';
 //Libreria de clases --> Control de direcciones IP
@@ -60,20 +59,10 @@ require_once __DIR__ . '/controladores/cls_proveedor_enlace.php';
 require_once __DIR__ . '/controladores/cls_tipo_enlace.php';
 //Libreria de clases --> Control de medios de enlace
 require_once __DIR__ . '/controladores/cls_medio_enlace.php';
-//Libreria de clases --> Control de enlace de Telecom
-require_once __DIR__ . '/controladores/cls_enlace_telecom.php';
 //Libreria de clases --> Control de padrones fotográficos para puntos BCR
 require_once __DIR__ . '/controladores/cls_padron_fotografico_puntosbcr.php';
 //Libreria de clases --> Control de enlaces del departamento de telecomunicaciones
-require_once __DIR__ . '/controladores/cls_estado_civil.php';
-//
-require_once __DIR__ . '/controladores/cls_estado_persona.php';
-//
-require_once __DIR__ . '/controladores/cls_nacionalidad.php';
-//
-require_once __DIR__ . '/controladores/cls_nivel_academico.php';
-//
-require_once __DIR__ . '/controladores/cls_personal_externo.php';
+require_once __DIR__ . '/controladores/cls_enlace_telecom.php';
 /*
  * El elemento controller, constituye la base y esencia de toda la lógica del negocio, en este
  * se almacenan cada una de las funcionales de ORIEl. El archivo en sí, se compone de "n" cantidad
@@ -260,13 +249,13 @@ $map = array(
     'eliminar_imagen_padron_puntobcr'=>array('controller'=>'Controller','action'=> 'eliminar_imagen_padron_puntobcr'), 
     'puntobcr_eliminar_horario'=>array('controller'=>'Controller','action'=> 'puntobcr_eliminar_horario'), 
    
-    //Controlador de Empresas
+    //Empresas
     'empresas_listar'=>array('controller'=>'Controller','action'=> 'empresas_listar'),
     'empresa_gestion'=>array('controller'=>'Controller','action'=> 'empresa_gestion'),
     'empresa_guardar'=>array('controller'=>'Controller','action'=> 'empresa_guardar'),
     'empresa_cambiar_estado'=>array('controller'=>'Controller','action'=> 'empresa_cambiar_estado'),
     
-    //Controlador de Personal
+    //Personal
     'personal_listar'=>array('controller'=>'Controller','action'=> 'personal_listar'), 
     'personal_cambiar_estado'=>array('controller'=>'Controller','action'=> 'personal_cambiar_estado'),
     'personal_gestion'=>array('controller'=>'Controller','action'=> 'personal_gestion'),
@@ -275,10 +264,6 @@ $map = array(
     'personal_cambiar_ue'=>array('controller'=>'Controller','action'=> 'personal_cambiar_ue'),
     'personal_cambiar_puesto'=>array('controller'=>'Controller','action'=> 'personal_cambiar_puesto'),
     'persona_guardar_informacion_general'=>array('controller'=>'Controller','action'=> 'persona_guardar_informacion_general'),
-    
-    //Controlador de Personal Externo
-    'personal_externo_listar'=>array('controller'=>'Controller','action'=> 'personal_externo_listar'), 
-    'personal_externo_gestion'=>array('controller'=>'Controller','action'=> 'personal_externo_gestion'), 
     
     //Importación de Prontuario
     'frm_importar_prontuario_paso_1'=>array('controller'=>'Controller','action'=> 'frm_importar_prontuario_paso_1'),
