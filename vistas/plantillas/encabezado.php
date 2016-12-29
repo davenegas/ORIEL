@@ -1,4 +1,4 @@
-   <?php       
+<?php       
     function nota_obtener() {
         $obj_general = new cls_general();
         $obj_general->obtener_notas();

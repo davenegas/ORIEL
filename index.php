@@ -209,7 +209,9 @@ $map = array(
     'actualiza_en_vivo_reporte_cerrados'=>  array('controller'=>'Controller','action'=>  'actualiza_en_vivo_reporte_cerrados'),
     'eventos_listar_filtrado'=>  array('controller'=>'Controller','action'=>  'eventos_listar_filtrado'),
     'notas_coordinacion_bitacora_guardar'=>  array('controller'=>'Controller','action'=>  'notas_coordinacion_bitacora_guardar'),
-    
+    'mezcla_eventos_bitacora_digital'=>  array('controller'=>'Controller','action'=>  'mezcla_eventos_bitacora_digital'),
+    'eliminar_mezcla_eventos_bitacora'=>  array('controller'=>'Controller','action'=>  'eliminar_mezcla_eventos_bitacora'),
+        
     //Tipo de eventos
     'tipo_eventos_listar'=>array('controller'=>'Controller','action'=> 'tipo_eventos_listar'),
     'tipo_eventos_guardar'=>array('controller'=>'Controller','action'=> 'tipo_eventos_guardar'),

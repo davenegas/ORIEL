@@ -2769,6 +2769,10 @@ class Controller{
         if(isset($_SESSION['nombre'])){
             //Creacion de objeto de clase eventos
             $obj_eventos = new cls_eventos();
+            
+            //Vector que almacena un si o uno dependiendo si el evento en cuestion pertenece a alguna mezcla
+            $eventos_con_mezcla=array();
+            
             //Establece el criterio de filtrado correspondiente para buscar los eventos.
             $obj_eventos->setCondicion("T_Evento.ID_EstadoEvento<>3 AND T_Evento.ID_EstadoEvento<>5");
             //Ejecuta la sentencia SQL
@@ -2784,6 +2788,14 @@ class Controller{
         if (count($params)>0){
             //Empieza a recorrer registro por registro
             for ($i = 0; $i <$tam; $i++) {
+                
+                $obj_eventos->setId($params[$i]['ID_Evento']);
+                if ($obj_eventos->existe_este_evento_en_otra_mezcla()){
+                    array_push($eventos_con_mezcla, "SI");
+                }else{
+                    array_push($eventos_con_mezcla, "NO");
+                }
+                
                 //Criterio de busqueda que permite traer todos los seguimientos del evento en cuestion
                 $obj_eventos->setCondicion("T_DetalleEvento.ID_Evento=".$params[$i]['ID_Evento']." order by T_DetalleEvento.Fecha desc,T_DetalleEvento.Hora desc");
                 //Obtiene los seguimientos del evento seleccionado, si los hubiere
@@ -2828,6 +2840,7 @@ class Controller{
                 }
             }
         } 
+        //print_r($eventos_con_mezcla);
        //Llamada al formulario correspondiente de la vista
         require __DIR__.'/../vistas/plantillas/frm_eventos_listar.php';
         }
@@ -3206,6 +3219,80 @@ class Controller{
         }  
     }
        
+    /*
+     * Metodo que permite notificar al usuario en pantalla cuando va a ingresar un tipo de evento en un punto bcr que ya se encuentra abierto
+     */
+    public function mezcla_eventos_bitacora_digital(){
+                
+        //Verifica que los parametros del metodo post estén definidos y hayan sido enviados al metodo
+        if(isset($_POST['id_numeros_de_evento'])){
+            
+            //Validación para verificar si el usuario está logeado en el sistema
+            if(isset($_SESSION['nombre'])){
+                // Creacion de una instancia de la clase eventos
+                $obj_eventos= new cls_eventos();
+                
+                $vector_eventos=explode('-',trim($_POST['id_numeros_de_evento']));
+                
+                if (sort($vector_eventos,SORT_NUMERIC)){
+                    
+                    $cadena_eventos=  implode("-", $vector_eventos);                    
+                    //Define el atributo de la clase referencia de mezcla
+                    $obj_eventos->setReferencia_mezcla($cadena_eventos);
+                    
+                    //Verifica que no exista esta mezcla en el sistema
+                    if ($obj_eventos->existe_esta_mezcla_de_eventos_en_el_sistema()){
+                        //Mensaje de notificacion en pantalla
+                        echo "NO";
+                        exit;
+                    }else
+                    {
+                        $bandera=0;
+                        for ($i = 0; $i < count($vector_eventos); $i++) {
+                            $obj_eventos->setId($vector_eventos[$i]);
+                            if ($obj_eventos->existe_este_evento_en_otra_mezcla()){
+                                $bandera=1;
+                            }
+                        }
+                        if ($bandera==0){
+                            $obj_eventos->setFecha(date("Y-m-d")); 
+                            $obj_eventos->setHora(date("H:i", time()));
+                            $obj_eventos->setId_usuario($_SESSION['id']);
+                            for ($i = 0; $i < count($vector_eventos); $i++) {
+                                $obj_eventos->setId($vector_eventos[$i]);
+                                $obj_eventos->guardar_registro_en_mezcla_de_eventos();
+                            }
+                            echo "";
+                            exit;
+                        }else{
+                            echo "NO";
+                            exit;
+                        }
+                            
+                    }
+                }else{
+                      echo "NO";
+                      exit;
+                }
+                
+            }else {
+                  /*
+             * Esta es la validación contraria a que la sesión de usuario esté definida  y abierta.
+             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+             * En la última línea llama a la pagina de inicio de sesión.
+             */
+               $tipo_de_alerta="alert alert-warning";
+               $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+               //Validación para verificar si el usuario está logeado en el sistema
+               require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+           }
+           //En caso de que no estén definidos los parámetros, procede a sacarlo del metodo de ejecución.
+        }   else   {
+            exit;
+        }
+    }
+    
     /*
      * Metodo que permite notificar al usuario en pantalla cuando va a ingresar un tipo de evento en un punto bcr que ya se encuentra abierto
      */
@@ -3765,7 +3852,7 @@ class Controller{
         }
     }
     
-    /*
+     /*
      * Metodo que permite recuperar un evento en estado cerrado o abierto por error.
      */
     
@@ -3809,6 +3896,41 @@ class Controller{
                     exit;
                      
                 }
+            }
+        }else {
+              /*
+             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+             * En la última línea llama a la pagina de inicio de sesión.
+             */
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            //Validación para verificar si el usuario está logeado en el sistema
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }
+    }
+    
+    /*
+     * Metodo que permite recuperar un evento en estado cerrado o abierto por error.
+     */
+    
+    public function eliminar_mezcla_eventos_bitacora(){
+        //Validación para verificar si el usuario está logeado en el sistema
+        if(isset($_SESSION['nombre'])){
+            //Crea una instancia de la clase eventos
+            $obj_eventos= new cls_eventos();
+            //Verifica que el envio de datos se haya realizado mediante el metodo post de html
+            if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+                
+                //Establece los atributos del objeto evento, con la información del formulario HTML
+               
+                $obj_eventos->setCondicion("Referencia_Mezcla='".$_POST['referencia']."'");
+                $obj_eventos->eliminar_mezcla_del_sistema();
+
+                //Devuelve un cero en la variable de impresión para javascript, para validar lo que se hizo en el metodo
+                echo "0";
+                    
             }
         }else {
               /*
@@ -3923,11 +4045,19 @@ class Controller{
                 $obj_eventos = new cls_eventos();
                 //Establece la condición para buscar la información del evento en la tabla de bd
                 $obj_eventos->setCondicion("ID_Evento=$ide");
+                
+                $obj_eventos->obtener_informacion_general_de_la_mezcla();
+                $vector_informacion_general_mezcla=$obj_eventos->getArreglo();
+           
                 //Obtiene el evento que se muesta en la ventana
                 $obj_eventos->obtiene_todos_los_eventos();
                 //Obtiene el arreglo de resultados
                 $params= $obj_eventos->getArreglo();
-                
+                                
+                $obj_eventos->setCondicion("Referencia_Mezcla='".$vector_informacion_general_mezcla[0]['Referencia_Mezcla']."'");
+                $obj_eventos->obtener_listado_de_eventos_de_una_mezcla();
+                $vector_listado_eventos_mezclados=$obj_eventos->getArreglo();
+       
                 //Verifica que haya traido la información correspondiente
                 if (count($params)>0){
                     // Toma el estado del evento
@@ -3938,8 +4068,24 @@ class Controller{
                      $prioridad_evento=$obj_eventos->obtiene_prioridad_de_tipo_de_evento();
                      
                 }
+                
+                $condicion_seguimientos="";
+                if ($vector_informacion_general_mezcla!=null){
+                    $tam=count($vector_listado_eventos_mezclados);
+                    
+                     for ($i = 0; $i <$tam; $i++) {
+                         if (strlen($condicion_seguimientos)!=0){
+                             $condicion_seguimientos=$condicion_seguimientos." or ";
+                         }
+                         $condicion_seguimientos=$condicion_seguimientos."T_DetalleEvento.ID_Evento=".$vector_listado_eventos_mezclados[$i]['ID_Evento'];
+                     }
+                    
+                }else{
+                        $condicion_seguimientos="T_DetalleEvento.ID_Evento=".$ide;
+                     }
+                
                //Obtiene los seguimientos del evento
-                $obj_eventos->setCondicion("ID_Evento=$ide"." "."order by T_DetalleEvento.Fecha desc,T_DetalleEvento.Hora desc");
+                $obj_eventos->setCondicion($condicion_seguimientos." order by T_DetalleEvento.Fecha desc,T_DetalleEvento.Hora desc");
                 //Obtiene los detalles del evento seleccionado
                 $obj_eventos->obtiene_detalle_evento();
                 //Asigna el resultado a un vector
@@ -3949,6 +4095,29 @@ class Controller{
                 //Obtiene el estado del evento
                 $estadoEventos = $obj_eventos->getArreglo();
                 //Llamada al formulario correspondiente de la vista
+                
+                $condicion_eventos="";
+                if ($vector_informacion_general_mezcla!=null){
+                    $tam=count($vector_listado_eventos_mezclados);
+                    
+                     for ($i = 0; $i <$tam; $i++) {
+                         if (strlen($condicion_eventos)!=0){
+                             $condicion_eventos=$condicion_eventos." or ";
+                         }
+                         $condicion_eventos=$condicion_eventos."ID_Evento=".$vector_listado_eventos_mezclados[$i]['ID_Evento'];
+                     }
+                    
+                }else{
+                    $condicion_eventos="ID_Evento=".$ide;
+                }
+               
+                //Obtiene los seguimientos del evento
+                $obj_eventos->setCondicion($condicion_eventos." order by T_Evento.Fecha desc,T_Evento.Hora desc");
+                //Obtiene el evento que se muesta en la ventana
+                $obj_eventos->obtiene_todos_los_eventos();
+                //Obtiene el arreglo de resultados
+                $params2= $obj_eventos->getArreglo();
+                
                 require __DIR__ . '/../vistas/plantillas/frm_eventos_editar.php';
                 //Controlador de errores.
             } catch (Exception $exc) {
