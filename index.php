@@ -31,6 +31,8 @@ require_once __DIR__ . '/controladores/cls_puntosBCR.php';
 require_once __DIR__ . '/controladores/cls_empresa.php';
 //Libreria de clases --> Control de personal(interno y externo)
 require_once __DIR__ . '/controladores/cls_personal.php';
+
+require_once __DIR__ . '/controladores/cls_personal_externo.php';
 //Libreria de clases --> Control de horarios
 require_once __DIR__ . '/controladores/cls_horario.php';
 //Libreria de clases --> Control de direcciones IP
@@ -63,6 +65,15 @@ require_once __DIR__ . '/controladores/cls_medio_enlace.php';
 require_once __DIR__ . '/controladores/cls_padron_fotografico_puntosbcr.php';
 //Libreria de clases --> Control de enlaces del departamento de telecomunicaciones
 require_once __DIR__ . '/controladores/cls_enlace_telecom.php';
+//Libreria de clases --> Control de estado civil
+require_once __DIR__ . '/controladores/cls_estado_civil.php';
+//Libreria de clases --> Control de estado del personal
+require_once __DIR__ . '/controladores/cls_estado_persona.php';
+//Libreria de clases --> Control de nacionalidad
+require_once __DIR__ . '/controladores/cls_nacionalidad.php';
+//Libreria de clases --> Control de nivel academico
+require_once __DIR__ . '/controladores/cls_nivel_academico.php';
+
 /*
  * El elemento controller, constituye la base y esencia de toda la lógica del negocio, en este
  * se almacenan cada una de las funcionales de ORIEl. El archivo en sí, se compone de "n" cantidad
