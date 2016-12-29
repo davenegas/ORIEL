@@ -231,11 +231,7 @@
             $dias_abierto= date_diff($fecha_evento, $fecha_actual);
             ?>
             <td style="text-align:center" hidden="true"><?php echo $params[$i]['ID_Evento'];?></td>
-
-            <td style="text-align:center"><?php echo date_format($fecha_evento, 'Y/m/d');?></td>
-            <td style="text-align:center"><?php echo $params[$i]['Hora'];?></td>
-            <td style="text-align:center"><?php echo $dias_abierto->format('%a');?></td>
-            <?php 
+             <?php 
 
              //Solamente los coordinadores ven esta columna
              if($_SESSION['modulos']['Módulo-Bitácora Digital-Notas de Supervisión']==1){    
@@ -259,9 +255,13 @@
             <?php     
                }
             ?>
-            <td style="text-align:center"><?php echo date_format($fecha_evento, 'd/m/Y');?></td>
+            <td style="text-align:center"><?php echo date_format($fecha_evento, 'Y/m/d');?></td>
             <td style="text-align:center"><?php echo $params[$i]['Hora'];?></td>
             <td style="text-align:center"><?php echo $dias_abierto->format('%a');?></td>
+           
+            <!--<td style="text-align:center"><?php echo date_format($fecha_evento, 'd/m/Y');?></td>-->
+            <!--<td style="text-align:center"><?php echo $params[$i]['Hora'];?></td>-->
+            <!--<td style="text-align:center"><?php echo $dias_abierto->format('%a');?></td>-->
             <td style="text-align:center" hidden="true"><input type="checkbox" name="seleccioneventos" value="<?php echo $params[$i]['ID_Evento'];?>"></td>
             <td style="text-align:center"><?php echo $params[$i]['Nombre_Provincia'];?></td>
             <td style="text-align:center"><?php echo $params[$i]['Tipo_Punto'];?></td>
