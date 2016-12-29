@@ -25,8 +25,12 @@
         <!--Se mantienen este div para dejar espacio a la izquierda de la tabla-->    
         <div class="col-sm-1 sidenav">
         </div>
-        <!--DIV central contiene la tabla con el personal externo-->    
-        <div class="col-sm-8 container">
+        <!--DIV central contiene la tabla con el personal externo--> 
+        <?php if(isset($vencidos)){?>
+            <div class="col-sm-8 container">
+        <?php } else { ?>
+            <div class="col-sm-10 container">    
+        <?php } ?>
         <h2>Listado General de Personal externo</h2>
 >>>>>>> origin/master
         <p>A continuación se detallan las personas relacionadas el BCR:</p>    
@@ -84,6 +88,7 @@
         </div>
             
         <div class="col-sm-3 sidenav">
+            <?php if(isset($vencidos)){?>
             <div class="well">
                 <p>Estado de permisos de portación</p>
             </div>
@@ -91,9 +96,10 @@
                 <?php 
                 $tam=count($vencidos);
                 for ($i = 0; $i <$tam; $i++) {?>
-                    <?php echo "-".$vencidos[$i]['mensaje'];?> <br>
+                <p><?php echo "-".$vencidos[$i]['Mensaje'];?></p>
                 <?php } ?>
             </div>
+            <?php } ?>
         </div>
         </div>
         </div>

@@ -6969,30 +6969,30 @@
             $params= $obj_personal->getArreglo();
             //Calcula proximas portaciones a vencer
             $fecha_actual= getdate();
-            $fecha_actual= $fecha_actual['year']."-".$fecha_actual['mon']."-".$fecha_actual['wday'];
+            
+            $fecha_actual= $fecha_actual['year']."-".$fecha_actual['mon']."-".$fecha_actual['mday'];
             
             $tam=count($params);
             $cantidad=0;
             for ($i = 0; $i <$tam; $i++) {
                 if($params[$i]['Fecha_Vencimiento_Portacion']<>"0000-00-00" && $params[$i]['ID_Estado_Persona']==1){
                     $dias = (strtotime($params[$i]['Fecha_Vencimiento_Portacion'])-strtotime($fecha_actual))/86400;
-                    //echo ("Faltan ".$dias." para vencer portación de ".$params[$i]['Identificacion'])."<br>";
                     if($dias<60){
                         if($dias<0){
-                            $vencidos[$cantidad]['dias']=intval($dias);
-                            $vencidos[$cantidad]['mensaje']= ($params[$i]['Nombre']." ".$params[$i]['Apellido']." portación vencida hace <b>".(intval(-$dias)))."</b> días.";   
+                            $vencidos[$cantidad]['Dias']=intval($dias);
+                            $vencidos[$cantidad]['Mensaje']= ($params[$i]['Nombre']." ".$params[$i]['Apellido']." portación vencida hace <b>".(intval(-$dias)))."</b> días.";   
                             
                         }else{
-                            $vencidos[$cantidad]['dias']=intval($dias);
-                            $vencidos[$cantidad]['mensaje']= ($params[$i]['Nombre']." ".$params[$i]['Apellido']." portación vence en <b>".intval($dias)."</b> días.");
-                            
+                            $vencidos[$cantidad]['Dias']=intval($dias);
+                            $vencidos[$cantidad]['Mensaje']= ($params[$i]['Nombre']." ".$params[$i]['Apellido']." portación vence en <b>".intval($dias)."</b> días.");
                         }
                         $cantidad++;
                     }
                 }
             }
-            sort($vencidos);
-            
+            if(isset($vencidos)){
+                sort($vencidos);
+            }
             require __DIR__ . '/../vistas/plantillas/frm_personal_externo_listar.php';
         }else{
               /*

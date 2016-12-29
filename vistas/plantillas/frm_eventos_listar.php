@@ -6,11 +6,19 @@
         <?php require_once 'frm_librerias_head.html'; ?>    
         <link rel="stylesheet" href="vistas/css/ventanaoculta.css"> 
         <script language="javascript" src="vistas/js/refresca_pagina_automaticamente.js"></script>  
-         <script>
-          $(document).ready(function () {
-            $.post("index.php?ctl=cuenta_visitas_a_bitacora_digital");
-           
-          });
+        <script>
+            $(document).ready(function () {
+                $.post("index.php?ctl=cuenta_visitas_a_bitacora_digital");
+            
+                if ( $.fn.dataTable.isDataTable('#tabla') ) {
+                    table = $('#tabla').DataTable();
+                }
+                table.destroy();
+                table = $('#tabla').DataTable( {
+                    stateSave: true
+                });
+            });
+            
           $(document).ready(function () {
               puestoenviado=<?php echo $puesto_enviado ?>;
             $("#puesto option[value="+puestoenviado+"]").attr("selected",true);
@@ -145,7 +153,7 @@
             $dias_abierto= date_diff($fecha_evento, $fecha_actual);
             ?>
             <td style="text-align:center" hidden="true"><?php echo $params[$i]['ID_Evento'];?></td>
-            <td style="text-align:center"><?php echo date_format($fecha_evento, 'd/m/Y');?></td>
+            <td style="text-align:center"><?php echo date_format($fecha_evento, 'Y/m/d');?></td>
             <td style="text-align:center"><?php echo $params[$i]['Hora'];?></td>
             <td style="text-align:center"><?php echo $dias_abierto->format('%a');?></td>
             <?php 
