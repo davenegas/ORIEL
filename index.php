@@ -68,11 +68,11 @@ require_once __DIR__ . '/controladores/cls_enlace_telecom.php';
 //Libreria de clases --> Control de marcas de asistencia
 require_once __DIR__ . '/controladores/cls_marcas.php';
 //Libreria de clases --> Control de turno
-require_once __DIR__ . '/controlador/cls_turno.php';
+//require_once __DIR__ . '/controlador/cls_turno.php';
 //Libreria de clases --> Control de descansos
-require_once __DIR__ . '/controlador/cls_descansos.php';
+//require_once __DIR__ . '/controlador/cls_descansos.php';
 //Libreria de clases --> Control de marcas de descanso
-require_once __DIR__ . '/controlador/cls_marcas_descanso.php';
+//require_once __DIR__ . '/controlador/cls_marcas_descanso.php';
 //Libreria de clases --> Control de estado civil
 require_once __DIR__ . '/controladores/cls_estado_civil.php';
 //Libreria de clases --> Control de estado del personal
