@@ -2868,6 +2868,8 @@
     public function eventos_listar_filtrado(){
         //Validación para verificar si el usuario está logeado en el sistema
         if(isset($_SESSION['nombre'])){
+            //Vector que almacena un si o uno dependiendo si el evento en cuestion pertenece a alguna mezcla
+            $eventos_con_mezcla=array();
             //Creación de una instancia de un objeto de la clase eventos.
             $obj_eventos = new cls_eventos();
             //Verifica para cual puesto de monitoreo fue realizada la solicitud, esto mediante el metodo post 
@@ -2918,6 +2920,13 @@
         if (count($params)>0){
             //Empieza a recorrer registro por registro
             for ($i = 0; $i <$tam; $i++) {
+                
+                $obj_eventos->setId($params[$i]['ID_Evento']);
+                if ($obj_eventos->existe_este_evento_en_otra_mezcla()){
+                    array_push($eventos_con_mezcla, "SI");
+                }else{
+                    array_push($eventos_con_mezcla, "NO");
+                }
                 //Criterio de busqueda que permite traer todos los seguimientos del evento en cuestion
                 $obj_eventos->setCondicion("T_DetalleEvento.ID_Evento=".$params[$i]['ID_Evento']." order by T_DetalleEvento.Fecha desc,T_DetalleEvento.Hora desc");
                 //Obtiene los seguimientos del evento seleccionado, si los hubiere
