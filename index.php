@@ -31,7 +31,7 @@ require_once __DIR__ . '/controladores/cls_puntosBCR.php';
 require_once __DIR__ . '/controladores/cls_empresa.php';
 //Libreria de clases --> Control de personal(interno y externo)
 require_once __DIR__ . '/controladores/cls_personal.php';
-
+//Libreria de clases --> Control de personal
 require_once __DIR__ . '/controladores/cls_personal_externo.php';
 //Libreria de clases --> Control de horarios
 require_once __DIR__ . '/controladores/cls_horario.php';
@@ -67,6 +67,12 @@ require_once __DIR__ . '/controladores/cls_padron_fotografico_puntosbcr.php';
 require_once __DIR__ . '/controladores/cls_enlace_telecom.php';
 //Libreria de clases --> Control de marcas de asistencia
 require_once __DIR__ . '/controladores/cls_marcas.php';
+//Libreria de clases --> Control de turno
+require_once __DIR__ . '/controlador/cls_turno.php';
+//Libreria de clases --> Control de descansos
+require_once __DIR__ . '/controlador/cls_descansos.php';
+//Libreria de clases --> Control de marcas de descanso
+require_once __DIR__ . '/controlador/cls_marcas_descanso.php';
 //Libreria de clases --> Control de estado civil
 require_once __DIR__ . '/controladores/cls_estado_civil.php';
 //Libreria de clases --> Control de estado del personal
@@ -244,6 +250,28 @@ $map = array(
     'obtiene_todas_las_marcas'=>array('controller'=>'Controller','action'=> 'obtiene_todas_las_marcas'),
     'guardar_marcas'=>array('controller'=>'Controller','action'=> 'guardar_marcas'),
     'guardar_contador'=>array('controller'=>'Controller','action'=> 'guardar_contador'),
+    'editar_usuario' => array('controller' =>'Controller', 'action' =>'editar_usuario'),
+    'obtiene_todos_los_descansos' => array('controller' =>'Controller', 'action' =>'obtiene_todos_los_descansos'),
+    'obtiene_todos_los_horarios' => array('controller' =>'Controller', 'action' =>'obtiene_todos_los_horarios'),
+    'obtiene_todos_los_turnos' => array('controller' =>'Controller', 'action' =>'obtiene_todos_los_turnos'),
+    'obtiene_todos_los_usuarios' => array('controller' =>'Controller', 'action' =>'obtiene_todos_los_usuarios'),
+    'listar' => array('controller' =>'Controller', 'action' =>'listar'),
+    'obtiene_lista' => array('controller' =>'Controller', 'action' =>'obtiene_lista'),
+    'obtiene_lista_horarios' => array('controller' =>'Controller', 'action' =>'obtiene_lista_horarios'),
+    'editar_horario' => array('controller' =>'Controller', 'action' =>'editar_horario'),
+    'obtiene_lista_turno' => array('controller' =>'Controller', 'action' =>'obtiene_lista_turno'),
+    'editar_turno' => array('controller' =>'Controller', 'action' =>'editar_turno'),
+    'obtiene_lista_descansos' => array('controller' =>'Controller', 'action' =>'obtiene_lista_descansos'),
+    'editar_descansos' => array('controller' =>'Controller', 'action' =>'editar_descansos'),
+    'guardar_turno' => array('controller' =>'Controller', 'action' =>'guardar_turno'),
+    'guardar_horario' => array('controller' =>'Controller', 'action' =>'guardar_horario'),
+    'guardar_descansos' => array('controller' =>'Controller', 'action' =>'guardar_descansos'),
+    'guardar_usuarios' => array('controller' =>'Controller', 'action' =>'guardar_usuarios'),
+    'obtiene_lista_marcas' => array('controller' =>'Controller', 'action' =>'obtiene_lista_marcas'),
+    'guardar_marcas' => array('controller' =>'Controller', 'action' =>'guardar_marcas'),
+    'obtiene_todas_las_marcas_descansos' => array('controller' =>'Controller', 'action' =>'obtiene_lista_marcas_descansos'),
+    'guardar_marcas_descanso' => array('controller' =>'Controller', 'action' =>'guardar_marcas_descanso'),
+    'obtiene_lista_marcas_reportes' => array('controller' =>'Controller', 'action' =>'obtiene_lista_marcas_reportes'),
     
     //PuntosBCR
     'puntos_bcr_listar'=>array('controller'=>'Controller','action'=> 'puntos_bcr_listar'),
