@@ -65,10 +65,8 @@ require_once __DIR__ . '/controladores/cls_medio_enlace.php';
 require_once __DIR__ . '/controladores/cls_padron_fotografico_puntosbcr.php';
 //Libreria de clases --> Control de enlaces del departamento de telecomunicaciones
 require_once __DIR__ . '/controladores/cls_enlace_telecom.php';
-
-//Libreria de clases -->
+//Libreria de clases --> Control de marcas de asistencia
 require_once __DIR__ . '/controladores/cls_marcas.php';
-
 //Libreria de clases --> Control de estado civil
 require_once __DIR__ . '/controladores/cls_estado_civil.php';
 //Libreria de clases --> Control de estado del personal
