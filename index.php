@@ -31,6 +31,8 @@ require_once __DIR__ . '/controladores/cls_puntosBCR.php';
 require_once __DIR__ . '/controladores/cls_empresa.php';
 //Libreria de clases --> Control de personal(interno y externo)
 require_once __DIR__ . '/controladores/cls_personal.php';
+
+require_once __DIR__ . '/controladores/cls_personal_externo.php';
 //Libreria de clases --> Control de horarios
 require_once __DIR__ . '/controladores/cls_horario.php';
 //Libreria de clases --> Control de direcciones IP
@@ -63,8 +65,19 @@ require_once __DIR__ . '/controladores/cls_medio_enlace.php';
 require_once __DIR__ . '/controladores/cls_padron_fotografico_puntosbcr.php';
 //Libreria de clases --> Control de enlaces del departamento de telecomunicaciones
 require_once __DIR__ . '/controladores/cls_enlace_telecom.php';
+<<<<<<< HEAD
 //Libreria de clases -->
 require_once __DIR__ . '/controladores/cls_marcas.php';
+=======
+//Libreria de clases --> Control de estado civil
+require_once __DIR__ . '/controladores/cls_estado_civil.php';
+//Libreria de clases --> Control de estado del personal
+require_once __DIR__ . '/controladores/cls_estado_persona.php';
+//Libreria de clases --> Control de nacionalidad
+require_once __DIR__ . '/controladores/cls_nacionalidad.php';
+//Libreria de clases --> Control de nivel academico
+require_once __DIR__ . '/controladores/cls_nivel_academico.php';
+>>>>>>> origin/master
 
 /*
  * El elemento controller, constituye la base y esencia de toda la lógica del negocio, en este
@@ -201,7 +214,9 @@ $map = array(
     'actualiza_en_vivo_reporte_cerrados'=>  array('controller'=>'Controller','action'=>  'actualiza_en_vivo_reporte_cerrados'),
     'eventos_listar_filtrado'=>  array('controller'=>'Controller','action'=>  'eventos_listar_filtrado'),
     'notas_coordinacion_bitacora_guardar'=>  array('controller'=>'Controller','action'=>  'notas_coordinacion_bitacora_guardar'),
-    
+    'mezcla_eventos_bitacora_digital'=>  array('controller'=>'Controller','action'=>  'mezcla_eventos_bitacora_digital'),
+    'eliminar_mezcla_eventos_bitacora'=>  array('controller'=>'Controller','action'=>  'eliminar_mezcla_eventos_bitacora'),
+        
     //Tipo de eventos
     'tipo_eventos_listar'=>array('controller'=>'Controller','action'=> 'tipo_eventos_listar'),
     'tipo_eventos_guardar'=>array('controller'=>'Controller','action'=> 'tipo_eventos_guardar'),

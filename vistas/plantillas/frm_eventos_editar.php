@@ -12,12 +12,138 @@
 		$("#FormularioExportacion").submit();
         });
         });
+        
+        function consultar_evento(id_evento){
+            
+          alert("index.php?ctl=frm_eventos_editar&id="+id_evento);
+          $.get("index.php?ctl=frm_eventos_editar&id="+id_evento); 
+            
+        }  
+         function eliminar_mezcla(id_referencia,id_evento){
+            
+            referencia=id_referencia;
+            evento=id_evento;
+                       
+            $.confirm({
+            title: 'Confirmación!',
+            content: 'Desea eliminar esta mezcla del sistema?',
+            confirm: function(){
+               $.post("index.php?ctl=eliminar_mezcla_eventos_bitacora", {referencia: referencia,evento:evento},function(data){
+                    
+                     if (data=="1"){
+                         $.alert({
+                            title: 'Información!',
+                            content: 'No fue posible eliminar la mezcla del sistema!!!',
+                            
+                        });
+                     }else{
+                          $.alert({
+                            title: 'Información!',
+                            content: 'Mezcla eliminada con éxito!!!',
+                            
+                        });
+                         location.reload();  
+                     }
+                    
+                });  
+               
+                //location.reload();  
+            },
+            cancel: function(){
+                //$.alert('Canceled!')
+            }
+            });
+            
+        }  
 </script>
     </head>
     <body>
         <?php require_once 'encabezado.php';?>
-        
+               
         <div class="container animated fadeIn">
+            <?php
+            if ($vector_informacion_general_mezcla!=null){
+            ?>
+            <h3 align="center">Mezcla de Eventos</h3>
+            <h4><u>Información General de la Mezcla</u></h4>
+           
+        <!--<p>A continuación se detallan los diferentes eventos que están registrados en el sistema:</p>-->            
+        <table class="table">
+          <thead> 
+               
+            <tr style="text-align:center">
+                <th hidden="true">Referencia Mezcla</th>
+                <th>Creada por</th>
+                <th>Fecha de Creación</th>
+                <th>Hora de Creación</th>
+                <?php 
+                //Solamente los coordinadores ven esta opcion de agregar mezclas
+                 if($_SESSION['modulos']['Módulo-Bitácora Digital-Eliminar Mezcla de Eventos']==1){    
+                 ?>
+                 <th>Gestión</th>   
+                 <?php 
+                 }
+                 ?>
+                         
+            </tr>
+          </thead>
+          <tbody>
+        
+            <?php 
+            $tam=count($vector_informacion_general_mezcla);
+            for ($i = 0; $i <$tam; $i++) {
+            ?>
+            <tr>
+                <?php
+                
+                $fecha_evento = date_create($vector_informacion_general_mezcla[$i]['Fecha']);
+                $fecha_actual = date_create(date("d-m-Y"));
+                $dias_abierto= date_diff($fecha_evento, $fecha_actual);
+                ?>
+                <td hidden="true"><?php echo $vector_informacion_general_mezcla[$i]['Referencia_Mezcla'];?></td>
+                <td><?php echo $vector_informacion_general_mezcla[$i]['Nombre_Completo'];?></td>
+                <td><?php echo date_format($fecha_evento, 'd/m/Y');?></td>
+                
+                <td><?php echo $vector_informacion_general_mezcla[$i]['Hora'];?></td>
+                
+                 <?php 
+                //Solamente los coordinadores ven esta opcion de agregar mezclas
+                 if($_SESSION['modulos']['Módulo-Bitácora Digital-Eliminar Mezcla de Eventos']==1){    
+                 ?>
+                 <td><a onclick="eliminar_mezcla('<?php echo $vector_informacion_general_mezcla[$i]['Referencia_Mezcla'];?>',<?php echo $params[0]['ID_Evento'];?>);">Eliminar</a></td>  
+                 <?php 
+                 }
+                 ?>
+                
+               
+            </tr>
+            <?php }
+            ?>
+            </tbody>
+        </table>
+            
+            <!--<h4><u>Lista de Eventos Relacionados en la Mezcla </u>(Orden Cronológico)</h4>-->
+            
+            <!--<p>A continuación se detallan los diferentes eventos que están registrados en el sistema:</p>-->            
+<!--        <table class="table">
+        
+          <tbody>
+          <tr>
+            <?php 
+            $tam=count($vector_listado_eventos_mezclados);
+            for ($i = 0; $i <$tam; $i++) {
+            ?>
+              <td style="text-align:center"><a href="index.php?ctl=frm_eventos_editar&accion=consulta_mezclados&id=
+               <?php echo $vector_listado_eventos_mezclados[$i]['ID_Evento'];?>"><?php echo $vector_listado_eventos_mezclados[$i]['PuntoBCR_TipoEvento'];?></a></td>
+            <?php }
+            ?>
+            </tr>
+            </tbody>
+        </table>-->
+            
+            <?php
+            }
+            ?>
             <h1 align="center">Detalle de Evento</h1>
             <hr/>
             <h3>General</h3>
@@ -41,24 +167,36 @@
           <tbody>
         
             <?php 
-            $tam=count($params);
+            $tam=count($params2);
             for ($i = 0; $i <$tam; $i++) {
             ?>
             <tr>
                 <?php
-                $fecha_evento = date_create($params[$i]['Fecha']);
+                $fecha_evento = date_create($params2[$i]['Fecha']);
                 $fecha_actual = date_create(date("d-m-Y"));
                 $dias_abierto= date_diff($fecha_evento, $fecha_actual);
                 ?>
                 <td><?php echo date_format($fecha_evento, 'd/m/Y');?></td>
-                <td><?php echo $params[$i]['Hora'];?></td>
+                <td><?php echo $params2[$i]['Hora'];?></td>
                 <td align="center"><?php echo $dias_abierto->format('%a días');?></td>
-                <td><?php echo $params[$i]['Nombre_Provincia'];?></td>
-                <td><?php echo $params[$i]['Tipo_Punto'];?></td>
-                <td><?php echo $params[$i]['Nombre'];?></td>
-                <td><?php echo $params[$i]['Evento'];?></td>
-                <td><?php echo $params[$i]['Estado_Evento'];?></td>
-                <td><?php echo $params[$i]['Nombre_Usuario']." ".$params[$i]['Apellido'] ?></td>
+                <td><?php echo $params2[$i]['Nombre_Provincia'];?></td>
+                <td><?php echo $params2[$i]['Tipo_Punto'];?></td>
+                <?php
+                if ($params2[$i]['ID_Evento']==$_GET['id']){
+                ?>
+                <td><u><b><?php echo $params2[$i]['Nombre'];?></b></u></td>
+                <?php
+                }else{
+                ?>
+                <!--<td><?php echo $params2[$i]['Nombre'];?></td>-->
+                <td><a href="index.php?ctl=frm_eventos_editar&accion=consulta_mezclados&id=
+               <?php echo $params2[$i]['ID_Evento'];?>"><?php echo $params2[$i]['Nombre'];?></a></td>
+                <?php
+                }
+                ?>
+                <td><?php echo $params2[$i]['Evento'];?></td>
+                <td><?php echo $params2[$i]['Estado_Evento'];?></td>
+                <td><?php echo $params2[$i]['Nombre_Usuario']." ".$params2[$i]['Apellido'] ?></td>
             </tr>
             <?php }
             ?>
@@ -67,7 +205,7 @@
             
             
             
-        <?php if ((($_GET['accion']=="editar_abiertos") || ($params[0]['ID_EstadoEvento']==1))||(($_GET['accion']=="consulta_relacionados") && ($params[0]['ID_EstadoEvento']==4))||(($_GET['accion']=="consulta_relacionados") && ($params[0]['ID_EstadoEvento']==2))) { ?>    
+        <?php if (((($_GET['accion']=="editar_abiertos") || ($params[0]['ID_EstadoEvento']==1))||((($_GET['accion']=="consulta_mezclados") && ($params[0]['ID_EstadoEvento']==1))||(($_GET['accion']=="consulta_mezclados") && ($params[0]['ID_EstadoEvento']==4))||(($_GET['accion']=="consulta_mezclados") && ($params[0]['ID_EstadoEvento']==2))))||(($_GET['accion']=="consulta_relacionados") && ($params[0]['ID_EstadoEvento']==4))||(($_GET['accion']=="consulta_relacionados") && ($params[0]['ID_EstadoEvento']==2))) { ?>    
             <hr/>
             <h3>Agregar nuevo seguimiento</h3>
                 
@@ -168,7 +306,15 @@
                   <th>Hora de Seguimiento</th>
                   <th>Detalle del Seguimiento</th>
                   <th>Ingresado Por</th>
+                  <?php
+                  if ($vector_informacion_general_mezcla!=null){
+                  ?>
+                  <th>Corresponde A</th>
+                  <?php
+                  }
+                  ?>
                   <th>Adjunto</th>
+                 
                 </tr>
             </thead>
                 <tbody>
@@ -187,6 +333,13 @@
                 <td><?php echo $detalleEvento[$i]['Detalle'];?></td>
                 <td><?php echo $detalleEvento[$i]['Nombre_Usuario']." ".$detalleEvento[$i]['Apellido'] ?></td>
                 <?php
+                if ($vector_informacion_general_mezcla!=null){
+                ?>
+                <td><?php echo $detalleEvento[$i]['PuntoBCR_TipoEvento'];?></td>
+                <?php
+                }
+                ?>
+                <?php
                 //echo strlen($detalleEvento[$i]['Adjunto']);
                 if (strlen($detalleEvento[$i]['Adjunto'])==3){
 
@@ -198,6 +351,7 @@
                 <!--<td><a href="../../../Adjuntos_Bitacora/<?php echo $detalleEvento[$i]['Adjunto'];?>" download="Adjunto_Seguimiento"><img src="vistas/Imagenes/Descargar.png" class="img-rounded" alt="Cinque Terre" width="15" height="15"></a></td>-->
                 <?php } ?>
                 <?php } ?>
+                 
                 </tbody>
         </table>  
          <?php if ($_GET['accion']=="consulta_cerrados") {  
@@ -207,6 +361,10 @@
         <?php if (($_GET['accion']=="consulta_relacionados") && ($params[0]['ID_EstadoEvento']!=1)&& ($params[0]['ID_EstadoEvento']!=2)&& ($params[0]['ID_EstadoEvento']!=4)){ ?>
         <td><a href="index.php?ctl=frm_eventos_agregar&id=<?php echo $params[0]['ID_PuntoBCR'];?>" class="btn btn-default" role="button">Volver</a></td>
         <?php }?>  
+        <?php if (($_GET['accion']=="consulta_mezclados") && ($params[0]['ID_EstadoEvento']!=1)&& ($params[0]['ID_EstadoEvento']!=2)&& ($params[0]['ID_EstadoEvento']!=4)){ ?>
+        <td><a href="index.php?ctl=frm_eventos_listar" class="btn btn-default" role="button">Volver</a></td>
+        <?php }?>  
+       
         </div>
             <?php require 'vistas/plantillas/pie_de_pagina.php'?>
     </body>

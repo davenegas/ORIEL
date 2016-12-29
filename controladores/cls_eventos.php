@@ -21,9 +21,19 @@ class cls_eventos{
     public $observaciones;
     public $prioridad;
     public $adjunto;
+    public $referencia_mezcla;
     public $observaciones_supervision;
     public $fecha_notas_supervision;
     
+    function getReferencia_mezcla() {
+        return $this->referencia_mezcla;
+    }
+
+    function setReferencia_mezcla($referencia_mezcla) {
+        $this->referencia_mezcla = $referencia_mezcla;
+    }
+
+        
     function getObservaciones_supervision() {
         return $this->observaciones_supervision;
     }
@@ -221,6 +231,7 @@ class cls_eventos{
         $this->prioridad="";
         $this->adjunto="";
         $this->observaciones_supervision="";
+        $this->referencia_mezcla="";
         $this->fecha_notas_supervision="";
         ;
     }
@@ -281,6 +292,52 @@ class cls_eventos{
       }    
   }
   
+  //Valida que no se ingrese el mismo tipo de evento en un sitio, si ya hay uno pendiente
+    
+    function eliminar_mezcla_del_sistema(){
+      //Establece la conexión con la bd
+      $this->obj_data_provider->conectar();
+      $this->obj_data_provider->eliminar_datos("T_MezclaEvento",$this->condicion);
+      $this->obj_data_provider->desconectar();
+     
+  }
+  
+  
+  //Valida que no se ingrese la misma mezcla de eventos en el sistema
+    
+    function existe_esta_mezcla_de_eventos_en_el_sistema(){
+      //Establece la conexión con la bd
+      $this->obj_data_provider->conectar();
+      $this->obj_data_provider->trae_datos("T_MezclaEvento","*","Referencia_Mezcla='".$this->referencia_mezcla."'");
+      $this->arreglo=$this->obj_data_provider->getArreglo();
+      $this->obj_data_provider->desconectar();
+      $this->resultado_operacion=true;
+      
+      if (count($this->arreglo)>0){
+        return true;
+      }else
+      {
+        return false;
+      }    
+  }
+  
+  //Valida que no se ingrese la misma mezcla de eventos en el sistema
+    
+    function existe_este_evento_en_otra_mezcla(){
+      //Establece la conexión con la bd
+      $this->obj_data_provider->conectar();
+      $this->obj_data_provider->trae_datos("T_MezclaEvento","*","ID_Evento=".$this->id);
+      $this->arreglo=$this->obj_data_provider->getArreglo();
+      $this->obj_data_provider->desconectar();
+      $this->resultado_operacion=true;
+      
+      if (count($this->arreglo)>0){
+        return true;
+      }else
+      {
+        return false;
+      }    
+  }
   
   //Valida que no se ingrese el mismo tipo de evento en un sitio, si ya hay uno pendiente
     
@@ -352,8 +409,8 @@ class cls_eventos{
         try{
         $this->obj_data_provider->conectar();
             $this->arreglo=$this->obj_data_provider->trae_datos(
-                "T_DetalleEvento left outer join T_Usuario on T_DetalleEvento.ID_Usuario=T_Usuario.ID_Usuario", 
-                "T_DetalleEvento.*,T_Usuario.Nombre Nombre_Usuario,T_Usuario.Apellido",
+                "T_DetalleEvento left outer join T_Usuario on T_DetalleEvento.ID_Usuario=T_Usuario.ID_Usuario inner join T_Evento on T_Evento.ID_Evento=T_DetalleEvento.ID_Evento inner join T_PuntoBCR on T_PuntoBCR.ID_PuntoBCR=T_Evento.ID_PuntoBCR inner join T_TipoEvento on T_TipoEvento.ID_Tipo_Evento=T_Evento.ID_Tipo_Evento", 
+                "T_DetalleEvento.*,T_Usuario.Nombre Nombre_Usuario,T_Usuario.Apellido,concat(concat(concat(T_PuntoBCR.Nombre,' ['),T_TipoEvento.Evento),']') as PuntoBCR_TipoEvento",
                 $this->condicion);
             $this->arreglo=$this->obj_data_provider->getArreglo();
             $this->obj_data_provider->desconectar();
@@ -563,6 +620,37 @@ class cls_eventos{
         try{
             $this->obj_data_provider->conectar();
             $this->arreglo= $this->obj_data_provider->trae_datos("T_TipoEvento","*","");
+            $this->arreglo=$this->obj_data_provider->getArreglo();
+            $this->obj_data_provider->desconectar();
+            $this->resultado_operacion=true;
+        }catch(Exception $exc){
+            echo $exc->getTraceAsString();
+        }
+    }
+    public function guardar_registro_en_mezcla_de_eventos(){
+         
+        $this->obj_data_provider->conectar();
+        $this->obj_data_provider->inserta_datos("T_MezclaEvento","ID_Mezcla_Evento,Referencia_Mezcla,ID_Evento,ID_Usuario,Fecha,Hora","null,'".$this->referencia_mezcla."',".$this->id.",".$this->id_usuario.",'".$this->fecha."','".$this->hora."'");     
+        $this->obj_data_provider->desconectar();
+        $this->resultado_operacion=true;
+     }
+     
+    public function obtener_informacion_general_de_la_mezcla(){
+        try{
+            $this->obj_data_provider->conectar();
+            $this->arreglo= $this->obj_data_provider->trae_datos("T_MezclaEvento inner join T_Usuario on T_Usuario.ID_Usuario=T_MezclaEvento.ID_Usuario","T_MezclaEvento.*,concat(concat(T_Usuario.Nombre,' '),T_Usuario.Apellido) as Nombre_Completo",$this->condicion);
+            $this->arreglo=$this->obj_data_provider->getArreglo();
+            $this->obj_data_provider->desconectar();
+            $this->resultado_operacion=true;
+        }catch(Exception $exc){
+            echo $exc->getTraceAsString();
+        }
+    }
+    
+    public function obtener_listado_de_eventos_de_una_mezcla(){
+        try{
+            $this->obj_data_provider->conectar();
+            $this->arreglo= $this->obj_data_provider->trae_datos("T_MezclaEvento inner join T_Evento on T_Evento.ID_Evento=T_MezclaEvento.ID_Evento inner join T_PuntoBCR on T_PuntoBCR.ID_PuntoBCR=T_Evento.ID_PuntoBCR inner join T_TipoEvento on T_TipoEvento.ID_Tipo_Evento=T_Evento.ID_Tipo_Evento","ID_Mezcla_Evento,Referencia_Mezcla,T_MezclaEvento.ID_Evento,concat(concat(concat(T_PuntoBCR.Nombre,' ('),T_TipoEvento.Evento),')') as PuntoBCR_TipoEvento,T_Evento.Fecha,T_Evento.Hora",$this->condicion." order by T_Evento.Fecha,T_Evento.Hora");
             $this->arreglo=$this->obj_data_provider->getArreglo();
             $this->obj_data_provider->desconectar();
             $this->resultado_operacion=true;
