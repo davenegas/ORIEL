@@ -7169,7 +7169,9 @@
                     }
                 }
             }
-            sort($vencidos);
+            if(isset ($vencidos)){
+                sort($vencidos);
+            }
             
             require __DIR__ . '/../vistas/plantillas/frm_personal_externo_listar.php';
         }else{
