@@ -66,7 +66,7 @@
                 <?php if ($_SESSION['modulos']['Seguridad-Trazabilidad']==1){ ?>
                     <li><a href="index.php?ctl=principal">Trazabilidad</a></li> 
                 <?php    }; ?>
-
+                                       
             </ul>
             </li>
 

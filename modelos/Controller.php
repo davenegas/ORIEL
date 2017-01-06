@@ -17,6 +17,7 @@
         //Llamada al formulario correspondiente de la vista
         require __DIR__ . '/../vistas/plantillas/frm_principal_publica.php';
     }
+      
 
     ////////////////////////////////////////////////////////////////////////////
     //////////////Metodos de Acceso publico/////////////////////////////////////
