@@ -206,10 +206,10 @@
                 <?php }; ?>
 
                 <?php if ($_SESSION['modulos']['Módulo-Personal']==1){ ?>
-                     <li><a href="index.php?ctl=personal_listar">Personal</a></li>
+                     <li><a href="index.php?ctl=personal_listar">Personal BCR</a></li>
                 <?php }; ?>
                 
-                <?php if ($_SESSION['modulos']['Módulo-Personal']==1){ ?>
+                <?php if ($_SESSION['modulos']['Módulo-Asistencia de Personal']==1){ ?>
                      <li><a href="index.php?ctl=marcas">Asistencia de Personal</a></li>
                 <?php }; ?>
                        
