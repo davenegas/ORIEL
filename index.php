@@ -81,6 +81,8 @@ require_once __DIR__ . '/controladores/cls_estado_persona.php';
 require_once __DIR__ . '/controladores/cls_nacionalidad.php';
 //Libreria de clases --> Control de nivel academico
 require_once __DIR__ . '/controladores/cls_nivel_academico.php';
+//Libreria de clases --> Control de Cencon
+require_once __DIR__ . '/controladores/cls_cencon.php';
 
 
 /*
@@ -204,6 +206,18 @@ $map = array(
     'cambiar_estado_rol' => array('controller' =>'Controller', 'action' =>'cambiar_estado_rol'),
     'gestion_roles'=>array('controller'=>'Controller', 'action'=>'gestion_roles'),
      
+    //Controlador de Cencon
+    'eventos_cencon'=>array('controller'=>'Controller', 'action'=>'eventos_cencon'),
+    'cencon_gestion'=>array('controller'=>'Controller', 'action'=>'cencon_gestion'),
+    'cencon_agregar_relacion'=>array('controller'=>'Controller', 'action'=>'cencon_agregar_relacion'),
+    'cencon_buscar_relaciones'=>array('controller'=>'Controller', 'action'=>'cencon_buscar_relaciones'),
+    'cencon_eliminar_relacion'=>array('controller'=>'Controller', 'action'=>'cencon_eliminar_relacion'),
+    'evento_buscar_cajero'=>array('controller'=>'Controller', 'action'=>'evento_buscar_cajero'),
+    'evento_buscar_persona'=>array('controller'=>'Controller', 'action'=>'evento_buscar_persona'),
+    'evento_buscar_relaciones'=>array('controller'=>'Controller', 'action'=>'evento_buscar_relaciones'),
+    'evento_nuevo_guardar'=>array('controller'=>'Controller', 'action'=>'evento_nuevo_guardar'),
+    'evento_cencon_cerrar'=>array('controller'=>'Controller', 'action'=>'evento_cencon_cerrar'),
+    
     //Controlador de Eventos (Bitacora Digital)
     'frm_eventos_listar' =>  array('controller'=>'Controller','action'=>'frm_eventos_listar'),
     'frm_eventos_agregar' =>  array('controller'=>'Controller','action'=>'frm_eventos_agregar'),

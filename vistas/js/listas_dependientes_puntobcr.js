@@ -119,12 +119,12 @@ $(document).ready(function(){
 //////////////////////////////////////////////////////////
 //Función para Ocultas ventanas
 function ocultar_elemento(){
-    document.getElementById('agregar_telefono').style.display = "none";
-    document.getElementById('asignar_ue').style.display = "none";
-    document.getElementById('asignar_area').style.display = "none";
-    document.getElementById('asignar_direccion_IP').style.display = "none";
-    document.getElementById('asignar_horario').style.display = "none";
-    document.getElementById('formulario_oculto_1').style.display = "none";
+    document.getElementById('ventana_oculta_1').style.display = "none";
+    document.getElementById('ventana_oculta_2').style.display = "none";
+    document.getElementById('ventana_oculta_3').style.display = "none";
+    document.getElementById('ventana_oculta_4').style.display = "none";
+    document.getElementById('ventana_oculta_5').style.display = "none";
+    document.getElementById('ventana_oculta_6').style.display = "none";
 }
 
 ///////////////////////////////////////////////////////
@@ -135,7 +135,7 @@ function check_empty() {
     } else {
         //alert("Form Submitted Successfully...");
         document.getElementById('ventana').submit();
-        document.getElementById('agregar_telefono').style.display = "none";
+        document.getElementById('ventana_oculta_1').style.display = "none";
     }
 }
 function mostrar_agregar_telefono() {
@@ -144,7 +144,7 @@ function mostrar_agregar_telefono() {
     document.getElementById('numero_telefono').value="";
     document.getElementById('observaciones_telefono').value="";
     
-    document.getElementById('agregar_telefono').style.display = "block";
+    document.getElementById('ventana_oculta_1').style.display = "block";
 }
 function eliminar_telefono(ide){
     $.confirm({title: 'Confirmación!', content: 'Desea eliminar este número de teléfono?', 
@@ -166,18 +166,18 @@ function editar_telefono(id_tel, tipo_tel, num, obser){
     document.getElementById('numero_telefono').value=num;
     document.getElementById('observaciones_telefono').value=obser;
     
-    document.getElementById('agregar_telefono').style.display = "block";
+    document.getElementById('ventana_oculta_1').style.display = "block";
 }
 
 ////////////////////////////////////////////////////
 //Funciones para UE
 function mostrar_lista_ue(){
-    document.getElementById('asignar_ue').style.display = "block";
+    document.getElementById('ventana_oculta_2').style.display = "block";
 }
 function agregar_ue(id_ue){
     id_unidad_ejecutora = id_ue;
     id_puntobcr = document.getElementById('ID_PuntoBCR').value;
-    document.getElementById('asignar_ue').style.display = "none";
+    document.getElementById('ventana_oculta_2').style.display = "none";
     $.post("index.php?ctl=puntobcr_agregar_ue", { id_unidad_ejecutora: id_unidad_ejecutora, id_puntobcr:id_puntobcr}, function(data){
             location.reload();
             //alert (data);
@@ -202,7 +202,7 @@ function eliminar_ue(ide){
 ////////////////////////////////////////////////////
 //Funcion para agregar o asignar Area de Apoyo
 function mostrar_area_apoyo(){
-    document.getElementById('asignar_area').style.display = "block";
+    document.getElementById('ventana_oculta_3').style.display = "block";
 }
 function validar_area(){
      if (document.getElementById('nombre').value == "") {
@@ -210,7 +210,7 @@ function validar_area(){
     } else {
         //alert("Form Submitted Successfully...");
         document.getElementById('nueva_area_apoyo').submit();
-        document.getElementById('asignar_area').style.display = "none";
+        document.getElementById('ventana_oculta_3').style.display = "none";
     }
  }
 function agregar_area(id){
@@ -244,7 +244,7 @@ function mostrar_direccion_IP(){
     document.getElementById('lista_direcciones').hidden=false;
     document.getElementById('direccion_ip').value = "";
     document.getElementById('observaciones_ip').value = "";
-    document.getElementById('asignar_direccion_IP').style.display = "block";
+    document.getElementById('ventana_oculta_4').style.display = "block";
 }
 function asignar_ip(id){
     id_direccion_ip = id;
@@ -275,7 +275,7 @@ function validar_direccion_ip(){
     } else {
         //alert("Form Submitted Successfully...");
         document.getElementById('nueva_direccion_ip').submit();
-        document.getElementById('asignar_direccion_IP').style.display = "none";
+        document.getElementById('ventana_oculta_4').style.display = "none";
     } 
 }
 function editar_ip(ide, tipo, direc, obser){
@@ -284,17 +284,17 @@ function editar_ip(ide, tipo, direc, obser){
     $("#tipo_ip option[value="+tipo+"]").attr("selected",true);
     document.getElementById('direccion_ip').value = direc;
     document.getElementById('observaciones_ip').value = obser;
-    document.getElementById('asignar_direccion_IP').style.display = "block";
+    document.getElementById('ventana_oculta_4').style.display = "block";
 }
 ///////////////////////////////////////////////////////////
 //Funciones para asignar Horario al Punto BCR
 function mostrar_horario(){
-    document.getElementById('asignar_horario').style.display = "block";
+    document.getElementById('ventana_oculta_5').style.display = "block";
 }
 function asignar_horario(id_hora){
     id_horario = id_hora;
     id_puntobcr = document.getElementById('ID_PuntoBCR').value;
-    document.getElementById('asignar_horario').style.display = "none";
+    document.getElementById('ventana_oculta_5').style.display = "none";
     $.post("index.php?ctl=puntobcr_asignar_horario", { id_horario: id_horario, id_puntobcr:id_puntobcr}, function(data){
             //alert (data);
             location.reload();
@@ -327,7 +327,7 @@ function mostrar_enlace_telecom(){
     $("#proveedor_enlace option[value=1]").attr("selected",true);
     $("#tipo_enlace option[value=1]").attr("selected",true);
     document.getElementById('observaciones_enlace').value="";
-    document.getElementById('formulario_oculto_1').style.display = "block";
+    document.getElementById('ventana_oculta_6').style.display = "block";
 }
 function mostrar_editar_enlace(id, enlace, interf, linea,provee, tipo, bandw, medio, obser ){
     document.getElementById('ID_Enlace').value=id;
@@ -339,7 +339,7 @@ function mostrar_editar_enlace(id, enlace, interf, linea,provee, tipo, bandw, me
     $("#proveedor_enlace option[value="+provee+"]").attr("selected",true);
     $("#tipo_enlace option[value="+tipo+"]").attr("selected",true);
     document.getElementById('observaciones_enlace').value=obser;
-    document.getElementById('formulario_oculto_1').style.display = "block";
+    document.getElementById('ventana_oculta_6').style.display = "block";
 }
 function eliminar_enlace(ide){
     id_enlace= ide;
@@ -363,6 +363,6 @@ function validar_enlace(){
     } else {
         //alert("Form Submitted Successfully...");
         document.getElementById('frm_enlace_guardar').submit();
-        document.getElementById('formulario_oculto_1').style.display = "none";
+        document.getElementById('ventana_oculta_6').style.display = "none";
     }  
 }

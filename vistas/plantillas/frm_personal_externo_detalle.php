@@ -253,7 +253,7 @@
                         <td style="text-align:center"><?php echo $num_telefono[$i]['Tipo_Telefono'];?></td>
                         <td style="text-align:center"><?php echo $num_telefono[$i]['Numero'];?></td>
                         <td style="text-align:center"><?php echo $num_telefono[$i]['Observaciones'];?></td>
-                        <?php if($_SESSION['modulos']['Editar- Personal']==1){  ?>
+                        <?php if($_SESSION['modulos']['Editar- Personal Externo']==1){  ?>
                             <td style="text-align:center"><a class="btn azul" role="button" id="prueba" name="prueba" 
                                     onclick="Editar_telefono(<?php echo $num_telefono[$i]['ID_Telefono'];?>,<?php echo $num_telefono[$i]['ID_Tipo_Telefono'];?>,'<?php echo $num_telefono[$i]['Numero'];?>','<?php echo $num_telefono[$i]['Observaciones'];?>')">
                                 Editar</a></td> 
@@ -315,7 +315,7 @@
         *******FORMULARIOS OCULTOS PARA FUNCIONALIDAD DE LA VENTANA************-->
 
         <!--agregar teléfono a la Persona-->
-        <div id="agregar_telefono"> 
+        <div id="ventana_oculta_1"> 
             <div id="popupventana">
                 <!--Formulario para ingresar nuevos números de teléfono-->
                 <form id="ventana" method="POST" name="form" action="index.php?ctl=personal_externo_numero_telefono_guardar">
@@ -347,7 +347,7 @@
         </div>
         
         <!--Agregar foto al personal externo-->
-        <div id="formulario_oculto_1">
+        <div id="ventana_oculta_2">
             <div id="popupventana2">
                 <div id="ventana2">
                 <img id="close" src='vistas/Imagenes/cerrar.png' width="25" onclick ="ocultar_elemento()">

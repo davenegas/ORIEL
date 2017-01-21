@@ -38,9 +38,9 @@ $(document).ready(function(){
 ////////////////////////////////////////////////////////////
 //Función para Ocultas ventanas
 function ocultar_elemento(){
-    document.getElementById('agregar_telefono').style.display = "none";
-    document.getElementById('asignar_ue').style.display = "none"; 
-    document.getElementById('asignar_area').style.display = "none";
+    document.getElementById('ventana_oculta_1').style.display = "none";
+    document.getElementById('ventana_oculta_2').style.display = "none"; 
+    document.getElementById('ventana_oculta_3').style.display = "none";
 }
 
 ///////////////////////////////////////////////////////
@@ -51,14 +51,14 @@ function check_empty() {
     } else {
         //alert("Form Submitted Successfully...");
         document.getElementById('ventana').submit();
-        document.getElementById('agregar_telefono').style.display = "none";
+        document.getElementById('ventana_oculta_1').style.display = "none";
     }
 }
 function mostrar_agregar_telefono() {
     document.getElementById('ID_Telefono').value="0";
     document.getElementById('numero').value=null;
     document.getElementById('observaciones').value=null;
-    document.getElementById('agregar_telefono').style.display = "block";
+    document.getElementById('ventana_oculta_1').style.display = "block";
 }
 function eliminar_telefono(ide){
     $.confirm({title: 'Confirmación!', content: 'Desea eliminar este número de teléfono?', 
@@ -80,18 +80,18 @@ function Editar_telefono(id_tel, tipo_tel, num, obser){
     document.getElementById('numero').value=num;
     document.getElementById('observaciones').value=obser;
     
-    document.getElementById('agregar_telefono').style.display = "block";
+    document.getElementById('ventana_oculta_1').style.display = "block";
 };
 
 ////////////////////////////////////////////////////////
 //Funciones para ventana oculta de Cambiar_UE
 function mostrar_lista_ue(){
-    document.getElementById('asignar_ue').style.display = "block";
+    document.getElementById('ventana_oculta_2').style.display = "block";
 }
 function cambiar_ue(id_ue){
     id_unidad_ejecutora = id_ue;
     id_persona = document.getElementById('ID_Persona').value;
-    document.getElementById('asignar_ue').style.display = "none";
+    document.getElementById('ventana_oculta_2').style.display = "none";
     $.post("index.php?ctl=personal_cambiar_ue", { id_unidad_ejecutora: id_unidad_ejecutora, id_persona:id_persona}, function(data){
             location.reload();
             //alert (data);
@@ -100,12 +100,12 @@ function cambiar_ue(id_ue){
 ///////////////////////////////////////////////////////////////////////
 //Funciones para ventana oculta de cambiar Puesto
 function mostrar_lista_puesto(){
-    document.getElementById('asignar_area').style.display = "block";
+    document.getElementById('ventana_oculta_3').style.display = "block";
 }
 function cambiar_puesto(puesto){
     id_puesto = puesto;
     id_persona = document.getElementById('ID_Persona').value;
-    document.getElementById('asignar_area').style.display = "none";
+    document.getElementById('ventana_oculta_3').style.display = "none";
     $.post("index.php?ctl=personal_cambiar_puesto", { id_puesto: id_puesto, id_persona:id_persona}, function(data){
             location.reload();
             //alert (data);

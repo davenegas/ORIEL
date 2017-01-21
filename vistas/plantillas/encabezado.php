@@ -123,7 +123,11 @@
                 <?php  if ($_SESSION['modulos']['Catálogos-Horarios']==1){?>
                    <li><a href="index.php?ctl=supervisor_zona_listar">Supervisor de Zona</a></li>
                 <?php  }; ?>
-                                     
+                       
+                <?php  if ($_SESSION['modulos']['Catálogos-Horarios']==1){?>
+                   <li><a href="index.php?ctl=cencon_gestion">Cencon Listar</a></li>
+                <?php  }; ?>
+                   
                 <?php  if ($_SESSION['modulos']['Importar- Prontuario']==1){?>
                    <li><a href="index.php?ctl=frm_importar_prontuario_paso_1">Importar Prontuario</a></li> 
                 <?php  }; ?>  
@@ -208,7 +212,11 @@
                 <?php if ($_SESSION['modulos']['Módulo-Personal']==1){ ?>
                      <li><a href="index.php?ctl=personal_listar">Personal</a></li>
                 <?php }; ?>
-                
+                     
+                <?php if ($_SESSION['modulos']['Módulo-Personal Externo']==1){?>
+                    <li><a href="index.php?ctl=personal_externo_listar">Personal Externo</a></li>
+                <?php }; ?>
+                    
                 <?php if ($_SESSION['modulos']['Módulo-Personal']==1){ ?>
                      <li><a href="index.php?ctl=marcas">Asistencia de Personal</a></li>
                 <?php }; ?>
@@ -217,15 +225,14 @@
                      <li><a href="index.php?ctl=areas_apoyo_listar">Áreas de Apoyo</a></li>
                 <?php }; ?>  
 
-
                 <?php if ($_SESSION['modulos']['Módulo-Control de Video']==1){?>
                     <!--<li><a href="#">Controles de Video</a></li>--> 
                 <?php }; ?>   
-
-                <?php if ($_SESSION['modulos']['Módulo-Personal Externo']==1){?>
-                    <li><a href="index.php?ctl=personal_externo_listar">Personal Externo</a></li>
-                <?php }; ?>
-
+                    
+                <?php if ($_SESSION['modulos']['Módulo-Control de Video']==1){?>
+                    <li><a href="index.php?ctl=eventos_cencon">Cencon</a></li> 
+                <?php }; ?>  
+                    
                 <?php if ($_SESSION['modulos']['Módulo-Control de Video']==1){?>
                     <li><a href="http://10.170.5.80/Operaciones_de_Seguridad/ctrlvideo/consulta.html">Controles de Video</a></li>
                 <?php }; ?>   

@@ -7035,7 +7035,7 @@
         }
     }
 
-     ////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////
     ///////////////////////Funciones de Unidades Ejecutoras/////////////////////          
     ////////////////////////////////////////////////////////////////////////////
     public function unidad_ejecutora_listar() {
@@ -7079,7 +7079,7 @@
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }  
     }
-     public function unidad_ejecutora_cambiar_estado() {
+    public function unidad_ejecutora_cambiar_estado() {
        if(isset($_SESSION['nombre'])){
            $obj_unidad_ejecutora = new cls_unidad_ejecutora();
            
@@ -7104,10 +7104,314 @@
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }  
     }
-////////////////////////////////////////////////////////////////////////////
-    ///////////////////////Funciones de Tipo Telefono/////////////////////          
+        
     ////////////////////////////////////////////////////////////////////////////
-
+    ///////////////////////Funciones de CENCON /////////////////////////////////          
+    ////////////////////////////////////////////////////////////////////////////
+    public function eventos_cencon(){
+        if(isset($_SESSION['nombre'])){
+            $obj_cencon = new cls_cencon();
+            $obj_personal = new cls_personal();
+            $obj_externo = new cls_personal_externo();
+            
+            $obj_cencon->setCondicion("Hora_Cierre is null");
+            $obj_cencon->obtener_todos_eventos_cencon();
+            $params= $obj_cencon->getArreglo();
+            
+            $tam=count($params);
+            for($i=0;$i<$tam;$i++){
+                if($params[$i]['ID_Empresa']==1){
+                    $obj_personal->setCondicion("ID_Persona='".$params[$i]['ID_Persona']."'");
+                    $obj_personal->obtener_personas_prontuario();
+                    $persona = $obj_personal->getArreglo();
+                    $params[$i] = array_merge((['Nombre_Persona' =>($persona[0]['Apellido_Nombre'])]),$params[$i]);
+                } else{
+                    $obj_externo->setCondicion("T_PersonalExterno.ID_Persona_Externa='".$params[$i]['ID_Persona']."'");
+                    $obj_externo->obtiene_todo_el_personal_externo();
+                    $persona = $obj_externo->getArreglo();
+                    $params[$i] = array_merge((['Nombre_Persona' =>($persona[0]['Apellido']." ".$persona[0]['Nombre'])]),$params[$i]);
+                }
+            }
+            require __DIR__.'/../vistas/plantillas/frm_eventos_cencon.php';
+        }
+        else {
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }
+    }
+ 
+    public function cencon_gestion(){
+        if(isset($_SESSION['nombre'])){
+            $obj_personal = new cls_personal();
+            $obj_externo = new cls_personal_externo();
+            $obj_puntos = new cls_puntosBCR();
+            $obj_cencon = new cls_cencon();
+            
+            //Obtiene todo el personal BCR
+            $obj_personal->obtiene_todo_el_personal();
+            $personal_bcr = $obj_personal->getArreglo();
+            
+            //Obtiene todo el personal externo
+            $obj_externo->obtiene_todo_el_personal_externo();
+            $personal_externo = $obj_externo->getArreglo();
+            
+            //Obtiene los puntos BCR
+            $obj_puntos->setCondicion("T_Puntobcr.ID_Tipo_Punto=2 OR T_Puntobcr.ID_Tipo_Punto=3 OR T_Puntobcr.ID_Tipo_Punto=4 OR T_Puntobcr.ID_Tipo_Punto=8");
+            $obj_puntos->obtiene_todos_los_puntos_bcr();
+            $puntosbcr = $obj_puntos->getArreglo();
+                        
+            require __DIR__.'/../vistas/plantillas/frm_cencon_gestion.php';
+        }
+        else {
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }
+    }
+    
+    public function cencon_agregar_relacion(){
+        if(isset($_SESSION['nombre'])){
+            $obj_cencon = new cls_cencon();
+            
+            $obj_cencon->setId($_POST['id_atm']);
+            $obj_cencon->setId2($_POST['id_persona']);
+            $obj_cencon->setCedula($_POST['cedula']);
+            $obj_cencon->setEmpresa($_POST['empresa']);
+            
+            $obj_cencon->agregar_relacion();
+            
+            $obj_cencon->setCondicion("T_Cencon.ID_Persona=".$_POST['id_persona']);
+            $obj_cencon->obtener_todas_relaciones();
+            $cajeros =  $obj_cencon->getArreglo();
+           
+            $tam = count($cajeros);
+            $html="";
+            $html.='<thead> 
+                            <th style="text-align:center">Número ATM</th>
+                            <th style="text-align:center">Nombre de ATM</th>
+                            <th style="text-align:center">Observaciones</th>
+                            <th style="text-align:center">Opciones</th>
+                        </thead>
+                        <tbody>';
+            for($i=0; $i<$tam;$i++){
+                $html .='<tr>'; 
+                $html .='<td style="text-align:center">'.$cajeros[$i]['Codigo'].'</td>';
+                $html .='<td style="text-align:center">'.$cajeros[$i]['Nombre'].'</td>';
+                $html .='<td style="text-align:center">'.$cajeros[$i]['Observaciones_Cencon'].'</td>';
+                $html .='<td style="text-align:center"><a class="btn" role="button" onclick="eliminar_cajero('.$cajeros[$i]['ID_Cencon'].');">Eliminar ATM</a></td></td>';
+                $html .='</tr>'; 
+            }  
+            $html.='</tbody> 
+                    </table>';
+            echo $html;
+        }
+        else {
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }
+    }
+    
+    public function cencon_buscar_relaciones(){
+        if(isset($_SESSION['nombre'])){
+            $obj_cencon = new cls_cencon();
+            $obj_cencon->setEmpresa($_POST['empresa']);
+            
+            $obj_cencon->setCondicion("T_Cencon.ID_Persona=".$_POST['id_persona']);
+            $obj_cencon->obtener_todas_relaciones();
+            $cajeros =  $obj_cencon->getArreglo();
+           
+            $tam = count($cajeros);
+            $html="";
+            $html.='<thead> 
+                            <th style="text-align:center">Número ATM</th>
+                            <th style="text-align:center">Nombre de ATM</th>
+                            <th style="text-align:center">Observaciones</th>
+                            <th style="text-align:center">Opciones</th>
+                        </thead>
+                        <tbody>';
+            for($i=0; $i<$tam;$i++){
+                $html .='<tr>'; 
+                $html .='<td style="text-align:center">'.$cajeros[$i]['Codigo'].'</td>';
+                $html .='<td style="text-align:center">'.$cajeros[$i]['Nombre_Punto'].'</td>';
+                $html .='<td style="text-align:center">'.$cajeros[$i]['Observaciones_Cencon'].'</td>';
+                $html .='<td style="text-align:center"><a class="btn" role="button" onclick="eliminar_cajero('.$cajeros[$i]['ID_Cencon'].');">Eliminar ATM</a></td></td>';
+                $html .='</tr>'; 
+            }  
+            $html.='</tbody> 
+                    </table>';
+            echo $html;
+        }
+        else {
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }
+    }
+    
+    public function cencon_eliminar_relacion(){
+        if(isset($_SESSION['nombre'])){
+            $obj_cencon = new cls_cencon();
+            $obj_cencon->setEmpresa($_POST['empresa']);
+            //Se elimina la relacion entre el atm y la persona
+            $obj_cencon->setCondicion("ID_Cencon=".$_POST['id_cencon']);
+            $obj_cencon->eliminar_relacion_persona_puntobcr();
+            
+            //Obtiene nuevamente la lista de Cajeros del usuario
+            $obj_cencon->setCondicion("T_Cencon.ID_Persona=".$_POST['id_persona']);
+            $obj_cencon->obtener_todas_relaciones();
+            $cajeros =  $obj_cencon->getArreglo();
+           
+            $tam = count($cajeros);
+            $html="";
+            $html.='<thead> 
+                            <th style="text-align:center">Número ATM</th>
+                            <th style="text-align:center">Nombre de ATM</th>
+                            <th style="text-align:center">Observaciones</th>
+                            <th style="text-align:center">Opciones</th>
+                        </thead>
+                        <tbody>';
+            for($i=0; $i<$tam;$i++){
+                $html .='<tr>'; 
+                $html .='<td style="text-align:center">'.$cajeros[$i]['Codigo'].'</td>';
+                $html .='<td style="text-align:center">'.$cajeros[$i]['Nombre'].'</td>';
+                $html .='<td style="text-align:center">'.$cajeros[$i]['Observaciones_Cencon'].'</td>';
+                $html .='<td style="text-align:center"><a class="btn" role="button" onclick="eliminar_cajero('.$cajeros[$i]['ID_Cencon'].');">Eliminar ATM</a></td></td>';
+                $html .='</tr>'; 
+            }  
+            $html.='</tbody> 
+                    </table>';
+            echo $html;
+        }
+        else {
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }
+    }
+    
+    public function evento_buscar_cajero() {
+        if(isset($_SESSION['nombre'])){
+            $obj_cencon = new cls_cencon();
+            $obj_punto = new cls_puntosBCR();
+            
+            $obj_punto->setCondicion("T_PuntoBCR.Codigo=".$_POST['id']);
+            $obj_punto->obtiene_todos_los_puntos_bcr();
+            $cajero = $obj_punto->getArreglo();
+            
+            echo json_encode($cajero[0], JSON_FORCE_OBJECT);
+        }
+        else {
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }
+    }
+    
+    public function evento_buscar_persona(){
+        if(isset($_SESSION['nombre'])){
+            $obj_cencon = new cls_cencon();
+            $obj_persona = new cls_personal();
+            $obj_externo = new cls_personal_externo();
+            
+            //Obtiene el código de la empresa 
+            $obj_cencon->setCondicion("T_Cencon.Cedula_Cencon='".$_POST['id']."'");
+            $obj_cencon->buscar_persona_cencon();
+            $funcionario = $obj_cencon->getArreglo();
+            
+            if($funcionario[0]['ID_Empresa']==1){
+                $obj_persona->setCondicion("T_Personal.ID_Persona='".$funcionario[0]['ID_Persona']."'");
+                $obj_persona->obtiene_todo_el_personal();
+                $funcionario= $obj_persona->getArreglo();
+            }else{
+                $obj_externo->setCondicion("T_PersonalExterno.ID_Persona_Externa='".$funcionario[0]['ID_Persona']."'");
+                $obj_externo->obtiene_todo_el_personal_externo();
+                $funcionario= $obj_externo->getArreglo();
+            }
+            
+            echo json_encode($funcionario[0], JSON_FORCE_OBJECT);
+        }
+        else {
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }
+    }
+    
+    public function evento_buscar_relaciones(){
+        if(isset($_SESSION['nombre'])){
+            $obj_cencon = new cls_cencon();
+            
+            //
+            $obj_cencon->setCondicion("T_Cencon.Cedula_Cencon='".$_POST['id']."'");  
+            $obj_cencon->setEmpresa($_POST['empresa']);
+            $obj_cencon->obtener_todas_relaciones();
+            $cajeros =  $obj_cencon->getArreglo();
+            
+            //print_r($cajeros);
+            
+            echo json_encode($cajeros, JSON_FORCE_OBJECT);
+        }
+        else {
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }
+    }
+    
+    public function evento_nuevo_guardar() {
+        if(isset($_SESSION['nombre'])){
+            $obj_cencon = new cls_cencon();
+            
+            $obj_cencon->setFecha($_POST['fecha_apertura']);
+            $obj_cencon->setHora($_POST['hora_apertura']);
+            $obj_cencon->setId($_POST['id_puntobcr']);
+            $obj_cencon->setId2($_POST['id_persona']);
+            $obj_cencon->setEmpresa($_POST['id_empresa']);
+            $obj_cencon->setUsuario($_SESSION['id']);
+            $obj_cencon->setObservaciones($_POST['observaciones']);
+            
+            $obj_cencon->setCondicion("Hora_Cierre is null");
+            $obj_cencon->obtener_todos_eventos_cencon();
+            $params= $obj_cencon->getArreglo();
+            
+            //Valida que el cajero no se encuentre abierto
+            $validado=0;
+            $tam=count($params);
+            for($i=0;$i<$tam;$i++){
+                if($params[$i]['ID_PuntoBCR']==$_POST['id_puntobcr']){
+                    $validado=1;
+                }
+            }
+            if($validado==0){
+                $obj_cencon->agregar_evento_cencon();
+            } else{
+                echo "Esta cajero tiene una apertura pendiente de cierre";
+            }
+        }
+        else {
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }  
+    }
+    
+    public function evento_cencon_cerrar(){
+        if(isset($_SESSION['nombre'])){
+            $obj_cencon = new cls_cencon();
+            
+            $obj_cencon->setFecha(date("Y-m-d"));
+            $obj_cencon->setHora(date("H:i", time()));
+            $obj_cencon->setCondicion("ID_Evento_Cencon=".$_POST['id_evento_cencon']);
+            $obj_cencon->cerrar_evento_cencon();
+        }
+        else {
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }  
+    }
     ////////////////////MANTENIMIENTO DE PERSONAL EXTERNO///////////////////////
     ////////////////////////////////////////////////////////////////////////////
     public function personal_externo_listar(){
@@ -8279,7 +8583,7 @@
        
             }
  
-        public function guardar_marcas_descanso() {
+    public function guardar_marcas_descanso() {
                 
          $obj_descanso= new cls_marcas_descanso();
          
@@ -8314,5 +8618,4 @@
         $obj_descanso->guardar_marcas_descanso();   
         }
            
-} 
-
+}
