@@ -16,7 +16,7 @@
                 table.destroy();
                 table = $('#tabla').DataTable( {
                     stateSave: true
-                });
+                });       
             });
             
           $(document).ready(function () {

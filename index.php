@@ -363,6 +363,9 @@ $map = array(
     'iniciar_sistema_cambiando_clave'=>array('controller'=>'Controller', 'action'=>'iniciar_sistema_cambiando_clave'),
     'cambia_clave_usuario_post'=>array('controller'=>'Controller', 'action'=>'cambia_clave_usuario_post')
     
+    //Pruebas y nuevas implementaciones
+    
+    
     );
  
 

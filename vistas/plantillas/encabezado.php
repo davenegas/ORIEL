@@ -66,7 +66,7 @@
                 <?php if ($_SESSION['modulos']['Seguridad-Trazabilidad']==1){ ?>
                     <li><a href="index.php?ctl=principal">Trazabilidad</a></li> 
                 <?php    }; ?>
-
+                                       
             </ul>
             </li>
 
@@ -210,14 +210,14 @@
                 <?php }; ?>
 
                 <?php if ($_SESSION['modulos']['Módulo-Personal']==1){ ?>
-                     <li><a href="index.php?ctl=personal_listar">Personal</a></li>
+                     <li><a href="index.php?ctl=personal_listar">Personal BCR</a></li>
                 <?php }; ?>
-                     
+  
                 <?php if ($_SESSION['modulos']['Módulo-Personal Externo']==1){?>
                     <li><a href="index.php?ctl=personal_externo_listar">Personal Externo</a></li>
                 <?php }; ?>
-                    
-                <?php if ($_SESSION['modulos']['Módulo-Personal']==1){ ?>
+
+                <?php if ($_SESSION['modulos']['Módulo-Asistencia de Personal']==1){ ?>
                      <li><a href="index.php?ctl=marcas">Asistencia de Personal</a></li>
                 <?php }; ?>
                        
@@ -229,7 +229,7 @@
                     <!--<li><a href="#">Controles de Video</a></li>--> 
                 <?php }; ?>   
                     
-                <?php if ($_SESSION['modulos']['Módulo-Control de Video']==1){?>
+                <?php if ($_SESSION['modulos']['Módulo-Cencon']==1){?>
                     <li><a href="index.php?ctl=eventos_cencon">Cencon</a></li> 
                 <?php }; ?>  
                     
