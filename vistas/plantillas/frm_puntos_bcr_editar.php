@@ -499,7 +499,7 @@
         
         
         <!--agregar teléfono a Punto BCR-->
-        <div id="agregar_telefono"> 
+        <div id="ventana_oculta_1"> 
             <div id="popupventana">
                 <!--Formulario para ingresar nuevos números de teléfono-->
                 <form id="ventana" method="post" name="form" action="index.php?ctl=puntobcr_numero_telefono_guardar">
@@ -531,7 +531,7 @@
             </div>
         
         <!--Asignar UE a Punto BCR-->
-        <div id="asignar_ue">
+        <div id="ventana_oculta_2">
             <div id="popupventana2">
                 <div id="ventana2">
                 <img id="close" src='vistas/Imagenes/cerrar.png' width="25" onclick ="ocultar_elemento()"> 
@@ -567,7 +567,7 @@
         </div> 
         
         <!--Agregar o asignar areas de apoyo-->
-        <div id="asignar_area">
+        <div id="ventana_oculta_3">
             <div id="popupventana2">
                 <div id="ventana2">
                 <img id="close" src='vistas/Imagenes/cerrar.png' width="25" onclick ="ocultar_elemento()">
@@ -703,7 +703,7 @@
         </div>
         
         <!--Agregar o asignar direccion IP-->
-        <div id="asignar_direccion_IP">
+        <div id="ventana_oculta_4">
             <div id="popupventana2">
                 <div id="ventana2">
                 <img id="close" src='vistas/Imagenes/cerrar.png' width="25" onclick ="ocultar_elemento()">
@@ -773,7 +773,7 @@
         </div>
         
      <!--Asignar Horario al Punto BCR-->
-        <div id="asignar_horario">
+        <div id="ventana_oculta_5">
             <div id="popupventana3">
                 <div id="ventana3">
                 <img id="close" src='vistas/Imagenes/cerrar.png' width="25" onclick ="ocultar_elemento()"> 
@@ -819,7 +819,7 @@
         </div> 
         
         <!--agregar o editar enlace del Punto BCR-->
-        <div id="formulario_oculto_1"> 
+        <div id="ventana_oculta_6"> 
             <div id="popupventana4">
                 <div id="ventana4">
                 <!--Formulario para ingresar nuevos números de teléfono-->

@@ -3,6 +3,7 @@
     <head>
         <meta charset="utf-8"/>
         <title>Inicio de Sesión</title>
+        <link rel="shortcut icon" href="vistas/Imagenes/Oriel.ico">
         <link href="../../../bootstrap-3.3.6/dist/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
         <script src="vistas/js/jquery.min.js"></script>    
         <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>-->      
@@ -59,6 +60,6 @@
         </div>
         
       <?php require 'vistas/plantillas/pie_de_pagina.php'?>
-       
+        
     </body>
 </html>

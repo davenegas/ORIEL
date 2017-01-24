@@ -189,7 +189,7 @@
         </div>  
         
          <!--agregar teléfono a la Persona-->
-        <div id="agregar_telefono"> 
+        <div id="ventana_oculta_1"> 
             <div id="popupventana">
                 <!--Formulario para ingresar nuevos números de teléfono-->
                 <form id="ventana" method="POST" name="form" action="index.php?ctl=area_apoyo_numero_telefono_guardar">

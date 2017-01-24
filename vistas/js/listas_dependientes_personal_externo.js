@@ -126,8 +126,8 @@ $(document).ready(function(){
 });
 
 function ocultar_elemento(){
-    document.getElementById('agregar_telefono').style.display = "none";
-    document.getElementById('formulario_oculto_1').style.display = "none";
+    document.getElementById('ventana_oculta_1').style.display = "none";
+    document.getElementById('ventana_oculta_2').style.display = "none";
 }
 
 /////////////////////////////////////////////////////////////////////
@@ -138,14 +138,14 @@ function check_empty() {
     } else {
         //alert("Form Submitted Successfully...");
         document.getElementById('ventana').submit();
-        document.getElementById('agregar_telefono').style.display = "none";
+        document.getElementById('ventana_oculta_1').style.display = "none";
     }
 }
 function mostrar_agregar_telefono() {
     document.getElementById('ID_Telefono').value="0";
     document.getElementById('numero').value=null;
     document.getElementById('observaciones_tel').value=null;
-    document.getElementById('agregar_telefono').style.display = "block";
+    document.getElementById('ventana_oculta_1').style.display = "block";
 }
 function eliminar_telefono(ide){
     $.confirm({title: 'Confirmación!', content: 'Desea eliminar este número de teléfono?', 
@@ -167,13 +167,13 @@ function Editar_telefono(id_tel, tipo_tel, num, obser){
     document.getElementById('numero').value=num;
     document.getElementById('observaciones_tel').value=obser;
     
-    document.getElementById('agregar_telefono').style.display = "block";
+    document.getElementById('ventana_oculta_1').style.display = "block";
 };
 
 ////////////////////////////////////////////////////////////////////
 ////////Funciones para agregar fotos de personal externo///////////
 function mostrar_agregar_foto(){
-    document.getElementById('formulario_oculto_1').style.display = "block";
+    document.getElementById('ventana_oculta_2').style.display = "block";
 }
 function valida_foto(){
     if (document.getElementById('Nombre').value == "" || document.getElementById('Descripcion').value == "") {
@@ -181,7 +181,7 @@ function valida_foto(){
     } else {
         //alert("Form Submitted Successfully...");
         document.getElementById('guardar_foto').submit();
-        document.getElementById('agregar_telefono').style.display = "none";
+        document.getElementById('ventana_oculta_2').style.display = "none";
     }
 }
 function eliminar_imagen(id_imagen){

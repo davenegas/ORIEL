@@ -136,7 +136,7 @@
         
         
         <!--agregar teléfono a la Persona-->
-        <div id="agregar_telefono"> 
+        <div id="ventana_oculta_1"> 
             <div id="popupventana">
                 <!--Formulario para ingresar nuevos números de teléfono-->
                 <form id="ventana" method="POST" name="form" action="index.php?ctl=personal_numero_telefono_guardar">
@@ -168,7 +168,7 @@
         </div>
         
         <!--Asignar UE a la Persona-->
-        <div id="asignar_ue">
+        <div id="ventana_oculta_2">
             <div id="popupventana2">
                 <div id="ventana2">
                 <img id="close" src='vistas/Imagenes/cerrar.png' width="25" onclick ="ocultar_elemento()"> 
@@ -204,7 +204,7 @@
         </div> 
         
         <!--Asignar Puesto a la persona-->
-        <div id="asignar_area">
+        <div id="ventana_oculta_3">
             <div id="popupventana2">
                 <div id="ventana2">
                 <img id="close" src='vistas/Imagenes/cerrar.png' width="25" onclick ="ocultar_elemento()"> 
