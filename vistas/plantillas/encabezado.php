@@ -123,6 +123,9 @@
                 <?php  if ($_SESSION['modulos']['Catálogos-Horarios']==1){?>
                    <li><a href="index.php?ctl=supervisor_zona_listar">Supervisor de Zona</a></li>
                 <?php  }; ?>
+                    <?php  if ($_SESSION['modulos']['Catálogos-Unidades de Video']==1){?>
+                   <li><a href="index.php?ctl=unidades_de_video_listar">Unidades de Video</a></li>
+                <?php  }; ?>
                                      
                 <?php  if ($_SESSION['modulos']['Importar- Prontuario']==1){?>
                    <li><a href="index.php?ctl=frm_importar_prontuario_paso_1">Importar Prontuario</a></li> 

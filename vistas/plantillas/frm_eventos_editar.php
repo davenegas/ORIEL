@@ -162,6 +162,7 @@
                 <th>Tipo de Evento</th>
                 <th>Estado Actual</th>
                 <th>Ingresado Por</th>
+                <th>Info del Sitio</th>
             </tr>
           </thead>
           <tbody>
@@ -197,6 +198,8 @@
                 <td><?php echo $params2[$i]['Evento'];?></td>
                 <td><?php echo $params2[$i]['Estado_Evento'];?></td>
                 <td><?php echo $params2[$i]['Nombre_Usuario']." ".$params2[$i]['Apellido'] ?></td>
+                <td><a href="index.php?ctl=gestion_punto_bcr&id=
+                        <?php echo $params2[$i]['ID_PuntoBCR']?>">Detalles</a></td>
             </tr>
             <?php }
             ?>

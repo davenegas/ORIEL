@@ -23,6 +23,8 @@ require_once __DIR__ . '/controladores/cls_roles.php';
 require_once __DIR__ . '/controladores/cls_modulos.php';
 //Libreria de clases --> Control de eventos de bitácora
 require_once __DIR__ . '/controladores/cls_eventos.php';
+//Libreria de clases --> Control de Unidades de Video
+require_once __DIR__ . '/controladores/cls_unidad_video.php';
 //Libreria de clases --> Control de áreas de apoyo
 require_once __DIR__ . '/controladores/cls_areasapoyo.php';
 //Libreria de clases --> Control de Puntos BCR
@@ -142,6 +144,10 @@ $map = array(
     'cuenta_visitas_a_puntos_bcr_privado'=>array('controller'=>'Controller', 'action'=>'cuenta_visitas_a_puntos_bcr_privado'),
     'cuenta_visitas_a_bitacora_digital'=>array('controller'=>'Controller', 'action'=>'cuenta_visitas_a_bitacora_digital'),
     
+    //Controles de Video
+    'unidades_de_video_listar'=>array('controller'=>'Controller', 'action'=>'unidades_de_video_listar'),
+    'editar_campo_unidades_de_video'=>array('controller'=>'Controller', 'action'=>'editar_campo_unidades_de_video'),
+       
     //Información Proveedor enlaces
     'proveedor_listar'=>array('controller'=>'Controller', 'action'=>'proveedor_listar'),
     'proveedor_enlace_guardar'=>array('controller'=>'Controller', 'action'=>'proveedor_enlace_guardar'),
