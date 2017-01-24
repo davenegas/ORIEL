@@ -128,7 +128,7 @@
                    <li><a href="index.php?ctl=unidades_de_video_listar">Unidades de Video</a></li>
                 <?php  }; ?>
           
-                <?php  if ($_SESSION['modulos']['Catálogos-Horarios']==1){?>
+                <?php  if ($_SESSION['modulos']['Catálogos-Cencon']==1){?>
                    <li><a href="index.php?ctl=cencon_gestion">Cencon Listar</a></li>
                 <?php  }; ?>
 

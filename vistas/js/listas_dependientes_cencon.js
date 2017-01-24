@@ -151,11 +151,13 @@ function agregar_evento_cencon(){
                     $.post("index.php?ctl=evento_nuevo_guardar", { fecha_apertura: fecha_apertura, hora_apertura:hora_apertura,
                     id_puntobcr:id_puntobcr, id_persona:id_persona, id_empresa:id_empresa, observaciones:observaciones}, function(data){
                         //alert (data);
-                        if(data.length>20){
-                            alert(data);
+                        var srt = data;
+                        var n= srt.search("pendiente");
+                        if(n!=-1){
+                            alert("Esta cajero tiene una apertura pendiente de cierre");
+                        } else{
+                            location.reload();
                         }
-                        location.reload();
-
                     });
                     valida_cajero=1
                 }
