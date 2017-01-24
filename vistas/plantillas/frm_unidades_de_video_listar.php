@@ -41,6 +41,8 @@
             function check_empty_AA() {
 
                 var f = new Date();
+                var estado_temp_num="";
+                var estado_nuevo_valor="";
                 m=f.getMonth() + 1; 
                 if(m < 10){ 
                    m = '0' + m;
@@ -53,29 +55,35 @@
                     //alert (document.getElementById('Estado_Arranque_Automatico').value);
                     var estado_temp=document.getElementById(document.getElementById('ID_Unidad_Video_AA').value+'-'+document.getElementById('campo_a_editar_AA').value).innerHTML;
                     if (estado_temp=="No"){
-                        estado_temp=0;
+                        estado_temp_num=0;
+                        estado_nuevo_valor="Si";
                     }else{
-                        estado_temp=1;
+                        estado_temp_num=1;
+                        estado_nuevo_valor="No";
                     }
                     //alert();
-                    if (document.getElementById('Estado_Arranque_Automatico').value!=estado_temp){
-                        alert("Prueba");
-                    }
-                    //alert(estado_temp);
-                    //if (document.getElementById('detalle').value!=document.getElementById(document.getElementById('ID_Unidad_Video').value+'-'+document.getElementById('campo_a_editar').value).value){
-                    //       document.getElementById(document.getElementById('ID_Unidad_Video').value+'-'+document.getElementById('campo_a_editar').value).innerHTML=document.getElementById('detalle').value; 
-                    //       document.getElementById(document.getElementById('ID_Unidad_Video').value+'-Fecha_Actualizacion').innerHTML=fecha_actual; 
-                   //        $.post("index.php?ctl=editar_campo_unidades_de_video", { id_unidad_video:document.getElementById('ID_Unidad_Video').value ,campo_a_editar:document.getElementById('campo_a_editar').value,valor:document.getElementById('detalle').value}, function(data){
-                    //       document.getElementById('ventana_oculta_1').style.display = "none";
-                           //var str = data;
-                           //var n = str.search("SI");
-                           //if (n!=-1){
+                    if (document.getElementById('Estado_Arranque_Automatico').value!=estado_temp_num){
+                        document.getElementById(document.getElementById('ID_Unidad_Video_AA').value+'-'+document.getElementById('campo_a_editar_AA').value).innerHTML=estado_nuevo_valor;
+                        document.getElementById(document.getElementById('ID_Unidad_Video_AA').value+'-Fecha_Actualizacion').innerHTML=fecha_actual; 
+                        $.post("index.php?ctl=editar_campo_unidades_de_video", { id_unidad_video:document.getElementById('ID_Unidad_Video_AA').value ,campo_a_editar:document.getElementById('campo_a_editar_AA').value,valor:document.getElementById('Estado_Arranque_Automatico').value}, function(data){
+                           var str = data;
+                           var n = str.search("SI");
+                           if (n!=-1){
 
                                //alert('Información Actualizada Correctamente!!!');
-                           // }
+                            }
 
-                           // }); 
-                    //}
+                            }); 
+                        
+                        document.getElementById('ventana_oculta_2').style.display = "none";
+                        
+                    }
+                    
+                   
+                    
+                           
+                          
+                    
                  }
                
 
@@ -122,13 +130,7 @@
                                document.getElementById(document.getElementById('ID_Unidad_Video').value+'-Fecha_Actualizacion').innerHTML=fecha_actual; 
                                $.post("index.php?ctl=editar_campo_unidades_de_video", { id_unidad_video:document.getElementById('ID_Unidad_Video').value ,campo_a_editar:document.getElementById('campo_a_editar').value,valor:document.getElementById('detalle').value}, function(data){
                                document.getElementById('ventana_oculta_1').style.display = "none";
-                               //var str = data;
-                               //var n = str.search("SI");
-                               //if (n!=-1){
-                                   
-                                   //alert('Información Actualizada Correctamente!!!');
-                               // }
-                                                           
+                                                                                          
                                 }); 
                             }
                     }
@@ -176,7 +178,7 @@
             function edita_dato(id_unidad,texto,valida,titulo) {
                 
               if (valida=="Arranque_Automatico"){
-                  alert(texto);
+                  //alert('_'+texto+'_');
                   //$("Estado_Arranque_Automatico option").val(texto);
                   $("#Estado_Arranque_Automatico option[value="+texto+"]").attr("selected",true);
                   document.getElementById('ID_Unidad_Video_AA').value=id_unidad;
@@ -344,5 +346,28 @@
             <!--Cierre agregar teléfono a Punto BCR-->
         </div>
         
+         <!--Cambiar estado del arranque automático de un grabador de video-->
+        <div id="ventana_oculta_3"> 
+            <div id="popupventana3">
+                <!--Formulario para ingresar nuevos números de teléfono-->
+                <!--<form id="ventana2" method="post" name="form" action="index.php?ctl=puntobcr_numero_telefono_guardar">-->
+                <div id="ventana3">
+                    <img id="close" src='vistas/Imagenes/cerrar.png' width="25" onclick ="ocultar_elemento()">
+                    <h2>Estado de la Unidad de Video</h2>
+                    <hr>
+                    <input hidden id="ID_Unidad_Video_Estado" name="ID_Unidad_Video_Estado" type="text" value="">
+                    <input hidden id="campo_a_editar_estado" name="campo_a_editar_estado" type="text" value="">
+                    <label for="Estado_Unidad_Video">Estado</label>
+                        <select class="form-control espacio-abajo" id="Estado_Unidad_Video" name="Estado_Unidad_Video">                 
+                                <option value="1" >Sin Utilizar/Disponible</option>   
+                                <option value="2" >En Taller/Con Avería</option>   
+                                <option value="3" >Obsoleto/Descontinuado</option>   
+                        </select>
+                    <button><a href="javascript:%20check_empty_Estado_Unidad_Video()" id="submit">Guardar</a></button>
+                    <!--</form>-->
+                </div>
+            </div>
+            <!--Cierre agregar teléfono a Punto BCR-->
+        </div>
     </body>
 </html>

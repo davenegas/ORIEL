@@ -3324,6 +3324,12 @@
                     //echo "t_unidadvideo". "Fecha_Actualizacion='".date("Y-m-d")."',".$_POST['campo_a_editar']."=".$_POST['valor'] ." ID_Unidad_Video="."_".$_POST['id_unidad_video']."_" ;
                     echo 'SI';
                 }
+                 if($_POST['campo_a_editar']=="Arranque_Automatico"){
+                    $obj_unidades_de_video->setCampos_valores("Fecha_Actualizacion='".date("Y-m-d")."',".$_POST['campo_a_editar']."=".$_POST['valor']);
+                    $obj_unidades_de_video->actualizar_campo_unidades_de_video();
+                    //echo "t_unidadvideo". "Fecha_Actualizacion='".date("Y-m-d")."',".$_POST['campo_a_editar']."=".$_POST['valor'] ." ID_Unidad_Video="."_".$_POST['id_unidad_video']."_" ;
+                    echo 'SI';
+                }
                  if(($_POST['campo_a_editar']=="Descripcion")||($_POST['campo_a_editar']=="Observaciones")||($_POST['campo_a_editar']=="Resolucion")){
                     $obj_unidades_de_video->setCampos_valores("Fecha_Actualizacion='".date("Y-m-d")."',".$_POST['campo_a_editar']."='".$_POST['valor']."'");
                     $obj_unidades_de_video->actualizar_campo_unidades_de_video();
