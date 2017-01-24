@@ -124,7 +124,7 @@
                    <li><a href="index.php?ctl=supervisor_zona_listar">Supervisor de Zona</a></li>
                 <?php  }; ?>
                        
-                <?php  if ($_SESSION['modulos']['Catálogos-Horarios']==1){?>
+                <?php  if ($_SESSION['modulos']['Catálogos-Cencon']==1){?>
                    <li><a href="index.php?ctl=cencon_gestion">Cencon Listar</a></li>
                 <?php  }; ?>
                    

@@ -7373,6 +7373,7 @@
             $obj_cencon->setUsuario($_SESSION['id']);
             $obj_cencon->setObservaciones($_POST['observaciones']);
             
+            //Obtiene eventos de Cencon pendiente de cierre.
             $obj_cencon->setCondicion("Hora_Cierre is null");
             $obj_cencon->obtener_todos_eventos_cencon();
             $params= $obj_cencon->getArreglo();
@@ -7387,8 +7388,9 @@
             }
             if($validado==0){
                 $obj_cencon->agregar_evento_cencon();
-            } else{
-                echo "Esta cajero tiene una apertura pendiente de cierre";
+            }   
+            if($validado==1){
+                echo "pendiente de cierre";
             }
         }
         else {
@@ -7452,7 +7454,8 @@
             $params= $obj_personal->getArreglo();
             //Calcula proximas portaciones a vencer
             $fecha_actual= getdate();
-            $fecha_actual= $fecha_actual['year']."-".$fecha_actual['mon']."-".$fecha_actual['wday'];
+            $fecha_actual= $fecha_actual['year']."-".$fecha_actual['mon']."-".$fecha_actual['mday'];
+            
             
             $tam=count($params);
             $cantidad=0;
