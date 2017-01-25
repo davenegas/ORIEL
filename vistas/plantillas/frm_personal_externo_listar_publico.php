@@ -1,16 +1,26 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>Puntos BCR</title>
+  <title>Personal Externo</title>
+  <?php require_once 'frm_librerias_head.html';?>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <?php require_once 'frm_librerias_head.html';?>
-
     <script>
         $(document).ready(function () {
         // Una vez se cargue al completo la página desaparecerá el div "cargando"
         $('#cargando').hide();
-        $.post("index.php?ctl=cuenta_visitas_a_puntos_bcr_publico");  
+        });
+        
+        $(document).ready(function() {
+            $(".fancybox-button").fancybox({
+                    prevEffect		: 'none',
+                    nextEffect		: 'none',
+                    closeBtn		: false,
+                    helpers		: {
+                            title	: { type : 'inside' },
+                            buttons	: {}
+                    }
+            });
         });
     </script>
 </head>
@@ -32,8 +42,8 @@
       <ul class="nav navbar-nav">
         <li><a href="index.php?ctl=inicio"><b>Inicio</b></a></li>
         <li><a href="index.php?ctl=personal_listar_publico">Personal</a></li>
-        <li class="active"><a href="index.php?ctl=puntobcr_listar_publico">Puntos BCR</a></li>
-        <li><a href="index.php?ctl=personal_externo_listar_publico">Padrones Fotográficos</a></li>
+        <li><a href="index.php?ctl=puntobcr_listar_publico">Puntos BCR</a></li>
+        <li class="active"><a href="index.php?ctl=personal_externo_listar_publico">Padrones Fotográficos</a></li>
         <li><a href="index.php?ctl=frm_contacto_publico">Contáctenos</a></li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
@@ -55,44 +65,53 @@
         <div id="cargando">
             <center><img align="center" src="vistas/Imagenes/Espere.gif"/></center>
         </div>
-        <h2>Listado General de Puntos BCR</h2>  
+<!--        <pre>
+            <?php print_r($externo)?>
+        </pre>-->
+        <h2>Listado General de Personal Externo</h2>  
         <table id="tabla" class="display" cellspacing="0" width="100%">
           <thead>
             <tr>
+              <th style="text-align:center">Identificación</th>
+              <th style="text-align:center">Apellido</th>
               <th style="text-align:center">Nombre</th>
-              <th style="text-align:center">Unidad Ejecutora</th>
-              <th style="text-align:center">Direccion</th>
-              <th style="text-align:center">Horario</th>
-              <th style="text-align:center">Tipo de Punto</th>
-              <th style="text-align:center">Número</th>
+              <th style="text-align:center">Empresa</th>
+              <th style="text-align:center">Responsable BCR</th>
+              <th style="text-align:center">Ocupación</th>
+              <th style="text-align:center">Dirección</th>
+              <th style="text-align:center">Foto</th>
             </tr>
           </thead>
           <tbody>
             <?php 
-            $tam=count($puntosbcr);
+            $tam=count($externo);
             for ($i = 0; $i <$tam; $i++) {
-            ?>
-            <tr>
-                <td style="text-align:center"><?php echo $puntosbcr[$i]['Nombre'];?></td>
-                <td style="text-align:center"><?php echo $puntosbcr[$i]['Departamento'];?></td>
-                <td style="text-align:center"><?php echo $puntosbcr[$i]['Direccion'];?></td>
-                <td style="text-align:center"><?php echo $puntosbcr[$i]['Observaciones'];?></td>
-                <td style="text-align:center"><?php echo $puntosbcr[$i]['Tipo_Punto'];?></td>
-                <td style="text-align:center"><?php echo $puntosbcr[$i]['Numero'];?></td>
-            </tr>     
-                    
-            <?php }
+                if($externo[$i]['Categoria']=='Rostro'){?>
+                    <tr>
+                        <td style="text-align:center"><?php echo $externo[$i]['Identificacion'];?></td>
+                        <td style="text-align:center"><?php echo $externo[$i]['Apellido'];?></td>
+                        <td style="text-align:center"><?php echo $externo[$i]['Nombre'];?></td>
+                        <td style="text-align:center"><?php echo $externo[$i]['Empresa'];?></td>
+                        <td style="text-align:center">NA</td>
+                        <td style="text-align:center"><?php echo $externo[$i]['Ocupacion'];?></td>
+                        <td style="text-align:center"><?php echo $externo[$i]['Direccion'];?></td>
+                        <td style="text-align:center"><a class="fancybox-button" rel="fancybox-button" href="../../../Padron_Fotografico_Personal_externo/<?php echo $externo[$i]['Nombre_Ruta'];?>" 
+                            title="<?php echo $externo[$i]['Apellido'].' '.$externo[$i]['Nombre'].' ('.$externo[$i]['Empresa'].')';?>">
+                            <img src="../../../Padron_Fotografico_Personal_externo/<?php echo $externo[$i]['Nombre_Ruta'];?>" alt="" width="50px"/></a></td>
+
+                    </tr>
+            <?php }}
             ?>
             </tbody>
         </table>
     </div>
     <div class="col-sm-2 sidenav">
       <div class="well">
-        <p>Información del Puntos BCR</p>
+        <p>Información del Personal Externo</p>
       </div>
-<!--      <div class="well">
-        <p>ADS</p>
-      </div>-->
+      <div class="well">
+        <p>Las busquedas se pueden realizar por cualquier campo sin importar el orden</p>
+      </div>
     </div>
   </div>
 </div>

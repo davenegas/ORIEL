@@ -56,7 +56,7 @@
         <li class="active"><a href="index.php?ctl=inicio"><b>Inicio</b></a></li>
         <li><a href="index.php?ctl=personal_listar_publico">Personal</a></li>
         <li><a href="index.php?ctl=puntobcr_listar_publico">Puntos BCR</a></li>
-        <!--<li><a href="#">Padrones Fotograficos</a></li>-->
+        <li><a href="index.php?ctl=personal_externo_listar_publico">Padrones Fotográficos</a></li>
         <li><a href="index.php?ctl=frm_contacto_publico">Contáctenos</a></li>
       </ul>
       <ul class="nav navbar-nav navbar-right">

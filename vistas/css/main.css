@@ -105,7 +105,7 @@ footer {
     width: 50%;
     margin: auto;
 }
-
+/***********************************************/
 /* Estilo para mensaje de alerta del sistema*/
 .dgcAlert {
     top: 0;
@@ -160,3 +160,4 @@ footer {
     color:#FFF; 
     margin-top:50px;
 }
+/***********************************************/

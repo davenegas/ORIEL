@@ -49,7 +49,6 @@ $(document).ready(function(){
             document.getElementById('observaciones').readOnly=true;
             $("#estado_persona").attr("disabled",true);
             $("#genero").attr("disabled",true);
-            $("#validado").attr("disabled",true);
             document.getElementById('ocupacion').readOnly=true;
             
             //Almacena la informacion del formulario en variables y la guarda en Personal Externo
@@ -72,7 +71,6 @@ $(document).ready(function(){
             observaciones = document.getElementById('observaciones').value;
             estado_persona = document.getElementById('estado_persona').value;
             genero = document.getElementById('genero').value;
-            validado = document.getElementById('validado').value;
             ocupacion = document.getElementById('ocupacion').value
             //ejecuta una funcion del index para guardar la información
             $.post("index.php?ctl=persona_externa_guardar_informacion", 
@@ -80,10 +78,17 @@ $(document).ready(function(){
                 apellido:apellido, fecha_nacimiento:fecha_nacimiento, fecha_ingreso:fecha_ingreso, fecha_salida:fecha_salida,
                 nacionalidad:nacionalidad,fecha_residencia:fecha_residencia,fecha_portacion:fecha_portacion,
                 Distrito:Distrito,Direccion:Direccion,estado_civil:estado_civil,correo:correo,nivel_academico:nivel_academico,
-                observaciones:observaciones, estado_persona:estado_persona, genero:genero, validado:validado,ocupacion:ocupacion}, 
+                observaciones:observaciones, estado_persona:estado_persona, genero:genero, ocupacion:ocupacion}, 
             function(data){
                 //alert (data);
-                document.getElementById('ID_Persona').value=parseInt(data);
+                var srt = data;
+                var n= srt.search("Repetido");
+                if(n!=-1){
+                    alert("Esta persona ya se encuentra registrada en el sistema");
+                } else{
+                    document.getElementById('ID_Persona').value=parseInt(data);
+                }
+                
             });
         }
     });
@@ -206,3 +211,10 @@ function eliminar_imagen(id_imagen){
     });
             
 }  
+function validar_persona_externa(){
+    id_persona = document.getElementById('ID_Persona').value;
+    validar = document.getElementById('validado').value;
+    $.post("index.php?ctl=personal_externo_validar", { id_persona: id_persona, validar:validar}, function(data){
+                location.reload();  
+            }); 
+}

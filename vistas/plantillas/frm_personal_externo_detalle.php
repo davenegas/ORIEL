@@ -28,10 +28,8 @@
                 <?php }?>
                 </h3>
                 <!--Información del personal Externo-->
-                <div class="col-md-12 espacio-abajo">
-                    <label for="ID_Persona">ID Persona</label>
-                    <input hidden="hidden" type="text" required="ID_Persona" readonly class="form-control" id="ID_Persona" name="ID_Persona" value="<?php echo $params[0]['ID_Persona_Externa'];?>">
-                </div>
+                <input type="text" hidden required="ID_Persona" readonly id="ID_Persona" name="ID_Persona" value="<?php echo $params[0]['ID_Persona_Externa'];?>">
+
                 <div class="col-md-4 espacio-abajo">
                     <label for="identificacion">Identificación</label>
                     <input type="text" required="cedula" readonly class="form-control" id="identificacion" name="identificacion" value="<?php echo $params[0]['Identificacion'];?>">
@@ -58,9 +56,13 @@
                     <label for="nombre">Nombre</label>
                     <input type="text" style="text-transform: uppercase" class="form-control" readonly ALIGN="right" id="nombre" name="nombre" value="<?php echo $params[0]['Nombre'];?>">
                 </div>
-                <div class="col-md-8 espacio-abajo">
+                <div class="col-md-4 espacio-abajo">
                     <label for="apellido">Apellidos</label>
                     <input type="text" style="text-transform: uppercase" class="form-control" readonly ALIGN="right" id="apellido" name="apellido" value="<?php echo $params[0]['Apellido'];?>">
+                </div>
+                <div class="col-md-4 espacio-abajo">
+                    <label for="ocupacion">Ocupación</label>
+                    <input type="text" class="form-control" readonly ALIGN="right" id="ocupacion" name="ocupacion" value="<?php echo $params[0]['Ocupacion'];?>">
                 </div>
                 <div class="col-md-4 espacio-abajo">
                     <label for="fecha_nacimiento">Fecha de Nacimiento</label>
@@ -210,7 +212,11 @@
                 </div>
                 <div class="col-md-4 espacio-abajo">
                     <label for="validado">Validado</label>
-                    <select class="form-control" disabled id="validado" name="validado"> 
+                    <?php if($_SESSION['modulos']['Validar- Personal Externo']==1){ ?>
+                        <select class="form-control" id="validado" name="validado" onchange="validar_persona_externa();"> 
+                    <?php } else{ ?>
+                        <select class="form-control" disabled readonly id="validado" name="validado" > 
+                    <?php } ?>
                         <?php if($params[0]['Validado']=='0'){?>
                         <option value="0" selected style="color: red">No Validado</option>
                             <option value="1">Validado</option>
@@ -221,8 +227,8 @@
                     </select>
                 </div>
                 <div class="col-md-4 espacio-abajo">
-                    <label for="ocupacion">Ocupación</label>
-                    <input type="text" class="form-control" readonly ALIGN="right" id="ocupacion" name="ocupacion" value="<?php echo $params[0]['Ocupacion'];?>">
+                    <label for="ocupacion">Validado por:</label>
+                    <input type="text" class="form-control" readonly ALIGN="right" id="ocupacion" name="ocupacion" value="<?php echo $params[0]['Nombre_Usuario'].' '.$params[0]['Apellido_Usuario'];?>">
                 </div>
             </div>
         </section>

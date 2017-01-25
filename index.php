@@ -134,10 +134,12 @@ $map = array(
     'nota_guardar' => array('controller' =>'Controller', 'action' =>'nota_guardar'),
     'nota_obtener' => array('controller' =>'Controller', 'action' =>'nota_obtener'),
     'iniciar_sesion' => array('controller' =>'Controller', 'action' =>'iniciar_sesion'),
-     
+    'ejecucion_automatico_proceso' => array('controller' =>'Controller', 'action' =>'ejecucion_automatico_proceso'),
+    
     //Información pública
     'personal_listar_publico'=>array('controller'=>'Controller', 'action'=>'personal_listar_publico'),
     'puntobcr_listar_publico'=>array('controller'=>'Controller', 'action'=>'puntobcr_listar_publico'),
+    'personal_externo_listar_publico'=>array('controller'=>'Controller', 'action'=>'personal_externo_listar_publico'),
     'frm_contacto_publico'=>array('controller'=>'Controller', 'action'=>'frm_contacto_publico'),
     'cuenta_visitas_a_la_pagina'=>array('controller'=>'Controller', 'action'=>'cuenta_visitas_a_la_pagina'),
     'cuenta_visitas_a_personal_publico'=>array('controller'=>'Controller', 'action'=>'cuenta_visitas_a_personal_publico'),
@@ -345,6 +347,7 @@ $map = array(
     'persona_externa_guardar_informacion'=>array('controller'=>'Controller','action'=> 'persona_externa_guardar_informacion'), 
     'guardar_imagen_persona_externa'=>array('controller'=>'Controller','action'=> 'guardar_imagen_persona_externa'), 
     'eliminar_imagen_personal_externo'=>array('controller'=>'Controller','action'=> 'eliminar_imagen_personal_externo'), 
+    'personal_externo_validar'=>array('controller'=>'Controller','action'=> 'personal_externo_validar'), 
     
     //Importación de Prontuario
     'frm_importar_prontuario_paso_1'=>array('controller'=>'Controller','action'=> 'frm_importar_prontuario_paso_1'),
