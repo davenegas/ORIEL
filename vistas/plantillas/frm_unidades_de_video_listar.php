@@ -36,8 +36,8 @@
                 tecla_final = String.fromCharCode(tecla);
                 return patron.test(tecla_final);
             }
-            
-                  //Valida informacion completa de formulario de notas de coordinacion
+
+            //Valida informacion completa de formulario de notas de coordinacion
             function check_empty_AA() {
 
                 var f = new Date();
@@ -51,8 +51,7 @@
                 fecha_actual=f.getFullYear()+"-"+m + "-" + f.getDate();
                 
                 if (document.getElementById('campo_a_editar_AA').value=='Arranque_Automatico'){
-                    
-                    //alert (document.getElementById('Estado_Arranque_Automatico').value);
+                  
                     var estado_temp=document.getElementById(document.getElementById('ID_Unidad_Video_AA').value+'-'+document.getElementById('campo_a_editar_AA').value).innerHTML;
                     if (estado_temp=="No"){
                         estado_temp_num=0;
@@ -61,7 +60,6 @@
                         estado_temp_num=1;
                         estado_nuevo_valor="No";
                     }
-                    //alert();
                     if (document.getElementById('Estado_Arranque_Automatico').value!=estado_temp_num){
                         document.getElementById(document.getElementById('ID_Unidad_Video_AA').value+'-'+document.getElementById('campo_a_editar_AA').value).innerHTML=estado_nuevo_valor;
                         document.getElementById(document.getElementById('ID_Unidad_Video_AA').value+'-Fecha_Actualizacion').innerHTML=fecha_actual; 
@@ -70,27 +68,66 @@
                            var n = str.search("SI");
                            if (n!=-1){
 
-                               //alert('Información Actualizada Correctamente!!!');
                             }
-
                             }); 
                         
-                        document.getElementById('ventana_oculta_2').style.display = "none";
-                        
+                        document.getElementById('ventana_oculta_2').style.display = "none";    
                     }
-                    
-                   
-                    
-                           
-                          
-                    
                  }
-               
-
-   
             }
             
-            
+             //Valida informacion completa de formulario de notas de coordinacion
+            function check_empty_Estado_Unidad_Video() {
+
+                var f = new Date();
+                var estado_temp_num="";
+                var estado_nuevo_valor="";
+                m=f.getMonth() + 1; 
+                if(m < 10){ 
+                   m = '0' + m;
+                } 
+
+                fecha_actual=f.getFullYear()+"-"+m + "-" + f.getDate();
+                             
+                if (document.getElementById('campo_a_editar_estado').value=='Estado'){
+                    var estado_temp=document.getElementById(document.getElementById('ID_Unidad_Video_Estado').value+'-'+document.getElementById('campo_a_editar_estado').value).innerHTML;
+                    
+                    if (estado_temp=="En producción"){
+                        estado_temp_num=0;
+                        estado_nuevo_valor="Si";
+                    }
+                    if (estado_temp=="Sin Utilizar/Disponible"){
+                        estado_temp_num=1;
+                        estado_nuevo_valor="Si";
+                    }
+                     if (estado_temp=="En taller/Con Avería"){
+                        estado_temp_num=2;
+                        estado_nuevo_valor="Si";
+                    }
+                     if (estado_temp=="Obsoleto-Descontinuado"){
+                        estado_temp_num=3;
+                        estado_nuevo_valor="Si";
+                    }
+                 
+                    if (document.getElementById('Estado_Unidad_Video').value!=estado_temp_num){
+                        var combo = document.getElementById('Estado_Unidad_Video');
+                        document.getElementById(document.getElementById('ID_Unidad_Video_Estado').value+'-'+document.getElementById('campo_a_editar_estado').value).innerHTML=combo.options[combo.selectedIndex].text;;
+                        document.getElementById(document.getElementById('ID_Unidad_Video_Estado').value+'-Fecha_Actualizacion').innerHTML=fecha_actual; 
+                        document.getElementById(document.getElementById('ID_Unidad_Video_Estado').value+'-ID_PuntoBCR').innerHTML=""; 
+                        document.getElementById(document.getElementById('ID_Unidad_Video_Estado').value+'-Provincia').innerHTML=""; 
+                        document.getElementById(document.getElementById('ID_Unidad_Video_Estado').value+'-Tipo_Punto').innerHTML=""; 
+                        $.post("index.php?ctl=editar_campo_unidades_de_video", { id_unidad_video:document.getElementById('ID_Unidad_Video_Estado').value ,campo_a_editar:document.getElementById('campo_a_editar_estado').value,valor:document.getElementById('Estado_Unidad_Video').value}, function(data){
+                           var str = data;
+                           var n = str.search("SI");
+                           if (n!=-1){
+
+                            }
+                            }); 
+                        
+                        document.getElementById('ventana_oculta_3').style.display = "none";    
+                    }
+                 }
+            }
              //Valida informacion completa de formulario de notas de coordinacion
             function check_empty() {
                 
@@ -110,13 +147,7 @@
                                document.getElementById(document.getElementById('ID_Unidad_Video').value+'-Fecha_Actualizacion').innerHTML=fecha_actual; 
                                $.post("index.php?ctl=editar_campo_unidades_de_video", { id_unidad_video:document.getElementById('ID_Unidad_Video').value ,campo_a_editar:document.getElementById('campo_a_editar').value,valor:document.getElementById('detalle').value}, function(data){
                                document.getElementById('ventana_oculta_1').style.display = "none";
-                               //var str = data;
-                               //var n = str.search("SI");
-                               //if (n!=-1){
-                                   
-                                   //alert('Información Actualizada Correctamente!!!');
-                               // }
-                                                           
+                          
                                 }); 
                             }
                         }else{
@@ -137,6 +168,7 @@
                     if (document.getElementById('campo_a_editar').value=='Mac_Address'){
                             if (document.getElementById('detalle').value!=document.getElementById(document.getElementById('ID_Unidad_Video').value+'-'+document.getElementById('campo_a_editar').value).value){
                                if (document.getElementById('detalle').value.trim().length==17){
+                                   //alert(document.getElementById('detalle').value);
                                     $.post("index.php?ctl=editar_campo_unidades_de_video", { id_unidad_video:document.getElementById('ID_Unidad_Video').value ,campo_a_editar:document.getElementById('campo_a_editar').value,valor:document.getElementById('detalle').value}, function(data){
                                     var n = data.search("SI");
                                     if (n!=-1){
@@ -144,6 +176,7 @@
                                         document.getElementById(document.getElementById('ID_Unidad_Video').value+'-Fecha_Actualizacion').innerHTML=fecha_actual; 
                                         document.getElementById('ventana_oculta_1').style.display = "none";
                                     }else{
+                                        //alert (data);
                                         alert('Esta Mac Address ya se encuentra registrada en otra unidad de video de la Base de Datos. Proceda a revisar!!!');
                                     }
 
@@ -171,39 +204,87 @@
                 }else{
                     alert('Es necesario completar el campo detalle');
                 }
-   
             }
-            
             //Valida informacion completa de formulario de notas de coordinacion
             function edita_dato(id_unidad,texto,valida,titulo) {
                 
               if (valida=="Arranque_Automatico"){
-                  //alert('_'+texto+'_');
-                  //$("Estado_Arranque_Automatico option").val(texto);
                   $("#Estado_Arranque_Automatico option[value="+texto+"]").attr("selected",true);
                   document.getElementById('ID_Unidad_Video_AA').value=id_unidad;
                   document.getElementById('campo_a_editar_AA').value=valida;
                   document.getElementById('ventana_oculta_2').style.display = "block";
-                  //alert(document.getElementById(document.getElementById('ID_Unidad_Video_AA').value+'-'+document.getElementById('campo_a_editar_AA').value).innerHTML);
+                  
               }else{
-                   document.getElementById('titulo_ventana_oculta').innerHTML=titulo;
-                   document.getElementById('ID_Unidad_Video').value=id_unidad;
-                   document.getElementById('campo_a_editar').value=valida;
-                   document.getElementById('detalle').value=document.getElementById(document.getElementById('ID_Unidad_Video').value+'-'+document.getElementById('campo_a_editar').value).innerHTML;
-                   document.getElementById('ventana_oculta_1').style.display = "block"; 
+                  if (valida=="Estado"){
+                       $("#Estado_Unidad_Video option[value="+texto+"]").attr("selected",true);
+                       document.getElementById('ID_Unidad_Video_Estado').value=id_unidad;
+                       document.getElementById('campo_a_editar_estado').value=valida;
+                       document.getElementById('ventana_oculta_3').style.display = "block";
+                  }else{
+                        if (valida=="ID_PuntoBCR"){
+                            //$("#Estado_Unidad_Video option[value="+texto+"]").attr("selected",true);
+                            document.getElementById('ID_Unidad_Video_PuntoBCR').value=id_unidad;
+                            document.getElementById('campo_a_editar_puntobcr').value=valida;
+                            document.getElementById('nombre_puntobcr').value=texto;
+                            document.getElementById('ventana_oculta_4').style.display = "block";
+                           
+                         }else{
+                            document.getElementById('titulo_ventana_oculta').innerHTML=titulo;
+                            document.getElementById('ID_Unidad_Video').value=id_unidad;
+                            document.getElementById('campo_a_editar').value=valida;
+                            document.getElementById('detalle').value=document.getElementById(document.getElementById('ID_Unidad_Video').value+'-'+document.getElementById('campo_a_editar').value).innerHTML;
+                            document.getElementById('ventana_oculta_1').style.display = "block"; 
+                        }
+                     }
               }
-              
-              
-            }
-                    
+            }       
             //Funcion para ocultar ventana de mantenimiento de notas de coordinacion
             function ocultar_elemento(){
                 document.getElementById('ventana_oculta_1').style.display = "none";
                 document.getElementById('ventana_oculta_2').style.display = "none";
-                //document.getElementById('ventana_oculta_2').style.display = "none";
+                document.getElementById('ventana_oculta_3').style.display = "none";
+                document.getElementById('ventana_oculta_4').style.display = "none";
                 //location.reload(true);
 
             }
+            //Funcion para ocultar ventana de mantenimiento de notas de coordinacion
+            function nueva_unidad_de_video(){
+              $.post("index.php?ctl=agregar_nueva_unidad_de_video",{}, function(data){
+                                    var n = data.search("SI");
+                                    if (n!=-1){
+                                        alert ('Fue ingresado un nuevo registro de unidad de video con siete ceros en el número de serie (0000000) y diecisiete ceros en la mac address (00000000000000000), esto para su respectiva actualización y utilización!!!');
+                                        setTimeout ("location.reload(true);", 12000); 
+                                    }else{
+                                        alert('No fue posible ingresar un nuevo registro de unidad de video, verifique en la tabla ya que existe un registro disponible inicializado con número de serie de siete ceros (0000000) o mac address de diecisiete ceros (00000000000000000).');
+                                    }
+
+                                    }); 
+            }
+              //Valida informacion completa de formulario de notas de coordinacion
+            function agregar_puntobcr(id_punt,nom,provin,tp){
+
+                var f = new Date();
+               
+                m=f.getMonth() + 1; 
+                if(m < 10){ 
+                   m = '0' + m;
+                } 
+
+                fecha_actual=f.getFullYear()+"-"+m + "-" + f.getDate();
+                document.getElementById(document.getElementById('ID_Unidad_Video_PuntoBCR').value+'-'+document.getElementById('campo_a_editar_puntobcr').value).innerHTML=nom;
+                document.getElementById(document.getElementById('ID_Unidad_Video_PuntoBCR').value+'-Fecha_Actualizacion').innerHTML=fecha_actual; 
+                document.getElementById(document.getElementById('ID_Unidad_Video_PuntoBCR').value+'-Estado').innerHTML="En producción"; 
+                document.getElementById(document.getElementById('ID_Unidad_Video_PuntoBCR').value+'-Provincia').innerHTML=provin; 
+                document.getElementById(document.getElementById('ID_Unidad_Video_PuntoBCR').value+'-Tipo_Punto').innerHTML=tp; 
+                $.post("index.php?ctl=editar_campo_unidades_de_video", { id_unidad_video:document.getElementById('ID_Unidad_Video_PuntoBCR').value ,campo_a_editar:document.getElementById('campo_a_editar_puntobcr').value,valor:id_punt}, function(data){
+                   var str = data;
+                   var n = str.search("SI");
+                   if (n!=-1){
+                    }
+                 }); 
+
+                document.getElementById('ventana_oculta_4').style.display = "none";      
+            }  
         </script>
     </head>
     <body>
@@ -214,16 +295,15 @@
         <div class="container animated fadeIn col-xs-10 quitar-float">
         <h2>Listado General de Unidades de Video</h2>
         <p>A continuación se detallan las Unidades de Video que están registradas en el sistema:</p>   
-<!--        <pre>
-            <?php print_r($params)?>;
-        </pre>-->
         <table id="tabla" class="display" cellspacing="0" width="100%">
             <thead>
                 <tr>
                     <th hidden style="text-align:center">ID Unidad de Video</th>
                     <th style="text-align:center">Punto BCR</th>
+                    <th style="text-align:center">Provincia</th>
                     <th style="text-align:center">Fecha Última Actualización</th>
                     <th style="text-align:center">Descripción</th>
+                    <th style="text-align:center">Tipo de Punto</th>
                     <th style="text-align:center">#Serie</th>
                     <th style="text-align:center">Promedio Días</th>
                     <th style="text-align:center">Disco Duro (GB)</th>
@@ -237,25 +317,22 @@
                     <th style="text-align:center">Calidad</th>
                     <th style="text-align:center">Arranque Automático</th>
                     <th style="text-align:center">Observaciones</th>
-                    <th style="text-align:center">Estado</th>
-                    <?php if($_SESSION['modulos']['Editar-Unidades de Video']==1){ ?> 
-                        <!--<th style="text-align:center">Cambiar Estado</th>-->
-                    <?php } ?>
-                    <!--<th>Información</th>-->        
+                    <th style="text-align:center">Estado</th>         
                 </tr>
           </thead>
           <tbody>
                 <?php 
                 $tam=count($params);
                 for ($i = 0; $i <$tam; $i++) {
-                //Solamente muestra los puntos activos o todos a quien puede cambiar el estado
-                //if($_SESSION['modulos']['Editar Estado- Unidades de Video']==1||$params[$i]['Estado_Punto']==1){    
+                //Solamente muestra los puntos activos o todos a quien puede cambiar el estado             
                 ?>
                 <tr>
                     <td hidden style="text-align:center"><?php echo $params[$i]['ID_Unidad_Video'];?></td>
-                    <td style="text-align:center"><?php echo $params[$i]['Nombre'];?></td>
+                    <td style="text-align:center" id="<?php echo $params[$i]['ID_Unidad_Video'].'-ID_PuntoBCR';?>" onclick="edita_dato('<?php echo $params[$i]['ID_Unidad_Video'];?>','<?php echo $params[$i]['ID_PuntoBCR'];?>','ID_PuntoBCR','Punto BCR')"><?php echo $params[$i]['Nombre'];?></td>
+                    <td style="text-align:center" id="<?php echo $params[$i]['ID_Unidad_Video'].'-Provincia';?>"><?php echo $params[$i]['Nombre_Provincia'];?></td>
                     <td style="text-align:center" id="<?php echo $params[$i]['ID_Unidad_Video'].'-Fecha_Actualizacion';?>"><?php echo $params[$i]['Fecha_Actualizacion'];?></td>
                     <td style="text-align:center" id="<?php echo $params[$i]['ID_Unidad_Video'].'-Descripcion';?>" onclick="edita_dato('<?php echo $params[$i]['ID_Unidad_Video'];?>','<?php echo $params[$i]['Descripcion'];?>','Descripcion','Descripción')"><?php echo $params[$i]['Descripcion'];?></td>
+                    <td style="text-align:center" id="<?php echo $params[$i]['ID_Unidad_Video'].'-Tipo_Punto';?>"><?php echo $params[$i]['Tipo_Punto'];?></td>
                     <td style="text-align:center" id="<?php echo $params[$i]['ID_Unidad_Video'].'-Serie';?>" onclick="edita_dato('<?php echo $params[$i]['ID_Unidad_Video'];?>','<?php echo $params[$i]['Serie'];?>','Serie','#Serie')"><?php echo $params[$i]['Serie'];?></td>
                     <td style="text-align:center" id="<?php echo $params[$i]['ID_Unidad_Video'].'-Promedio_Dias';?>" onclick="edita_dato('<?php echo $params[$i]['ID_Unidad_Video'];?>','<?php echo $params[$i]['Promedio_Dias'];?>','Promedio_Dias','Promedio Días')"><?php echo $params[$i]['Promedio_Dias'];?></td>
                     <td style="text-align:center" id="<?php echo $params[$i]['ID_Unidad_Video'].'-Capacidad_Disco_Duro';?>" onclick="edita_dato('<?php echo $params[$i]['ID_Unidad_Video'];?>','<?php echo $params[$i]['Capacidad_Disco_Duro'];?>','Capacidad_Disco_Duro','Disco Duro(GB)')"><?php echo $params[$i]['Capacidad_Disco_Duro'];?></td>
@@ -273,32 +350,26 @@
                     <td style="text-align:center" id="<?php echo $params[$i]['ID_Unidad_Video'].'-Arranque_Automatico';?>" onclick="edita_dato('<?php echo $params[$i]['ID_Unidad_Video'];?>','<?php echo $params[$i]['Arranque_Automatico'];?>','Arranque_Automatico','Arranque Automático')">No</td>
                     <?php } ?>
                     <td style="text-align:center" id="<?php echo $params[$i]['ID_Unidad_Video'].'-Observaciones';?>" onclick="edita_dato('<?php echo $params[$i]['ID_Unidad_Video'];?>','<?php echo $params[$i]['Obser'];?>','Observaciones','Observaciones')"><?php echo $params[$i]['Obser'];?></td>
-                    <?php if($_SESSION['modulos']['Editar Estado-Unidades de Video']==1){ 
-                        if ($params[$i]['Estad']==1){  ?>  
-                            <td style="text-align:center">Activo</td>
-                        <?php } else {?>  
-                            <td style="text-align:center">Operando</td>
-                        <?php }?>
-<!--                        <td style="text-align:center"><a href="index.php?ctl=punto_bcr_cambiar_estado&id=
-                            <?php echo $params[$i]['ID_Unidad_Video']?>&estado=<?php echo $params[$i]['Estad']?>">
-                            Activar/Desactivar</a></td>-->
-                    <?php } ?>
-<!--                    <td style="text-align:center"><a href="index.php?ctl=gestion_punto_bcr&id=
-                        <?php echo $params[$i]['ID_Unidad_Video']?>&estado=<?php echo $params[$i]['Estad']?>
-                        &descripcion=<?php echo $params[$i]['Observaciones']?>">
-                        Detalles</a></td>-->
-                    <?php //if($_SESSION['modulos']['Módulo-Bitácora Digital']==1){ ?> 
-<!--                        <td style="text-align:center"><a href="index.php?ctl=frm_eventos_agregar&id=<?php echo $params[$i]['ID_PuntoBCR']?>">
-                            Ingresar Evento</a></td>-->
-                    <?php//} ?>
+                  
+                    <?php if ($params[$i]['Estad']==0){  ?>  
+                         <td style="text-align:center" id="<?php echo $params[$i]['ID_Unidad_Video'].'-Estado';?>" onclick="edita_dato('<?php echo $params[$i]['ID_Unidad_Video'];?>','<?php echo $params[$i]['Estad'];?>','Estado','Estado')">En Producción</td>
+                     <?php } ?>  
+                       <?php  if ($params[$i]['Estad']==1){  ?>  
+                         <td style="text-align:center" id="<?php echo $params[$i]['ID_Unidad_Video'].'-Estado';?>" onclick="edita_dato('<?php echo $params[$i]['ID_Unidad_Video'];?>','<?php echo $params[$i]['Estad'];?>','Estado','Estado')">Sin Utilizar-Disponible</td>
+                     <?php } ?>  
+                       <?php  if ($params[$i]['Estad']==2){  ?>  
+                         <td style="text-align:center" id="<?php echo $params[$i]['ID_Unidad_Video'].'-Estado';?>" onclick="edita_dato('<?php echo $params[$i]['ID_Unidad_Video'];?>','<?php echo $params[$i]['Estad'];?>','Estado','Estado')">En taller/Con Avería</td>
+                     <?php } ?>   
+                          <?php  if ($params[$i]['Estad']==3){  ?>  
+                         <td style="text-align:center" id="<?php echo $params[$i]['ID_Unidad_Video'].'-Estado';?>" onclick="edita_dato('<?php echo $params[$i]['ID_Unidad_Video'];?>','<?php echo $params[$i]['Estad'];?>','Estado','Estado')">Obsoleto-Descontinuado</td>
+                     <?php } ?>  
                 </tr>     
-
-            <?php }//} ?>
+            <?php } ?>
             </tbody>
         </table>
-        <?php if($_SESSION['modulos']['Editar Estado-Unidades de Video']==1){ ?>
-            <!--<a href="index.php?ctl=gestion_punto_bcr&id=0" class="btn btn-default" role="button">Agregar Nueva Unidad de Video</a>-->
-        <?php }?>
+        
+        <a href="#" class="btn btn-default" role="button" onclick="nueva_unidad_de_video();">Agregar Nueva Unidad de Video</a>
+      
         </div> 
         
         <?php require 'vistas/plantillas/pie_de_pagina.php' ?>
@@ -325,10 +396,8 @@
         
         <!--Cambiar estado del arranque automático de un grabador de video-->
         <div id="ventana_oculta_2"> 
-            <div id="popupventana2">
-                <!--Formulario para ingresar nuevos números de teléfono-->
-                <!--<form id="ventana2" method="post" name="form" action="index.php?ctl=puntobcr_numero_telefono_guardar">-->
-                <div id="ventana2">
+            <div id="popupventana">
+                <div id="ventana">
                     <img id="close" src='vistas/Imagenes/cerrar.png' width="25" onclick ="ocultar_elemento()">
                     <h2>Arranque Automático</h2>
                     <hr>
@@ -340,7 +409,6 @@
                                 <option value="0" >NO</option>   
                         </select>
                     <button><a href="javascript:%20check_empty_AA()" id="submit">Guardar</a></button>
-                    <!--</form>-->
                 </div>
             </div>
             <!--Cierre agregar teléfono a Punto BCR-->
@@ -348,10 +416,8 @@
         
          <!--Cambiar estado del arranque automático de un grabador de video-->
         <div id="ventana_oculta_3"> 
-            <div id="popupventana3">
-                <!--Formulario para ingresar nuevos números de teléfono-->
-                <!--<form id="ventana2" method="post" name="form" action="index.php?ctl=puntobcr_numero_telefono_guardar">-->
-                <div id="ventana3">
+            <div id="popupventana">  
+                <div id="ventana">
                     <img id="close" src='vistas/Imagenes/cerrar.png' width="25" onclick ="ocultar_elemento()">
                     <h2>Estado de la Unidad de Video</h2>
                     <hr>
@@ -364,10 +430,47 @@
                                 <option value="3" >Obsoleto/Descontinuado</option>   
                         </select>
                     <button><a href="javascript:%20check_empty_Estado_Unidad_Video()" id="submit">Guardar</a></button>
-                    <!--</form>-->
                 </div>
             </div>
             <!--Cierre agregar teléfono a Punto BCR-->
         </div>
+         <!--Asignar Puntos BCR a las Unidades-->
+        <div id="ventana_oculta_4">
+            <div id="popupventana2">
+                <div id="ventana2">
+                <img id="close" src='vistas/Imagenes/cerrar.png' width="25" onclick ="ocultar_elemento()"> 
+                <input hidden id="ID_Unidad_Video_PuntoBCR" name="ID_Unidad_Video_PuntoBCR" type="text" value="">
+                <input hidden id="campo_a_editar_puntobcr" name="campo_a_editar_puntobcr" type="text" value="">
+                <input hidden id="nombre_puntobcr" name="nombre_puntobcr" type="text" value="">
+                    <!--Tabla con la lista de Unidades Ejecutoras-->
+                    <table id="tabla3" class="display" cellspacing="0" width="100%">
+                    <thead>
+                        <tr>
+                            <th style="text-align:center">Código</th>
+                            <th style="text-align:center">Nombre</th>
+                            <th style="text-align:center">Tipo</th>
+                            <th style="text-align:center">Provincia</th>
+                            <th style="text-align:center">Opciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php 
+                        $tam=count($puntosbcr);
+                        for ($i = 0; $i <$tam; $i++) { ?>  
+                        <tr>
+                            <td style="text-align:center"><?php echo $puntosbcr[$i]['Codigo'];?></td>
+                            <td style="text-align:center"><?php echo $puntosbcr[$i]['Nombre'];?></td>
+                            <td style="text-align:center"><?php echo $puntosbcr[$i]['Tipo_Punto'];?></td>
+                            <td style="text-align:center"><?php echo $puntosbcr[$i]['Nombre_Provincia'];?></td>
+                            <td style="text-align:center"><a class="btn" role="button" onclick="agregar_puntobcr('<?php echo $puntosbcr[$i]['ID_PuntoBCR'];?>','<?php echo $puntosbcr[$i]['Nombre'];?>','<?php echo $puntosbcr[$i]['Nombre_Provincia'];?>','<?php echo $puntosbcr[$i]['Tipo_Punto'];?>');">
+                                    Seleccionar Punto BCR</a></td>
+                        </tr>
+                        <?php } ?>
+                     </tbody>
+                  </table>
+                </div>
+            </div>
+        <!--Cierre Asignar UE a Punto BRC-->
+        </div> 
     </body>
 </html>

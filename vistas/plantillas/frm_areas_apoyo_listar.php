@@ -4,7 +4,17 @@
         <meta charset="utf-8"/>
         <title>Lista de Areas de Apoyo</title>
         <?php require_once 'frm_librerias_head.html';?>
-        
+        <script>
+         $(document).ready(function () {
+                if ( $.fn.dataTable.isDataTable('#tabla') ) {
+                    table = $('#tabla').DataTable();
+                }
+                table.destroy();
+                table = $('#tabla').DataTable( {
+                    "lengthMenu": [[10, 25, 50,100,-1], [10, 25, 50,100,"All"]]
+                });        
+            });
+         </script>
     </head>
     <body>
         <?php require_once 'encabezado.php';?>

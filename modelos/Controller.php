@@ -3308,6 +3308,40 @@
     /*
      * Metodo que permite notificar al usuario en pantalla cuando va a ingresar un tipo de evento en un punto bcr que ya se encuentra abierto
      */
+    
+    public function  agregar_nueva_unidad_de_video(){
+
+        //Validación para verificar si el usuario está logeado en el sistema
+        if(isset($_SESSION['nombre'])){
+
+            $obj_unidades_de_video= new cls_unidad_video();
+            $obj_unidades_de_video->setCondicion("Mac_Address='00000000000000000' OR Serie='0000000'");                         
+            
+            if ($obj_unidades_de_video->existe_este_dato_en_la_tabla_unidades_video()){
+                echo 'NO';
+            }else{
+                $obj_unidades_de_video->agregar_nueva_unidad_de_video();
+                echo 'SI';
+            }
+             
+
+        }else {
+              /*
+         * Esta es la validación contraria a que la sesión de usuario esté definida  y abierta.
+         * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+         * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+         * En la última línea llama a la pagina de inicio de sesión.
+         */
+           $tipo_de_alerta="alert alert-warning";
+           $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+           //Validación para verificar si el usuario está logeado en el sistema
+           require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+       }
+       //En caso de que no estén definidos los parámetros, procede a sacarlo del metodo de ejecución.
+
+    }
+    
+    
     public function editar_campo_unidades_de_video(){
 
         //Verifica que los parametros del metodo post estén definidos y hayan sido enviados al metodo
@@ -3317,7 +3351,8 @@
             if(isset($_SESSION['nombre'])){
                 
                 $obj_unidades_de_video= new cls_unidad_video();
-                $obj_unidades_de_video->setCondicion("ID_Unidad_Video=".$_POST['id_unidad_video']);                         
+                $obj_unidades_de_video->setCondicion("ID_Unidad_Video=".$_POST['id_unidad_video']);  
+                
                 if(($_POST['campo_a_editar']=="Cuadros_Por_Segundo")||($_POST['campo_a_editar']=="Camaras_Habilitadas")||($_POST['campo_a_editar']=="Cantidad_Entradas_Video")||($_POST['campo_a_editar']=="Regulacion")||($_POST['campo_a_editar']=="Calidad")||($_POST['campo_a_editar']=="Version_Software")||($_POST['campo_a_editar']=="Capacidad_Disco_Duro")||($_POST['campo_a_editar']=="Promedio_Dias")){
                     $obj_unidades_de_video->setCampos_valores("Fecha_Actualizacion='".date("Y-m-d")."',".$_POST['campo_a_editar']."=".$_POST['valor']);
                     $obj_unidades_de_video->actualizar_campo_unidades_de_video();
@@ -3326,6 +3361,18 @@
                 }
                  if($_POST['campo_a_editar']=="Arranque_Automatico"){
                     $obj_unidades_de_video->setCampos_valores("Fecha_Actualizacion='".date("Y-m-d")."',".$_POST['campo_a_editar']."=".$_POST['valor']);
+                    $obj_unidades_de_video->actualizar_campo_unidades_de_video();
+                    //echo "t_unidadvideo". "Fecha_Actualizacion='".date("Y-m-d")."',".$_POST['campo_a_editar']."=".$_POST['valor'] ." ID_Unidad_Video="."_".$_POST['id_unidad_video']."_" ;
+                    echo 'SI';
+                }
+                 if($_POST['campo_a_editar']=="Estado"){
+                    $obj_unidades_de_video->setCampos_valores("Fecha_Actualizacion='".date("Y-m-d")."',".$_POST['campo_a_editar']."=".$_POST['valor'].",ID_PuntoBCR=0");
+                    $obj_unidades_de_video->actualizar_campo_unidades_de_video();
+                    //echo "t_unidadvideo". "Fecha_Actualizacion='".date("Y-m-d")."',".$_POST['campo_a_editar']."=".$_POST['valor'] ." ID_Unidad_Video="."_".$_POST['id_unidad_video']."_" ;
+                    echo 'SI';
+                }
+                 if($_POST['campo_a_editar']=="ID_PuntoBCR"){
+                    $obj_unidades_de_video->setCampos_valores("Fecha_Actualizacion='".date("Y-m-d")."',".$_POST['campo_a_editar']."=".$_POST['valor'].",Estado=0");
                     $obj_unidades_de_video->actualizar_campo_unidades_de_video();
                     //echo "t_unidadvideo". "Fecha_Actualizacion='".date("Y-m-d")."',".$_POST['campo_a_editar']."=".$_POST['valor'] ." ID_Unidad_Video="."_".$_POST['id_unidad_video']."_" ;
                     echo 'SI';
@@ -3341,6 +3388,7 @@
                     if ($obj_unidades_de_video->existe_este_dato_en_la_tabla_unidades_video()){
                         echo "NO";
                     }else{
+                          $obj_unidades_de_video->setCondicion("ID_Unidad_Video=".$_POST['id_unidad_video']);  
                           $obj_unidades_de_video->setCampos_valores("Fecha_Actualizacion='".date("Y-m-d")."',".$_POST['campo_a_editar']."='".$_POST['valor']."'");
                           $obj_unidades_de_video->actualizar_campo_unidades_de_video();               
                           echo 'SI';
@@ -3352,6 +3400,7 @@
                     if ($obj_unidades_de_video->existe_este_dato_en_la_tabla_unidades_video()){
                         echo "NO";
                     }else{
+                          $obj_unidades_de_video->setCondicion("ID_Unidad_Video=".$_POST['id_unidad_video']);  
                           $obj_unidades_de_video->setCampos_valores("Fecha_Actualizacion='".date("Y-m-d")."',".$_POST['campo_a_editar']."='".$_POST['valor']."'");
                           $obj_unidades_de_video->actualizar_campo_unidades_de_video();               
                           echo 'SI';
@@ -5201,11 +5250,18 @@
      public function unidades_de_video_listar(){
         if(isset($_SESSION['nombre'])){
             $obj_unidad_video=new cls_unidad_video();
+            $obj_puntos = new cls_puntosBCR();
             $obj_unidad_video->obtiene_todas_las_unidades_de_video();
             $params= $obj_unidad_video->getArreglo();
-            //echo '<pre>';
-            //print_r($params);
-            //echo '</pre>';
+            //Obtiene los puntos BCR
+            
+            $obj_puntos->obtiene_todos_los_puntos_bcr();
+            $puntosbcr = $obj_puntos->getArreglo();
+            
+            /*echo '<pre>';
+            print_r($params);
+            echo '</pre>';*/
+           
             require __DIR__ . '/../vistas/plantillas/frm_unidades_de_video_listar.php';
         }else{
               /*

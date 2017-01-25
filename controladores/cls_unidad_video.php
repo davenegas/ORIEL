@@ -246,16 +246,26 @@ class cls_unidad_video{
         $this->obj_data_provider->conectar();
         if($this->condicion==""){
             $this->arreglo=$this->obj_data_provider->trae_datos(
-                    "t_unidadvideo left join t_puntoBCR on t_unidadvideo.ID_PuntoBCR=t_puntoBCR.ID_PuntoBCR", 
-                    "*,t_unidadvideo.Estado as Estad,t_unidadvideo.Observaciones as Obser,t_puntoBCR.Nombre",
+                    "t_unidadvideo 
+                        left join t_puntoBCR on t_unidadvideo.ID_PuntoBCR=t_puntoBCR.ID_PuntoBCR 
+                        left join t_distrito on t_puntoBCR.ID_distrito=t_distrito.ID_distrito
+                        left join t_canton on t_distrito.ID_canton=t_canton.ID_canton
+                        left join t_provincia on t_canton.ID_provincia=t_provincia.ID_provincia
+                        left join T_TipoPuntoBCR ON T_PuntoBCR.ID_Tipo_Punto = T_TipoPuntoBCR.ID_Tipo_Punto", 
+                    "*,t_Provincia.Nombre_Provincia,t_unidadvideo.Estado as Estad,t_unidadvideo.Observaciones as Obser,t_puntoBCR.Nombre,T_TipoPuntoBCR.Tipo_Punto",
                     "");
             $this->arreglo=$this->obj_data_provider->getArreglo();
             $this->obj_data_provider->desconectar();
         }
         else{
             $this->arreglo=$this->obj_data_provider->trae_datos(
-                    "t_unidadvideo left join t_puntoBCR on t_unidadvideo.ID_PuntoBCR=t_puntoBCR.ID_PuntoBCR", 
-                    "*,t_unidadvideo.Estado as Estad,t_unidadvideo.Observaciones as Obser,t_puntoBCR.Nombre",
+                                   "t_unidadvideo 
+                        left join t_puntoBCR on t_unidadvideo.ID_PuntoBCR=t_puntoBCR.ID_PuntoBCR 
+                        left join t_distrito on t_puntoBCR.ID_distrito=t_distrito.ID_distrito
+                        left join t_canton on t_distrito.ID_canton=t_canton.ID_canton
+                        left join t_provincia on t_canton.ID_provincia=t_provincia.ID_provincia
+                        left join T_TipoPuntoBCR ON T_PuntoBCR.ID_Tipo_Punto = T_TipoPuntoBCR.ID_Tipo_Punto", 
+                    "*,t_Provincia.Nombre_Provincia,t_unidadvideo.Estado as Estad,t_unidadvideo.Observaciones as Obser,t_puntoBCR.Nombre,T_TipoPuntoBCR.Tipo_Punto",
                     $this->condicion);
             $this->arreglo=$this->obj_data_provider->getArreglo();
             $this->obj_data_provider->desconectar();
@@ -269,200 +279,13 @@ class cls_unidad_video{
         $this->obj_data_provider->desconectar();
  
     }
+    public function agregar_nueva_unidad_de_video(){
+        $this->obj_data_provider->conectar();
+        $this->obj_data_provider->inserta_datos("T_UnidadVideo", "`ID_Unidad_Video`, `Descripcion`, `Promedio_Dias`, `Capacidad_Disco_Duro`, `Version_Software`, `Mac_Address`, `Serie`, `Regulacion`, `Cantidad_Entradas_Video`, `Camaras_Habilitadas`, `Cuadros_Por_Segundo`, `Resolucion`, `Calidad`, `ID_PuntoBCR`, `Observaciones`, `Arranque_Automatico`, `Fecha_Actualizacion`, `Estado`", "null,'',0,0,0,'00000000000000000','0000000',0,0,0,0,'0X0',0,0,'',1,'0000-00-00',1");
+        $this->arreglo=$this->obj_data_provider->getArreglo();
+        $this->obj_data_provider->desconectar();
+        $this->resultado_operacion=true;
+    }
+    
    
-    
-    public function obtiene_todos_los_puntos_bcr(){
-        $this->obj_data_provider->conectar();
-        if($this->condicion==""){
-            $this->arreglo=$this->obj_data_provider->trae_datos(
-                    "T_PuntoBCR
-			LEFT OUTER JOIN T_Horario ON T_PuntoBCR.ID_Horario= T_Horario.ID_Horario
-			LEFT OUTER JOIN T_TipoPuntoBCR ON T_PuntoBCR.ID_Tipo_Punto = T_TipoPuntoBCR.ID_Tipo_Punto
-			LEFT OUTER JOIN T_Empresa ON T_PuntoBCR.ID_Empresa = T_Empresa.ID_Empresa
-			LEFT OUTER JOIN T_Distrito ON T_PuntoBCR.ID_Distrito = T_Distrito.ID_Distrito
-			LEFT OUTER JOIN T_UE_PuntoBCR ON T_PuntoBCR.ID_PuntoBCR= T_UE_PuntoBCR.ID_PuntoBCR
-			LEFT OUTER JOIN T_UnidadEjecutora ON T_UE_PuntoBCR.ID_Unidad_Ejecutora = T_UnidadEjecutora.ID_Unidad_Ejecutora
-			LEFT OUTER JOIN T_PuntoBCREnlace ON T_PuntoBCREnlace.ID_PuntoBCR = T_PuntoBCR.ID_PuntoBCR
-			LEFT OUTER JOIN T_EnlaceTelecomunicaciones ON T_EnlaceTelecomunicaciones.ID_Enlace = T_PuntoBCREnlace.ID_Enlace
-			LEFT OUTER JOIN T_PuntoBCRDireccionIP ON T_PuntoBCRDireccionIP.ID_PuntoBCR = T_PuntoBCR.ID_PuntoBCR
-			LEFT OUTER JOIN T_DireccionIP ON T_DireccionIP.ID_Direccion_IP = T_PuntoBCRDireccionIP.ID_Direccion_IP
-			GROUP by T_PuntoBCR.ID_PuntoBCR", 
-                    "T_PuntoBCR.ID_PuntoBCR, T_PuntoBCR.Nombre, T_PuntoBCR.Direccion, T_PuntoBCR.Codigo, 
-			T_PuntoBCR.Cuenta_SIS, T_PuntoBCR.Observaciones as Observaciones_Punto, 
-                        T_PuntoBCR.Estado as Estado_Punto, T_PuntoBCR.ID_Gerente_Zona, T_PuntoBCR.ID_Supervisor_Zona,
-			T_Horario.*, 
-			T_TipoPuntoBCR.ID_Tipo_Punto, T_TipoPuntoBCR.Tipo_Punto,
-			T_Empresa.ID_Empresa, T_Empresa.Empresa,
-			T_Distrito.ID_Distrito, T_Distrito.Nombre_Distrito,
-			T_UnidadEjecutora.ID_Unidad_Ejecutora, T_UnidadEjecutora.Departamento,
-			GROUP_CONCAT(char(10),T_EnlaceTelecomunicaciones.Numero_Linea) as Numero_Linea,
-                        GROUP_CONCAT(char(10),T_DireccionIP.Direccion_IP) as Direccion_IP",
-                    "");
-            $this->arreglo=$this->obj_data_provider->getArreglo();
-            $this->obj_data_provider->desconectar();
-            $this->resultado_operacion=true;
-        }
-        else{
-            $this->arreglo=$this->obj_data_provider->trae_datos(
-                    "T_PuntoBCR
-			LEFT OUTER JOIN T_Horario ON T_PuntoBCR.ID_Horario= T_Horario.ID_Horario
-			LEFT OUTER JOIN T_TipoPuntoBCR ON T_PuntoBCR.ID_Tipo_Punto = T_TipoPuntoBCR.ID_Tipo_Punto
-			LEFT OUTER JOIN T_Empresa ON T_PuntoBCR.ID_Empresa = T_Empresa.ID_Empresa
-			LEFT OUTER JOIN T_Distrito ON T_PuntoBCR.ID_Distrito = T_Distrito.ID_Distrito
-			LEFT OUTER JOIN T_UE_PuntoBCR ON T_PuntoBCR.ID_PuntoBCR= T_UE_PuntoBCR.ID_PuntoBCR
-			LEFT OUTER JOIN T_UnidadEjecutora ON T_UE_PuntoBCR.ID_Unidad_Ejecutora = T_UnidadEjecutora.ID_Unidad_Ejecutora
-			LEFT OUTER JOIN T_PuntoBCREnlace ON T_PuntoBCREnlace.ID_PuntoBCR = T_PuntoBCR.ID_PuntoBCR
-			LEFT OUTER JOIN T_EnlaceTelecomunicaciones ON T_EnlaceTelecomunicaciones.ID_Enlace = T_PuntoBCREnlace.ID_Enlace", 
-                    "T_PuntoBCR.ID_PuntoBCR, T_PuntoBCR.Nombre, T_PuntoBCR.Direccion, T_PuntoBCR.Codigo, 
-			T_PuntoBCR.Cuenta_SIS, T_PuntoBCR.Observaciones as Observaciones_Punto, 
-                        T_PuntoBCR.Estado as Estado_Punto, T_PuntoBCR.ID_Gerente_Zona, T_PuntoBCR.ID_Supervisor_Zona,
-			T_Horario.*, 
-			T_TipoPuntoBCR.ID_Tipo_Punto, T_TipoPuntoBCR.Tipo_Punto,
-			T_Empresa.ID_Empresa, T_Empresa.Empresa,
-			T_Distrito.ID_Distrito, T_Distrito.Nombre_Distrito,
-			T_UnidadEjecutora.ID_Unidad_Ejecutora, T_UnidadEjecutora.Departamento,
-			T_EnlaceTelecomunicaciones.Numero_Linea",
-                    $this->condicion);
-            $this->arreglo=$this->obj_data_provider->getArreglo();
-            $this->obj_data_provider->desconectar();
-            $this->resultado_operacion=true;
-        }
-    }
-    
-    public function obtiene_los_tipo_puntos(){
-        $this->obj_data_provider->conectar();
-        if($this->condicion==""){
-            $this->arreglo=$this->obj_data_provider->trae_datos(
-                    "T_TipoPuntoBCR", 
-                    "*",
-                    "");
-            $this->arreglo=$this->obj_data_provider->getArreglo();
-            $this->obj_data_provider->desconectar();
-            $this->resultado_operacion=true;
-        }
-        else{
-            $this->arreglo=$this->obj_data_provider->trae_datos(
-                    "T_TipoPuntoBCR", 
-                    "*",
-                    $this->condicion);
-            $this->arreglo=$this->obj_data_provider->getArreglo();
-            $this->obj_data_provider->desconectar();
-            $this->resultado_operacion=true;
-        } 
-    }
-    
-    public function obtiene_unidades_ejecutoras(){
-        $this->obj_data_provider->conectar();
-        $this->arreglo=$this->obj_data_provider->trae_datos(
-            "T_UnidadEjecutora
-			LEFT OUTER JOIN T_UE_PuntoBCR ON T_UE_PuntoBCR.ID_Unidad_Ejecutora = T_UnidadEjecutora.ID_Unidad_Ejecutora", 
-            "*",
-            $this->condicion);
-        $this->arreglo=$this->obj_data_provider->getArreglo();
-        $this->obj_data_provider->desconectar();
-        $this->resultado_operacion=true;  
-    }
-    
-    public function obtiene_distritos(){
-        $this->obj_data_provider->conectar();
-        $this->arreglo=$this->obj_data_provider->trae_datos(
-            "T_Distrito", 
-            "*",
-            $this->condicion);
-        $this->arreglo=$this->obj_data_provider->getArreglo();
-        $this->obj_data_provider->desconectar();
-        $this->resultado_operacion=true; 
-        //echo "distrito x2";
-    }
-    
-    public function obtiene_cantones(){
-        $this->obj_data_provider->conectar();
-        $this->arreglo=$this->obj_data_provider->trae_datos(
-            "T_Canton", 
-            "*",
-            $this->condicion);
-        $this->arreglo=$this->obj_data_provider->getArreglo();
-        $this->obj_data_provider->desconectar();
-        $this->resultado_operacion=true; 
-        //echo "canton x2";
-    }
-    
-    public function obtiene_provincias(){
-        $this->obj_data_provider->conectar();
-        $this->arreglo=$this->obj_data_provider->trae_datos(
-            "T_Provincia", 
-            "*",
-            $this->condicion);
-        $this->arreglo=$this->obj_data_provider->getArreglo();
-        $this->obj_data_provider->desconectar();
-        $this->resultado_operacion=true; 
-        //echo "provincia x2";
-    }
-    
-    public function actualizar_ubicacion_puntobcr(){
-        $this->obj_data_provider->conectar();
-        $this->arreglo=$this->obj_data_provider->edita_datos("T_PuntoBCR", "ID_Distrito='".$this->id."', ". "Direccion='".$this->direccion."'",$this->condicion);
-        $this->arreglo=$this->obj_data_provider->getArreglo();
-        $this->obj_data_provider->desconectar();
-        $this->resultado_operacion=true;
-    }
-    
-    public function actualizar_informacion_general_puntobcr(){
-        $this->obj_data_provider->conectar();
-        $this->arreglo=$this->obj_data_provider->edita_datos("T_PuntoBCR", "Codigo='".$this->codigo."', ". "Cuenta_SIS='".$this->cuentasis."', "."Nombre='".$this->nombre."', "."ID_Tipo_Punto='".$this->id."'",$this->condicion);
-        $this->arreglo=$this->obj_data_provider->getArreglo();
-        $this->obj_data_provider->desconectar();
-        $this->resultado_operacion=true;
-    }
-    
-    
-    
-    public function guardar_punto_bcr(){
-        $this->obj_data_provider->conectar();
-        $this->obj_data_provider->inserta_datos("T_PuntoBCR", "`ID_PuntoBCR`, `Nombre`, `Direccion`, `Codigo`, `Cuenta_SIS`, `ID_Horario`, `ID_Tipo_Punto`, `ID_Empresa`, `ID_Gerente_Zona`, `ID_Supervisor_Zona`, `ID_Distrito`, `Observaciones`, `Estado`", "'".$this->id."','".$this->nombre."','".$this->direccion."','".$this->codigo."','".$this->cuentasis."','".$this->horaslaborales."','".$this->tipo_punto."','".$this->empresa."','"."1"."','"."1"."','".$this->distrito."','".$this->observaciones."','".$this->estado."'");
-        $this->arreglo=$this->obj_data_provider->getArreglo();
-        $this->obj_data_provider->desconectar();
-        $this->resultado_operacion=true;
-    }
-    
-    public function actualizar_informacion_adicional_puntobcr(){
-        $this->obj_data_provider->conectar();
-        $this->arreglo=$this->obj_data_provider->edita_datos("T_PuntoBCR", "ID_Empresa='".$this->empresa."', Observaciones='".$this->observaciones."', ID_Gerente_Zona='".$this->gerente."', ID_Supervisor_Zona='".$this->supervisor."'",$this->condicion);
-        $this->arreglo=$this->obj_data_provider->getArreglo();
-        $this->obj_data_provider->desconectar();
-        $this->resultado_operacion=true;
-    }
-    
-    public function actualizar_estado_puntobcr(){
-        $this->obj_data_provider->conectar();
-        $this->obj_data_provider->edita_datos("T_PuntoBCR", "Estado='".$this->estado."'",$this->condicion);
-        $this->obj_data_provider->desconectar();
-        $this->resultado_operacion=true;
-    }
-    
-    public function obtiene_todos_los_puntos_bcr_publico(){
-        $this->obj_data_provider->conectar();
-        if($this->condicion==""){
-            $this->arreglo=$this->obj_data_provider->trae_datos(
-                    "T_PuntoBCR
-			LEFT OUTER JOIN T_Horario ON T_PuntoBCR.ID_Horario= T_Horario.ID_Horario
-			LEFT OUTER JOIN T_TipoPuntoBCR ON T_PuntoBCR.ID_Tipo_Punto = T_TipoPuntoBCR.ID_Tipo_Punto
-			LEFT OUTER JOIN T_UE_PuntoBCR ON T_PuntoBCR.ID_PuntoBCR= T_UE_PuntoBCR.ID_PuntoBCR
-			LEFT OUTER JOIN T_UnidadEjecutora ON T_UE_PuntoBCR.ID_Unidad_Ejecutora = T_UnidadEjecutora.ID_Unidad_Ejecutora
-                        LEFT OUTER JOIN T_Telefono on T_PuntoBCR.ID_PuntoBCR = T_Telefono.ID
-			LEFT OUTER JOIN T_TipoTelefono ON T_Telefono.ID_Tipo_Telefono = T_TipoTelefono.ID_Tipo_Telefono", 
-                    "T_PuntoBCR.ID_PuntoBCR, T_PuntoBCR.Nombre, T_PuntoBCR.Direccion,
-			T_Horario.*,
-			T_TipoPuntoBCR.ID_Tipo_Punto, T_TipoPuntoBCR.Tipo_Punto,
-			T_UnidadEjecutora.ID_Unidad_Ejecutora, T_UnidadEjecutora.Departamento,
-                        GROUP_CONCAT(char(10),T_TipoTelefono.Tipo_Telefono,': ',T_Telefono.Numero) as Numero",
-                    "(T_TipoTelefono.ID_Tipo_Telefono = '1') AND 
-                        (T_TipoPuntoBCR.ID_Tipo_Punto='1' OR T_TipoPuntoBCR.ID_Tipo_Punto='5' OR T_TipoPuntoBCR.ID_Tipo_Punto='9'
-                        OR T_TipoPuntoBCR.ID_Tipo_Punto='10' OR T_TipoPuntoBCR.ID_Tipo_Punto='11') AND (T_PuntoBCR.Estado='1') 
-                        group by T_PuntoBCR.ID_PuntoBCR");
-            $this->arreglo=$this->obj_data_provider->getArreglo();
-            $this->obj_data_provider->desconectar();
-            $this->resultado_operacion=true;
-        }
-    }
 }?>

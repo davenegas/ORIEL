@@ -9,6 +9,15 @@
             // Una vez se cargue al completo la página desaparecerá el div "cargando"
             $('#cargando').hide();
           });
+           $(document).ready(function () {
+                if ( $.fn.dataTable.isDataTable('#tabla') ) {
+                    table = $('#tabla').DataTable();
+                }
+                table.destroy();
+                table = $('#tabla').DataTable( {
+                    "lengthMenu": [[10, 25, 50,100,-1], [10, 25, 50,100,"All"]]
+                });       
+            });
         </script>
     </head>
     <body>

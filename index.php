@@ -149,7 +149,8 @@ $map = array(
     //Controles de Video
     'unidades_de_video_listar'=>array('controller'=>'Controller', 'action'=>'unidades_de_video_listar'),
     'editar_campo_unidades_de_video'=>array('controller'=>'Controller', 'action'=>'editar_campo_unidades_de_video'),
-       
+    'agregar_nueva_unidad_de_video'=>array('controller'=>'Controller', 'action'=>'agregar_nueva_unidad_de_video'),
+           
     //Información Proveedor enlaces
     'proveedor_listar'=>array('controller'=>'Controller', 'action'=>'proveedor_listar'),
     'proveedor_enlace_guardar'=>array('controller'=>'Controller', 'action'=>'proveedor_enlace_guardar'),
