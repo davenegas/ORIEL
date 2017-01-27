@@ -93,7 +93,7 @@
                         <td style="text-align:center"><?php echo $externo[$i]['Apellido'];?></td>
                         <td style="text-align:center"><?php echo $externo[$i]['Nombre'];?></td>
                         <td style="text-align:center"><?php echo $externo[$i]['Empresa'];?></td>
-                        <td style="text-align:center">No Disponible</td>
+                        <td style="text-align:center"><?php echo $externo[$i]['Apellido_Nombre'];?></td>
                         <td style="text-align:center"><?php echo $externo[$i]['Nombre_Usuario']." ".$externo[$i]['Apellido_Usuario'];?></td>
                         <td style="text-align:center"><?php echo $externo[$i]['Ocupacion'];?></td>
                         <td style="text-align:center"><?php echo $externo[$i]['Direccion'];?></td>
