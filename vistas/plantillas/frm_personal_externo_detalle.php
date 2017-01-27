@@ -212,19 +212,27 @@
                 </div>
                 <div class="col-md-4 espacio-abajo">
                     <label for="validado">Validado</label>
+                    
                     <?php if($_SESSION['modulos']['Validar- Personal Externo']==1){ ?>
-                        <select class="form-control" id="validado" name="validado" onchange="validar_persona_externa();"> 
-                    <?php } else{ ?>
-                        <select class="form-control" disabled readonly id="validado" name="validado" > 
-                    <?php } ?>
+                    <select class="form-control" id="validado" name="validado" onchange="validar_persona_externa();">
                         <?php if($params[0]['Validado']=='0'){?>
-                        <option value="0" selected style="color: red">No Validado</option>
+                            <option value="0" selected style="color: red">No Validado</option>
                             <option value="1">Validado</option>
                         <?php } else { ?>
                             <option value="0" style="color: red">No Validado</option>
                             <option value="1" selected>Validado</option>
                         <?php }?>  
                     </select>
+                    <?php } else{ ?>
+                        <select class="form-control" disabled readonly id="validado" name="validado" > 
+                        <?php if($params[0]['Validado']=='0'){?>
+                            <option value="0" selected style="color: red">No Validado</option>
+                            <option value="1">Validado</option>
+                        <?php } else { ?>
+                            <option value="0" style="color: red">No Validado</option>
+                            <option value="1" selected>Validado</option>
+                        <?php }}?>  
+                        </select>
                 </div>
                 <div class="col-md-4 espacio-abajo">
                     <label for="ocupacion">Validado por:</label>

@@ -5156,11 +5156,13 @@
             $fecha_actual= getdate();
             $fecha_actual= $fecha_actual['year']."-".$fecha_actual['mon']."-".$fecha_actual['mday'];
             
-            $obj_personal->setCondicion("(Fecha_Vencimiento_Portacion<'".$fecha_actual."' AND Fecha_Vencimiento_Portacion<> '0000-00-00' AND Validado=1 ) OR (Fecha_Vencimiento_Residencia<'".$fecha_actual."' AND Fecha_Vencimiento_Residencia<>'0000-00-00' AND Validado=1)");
+            $obj_personal->setCondicion("(Fecha_Vencimiento_Portacion<'".$fecha_actual."' AND Fecha_Vencimiento_Portacion<> '0000-00-00' AND Validado=1 ) "
+                    . "OR (Fecha_Vencimiento_Residencia<'".$fecha_actual."' AND Fecha_Vencimiento_Residencia<>'0000-00-00' AND Validado=1) "
+                    . "OR (Fecha_Salida<'".$fecha_actual."' AND Fecha_Salida<>'0000-00-00' AND Validado=1)");
             $obj_personal->obtiene_todo_el_personal_externo();
             $params= $obj_personal->getArreglo();
             
-            $obj_persona->invalidar_personas_automatico();
+            $obj_personal->invalidar_personas_automatico();
 
             $cadena_oficiales="";
                 // Recorre la información del vector 
@@ -5411,18 +5413,48 @@
     
     public function empresa_gestion(){
         if(isset($_SESSION['nombre'])){
+            $obj_empresa = new cls_empresa();
+            $obj_personal= new cls_personal();
+            $obj_externo = new cls_personal_externo();
+            $obj_ue = new cls_unidad_ejecutora();
             if ($_GET['id']==0){
-                $observaciones="";
-                $estado=1;
-                $ide=$_GET['id'];
-                $empresa="";
+                $empresa[0]['ID_Empresa'] = 0;
+                $empresa[0]['Empresa'] ="";
+                $empresa[0]['Observaciones'] ="";
+                $empresa[0]['Estado'] ="";
+                $empresa[0]['Cedula_Juridica'] ="";
+                $empresa[0]['ID_Persona_Externa'] ="";
+                $empresa[0]['Telefono_Empresa'] ="";
+                $empresa[0]['Direccion'] ="";
+                $empresa[0]['Tipo_Empresa'] ="";
+                $empresa[0]['ID_Unidad_Ejecutora'] ="";
+                $empresa[0]['ID_Persona'] ="";
+                $empresa[0]['Fecha_Inicio'] ="";
+                $empresa[0]['Fecha_Final'] ="";
+                $empresa[0]['Nombre_Externo'] ="";
+                $empresa[0]['Apellido_Externo'] ="";
+                $empresa[0]['Apellido_Nombre'] ="";
+                $empresa[0]['Departamento'] ="";
             }   else   {
-                $ide=$_GET['id'];
-                $observaciones=$_GET['observaciones'];
-                $estado=$_GET['estado'];
-                $empresa=$_GET['empresa'];
-            }
+                $obj_empresa->setCondicion("T_Empresa.ID_Empresa='".$_GET['id']."'");
+                $obj_empresa->obtiene_todas_las_empresas();
+                $empresa= $obj_empresa->getArreglo();
+                $obj_externo->setCondicion("T_PersonalExterno.ID_Empresa=".$empresa[0]['ID_Empresa']);
+            } 
+            
+            //Obtiene todo el personal BCR
+            $obj_personal->obtiene_todo_el_personal();
+            $personal_bcr = $obj_personal->getArreglo();
+            
+            //Obtiene todo el personal externo
+            $obj_externo->obtiene_todo_el_personal_externo();
+            $personal_externo = $obj_externo->getArreglo();
+            
+            //Obtiene las Unidades Ejecutoras
+            $obj_ue->obtener_unidades_ejecutoras();
+            $unidad_ejecutora = $obj_ue->getArreglo();
             require __DIR__ . '/../vistas/plantillas/frm_empresas_editar.php';
+            
         }   else    {
               /*
              * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
@@ -5444,6 +5476,17 @@
                 $obj_empresas->setEmpresa($_POST['empresa']);
                 $obj_empresas->setObservaciones($_POST['observaciones']);
                 $obj_empresas->setEstado($_POST['estado']);
+                $obj_empresas->setCedula_juridica($_POST['cedula_juridica']);
+                $obj_empresas->setId_externo($_POST['ID_Personal_Externo']);
+                $obj_empresas->setTelefono($_POST['telefono_empresa']);
+                $obj_empresas->setDireccion($_POST['direccion']);
+                $obj_empresas->setTipo_empresa($_POST['tipo_empresa']);
+                $obj_empresas->setId_ue($_POST['ID_Unidad_Ejecutora']);
+                $obj_empresas->setId_persona($_POST['ID_Persona']);
+                $obj_empresas->setFecha_inicio($_POST['fecha_inicio']);
+                $obj_empresas->setFecha_final($_POST['fecha_final']);
+                
+               
                 $obj_empresas->guardar_empresa();
                 header ("location:/ORIEL/index.php?ctl=empresas_listar");
                 //$this->empresas_listar();
