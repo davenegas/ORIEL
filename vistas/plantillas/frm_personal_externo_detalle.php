@@ -254,7 +254,7 @@
                         <th style="text-align:center">Tipo de Teléfono</th>
                         <th style="text-align:center">Número teléfono</th>
                         <th style="text-align:center">Observaciones</th>
-                        <?php if($_SESSION['modulos']['Editar- Personal']==1){ ?>
+                        <?php if($_SESSION['modulos']['Editar- Personal Externo']==1){ ?>
                         <th style="text-align:center" colspan="2">Opciones número</th>
                         <?php } ?>
                     </tr>
@@ -296,7 +296,7 @@
                             <th style="text-align:center">Nombre Imágen</th>
                             <th style="text-align:center">Descripción</th>
                             <th style="text-align:center">Imágen</th>
-                            <?php if($_SESSION['modulos']['Editar- Padrón Fotográfico Puntos BCR']==1){ ?>
+                            <?php if($_SESSION['modulos']['Editar- Personal Externo']==1){ ?>
                                 <th style="text-align:center">Gestión</th>
                             <?php } ?>
                             <th style="text-align:center" hidden="hidden">Nombre Ruta</th>
@@ -312,7 +312,7 @@
                             <td style="text-align:center"><?php echo $fotos [$i]['Descripcion'];?></td>
                             <td style="text-align:center"><a class="fancybox-button" rel="fancybox-button" href="../../../Padron_Fotografico_Personal_externo/<?php echo $fotos[$i]['Nombre_Ruta'];?>" title="<?php echo $fotos[$i]['Nombre_Imagen'].' ('.$fotos[$i]['Descripcion'].')';?>">
                                 <img src="../../../Padron_Fotografico_Personal_externo/<?php echo $fotos[$i]['Nombre_Ruta'];?>" alt="" width="200px"/></a></td>
-                            <?php if($_SESSION['modulos']['Editar- Padrón Fotográfico Puntos BCR']==1){ ?>
+                            <?php if($_SESSION['modulos']['Editar- Personal Externo']==1){ ?>
                             <td align="center"><a onclick="eliminar_imagen(<?php echo $fotos[$i]['ID_Padron_Personal'];?>);">Eliminar</a></td>    
                             <?php } ?>
                             <td style="text-align:center" hidden="hidden"><?php echo $fotos [$i]['Nombre_Ruta'];?></td>
