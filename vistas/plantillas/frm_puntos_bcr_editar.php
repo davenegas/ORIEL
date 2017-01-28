@@ -21,9 +21,6 @@
                 <?php }?>
             </h2>
         </header>
-<!--            <pre>
-                <?php print_r($params)?>
-            </pre>-->
             <div class="bordegris"> 
             <h3>Información General del Punto BCR
                 
@@ -54,16 +51,13 @@
                 <select class="form-control" id="Tipo_Punto" disabled name="Tipo_Punto" > 
                 <?php
                 $tam = count($tipo_puntos);
-
-                for($i=0; $i<$tam;$i++)
-                {
-                    if($tipo_puntos[$i]['ID_Tipo_Punto']==$params[0]['ID_Tipo_Punto']){
-                        
-                       ?> <option value="<?php echo $tipo_puntos[$i]['ID_Tipo_Punto']?>" selected="selected"><?php echo $tipo_puntos[$i]['Tipo_Punto']?></option><?php
-                    }
-                    else {?>
+                for($i=0; $i<$tam;$i++){
+                    if($tipo_puntos[$i]['ID_Tipo_Punto']==$params[0]['ID_Tipo_Punto']){ ?> 
+                    <option value="<?php echo $tipo_puntos[$i]['ID_Tipo_Punto']?>" selected="selected"><?php echo $tipo_puntos[$i]['Tipo_Punto']?></option><?php
+                    }  else {?>
                         <option value="<?php echo $tipo_puntos[$i]['ID_Tipo_Punto']?>" ><?php echo $tipo_puntos[$i]['Tipo_Punto']?></option>   
-                <?php }}  ?>
+                    <?php }
+                } ?>
                 </select>
             </div>
                 <div class="bordegris"  >
@@ -435,7 +429,7 @@
             </div>
             <div class="col-md-4 espacio-abajo">
               <label for="nombre_supervisor">Nombre del Supervisor</label>
-              <input type="text" readonly class="form-control" id="nombre_supervisor" name="nombre_supervisor" value="<?php echo $supervisor_zona_externo[$ubicacionpersona]['Apellido_Nombre'];?>">
+              <input type="text" readonly class="form-control" id="nombre_supervisor" name="nombre_supervisor" value="<?php echo $supervisor_zona_externo[$ubicacionpersona]['Apellido'].' '.$supervisor_zona_externo[$ubicacionpersona]['Nombre'];?>">
             </div>
             <div class="col-md-4 espacio-abajo">
               <label for="tel_supervisor">Teléfono</label>

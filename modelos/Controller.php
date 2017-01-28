@@ -3321,7 +3321,7 @@
      * Metodo que permite notificar al usuario en pantalla cuando va a ingresar un tipo de evento en un punto bcr que ya se encuentra abierto
      */
     
-    public function  agregar_nueva_unidad_de_video(){
+    public function agregar_nueva_unidad_de_video(){
 
         //Validación para verificar si el usuario está logeado en el sistema
         if(isset($_SESSION['nombre'])){
@@ -8429,17 +8429,14 @@
     
     public function gerente_zona_guardar(){
         if(isset($_SESSION['nombre'])){   
-            
-                $obj_gerentezona = new cls_gerente_zona();
-                $obj_gerentezona->setNombre($_POST['nombre2']);
-                $obj_gerentezona->setNumero($_POST['numero2']);
-                $obj_gerentezona->setObservaciones($_POST['observaciones2']);
-                $obj_gerentezona->setEstado($_POST['estado2']);
-                $obj_gerentezona->guardar_gerente_zona();
-                $obj_gerentezona->obtiene_gerente_zona();
-                $params =$obj_gerentezona->getArreglo();
-                require __DIR__.'/../vistas/plantillas/frm_gerente_zona_listar.php';
-           
+            $obj_gerentezona = new cls_gerente_zona();
+            $obj_gerentezona->setNombre($_POST['nombre2']);
+            $obj_gerentezona->setZona($_POST['zona_gerencia2']);
+            $obj_gerentezona->setObservaciones($_POST['observaciones2']);
+            $obj_gerentezona->setEstado($_POST['estado2']);
+            $obj_gerentezona->guardar_gerente_zona();
+                
+            header ("location:/ORIEL/index.php?ctl=gerente_zona_listar");
         }else{
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
@@ -8448,24 +8445,18 @@
     }
     
     public function gerente_zona_editar(){
-                if(isset($_SESSION['nombre'])){
-               $obj_gerentezona = new cls_gerente_zona();
-               $obj_gerentezona->setNombre($_POST['nombre']); 
-               $obj_gerentezona->setNumero($_POST['numero']); 
-               $obj_gerentezona->setObservaciones($_POST['observaciones']);
-               
-                if ($_POST['ID_Gerente_Zona']>=(1)){
-                    
-                   $obj_gerentezona->setEstado(1);
-                   $obj_gerentezona->setEstado($_POST['estado']);
-                   $obj_gerentezona->setCondicion("ID_Gerente_Zona='".$_POST['ID_Gerente_Zona']."'");
-                   $obj_gerentezona->editar_gerente_zona();
+        if(isset($_SESSION['nombre'])){
+            $obj_gerentezona = new cls_gerente_zona();
+            $obj_gerentezona->setNombre($_POST['nombre']); 
+            $obj_gerentezona->setZona($_POST['zona_gerencia']); 
+            $obj_gerentezona->setObservaciones($_POST['observaciones']);
+              
+            if ($_POST['ID_Gerente_Zona']>=(1)){
+                $obj_gerentezona->setCondicion("ID_Gerente_Zona='".$_POST['ID_Gerente_Zona']."'");
+                $obj_gerentezona->editar_gerente_zona();
                    
-                }       
-           $obj_gerentezona->setCondicion("");  
-           $obj_gerentezona->obtiene_gerente_zona();
-           $params =$obj_gerentezona->getArreglo();
-           require __DIR__.'/../vistas/plantillas/frm_gerente_zona_listar.php';
+            }       
+           header ("location:/ORIEL/index.php?ctl=gerente_zona_listar");
         }else {
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
@@ -8503,16 +8494,17 @@
     ////////////////////////////Supervisor de Zona//////////////////////////////      
     ////////////////////////////////////////////////////////////////////////////
     public function supervisor_zona_listar() {
-       if(isset($_SESSION['nombre'])){
-           $obj_supervisorzona = new cls_supervisor_zona();
-           $obj_supervisorzona->setCondicion("");
-           $obj_supervisorzona->obtiene_supervisor_zona();
-           $params =$obj_supervisorzona->getArreglo();
-           $numero =$obj_supervisorzona->getArreglo();
-           $obj_supervisorzona->obtener_nombre_supervisor_zona();
-           $nombre =$obj_supervisorzona->getArreglo();
-                   
-           require __DIR__.'/../vistas/plantillas/frm_supervisor_zona_listar.php';
+        if(isset($_SESSION['nombre'])){
+            $obj_supervisorzona = new cls_supervisor_zona();
+            $obj_supervisorzona->setCondicion("");
+            $obj_supervisorzona->obtiene_supervisor_zona();
+            $params =$obj_supervisorzona->getArreglo();
+            
+            //$numero =$obj_supervisorzona->getArreglo();
+            $obj_supervisorzona->obtener_nombre_supervisor_zona();
+            $nombre =$obj_supervisorzona->getArreglo();
+
+            require __DIR__.'/../vistas/plantillas/frm_supervisor_zona_listar.php';
         }
         else {
             $tipo_de_alerta="alert alert-warning";
@@ -8523,17 +8515,13 @@
     
     public function supervisor_zona_guardar(){
         if(isset($_SESSION['nombre'])){   
-            
-                $obj_supervisorzona = new cls_supervisor_zona();
-                $obj_supervisorzona->setNombre($_POST['nombre2']);
-                $obj_supervisorzona->setNumero($_POST['numero2']);
-                $obj_supervisorzona->setObservaciones($_POST['observaciones2']);
-                $obj_supervisorzona->setEstado($_POST['estado2']);
-                $obj_supervisorzona->guardar_supervisor_zona();
-                $obj_supervisorzona->obtiene_supervisor_zona();
-                $params =$obj_supervisorzona->getArreglo();
-                require __DIR__.'/../vistas/plantillas/frm_supervisor_zona_listar.php';
-           
+            $obj_supervisorzona = new cls_supervisor_zona();
+            $obj_supervisorzona->setNombre($_POST['nombre2']);
+            $obj_supervisorzona->setZona($_POST['zona_supervisor2']);
+            $obj_supervisorzona->setObservaciones($_POST['observaciones2']);
+            $obj_supervisorzona->setEstado($_POST['estado2']);
+            $obj_supervisorzona->guardar_supervisor_zona();
+            header ("location:/ORIEL/index.php?ctl=supervisor_zona_listar");
         }else{
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
@@ -8542,24 +8530,17 @@
     }
     
     public function supervisor_zona_editar(){
-                if(isset($_SESSION['nombre'])){
-               $obj_supervisorzona = new cls_supervisor_zona();
-               $obj_supervisorzona->setNombre($_POST['nombre']); 
-               $obj_supervisorzona->setNumero($_POST['numero']); 
-               $obj_supervisorzona->setObservaciones($_POST['observaciones']);
+        if(isset($_SESSION['nombre'])){
+            $obj_supervisorzona = new cls_supervisor_zona();
+            $obj_supervisorzona->setNombre($_POST['nombre']); 
+            $obj_supervisorzona->setZona($_POST['zona_supervisor']); 
+            $obj_supervisorzona->setObservaciones($_POST['observaciones']);
                
-                if ($_POST['ID_Supervisor_Zona']>=(1)){
-                    
-                   $obj_supervisorzona->setEstado(1);
-                   $obj_supervisorzona->setEstado($_POST['estado']);
-                   $obj_supervisorzona->setCondicion("ID_Supervisor_Zona='".$_POST['ID_Supervisor_Zona']."'");
-                   $obj_supervisorzona->editar_supervisor_zona();
-                   
-                }       
-           $obj_supervisorzona->setCondicion("");  
-           $obj_supervisorzona->obtiene_supervisor_zona();
-           $params =$obj_supervisorzona->getArreglo();
-           require __DIR__.'/../vistas/plantillas/frm_supervisor_zona_listar.php';
+            if ($_POST['ID_Supervisor_Zona']>=(1)){
+                $obj_supervisorzona->setCondicion("ID_Supervisor_Zona='".$_POST['ID_Supervisor_Zona']."'");
+                $obj_supervisorzona->editar_supervisor_zona();    
+            }       
+            header ("location:/ORIEL/index.php?ctl=supervisor_zona_listar");
         }else {
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";

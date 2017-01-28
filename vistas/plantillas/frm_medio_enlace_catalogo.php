@@ -8,7 +8,7 @@
         <script>
             //Funcion para ocultar ventana de mantenimiento de proveedor
             function ocultar_elemento(){
-                document.getElementById('formulario_oculto_1').style.display = "none";
+                document.getElementById('ventana_oculta_1').style.display = "none";
             }
             //Valida informacion completa de formulario de proveedor
             function check_empty() {
@@ -18,7 +18,7 @@
                     //alert("Form Submitted Successfully...");
                     //Envia el formulario y lo oculta
                     document.getElementById('ventana').submit();
-                    document.getElementById('formulario_oculto_1').style.display = "none";
+                    document.getElementById('ventana_oculta_1').style.display = "none";
                 }
             }
             //Funcion para agregar un nuevo proveedor- formulario en blanco
@@ -26,14 +26,14 @@
                 document.getElementById('ID_Medio_Enlace').value="0";
                 document.getElementById('nombre').value=null;
                 document.getElementById('observaciones').value=null;
-                document.getElementById('formulario_oculto_1').style.display = "block";
+                document.getElementById('ventana_oculta_1').style.display = "block";
             }
             //Funcion para editar informacion de proveedor
             function Editar_medio_enlace(id_enlace,nomb, obser){
                 document.getElementById('ID_Medio_Enlace').value=id_enlace;
                 document.getElementById('nombre').value=nomb;
                 document.getElementById('observaciones').value=obser;
-                document.getElementById('formulario_oculto_1').style.display = "block";
+                document.getElementById('ventana_oculta_1').style.display = "block";
             };
         </script>
     </head>
@@ -81,7 +81,7 @@
             <?php require 'vistas/plantillas/pie_de_pagina.php' ?>
         
         <!--agregar o editar proveedor-->
-        <div id="formulario_oculto_1"> 
+        <div id="ventana_oculta_1"> 
             <div id="popupventana">
                 <!--Formulario para proveedor de enlaces de telecomunicaciones-->
                 <form id="ventana" method="POST" name="form" action="index.php?ctl=medio_enlace_guardar">
