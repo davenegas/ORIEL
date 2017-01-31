@@ -28,7 +28,6 @@
             puesto = pst;
             document.getElementById('puestos').submit();
         }
-        
         function cambiar_estado_boton_resumen(codigo){
  
             identificador='btn'+codigo;
@@ -41,8 +40,7 @@
                  objetoSPAN.innerHTML = '+'; 
             }
       
-        }
-        
+        }    
          //Funcion para ocultar ventana de mantenimiento de notas de coordinacion
             function ocultar_elemento(){
                 document.getElementById('ventana_oculta_1').style.display = "none";
@@ -58,7 +56,6 @@
                 if (notas.trim()==""){
                      document.getElementById('observaciones').value="Sin Anotaciones";
                 }
-                
                 //Envia el formulario y lo oculta
                 document.getElementById('ventana').submit();
                 document.getElementById('ventana_oculta_1').style.display = "none";
@@ -75,17 +72,11 @@
                 }
                 document.getElementById('ventana_oculta_1').style.display = "block";
             }
-            
-            
              //Funcion para editar notas de supervisión
            function mostrar_resumen_de_seguimientos(prueb) {
-                //alert(prueb);
-                //location.reload(true);
+              
                 var mydiv= document.getElementById('tabla_seguimientos');
-                
-                //mydiv.removedNode();
-                //mydiv.appendChild(document.getElementById("tbl"+prueb));
-                
+                              
                 mydiv.appendChild(document.getElementById("tbl"+prueb));
                 document.getElementById('ventana_oculta_2').style.display = "block";
        
@@ -129,8 +120,7 @@
                               }
                            }   
                         }
-                        if (cuenta_numero_eventos>1){
-                            //alert(id_numeros_de_evento);
+                        if (cuenta_numero_eventos>1){                     
                             $.post("index.php?ctl=mezcla_eventos_bitacora_digital", { id_numeros_de_evento: id_numeros_de_evento }, function(data){
                       
                             var str = data;
@@ -140,14 +130,11 @@
                                  alert('Ya existe esta mezcla en el sistema de forma idéntica o alguno de los eventos seleccionados pertenece a otra mezcla existente. No es posible el reingreso de la información!!!');
                             }else{
                                 alert('Mezcla ingresada correctamente en el sistema!!!');
-                                //alert(data);
                             }
                             });   
                         }else{
                             alert ("Es necesario mezclar al menos dos eventos!!! Por favor repita el procedimiento.");
                         }
-                        //alert(cuenta_numero_eventos);
-                        //alert(id_numeros_de_evento);
                         for (var i=0;i < tbl.rows.length; i++){                  
                             tbl.rows[i].cells[5].hidden=true;
                         }

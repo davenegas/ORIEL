@@ -242,7 +242,7 @@ class cls_puntosBCR{
 			LEFT OUTER JOIN T_EnlaceTelecomunicaciones ON T_EnlaceTelecomunicaciones.ID_Enlace = T_PuntoBCREnlace.ID_Enlace
 			LEFT OUTER JOIN T_PuntoBCRDireccionIP ON T_PuntoBCRDireccionIP.ID_PuntoBCR = T_PuntoBCR.ID_PuntoBCR
 			LEFT OUTER JOIN T_DireccionIP ON T_DireccionIP.ID_Direccion_IP = T_PuntoBCRDireccionIP.ID_Direccion_IP
-			GROUP by T_PuntoBCR.ID_PuntoBCR", 
+			", 
                     "T_PuntoBCR.ID_PuntoBCR, T_PuntoBCR.Nombre, T_PuntoBCR.Direccion, T_PuntoBCR.Codigo, 
 			T_PuntoBCR.Cuenta_SIS, T_PuntoBCR.Observaciones as Observaciones_Punto, 
                         T_PuntoBCR.Estado as Estado_Punto, T_PuntoBCR.ID_Gerente_Zona, T_PuntoBCR.ID_Supervisor_Zona,
@@ -253,7 +253,7 @@ class cls_puntosBCR{
 			T_UnidadEjecutora.ID_Unidad_Ejecutora, T_UnidadEjecutora.Departamento,
 			GROUP_CONCAT(char(10),T_EnlaceTelecomunicaciones.Numero_Linea) as Numero_Linea,
                         GROUP_CONCAT(char(10),T_DireccionIP.Direccion_IP) as Direccion_IP ",
-                    $this->condicion);
+                    $this->condicion." GROUP by T_PuntoBCR.ID_PuntoBCR");
             $this->arreglo=$this->obj_data_provider->getArreglo();
             $this->obj_data_provider->desconectar();
             $this->resultado_operacion=true;
