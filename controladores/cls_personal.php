@@ -318,11 +318,11 @@ class cls_personal{
         if($this->condicion==""){
             $this->arreglo=$this->obj_data_provider->trae_datos(
                     "T_SupervisorZona
-			LEFT OUTER JOIN T_Personal ON T_SupervisorZona.ID_Persona = T_Personal.ID_Persona
-			LEFT OUTER JOIN T_Telefono ON T_Personal.ID_Persona = T_Telefono.ID
+			LEFT OUTER JOIN T_PersonalExterno ON T_SupervisorZona.ID_Persona_Externa = T_PersonalExterno.ID_Persona_Externa
+			LEFT OUTER JOIN T_Telefono ON T_PersonalExterno.ID_Persona_Externa = T_Telefono.ID
 			LEFT OUTER JOIN T_TipoTelefono ON T_Telefono.ID_Tipo_Telefono = T_TipoTelefono.ID_Tipo_Telefono", 
                     "T_SupervisorZona.*, 
-			T_Personal.Apellido_Nombre,
+			T_PersonalExterno.Apellido,T_PersonalExterno.Nombre,
 			GROUP_CONCAT(T_TipoTelefono.Tipo_Telefono,': ',T_Telefono.Numero) as Numero",
                     "(T_TipoTelefono.ID_Tipo_Telefono = '3')
 			GROUP BY T_SupervisorZona.ID_Supervisor_Zona");

@@ -4,10 +4,91 @@ class cls_empresa{
     public $empresa;
     public $observaciones;
     public $estado;
+    public $cedula_juridica;
+    public $id_externo;
+    public $telefono;
+    public $direccion;
+    public $tipo_empresa;
+    public $id_ue;
+    public $id_persona;
+    public $fecha_inicio;
+    public $fecha_final;
     public $obj_data_provider;
     public $arreglo;
     private $condicion;
     
+    function getCedula_juridica() {
+        return $this->cedula_juridica;
+    }
+
+    function getId_externo() {
+        return $this->id_externo;
+    }
+
+    function getTelefono() {
+        return $this->telefono;
+    }
+
+    function getDireccion() {
+        return $this->direccion;
+    }
+
+    function getTipo_empresa() {
+        return $this->tipo_empresa;
+    }
+
+    function getId_ue() {
+        return $this->id_ue;
+    }
+
+    function getId_persona() {
+        return $this->id_persona;
+    }
+
+    function getFecha_inicio() {
+        return $this->fecha_inicio;
+    }
+
+    function getFecha_final() {
+        return $this->fecha_final;
+    }
+
+    function setCedula_juridica($cedula_juridica) {
+        $this->cedula_juridica = $cedula_juridica;
+    }
+
+    function setId_externo($id_externo) {
+        $this->id_externo = $id_externo;
+    }
+
+    function setTelefono($telefono) {
+        $this->telefono = $telefono;
+    }
+
+    function setDireccion($direccion) {
+        $this->direccion = $direccion;
+    }
+
+    function setTipo_empresa($tipo_empresa) {
+        $this->tipo_empresa = $tipo_empresa;
+    }
+
+    function setId_ue($id_ue) {
+        $this->id_ue = $id_ue;
+    }
+
+    function setId_persona($id_persona) {
+        $this->id_persona = $id_persona;
+    }
+
+    function setFecha_inicio($fecha_inicio) {
+        $this->fecha_inicio = $fecha_inicio;
+    }
+
+    function setFecha_final($fecha_final) {
+        $this->fecha_final = $fecha_final;
+    }
+ 
     function getId() {
         return $this->id;
     }
@@ -69,6 +150,15 @@ class cls_empresa{
         $this->empresa="";
         $this->observaciones="";
         $this->estado="";
+        $this->cedula_juridica;
+        $this->id_externo="";
+        $this->telefono="";
+        $this->direccion="";
+        $this->tipo_empresa="";
+        $this->id_ue="";
+        $this->id_persona="";
+        $this->fecha_inicio="";
+        $this->fecha_final="";
         $this->obj_data_provider=new Data_Provider();
         $this->arreglo;
         $this->condicion="";
@@ -78,7 +168,11 @@ class cls_empresa{
         if($this->condicion==""){
             $this->obj_data_provider->conectar();
             //Llama al metodo que realiza la consulta a la bd
-            $this->obj_data_provider->trae_datos("T_Empresa", "*", "");
+            $this->obj_data_provider->trae_datos("T_Empresa LEFT OUTER JOIN T_PersonalExterno ON T_PersonalExterno.ID_Persona_Externa = T_Empresa.ID_Persona_Externa
+                    LEFT OUTER JOIN T_Personal ON T_Personal.ID_Persona = T_Empresa.ID_Persona
+                    LEFT OUTER JOIN T_UnidadEjecutora ON T_UnidadEjecutora.ID_Unidad_Ejecutora = T_Empresa.ID_Unidad_Ejecutora", 
+                    "T_Empresa.*, T_PersonalExterno.Nombre as Nombre_Externo, T_PersonalExterno.Apellido as Apellido_Externo, 
+                    T_Personal.Apellido_Nombre, T_UnidadEjecutora.Departamento", "");
             $this->arreglo=$this->obj_data_provider->getArreglo();
             $this->obj_data_provider->desconectar();
        
@@ -87,7 +181,12 @@ class cls_empresa{
         else{
             $this->obj_data_provider->conectar();
             //Llama al metodo que realiza la consulta a la bd
-            $this->obj_data_provider->trae_datos("T_Empresa", "*", $this->condicion);
+            $this->obj_data_provider->trae_datos("T_Empresa LEFT OUTER JOIN T_PersonalExterno ON T_PersonalExterno.ID_Persona_Externa = T_Empresa.ID_Persona_Externa
+                    LEFT OUTER JOIN T_Personal ON T_Personal.ID_Persona = T_Empresa.ID_Persona
+                    LEFT OUTER JOIN T_UnidadEjecutora ON T_UnidadEjecutora.ID_Unidad_Ejecutora = T_Empresa.ID_Unidad_Ejecutora", 
+                    "T_Empresa.*, T_PersonalExterno.Nombre as Nombre_Externo, T_PersonalExterno.Apellido as Apellido_Externo,
+                    T_Personal.Apellido_Nombre, T_UnidadEjecutora.Departamento", 
+                    $this->condicion);
             $this->arreglo=$this->obj_data_provider->getArreglo();
             $this->obj_data_provider->desconectar();
             $this->resultado_operacion=true;
@@ -96,44 +195,20 @@ class cls_empresa{
     
     public function guardar_empresa() {
         $this->obj_data_provider->conectar();
-        
         if ($this->id==0){
-             //Registro de la trazabilidad del sistema
-            $cadena_sql=str_replace(","," - ","call sp_set_empresa(Inserta Datos en T_Empresa ID_Empresa='".$this->id."',Empresa='".$this->empresa."',Observaciones='".$this->observaciones."',Estado='".$this->estado."')");
-            $cadena_sql=str_replace("'"," ",$cadena_sql);
-            $cadena_sql = str_replace("(","[",$cadena_sql);
-            $cadena_sql = str_replace(")","]",$cadena_sql);
-
-            $detalle_sql="insert into t_traza (ID_Traza,Fecha,Hora,ID_Usuario,Tabla_Afectada,Dato_Anterior,Dato_Actualizado) values(null,'".date("Y-m-d")."','".date("H:i:s", time())."',".$_SESSION['id'].",'"."T_Empresa"."','Insercion - Sin Valores Anteriores','".$cadena_sql."');";
-            $this->obj_data_provider->inserta_datos_para_uso_de_trazabilidad($detalle_sql);
+            $this->obj_data_provider->inserta_datos("T_Empresa","Empresa, Observaciones, Estado, Cedula_Juridica, ID_Persona_Externa, Telefono_Empresa, Direccion, Tipo_Empresa, ID_Unidad_Ejecutora, ID_Persona, Fecha_Inicio, Fecha_Final",
+                    "'".$this->empresa."','".$this->observaciones."','".$this->estado."','".$this->cedula_juridica."','".$this->id_externo."','".$this->telefono."','".$this->direccion."','".$this->tipo_empresa."','".$this->id_ue."','".$this->id_persona."','".$this->fecha_inicio."','".$this->fecha_final."'");
+        
+            
         }else{
-            $this->obj_data_provider->trae_datos("T_Empresa", "*", "ID_Empresa=".$this->id);
-            $valores_iniciales="Edicion - Valores anteriores de la tabla formato SELECT:\n ";
-            if (count($this->obj_data_provider->getArreglo())>0){
-                $valores_iniciales= $valores_iniciales ." ". implode(" - ",$this->obj_data_provider->getArreglo()[0]);
-            }
-            $valores_iniciales=$valores_iniciales . "\nA continuacion valores anteriores de la tabla formato arreglo:\n ";
-            $valores_iniciales=$valores_iniciales . serialize($this->obj_data_provider->getArreglo());
-
-             //Registro de la trazabilidad del sistema
-            $cadena_sql=str_replace(","," - ","call sp_set_empresa(Modifica Datos en T_Empresa donde ID_Empresa='".$this->id."','Empresa=".$this->empresa."',Observaciones='".$this->observaciones."',Estado='".$this->estado."')");
-            $cadena_sql=str_replace("'"," ",$cadena_sql);
-            $cadena_sql = str_replace("(","[",$cadena_sql);
-            $cadena_sql = str_replace(")","]",$cadena_sql);
-            
-            $detalle_sql="insert into t_traza (ID_Traza,Fecha,Hora,ID_Usuario,Tabla_Afectada,Dato_Anterior,Dato_Actualizado) values(null,'".date("Y-m-d")."','".date("H:i:s", time())."',".$_SESSION['id'].",'"."T_Empresa"."','".$valores_iniciales. "','".$cadena_sql."');";       
-            $this->obj_data_provider->inserta_datos_para_uso_de_trazabilidad($detalle_sql);
-            }
-
-        // Llamada al procedimiento almacenado de mysql para gestión de la empresa 
-            
-        //Verifica el valor de estado, para ingresarlo en el sistema
-        if ($this->estado=="Activo"){
-            $this->estado="1";
-        }  if ($this->estado=="Inactivo") {
-             $this->estado="0";
+            $this->obj_data_provider->edita_datos("T_Empresa", "Empresa='".$this->empresa."', Observaciones='".$this->observaciones
+                    ."', Estado='".$this->estado."', Cedula_Juridica='".$this->cedula_juridica."', ID_Persona_Externa='".$this->id_externo.
+                    "', Telefono_Empresa='".$this->telefono."', Direccion='".$this->direccion."', Tipo_Empresa='".$this->tipo_empresa.
+                    "', ID_Unidad_Ejecutora='".$this->id_ue."', ID_Persona='".$this->id_persona."', Fecha_Inicio='".$this->fecha_inicio.
+                    "', Fecha_Final='".$this->fecha_final."'",
+                    "ID_Empresa=".$this->id);
         }
-        $sql=("call sp_set_empresa('".$this->id."','".$this->empresa."','".$this->observaciones."','".$this->estado."')");
-        $this->obj_data_provider->insertar_datos_con_phpmyadmin($sql);
+        $this->obj_data_provider->desconectar();
+        $this->resultado_operacion=true;
     }
 } ?>

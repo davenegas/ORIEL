@@ -212,9 +212,42 @@ function eliminar_imagen(id_imagen){
             
 }  
 function validar_persona_externa(){
+    
     id_persona = document.getElementById('ID_Persona').value;
     validar = document.getElementById('validado').value;
-    $.post("index.php?ctl=personal_externo_validar", { id_persona: id_persona, validar:validar}, function(data){
-                location.reload();  
-            }); 
+    Fecha_Salida = document.getElementById('fecha_salida').value;
+    Fecha_Residencia = document.getElementById('fecha_residencia').value;
+    Fecha_Portacion = document.getElementById('fecha_portacion').value;
+    Estado_Persona =document.getElementById('estado_persona').value;
+    fecha_actual= new Date().toJSON().slice(0,10);
+    if(validar==1){
+        if(fecha_actual<Fecha_Salida || Fecha_Salida==''){
+            if(fecha_actual<Fecha_Residencia || Fecha_Residencia==''){
+                if(fecha_actual<Fecha_Portacion || Fecha_Portacion==''){
+                    if(Estado_Persona==1){
+                    $.post("index.php?ctl=personal_externo_validar", { id_persona: id_persona, validar:validar}, function(data){
+                        location.reload(); 
+                    });
+                    }else{
+                        document.getElementById('validado').selectedIndex=0;
+                        alert("La persona no esta Activa \nNo se puede Validar la persona");
+                    }
+                }else{
+                    document.getElementById('validado').selectedIndex=0;
+                    alert("Fecha Portación invalida \nNo se puede Validar la persona");
+                }
+            } else{
+                document.getElementById('validado').selectedIndex=0;
+                alert("Fecha residencia invalida \nNo se puede Validar la persona");
+            }
+        } else{
+            document.getElementById('validado').selectedIndex=0;
+            alert("Fecha de Salida invalida\nNo se puede Validar la persona");
+        }
+    }else{
+        $.post("index.php?ctl=personal_externo_validar", { id_persona: id_persona, validar:validar}, function(data){
+            location.reload(); 
+        }); 
+    }
+     
 }

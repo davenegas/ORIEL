@@ -212,19 +212,27 @@
                 </div>
                 <div class="col-md-4 espacio-abajo">
                     <label for="validado">Validado</label>
+                    
                     <?php if($_SESSION['modulos']['Validar- Personal Externo']==1){ ?>
-                        <select class="form-control" id="validado" name="validado" onchange="validar_persona_externa();"> 
-                    <?php } else{ ?>
-                        <select class="form-control" disabled readonly id="validado" name="validado" > 
-                    <?php } ?>
+                    <select class="form-control" id="validado" name="validado" onchange="validar_persona_externa();">
                         <?php if($params[0]['Validado']=='0'){?>
-                        <option value="0" selected style="color: red">No Validado</option>
+                            <option value="0" selected style="color: red">No Validado</option>
                             <option value="1">Validado</option>
                         <?php } else { ?>
                             <option value="0" style="color: red">No Validado</option>
                             <option value="1" selected>Validado</option>
                         <?php }?>  
                     </select>
+                    <?php } else{ ?>
+                        <select class="form-control" disabled readonly id="validado" name="validado" > 
+                        <?php if($params[0]['Validado']=='0'){?>
+                            <option value="0" selected style="color: red">No Validado</option>
+                            <option value="1">Validado</option>
+                        <?php } else { ?>
+                            <option value="0" style="color: red">No Validado</option>
+                            <option value="1" selected>Validado</option>
+                        <?php }}?>  
+                        </select>
                 </div>
                 <div class="col-md-4 espacio-abajo">
                     <label for="ocupacion">Validado por:</label>
@@ -246,7 +254,7 @@
                         <th style="text-align:center">Tipo de Teléfono</th>
                         <th style="text-align:center">Número teléfono</th>
                         <th style="text-align:center">Observaciones</th>
-                        <?php if($_SESSION['modulos']['Editar- Personal']==1){ ?>
+                        <?php if($_SESSION['modulos']['Editar- Personal Externo']==1){ ?>
                         <th style="text-align:center" colspan="2">Opciones número</th>
                         <?php } ?>
                     </tr>
@@ -288,7 +296,7 @@
                             <th style="text-align:center">Nombre Imágen</th>
                             <th style="text-align:center">Descripción</th>
                             <th style="text-align:center">Imágen</th>
-                            <?php if($_SESSION['modulos']['Editar- Padrón Fotográfico Puntos BCR']==1){ ?>
+                            <?php if($_SESSION['modulos']['Editar- Personal Externo']==1){ ?>
                                 <th style="text-align:center">Gestión</th>
                             <?php } ?>
                             <th style="text-align:center" hidden="hidden">Nombre Ruta</th>
@@ -304,7 +312,7 @@
                             <td style="text-align:center"><?php echo $fotos [$i]['Descripcion'];?></td>
                             <td style="text-align:center"><a class="fancybox-button" rel="fancybox-button" href="../../../Padron_Fotografico_Personal_externo/<?php echo $fotos[$i]['Nombre_Ruta'];?>" title="<?php echo $fotos[$i]['Nombre_Imagen'].' ('.$fotos[$i]['Descripcion'].')';?>">
                                 <img src="../../../Padron_Fotografico_Personal_externo/<?php echo $fotos[$i]['Nombre_Ruta'];?>" alt="" width="200px"/></a></td>
-                            <?php if($_SESSION['modulos']['Editar- Padrón Fotográfico Puntos BCR']==1){ ?>
+                            <?php if($_SESSION['modulos']['Editar- Personal Externo']==1){ ?>
                             <td align="center"><a onclick="eliminar_imagen(<?php echo $fotos[$i]['ID_Padron_Personal'];?>);">Eliminar</a></td>    
                             <?php } ?>
                             <td style="text-align:center" hidden="hidden"><?php echo $fotos [$i]['Nombre_Ruta'];?></td>

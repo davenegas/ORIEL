@@ -68,7 +68,7 @@
 <!--        <pre>
             <?php print_r($externo)?>
         </pre>-->
-        <h2>Listado General de Personal Externo</h2>  
+        <h2>Padrón Fotográfico de Personal Externo</h2>  
         <table id="tabla" class="display" cellspacing="0" width="100%">
           <thead>
             <tr>
@@ -77,6 +77,7 @@
               <th style="text-align:center">Nombre</th>
               <th style="text-align:center">Empresa</th>
               <th style="text-align:center">Responsable BCR</th>
+              <th style="text-align:center">Validado Por</th>
               <th style="text-align:center">Ocupación</th>
               <th style="text-align:center">Dirección</th>
               <th style="text-align:center">Foto</th>
@@ -92,7 +93,8 @@
                         <td style="text-align:center"><?php echo $externo[$i]['Apellido'];?></td>
                         <td style="text-align:center"><?php echo $externo[$i]['Nombre'];?></td>
                         <td style="text-align:center"><?php echo $externo[$i]['Empresa'];?></td>
-                        <td style="text-align:center">NA</td>
+                        <td style="text-align:center"><?php echo $externo[$i]['Apellido_Nombre'];?></td>
+                        <td style="text-align:center"><?php echo $externo[$i]['Nombre_Usuario']." ".$externo[$i]['Apellido_Usuario'];?></td>
                         <td style="text-align:center"><?php echo $externo[$i]['Ocupacion'];?></td>
                         <td style="text-align:center"><?php echo $externo[$i]['Direccion'];?></td>
                         <td style="text-align:center"><a class="fancybox-button" rel="fancybox-button" href="../../../Padron_Fotografico_Personal_externo/<?php echo $externo[$i]['Nombre_Ruta'];?>" 

@@ -92,7 +92,7 @@
                   </table>
                 </div>
             </div>
-        <!--Cierre Asignar UE a Punto BRC-->
+        <!--Cierre Asignar Personal BCR a Cencon-->
         </div> 
         
         <!--Asignar Persona externo -->
@@ -128,7 +128,7 @@
                   </table>
                 </div>
             </div>
-        <!--Cierre Asignar UE a Punto BRC-->
+        <!--Cierre Asignar Personal Externo a Cencon-->
         </div> 
         
         <!--Asignar Cajeros a la persona-->
@@ -162,7 +162,7 @@
                   </table>
                 </div>
             </div>
-        <!--Cierre Asignar UE a Punto BRC-->
+        <!--Cierre Asignar UE al personal-->
         </div> 
         
     </body>

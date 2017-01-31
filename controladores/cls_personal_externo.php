@@ -324,9 +324,11 @@ class cls_personal_externo{
         $this->obj_data_provider->conectar();
         $this->arreglo=$this->obj_data_provider->trae_datos("T_PersonalExterno
                         LEFT OUTER JOIN T_Empresa ON T_Empresa.ID_Empresa = T_PersonalExterno.ID_Empresa
-                        LEFT OUTER JOIN T_PadronFotograficoPersonalExterno ON T_PadronFotograficoPersonalExterno.ID_Persona_Externa = T_PersonalExterno.ID_Persona_Externa", 
+                        LEFT OUTER JOIN T_PadronFotograficoPersonalExterno ON T_PadronFotograficoPersonalExterno.ID_Persona_Externa = T_PersonalExterno.ID_Persona_Externa
+                        LEFT OUTER JOIN T_Usuario ON T_Usuario.ID_Usuario = T_PersonalExterno.ID_Usuario
+                        LEFT OUTER JOIN T_Personal ON T_Personal.ID_Persona = T_Empresa.ID_Persona", 
                     "T_PersonalExterno.*,T_PadronFotograficoPersonalExterno.*,
-                        T_Empresa.ID_Empresa, T_Empresa.Empresa",
+                        T_Empresa.ID_Empresa, T_Empresa.Empresa, T_Usuario.Nombre as Nombre_Usuario, T_Usuario.Apellido as Apellido_Usuario, T_Personal.Apellido_Nombre",
                     "T_PersonalExterno.ID_Estado_Persona=1 AND T_PersonalExterno.Validado=1");
         $this->arreglo=$this->obj_data_provider->getArreglo();
         $this->obj_data_provider->desconectar();

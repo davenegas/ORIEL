@@ -241,8 +241,7 @@ class cls_puntosBCR{
 			LEFT OUTER JOIN T_PuntoBCREnlace ON T_PuntoBCREnlace.ID_PuntoBCR = T_PuntoBCR.ID_PuntoBCR
 			LEFT OUTER JOIN T_EnlaceTelecomunicaciones ON T_EnlaceTelecomunicaciones.ID_Enlace = T_PuntoBCREnlace.ID_Enlace
 			LEFT OUTER JOIN T_PuntoBCRDireccionIP ON T_PuntoBCRDireccionIP.ID_PuntoBCR = T_PuntoBCR.ID_PuntoBCR
-			LEFT OUTER JOIN T_DireccionIP ON T_DireccionIP.ID_Direccion_IP = T_PuntoBCRDireccionIP.ID_Direccion_IP
-			", 
+			LEFT OUTER JOIN T_DireccionIP ON T_DireccionIP.ID_Direccion_IP = T_PuntoBCRDireccionIP.ID_Direccion_IP", 
                     "T_PuntoBCR.ID_PuntoBCR, T_PuntoBCR.Nombre, T_PuntoBCR.Direccion, T_PuntoBCR.Codigo, 
 			T_PuntoBCR.Cuenta_SIS, T_PuntoBCR.Observaciones as Observaciones_Punto, 
                         T_PuntoBCR.Estado as Estado_Punto, T_PuntoBCR.ID_Gerente_Zona, T_PuntoBCR.ID_Supervisor_Zona,

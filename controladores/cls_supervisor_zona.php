@@ -5,7 +5,7 @@ class cls_supervisor_zona{
     public $arreglo;
     private $condicion;
     public $nombre;
-    public $numero;
+    public $zona;
     public $observaciones;
     public $estado;
     
@@ -33,14 +33,14 @@ class cls_supervisor_zona{
         return $this->condicion;
     }
 
-    function getNombre() {
-        return $this->nombre;
+    function getZona() {
+        return $this->zona;
     }
-    
-     function getNumero() {
-        return $this->numero;
+
+    function setZona($zona) {
+        $this->zona = $zona;
     }
-    
+ 
     function setId($id) {
         $this->id = $id;
     }
@@ -82,47 +82,49 @@ class cls_supervisor_zona{
         $this->numero="";
        
     }
-     public function obtiene_supervisor_zona(){
+    
+    public function obtiene_supervisor_zona(){
         $this->obj_data_provider->conectar();
         if($this->condicion==""){
-            $this->arreglo=$this->obj_data_provider->trae_datos("T_SupervisorZona LEFT OUTER JOIN T_Personal ON T_SupervisorZona.ID_Persona = T_Personal.ID_Persona", 
-            "DISTINCT T_SupervisorZona.*, T_Personal.ID_Persona, T_Personal.Apellido_Nombre ","");
+            $this->arreglo=$this->obj_data_provider->trae_datos("T_SupervisorZona LEFT OUTER JOIN T_PersonalExterno ON T_SupervisorZona.ID_Persona_Externa = T_PersonalExterno.ID_Persona_Externa", 
+                "DISTINCT T_SupervisorZona.*, T_PersonalExterno.Nombre, T_PersonalExterno.Apellido ","");
             $this->arreglo=$this->obj_data_provider->getArreglo();
             $this->obj_data_provider->desconectar();
             $this->resultado_operacion=true;
         }
         else{
-            $this->arreglo=$this->obj_data_provider->trae_datos("T_SupervisorZona LEFT OUTER JOIN T_Personal ON T_SupervisorZona.ID_Persona = T_Personal.ID_Persona", 
-            "DISTINCT T_SupervisorZona.*, T_Personal.ID_Persona, T_Personal.Apellido_Nombre ",$this->condicion);
+            $this->arreglo=$this->obj_data_provider->trae_datos("T_SupervisorZona LEFT OUTER JOIN T_PersonalExterno ON T_SupervisorZona.ID_Persona_Externa = T_PersonalExterno.ID_Persona_Externa", 
+            "DISTINCT T_SupervisorZona.*, T_PersonalExterno.Nombre, T_PersonalExterno.Apellido ",$this->condicion);
             $this->arreglo=$this->obj_data_provider->getArreglo();
             $this->obj_data_provider->desconectar();
             $this->resultado_operacion=true;
         }
     }
+    
     public function guardar_supervisor_zona(){
-         
         $this->obj_data_provider->conectar();
-        $this->obj_data_provider->inserta_datos("T_SupervisorZona","ID_Supervisor_Zona,ID_Persona,Zona_Supervisor,Observaciones,Estado","null,'".$this->nombre."','".$this->numero."','".$this->observaciones."','".$this->estado."'");
-        $this->arreglo= $this->obj_data_provider->trae_datos("T_supervisorzona ORDER BY `ID_Supervisor_Zona` DESC LIMIT 1", "*", $this->condicion);
+        $this->obj_data_provider->inserta_datos("T_SupervisorZona","ID_Supervisor_Zona,ID_Persona_Externa,Zona_Supervisor,Observaciones,Estado","null,'".$this->nombre."','".$this->zona."','".$this->observaciones."','".$this->estado."'");
+        $this->arreglo= $this->obj_data_provider->trae_datos("T_supervisorzona ORDER BY `ID_Supervisor_Zona` ASC LIMIT 1", "*", $this->condicion);
         $this->arreglo=$this->obj_data_provider->getArreglo();
         $this->obj_data_provider->desconectar();
         $this->resultado_operacion=true;
-     }
+    }
+    
     public function editar_supervisor_zona(){
-         
         $this->obj_data_provider->conectar();
-        $this->obj_data_provider->edita_datos("T_SupervisorZona","ID_Persona='".$this->nombre."',Zona_Supervisor='".$this->numero."',Observaciones='".$this->observaciones."',Estado='".$this->estado."'",$this->condicion);
+        $this->obj_data_provider->edita_datos("T_SupervisorZona","ID_Persona_Externa='".$this->nombre."',Zona_Supervisor='".$this->zona."',Observaciones='".$this->observaciones."'",$this->condicion);
         $this->obj_data_provider->desconectar();
-     }    
+    }  
+     
     public function obtener_nombre_supervisor_zona(){
         $this->obj_data_provider->conectar();
-        $this->arreglo=$this->obj_data_provider->trae_datos("T_Personal ORDER BY Apellido_Nombre DESC","*",$this->condicion);
+        $this->arreglo=$this->obj_data_provider->trae_datos("T_PersonalExterno ORDER BY Apellido ASC","*",$this->condicion);
         $this->arreglo=$this->obj_data_provider->getArreglo();
         $this->obj_data_provider->desconectar();
         $this->resultado_operacion=true;
-    }  
+    } 
+    
     public function cambiar_estado_supervisorzona(){
-        
         $this->obj_data_provider->conectar();
         $this->obj_data_provider->edita_datos("T_SupervisorZona","Estado='".$this->estado."'",$this->condicion);
         $this->obj_data_provider->desconectar();
