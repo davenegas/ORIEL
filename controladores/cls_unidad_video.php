@@ -271,6 +271,37 @@ class cls_unidad_video{
             $this->obj_data_provider->desconectar();
         } 
     }
+    
+    
+    public function obtiene_unidades_de_video_que_tienen_punto_bcr(){
+        $this->obj_data_provider->conectar();
+        if($this->condicion==""){
+            $this->arreglo=$this->obj_data_provider->trae_datos(
+                    "t_unidadvideo 
+                        inner join t_puntoBCR on t_unidadvideo.ID_PuntoBCR=t_puntoBCR.ID_PuntoBCR 
+                        inner join t_distrito on t_puntoBCR.ID_distrito=t_distrito.ID_distrito
+                        inner join t_canton on t_distrito.ID_canton=t_canton.ID_canton
+                        inner join t_provincia on t_canton.ID_provincia=t_provincia.ID_provincia
+                        inner join T_TipoPuntoBCR ON T_PuntoBCR.ID_Tipo_Punto = T_TipoPuntoBCR.ID_Tipo_Punto", 
+                    "*,t_Provincia.Nombre_Provincia,t_unidadvideo.Estado as Estad,t_unidadvideo.Observaciones as Obser,t_puntoBCR.Nombre,T_TipoPuntoBCR.Tipo_Punto",
+                    "");
+            $this->arreglo=$this->obj_data_provider->getArreglo();
+            $this->obj_data_provider->desconectar();
+        }
+        else{
+            $this->arreglo=$this->obj_data_provider->trae_datos(
+                                   "t_unidadvideo 
+                        inner join t_puntoBCR on t_unidadvideo.ID_PuntoBCR=t_puntoBCR.ID_PuntoBCR 
+                        inner join t_distrito on t_puntoBCR.ID_distrito=t_distrito.ID_distrito
+                        inner join t_canton on t_distrito.ID_canton=t_canton.ID_canton
+                        inner join t_provincia on t_canton.ID_provincia=t_provincia.ID_provincia
+                        inner join T_TipoPuntoBCR ON T_PuntoBCR.ID_Tipo_Punto = T_TipoPuntoBCR.ID_Tipo_Punto", 
+                    "*,t_Provincia.Nombre_Provincia,t_unidadvideo.Estado as Estad,t_unidadvideo.Observaciones as Obser,t_puntoBCR.Nombre,T_TipoPuntoBCR.Tipo_Punto",
+                    $this->condicion);
+            $this->arreglo=$this->obj_data_provider->getArreglo();
+            $this->obj_data_provider->desconectar();
+        } 
+    }
    
     public function actualizar_campo_unidades_de_video(){
         $this->obj_data_provider->conectar();

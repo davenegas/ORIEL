@@ -6,6 +6,9 @@
         <?php require_once 'frm_librerias_head.html'; ?>    
         <link rel="stylesheet" href="vistas/css/ventanaoculta.css"> 
         <script language="javascript" src="vistas/js/refresca_pagina_automaticamente.js"></script>  
+        <script type="text/javascript">
+         window.onunload = unloadPage;
+        </script>
         <script>
             $(document).ready(function () {
                 $.post("index.php?ctl=cuenta_visitas_a_bitacora_digital");
@@ -46,6 +49,7 @@
                 document.getElementById('ventana_oculta_1').style.display = "none";
                 document.getElementById('ventana_oculta_2').style.display = "none";
                 location.reload(true);
+      
 
             }
             //Valida informacion completa de formulario de notas de coordinacion
@@ -76,7 +80,7 @@
            function mostrar_resumen_de_seguimientos(prueb) {
               
                 var mydiv= document.getElementById('tabla_seguimientos');
-                              
+       
                 mydiv.appendChild(document.getElementById("tbl"+prueb));
                 document.getElementById('ventana_oculta_2').style.display = "block";
        
@@ -165,6 +169,7 @@
                 <option value="2">Puesto 2</option>
                 <option value="3">Puesto 3</option>
                 <option value="4">Puesto 4</option>
+                <option value="5">Z2</option>
             </select>
             </form>  
         </div>
@@ -347,8 +352,6 @@
                      <img id="close" src='vistas/Imagenes/cerrar.png' width="25" onclick ="ocultar_elemento()">
                     <h2 align="center">Resumen de Seguimientos:</h2>
                     <div id="tabla_seguimientos">                
-                    </div>
-                    <div id="pruebita">                
                     </div>
                     <hr>
                 </div>

@@ -18,6 +18,7 @@
         require __DIR__ . '/../vistas/plantillas/frm_principal_publica.php';
     }
       
+    
 
     ////////////////////////////////////////////////////////////////////////////
     //////////////Metodos de Acceso publico/////////////////////////////////////
@@ -108,6 +109,7 @@
         if(isset($_SESSION['nombre'])){
             //Llamada al formulario correspondiente de la vista
            require __DIR__ . '/../vistas/plantillas/frm_principal.php';
+           
         }else{
               /*
              * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
@@ -416,6 +418,17 @@
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         } 
+    }
+    
+     public function puestos_de_monitoreo_listar(){
+        //Variables que muestran tipos de adventencia en pantalla según sea necesario
+        $tipo_de_alerta="alert alert-info";
+        $validacion="Verificación de Identidad";
+        //Llamada al formulario correspondiente de la vista
+        $obj_unidades_de_video= new cls_unidad_video();
+        $obj_unidades_de_video->obtiene_unidades_de_video_que_tienen_punto_bcr();
+        $params=$obj_unidades_de_video->getArreglo();
+        require __DIR__ . '/../vistas/plantillas/frm_puestos_de_monitoreo_listar.php';
     }
      
     //Paso de importación del prontuario que permite actualizar la tabla de puestos en el sistema
@@ -2577,8 +2590,7 @@
                             //Asigna a la variable de sesion, el apellido del usuario
                             $_SESSION['apellido']=$obj_usuarios->getApellido();
                             //Asigna a la variable de sesion, el id del usuario
-                            $_SESSION['id']=$obj_usuarios->getId();
-                            
+                            $_SESSION['id']=$obj_usuarios->getId();    
                             //Crea una variable de sesion de tipo vector para acumular el total de modulos del sistema
                             $_SESSION['modulos']=array();
                             //Obtiene todos los modulos de seguridad registrados en la bd
@@ -2912,6 +2924,13 @@
                 $puesto_enviado=4;
                 //Establecer la condición de filtrado por puesto para la consulta SQL a la base de datos
                 $obj_eventos->setCondicion("T_Evento.ID_EstadoEvento<>3 AND T_Evento.ID_EstadoEvento<>5 AND (T_Evento.ID_Provincia=2 OR T_Evento.ID_Provincia=3 OR T_Evento.ID_Provincia=7) AND (T_Evento.ID_Tipo_Punto<>3 AND T_Evento.ID_Tipo_Punto<>4)");
+            }
+            //Verifica para cual puesto de monitoreo fue realizada la solicitud, esto mediante el metodo post 
+            if($_POST['puesto']==5){
+                //Variable de control del puesto a visualizar
+                $puesto_enviado=5;
+                //Establecer la condición de filtrado por puesto para la consulta SQL a la base de datos
+                $obj_eventos->setCondicion("(T_Evento.ID_EstadoEvento<>3 AND T_Evento.ID_EstadoEvento<>5) AND (T_Evento.ID_Tipo_Evento=17)");
             }
             //Verifica para cual puesto de monitoreo fue realizada la solicitud, esto mediante el metodo post 
             if($_POST['puesto']==0){
@@ -3997,6 +4016,59 @@
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }
     }
+    
+    /*
+     * Metodo que permite eliminar una imagen del padron fotografico de puntos BCR
+     */
+    
+    public function eliminar_imagen_padron_unidades_de_video(){
+      //Validación para verificar si el usuario está logeado en el sistema  
+        if(isset($_SESSION['nombre'])){
+            //Creacion de una instancia de la clase padron fotografico
+            $obj_padron_fotografico= new cls_padron_fotografico_unidades_de_video();
+            //Verifica que el envión de información haya sido realizado mediante el metodo post )formulario HTML)
+            if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+                //Busca el registro correspondiente mediante el id llave de la tabla
+                $obj_padron_fotografico->setCondicion("ID_Padron_Unidad_Video=".$_POST['id_imagen']);
+                //Ejecuta el metodo que obtiene las imagenes correspondientes
+                $obj_padron_fotografico->obtener_imagenes_unidades_de_video();
+                //Obtiene el arreglo correspondiente
+                $params=$obj_padron_fotografico->getArreglo();
+                //Elimina la imagen de la base de datos
+                $obj_padron_fotografico->eliminar_imagen_unidad_de_video();
+                
+                //Obtiene la ruta del directorio raiz de oriel mediante la variable reservada correspondiente
+                $raiz=$_SERVER['DOCUMENT_ROOT'];
+    
+                //Formatea la ruta para verificar si tiene la cantidad adecuada de /
+                if (substr($raiz,-1)!="/"){
+                    $raiz.="/";
+                }
+
+                //$ruta=  $raiz."Padron_Fotografico_Puntos_BCR/20161110111422Entrada Principal.jpg";
+               //$ruta=  $raiz."Padron_Fotografico_Puntos_BCR/".$_POST['ruta_imagen'];
+                //Establece la ruta completa de la imagen, incluyendo el nombre y la extensión de la misma
+                $ruta=  $raiz."Padron_Fotografico_Unidades_Video/".$params[0]['Nombre_Ruta'];
+                
+               //Borra el archivo fisico del disco duro
+                unlink($ruta);
+                      
+            }
+        }else {
+              /*
+             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+             * En la última línea llama a la pagina de inicio de sesión.
+             */
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            //Llamada al formulario correspondiente de la vista
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }
+    }
+    
+    
      /*
      * Metodo que permite recuperar un evento en estado cerrado o abierto por error.
      */
@@ -5010,6 +5082,155 @@
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         } 
+    }
+    
+    public function frm_unidades_de_video_padron_fotografico(){
+        if(isset($_SESSION['nombre'])){  
+            if (isset($_GET['id'])){
+                $obj_padron_fotografico= new cls_padron_fotografico_unidades_de_video();
+                $obj_padron_fotografico->setCondicion("ID_Unidad_Video=".$_GET['id']); 
+                $obj_padron_fotografico->obtener_imagenes_unidades_de_video();
+                $params=$obj_padron_fotografico->getArreglo();
+               
+            }else{
+                echo "<script type=\"text/javascript\">alert('Se presentó un error inesperado, por favor vuelva a seleccionar el punto BCR');history.go(-1);</script>";;
+                exit();
+            }
+            
+            require __DIR__ . '/../vistas/plantillas/frm_unidades_de_video_padron_fotografico.php';
+        }else {
+              /*
+             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+             * En la última línea llama a la pagina de inicio de sesión.
+             */
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        } 
+    }
+    
+    public function guardar_imagen_unidades_de_video(){
+        if(isset($_SESSION['nombre'])){
+              if (!(isset($_POST['Nombre']))){
+                echo "<script type=\"text/javascript\">alert('Es necesario ingresar un nombre de referencia para la imágen!');history.go(-1);</script>";;
+                exit();
+              }
+              
+              if (!(isset($_POST['Descripcion']))){
+                echo "<script type=\"text/javascript\">alert('Es necesario ingresar una descripción básica para la imágen!');history.go(-1);</script>";;
+                exit();
+              }
+              
+               if (!(isset($_POST['Categoria']))){
+                echo "<script type=\"text/javascript\">alert('Es necesario elegir una categoría para la imágen!');history.go(-1);</script>";;
+                exit();
+              }
+              
+               if (!(isset($_POST['id_unidad_video']))){
+                
+                exit();
+              }
+              
+              $nombre_imagen= str_replace('"','',str_replace("'","",$_POST['Nombre']));
+              $categoria=$_POST['Categoria'];
+              $descripcion=str_replace("'","",$_POST['Descripcion']);
+              $id_unidad_video=$_POST['id_unidad_video'];
+              
+              
+              //Validación de informacion en detalle de evento, elimina algunos caracteres especiales
+              
+              $descripcion= str_replace("'","",$descripcion);
+              $descripcion= str_replace('"','',$descripcion);
+
+
+            //Obtiene el mensaje de verificacion del envio del archivo
+            $recepcion_archivo=$_FILES['archivo_adjunto']['error'];
+
+              
+            $obj_padron_fotografico = new cls_padron_fotografico_unidades_de_video();
+            $obj_padron_fotografico->setId_unidad_video($id_unidad_video);
+            $obj_padron_fotografico->setNombre_imagen($nombre_imagen);
+
+            //Asigna el atributo descripcion
+            $obj_padron_fotografico->setDescripcion($descripcion);
+            //Asigna el atributo categoria
+
+            $obj_padron_fotografico->setCategoria($categoria);
+                       
+            $recepcion_archivo=$_FILES['archivo_adjunto']['error'];
+        
+            $date=new DateTime(); //this returns the current date time
+            $result = $date->format('Y-m-d-H-i-s');
+            //echo $result;
+            $krr = explode('-',$result);
+            $result = implode("",$krr);
+                       
+            $raiz=$_SERVER['DOCUMENT_ROOT'];
+                       
+            if (substr($raiz,-1)!="/"){
+                $raiz.="/";
+            }
+            
+            $ruta=  str_replace('"','',str_replace("'","",$raiz."Padron_Fotografico_Unidades_Video/".Encrypter::quitar_tildes($id_unidad_video."-".$result."-".$_FILES['archivo_adjunto']['name'])));
+                      
+            $nombre_ruta=str_replace('"','',str_replace("'","",Encrypter::quitar_tildes($id_unidad_video."-".$result."-".$_FILES['archivo_adjunto']['name'])));
+            
+            
+            switch ($recepcion_archivo) {
+                case 0:{
+                    if ((basename($_FILES['archivo_adjunto']['type'])==="jpeg")||(basename($_FILES['archivo_adjunto']['type'])==="gif")||(basename($_FILES['archivo_adjunto']['type'])==="png")||(basename($_FILES['archivo_adjunto']['type'])==="bmp")||(basename($_FILES['archivo_adjunto']['type'])==="tiff")||(basename($_FILES['archivo_adjunto']['type'])==="jpg")){
+                        if (move_uploaded_file($_FILES['archivo_adjunto']['tmp_name'], $ruta)){
+                            $obj_padron_fotografico->setNombre_ruta(Encrypter::quitar_tildes($nombre_ruta));
+                            $obj_padron_fotografico->setFormato(basename($_FILES['archivo_adjunto']['type']));
+                            $obj_padron_fotografico->setCondicion("");
+                            $obj_padron_fotografico->guardar_imagen_unidad_de_video();
+                            header ("location:/ORIEL/index.php?ctl=frm_unidades_de_video_padron_fotografico&id=".$obj_padron_fotografico->getId_unidad_video());
+                        }else{
+                            echo "<script type=\"text/javascript\">alert('Hubo un problema al subir el archivo al servidor!!!');history.go(-1);</script>";;
+                        }
+                    }else{
+                        echo "<script type=\"text/javascript\">alert('El archivo no corresponde a un formato valido de imagenes !!!!');history.go(-1);</script>";;
+                    }
+                    break;
+                }
+                    
+                case 2:{
+                    echo "<script type=\"text/javascript\">alert('El archivo consume mayor espacio del permitido (2 mb) !!!!');history.go(-1);</script>";;
+                    break;
+                }
+                case 4:{ 
+                    
+                    echo "<script type=\"text/javascript\">alert('No fue seleccionado ningun archivo!!!!');history.go(-1);</script>";;
+                                       
+                    break;
+                }
+                 case 6:{
+                    echo "<script type=\"text/javascript\">alert('El servidor no tiene acceso a la carpeta temporal de almacenamiento!!!!');history.go(-1);</script>";
+                    break;
+                 } 
+                case 7:{
+                    echo "<script type=\"text/javascript\">alert('No es posible escribir en el disco duro del servidor!!!!');history.go(-1);</script>";;
+                    break;
+                }  
+                case 8:{
+                    echo "<script type=\"text/javascript\">alert('Fue detenida la carga del archivo debido a una extension de PHP!!!!');history.go(-1);</script>";;
+                    break;
+                }   
+            }
+        }else {
+              /*
+             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+             * En la última línea llama a la pagina de inicio de sesión.
+             */
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+         }  
+         
     }
     
     public function guardar_imagen_puntos_bcr(){

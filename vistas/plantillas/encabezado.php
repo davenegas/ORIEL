@@ -3,10 +3,6 @@
         $obj_general = new cls_general();
         $obj_general->obtener_notas();
         $notas= $obj_general->getArreglo(); 
-        
-//        echo "<pre>";
-//        print_r($notas);
-//        echo "</pre>";
         return $notas;
     }
     ?>
@@ -82,7 +78,7 @@
                    $_SESSION['modulos']['Catálogos-Gerente Zona']==1|| $_SESSION['modulos']['Catálogos-Supervisor Zona']==1||
                    $_SESSION['modulos']['Catálogos-Proveedor enlaces']==1||$_SESSION['modulos']['Catálogos-Tipo enlaces']==1||
                    $_SESSION['modulos']['Catálogos-Medio enlaces']==1|| $_SESSION['modulos']['Catálogos-Unidades de Video']==1||
-                   $_SESSION['modulos']['Catálogos-Cencon']==1 )){  ?>
+                   $_SESSION['modulos']['Catálogos-Cencon']==1 || $_SESSION['modulos']['Catálogos-Puestos de Monitoreo']==1)){  ?>
 
             <li class="dropdown">
             <a class="dropdown-toggle" data-toggle="dropdown" href="#">Catálogos
@@ -140,7 +136,11 @@
                     <?php  if ($_SESSION['modulos']['Catálogos-Unidades de Video']==1){?>
                    <li><a href="index.php?ctl=unidades_de_video_listar">Unidades de Video</a></li>
                 <?php  }; ?>
-          
+                   
+                    <?php  if ($_SESSION['modulos']['Catálogos-Puestos de Monitoreo']==1){?>
+                   <li><a href="index.php?ctl=puestos_de_monitoreo_listar"> Puestos de Monitoreo</a></li>
+                <?php  }; ?>
+                            
                 <?php  if ($_SESSION['modulos']['Catálogos-Cencon']==1){?>
                    <li><a href="index.php?ctl=cencon_gestion">Cencon Listar</a></li>
                 <?php  }; ?>

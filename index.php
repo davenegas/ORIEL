@@ -65,6 +65,8 @@ require_once __DIR__ . '/controladores/cls_tipo_enlace.php';
 require_once __DIR__ . '/controladores/cls_medio_enlace.php';
 //Libreria de clases --> Control de padrones fotográficos para puntos BCR
 require_once __DIR__ . '/controladores/cls_padron_fotografico_puntosbcr.php';
+//Libreria de clases --> Control de padrones fotográficos para unidades de video
+require_once __DIR__ . '/controladores/cls_padron_fotografico_unidades_de_video.php';
 //Libreria de clases --> Control de enlaces del departamento de telecomunicaciones
 require_once __DIR__ . '/controladores/cls_enlace_telecom.php';
 //Libreria de clases --> Control de marcas de asistencia
@@ -152,7 +154,11 @@ $map = array(
     'unidades_de_video_listar'=>array('controller'=>'Controller', 'action'=>'unidades_de_video_listar'),
     'editar_campo_unidades_de_video'=>array('controller'=>'Controller', 'action'=>'editar_campo_unidades_de_video'),
     'agregar_nueva_unidad_de_video'=>array('controller'=>'Controller', 'action'=>'agregar_nueva_unidad_de_video'),
-           
+    'frm_unidades_de_video_padron_fotografico'=>array('controller'=>'Controller','action'=> 'frm_unidades_de_video_padron_fotografico'),
+    'guardar_imagen_unidades_de_video'=>array('controller'=>'Controller','action'=> 'guardar_imagen_unidades_de_video'), 
+    'eliminar_imagen_padron_unidades_de_video'=>array('controller'=>'Controller','action'=> 'eliminar_imagen_padron_unidades_de_video'), 
+    'puestos_de_monitoreo_listar'=>array('controller'=>'Controller','action'=> 'puestos_de_monitoreo_listar'), 
+                
     //Información Proveedor enlaces
     'proveedor_listar'=>array('controller'=>'Controller', 'action'=>'proveedor_listar'),
     'proveedor_enlace_guardar'=>array('controller'=>'Controller', 'action'=>'proveedor_enlace_guardar'),

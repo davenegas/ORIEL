@@ -285,6 +285,12 @@
 
                 document.getElementById('ventana_oculta_4').style.display = "none";      
             }  
+            function cargar_padron_fotografico(id_uni){  
+                if (document.getElementById(id_uni+'-ID_PuntoBCR').innerHTML.length>0){
+                    //alert(document.getElementById(id_uni+'-ID_PuntoBCR').innerHTML.length);
+                    document.location.href="index.php?ctl=frm_unidades_de_video_padron_fotografico&id="+id_uni;
+                }
+            }
         </script>
     </head>
     <body>
@@ -299,6 +305,7 @@
             <thead>
                 <tr>
                     <th hidden style="text-align:center">ID Unidad de Video</th>
+                    <th style="text-align:center">Imágenes</th>
                     <th style="text-align:center">Punto BCR</th>
                     <th style="text-align:center">Provincia</th>
                     <th style="text-align:center">Fecha Última Actualización</th>
@@ -328,6 +335,7 @@
                 ?>
                 <tr>
                     <td hidden style="text-align:center"><?php echo $params[$i]['ID_Unidad_Video'];?></td>
+                    <td style="text-align:center"><a href="#" align="right" onclick="cargar_padron_fotografico('<?php echo $params[$i]['ID_Unidad_Video'];?>');"><img src="vistas/Imagenes/gallery.gif" width="40" height="40"></a></td>
                     <td style="text-align:center" id="<?php echo $params[$i]['ID_Unidad_Video'].'-ID_PuntoBCR';?>" onclick="edita_dato('<?php echo $params[$i]['ID_Unidad_Video'];?>','<?php echo $params[$i]['ID_PuntoBCR'];?>','ID_PuntoBCR','Punto BCR')"><?php echo $params[$i]['Nombre'];?></td>
                     <td style="text-align:center" id="<?php echo $params[$i]['ID_Unidad_Video'].'-Provincia';?>"><?php echo $params[$i]['Nombre_Provincia'];?></td>
                     <td style="text-align:center" id="<?php echo $params[$i]['ID_Unidad_Video'].'-Fecha_Actualizacion';?>"><?php echo $params[$i]['Fecha_Actualizacion'];?></td>
