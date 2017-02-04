@@ -59,7 +59,7 @@ class cls_eventos{
         $this->adjunto = $adjunto;
     }
 
-        function getPrioridad() {
+    function getPrioridad() {
         return $this->prioridad;
     }
 
@@ -237,7 +237,7 @@ class cls_eventos{
     }
     
     //Este metodo realiza la modificación del estado del modulo, de activo a inactivo o viceversa en la bd
-  function edita_estado_evento($nuevo_estado){
+    function edita_estado_evento($nuevo_estado){
       $this->obj_data_provider->conectar();
       //Llama al metodo para editar los datos correspondientes
       $this->obj_data_provider->edita_datos("T_Evento","ID_EstadoEvento=".$nuevo_estado,"ID_Evento=".$this->id);
@@ -247,7 +247,7 @@ class cls_eventos{
   }
   
     //Este metodo realiza la modificación del estado del modulo, de activo a inactivo o viceversa en la bd
-  function edita_notas_supervision_evento(){
+    function edita_notas_supervision_evento(){
       $this->obj_data_provider->conectar();
       //Llama al metodo para editar los datos correspondientes
       $this->obj_data_provider->edita_datos("T_Evento","Observaciones_Evento='".$this->observaciones_supervision."',Fecha_Observaciones='".$this->fecha_notas_supervision."'","ID_Evento=".$this->id);
@@ -274,8 +274,7 @@ class cls_eventos{
   }
   
   
-  //Valida que no se ingrese el mismo tipo de evento en un sitio, si ya hay uno pendiente
-    
+    //Valida que no se ingrese el mismo tipo de evento en un sitio, si ya hay uno pendiente
     function existe_abierto_este_tipo_de_evento_en_este_sitio(){
       //Establece la conexión con la bd
       $this->obj_data_provider->conectar();
@@ -292,8 +291,7 @@ class cls_eventos{
       }    
   }
   
-  //Valida que no se ingrese el mismo tipo de evento en un sitio, si ya hay uno pendiente
-    
+    //Valida que no se ingrese el mismo tipo de evento en un sitio, si ya hay uno pendiente
     function eliminar_mezcla_del_sistema(){
       //Establece la conexión con la bd
       $this->obj_data_provider->conectar();
@@ -303,8 +301,7 @@ class cls_eventos{
   }
   
   
-  //Valida que no se ingrese la misma mezcla de eventos en el sistema
-    
+    //Valida que no se ingrese la misma mezcla de eventos en el sistema
     function existe_esta_mezcla_de_eventos_en_el_sistema(){
       //Establece la conexión con la bd
       $this->obj_data_provider->conectar();
@@ -321,8 +318,7 @@ class cls_eventos{
       }    
   }
   
-  //Valida que no se ingrese la misma mezcla de eventos en el sistema
-    
+    //Valida que no se ingrese la misma mezcla de eventos en el sistema
     function existe_este_evento_en_otra_mezcla(){
       //Establece la conexión con la bd
       $this->obj_data_provider->conectar();
@@ -339,8 +335,7 @@ class cls_eventos{
       }    
   }
   
-  //Valida que no se ingrese el mismo tipo de evento en un sitio, si ya hay uno pendiente
-    
+    //Valida que no se ingrese el mismo tipo de evento en un sitio, si ya hay uno pendiente
     function obtiene_prioridad_de_tipo_de_evento(){
       //Establece la conexión con la bd
       $this->obj_data_provider->conectar();
@@ -404,6 +399,7 @@ class cls_eventos{
             $this->resultado_operacion=true;
         }
     }
+    
     //Detalles de bitacora
     public function obtiene_detalle_evento(){
         try{

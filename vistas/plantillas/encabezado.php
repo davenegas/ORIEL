@@ -189,7 +189,11 @@
                     <li><a href="index.php?ctl=enlace_reporte">Enlaces Telecom</a></li> 
                 <?php }; ?>
                 
-                 <?php if ($_SESSION['modulos']['Reportes-Trazabilidad']==1){ ?>
+                <?php if ($_SESSION['modulos']['Reportes-Enlaces Telecom']==1){ ?>
+                    <li><a href="index.php?ctl=reporte_cencon">Reporte Cencon</a></li> 
+                <?php }; ?>
+                    
+                <?php if ($_SESSION['modulos']['Reportes-Trazabilidad']==1){ ?>
                     <li><a href="index.php?ctl=frm_trazabilidad_listar">Trazabilidad</a></li> 
                 <?php }; ?>   
 
@@ -271,7 +275,9 @@
             <a class="dropdown-toggle" data-toggle="dropdown" href="#">Ayuda
             <span class="caret"></span></a>
             <ul class="dropdown-menu">
-                <!--<li><a href="#">Ayuda</a></li>--> 
+                <?php if ($_SESSION['modulos']['Módulo-Personal Externo']==1){?>
+                    <li><a href="index.php?ctl=manual_personal_externo">Manual Personal Externo</a></li>
+                <?php }; ?>
             </ul>
             </li>
            <?php 

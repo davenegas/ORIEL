@@ -19,7 +19,7 @@
                 <?php }?>
             </h2>
 <!--            <pre>
-                <?php print_r($params); ?>
+                <?php print_r($fotos); ?>
             </pre>-->
             <div>
                 <h3>Información General
@@ -28,7 +28,7 @@
                 <?php }?>
                 </h3>
                 <!--Información del personal Externo-->
-                <input type="text" hidden required="ID_Persona" readonly id="ID_Persona" name="ID_Persona" value="<?php echo $params[0]['ID_Persona_Externa'];?>">
+                <input type="text"  required="ID_Persona" readonly id="ID_Persona" name="ID_Persona" value="<?php echo $params[0]['ID_Persona_Externa'];?>">
 
                 <div class="col-md-4 espacio-abajo">
                     <label for="identificacion">Identificación</label>
@@ -102,7 +102,7 @@
                 
                 <div class="col-md-4">
                 <label for="Provincia">Provincia</label>
-                    <select class="form-control" disabled id="Provincia" name="Provincia" > 
+                    <select class="form-control" disabled required id="Provincia" name="Provincia" > 
                     <?php
                         $tam = count($provincias);
                         for($i=0; $i<$tam;$i++) {
@@ -116,7 +116,7 @@
                 
                 <div class="col-md-4">
                 <label for="Canton">Cantón</label>
-                    <select class="form-control" disabled id="Canton" name="Canton" > 
+                    <select class="form-control" disabled required id="Canton" name="Canton" > 
                     <?php
                     $tam = count($cantones);
 
@@ -132,7 +132,7 @@
             
                 <div class="col-md-4">
                     <label for="Distrito">Distrito</label>
-                    <select class="form-control" disabled id="Distrito" name="Distrito" > 
+                    <select class="form-control" disabled required id="Distrito" name="Distrito" > 
                     <?php
                     $tam = count($distritos);
                     for($i=0; $i<$tam;$i++){
@@ -336,8 +336,8 @@
                     <img id="close" src='vistas/Imagenes/cerrar.png' width="25" onclick ="ocultar_elemento()">
                     <h2>Agregar número de teléfono</h2>
                     <hr>
-                    <input hidden id="ID_Telefono" name="ID_Telefono" type="text">
-                    <input hidden id="ID_Persona" name="ID_Persona" type="text" value="<?php echo $params[0]['ID_Persona_Externa']; ?>">
+                    <input  id="ID_Telefono" name="ID_Telefono" type="text">
+                    <input  id="ID_Persona_Telefono" name="ID_Persona_Telefono" type="text" value="<?php echo $params[0]['ID_Persona_Externa']; ?>">
                     
                     <label for="Tipo_Telefono">Tipo de Telefono</label>
                         <select class="form-control espacio-abajo" id="Tipo_Telefono" name="Tipo_Telefono"> 

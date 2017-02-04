@@ -33,6 +33,7 @@
         //Llamada al formulario correspondiente de la vista
         require __DIR__ . '/../vistas/plantillas/frm_personal_listar_publico.php';
     }
+    
     //Lista de puntos BCR con información general y pública para vista de todo el conglomerado BCR
     public function puntobcr_listar_publico(){
         //Creación del objeto puntos BCR
@@ -61,9 +62,10 @@
         //Llamada al formulario correspondiente de la vista
         require __DIR__ . '/../vistas/plantillas/frm_personal_externo_listar_publico.php';
     }
-    //////////////////////////
-    //Metodos relacionados del area de Modulos de Seguridad del Sistema//
-    //////////////////////////
+    
+    ////////////////////////////////////////////////////////////////////////////
+    //Metodos relacionados del area de Modulos de Seguridad del Sistema/////////
+    ////////////////////////////////////////////////////////////////////////////
 
     // Metodo que llama al formulario correspondiente para validación de credenciales por parte del usuario
     public function iniciar_sesion(){
@@ -75,7 +77,6 @@
         require __DIR__ . '/../vistas/plantillas/inicio_sesion.php'; 
     }
     
-
     // Obtiene lista completa de roles del sistema
     
     //Metodo que muestra el listado general de roles de seguridad establecidos en el sistema. Pantalla principal del mantenimiento.
@@ -102,7 +103,7 @@
         }
     }    
 
-    // Metodo que realiza la llamada al formulario principal del sistema ORIEL
+    //Metodo que realiza la llamada al formulario principal del sistema ORIEL
     public function principal(){
         //Validación para verificar si el usuario está logeado en el sistema
         if(isset($_SESSION['nombre'])){
@@ -126,9 +127,6 @@
     ///Serie de metodos que permiten crear un utilitario de importación de personal BCR ////////
     ////////////////////////////////////////////////////////////////////////////
     
-    /*
-     * 
-     */
     /*
      * Paso del utilitario, pantalla de bienvendida, desde esta pantalla es posible 
      * seleccionar el archivo csv correspondiente con el listado total de personas
@@ -220,7 +218,7 @@
         } 
     }
     
-    // Paso de importación del prontuario que permite actualizar la tabla de unidades ejecutoras en el sistema
+    //Paso de importación del prontuario que permite actualizar la tabla de unidades ejecutoras en el sistema
     public function frm_importar_prontuario_paso_3(){
         //Validación para verificar si el usuario está logeado en el sistema
         if(isset($_SESSION['nombre'])){
@@ -549,7 +547,7 @@
         } 
     }
         
-    // Paso de importación del prontuario que permite actualizar la tabla de personas en el sistema
+    //Paso de importación del prontuario que permite actualizar la tabla de personas en el sistema
     public function frm_importar_prontuario_paso_5(){
         //Validación para verificar si el usuario está logeado en el sistema
         if(isset($_SESSION['nombre'])){
@@ -899,7 +897,7 @@
         } 
     }
 
-     // Paso de importación del prontuario que permite actualizar la tabla de celulares en el sistema
+    //Paso de importación del prontuario que permite actualizar la tabla de celulares en el sistema
     public function frm_importar_prontuario_paso_7(){
         
         if(isset($_SESSION['nombre'])){
@@ -1057,7 +1055,7 @@
         } 
     }
     
-    // Paso de importación del prontuario que permite actualizar la tabla de personas y telefonos de extensiones en el sistema
+    //Paso de importación del prontuario que permite actualizar la tabla de personas y telefonos de extensiones en el sistema
     public function frm_importar_prontuario_paso_8(){
         //Validación para verificar si el usuario está logeado en el sistema
         if(isset($_SESSION['nombre'])){
@@ -1292,7 +1290,7 @@
         } 
     }
     
-    // Paso de importación del prontuario que permite actualizar ls tabla de puestos y unidades ejecutoras
+    //Paso de importación del prontuario que permite actualizar ls tabla de puestos y unidades ejecutoras
     //Eliminando las que se encuentran solas sin relación con personas o puntos bcr
     public function frm_importar_prontuario_paso_9(){
         //Validación para verificar si el usuario está logeado en el sistema
@@ -1555,7 +1553,7 @@
         } 
     }
     
-    // Prepara las variables y el formulario respectivo para cambio de clave
+    //Prepara las variables y el formulario respectivo para cambio de clave
     public function cambiar_password(){   
         $usuario = "";       
         $clave = "";  
@@ -1731,7 +1729,7 @@
             }
     }  
 
-    // Cambia estado del rol (activo/inactivo)
+    //Cambia estado del rol (activo/inactivo)
     public function cambiar_estado_rol(){
         //Validación para verificar si el usuario está logeado en el sistema
         if(isset($_SESSION['nombre'])){
@@ -1773,8 +1771,8 @@
       }
     }
 
-    // Metodo que permite cerrar o destruir la sesión actual de usuario, para poder 
-     //validar nuevamente el ingreso y validacion de usuario
+    //Metodo que permite cerrar o destruir la sesión actual de usuario, para poder 
+    //validar nuevamente el ingreso y validacion de usuario
     public function cerrar_sesion(){
        //Envia un tipo de alerta de información, indicando que el sistema cerró la sesion actual
        $tipo_de_alerta="alert alert-info";
@@ -1785,7 +1783,7 @@
        session_destroy();
     }
     
-    // Metodo que permite obtener las notas del sistema, a nivel del rol de coordinacion de Z1.
+    //Metodo que permite obtener las notas del sistema, a nivel del rol de coordinacion de Z1.
     public function nota_obtener() {
         //Validación para verificar si el usuario está logeado en el sistema
         if(isset($_SESSION['nombre'])){
@@ -2097,9 +2095,7 @@
         }
     }
     
-    /*
-     * Metodo que permite cambiar el estado de un modulo (activo/inactivo)
-     */
+    //Metodo que permite cambiar el estado de un modulo (activo/inactivo)
     public function modulos_cambiar_estado(){
         //Validación para verificar si el usuario está logeado en el sistema
         if(isset($_SESSION['nombre'])){
@@ -2141,9 +2137,7 @@
         }
     }
 
-    /*
-     * Permite agregar o modificar modulos de seguridad del sistema
-     */
+    //Permite agregar o modificar modulos de seguridad del sistema
     public function modulos_gestion(){
         //Validación para verificar si el usuario está logeado en el sistema
         if(isset($_SESSION['nombre'])){
@@ -2179,9 +2173,8 @@
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }
     }
-    /*
-     * Metodo que permite traer de bd el listado total de usuarios del sistema 
-     */
+    
+    //Metodo que permite traer de bd el listado total de usuarios del sistema 
     public function listar_usuarios(){
         //Validación para verificar si el usuario está logeado en el sistema
         if(isset($_SESSION['nombre'])){
@@ -2208,9 +2201,7 @@
         }
     }
      
-    /*
-     * Metodo que permite el mantenimiento de usuarios de seguridad del sistema
-     */
+    //Metodo que permite el mantenimiento de usuarios de seguridad del sistema
     public function gestion_usuarios(){
         //Validación para verificar si el usuario está logeado en el sistema
         if(isset($_SESSION['nombre'])){
@@ -2282,9 +2273,7 @@
         }
     }
 
-    /*
-     * Metodo que permite realizar el mantenimiento general de la tabla de usuarios del sistema
-     */
+    //Metodo que permite realizar el mantenimiento general de la tabla de usuarios del sistema
     public function guardar_usuario(){
         //Validación para verificar si el usuario está logeado en el sistema
         if(isset($_SESSION['nombre'])){
@@ -2378,9 +2367,8 @@
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }
     }
-    /*
-     * Metodo que permite cambiar de estado un usuario en la bd (activo/inactivo)
-     */
+    
+    //Metodo que permite cambiar de estado un usuario en la bd (activo/inactivo)
     public function cambiar_estado_usuario(){
         //Creacion de una instancia de la clase roles
         $obj_roles= new cls_roles();
@@ -2437,10 +2425,8 @@
         }
     }
      
-    /*
-     * Metodo que permite resetear la clave de un usuario en especifico, por parte de un usuario administrador.
-     * El nuevo password queda de manera momentánea, con la cedula o SSN para ingresar nuevamente.
-     */
+    //Metodo que permite resetear la clave de un usuario en especifico, por parte de un usuario administrador.
+    //El nuevo password queda de manera momentánea, con la cedula o SSN para ingresar nuevamente.
     public function reset_password(){ 
         //Validación para verificar si el usuario está logeado en el sistema
         if(isset($_SESSION['nombre'])){
@@ -2477,9 +2463,7 @@
         }
     }
 
-    /*
-     * Metodo que permite recordar el password de un usuario mediante el envio de la información por correo 
-     */
+    //Metodo que permite recordar el password de un usuario mediante el envio de la información por correo 
     public function recordar_password(){
         //Inicializa la variable para notificar al usuario del resultado de la operacion
         $validacion="";
@@ -2536,7 +2520,6 @@
      * navegar dentro de todas las funcionalidades de ORIEL.
      * 
      */
-    
     public function listar(){
         //Inicializa las variables de control para notificar al usuario del resultado del proceso
         $validacion="";
@@ -2660,9 +2643,7 @@
         }
     }
      
-    /*
-     * Metodo que permite iniciar el ingreso a la parte privada del sistema, cambiando la clave.
-     */
+    //Metodo que permite iniciar el ingreso a la parte privada del sistema, cambiando la clave.
     public function iniciar_sistema_cambiando_clave(){
         //Inicializa la variable de control para informar al usuario del resultado del proceso.
         $validacion="";
@@ -2774,11 +2755,10 @@
 
     }
     
-//FUNCIONES PARA EVENTOS
-    
-    /*
-     * Metodo que permite listar los eventos de bitácora que están activos o en atención.
-     */
+    ////////////////////////////////////////////////////////////////////////////
+    ///////////////////////FUNCIONES PARA EVENTOS///////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////
+    //Metodo que permite listar los eventos de bitácora que están activos o en atención.
     public function frm_eventos_listar(){
         //Validación para verificar si el usuario está logeado en el sistema
         if(isset($_SESSION['nombre'])){
@@ -3000,9 +2980,7 @@
         }
     }
     
-    /*
-     * Metodo del contralador que permite listar los eventos cerrados en pantalla de la bitacora digital.
-     */
+    //Metodo del contralador que permite listar los eventos cerrados en pantalla de la bitacora digital.
     public function frm_eventos_lista_cerrados(){
         //Validación para verificar si el usuario está logeado en el sistema
         if(isset($_SESSION['nombre'])){
@@ -3106,10 +3084,7 @@
         }
     }
     
-    /*
-     * Metodo del controler que permite agregar un nuevo evento al modulo de la bitacora digital del centro de control
-     */
-    
+    //Metodo del controler que permite agregar un nuevo evento al modulo de la bitacora digital del centro de control
     public function frm_eventos_agregar(){
         //Valida errores durante el procedimiento realizado
         try {
@@ -3243,9 +3218,7 @@
         }  
     }
        
-    /*
-     * Metodo que permite notificar al usuario en pantalla cuando va a ingresar un tipo de evento en un punto bcr que ya se encuentra abierto
-     */
+    //Metodo que permite notificar al usuario en pantalla cuando va a ingresar un tipo de evento en un punto bcr que ya se encuentra abierto
     public function mezcla_eventos_bitacora_digital(){
                 
         //Verifica que los parametros del metodo post estén definidos y hayan sido enviados al metodo
@@ -3317,10 +3290,7 @@
         }
     }
     
-    /*
-     * Metodo que permite notificar al usuario en pantalla cuando va a ingresar un tipo de evento en un punto bcr que ya se encuentra abierto
-     */
-    
+    //Metodo que permite notificar al usuario en pantalla cuando va a ingresar un tipo de evento en un punto bcr que ya se encuentra abierto
     public function agregar_nueva_unidad_de_video(){
 
         //Validación para verificar si el usuario está logeado en el sistema
@@ -3438,10 +3408,7 @@
         }
     }
     
-    
-    /*
-     * Metodo que permite notificar al usuario en pantalla cuando va a ingresar un tipo de evento en un punto bcr que ya se encuentra abierto
-     */
+    //Metodo que permite notificar al usuario en pantalla cuando va a ingresar un tipo de evento en un punto bcr que ya se encuentra abierto
     public function alerta_en_vivo_mismo_punto_bcr_y_evento(){
                 
         //Verifica que los parametros del metodo post estén definidos y hayan sido enviados al metodo
@@ -3487,7 +3454,6 @@
      * parametros de busqueda suministrados por el usuario de consulta. Entre los parametros se encuentran,
      * nombre de usuario, fecha, tabla, etc.
      */
-    
     public function actualiza_en_vivo_reporte_trazabilidad(){
             //Realiza una pausa de 2 segundos
             sleep(2);       
@@ -3616,9 +3582,7 @@
         
     }
     
-    /*
-     * Muestra en pantalla un reportes de eventos cerrados, de acuerdo a parametros de busqueda específicos, como fecha, sitio, etc.
-     */
+    //Muestra en pantalla un reportes de eventos cerrados, de acuerdo a parametros de busqueda específicos, como fecha, sitio, etc.
     public function actualiza_en_vivo_reporte_cerrados(){
         //Espera 2 segundos antes de iniciar la ejecución del método, para mostrar un gift de espera en pantalla
             sleep(2);       
@@ -3724,7 +3688,7 @@
                     $html.="<th>Estado del Evento</th>";
                     $html.="<th>Cerrado Por</th>";
                     //Dependiendo del rol del usuario en cuestión, mostrará el botón de gestión de los eventos.
-                    if ($_SESSION['rol']!=2){  
+                    if ($_SESSION['modulos']['Recuperar Eventos Cerrados']==1){  
                         $html.="<th>Gestión</th>";
                     }
                     //Resto de columnas
@@ -3769,7 +3733,7 @@
                         $html.="<td>".$detalle_y_ultimo_usuario[$i]['Usuario']."</td>";
                         
                         //Dependiendo del rol del usuario, muestra en pantalla la opción de recuperar eventos
-                        if ($_SESSION['rol']!=2){  
+                        if ($_SESSION['modulos']['Recuperar Eventos Cerrados']==1){  
                             //Asigna la función de javascript que ejecuta la recuperación en vivo del evento, para que sea reabierto
                             $html.="<td align='center'><a onclick='recuperar_evento(".$params[$i]['ID_Evento'].",".$params[$i]['ID_PuntoBCR'].",".$params[$i]['ID_Tipo_Evento'].")'>Recuperar Evento</a></td>";
                         }   
@@ -3947,10 +3911,8 @@
             exit;
         }     
     }
-    /*
-     * Metodo que permite eliminar una imagen del padron fotografico de puntos BCR
-     */
     
+    //Metodo que permite eliminar una imagen del padron fotografico de puntos BCR
     public function eliminar_imagen_padron_puntobcr(){
       //Validación para verificar si el usuario está logeado en el sistema  
         if(isset($_SESSION['nombre'])){
@@ -3997,10 +3959,8 @@
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }
     }
-     /*
-     * Metodo que permite recuperar un evento en estado cerrado o abierto por error.
-     */
     
+    //Metodo que permite recuperar un evento en estado cerrado o abierto por error.
     public function frm_eventos_recuperar(){
         //Validación para verificar si el usuario está logeado en el sistema
         if(isset($_SESSION['nombre'])){
@@ -4056,10 +4016,7 @@
         }
     }
     
-    /*
-     * Metodo que permite recuperar un evento en estado cerrado o abierto por error.
-     */
-    
+    //Metodo que permite recuperar un evento en estado cerrado o abierto por error.
     public function eliminar_mezcla_eventos_bitacora(){
         //Validación para verificar si el usuario está logeado en el sistema
         if(isset($_SESSION['nombre'])){
@@ -4091,9 +4048,7 @@
         }
     }
     
-    /*
-     * Metodo que permite guardar un nuevo evento de bitacora digital
-     */
+    //Metodo que permite guardar un nuevo evento de bitacora digital
     public function guardar_evento(){
         //Validación para verificar si el usuario está logeado en el sistema
         if(isset($_SESSION['nombre'])){
@@ -4178,9 +4133,7 @@
         }
     }
     
-    /*
-     * Permite agregar un seguimiento para un evento o cerrar uno
-     */
+    //Permite agregar un seguimiento para un evento o cerrar uno
     public function frm_eventos_editar(){
         //Validación para verificar si el usuario está logeado en el sistema
         if(isset($_SESSION['nombre'])){
@@ -4284,9 +4237,7 @@
         }
     }
     
-    /*
-     *Metodo de la clase que permite contar los ingresos a puntos bcr publico.
-     */
+    //Metodo de la clase que permite contar los ingresos a puntos bcr publico.
     public function cuenta_visitas_a_puntos_bcr_publico(){
         
            //Extrae el directorio raiz del proyecto oriel
@@ -4382,9 +4333,7 @@
 
     }
     
-    /*
-     * Metodo de la clase que permite contar las visitas a puntos bcr area limitada por nombre de usuario y contraseña.
-     */
+    //Metodo de la clase que permite contar las visitas a puntos bcr area limitada por nombre de usuario y contraseña.
     public function cuenta_visitas_a_puntos_bcr_privado(){
         
            // Extrae el directorio raiz del proyecto ORIEL
@@ -4481,10 +4430,8 @@
 
     }
     
-    /*
-     * Metodo que permite contar todas las visitas del dia que se hacen al modulo de bitacora digital de ORIEL
-     */
-    
+
+    //Metodo que permite contar todas las visitas del dia que se hacen al modulo de bitacora digital de ORIEL
     public function cuenta_visitas_a_bitacora_digital(){
         
         // Obtiene la raiz del directorio donde esta localizado oriel
@@ -4583,9 +4530,7 @@
 
     }
     
-    /*
-     * Metodo que permite registrar las visitas al modulo de personal privado de ORIEL
-     */
+    //Metodo que permite registrar las visitas al modulo de personal privado de ORIEL
     public function cuenta_visitas_a_personal_privado(){
         
         //Obtiene la ruta del directorio raiz del proyecto ORIEL
@@ -4682,9 +4627,7 @@
 
     }
     
-    /*
-     * Modulo del sistema que permite contar  la cantidad de veces que se utiliza el área de consulta de personal en vista publica
-     */
+    //Modulo del sistema que permite contar  la cantidad de veces que se utiliza el área de consulta de personal en vista publica
     public function cuenta_visitas_a_personal_publico(){
            //Obitne el directorio raiz donde está alojado el proyecto ORIEL
            $raiz=$_SERVER['DOCUMENT_ROOT'];
@@ -4770,9 +4713,7 @@
 
     }
     
-    /*
-     * Metodo que permite registrar el conteo de visitas al sitio web ORIEL
-     */
+    //Metodo que permite registrar el conteo de visitas al sitio web ORIEL
     public function cuenta_visitas_a_la_pagina(){
         //Obtiene el directorio raiz donde se encuentra localizado el proyecto ORIEL
         $raiz=$_SERVER['DOCUMENT_ROOT'];
@@ -4872,7 +4813,6 @@
         fclose($fp);
 
     }
-    
     
     public function guardar_seguimiento_evento(){
         if(isset($_SESSION['nombre'])){
@@ -5176,7 +5116,7 @@
                 fwrite($fp, $cadena_oficiales);
                 //Cierra el archivo
                 fclose($fp);
-                echo ($cadena_oficiales);
+                //echo ($cadena_oficiales);
         }
         
     }
@@ -5338,7 +5278,7 @@
     //Metodos relacionados del area de Empresas de Seguridad del Sistema
     //////////////////////////
 
-  // Metodo que permite actualizar en tiempo real la lista de estado de evento de bitacora dependiendo
+    // Metodo que permite actualizar en tiempo real la lista de estado de evento de bitacora dependiendo
     // de la prioridad del tipo de evento y rol de usuario que esté manipulando la información
     public function actualiza_en_vivo_estado_evento(){
         
@@ -5746,7 +5686,7 @@
         }
     }
     
-    // Metodo que permite actualizar en tiempo real la lista de cantones
+    //Metodo que permite actualizar en tiempo real la lista de cantones
     public function actualiza_en_vivo_canton(){
         if(isset($_SESSION['nombre'])){
             $obj_puntos_bcr = new cls_puntosBCR();
@@ -5799,7 +5739,7 @@
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }
     }
-    // Metodo que permite actualizar en tiempo real la lista de puntos bcr
+    //Metodo que permite actualizar en tiempo real la lista de puntos bcr
     public function actualiza_en_vivo_punto_bcr(){
         if(isset($_SESSION['nombre'])){
             
@@ -7359,41 +7299,7 @@
     ////////////////////////////////////////////////////////////////////////////
     ///////////////////////Funciones de CENCON /////////////////////////////////          
     ////////////////////////////////////////////////////////////////////////////
-    public function eventos_cencon(){
-        if(isset($_SESSION['nombre'])){
-            $obj_cencon = new cls_cencon();
-            $obj_personal = new cls_personal();
-            $obj_externo = new cls_personal_externo();
-            
-            $obj_cencon->setCondicion("Hora_Cierre is null");
-            $obj_cencon->obtener_todos_eventos_cencon();
-            $params= $obj_cencon->getArreglo();
-            
-            $tam=count($params);
-            for($i=0;$i<$tam;$i++){
-                if($params[$i]['ID_Empresa']==1){
-                    $obj_personal->setCondicion("ID_Persona='".$params[$i]['ID_Persona']."'");
-                    $obj_personal->obtener_personas_prontuario();
-                    $persona = $obj_personal->getArreglo();
-                    $params[$i] = array_merge((['Nombre_Persona' =>($persona[0]['Apellido_Nombre'])]),$params[$i]);
-                } else{
-                    $obj_externo->setCondicion("T_PersonalExterno.ID_Persona_Externa='".$params[$i]['ID_Persona']."'");
-                    $obj_externo->obtiene_todo_el_personal_externo();
-                    $persona = $obj_externo->getArreglo();
-                    $params[$i] = array_merge((['Nombre_Persona' =>($persona[0]['Apellido']." ".$persona[0]['Nombre'])]),$params[$i]);
-                }
-            }
-            
-            
-            
-            require __DIR__.'/../vistas/plantillas/frm_eventos_cencon.php';
-        }
-        else {
-            $tipo_de_alerta="alert alert-warning";
-            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
-            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
-        }
-    }
+    
  
     public function cencon_gestion(){
         if(isset($_SESSION['nombre'])){
@@ -7428,17 +7334,35 @@
         if(isset($_SESSION['nombre'])){
             $obj_cencon = new cls_cencon();
             
-            $obj_cencon->setId($_POST['id_atm']);
-            $obj_cencon->setId2($_POST['id_persona']);
-            $obj_cencon->setCedula($_POST['cedula']);
-            $obj_cencon->setEmpresa($_POST['empresa']);
+            //Obtiene la información de los cajeros de la persona
+            $obj_cencon->setCondicion("T_Cencon.ID_Persona=".$_POST['id_persona']);
+            $obj_cencon->obtener_todas_relaciones();
+            $cajeros =  $obj_cencon->getArreglo();
+             
+            $tamaño = count($puntosbcr);
+            $validar=0;
+            //recorre la lista de cajeros para ver si tiene el cajero en el vector
+            for($i=0; $i<$tamaño;$i++){
+                if($cajeros[$i]['ID_PuntoBCR']==$_POST['id_atm']){
+                    $validar=1;
+                }
+            }
             
-            $obj_cencon->agregar_relacion();
-            
+            if($validar=0){
+                //Estable los parametros para agregar la relación
+                $obj_cencon->setId($_POST['id_atm']);
+                $obj_cencon->setId2($_POST['id_persona']);
+                $obj_cencon->setCedula($_POST['cedula']);
+                $obj_cencon->setEmpresa($_POST['empresa']);
+                //Agrega la relación del cajero con la persona
+                $obj_cencon->agregar_relacion();
+            }
+            //Obtiene nuevamente la información de los cajeros de la persona
             $obj_cencon->setCondicion("T_Cencon.ID_Persona=".$_POST['id_persona']);
             $obj_cencon->obtener_todas_relaciones();
             $cajeros =  $obj_cencon->getArreglo();
            
+            //Procedimiento para crear la tabla y enviarla al html
             $tam = count($cajeros);
             $html="";
             $html.='<thead> 
@@ -7452,7 +7376,7 @@
                 $html .='<tr>'; 
                 $html .='<td style="text-align:center">'.$cajeros[$i]['Codigo'].'</td>';
                 $html .='<td style="text-align:center">'.$cajeros[$i]['Nombre'].'</td>';
-                $html .='<td style="text-align:center">'.$cajeros[$i]['Observaciones_Cencon'].'</td>';
+                $html .='<td style="text-align:center" id="'.$cajeros[$i]['ID_Cencon'].'" onclick="cencon_observaciones('.$cajeros[$i]['ID_Cencon'].',&#39;'.$cajeros[$i]['Observaciones_Cencon'].'&#39;)" value="'.$cajeros[$i]['Observaciones_Cencon'].'">'.$cajeros[$i]['Observaciones_Cencon'].'</td>';
                 $html .='<td style="text-align:center"><a class="btn" role="button" onclick="eliminar_cajero('.$cajeros[$i]['ID_Cencon'].');">Eliminar ATM</a></td></td>';
                 $html .='</tr>'; 
             }  
@@ -7489,7 +7413,7 @@
                 $html .='<tr>'; 
                 $html .='<td style="text-align:center">'.$cajeros[$i]['Codigo'].'</td>';
                 $html .='<td style="text-align:center">'.$cajeros[$i]['Nombre_Punto'].'</td>';
-                $html .='<td style="text-align:center">'.$cajeros[$i]['Observaciones_Cencon'].'</td>';
+                $html .='<td style="text-align:center" id="'.$cajeros[$i]['ID_Cencon'].'" onclick="cencon_observaciones('.$cajeros[$i]['ID_Cencon'].',&#39;'.$cajeros[$i]['Observaciones_Cencon'].'&#39;)" value="'.$cajeros[$i]['Observaciones_Cencon'].'">'.$cajeros[$i]['Observaciones_Cencon'].'</td>';
                 $html .='<td style="text-align:center"><a class="btn" role="button" onclick="eliminar_cajero('.$cajeros[$i]['ID_Cencon'].');">Eliminar ATM</a></td></td>';
                 $html .='</tr>'; 
             }  
@@ -7530,7 +7454,7 @@
                 $html .='<tr>'; 
                 $html .='<td style="text-align:center">'.$cajeros[$i]['Codigo'].'</td>';
                 $html .='<td style="text-align:center">'.$cajeros[$i]['Nombre'].'</td>';
-                $html .='<td style="text-align:center">'.$cajeros[$i]['Observaciones_Cencon'].'</td>';
+                $html .='<td style="text-align:center" id="'.$cajeros[$i]['ID_Cencon'].'" onclick="cencon_observaciones('.$cajeros[$i]['ID_Cencon'].',&#39;'.$cajeros[$i]['Observaciones_Cencon'].'&#39;)" value="'.$cajeros[$i]['Observaciones_Cencon'].'">'.$cajeros[$i]['Observaciones_Cencon'].'</td>';
                 $html .='<td style="text-align:center"><a class="btn" role="button" onclick="eliminar_cajero('.$cajeros[$i]['ID_Cencon'].');">Eliminar ATM</a></td></td>';
                 $html .='</tr>'; 
             }  
@@ -7545,6 +7469,86 @@
         }
     }
     
+    public function cencon_observaciones(){
+        if(isset($_SESSION['nombre'])){
+            $obj_cencon = new cls_cencon();
+            $obj_cencon->setCondicion("T_Cencon.ID_Cencon=".$_POST['id_cencon']);
+            $obj_cencon->setObservaciones($_POST['observaciones']);
+            $obj_cencon->editar_observaciones_cencon();
+        }
+        else {
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }  
+    }
+    
+    public function todos_cajero_relacion(){
+        if(isset($_SESSION['nombre'])){
+            $obj_cencon = new cls_cencon();
+            $obj_puntos = new cls_puntosBCR();
+            
+            //Valida la accion que trae desde la página
+            if($_POST['accion']=='agregar'){
+                //Obtiene los puntos BCR
+                $obj_puntos->setCondicion("T_Puntobcr.ID_Tipo_Punto=2 OR T_Puntobcr.ID_Tipo_Punto=3 OR T_Puntobcr.ID_Tipo_Punto=4 OR T_Puntobcr.ID_Tipo_Punto=8");
+                $obj_puntos->obtiene_todos_los_puntos_bcr();
+                $puntosbcr = $obj_puntos->getArreglo();
+                
+                //Elimina las relaciones de la persona para no repetir cajeros
+                $obj_cencon->setCondicion("ID_Persona=".$_POST['id_persona']);
+                $obj_cencon->eliminar_relacion_persona_puntobcr();
+                
+                //obtiene el tamaño del vector
+                $tamaño = count($puntosbcr);
+                for($i=0; $i<$tamaño;$i++){
+                    //Establece los parametros para agregar la relación entre la persona y los puntos
+                    $obj_cencon->setId($puntosbcr[$i]['ID_PuntoBCR']);
+                    $obj_cencon->setId2($_POST['id_persona']);
+                    $obj_cencon->setCedula($_POST['cedula']);
+                    $obj_cencon->setEmpresa($_POST['empresa']);
+                    //Agrega la relación
+                    $obj_cencon->agregar_relacion(); 
+                }
+            }
+            if($_POST['accion']=='eliminar'){
+                //Define la condicion para eliminar
+                $obj_cencon->setCondicion("ID_Persona=".$_POST['id_persona']);
+                $obj_cencon->eliminar_relacion_persona_puntobcr();
+            }
+
+            $obj_cencon->setCondicion("T_Cencon.ID_Persona=".$_POST['id_persona']);
+            $obj_cencon->obtener_todas_relaciones();
+            $cajeros =  $obj_cencon->getArreglo();
+           
+            $tam = count($cajeros);
+            $html="";
+            $html.='<thead> 
+                            <th style="text-align:center">Número ATM</th>
+                            <th style="text-align:center">Nombre de ATM</th>
+                            <th style="text-align:center">Observaciones</th>
+                            <th style="text-align:center">Opciones</th>
+                        </thead>
+                        <tbody>';
+            for($i=0; $i<$tam;$i++){
+                $html .='<tr>'; 
+                $html .='<td style="text-align:center">'.$cajeros[$i]['Codigo'].'</td>';
+                $html .='<td style="text-align:center">'.$cajeros[$i]['Nombre'].'</td>';
+                $html .='<td style="text-align:center" id="'.$cajeros[$i]['ID_Cencon'].'" onclick="cencon_observaciones('.$cajeros[$i]['ID_Cencon'].',&#39;'.$cajeros[$i]['Observaciones_Cencon'].'&#39;)" value="'.$cajeros[$i]['Observaciones_Cencon'].'">'.$cajeros[$i]['Observaciones_Cencon'].'</td>';
+                $html .='<td style="text-align:center"><a class="btn" role="button" onclick="eliminar_cajero('.$cajeros[$i]['ID_Cencon'].');">Eliminar ATM</a></td></td>';
+                $html .='</tr>'; 
+            }  
+            $html.='</tbody> 
+                    </table>';
+            echo $html;
+        }
+        else {
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }
+    }
+    /////////////////////Eventos Cencon///////////////////////////////////////
     public function evento_buscar_cajero() {
         if(isset($_SESSION['nombre'])){
             $obj_cencon = new cls_cencon();
@@ -7616,8 +7620,14 @@
     
     public function evento_nuevo_guardar() {
         if(isset($_SESSION['nombre'])){
+            //Clases necesarias para agregar un evento de cencon
             $obj_cencon = new cls_cencon();
+            $obj_eventos= new cls_eventos();
+            $obj_puntobcr = new cls_puntosBCR();
+            $obj_personal = new cls_personal();
+            $obj_externo = new cls_personal_externo();
             
+            //Estable atributos para el evento de Cencon
             $obj_cencon->setFecha($_POST['fecha_apertura']);
             $obj_cencon->setHora($_POST['hora_apertura']);
             $obj_cencon->setId($_POST['id_puntobcr']);
@@ -7625,25 +7635,105 @@
             $obj_cencon->setEmpresa($_POST['id_empresa']);
             $obj_cencon->setUsuario($_SESSION['id']);
             $obj_cencon->setObservaciones($_POST['observaciones']);
+            $obj_cencon->setSeguimiento($_POST['seguimiento']);
+
+            //Valida que la fecha y la hora del evento cencon
+            $fecha_seguimiento = strtotime($_POST['fecha_apertura']);
+            $fecha_seguimiento = date("Y-m-d", $fecha_seguimiento);
+
+            //Validaciones de la fecha ingresada para el evento, caso negativo muestra una advertencia en pantalla
+            if ($fecha_seguimiento >  date("Y-m-d")){
+                //Muestra modal en pantalla
+                echo "<script type=\"text/javascript\">alert('No es posible ingresar eventos futuros!!!!');history.go(-1);</script>";;
+                //Sale del metodo
+                exit();
+                //Verifica que la fecha sea de hoy
+            }if($fecha_seguimiento == date("Y-m-d")){
+                $hora_seguimiento = strtotime($_POST['hora_apertura']);
+                $hora_seguimiento = date("H:i", $hora_seguimiento);
+
+                //Valida que no se ingresen eventos en tiempo futuro
+                if ($hora_seguimiento >  date("H:i", time())){
+                    //Muestra mensaje en pantalla para advertir al usuario
+                    echo "<script type=\"text/javascript\">alert('No es posible ingresar eventos futuros!!!!');history.go(-1);</script>";;
+                    //Sale del metodo
+                    exit();
+                }
+            }
             
             //Obtiene eventos de Cencon pendiente de cierre.
             $obj_cencon->setCondicion("Hora_Cierre is null");
             $obj_cencon->obtener_todos_eventos_cencon();
             $params= $obj_cencon->getArreglo();
-            
+          
             //Valida que el cajero no se encuentre abierto
-            $validado=0;
             $tam=count($params);
             for($i=0;$i<$tam;$i++){
                 if($params[$i]['ID_PuntoBCR']==$_POST['id_puntobcr']){
-                    $validado=1;
+                   echo "No es posible abrir, pendiente de cierre";
+                   exit();
                 }
             }
-            if($validado==0){
-                $obj_cencon->agregar_evento_cencon();
-            }   
-            if($validado==1){
-                echo "pendiente de cierre";
+            //Se agrega el evento de Cencon
+            $obj_cencon->agregar_evento_cencon();
+            //
+            ///Se procede a agregar el evento a la bitacora de Centro de Control
+            
+            //Se obtiene informacion necesaria del Punto BCR para agregar el evento
+            $obj_puntobcr->setCondicion("T_Puntobcr.ID_PuntoBCR=".$_POST['id_puntobcr']);
+            $obj_puntobcr->obtiene_todos_los_puntos_bcr();
+            $puntosbcr = $obj_puntobcr->getArreglo();
+            
+            //Establece los atributos de la clase para el ingreso del evento
+            $obj_eventos->setFecha($_POST['fecha_apertura']); 
+            $obj_eventos->setHora($_POST['hora_apertura']);
+            $obj_eventos->setTipo_evento('39');
+            $obj_eventos->setProvincia($puntosbcr[0]['ID_Provincia']); 
+            $obj_eventos->setTipo_punto($puntosbcr[0]['ID_Tipo_Punto']); 
+            $obj_eventos->setPunto_bcr($_POST['id_puntobcr']);
+            $obj_eventos->setEstado_evento('1');
+            $obj_eventos->setId_usuario($_SESSION['id']);
+            $obj_eventos->setEstado(1);
+            
+            //Obtiene informacion de la persona que realizó la apertura
+            if($_POST['id_empresa']==1){
+                $obj_personal->setCondicion("ID_Persona='".$_POST['id_persona']."'");
+                $obj_personal->obtener_personas_prontuario();
+                $personal = $obj_personal->getArreglo();
+                $persona=$personal[0]['Apellido_Nombre'];
+            } else{
+                $obj_externo->setCondicion("T_PersonalExterno.ID_Persona_Externa='".$_POST['id_persona']."'");
+                $obj_externo->obtiene_todo_el_personal_externo();
+                $personal = $obj_externo->getArreglo();
+                $persona = $personal[0]['Apellido']." ".$personal[0]['Nombre'];
+            }
+            //Verifica que no exista este tipo de evento abierto para este punto BCR
+            if (!$obj_eventos->existe_abierto_este_tipo_de_evento_en_este_sitio()){
+                //Ingresa el evento mediante el metodo de la clase
+                $obj_eventos->ingresar_evento();
+                
+                //Establece los atributos del seguimiento del evento de Z1
+                $obj_eventos->setDetalle("Se realiza apertura de la cerradura de Cencon al funcionario: ".$persona);
+                $obj_eventos->setId2(0);
+                //Obtiene el id del ultimo seguimiento para incluirlo en el nuevo
+                $obj_eventos->obtiene_id_ultimo_evento_ingresado(); 
+                //Establece el id correspondiente
+                $obj_eventos->setId($obj_eventos->getId_ultimo_evento_ingresado());
+                $obj_eventos->setAdjunto("N/A");
+                //Ingresa el seguimiento
+                $obj_eventos->ingresar_seguimiento_evento();  
+                //echo "3 guarda seguimiento";
+                //Llama al listado principal de eventos abiertos o pendientes
+                //header ("location:/ORIEL/index.php?ctl=frm_eventos_listar");
+            }else{
+                $obj_eventos->existe_abierto_este_tipo_de_evento_en_este_sitio();
+                $id_evento= $obj_eventos->getArreglo();
+                $obj_eventos->setDetalle("Se realiza apertura de la cerradura de Cencon al funcionario: ".$persona);
+                $obj_eventos->setId2(0);
+                $obj_eventos->setId($id_evento[0]['ID_Evento']);
+                $obj_eventos->setAdjunto("N/A");
+                //Ingresa el seguimiento
+                $obj_eventos->ingresar_seguimiento_evento();  
             }
         }
         else {
@@ -7656,17 +7746,350 @@
     public function evento_cencon_cerrar(){
         if(isset($_SESSION['nombre'])){
             $obj_cencon = new cls_cencon();
-            
+            $obj_eventos= new cls_eventos();
+            $obj_puntobcr = new cls_puntosBCR();
+            //Estable parametros necesarios para realizar el cierre del evento de Cencon
             $obj_cencon->setFecha(date("Y-m-d"));
             $obj_cencon->setHora(date("H:i", time()));
             $obj_cencon->setCondicion("ID_Evento_Cencon=".$_POST['id_evento_cencon']);
+            //Se procede a cerrar el evento de control
             $obj_cencon->cerrar_evento_cencon();
+            
+            //Obtenemos informacion del evento de cencon cerrado
+            $obj_cencon->obtener_todos_eventos_cencon();
+            $cencon_cerrado = $obj_cencon->getArreglo();
+            
+            //Se obtiene informacion necesaria del Punto BCR para agregar al seguimiento
+            $obj_puntobcr->setCondicion("T_Puntobcr.ID_PuntoBCR=".$cencon_cerrado[0]['ID_PuntoBCR']);
+            $obj_puntobcr->obtiene_todos_los_puntos_bcr();
+            $puntosbcr = $obj_puntobcr->getArreglo();
+            
+            //Estable parametros necesarios para realizar seguimiento a la bitácora de Centro de Control
+            $obj_eventos->setFecha(date("Y-m-d")); 
+            $obj_eventos->setHora(date("H:i", time()));
+            $obj_eventos->setTipo_evento('39');
+            $obj_eventos->setProvincia($puntosbcr[0]['ID_Provincia']); 
+            $obj_eventos->setTipo_punto($puntosbcr[0]['ID_Tipo_Punto']); 
+            $obj_eventos->setPunto_bcr($cencon_cerrado[0]['ID_PuntoBCR']);
+            $obj_eventos->setId_usuario($_SESSION['id']);
+            
+            //Obtiene evento para agregar seguimiento
+            $obj_eventos->existe_abierto_este_tipo_de_evento_en_este_sitio();
+            $id_evento= $obj_eventos->getArreglo();
+            $obj_eventos->setDetalle("Se realiza cierre de la cerradura de Cencon");
+            $obj_eventos->setId2(0);
+            $obj_eventos->setId($id_evento[0]['ID_Evento']);
+            $obj_eventos->setAdjunto("N/A");
+            //Ingresa el seguimiento
+            $obj_eventos->ingresar_seguimiento_evento(); 
+            
+            //Obtiene los seguimientos del evento
+            $obj_eventos->setCondicion("T_DetalleEvento.ID_Evento=".$id_evento[0]['ID_Evento']);
+            $obj_eventos->obtiene_detalle_evento();
+            $params = $obj_eventos->getArreglo();
+            $tam=count($params);
+            if($tam==2){
+                $obj_eventos->edita_estado_evento("3");
+            }
         }
         else {
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }  
+    }
+    
+    public function eventos_cencon(){
+        if(isset($_SESSION['nombre'])){
+            $obj_cencon = new cls_cencon();
+            $obj_personal = new cls_personal();
+            $obj_externo = new cls_personal_externo();
+            
+            $obj_cencon->setCondicion("Hora_Cierre is null");
+            $obj_cencon->obtener_todos_eventos_cencon();
+            $params= $obj_cencon->getArreglo();
+            
+            $tam=count($params);
+            for($i=0;$i<$tam;$i++){
+                if($params[$i]['ID_Empresa']==1){
+                    $obj_personal->setCondicion("ID_Persona='".$params[$i]['ID_Persona']."'");
+                    $obj_personal->obtener_personas_prontuario();
+                    $persona = $obj_personal->getArreglo();
+                    $params[$i] = array_merge((['Nombre_Persona' =>($persona[0]['Apellido_Nombre'])]),$params[$i]);
+                } else{
+                    $obj_externo->setCondicion("T_PersonalExterno.ID_Persona_Externa='".$params[$i]['ID_Persona']."'");
+                    $obj_externo->obtiene_todo_el_personal_externo();
+                    $persona = $obj_externo->getArreglo();
+                    $params[$i] = array_merge((['Nombre_Persona' =>($persona[0]['Apellido']." ".$persona[0]['Nombre'])]),$params[$i]);
+                }
+            }
+            //Obtiene la fecha del servidor en un arreglo
+            $fecha_actual= getdate();
+            //Convierta la fecha a formto aaaa/mm/dd hh:mm
+            $fecha_actual= $fecha_actual['year']."-".$fecha_actual['mon']."-".$fecha_actual['mday'].' '.$fecha_actual['hours'].':'.$fecha_actual['minutes'];
+            //asigna la fecha actual a un arreglo formato DateTime
+            $date1 = new DateTime($fecha_actual);
+            $diff="";
+            for ($i = 0; $i <$tam; $i++) {
+                //asigna da date2 la fecha que trae en el arreglo
+                $date2 = new DateTime($params[$i]['Fecha_Apertura'].' '.$params[$i]['Hora_Apertura']);
+                $diff = $date1->diff($date2);
+                //print_r($diff);
+                $vencidos[$i]['tiempo']=(intval($diff->d)*1440)+(intval($diff->h)*60)+(intval($diff->i)*1);
+                $vencidos[$i]['mensaje']= ("ATM #".$params[$i]['Codigo']." | D:". $diff->d." | Hr:". $diff->h." | Min:". $diff->i." \n "); 
+                if(!($params[$i]['Seguimiento']=="Arqueo de ATM" ||$params[$i]['Seguimiento']=="ATM en Mantenimiento"||$params[$i]['Seguimiento']=="Apertura con llave Azul")){
+                    if($vencidos[$i]['tiempo']>'40'){
+                        if($params[$i]['Seguimiento']=="Se envió correo al funcionario"||$params[$i]['Seguimiento']=="Se envió correo al encargado"||$params[$i]['Seguimiento']=="Se le informó al coordinador"){
+                            if($vencidos[$i]['tiempo']>'70'){
+                                if($params[$i]['Seguimiento']=="Se envió correo al encargado"||$params[$i]['Seguimiento']=="Se le informó al coordinador"){
+                                    if($vencidos[$i]['tiempo']>'100'){
+                                        if($params[$i]['Seguimiento']=="Se le informó al coordinador"){
+                                            $vencidos[$i]['color']="color: blueviolet";
+                                            //echo "blueviolet +100 informó".$params[$i]['Codigo']."\n||||";
+                                        }else{
+                                            $vencidos[$i]['color']="color: red";
+                                            //echo "rojo +100 sin informar".$params[$i]['Codigo']."\n||||";
+                                        } 
+                                    }else{
+                                        $vencidos[$i]['color']="color: orange";
+                                        //echo "naranja -110".$params[$i]['Codigo']."\n|||||";
+                                    }
+                                }else{
+                                    $vencidos[$i]['color']="color: red";
+                                    //echo "rojo -correo encargado".$params[$i]['Codigo']."\n|||||";
+                                }
+                            }else{
+                                $vencidos[$i]['color']="color: orange";
+                                //echo "naranja -70 y correo".$params[$i]['Codigo']."\n|||||";
+                            }
+                        }else{
+                            $vencidos[$i]['color']="color: red";
+                            //echo "rojo +40 sin correo".$params[$i]['Codigo']."\n||||";
+                        }
+                    } else{
+                        //echo "nada".$params[$i]['Codigo']."\n||||";
+                    }
+                }
+            }
+            if(isset ($vencidos)){
+                rsort($vencidos);
+            }
+            require __DIR__.'/../vistas/plantillas/frm_eventos_cencon.php';
+        }
+        else {
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }
+    }
+    
+    public function evento_cencon_observaciones(){
+        if(isset($_SESSION['nombre'])){
+            $obj_cencon = new cls_cencon();
+            $obj_cencon->setCondicion("T_EventoCencon.ID_Evento_Cencon=".$_POST['id_evento_cencon']);
+            $obj_cencon->setObservaciones($_POST['observaciones']);
+            $obj_cencon->editar_observaciones_evento();
+        }
+        else {
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }    
+    }
+    
+    public function evento_cencon_seguimiento(){
+        if(isset($_SESSION['nombre'])){
+            $obj_cencon = new cls_cencon();
+            $obj_cencon->setCondicion("T_EventoCencon.ID_Evento_Cencon=".$_POST['id_evento_cencon']);
+            $obj_cencon->setSeguimiento($_POST['seguimiento']);
+            $obj_cencon->editar_seguimiento_evento();
+        }
+        else {
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        } 
+    }
+    
+    public function evento_cencon_reasignar(){
+        if(isset($_SESSION['nombre'])){
+            $obj_cencon = new cls_cencon();
+            
+            $obj_cencon->setCondicion("T_Cencon.Cedula_Cencon='".$_POST['cedula_cencon']."' AND T_Cencon.ID_PuntoBCR='".$_POST['numero_cajero']."'");
+            $obj_cencon->buscar_persona_cencon();
+            $params = $obj_cencon->getArreglo();
+            
+            if ($params!=null){
+                $obj_cencon->setCondicion("T_EventoCencon.ID_Evento_Cencon=".$_POST['id_evento_cencon']);
+                $obj_cencon->setId($params[0]['ID_Persona']);
+                $obj_cencon->setEmpresa($params[0]['ID_Empresa']);
+                $obj_cencon->setUsuario($_SESSION['id']);
+                $obj_cencon->reasignar_evento_cencon();
+            } else {
+                echo "No se puede reasignar";
+            }
+        }
+        else {
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }
+    }
+    
+    public function reporte_cencon(){
+        if(isset($_SESSION['nombre'])){
+            $obj_cencon = new cls_cencon();
+            $obj_personal = new cls_personal();
+            $obj_externo = new cls_personal_externo();
+            
+            $obj_cencon->setCondicion("T_EventoCencon.Fecha_Apertura='".date("Y-m-d")."'");
+            $obj_cencon->obtener_todos_eventos_cencon();
+            $params= $obj_cencon->getArreglo();
+            
+            $tam=count($params);
+            for($i=0;$i<$tam;$i++){
+                if($params[$i]['ID_Empresa']==1){
+                    $obj_personal->setCondicion("ID_Persona='".$params[$i]['ID_Persona']."'");
+                    $obj_personal->obtener_personas_prontuario();
+                    $persona = $obj_personal->getArreglo();
+                    $params[$i] = array_merge((['Nombre_Persona' =>($persona[0]['Apellido_Nombre'])]),$params[$i]);
+                } else{
+                    $obj_externo->setCondicion("T_PersonalExterno.ID_Persona_Externa='".$params[$i]['ID_Persona']."'");
+                    $obj_externo->obtiene_todo_el_personal_externo();
+                    $persona = $obj_externo->getArreglo();
+                    $params[$i] = array_merge((['Nombre_Persona' =>($persona[0]['Apellido']." ".$persona[0]['Nombre'])]),$params[$i]);
+                }
+            }
+            
+            require __DIR__.'/../vistas/plantillas/rpt_eventos_cencon.php';
+        }
+        else {
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }  
+    }
+    
+    public function actualiza_en_vivo_reporte_cencon(){
+        //Espera 2 segundos antes de iniciar la ejecución del método, para mostrar un gift de espera en pantalla
+        sleep(2);       
+        //Validación para verificar si el usuario está logeado en el sistema
+        if(isset($_SESSION['nombre'])){
+            //Creación de un nuevo objeto de la clase eventos
+            $obj_cencon = new cls_cencon();
+            $obj_personal = new cls_personal();
+            $obj_externo = new cls_personal_externo();
+            //Recibe la fecha inicial del reporte
+            $fecha_inicial=$_POST['fecha_inicial'];
+            //Recibe la fecha final del reporte
+            $fecha_final=$_POST['fecha_final'];
+                              
+            //Establece la condición SQL para definir el rango de fechas del reporte
+            //Establece la condicion de la consulta
+            $obj_cencon->setCondicion("(T_EventoCencon.Fecha_Apertura between '".$fecha_inicial."' AND '".$fecha_final."')");
+            //Obtiene los eventos de acuerdo a la condicion.
+            $obj_cencon->obtener_todos_eventos_cencon();
+            //Obtiene el arreglo de resultados
+            $params= $obj_cencon->getArreglo();
+            
+            // Busca la información de la persona de acuerdo a la empresa y el ID_Persona y luego lo agrega al vactor de params
+            $tamano=count($params);
+            for($i=0;$i<$tamano;$i++){
+                if($params[$i]['ID_Empresa']==1){
+                    $obj_personal->setCondicion("ID_Persona='".$params[$i]['ID_Persona']."'");
+                    $obj_personal->obtener_personas_prontuario();
+                    $persona = $obj_personal->getArreglo();
+                    $params[$i] = array_merge((['Nombre_Persona' =>($persona[0]['Apellido_Nombre'])]),$params[$i]);
+                } else{
+                    $obj_externo->setCondicion("T_PersonalExterno.ID_Persona_Externa='".$params[$i]['ID_Persona']."'");
+                    $obj_externo->obtiene_todo_el_personal_externo();
+                    $persona = $obj_externo->getArreglo();
+                    $params[$i] = array_merge((['Nombre_Persona' =>($persona[0]['Apellido']." ".$persona[0]['Nombre'])]),$params[$i]);
+                }
+            }
+            //verifica que hayan resultados en la consulta, para empezar a pintar la tabla HTML que se mostrará en pantalla al formulario
+            if (count($params)>0){
+                //Creación de la tabla
+                $html='<table id="tabla" class="display2">';
+                //Creación de la cabecera de la tabla
+                $html.='<thead>';
+                //Creación de la fila de títulos de la tabla
+                $html.='<tr>';
+                //Columna id evento, la cual está oculta en la tabla
+                $html.='<th hidden>ID_Evento_Cencon</th>';
+                //Resto de columnas de la tabla, de acuerdo a lo requerido en la consulta SQL
+                $html.='<th style="text-align:center">Fecha Apertura</th>';
+                $html.='<th style="text-align:center">Hora Apertura</th>';
+                $html.='<th style="text-align:center">Fecha Cierre</th>';
+                $html.='<th style="text-align:center">Hora Cierre</th>';
+                $html.='<th style="text-align:center">Nombre Cajero</th>';
+                $html.='<th style="text-align:center">Funcionario</th>';
+                $html.='<th style="text-align:center">Empresa</th>';
+                $html.='<th style="text-align:center">Usuario</th> ';
+                $html.='<th style="text-align:center">Observaciones</th>';
+                //termina la fila de cabeceras
+                $html.='</tr>';
+                //termina la cabecera de la tabla
+                $html.='</thead>';
+                  
+                //Inicializa el cuerpo de la tabla
+                $html.='<tbody id="cuerpo">';
+                //Retorna el tamaño del vector que almacena la consulta sql
+                $tam=count($params);
+                    
+                //Vector que recorre registro por registros de la consulta SQL
+                for ($i = 0; $i <$tam; $i++) {
+                    //Agrega a la fila de cada evento, un comentario interno con el detalle del último seguimiento
+                    $html.='<tr>';
+                    //Pinta y oculta el id del evento 
+                    $html.='<td hidden >'.$params[$i]['ID_Evento_Cencon'].'</td>';
+                    //Pinta las columnas correspondientes al reporte de eventos
+                    $html.='<td>'.$params[$i]['Fecha_Apertura'].'</td>';
+                    $html.='<td>'.$params[$i]['Hora_Apertura'].'</td>';
+                    $html.='<td>'.$params[$i]['Fecha_Cierre'].'</td>';
+                    $html.='<td>'.$params[$i]['Hora_Cierre'].'</td>';
+                    $html.='<td>'.$params[$i]['Codigo'].' - '.$params[$i]['Nombre'].'</td>';
+                    $html.='<td>'.$params[$i]['Nombre_Persona'].'</td>';
+                    $html.='<td>'.$params[$i]['Empresa'].'</td>';
+                    $html.='<td>'.$params[$i]['Nombre_usuario'].' '.$params[$i]['Apellido_usuario'].'</td>';
+                    $html.='<td>'.$params[$i]['Observaciones'].'</td>';
+                        
+                    //Cierra la fila del registro del evento en cuestión.
+                    $html.='</tr>';
+                    }
+
+                    //Finaliza el cuerpo de la tabla
+                $html.='</tbody>';
+
+                //Culmina la tabla
+                $html.='</table>';
+                    
+                //Imprime en pantalla el codigo html estructurado en este metodo
+                echo $html;
+                    //Sale del metodo
+                exit;
+            }else{
+                //En caso de que no hayan resultados, muestra la información correspondiente.
+                $html="<h4>No se encontraron eventos para este filtro.</h4>";
+                //Imprime la variable html
+                echo $html;
+                //Sale del metodo
+                exit;
+            }    
+                //Imprime la variable html y sale del metodo
+            echo $html;
+        }else {
+            /*
+             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+             * En la última línea llama a la pagina de inicio de sesión.
+             */
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            //Llamada al formulario correspondiente de la vista
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }
     }
     
     ////////////////////MANTENIMIENTO DE PERSONAL EXTERNO///////////////////////
@@ -7884,7 +8307,7 @@
                 //ID del telefono
                 $obj_telefono->setId($_POST['ID_Telefono']);
                 //Id de la persona
-                $obj_telefono->setId2($_POST['ID_Persona']);
+                $obj_telefono->setId2($_POST['ID_Persona_Telefono']);
                 //Tipo de telefono
                 $obj_telefono->setTipo_telefono($_POST['Tipo_Telefono']);
                 //Establece el numero
@@ -7902,7 +8325,7 @@
                     $obj_telefono->actualizar_telefono();
                 }
                 //Muestra la vista de usuario correspondiente
-                header("location:/ORIEL/index.php?ctl=personal_externo_gestion&id=".$_POST['ID_Persona']);
+                header("location:/ORIEL/index.php?ctl=personal_externo_gestion&id=".$_POST['ID_Persona_Telefono']);
             }
         }   else    {
               /*
@@ -8892,5 +9315,23 @@
         }       
         $obj_descanso->guardar_marcas_descanso();   
         }
-           
+    
+    ////////////////////////////////////////////////////////////////////////////
+    /////////////////////////Manuales de Ayuda//////////////////////////////////  
+    ////////////////////////////////////////////////////////////////////////////    
+    public function manual_personal_externo_publico() {
+        //Llamada al formulario correspondiente de la vista
+        require __DIR__ . '/../vistas/plantillas/frm_ayuda_personal_externo_publico.php';
+    }
+    public function manual_personal_externo() {
+        if(isset($_SESSION['nombre'])){
+            //Llamada al formulario correspondiente de la vista
+            require __DIR__ . '/../vistas/plantillas/frm_ayuda_personal_externo.php';
+        } else {
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }
+    }
+    
 }

@@ -136,6 +136,11 @@ $map = array(
     'iniciar_sesion' => array('controller' =>'Controller', 'action' =>'iniciar_sesion'),
     'ejecucion_automatico_proceso' => array('controller' =>'Controller', 'action' =>'ejecucion_automatico_proceso'),
     
+    //Controlador de Manuales de ayuda
+    'manual_personal_externo_publico'=>array('controller'=>'Controller', 'action'=>'manual_personal_externo_publico'),
+    'manual_personal_externo'=>array('controller'=>'Controller', 'action'=>'manual_personal_externo'),
+    
+    
     //Información pública
     'personal_listar_publico'=>array('controller'=>'Controller', 'action'=>'personal_listar_publico'),
     'puntobcr_listar_publico'=>array('controller'=>'Controller', 'action'=>'puntobcr_listar_publico'),
@@ -226,6 +231,13 @@ $map = array(
     'evento_buscar_relaciones'=>array('controller'=>'Controller', 'action'=>'evento_buscar_relaciones'),
     'evento_nuevo_guardar'=>array('controller'=>'Controller', 'action'=>'evento_nuevo_guardar'),
     'evento_cencon_cerrar'=>array('controller'=>'Controller', 'action'=>'evento_cencon_cerrar'),
+    'evento_cencon_observaciones'=>array('controller'=>'Controller', 'action'=>'evento_cencon_observaciones'),
+    'evento_cencon_seguimiento'=>array('controller'=>'Controller', 'action'=>'evento_cencon_seguimiento'),
+    'cencon_observaciones'=>array('controller'=>'Controller', 'action'=>'cencon_observaciones'),
+    'evento_cencon_reasignar'=>array('controller'=>'Controller', 'action'=>'evento_cencon_reasignar'),
+    'reporte_cencon'=>array('controller'=>'Controller', 'action'=>'reporte_cencon'),
+    'actualiza_en_vivo_reporte_cencon'=>array('controller'=>'Controller', 'action'=>'actualiza_en_vivo_reporte_cencon'),
+    'todos_cajero_relacion'=>array('controller'=>'Controller', 'action'=>'todos_cajero_relacion'),
     
     //Controlador de Eventos (Bitacora Digital)
     'frm_eventos_listar' =>  array('controller'=>'Controller','action'=>'frm_eventos_listar'),
