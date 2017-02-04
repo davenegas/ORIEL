@@ -326,8 +326,8 @@
                     <th style="text-align:center">Observaciones</th>
                     <th style="text-align:center">Estado</th>         
                 </tr>
-          </thead>
-          <tbody>
+            </thead>
+            <tbody>
                 <?php 
                 $tam=count($params);
                 for ($i = 0; $i <$tam; $i++) {

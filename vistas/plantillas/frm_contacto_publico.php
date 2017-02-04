@@ -28,6 +28,13 @@
         <li><a href="index.php?ctl=puntobcr_listar_publico">Puntos BCR</a></li>
         <li><a href="index.php?ctl=personal_externo_listar_publico">Padrones Fotográficos</a></li>
         <li class="active"><a href="index.php?ctl=frm_contacto_publico">Contáctenos</a></li>
+        <li class="dropdown">
+            <a class="dropdown-toggle" data-toggle="dropdown" href="#">Ayuda
+            <span class="caret"></span></a>
+            <ul class="dropdown-menu">
+                <li><a href="index.php?ctl=manual_personal_externo_publico">Manual Personal Externo</a></li>
+            </ul>
+        </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li><a href="index.php?ctl=iniciar_sesion"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>

@@ -12,7 +12,7 @@
         <?php require_once 'encabezado.php';?>
         <section class="container espacio-arriba-15">
 <!--            <pre>
-                <?php print_r($cajeros)?>
+                <?php print_r($puntosbcr)?>
             </pre>-->
                 <div class="col-sm-4 quitar-float">
                     <label for="tipo_funcionario">Tipo de Funcionario</label>
@@ -45,10 +45,15 @@
                     <input class="form-control" disabled id="unidad_ejecutora" name="unidad_ejecutora" type="text">
                 </div>
                 </div>
-                <div class="quitar-float col-sm-4" style="margin-bottom: 20px; margin-top: 90px;">
-                    <a id="buscar_cajero" onclick="buscar_cajero()">Buscar Cajero Automático</a>
+                <div class="col-sm-4" style="margin-bottom: 20px; margin-top: 10px;">
+                    <a id="buscar_cajero1" onclick="buscar_cajero()">Buscar Cajero Automático</a>
                 </div>
-
+                <div class="col-sm-4" style="margin-bottom: 20px; margin-top: 10px;">
+                    <a id="todos_cajero1" onclick="todos_cajero('agregar')">Agregar todos los cajeros</a>
+                </div>
+                 <div class="col-sm-4" style="margin-bottom: 20px; margin-top: 10px;">
+                    <a id="todos_cajero2" onclick="todos_cajero('eliminar')">Eliminar todos los cajeros</a>
+                </div>
                 <div>
                     <table id="cajeros_persona" class="col-md-12">
                         <thead> 
@@ -165,5 +170,20 @@
         <!--Cierre Asignar UE al personal-->
         </div> 
         
+        <div id="ventana_oculta_4"> 
+            <div id="popupventana">
+                <div id="ventana">
+                    <img id="close" src='vistas/Imagenes/cerrar.png' width="25" onclick ="ocultar_elemento()"> 
+                    <h2 align="center" id="titulo_ventana_oculta">Cencon Observaciones ATM</h2>
+                    <hr>
+                    <input id="ID_Cencon" name="ID_Cencon" type="text" value="">
+
+                    <label for="observaciones_cencon">Observaciones</label>
+                    <input class="form-control" id="observaciones_cencon" name="observaciones_cencon" type="text">            
+                    <hr>
+                    <button onclick="guardar_observaciones_cencon();">Guardar</a></button>
+                </div>
+            </div>
+        </div>
     </body>
 </html>

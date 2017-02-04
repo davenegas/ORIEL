@@ -189,7 +189,11 @@
                     <li><a href="index.php?ctl=enlace_reporte">Enlaces Telecom</a></li> 
                 <?php }; ?>
                 
-                 <?php if ($_SESSION['modulos']['Reportes-Trazabilidad']==1){ ?>
+                <?php if ($_SESSION['modulos']['Reportes-Enlaces Telecom']==1){ ?>
+                    <li><a href="index.php?ctl=reporte_cencon">Reporte Cencon</a></li> 
+                <?php }; ?>
+                    
+                <?php if ($_SESSION['modulos']['Reportes-Trazabilidad']==1){ ?>
                     <li><a href="index.php?ctl=frm_trazabilidad_listar">Trazabilidad</a></li> 
                 <?php }; ?>   
 
@@ -245,10 +249,10 @@
                 <?php if ($_SESSION['modulos']['Módulo-Control de Video']==1){?>
                     <!--<li><a href="#">Controles de Video</a></li>--> 
                 <?php }; ?>   
-                    
-                <?php if ($_SESSION['modulos']['Módulo-Cencon']==1){?>
+                  
+                 <!-- <?php if ($_SESSION['modulos']['Módulo-Cencon']==1){?>
                     <li><a href="index.php?ctl=eventos_cencon">Cencon</a></li> 
-                <?php }; ?>  
+                <?php }; ?>  --> 
                     
                 <?php if ($_SESSION['modulos']['Módulo-Control de Video']==1){?>
                     <li><a href="http://10.170.5.80/Operaciones_de_Seguridad/ctrlvideo/consulta.html">Controles de Video</a></li>
@@ -271,7 +275,9 @@
             <a class="dropdown-toggle" data-toggle="dropdown" href="#">Ayuda
             <span class="caret"></span></a>
             <ul class="dropdown-menu">
-                <!--<li><a href="#">Ayuda</a></li>--> 
+                <?php if ($_SESSION['modulos']['Módulo-Personal Externo']==1){?>
+                    <li><a href="index.php?ctl=manual_personal_externo">Manual Personal Externo</a></li>
+                <?php }; ?>
             </ul>
             </li>
            <?php 

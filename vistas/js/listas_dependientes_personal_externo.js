@@ -73,23 +73,27 @@ $(document).ready(function(){
             genero = document.getElementById('genero').value;
             ocupacion = document.getElementById('ocupacion').value
             //ejecuta una funcion del index para guardar la información
-            $.post("index.php?ctl=persona_externa_guardar_informacion", 
-            { id_persona:id_persona, identificacion: identificacion, empresa:empresa, nombre:nombre,
-                apellido:apellido, fecha_nacimiento:fecha_nacimiento, fecha_ingreso:fecha_ingreso, fecha_salida:fecha_salida,
-                nacionalidad:nacionalidad,fecha_residencia:fecha_residencia,fecha_portacion:fecha_portacion,
-                Distrito:Distrito,Direccion:Direccion,estado_civil:estado_civil,correo:correo,nivel_academico:nivel_academico,
-                observaciones:observaciones, estado_persona:estado_persona, genero:genero, ocupacion:ocupacion}, 
-            function(data){
-                //alert (data);
-                var srt = data;
-                var n= srt.search("Repetido");
-                if(n!=-1){
-                    alert("Esta persona ya se encuentra registrada en el sistema");
-                } else{
-                    document.getElementById('ID_Persona').value=parseInt(data);
-                }
-                
-            });
+            if (document.getElementById('Distrito').value == '0') {
+                alert("Seleccione la el Distrito de la persona!");
+            } else {
+                $.post("index.php?ctl=persona_externa_guardar_informacion", 
+                { id_persona:id_persona, identificacion: identificacion, empresa:empresa, nombre:nombre,
+                    apellido:apellido, fecha_nacimiento:fecha_nacimiento, fecha_ingreso:fecha_ingreso, fecha_salida:fecha_salida,
+                    nacionalidad:nacionalidad,fecha_residencia:fecha_residencia,fecha_portacion:fecha_portacion,
+                    Distrito:Distrito,Direccion:Direccion,estado_civil:estado_civil,correo:correo,nivel_academico:nivel_academico,
+                    observaciones:observaciones, estado_persona:estado_persona, genero:genero, ocupacion:ocupacion}, 
+                function(data){
+                    //alert (data);
+                    var srt = data;
+                    var n= srt.search("Repetido");
+                    if(n!=-1){
+                        alert("Esta persona ya se encuentra registrada en el sistema");
+                    } else{
+                        document.getElementById('ID_Persona').value=parseInt(data);
+                    }
+
+                });
+            }
         }
     });
     
@@ -147,10 +151,13 @@ function check_empty() {
     }
 }
 function mostrar_agregar_telefono() {
-    document.getElementById('ID_Telefono').value="0";
-    document.getElementById('numero').value=null;
-    document.getElementById('observaciones_tel').value=null;
-    document.getElementById('ventana_oculta_1').style.display = "block";
+    if (document.getElementById('ID_Persona').value > 0) {
+        document.getElementById('ID_Persona_Telefono').value = document.getElementById('ID_Persona').value;
+        document.getElementById('ID_Telefono').value="0";
+        document.getElementById('numero').value=null;
+        document.getElementById('observaciones_tel').value=null;
+        document.getElementById('ventana_oculta_1').style.display = "block";
+    }
 }
 function eliminar_telefono(ide){
     $.confirm({title: 'Confirmación!', content: 'Desea eliminar este número de teléfono?', 
@@ -178,7 +185,9 @@ function Editar_telefono(id_tel, tipo_tel, num, obser){
 ////////////////////////////////////////////////////////////////////
 ////////Funciones para agregar fotos de personal externo///////////
 function mostrar_agregar_foto(){
+    if (document.getElementById('ID_Persona').value > 0) {
     document.getElementById('ventana_oculta_2').style.display = "block";
+    } 
 }
 function valida_foto(){
     if (document.getElementById('Nombre').value == "" || document.getElementById('Descripcion').value == "") {

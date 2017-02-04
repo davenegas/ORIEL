@@ -8,9 +8,18 @@ class cls_cencon {
     public $hora;
     public $usuario;
     public $observaciones;
+    public $seguimiento;
     public $obj_data_provider;
     public $arreglo;
     private $condicion; 
+
+    function getSeguimiento() {
+        return $this->seguimiento;
+    }
+
+    function setSeguimiento($seguimiento) {
+        $this->seguimiento = $seguimiento;
+    }
 
     function getEmpresa() {
         return $this->empresa;
@@ -186,7 +195,7 @@ class cls_cencon {
     
     public function agregar_evento_cencon(){
         $this->obj_data_provider->conectar();
-        $this->obj_data_provider->inserta_datos("T_EventoCencon", "Fecha_Apertura, Hora_Apertura, ID_PuntoBCR, ID_Persona, ID_Empresa, ID_Usuario, Observaciones","'".$this->fecha."','".$this->hora."', '".$this->id."','".$this->id2."','".$this->empresa."','".$this->usuario."','".$this->observaciones."'");
+        $this->obj_data_provider->inserta_datos("T_EventoCencon", "Fecha_Apertura, Hora_Apertura, ID_PuntoBCR, ID_Persona, ID_Empresa, ID_Usuario, Observaciones, Seguimiento","'".$this->fecha."','".$this->hora."', '".$this->id."','".$this->id2."','".$this->empresa."','".$this->usuario."','".$this->observaciones."','".$this->seguimiento."'");
         $this->obj_data_provider->desconectar();
         $this->resultado_operacion=true;
     }
@@ -194,14 +203,20 @@ class cls_cencon {
     public function obtener_todos_eventos_cencon(){
         $this->obj_data_provider->conectar();
             if($this->condicion==""){
-                $this->arreglo=$this->obj_data_provider->trae_datos("T_EventoCencon "
-                        . "LEFT OUTER JOIN T_PuntoBCR ON T_PuntoBCR.ID_PuntoBCR = T_EventoCencon.ID_PuntoBCR", 
-                        "T_EventoCencon.*, T_PuntoBCR.Nombre, T_PuntoBCR.Codigo", 
+                $this->arreglo=$this->obj_data_provider->trae_datos("T_EventoCencon 
+                        LEFT OUTER JOIN T_PuntoBCR ON T_PuntoBCR.ID_PuntoBCR = T_EventoCencon.ID_PuntoBCR 
+                        LEFT OUTER JOIN T_Empresa ON T_Empresa.ID_Empresa = T_EventoCencon.ID_Empresa 
+                        LEFT OUTER JOIN T_Usuario ON T_Usuario.ID_Usuario = T_EventoCencon.ID_Usuario", 
+                        "T_EventoCencon.*, T_PuntoBCR.Nombre, T_PuntoBCR.Codigo,T_Empresa.Empresa, 
+                        T_Usuario.Nombre as Nombre_usuario, T_Usuario.Apellido as Apellido_usuario", 
                         "");
             }else{
-                $this->arreglo=$this->obj_data_provider->trae_datos("T_EventoCencon "
-                        . "LEFT OUTER JOIN T_PuntoBCR ON T_PuntoBCR.ID_PuntoBCR = T_EventoCencon.ID_PuntoBCR", 
-                        "T_EventoCencon.*, T_PuntoBCR.Nombre, T_PuntoBCR.Codigo",
+                $this->arreglo=$this->obj_data_provider->trae_datos("T_EventoCencon 
+                        LEFT OUTER JOIN T_PuntoBCR ON T_PuntoBCR.ID_PuntoBCR = T_EventoCencon.ID_PuntoBCR 
+                        LEFT OUTER JOIN T_Empresa ON T_Empresa.ID_Empresa = T_EventoCencon.ID_Empresa 
+                        LEFT OUTER JOIN T_Usuario ON T_Usuario.ID_Usuario = T_EventoCencon.ID_Usuario", 
+                        "T_EventoCencon.*, T_PuntoBCR.Nombre, T_PuntoBCR.Codigo,T_Empresa.Empresa, 
+                        T_Usuario.Nombre as Nombre_usuario, T_Usuario.Apellido as Apellido_usuario",
                         $this->condicion);
             }
              $this->arreglo=$this->obj_data_provider->getArreglo();
@@ -212,6 +227,32 @@ class cls_cencon {
     public function cerrar_evento_cencon(){
         $this->obj_data_provider->conectar();
         $this->obj_data_provider->edita_datos("T_EventoCencon", "Fecha_Cierre='".$this->fecha."', Hora_Cierre='".$this->hora."'", $this->condicion);
+        $this->obj_data_provider->desconectar();
+        $this->resultado_operacion=true;
+    }
+    
+    public function editar_observaciones_evento(){
+        $this->obj_data_provider->conectar();
+        $this->obj_data_provider->edita_datos("T_EventoCencon", "Observaciones='".$this->observaciones."'", $this->condicion);
+        $this->obj_data_provider->desconectar();
+        $this->resultado_operacion=true;
+    }
+    public function editar_seguimiento_evento(){
+        $this->obj_data_provider->conectar();
+        $this->obj_data_provider->edita_datos("T_EventoCencon", "Seguimiento='".$this->seguimiento."'", $this->condicion);
+        $this->obj_data_provider->desconectar();
+        $this->resultado_operacion=true;
+    }
+    
+    public function editar_observaciones_cencon(){
+        $this->obj_data_provider->conectar();
+        $this->obj_data_provider->edita_datos("T_Cencon", "Observaciones='".$this->observaciones."'", $this->condicion);
+        $this->obj_data_provider->desconectar();
+        $this->resultado_operacion=true;
+    }
+    public function reasignar_evento_cencon(){
+        $this->obj_data_provider->conectar();
+        $this->obj_data_provider->edita_datos("T_EventoCencon", "ID_Persona='".$this->id."', ID_Empresa='".$this->empresa."', ID_Usuario='".$this->usuario."'", $this->condicion);
         $this->obj_data_provider->desconectar();
         $this->resultado_operacion=true;
     }

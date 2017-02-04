@@ -11,13 +11,17 @@ $(document).ready(function(){
     });
 
 });
-//////////////////////////////////////////////////////////////
-//Función para ventanas ocultas
+////////////////////////////////////////////////////////////////////////////////
+////////////Función para ventanas ocultas General///////////////////////////////
 function ocultar_elemento(){
     document.getElementById('ventana_oculta_1').style.display = "none";
     document.getElementById('ventana_oculta_2').style.display = "none";
     document.getElementById('ventana_oculta_3').style.display = "none";
+    document.getElementById('ventana_oculta_4').style.display = "none";
 }
+
+////////////////////////////////////////////////////////////////////////////////
+////////////////////Funciones de catalogo de CENCON/////////////////////////////
 function buscar_persona() {
     if(document.getElementById('tipo_funcionario').value==0){
         document.getElementById('ventana_oculta_1').style.display = "block";
@@ -41,7 +45,19 @@ function agregar_persona(id,ident, nombre, depart, empresa){
             $("#cajeros_persona").html(data);
           });
 }
-/////////////////////////////////////////////////////////////
+function cencon_observaciones(ide, obser){
+    document.getElementById('ID_Cencon').value=ide;
+    document.getElementById('observaciones_cencon').value=document.getElementById(ide).innerHTML;
+    document.getElementById('ventana_oculta_4').style.display = "block";
+}
+function guardar_observaciones_cencon(){
+    id_cencon= document.getElementById('ID_Cencon').value;
+    observaciones= document.getElementById('observaciones_cencon').value;
+    $.post("index.php?ctl=cencon_observaciones",{id_cencon:id_cencon, observaciones:observaciones}, function(data){
+        document.getElementById(id_cencon).innerHTML=observaciones;
+    });
+    document.getElementById('ventana_oculta_4').style.display = "none";
+}
 function buscar_cajero(){
     if(document.getElementById('tipo_funcionario').value==0 || document.getElementById('tipo_funcionario').value==1){
         document.getElementById('ventana_oculta_3').style.display = "block";
@@ -68,6 +84,27 @@ function eliminar_cajero(id){
             $("#cajeros_persona").html(data);
           });
 }
+function todos_cajero(funcion){
+    //alert ("todos");
+    accion = funcion;
+    id_persona = document.getElementById('ID_Persona').value;
+    cedula = document.getElementById('cedula_persona').value;
+    empresa = document.getElementById('ID_Empresa').value;
+    $.confirm({title: 'Confirmación!', content: 'Realmente desea '+accion+' todos los cajeros ?', 
+        confirm: function(){
+            $("#cajeros_persona").html('<center><img align="center" src="vistas/Imagenes/Espere.gif"/></center>');
+            $.post("index.php?ctl=todos_cajero_relacion", { accion:accion, id_persona: id_persona, cedula: cedula, empresa:empresa }, function(data){
+                //alert (data);
+                $("#cajeros_persona").html(data);
+              });
+        },
+        cancel: function(){
+            //$.alert('Canceled!')
+        }
+    });
+}
+////////////////////////////////////////////////////////////////////////////////
+///////////////////////////FUNCIONES DE MÓDULO CENCON//////////////////////////
 function evento_buscar_cajero(){
     id= document.getElementById('numero_atm').value;
     var datos = new Array;
@@ -128,7 +165,7 @@ function agregar_evento_cencon(){
     } else{
         id= document.getElementById('cedula').value;
         empresa = document.getElementById('ID_Empresa').value;
-
+        
         var cajeros= new Array();
         var result=[];
         var valida_cajero=0;
@@ -147,19 +184,24 @@ function agregar_evento_cencon(){
                     id_persona= document.getElementById('ID_Persona').value;
                     id_empresa= document.getElementById('ID_Empresa').value;
                     observaciones = document.getElementById('observaciones').value;
-                    
+                    seguimiento = document.getElementById('seguimiento').value;
                     $.post("index.php?ctl=evento_nuevo_guardar", { fecha_apertura: fecha_apertura, hora_apertura:hora_apertura,
-                    id_puntobcr:id_puntobcr, id_persona:id_persona, id_empresa:id_empresa, observaciones:observaciones}, function(data){
+                    id_puntobcr:id_puntobcr, id_persona:id_persona, id_empresa:id_empresa, observaciones:observaciones, seguimiento:seguimiento}, function(data){
                         //alert (data);
                         var srt = data;
-                        var n= srt.search("pendiente");
+                        var n= srt.search("No es posible");
                         if(n!=-1){
-                            alert("Esta cajero tiene una apertura pendiente de cierre");
+                            n= srt.search("futuros");
+                            if(n!=-1){
+                                alert('No es posible ingresar eventos futuros!!!');
+                            }else{
+                                alert("Esta cajero tiene una apertura pendiente de cierre");
+                            }
                         } else{
                             location.reload();
                         }
                     });
-                    valida_cajero=1
+                    valida_cajero=1;
                 }
             }
             if(valida_cajero==0){
@@ -173,6 +215,57 @@ function evento_cencon_cerrar(ide){
         confirm: function(){
             id_evento_cencon= ide;
             $.post("index.php?ctl=evento_cencon_cerrar", { id_evento_cencon: id_evento_cencon}, function(data){
+                location.reload();
+                //alert (data);
+              });
+        },
+        cancel: function(){
+                //$.alert('Canceled!')
+        }
+    });
+}
+function editar_observaciones(ide, obser){
+    document.getElementById('ID_Evento_Cencon').value=ide;
+    document.getElementById('observaciones_evento').value=obser;
+    document.getElementById('ventana_oculta_1').style.display = "block";
+}
+function guardar_observaciones_evento(){
+    id_evento_cencon= document.getElementById('ID_Evento_Cencon').value;
+    observaciones= document.getElementById('observaciones_evento').value;
+    $.post("index.php?ctl=evento_cencon_observaciones",{id_evento_cencon:id_evento_cencon, observaciones:observaciones}, function(data){
+                location.reload();
+                //alert (data);
+              });
+    document.getElementById('ventana_oculta_1').style.display = "none";
+}
+function editar_seguimiento(ide, seguimiento){
+    document.getElementById('ID_Evento_Cencon').value=ide;
+    $("#seguimiento_evento option[value='"+seguimiento+"']").attr("selected",true);
+    document.getElementById('ventana_oculta_3').style.display = "block";
+}
+function guardar_seguimiento_evento(){
+    id_evento_cencon= document.getElementById('ID_Evento_Cencon').value;
+    seguimiento= document.getElementById('seguimiento_evento').value;
+    
+    $.post("index.php?ctl=evento_cencon_seguimiento",{id_evento_cencon:id_evento_cencon, seguimiento:seguimiento}, function(data){
+                location.reload();
+                //alert (data);
+              });
+    document.getElementById('ventana_oculta_3').style.display = "none";
+}
+function reasignar_apertura(ide,cajero, obser){
+    document.getElementById('ID_Evento_Cencon').value=ide;
+    document.getElementById('numero_cajero').value=cajero;
+    document.getElementById('Cedula_persona').value="";
+    document.getElementById('ventana_oculta_2').style.display = "block";
+}
+function reasignar_apertura_cencon(){
+    $.confirm({title: 'Confirmación!', content: 'Desea reasignar la apertura de este cajero?', 
+        confirm: function(){
+            id_evento_cencon= document.getElementById('ID_Evento_Cencon').value;
+            numero_cajero=document.getElementById('numero_cajero').value;
+            cedula_cencon = document.getElementById('Cedula_persona').value;
+            $.post("index.php?ctl=evento_cencon_reasignar", { id_evento_cencon: id_evento_cencon, numero_cajero:numero_cajero, cedula_cencon:cedula_cencon}, function(data){
                 location.reload();
                 //alert (data);
               });
