@@ -28,7 +28,7 @@
                 <?php }?>
                 </h3>
                 <!--Información del personal Externo-->
-                <input type="text"  required="ID_Persona" readonly id="ID_Persona" name="ID_Persona" value="<?php echo $params[0]['ID_Persona_Externa'];?>">
+                <input type="text" hidden required="ID_Persona" readonly id="ID_Persona" name="ID_Persona" value="<?php echo $params[0]['ID_Persona_Externa'];?>">
 
                 <div class="col-md-4 espacio-abajo">
                     <label for="identificacion">Identificación</label>
@@ -336,8 +336,8 @@
                     <img id="close" src='vistas/Imagenes/cerrar.png' width="25" onclick ="ocultar_elemento()">
                     <h2>Agregar número de teléfono</h2>
                     <hr>
-                    <input  id="ID_Telefono" name="ID_Telefono" type="text">
-                    <input  id="ID_Persona_Telefono" name="ID_Persona_Telefono" type="text" value="<?php echo $params[0]['ID_Persona_Externa']; ?>">
+                    <input hidden id="ID_Telefono" name="ID_Telefono" type="text">
+                    <input hidden id="ID_Persona_Telefono" name="ID_Persona_Telefono" type="text" value="<?php echo $params[0]['ID_Persona_Externa']; ?>">
                     
                     <label for="Tipo_Telefono">Tipo de Telefono</label>
                         <select class="form-control espacio-abajo" id="Tipo_Telefono" name="Tipo_Telefono"> 

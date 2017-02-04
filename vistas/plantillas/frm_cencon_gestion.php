@@ -46,13 +46,13 @@
                 </div>
                 </div>
                 <div class="col-sm-4" style="margin-bottom: 20px; margin-top: 10px;">
-                    <a id="buscar_cajero" onclick="buscar_cajero()">Buscar Cajero Automático</a>
+                    <a id="buscar_cajero1" onclick="buscar_cajero()">Buscar Cajero Automático</a>
                 </div>
                 <div class="col-sm-4" style="margin-bottom: 20px; margin-top: 10px;">
-                    <a id="todos_cajero" onclick="todos_cajero('agregar')">Agregar todos los cajeros</a>
+                    <a id="todos_cajero1" onclick="todos_cajero('agregar')">Agregar todos los cajeros</a>
                 </div>
                  <div class="col-sm-4" style="margin-bottom: 20px; margin-top: 10px;">
-                    <a id="todos_cajero" onclick="todos_cajero('eliminar')">Eliminar todos los cajeros</a>
+                    <a id="todos_cajero2" onclick="todos_cajero('eliminar')">Eliminar todos los cajeros</a>
                 </div>
                 <div>
                     <table id="cajeros_persona" class="col-md-12">

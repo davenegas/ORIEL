@@ -92,10 +92,10 @@ function todos_cajero(funcion){
     empresa = document.getElementById('ID_Empresa').value;
     $.confirm({title: 'Confirmación!', content: 'Realmente desea '+accion+' todos los cajeros ?', 
         confirm: function(){
+            $("#cajeros_persona").html('<center><img align="center" src="vistas/Imagenes/Espere.gif"/></center>');
             $.post("index.php?ctl=todos_cajero_relacion", { accion:accion, id_persona: id_persona, cedula: cedula, empresa:empresa }, function(data){
                 //alert (data);
                 $("#cajeros_persona").html(data);
-                location.reload();
               });
         },
         cancel: function(){

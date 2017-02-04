@@ -249,10 +249,10 @@
                 <?php if ($_SESSION['modulos']['Módulo-Control de Video']==1){?>
                     <!--<li><a href="#">Controles de Video</a></li>--> 
                 <?php }; ?>   
-                    
-                <?php if ($_SESSION['modulos']['Módulo-Cencon']==1){?>
+                  
+                 <!-- <?php if ($_SESSION['modulos']['Módulo-Cencon']==1){?>
                     <li><a href="index.php?ctl=eventos_cencon">Cencon</a></li> 
-                <?php }; ?>  
+                <?php }; ?>  --> 
                     
                 <?php if ($_SESSION['modulos']['Módulo-Control de Video']==1){?>
                     <li><a href="http://10.170.5.80/Operaciones_de_Seguridad/ctrlvideo/consulta.html">Controles de Video</a></li>
