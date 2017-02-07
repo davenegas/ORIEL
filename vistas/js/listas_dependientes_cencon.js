@@ -68,7 +68,8 @@ function agregar_atm(id){
     id_persona = document.getElementById('ID_Persona').value;
     cedula = document.getElementById('cedula_persona').value;
     empresa = document.getElementById('ID_Empresa').value;
-    $.post("index.php?ctl=cencon_agregar_relacion", { id_atm: id_atm, id_persona:id_persona, cedula: cedula, empresa: empresa}, function(data){
+    $.post("index.php?ctl=cencon_agregar_relacion", { id_atm: id_atm, 
+        id_persona:id_persona, cedula: cedula, empresa: empresa}, function(data){
             //alert(data);
             $("#cajeros_persona").html(data);
           });

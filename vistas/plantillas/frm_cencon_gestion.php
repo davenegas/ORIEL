@@ -2,7 +2,7 @@
 <html lang="es">
     <head>
         <meta charset="utf-8"/>
-        <title>Gestión de Personal Externo</title>
+        <title>Gestión de Cencon</title>
         <script language="javascript" src="vistas/js/jquery.js"></script>
         <script language="javascript" src="vistas/js/listas_dependientes_cencon.js"></script>
         <link rel="stylesheet" href="vistas/css/ventanaoculta.css">
@@ -14,18 +14,20 @@
 <!--            <pre>
                 <?php print_r($puntosbcr)?>
             </pre>-->
-                <div class="col-sm-4 quitar-float">
-                    <label for="tipo_funcionario">Tipo de Funcionario</label>
-                    <select class="form-control" id="tipo_funcionario" name="tipo_funcionario" > 
-                        <option value="-"></option>
-                        <option value="0">Personal Interno</option>
-                        <option value="1">Personal Externo</option>
-                    </select>
-                </div>
-                
+            <h2>Gestion Módulo de Cencon</h2>
+            <p>A continuación se detallan los diferentes proveedor que están registrados en el sistema:</p>
+            <div class="col-sm-4 quitar-float">
+                <label for="tipo_funcionario">Tipo de Funcionario</label>
+                <select class="form-control" id="tipo_funcionario" name="tipo_funcionario" > 
+                    <option value="-"></option>
+                    <option value="0">Personal Interno</option>
+                    <option value="1">Personal Externo</option>
+                </select>
+            </div>
+
             <div class="quitar-float col-sm-6" style="margin-bottom: 15px; margin-top: 15px;">
-                    <a class="quitar-float" id="buscar_persona" onclick="buscar_persona()">Buscar Persona</a>
-                </div>
+                <a class="quitar-float" id="buscar_persona" onclick="buscar_persona()">Buscar Persona</a>
+            </div>
                 
                 <input  required hidden disabled id="ID_Persona" name="ID_Persona" type="text">
                 <input  required hidden disabled id="ID_Empresa" name="ID_Empresa" type="text">

@@ -4,10 +4,10 @@
  class Controller{
      
      //Declaración de métodos que envuelven toda la funcionalidad del sistema
-     /*
-      * A través del componente index se llaman cada uno de los eventos de la clase 
-      * controller para que sean ejecutados según sea necesario.
-      */
+    /*
+     * A través del componente index se llaman cada uno de los eventos de la clase 
+     * controller para que sean ejecutados según sea necesario.
+    */
      
     /*Inicio del sitio web, llamada a la pantalla principal para inicio de sesion*/
     public function inicio(){
@@ -7556,12 +7556,12 @@
         if(isset($_SESSION['nombre'])){
             $obj_cencon = new cls_cencon();
             
+            $obj_cencon->setEmpresa($_POST['empresa']);
             //Obtiene la información de los cajeros de la persona
-            $obj_cencon->setCondicion("T_Cencon.ID_Persona=".$_POST['id_persona']);
+            $obj_cencon->setCondicion("T_Cencon.Cedula_Cencon='".$_POST['cedula']."'");
             $obj_cencon->obtener_todas_relaciones();
             $cajeros =  $obj_cencon->getArreglo();
-             
-            $tamaño = count($puntosbcr);
+            $tamaño = count($cajeros);
             $validar=0;
             //recorre la lista de cajeros para ver si tiene el cajero en el vector
             for($i=0; $i<$tamaño;$i++){
@@ -7570,17 +7570,19 @@
                 }
             }
             
-            if($validar=0){
+            if($validar==0){
                 //Estable los parametros para agregar la relación
                 $obj_cencon->setId($_POST['id_atm']);
                 $obj_cencon->setId2($_POST['id_persona']);
                 $obj_cencon->setCedula($_POST['cedula']);
                 $obj_cencon->setEmpresa($_POST['empresa']);
                 //Agrega la relación del cajero con la persona
+                $obj_cencon->setCondicion("");
                 $obj_cencon->agregar_relacion();
             }
             //Obtiene nuevamente la información de los cajeros de la persona
-            $obj_cencon->setCondicion("T_Cencon.ID_Persona=".$_POST['id_persona']);
+            $obj_cencon->setCondicion("T_Cencon.Cedula_Cencon='".$_POST['cedula']."'");
+            $obj_cencon->setEmpresa($_POST['empresa']);
             $obj_cencon->obtener_todas_relaciones();
             $cajeros =  $obj_cencon->getArreglo();
            
@@ -7597,7 +7599,7 @@
             for($i=0; $i<$tam;$i++){
                 $html .='<tr>'; 
                 $html .='<td style="text-align:center">'.$cajeros[$i]['Codigo'].'</td>';
-                $html .='<td style="text-align:center">'.$cajeros[$i]['Nombre'].'</td>';
+                $html .='<td style="text-align:center">'.$cajeros[$i]['Nombre_Punto'].'</td>';
                 $html .='<td style="text-align:center" id="'.$cajeros[$i]['ID_Cencon'].'" onclick="cencon_observaciones('.$cajeros[$i]['ID_Cencon'].',&#39;'.$cajeros[$i]['Observaciones_Cencon'].'&#39;)" value="'.$cajeros[$i]['Observaciones_Cencon'].'">'.$cajeros[$i]['Observaciones_Cencon'].'</td>';
                 $html .='<td style="text-align:center"><a class="btn" role="button" onclick="eliminar_cajero('.$cajeros[$i]['ID_Cencon'].');">Eliminar ATM</a></td></td>';
                 $html .='</tr>'; 
@@ -7616,9 +7618,9 @@
     public function cencon_buscar_relaciones(){
         if(isset($_SESSION['nombre'])){
             $obj_cencon = new cls_cencon();
-            $obj_cencon->setEmpresa($_POST['empresa']);
             
             $obj_cencon->setCondicion("T_Cencon.ID_Persona=".$_POST['id_persona']);
+            $obj_cencon->setEmpresa($_POST['empresa']);
             $obj_cencon->obtener_todas_relaciones();
             $cajeros =  $obj_cencon->getArreglo();
            
@@ -7675,7 +7677,7 @@
             for($i=0; $i<$tam;$i++){
                 $html .='<tr>'; 
                 $html .='<td style="text-align:center">'.$cajeros[$i]['Codigo'].'</td>';
-                $html .='<td style="text-align:center">'.$cajeros[$i]['Nombre'].'</td>';
+                $html .='<td style="text-align:center">'.$cajeros[$i]['Nombre_Punto'].'</td>';
                 $html .='<td style="text-align:center" id="'.$cajeros[$i]['ID_Cencon'].'" onclick="cencon_observaciones('.$cajeros[$i]['ID_Cencon'].',&#39;'.$cajeros[$i]['Observaciones_Cencon'].'&#39;)" value="'.$cajeros[$i]['Observaciones_Cencon'].'">'.$cajeros[$i]['Observaciones_Cencon'].'</td>';
                 $html .='<td style="text-align:center"><a class="btn" role="button" onclick="eliminar_cajero('.$cajeros[$i]['ID_Cencon'].');">Eliminar ATM</a></td></td>';
                 $html .='</tr>'; 
@@ -7738,7 +7740,7 @@
                 $obj_cencon->setCondicion("ID_Persona=".$_POST['id_persona']);
                 $obj_cencon->eliminar_relacion_persona_puntobcr();
             }
-
+            $obj_cencon->setEmpresa($_POST['empresa']);
             $obj_cencon->setCondicion("T_Cencon.ID_Persona=".$_POST['id_persona']);
             $obj_cencon->obtener_todas_relaciones();
             $cajeros =  $obj_cencon->getArreglo();
@@ -8424,13 +8426,13 @@
                 $params[0]['Correo'] ="";
                 $params[0]['Genero'] ="";
                 $params[0]['Direccion'] ="";
-                $params[0]['ID_Distrito']  ="";
-                $params[0]['ID_Estado_Civil'] ="";
-                $params[0]['ID_Nacionalidad'] ="";
-                $params[0]['ID_Nivel_Academico'] ="";
+                $params[0]['ID_Distrito']  =1;
+                $params[0]['ID_Estado_Civil'] =1;
+                $params[0]['ID_Nacionalidad'] =1;
+                $params[0]['ID_Nivel_Academico'] =1;
                 $params[0]['ID_Empresa'] ="";
-                $params[0]['ID_Estado_Persona'] ="";
-                $params[0]['Validado'] ="";
+                $params[0]['ID_Estado_Persona'] =1;
+                $params[0]['Validado'] =0;
                 $params[0]['Observaciones'] ="";
                 $params[0]['Ocupacion'] ="";
                 $params[0]['Nombre_Estado'] ="";

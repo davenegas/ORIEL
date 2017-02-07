@@ -54,7 +54,7 @@
         <div class="row content">
             <div class="col-sm-12 text-center">
                <!--<embed src="vistas/Manuales/ORIEL_MANUAL_USUARIO_PERSONAL_EXTERNO_VP.pdf#toolbar=0" width="900" height="450">-->
-               <embed src="vistas/Manuales/ORIEL_MANUAL_USUARIO_PERSONAL_EXTERNO_VP.pdf" width="900" height="450">
+               <embed src="vistas/Manuales/ORIEL_MANUAL_USUARIO_PERSONAL_EXTERNO_VP.pdf" width="1000" height="600">
             </div>
         </div>
     </div>
