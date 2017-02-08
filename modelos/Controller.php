@@ -418,17 +418,47 @@
         } 
     }
     
-     public function puestos_de_monitoreo_listar(){
+     public function puestos_de_monitoreo_editar(){
         //Variables que muestran tipos de adventencia en pantalla según sea necesario
         $tipo_de_alerta="alert alert-info";
         $validacion="Verificación de Identidad";
-        //Llamada al formulario correspondiente de la vista
+        $tiempo_estandar = $_GET['tiempo_revision'];
+        
         $obj_unidades_de_video= new cls_unidad_video();
         $obj_unidades_de_video->obtiene_unidades_de_video_que_tienen_punto_bcr();
         $params=$obj_unidades_de_video->getArreglo();
-        require __DIR__ . '/../vistas/plantillas/frm_puestos_de_monitoreo_listar.php';
+        
+        
+        $obj_puesto_de_monitoreo= new cls_puestos_de_monitoreo();        
+        $obj_puesto_de_monitoreo->setCondicion("T_PuestoMonitoreoUnidadVideo.ID_Puesto_Monitoreo=".$_GET['id']);
+        $obj_puesto_de_monitoreo->obtiene_todas_las_unidades_asociadas_a_un_puesto_de_monitoreo();
+        $unidades_asociadas_al_puesto=$obj_puesto_de_monitoreo->getArreglo();
+              
+        //echo $_GET['id'];
+        require __DIR__ . '/../vistas/plantillas/frm_puestos_de_monitoreo_editar.php';
     }
      
+     public function actualiza_puesto_de_monitoreo(){
+
+        $obj_puestos_de_monitoreo= new cls_puestos_de_monitoreo();
+        $elementos = $_POST['data'];
+        
+        $tam= count($elementos[0]);
+        $obj_puestos_de_monitoreo->setCondicion("ID_Puesto_Monitoreo=".$elementos[0][0]);
+        $obj_puestos_de_monitoreo->eliminar_registros_puesto_de_monitoreo();
+        
+        if($tam>1){
+              
+            for ($i = 1; $i < $tam; $i++) {
+                $obj_puestos_de_monitoreo->setId_puesto_monitoreo($elementos[0][$i]);
+                $obj_puestos_de_monitoreo->setId_unidad_video($elementos[1][$i]);
+                $obj_puestos_de_monitoreo->setTiempo_personalizado_revision($elementos[6][$i]);
+                $obj_puestos_de_monitoreo->agregar_nueva_unidad_de_video_a_puesto_de_monitoreo();
+                
+            }
+        }
+    }
+    
     //Paso de importación del prontuario que permite actualizar la tabla de puestos en el sistema
     public function frm_importar_prontuario_paso_4(){
         //Validación para verificar si el usuario está logeado en el sistema
@@ -5478,6 +5508,9 @@
             $obj_puntos->obtiene_todos_los_puntos_bcr();
             $puntosbcr = $obj_puntos->getArreglo();
             
+            $obj_puntos->setCondicion("T_PuntoBCR.Estado=1 AND not T_PuntoBCR.ID_PuntoBCR In (Select ID_PuntoBCR From t_unidadvideo)");
+            $obj_puntos->obtiene_todos_los_puntos_bcr();
+            $puntosbcr_sin_video=$obj_puntos->getArreglo();
             /*echo '<pre>';
             print_r($params);
             echo '</pre>';*/
@@ -9556,6 +9589,109 @@
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }
+    }
+    
+     public function puestos_de_monitoreo_listar() {
+       if(isset($_SESSION['nombre'])){
+           $obj_puesto_monitoreo = new cls_puestos_de_monitoreo();
+           $obj_puesto_monitoreo->obtiene_todos_puestos_de_monitoreo();
+           $params =$obj_puesto_monitoreo->getArreglo();
+           
+           $vector_estadisticas=array ();
+           //$vector_estadisticas[]=array ("","","");
+           
+           for ($i = 0; $i < count($params); $i++) {
+                
+               $obj_puesto_monitoreo->setCondicion("T_PuestoMonitoreoUnidadVideo.ID_Puesto_Monitoreo=".$params[$i]['ID_Puesto_Monitoreo']);
+               $obj_puesto_monitoreo->obtiene_estadistica_general_puestos_de_monitoreo();
+               $vector_temporal=$obj_puesto_monitoreo->getArreglo();
+               
+               if (count($vector_temporal)>0){
+                  $vector_estadisticas[]=$vector_temporal[0];
+                }else{
+                  $vector_estadisticas[]=array("Total_Minutos"=>"0","Total_Unidades"=>"0","Total_Camaras"=>"0");
+                }
+            }
+            
+            //print_r($vector_estadisticas);
+            require __DIR__.'/../vistas/plantillas/frm_puestos_de_monitoreo_listar.php';
+        }
+        else {
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }  
+    } 
+    
+    public function puesto_monitoreo_cambiar_estado() {
+       if(isset($_SESSION['nombre'])){
+           $obj_puesto_monitoreo = new cls_puestos_de_monitoreo();
+           
+           if ($_GET['estado']==1){
+               
+               $obj_puesto_monitoreo->setEstado("0");
+               
+           }else {
+               
+               $obj_puesto_monitoreo->setestado("1");
+           }
+           $obj_puesto_monitoreo->setCondicion("ID_Puesto_Monitoreo='".$_GET['id']."'");
+           $obj_puesto_monitoreo->cambiar_estado_puesto_monitoreo();
+           $obj_puesto_monitoreo->setCondicion("");    
+           $obj_puesto_monitoreo->obtiene_todos_puestos_de_monitoreo();
+           $params =$obj_puesto_monitoreo->getArreglo();
+           
+            $vector_estadisticas=array ();
+           //$vector_estadisticas[]=array ("","","");
+           
+           for ($i = 0; $i < count($params); $i++) {
+                
+               $obj_puesto_monitoreo->setCondicion("T_PuestoMonitoreoUnidadVideo.ID_Puesto_Monitoreo=".$params[$i]['ID_Puesto_Monitoreo']);
+               $obj_puesto_monitoreo->obtiene_estadistica_general_puestos_de_monitoreo();
+               $vector_temporal=$obj_puesto_monitoreo->getArreglo();
+               
+               if (count($vector_temporal)>0){
+                  $vector_estadisticas[]=$vector_temporal[0];
+                }else{
+                  $vector_estadisticas[]=array("Total_Minutos"=>"0","Total_Unidades"=>"0","Total_Camaras"=>"0");
+                }
+            }
+           
+            require __DIR__.'/../vistas/plantillas/frm_puestos_de_monitoreo_listar.php';
+        }
+        else {
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }  
+    }
+    
+    public function puesto_monitoreo_guardar() {
+          if(isset($_SESSION['nombre'])){
+               $obj_puesto_monitoreo = new cls_puestos_de_monitoreo();
+               $obj_puesto_monitoreo->setNombre($_POST['nombre']); 
+               $obj_puesto_monitoreo->setDescripcion($_POST['descripcion']); 
+               $obj_puesto_monitoreo->setObservaciones($_POST['observaciones']);
+               $obj_puesto_monitoreo->setTiempo_estandar_revision($_POST['tiempo_estandar_revision']); 
+               
+                if ($_POST['ID_Puesto_Monitoreo']==0){
+                   $obj_puesto_monitoreo->setEstado(1);
+                   $obj_puesto_monitoreo->agregar_nuevo_puesto_monitoreo();
+                }else{  
+                           $obj_puesto_monitoreo->setCondicion("ID_Puesto_Monitoreo='".$_POST['ID_Puesto_Monitoreo']."'");
+                           $obj_puesto_monitoreo->edita_puesto_monitoreo();
+                   
+                }       
+           $obj_puesto_monitoreo->setCondicion("");    
+           $obj_puesto_monitoreo->obtiene_todos_puestos_de_monitoreo();
+           $params =$obj_puesto_monitoreo->getArreglo();
+           require __DIR__.'/../vistas/plantillas/frm_puestos_de_monitoreo_listar.php';
+        }
+        else {
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }  
     }
     
 }

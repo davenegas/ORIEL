@@ -507,7 +507,7 @@ class cls_personal{
        
     }
         
-     function eliminar_telefonos_personas_bcr_fuera_de_prontuario_para_prontuario(){
+    function eliminar_telefonos_personas_bcr_fuera_de_prontuario_para_prontuario(){
           
         $this->obj_data_provider->conectar();
         $this->obj_data_provider->eliminar_datos_para_prontuario("t_telefono", "(".$this->condicion.") AND (ID_Tipo_Telefono=2 OR ID_Tipo_Telefono=3 OR ID_Tipo_Telefono=4 OR ID_Tipo_Telefono=27)");
