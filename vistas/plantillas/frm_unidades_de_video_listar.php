@@ -21,6 +21,28 @@
                 });       
             });
             
+            $(document).ready(function () {
+                if ( $.fn.dataTable.isDataTable('#tabla3') ) {
+                    table = $('#tabla3').DataTable();
+                }
+                table.destroy();
+                table = $('#tabla3').DataTable( {
+                    stateSave: true,
+                    "lengthMenu": [[10, 25, 50,100,-1], [10, 25, 50,100,"All"]]
+                });       
+            });
+            
+              $(document).ready(function () {
+                if ( $.fn.dataTable.isDataTable('#tabla4') ) {
+                    table = $('#tabla4').DataTable();
+                }
+                table.destroy();
+                table = $('#tabla4').DataTable( {
+                    stateSave: true,
+                    "lengthMenu": [[10, 25, 50,100,-1], [10, 25, 50,100,"All"]]
+                });       
+            });
+            
             //Valida para permitir solo numeros en un input
             //Llamarlo desde el evento  onkeypress="return valida(event)"
              function valida(e){
@@ -244,6 +266,7 @@
                 document.getElementById('ventana_oculta_2').style.display = "none";
                 document.getElementById('ventana_oculta_3').style.display = "none";
                 document.getElementById('ventana_oculta_4').style.display = "none";
+                document.getElementById('ventana_oculta_5').style.display = "none";
                 //location.reload(true);
 
             }
@@ -285,6 +308,14 @@
 
                 document.getElementById('ventana_oculta_4').style.display = "none";      
             }  
+            
+              //Valida informacion completa de formulario de notas de coordinacion
+            function mostrar_puntosbcr_sin_unidad_de_video() {
+           
+                  document.getElementById('ventana_oculta_5').style.display = "block";
+
+            }    
+            
             function cargar_padron_fotografico(id_uni){  
                 if (document.getElementById(id_uni+'-ID_PuntoBCR').innerHTML.length>0){
                     //alert(document.getElementById(id_uni+'-ID_PuntoBCR').innerHTML.length);
@@ -300,6 +331,8 @@
         </div>
         <div class="container animated fadeIn col-xs-10 quitar-float">
         <h2>Listado General de Unidades de Video</h2>
+        <a role="button" onclick="mostrar_puntosbcr_sin_unidad_de_video();">Puntos BCR sin unidad de video asignada en el sistema</a></td>
+  
         <p>A continuación se detallan las Unidades de Video que están registradas en el sistema:</p>   
         <table id="tabla" class="display" cellspacing="0" width="100%">
             <thead>
@@ -472,6 +505,39 @@
                             <td style="text-align:center"><?php echo $puntosbcr[$i]['Nombre_Provincia'];?></td>
                             <td style="text-align:center"><a class="btn" role="button" onclick="agregar_puntobcr('<?php echo $puntosbcr[$i]['ID_PuntoBCR'];?>','<?php echo $puntosbcr[$i]['Nombre'];?>','<?php echo $puntosbcr[$i]['Nombre_Provincia'];?>','<?php echo $puntosbcr[$i]['Tipo_Punto'];?>');">
                                     Seleccionar Punto BCR</a></td>
+                        </tr>
+                        <?php } ?>
+                     </tbody>
+                  </table>
+                </div>
+            </div>
+        <!--Cierre Asignar UE a Punto BRC-->
+        </div> 
+         
+         <div id="ventana_oculta_5">
+            <div id="popupventana2">
+                <div id="ventana2">
+                <img id="close" src='vistas/Imagenes/cerrar.png' width="25" onclick ="ocultar_elemento()"> 
+                    <!--Tabla con la lista de Unidades Ejecutoras-->
+                    <table id="tabla4" class="display" cellspacing="0" width="100%">
+                    <thead>
+                        <tr>
+                            <th style="text-align:center">Código</th>
+                            <th style="text-align:center">Nombre</th>
+                            <th style="text-align:center">Tipo</th>
+                            <th style="text-align:center">Provincia</th>
+                          
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php 
+                        $tama=count($puntosbcr_sin_video);
+                        for ($i = 0; $i <$tama; $i++) { ?>  
+                        <tr>
+                            <td style="text-align:center"><?php echo $puntosbcr_sin_video[$i]['Codigo'];?></td>
+                            <td style="text-align:center"><?php echo $puntosbcr_sin_video[$i]['Nombre'];?></td>
+                            <td style="text-align:center"><?php echo $puntosbcr_sin_video[$i]['Tipo_Punto'];?></td>
+                            <td style="text-align:center"><?php echo $puntosbcr_sin_video[$i]['Nombre_Provincia'];?></td>
                         </tr>
                         <?php } ?>
                      </tbody>

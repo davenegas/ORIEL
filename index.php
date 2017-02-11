@@ -23,6 +23,8 @@ require_once __DIR__ . '/controladores/cls_roles.php';
 require_once __DIR__ . '/controladores/cls_modulos.php';
 //Libreria de clases --> Control de eventos de bitácora
 require_once __DIR__ . '/controladores/cls_eventos.php';
+//Libreria de clases --> Control de Puestos de Monitoreo
+require_once __DIR__ . '/controladores/cls_puestos_de_monitoreo.php';
 //Libreria de clases --> Control de Unidades de Video
 require_once __DIR__ . '/controladores/cls_unidad_video.php';
 //Libreria de clases --> Control de áreas de apoyo
@@ -168,7 +170,12 @@ $map = array(
     'guardar_imagen_unidades_de_video'=>array('controller'=>'Controller','action'=> 'guardar_imagen_unidades_de_video'), 
     'eliminar_imagen_padron_unidades_de_video'=>array('controller'=>'Controller','action'=> 'eliminar_imagen_padron_unidades_de_video'), 
     'puestos_de_monitoreo_listar'=>array('controller'=>'Controller','action'=> 'puestos_de_monitoreo_listar'), 
-                
+    'puestos_de_monitoreo_editar'=>array('controller'=>'Controller','action'=> 'puestos_de_monitoreo_editar'), 
+    'puesto_monitoreo_guardar'=>array('controller'=>'Controller','action'=> 'puesto_monitoreo_guardar'), 
+    'puesto_monitoreo_cambiar_estado'=>array('controller'=>'Controller','action'=> 'puesto_monitoreo_cambiar_estado'), 
+    'actualiza_puesto_de_monitoreo'=>array('controller'=>'Controller','action'=> 'actualiza_puesto_de_monitoreo'), 
+    
+              
     //Información Proveedor enlaces
     'proveedor_listar'=>array('controller'=>'Controller', 'action'=>'proveedor_listar'),
     'proveedor_enlace_guardar'=>array('controller'=>'Controller', 'action'=>'proveedor_enlace_guardar'),
