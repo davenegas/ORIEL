@@ -419,7 +419,7 @@
     }
     //SINCRONIZACIÓN 11 ENERO, 12MD     
     //public function puestos_de_monitoreo_editar(){
-    public function puestos_de_monitoreo_listar(){
+    public function puestos_de_monitoreo_editar(){
         //Variables que muestran tipos de adventencia en pantalla según sea necesario
         $tipo_de_alerta="alert alert-info";
         $validacion="Verificación de Identidad";
@@ -9655,8 +9655,8 @@
         }
     }
     
-    //SINCRONIZACIÓN 11 ENERO, 12MD: NOMBRE REPETIDO, SE AGREGÓ UN 2
-    public function puestos_de_monitoreo_listar2() {
+    //SINCRONIZACIÓN 11 ENERO, 12MD: NOMBRE REPETIDO
+    public function puestos_de_monitoreo_listar() {
        if(isset($_SESSION['nombre'])){
            $obj_puesto_monitoreo = new cls_puestos_de_monitoreo();
            $obj_puesto_monitoreo->obtiene_todos_puestos_de_monitoreo();
@@ -9673,7 +9673,7 @@
                
                if (count($vector_temporal)>0){
                   $vector_estadisticas[]=$vector_temporal[0];
-                }else{
+                }else {
                   $vector_estadisticas[]=array("Total_Minutos"=>"0","Total_Unidades"=>"0","Total_Camaras"=>"0");
                 }
             }
@@ -9810,6 +9810,36 @@
             $params= $obj_reporte->getArreglo();
             
             require __DIR__ . '/../vistas/plantillas/rpt_eventos_provincia.php';
+
+        }
+        else {
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+
+        }
+    }
+    
+    public function reporte_eventos_oficina(){
+        if(isset($_SESSION['nombre'])){
+            $obj_reporte = new cls_reporteria();
+            //Verifica si se envió una fecha especifica de busqueda
+            if(isset($_POST['fecha_inicial'])){
+                $fecha_inicio = $_POST['fecha_inicial'];
+                $fecha_fin= $_POST['fecha_final'];
+                $obj_reporte->setCondicion("t_evento.Fecha BETWEEN '".$fecha_inicio."' AND '".$fecha_fin."'");
+                $titulo = "Historico de Activaciones del ".$fecha_inicio." al ".$fecha_fin." por Punto BCR";
+            } else{
+                $fecha_inicio = '2016-01-01';
+                $fecha_fin= date("Y-m-d");
+                $obj_reporte->setCondicion("t_evento.Fecha BETWEEN '".$fecha_inicio."' AND '".$fecha_fin."'");
+                $titulo = "Historico de Activaciones por Punto BCR";
+            }
+            
+            $obj_reporte->eventos_por_sitio();
+            $params= $obj_reporte->getArreglo();
+            
+            require __DIR__ . '/../vistas/plantillas/rpt_eventos_sitio.php';
 
         }
         else {

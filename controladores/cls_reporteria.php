@@ -69,4 +69,18 @@ class cls_reporteria{
         $this->obj_data_provider->desconectar();
         $this->resultado_operacion=true;
     }
+    
+    public function eventos_por_sitio(){
+    $this->obj_data_provider->conectar();
+        $this->arreglo= $this->obj_data_provider->trae_datos("T_Evento 
+			LEFT OUTER JOIN t_puntobcr on t_puntobcr.ID_PuntoBCR = t_evento.ID_PuntoBCR", 
+                        "count(t_evento.ID_PuntoBCR) TOTAL, t_puntobcr.Nombre", 
+                        $this->condicion." group by t_evento.ID_PuntoBCR
+                        having count(T_Evento.ID_PuntoBCR)
+                        ORDER BY TOTAL DESC LIMIT 10");
+        $this->arreglo=$this->obj_data_provider->getArreglo();
+        $this->obj_data_provider->desconectar();
+        $this->resultado_operacion=true;    
+    }
+    
 }?>

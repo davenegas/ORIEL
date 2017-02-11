@@ -8,110 +8,109 @@
         <script src="vistas/js/exporting.js"></script>
         <script src="vistas/js/highcharts-3d.js"></script>
         <script type="text/javascript">
-$(function () {
-    // Set up the chart
-    var chart = new Highcharts.Chart({
-        chart: {
-            renderTo: 'container',
-            type: 'column',
-            options3d: {
-                enabled: true,
-                alpha: 5,
-                beta: 10,
-                depth: 50,
-                viewDistance: 25
-            }
-        },
-        xAxis: {
-            categories: ['San José', 'Alajuela', 'Cartago', 'Heredia', 'Guanacaste', 'Puntarenas', 'Limón'],
-                title: {
-                    text: null
-               }
-        },
-        title: {
-            text: (function() { var data = [];  data.push(['<?php echo $titulo?>']); return data; })()
-        },
-        plotOptions: {
-            column: {
-                depth: 25
-            }
-        },
-        series: [{
-                        name: 'Activación de Duress',
-			data: (function() { var data = [];
-                                <?php   for($j = 1 ;$j<8;$j++){
-                                    $dato=0;
-                                    for($i = 0 ;$i<count($params);$i++){
-                                        if($params[$i]['ID_Provincia']==$j && $params[$i]['ID_Tipo_Evento']==4){    
-                                            $dato = $params[$i]['Total_evento'];    ?>
-                                        <?php }
-                                    }?>
-                                    data.push([<?php echo $dato;?>]);
-                                <?php } ?>
-                                return data;
-                                })()
-                    },{
-                        name: 'Activación de Fuego',
-			data: (function() { var data = [];
-                                <?php   for($j = 1 ;$j<8;$j++){
-                                    $dato=0;
-                                    for($i = 0 ;$i<count($params);$i++){
-                                        if($params[$i]['ID_Provincia']==$j && $params[$i]['ID_Tipo_Evento']==5){    
-                                            $dato = $params[$i]['Total_evento'];    ?>
-                                        <?php }
-                                    }?>
-                                    data.push([<?php echo $dato;?>]);
-                                <?php } ?>
-                                return data;
-                                })()
-                    },{
-                        name: 'Activación de Intrusión',
-			data: (function() { var data = [];
-                                <?php   for($j = 1 ;$j<8;$j++){
-                                    $dato=0;
-                                    for($i = 0 ;$i<count($params);$i++){
-                                        if($params[$i]['ID_Provincia']==$j && $params[$i]['ID_Tipo_Evento']==6){    
-                                            $dato = $params[$i]['Total_evento'];    ?>
-                                        <?php }
-                                    }?>
-                                    data.push([<?php echo $dato;?>]);
-                                <?php } ?>
-                                return data;
-                                })()
-                    },{
-                        name: 'Activación de Panico',
-			data: (function() { var data = [];
-                                <?php   for($j = 1 ;$j<8;$j++){
-                                    $dato=0;
-                                    for($i = 0 ;$i<count($params);$i++){
-                                        if($params[$i]['ID_Provincia']==$j && $params[$i]['ID_Tipo_Evento']==7){    
-                                            $dato = $params[$i]['Total_evento'];    ?>
-                                        <?php }
-                                    }?>
-                                    data.push([<?php echo $dato;?>]);
-                                <?php } ?>
-                                return data;
-                                })()
-                    }
-                    ]
-    });
+            $(function () {
+                var chart = new Highcharts.Chart({
+                    chart: {
+                        renderTo: 'container',
+                        type: 'column',
+                        options3d: {
+                            enabled: true,
+                            alpha: 5,
+                            beta: 10,
+                            depth: 50,
+                            viewDistance: 25
+                        }
+                    },
+                    xAxis: {
+                        categories: ['San José', 'Alajuela', 'Cartago', 'Heredia', 'Guanacaste', 'Puntarenas', 'Limón'],
+                            title: {
+                                text: null
+                           }
+                    },
+                    title: {
+                        text: (function() { var data = [];  data.push(['<?php echo $titulo?>']); return data; })()
+                    },
+                    plotOptions: {
+                        column: {
+                            depth: 25
+                        }
+                    },
+                    series: [{
+                                    name: 'Activación de Duress',
+                                    data: (function() { var data = [];
+                                            <?php   for($j = 1 ;$j<8;$j++){
+                                                $dato=0;
+                                                for($i = 0 ;$i<count($params);$i++){
+                                                    if($params[$i]['ID_Provincia']==$j && $params[$i]['ID_Tipo_Evento']==4){    
+                                                        $dato = $params[$i]['Total_evento'];    ?>
+                                                    <?php }
+                                                }?>
+                                                data.push([<?php echo $dato;?>]);
+                                            <?php } ?>
+                                            return data;
+                                            })()
+                                },{
+                                    name: 'Activación de Fuego',
+                                    data: (function() { var data = [];
+                                            <?php   for($j = 1 ;$j<8;$j++){
+                                                $dato=0;
+                                                for($i = 0 ;$i<count($params);$i++){
+                                                    if($params[$i]['ID_Provincia']==$j && $params[$i]['ID_Tipo_Evento']==5){    
+                                                        $dato = $params[$i]['Total_evento'];    ?>
+                                                    <?php }
+                                                }?>
+                                                data.push([<?php echo $dato;?>]);
+                                            <?php } ?>
+                                            return data;
+                                            })()
+                                },{
+                                    name: 'Activación de Intrusión',
+                                    data: (function() { var data = [];
+                                            <?php   for($j = 1 ;$j<8;$j++){
+                                                $dato=0;
+                                                for($i = 0 ;$i<count($params);$i++){
+                                                    if($params[$i]['ID_Provincia']==$j && $params[$i]['ID_Tipo_Evento']==6){    
+                                                        $dato = $params[$i]['Total_evento'];    ?>
+                                                    <?php }
+                                                }?>
+                                                data.push([<?php echo $dato;?>]);
+                                            <?php } ?>
+                                            return data;
+                                            })()
+                                },{
+                                    name: 'Activación de Panico',
+                                    data: (function() { var data = [];
+                                            <?php   for($j = 1 ;$j<8;$j++){
+                                                $dato=0;
+                                                for($i = 0 ;$i<count($params);$i++){
+                                                    if($params[$i]['ID_Provincia']==$j && $params[$i]['ID_Tipo_Evento']==7){    
+                                                        $dato = $params[$i]['Total_evento'];    ?>
+                                                    <?php }
+                                                }?>
+                                                data.push([<?php echo $dato;?>]);
+                                            <?php } ?>
+                                            return data;
+                                            })()
+                                }
+                                ]
+                });
 
-    function showValues() {
-        $('#alpha-value').html(chart.options.chart.options3d.alpha);
-        $('#beta-value').html(chart.options.chart.options3d.beta);
-        $('#depth-value').html(chart.options.chart.options3d.depth);
-    }
+                function showValues() {
+                    $('#alpha-value').html(chart.options.chart.options3d.alpha);
+                    $('#beta-value').html(chart.options.chart.options3d.beta);
+                    $('#depth-value').html(chart.options.chart.options3d.depth);
+                }
 
-    // Activate the sliders
-    $('#sliders input').on('input change', function () {
-        chart.options.chart.options3d[this.id] = this.value;
-        showValues();
-        chart.redraw(false);
-    });
+                // Activate the sliders
+                $('#sliders input').on('input change', function () {
+                    chart.options.chart.options3d[this.id] = this.value;
+                    showValues();
+                    chart.redraw(false);
+                });
 
-    showValues();
-});
-		</script>
+                showValues();
+            });
+	</script>
     </head>
     <body>
         <?php require_once 'encabezado.php';?>
@@ -132,25 +131,25 @@ $(function () {
         </div>
         
         <div class="col-sm-10 container espacio-abajo">
-        <section class='container' >
-            <div id="container" style="min-width: 310px; max-width: 1000px; height: 500px; margin: 20 auto; margin-top: 50px;"></div>
-            <div id="sliders" style="min-width: 310px; max-width: 800px;">
-                <table>
-                    <tr>
-                            <td>Alpha Angle</td>
+            <section class='container' >
+                <div id="container" style="min-width: 310px; max-width: 1000px; height: 500px; margin: 20 auto; margin-top: 50px;"></div>
+                <div id="sliders" style="min-width: 310px; max-width: 800px;">
+                    <table>
+                        <tr>
+                            <td>Ángulo Alfa</td>
                             <td><input id="alpha" type="range" min="0" max="45" value="5"/> <span id="alpha-value" class="value"></span></td>
-                    </tr>
-                    <tr>
-                            <td>Beta Angle</td>
+                        </tr>
+                        <tr>
+                            <td>Ángulo Beta</td>
                             <td><input id="beta" type="range" min="-45" max="45" value="10"/> <span id="beta-value" class="value"></span></td>
-                    </tr>
-                    <tr>
-                            <td>Depth</td>
+                        </tr>
+                        <tr>
+                            <td>Profundidad</td>
                             <td><input id="depth" type="range" min="20" max="100" value="50"/> <span id="depth-value" class="value"></span></td>
-                    </tr>
-                </table>
-            </div>
-        </section>
+                        </tr>
+                    </table>
+                </div>
+            </section>
         </div>
         <?php require_once 'pie_de_pagina.php' ?>
     </body>
