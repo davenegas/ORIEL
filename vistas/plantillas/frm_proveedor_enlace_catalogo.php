@@ -44,40 +44,41 @@
         <h2>Listado General de Proveedores de Enlaces BCR</h2>
         <p>A continuación se detallan los diferentes proveedor que están registrados en el sistema:</p>            
         <table id="tabla" class="display" cellspacing="0">
-          <thead>
-            <tr>
-              <th>ID Proveedor</th>
-              <th>Nombre Proveedor</th>
-              <th>Observaciones</th>
-              <th>Estado</th>
-              <th>Cambiar Estado</th>
-              <th>Mantenmiento</th>
-            </tr>
-          </thead>
-          <tbody>
-            <?php 
-            $tam=count($params);  
-            for ($i = 0; $i <$tam; $i++) {
-            ?>
-            <tr>
-                <td><?php echo $params[$i]['ID_Proveedor'];?></td>
-                <td><?php echo $params[$i]['Nombre_Proveedor'];?></td>
-                <td><?php echo $params[$i]['Observaciones'];?></td>
-                <?php if ($params[$i]['Estado']==1){?>  
-                    <td>Activo</td>
-                <?php }else {?>  
-                    <td>Inactivo</td>
-                <?php }?>
-                <td><a href="index.php?ctl=proveedor_enlace_cambiar_estado&ide=<?php echo $params[$i]['ID_Proveedor']?>&estado=<?php echo $params[$i]['Estado']?>"> Activar/Desactivar</a></td>
-                <td><a role="button" onclick="Editar_proveedor(<?php echo $params[$i]['ID_Proveedor'];?>,'<?php echo $params[$i]['Nombre_Proveedor'];?>','<?php echo $params[$i]['Observaciones'];?>')"> 
-                       Editar</a></td>
-            </tr>     
-            <?php } ?>
+            <thead>
+                <tr>
+                    <th style="text-align:center">ID Proveedor</th>
+                    <th style="text-align:center">Nombre Proveedor</th>
+                    <th style="text-align:center">Observaciones</th>
+                    <th style="text-align:center">Estado</th>
+                    <th style="text-align:center">Cambiar Estado</th>
+                    <th style="text-align:center">Mantenmiento</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php 
+                $tam=count($params);  
+                for ($i = 0; $i <$tam; $i++) {
+                ?>
+                    <tr>
+                        <td style="text-align:center"><?php echo $params[$i]['ID_Proveedor'];?></td>
+                        <td style="text-align:center"><?php echo $params[$i]['Nombre_Proveedor'];?></td>
+                        <td style="text-align:center"><?php echo $params[$i]['Observaciones'];?></td>
+                        <?php if ($params[$i]['Estado']==1){?>  
+                            <td>Activo</td>
+                        <?php }else {?>  
+                            <td>Inactivo</td>
+                        <?php }?>
+                        <td style="text-align:center"><a href="index.php?ctl=proveedor_enlace_cambiar_estado&ide=<?php echo $params[$i]['ID_Proveedor']?>&estado=<?php echo $params[$i]['Estado']?>"> Activar/Desactivar</a></td>
+                        <td style="text-align:center"><a role="button" onclick="Editar_proveedor(<?php echo $params[$i]['ID_Proveedor'];?>,'<?php echo $params[$i]['Nombre_Proveedor'];?>','<?php echo $params[$i]['Observaciones'];?>')"> 
+                               Editar</a></td>
+                    </tr>     
+                <?php } ?>
             </tbody>
         </table>
         <a id="popup" onclick="mostrar_agregar_proveedor()" class="btn btn-default" role="button">Agregar Nuevo Proveedor</a>
         </div>
-            <?php require 'vistas/plantillas/pie_de_pagina.php' ?>
+        
+        <?php require 'vistas/plantillas/pie_de_pagina.php' ?>
         
         <!--agregar o editar proveedor-->
         <div id="ventana_oculta_1"> 
@@ -95,7 +96,7 @@
                     <button><a href="javascript:%20check_empty()" id="submit">Guardar</a></button>
                 </form>
             </div>
-        <!--Cierre agregar teléfono a Punto BCR-->
+        <!--Cierre agregar o editar proveedorR-->
         </div>
     </body>
 </html>

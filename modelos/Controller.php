@@ -418,7 +418,7 @@
         } 
     }
     
-     public function puestos_de_monitoreo_listar(){
+    public function puestos_de_monitoreo_listar(){
         //Variables que muestran tipos de adventencia en pantalla según sea necesario
         $tipo_de_alerta="alert alert-info";
         $validacion="Verificación de Identidad";
@@ -2910,7 +2910,7 @@
                 //Variable de control del puesto a visualizar
                 $puesto_enviado=5;
                 //Establecer la condición de filtrado por puesto para la consulta SQL a la base de datos
-                $obj_eventos->setCondicion("(T_Evento.ID_EstadoEvento<>3 AND T_Evento.ID_EstadoEvento<>5) AND (T_Evento.ID_Tipo_Evento=17)");
+                $obj_eventos->setCondicion("(T_Evento.ID_EstadoEvento<>3 AND T_Evento.ID_EstadoEvento<>5) AND (T_Evento.ID_Tipo_Evento=17 OR T_Evento.ID_Tipo_Evento=38)");
             }
             //Verifica para cual puesto de monitoreo fue realizada la solicitud, esto mediante el metodo post 
             if($_POST['puesto']==0){
@@ -5342,6 +5342,7 @@
         }
         
     }
+    
     /////////////////////////////////////////////////////////////////////////////
     ///Metodos relacionados del area de Tipos de Evento de Seguridad del Sistema//
     /////////////////////////////////////////////////////////////////////////////
@@ -5650,7 +5651,7 @@
                 
                
                 $obj_empresas->guardar_empresa();
-                header ("location:/ORIEL/index.php?ctl=empresas_listar");
+                //header ("location:/ORIEL/index.php?ctl=empresas_listar");
                 //$this->empresas_listar();
             }
             
@@ -6263,17 +6264,22 @@
         if(isset($_SESSION['nombre'])){
             //echo "<script>alert('test msgbox')</script>";
             $obj_direccion_ip = new cls_direccionIP();
-            //Crea nueva area de apoyo
+            //Paramatros para crear nueva Dirección IP
             $obj_direccion_ip->setId($_POST['ID_Direccion_IP']);
             $obj_direccion_ip->setTipo_IP($_POST['tipo_ip']);
             $obj_direccion_ip->setDireccionIP($_POST['direccion_ip']);
             $obj_direccion_ip->setObservaciones($_POST['observaciones_ip']);
-            $obj_direccion_ip->setCondicion("");
+            
+            if($_POST['ID_Direccion_IP']==0){
+                $obj_direccion_ip->setCondicion("");
+            } else {
+                $obj_direccion_ip->setCondicion("ID_Direccion_IP=".$_POST['ID_Direccion_IP']);
+            }
             $obj_direccion_ip->agregar_direccion_ip();
             
             $nueva_ip= $obj_direccion_ip->getArreglo();
             
-            //Asigna el area de apoyo al puntoBCR
+            //Asigna dirección IP al puntoBCR
             $obj_direccion_ip->setId($nueva_ip[0]['ID_Direccion_IP']);
             $obj_direccion_ip->setId2($_POST['ID_PuntoBCR']);
             $obj_direccion_ip->setCondicion("T_puntoBCRDireccionIP.ID_PuntoBCR='".$_POST['ID_PuntoBCR']."' AND T_puntoBCRDireccionIP.ID_Direccion_IP='".$nueva_ip[0]['ID_Direccion_IP']."'");
@@ -7465,6 +7471,7 @@
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }  
     }
+    
     public function unidad_ejecutora_guardar() {
           if(isset($_SESSION['nombre'])){
                $obj_unidad_ejecutora = new cls_unidad_ejecutora();
@@ -7492,6 +7499,7 @@
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }  
     }
+    
     public function unidad_ejecutora_cambiar_estado() {
        if(isset($_SESSION['nombre'])){
            $obj_unidad_ejecutora = new cls_unidad_ejecutora();
@@ -7522,9 +7530,11 @@
     ///////////////////////Funciones de CENCON /////////////////////////////////          
     ////////////////////////////////////////////////////////////////////////////
     
- 
+    //Funcion para cargar el catálogo Cencon.
+    //Carga información de Personal BCR, Personal Externo y PuntosBCR
     public function cencon_gestion(){
         if(isset($_SESSION['nombre'])){
+            //Crea lo objetos necesarios para cargar la información 
             $obj_personal = new cls_personal();
             $obj_externo = new cls_personal_externo();
             $obj_puntos = new cls_puntosBCR();
@@ -7538,11 +7548,11 @@
             $obj_externo->obtiene_todo_el_personal_externo();
             $personal_externo = $obj_externo->getArreglo();
             
-            //Obtiene los puntos BCR
+            //Obtiene los puntos BCR que sean tipo ATM
             $obj_puntos->setCondicion("T_Puntobcr.ID_Tipo_Punto=2 OR T_Puntobcr.ID_Tipo_Punto=3 OR T_Puntobcr.ID_Tipo_Punto=4 OR T_Puntobcr.ID_Tipo_Punto=8");
             $obj_puntos->obtiene_todos_los_puntos_bcr();
             $puntosbcr = $obj_puntos->getArreglo();
-                        
+            
             require __DIR__.'/../vistas/plantillas/frm_cencon_gestion.php';
         }
         else {
@@ -7552,8 +7562,10 @@
         }
     }
     
+    //Permiter crear una realación entre un Punto BCR y una persona
     public function cencon_agregar_relacion(){
         if(isset($_SESSION['nombre'])){
+            //Crea lo objetos necesarios para cargar la información 
             $obj_cencon = new cls_cencon();
             
             $obj_cencon->setEmpresa($_POST['empresa']);
@@ -7561,15 +7573,18 @@
             $obj_cencon->setCondicion("T_Cencon.Cedula_Cencon='".$_POST['cedula']."'");
             $obj_cencon->obtener_todas_relaciones();
             $cajeros =  $obj_cencon->getArreglo();
+            
+            //Obtiene la cantidad de cajeros que tiene la persona
             $tamaño = count($cajeros);
             $validar=0;
             //recorre la lista de cajeros para ver si tiene el cajero en el vector
             for($i=0; $i<$tamaño;$i++){
+                //Si encuentra el cajero en la lista asigna 1
                 if($cajeros[$i]['ID_PuntoBCR']==$_POST['id_atm']){
                     $validar=1;
                 }
             }
-            
+            //si es 0 la persona no tiene acceso al cajero
             if($validar==0){
                 //Estable los parametros para agregar la relación
                 $obj_cencon->setId($_POST['id_atm']);
@@ -7615,15 +7630,17 @@
         }
     }
     
+    //Funcion para realiza busqueda de relaciones entre Puntos BCR y personar, es necesario el ID_Empresa
     public function cencon_buscar_relaciones(){
         if(isset($_SESSION['nombre'])){
             $obj_cencon = new cls_cencon();
-            
+            //Obtiene todas las relaciones de la persona, debe tener la empresa
             $obj_cencon->setCondicion("T_Cencon.ID_Persona=".$_POST['id_persona']);
             $obj_cencon->setEmpresa($_POST['empresa']);
             $obj_cencon->obtener_todas_relaciones();
             $cajeros =  $obj_cencon->getArreglo();
-           
+            
+           //Procedimiento para crear la tabla y enviarla al html
             $tam = count($cajeros);
             $html="";
             $html.='<thead> 
@@ -7652,9 +7669,11 @@
         }
     }
     
+    //Elimina una relación entre punto BCR y una persona
     public function cencon_eliminar_relacion(){
         if(isset($_SESSION['nombre'])){
             $obj_cencon = new cls_cencon();
+            
             $obj_cencon->setEmpresa($_POST['empresa']);
             //Se elimina la relacion entre el atm y la persona
             $obj_cencon->setCondicion("ID_Cencon=".$_POST['id_cencon']);
@@ -7665,6 +7684,7 @@
             $obj_cencon->obtener_todas_relaciones();
             $cajeros =  $obj_cencon->getArreglo();
            
+            //Procedimiento para crear la tabla y enviarla al html
             $tam = count($cajeros);
             $html="";
             $html.='<thead> 
@@ -7693,9 +7713,11 @@
         }
     }
     
+    //Funcion para cambiar observaciones a relacion entre Punto BCR y personas
     public function cencon_observaciones(){
         if(isset($_SESSION['nombre'])){
             $obj_cencon = new cls_cencon();
+            //Se crea la condición de edición y se edita la observación
             $obj_cencon->setCondicion("T_Cencon.ID_Cencon=".$_POST['id_cencon']);
             $obj_cencon->setObservaciones($_POST['observaciones']);
             $obj_cencon->editar_observaciones_cencon();
@@ -7707,6 +7729,7 @@
         }  
     }
     
+    //Función permite agregar o eliminar todos los Puntos BCR a una persona
     public function todos_cajero_relacion(){
         if(isset($_SESSION['nombre'])){
             $obj_cencon = new cls_cencon();
@@ -7772,16 +7795,19 @@
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }
     }
-    /////////////////////Eventos Cencon///////////////////////////////////////
+    
+    /////////////////////Eventos Módulo Cencon /////////////////////////////////
+    //Función que permite buscar la información de un PuntoBCR y enviarla a JavaScript
     public function evento_buscar_cajero() {
         if(isset($_SESSION['nombre'])){
             $obj_cencon = new cls_cencon();
             $obj_punto = new cls_puntosBCR();
-            
+            //Buscar la información de un PuntoBCR basado en el código del cajero
             $obj_punto->setCondicion("T_PuntoBCR.Codigo=".$_POST['id']);
             $obj_punto->obtiene_todos_los_puntos_bcr();
             $cajero = $obj_punto->getArreglo();
             
+            //Convierte la información en un json para enviarlo a JavaScript
             echo json_encode($cajero[0], JSON_FORCE_OBJECT);
         }
         else {
@@ -7791,27 +7817,33 @@
         }
     }
     
+    //Función que permite buscar la información de una persona y enviarla a JavaScript
     public function evento_buscar_persona(){
         if(isset($_SESSION['nombre'])){
+            //Se crean los objetos necesarios
             $obj_cencon = new cls_cencon();
             $obj_persona = new cls_personal();
             $obj_externo = new cls_personal_externo();
             
-            //Obtiene el código de la empresa 
+            //Obtiene la información de relaciones de la persona para saber a cual empresa pertenece
             $obj_cencon->setCondicion("T_Cencon.Cedula_Cencon='".$_POST['id']."'");
             $obj_cencon->buscar_persona_cencon();
             $funcionario = $obj_cencon->getArreglo();
             
+            //Obtiene la información completa de la persona según la empresa (externa o Banco==1)
             if($funcionario[0]['ID_Empresa']==1){
+                //Obtiene la información si la persona es BCR
                 $obj_persona->setCondicion("T_Personal.ID_Persona='".$funcionario[0]['ID_Persona']."'");
                 $obj_persona->obtiene_todo_el_personal();
                 $funcionario= $obj_persona->getArreglo();
             }else{
+                //Obtiene la información en caso de ser otra empresa
                 $obj_externo->setCondicion("T_PersonalExterno.ID_Persona_Externa='".$funcionario[0]['ID_Persona']."'");
                 $obj_externo->obtiene_todo_el_personal_externo();
                 $funcionario= $obj_externo->getArreglo();
             }
             
+            //Convierte la información en un json para enviarlo a JavaScript
             echo json_encode($funcionario[0], JSON_FORCE_OBJECT);
         }
         else {
@@ -7821,18 +7853,18 @@
         }
     }
     
+    //Función necesaria para buscar relación entre puntos BCR y Personas
     public function evento_buscar_relaciones(){
         if(isset($_SESSION['nombre'])){
             $obj_cencon = new cls_cencon();
             
-            //
+            //Obtiene todas las relaciones buscando por Cedula
             $obj_cencon->setCondicion("T_Cencon.Cedula_Cencon='".$_POST['id']."'");  
             $obj_cencon->setEmpresa($_POST['empresa']);
             $obj_cencon->obtener_todas_relaciones();
             $cajeros =  $obj_cencon->getArreglo();
             
-            //print_r($cajeros);
-            
+            //Convierte la información en un json para enviarlo a JavaScript
             echo json_encode($cajeros, JSON_FORCE_OBJECT);
         }
         else {
@@ -8441,8 +8473,38 @@
                 $params[0]['Nombre_Usuario'] ="";
                 $params[0]['Apellido_Usuario'] ="";
             }
-            //Obtiene empresa 
+            
+            //Obtiene información de empresas
+            //Según el rol asignado
             $obj_empresa->setCondicion("");
+            if($_SESSION['rol']==10){
+                $obj_empresa->setCondicion("T_Empresa.ID_Empresa=2");
+            }
+            //Muestra solamente información de personal externo G4S, rol 9 Seguridad Privada G4S
+            if($_SESSION['rol']==9){
+                $obj_empresa->setCondicion("T_Empresa.ID_Empresa=3");
+            } 
+            //Muestra solamente información de personal externo G4S y VMA, rol 16 Operaciones de Seguridad
+            if($_SESSION['rol']==16){
+                $obj_empresa->setCondicion("T_Empresa.ID_Empresa=3 OR T_Empresa.ID_Empresa=2");
+            }
+            //Muestra solamente información de personal externo Qubo Digital Ltda(15) y Sistemas Contra Incendio OLPRA(16), rol 15 Defensa al Cliente
+            if($_SESSION['rol']==15){
+                $obj_empresa->setCondicion("T_Empresa.ID_Empresa=15 OR T_Empresa.ID_Empresa=16");
+            }
+            //Muestra solamente información de personal externo NOVUS(8) y Correos de Costa Rica(9), rol 7 Servicios Auxiliar
+            if($_SESSION['rol']==7){
+                $obj_empresa->setCondicion("T_Empresa.ID_Empresa=8 OR T_Empresa.ID_Empresa=9");
+            }
+            //Muestra solamente información de personal externo SELOSA SA(10), CLIMA TECNICA REFRIGERACIÓN INDUST(11),
+            //SCO MANTENIMIENTO INDUSTRIAL SA(12),ENFRION DEL NORTE SA(13),SERVICIOS TECNICOS Y COMERCIALES SA(14),
+            //FONT SERVICIOS ELECTROMECANICOS SA(17), MATRA(18),  rol 13 Obras Civiles
+            if($_SESSION['rol']==13){
+                $obj_empresa->setCondicion("T_Empresa.ID_Empresa=10 OR T_Empresa.ID_Empresa=11 OR
+                        T_Empresa.ID_Empresa=12 OR T_Empresa.ID_Empresa=13 OR
+                       T_Empresa.ID_Empresa=14 OR T_Empresa.ID_Empresa=17 OR 
+                       T_Empresa.ID_Empresa=18");
+            }
             $obj_empresa->obtiene_todas_las_empresas();
             $empresas= $obj_empresa->getArreglo();
 		
@@ -8577,7 +8639,7 @@
             //Elimina el telefono de la base de datos
             $obj_telefono->eliminar_telefono();
         }else{
-              /*
+             /*
              * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
              * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
              * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
@@ -8599,8 +8661,8 @@
             //Establece los atributos de la clase: tales como identificacion, nombre, empresa, etc
             $obj_persona->setIdentificacion($_POST['identificacion']);
             $obj_persona->setEmpresa($_POST['empresa']);
-            $obj_persona->setNombre($_POST['nombre']);
-            $obj_persona->setApellido($_POST['apellido']);
+            $obj_persona->setNombre(strtoupper($_POST['nombre']));
+            $obj_persona->setApellido(strtoupper ($_POST['apellido']));
             $obj_persona->setFecha_nacimiento($_POST['fecha_nacimiento']);
             $obj_persona->setFecha_ingreso($_POST['fecha_ingreso']);
             $obj_persona->setFecha_salida($_POST['fecha_salida']);
@@ -8628,6 +8690,7 @@
                 for($i=0; $i<$tam;$i++){
                     if($params[$i]['Identificacion']==$_POST['identificacion']){
                         echo 'Repetido';
+                        exit();
                     }
                 }
             } //Editar persona   
@@ -8647,12 +8710,12 @@
             }
             echo $nueva_persona;
         }else{
-              /*
-             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
-             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
-             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
-             * En la última línea llama a la pagina de inicio de sesión.
-             */
+            /*
+            * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+            * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+            * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+            * En la última línea llama a la pagina de inicio de sesión.
+            */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
             //Llama a la vista de usuario correspondiente
@@ -8954,7 +9017,6 @@
     }
     
     ////////////////////////////////////////////////////////////////////////////
-
     ///////////////////////Funciones de Tipo Punto/////////////////////          
     ////////////////////////////////////////////////////////////////////////////
 
@@ -9547,11 +9609,70 @@
         //Llamada al formulario correspondiente de la vista
         require __DIR__ . '/../vistas/plantillas/frm_ayuda_personal_externo_publico.php';
     }
+    
     public function manual_personal_externo() {
         if(isset($_SESSION['nombre'])){
             //Llamada al formulario correspondiente de la vista
             require __DIR__ . '/../vistas/plantillas/frm_ayuda_personal_externo.php';
         } else {
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }
+    }
+    
+    ////////////////////////////////////////////////////////////////////////////
+    ///////////////////////Funciones de Reportes////////////////////////////////  
+    ////////////////////////////////////////////////////////////////////////////
+    public function reporte_seguimiento_eventos(){
+        if(isset($_SESSION['nombre'])){
+            $obj_reporte = new cls_reporteria();
+            //Verifica si se envió una fecha especifica de busqueda
+            if(isset($_POST['fecha_inicial'])){
+                $fecha_inicio = $_POST['fecha_inicial'];
+                $fecha_fin= $_POST['fecha_final'];
+                $obj_reporte->setCondicion("(t_detalleevento.Fecha BETWEEN '".$fecha_inicio."' AND '".$fecha_fin."') AND (T_Usuario.Estado=1)");
+                $titulo = "Historico de Seguimiento del ".$fecha_inicio." al ".$fecha_fin." ingresador por Usuario";
+            } else{
+                $fecha_inicio = '2016-01-01';
+                $fecha_fin= date("Y-m-d");
+                $obj_reporte->setCondicion("t_detalleevento.Fecha BETWEEN '".$fecha_inicio."' AND '".$fecha_fin."'");
+                $titulo = "Historico de Seguimientos ingresados por Usuario";
+            }
+            
+            $obj_reporte->seguimientos_por_operador();
+            $params= $obj_reporte->getArreglo();
+            require __DIR__ . '/../vistas/plantillas/rpt_seguimiento_eventos.php';
+        }
+        else {
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }
+    }
+    
+    public function reporte_eventos_provincia(){
+        if(isset($_SESSION['nombre'])){
+            $obj_reporte = new cls_reporteria();
+            //Verifica si se envió una fecha especifica de busqueda
+            if(isset($_POST['fecha_inicial'])){
+                $fecha_inicio = $_POST['fecha_inicial'];
+                $fecha_fin= $_POST['fecha_final'];
+                $obj_reporte->setCondicion("t_evento.Fecha BETWEEN '".$fecha_inicio."' AND '".$fecha_fin."'");
+                $titulo = "Historico de Activaciones del ".$fecha_inicio." al ".$fecha_fin." por Provincia";
+            } else{
+                $fecha_inicio = '2016-01-01';
+                $fecha_fin= date("Y-m-d");
+                $obj_reporte->setCondicion("t_evento.Fecha BETWEEN '".$fecha_inicio."' AND '".$fecha_fin."'");
+                $titulo = "Historico de Activaciones por Provincia";
+            }
+            
+            $obj_reporte->eventos_por_provincia();
+            $params= $obj_reporte->getArreglo();
+            
+            require __DIR__ . '/../vistas/plantillas/rpt_eventos_provincia.php';
+        }
+        else {
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';

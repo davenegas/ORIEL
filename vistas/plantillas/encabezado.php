@@ -14,7 +14,6 @@
         <script src="vistas/js/jquery-1-4-2-min.js"></script>
         <script language="javascript" src="vistas/js/listas_dependientes_encabezado.js"></script>
     </head>
-    <br>
      <center><img src="vistas/Imagenes/Banner_Centro_de_Control.jpg" alt=""/></center>
      <?php
      if($_SESSION['modulos']['Notas Importantes']==1){ ?>
@@ -142,7 +141,7 @@
                 <?php  }; ?>
                             
                 <?php  if ($_SESSION['modulos']['Catálogos-Cencon']==1){?>
-                   <li><a href="index.php?ctl=cencon_gestion">Cencon Listar</a></li>
+                   <li><a href="index.php?ctl=cencon_gestion">Registro Cencon</a></li>
                 <?php  }; ?>
                    
                 <?php  if ($_SESSION['modulos']['Importar- Prontuario']==1){?>
@@ -191,6 +190,14 @@
                 
                 <?php if ($_SESSION['modulos']['Reportes-Enlaces Telecom']==1){ ?>
                     <li><a href="index.php?ctl=reporte_cencon">Reporte Cencon</a></li> 
+                <?php }; ?>
+                
+                <?php if ($_SESSION['modulos']['Reportes-Enlaces Telecom']==1){ ?>
+                    <li><a href="index.php?ctl=reporte_seguimiento_eventos">Historico Seguimiento Usuarios</a></li> 
+                <?php }; ?>
+                
+                <?php if ($_SESSION['modulos']['Reportes-Enlaces Telecom']==1){ ?>
+                    <li><a href="index.php?ctl=reporte_eventos_provincia">Activaciones por Provincia</a></li> 
                 <?php }; ?>
                     
                 <?php if ($_SESSION['modulos']['Reportes-Trazabilidad']==1){ ?>

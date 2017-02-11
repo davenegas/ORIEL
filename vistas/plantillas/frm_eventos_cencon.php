@@ -1,9 +1,4 @@
 <!DOCTYPE html>
-<!--
-To change this license header, choose License Headers in Project Properties.
-To change this template file, choose Tools | Templates
-and open the template in the editor.
--->
 <html>
     <head>
         <meta charset="UTF-8">
@@ -17,11 +12,8 @@ and open the template in the editor.
         <?php require_once 'encabezado.php';?>
         <div class="container-fluid text-center">
             <h2>Bitácora Digital de Cencon</h2> 
-<!--            <pre>
-                <?php print_r($params);?>
-            </pre>-->
             <div class="row content">
-            <!--Se mantienen este div para dejar espacio a la izquierda de la tabla-->    
+                <!--Se mantienen este div para dejar espacio a la izquierda de la tabla-->    
                 <div class="col-sm-1 sidenav">
                 </div>
                 <!--DIV central contiene la tabla con el personal externo-->    
@@ -131,14 +123,14 @@ and open the template in the editor.
                         <p>Alerta de tiempo de apertura:</p>
                     </div>
                     <?php if(isset($vencidos)){?>
-                    <div class="well" align="left">
-                        <p><b> | ATM | Días | Horas | Minutos</b></p>
-                        <?php 
-                        $tam=$tam=count($vencidos);
-                        for ($i = 0; $i <$tam; $i++) {?>
-                            <p style="<?php echo $vencidos[$i]['color']?>"><?php echo "- ".$vencidos[$i]['mensaje'];?> <br></p>
-                        <?php }?>   
-                    </div>
+                        <div class="well" align="left">
+                            <p><b> | ATM | Días | Horas | Minutos</b></p>
+                            <?php 
+                            $tam=$tam=count($vencidos);
+                            for ($i = 0; $i <$tam; $i++) {?>
+                                <p style="<?php echo $vencidos[$i]['color']?>"><?php echo "- ".$vencidos[$i]['mensaje'];?> <br></p>
+                            <?php }?>   
+                        </div>
                 <?php } ?>
                 </div>
             </div>

@@ -42,7 +42,6 @@
     </head>
     <body>
         <?php require_once 'encabezado.php';?>
-        
         <div class="container">
         <h2>Listado General de Unidades Ejecutoras BCR</h2>
         <p>A continuación se detallan las diferentes unidades ejecutoras que están registrados en el sistema:</p>            
@@ -82,7 +81,7 @@
         </table>
         <a id="popup" onclick="mostrar_agregar_proveedor()" class="btn btn-default" role="button">Agregar Nueva UE</a>
         </div>
-            <?php require 'vistas/plantillas/pie_de_pagina.php' ?>
+        <?php require 'vistas/plantillas/pie_de_pagina.php' ?>
         
         <!--agregar o editar Unidad ejecutora-->
         <div id="ventana_oculta_1"> 

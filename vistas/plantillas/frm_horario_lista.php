@@ -4,7 +4,6 @@
         <meta charset="utf-8"/>
         <title>Lista Horarios BCR</title>
         <?php require_once 'frm_librerias_head.html'; ?>
-        
     </head>
     <body>
         <?php require_once 'encabezado.php';?>
@@ -28,22 +27,22 @@
                 </thead>
                 <tbody>
                     <?php $tam = count($horarios);
-                    for($i=0; $i<$tam;$i++){?>
-                    <tr>
-                        <td style="text-align:center">Horario público</td>
-                        <td style="text-align:center"><?php echo $horarios[$i]['Hora_Apertura_Domingo']." - ".$horarios[$i]['Hora_Cierre_Domingo'];?></td>
-                        <td style="text-align:center"><?php echo $horarios[$i]['Hora_Apertura_Lunes']." - ".$horarios[$i]['Hora_Cierre_Lunes'];?></td>
-                        <td style="text-align:center"><?php echo $horarios[$i]['Hora_Apertura_Martes']." - ".$horarios[$i]['Hora_Cierre_Martes'];?></td>
-                        <td style="text-align:center"><?php echo $horarios[$i]['Hora_Apertura_Miercoles']." - ".$horarios[$i]['Hora_Cierre_Miercoles'];?></td>
-                        <td style="text-align:center"><?php echo $horarios[$i]['Hora_Apertura_Jueves']." - ".$horarios[$i]['Hora_Cierre_Jueves'];?></td>
-                        <td style="text-align:center"><?php echo $horarios[$i]['Hora_Apertura_Viernes']." - ".$horarios[$i]['Hora_Cierre_Viernes'];?></td>
-                        <td style="text-align:center"><?php echo $horarios[$i]['Hora_Apertura_Sabado']." - ".$horarios[$i]['Hora_Cierre_Sabado'];?></td>
-                        <td style="text-align:center"><?php echo $horarios[$i]['Observaciones'];?></td>
-                        <td style="text-align:center"><a href="index.php?ctl=horario_gestion&ide=
-                                    <?php echo $horarios[$i]['ID_Horario']?>">
+                    for($i=0; $i<$tam;$i++){ ?>
+                        <tr>
+                            <td style="text-align:center">Horario público</td>
+                            <td style="text-align:center"><?php echo $horarios[$i]['Hora_Apertura_Domingo']." - ".$horarios[$i]['Hora_Cierre_Domingo'];?></td>
+                            <td style="text-align:center"><?php echo $horarios[$i]['Hora_Apertura_Lunes']." - ".$horarios[$i]['Hora_Cierre_Lunes'];?></td>
+                            <td style="text-align:center"><?php echo $horarios[$i]['Hora_Apertura_Martes']." - ".$horarios[$i]['Hora_Cierre_Martes'];?></td>
+                            <td style="text-align:center"><?php echo $horarios[$i]['Hora_Apertura_Miercoles']." - ".$horarios[$i]['Hora_Cierre_Miercoles'];?></td>
+                            <td style="text-align:center"><?php echo $horarios[$i]['Hora_Apertura_Jueves']." - ".$horarios[$i]['Hora_Cierre_Jueves'];?></td>
+                            <td style="text-align:center"><?php echo $horarios[$i]['Hora_Apertura_Viernes']." - ".$horarios[$i]['Hora_Cierre_Viernes'];?></td>
+                            <td style="text-align:center"><?php echo $horarios[$i]['Hora_Apertura_Sabado']." - ".$horarios[$i]['Hora_Cierre_Sabado'];?></td>
+                            <td style="text-align:center"><?php echo $horarios[$i]['Observaciones'];?></td>
+                            <td style="text-align:center"><a href="index.php?ctl=horario_gestion&ide=
+                                <?php echo $horarios[$i]['ID_Horario']?>">
                                     Editar Horario</a></td>
-                    </tr>
-                    <?php }?>
+                        </tr>
+                    <?php } ?>
                 </tbody> 
             </table> 
             <a href="index.php?ctl=horario_gestion&ide=0" class="btn btn-default" role="button">Agregar Nuevo Horario</a>

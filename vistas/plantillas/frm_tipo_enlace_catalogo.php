@@ -41,44 +41,44 @@
         <?php require_once 'encabezado.php';?>
         
         <div class="container">
-        <h2>Listado General de Tipo de Enlaces BCR</h2>
-        <p>A continuación se detallan los diferentes tipo de enlace que están registrados en el sistema:</p>            
-        <table id="tabla" class="display" cellspacing="0">
-          <thead>
-            <tr>
-              <th>ID Tipo Enlace</th>
-              <th>Tipo de Enlace</th>
-              <th>Observaciones</th>
-              <th>Estado</th>
-              <th>Cambiar Estado</th>
-              <th>Mantenmiento</th>
-            </tr>
-          </thead>
-          <tbody>
-            <?php 
-            $tam=count($params);  
-            for ($i = 0; $i <$tam; $i++) {
-            ?>
-            <tr>
-                <td><?php echo $params[$i]['ID_Tipo_Enlace'];?></td>
-                <td><?php echo $params[$i]['Tipo_Enlace'];?></td>
-                <td><?php echo $params[$i]['Observaciones'];?></td>
-                <?php if ($params[$i]['Estado']==1){?>  
-                    <td>Activo</td>
-                <?php }else {?>  
-                    <td>Inactivo</td>
-                <?php }?>
-                <td><a href="index.php?ctl=tipo_enlace_cambiar_estado&ide=<?php echo $params[$i]['ID_Tipo_Enlace']?>&estado=<?php echo $params[$i]['Estado']?>"> 
-                        Activar/Desactivar</a></td>
-                <td><a role="button" onclick="Editar_tipo_enlace(<?php echo $params[$i]['ID_Tipo_Enlace'];?>,'<?php echo $params[$i]['Tipo_Enlace'];?>','<?php echo $params[$i]['Observaciones'];?>')"> 
-                       Editar</a></td>
-            </tr>     
-            <?php } ?>
-            </tbody>
-        </table>
-        <a id="popup" onclick="mostrar_agregar_tipo_enlace()" class="btn btn-default" role="button">Agregar Nuevo Tipo de Enlace</a>
+            <h2>Listado General de Tipo de Enlaces BCR</h2>
+            <p>A continuación se detallan los diferentes tipo de enlace que están registrados en el sistema:</p>            
+            <table id="tabla" class="display" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th style="text-align:center">ID Tipo Enlace</th>
+                        <th style="text-align:center">Tipo de Enlace</th>
+                        <th style="text-align:center">Observaciones</th>
+                        <th style="text-align:center">Estado</th>
+                        <th style="text-align:center">Cambiar Estado</th>
+                        <th style="text-align:center">Mantenmiento</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php 
+                    $tam=count($params);  
+                    for ($i = 0; $i <$tam; $i++) {  ?>
+                        <tr>
+                            <td style="text-align:center"><?php echo $params[$i]['ID_Tipo_Enlace'];?></td>
+                            <td style="text-align:center"><?php echo $params[$i]['Tipo_Enlace'];?></td>
+                            <td style="text-align:center"><?php echo $params[$i]['Observaciones'];?></td>
+                            <?php if ($params[$i]['Estado']==1){?>  
+                                <td>Activo</td>
+                            <?php }else {?>  
+                                <td>Inactivo</td>
+                            <?php }?>
+                            <td style="text-align:center"><a href="index.php?ctl=tipo_enlace_cambiar_estado&ide=<?php echo $params[$i]['ID_Tipo_Enlace']?>&estado=<?php echo $params[$i]['Estado']?>"> 
+                                    Activar/Desactivar</a></td>
+                            <td style="text-align:center"><a role="button" onclick="Editar_tipo_enlace(<?php echo $params[$i]['ID_Tipo_Enlace'];?>,'<?php echo $params[$i]['Tipo_Enlace'];?>','<?php echo $params[$i]['Observaciones'];?>')"> 
+                                   Editar</a></td>
+                        </tr>     
+                    <?php } ?>
+                </tbody>
+            </table>
+            <a id="popup" onclick="mostrar_agregar_tipo_enlace()" class="btn btn-default" role="button">Agregar Nuevo Tipo de Enlace</a>
         </div>
-            <?php require 'vistas/plantillas/pie_de_pagina.php' ?>
+        
+        <?php require 'vistas/plantillas/pie_de_pagina.php' ?>
         
         <!--agregar o editar proveedor-->
         <div id="ventana_oculta_1"> 
