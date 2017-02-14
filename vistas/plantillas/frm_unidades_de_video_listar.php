@@ -546,5 +546,6 @@
             </div>
         <!--Cierre Asignar UE a Punto BRC-->
         </div> 
+        <?php require 'vistas/plantillas/pie_de_pagina.php' ?>
     </body>
 </html>

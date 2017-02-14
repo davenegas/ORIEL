@@ -307,6 +307,16 @@ class cls_puestos_de_monitoreo{
        
     }
     
+    //Este metodo realiza la modificación del estado del modulo, de activo a inactivo o viceversa en la bd
+    function edita_tiempo_en_unidades_de_video_ligadas_al_puesto(){
+        $this->obj_data_provider->conectar();
+        //Llama al metodo para editar los datos correspondientes
+        $this->obj_data_provider->edita_datos("t_PuestoMonitoreounidadvideo","Tiempo_Personalizado_Revision=".$this->tiempo_estandar_revision,$this->condicion);
+        //Metodo de la clase data provider que desconecta la sesión con la base de datos
+        $this->obj_data_provider->desconectar();
+       
+    }
+    
     function eliminar_registros_puesto_de_monitoreo(){
           
         $this->obj_data_provider->conectar();
@@ -320,7 +330,5 @@ class cls_puestos_de_monitoreo{
         $this->obj_data_provider->inserta_datos("T_PuestoMonitoreoUnidadVideo", "`ID_Puesto_Monitoreo_Unidad_Video`,`ID_Puesto_Monitoreo`,`ID_Unidad_Video`,`Tiempo_Personalizado_Revision`", "null,".$this->id_puesto_monitoreo.",".$this->id_unidad_video.",".$this->tiempo_personalizado_revision);
         $this->arreglo=$this->obj_data_provider->getArreglo();
         $this->obj_data_provider->desconectar();
-      
     }
-   
 }?>

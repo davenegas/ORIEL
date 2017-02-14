@@ -4,7 +4,17 @@
         <title>Lista de Puestos de Monitoreo</title>
         <?php require_once 'frm_librerias_head.html';?>
         <link rel="stylesheet" href="vistas/css/ventanaoculta.css">
- <script>
+        <script>
+             $(document).ready(function () {
+                if ( $.fn.dataTable.isDataTable('#tabla') ) {
+                    table = $('#tabla').DataTable();
+                }
+                table.destroy();
+                table = $('#tabla').DataTable( {
+                    stateSave: true,
+                    "lengthMenu": [[10, 25, 50,100,-1], [10, 25, 50,100,"All"]]
+                });     
+            });
             //Funcion para ocultar ventana de mantenimiento de proveedor
             function ocultar_elemento(){
                 document.getElementById('ventana_oculta_1').style.display = "none";
@@ -37,8 +47,12 @@
                 document.getElementById('descripcion').value=descrip;
                 document.getElementById('observaciones').value=obser;
                 document.getElementById('tiempo_estandar_revision').value=tiempo;
+                document.getElementById('tiempo_revision_original').value=tiempo;
                 document.getElementById('ventana_oculta_1').style.display = "block";
             };
+            
+             
+            
         </script>
         
          </head>
@@ -98,7 +112,7 @@
         </table>
         <a id="popup" onclick="mostrar_agregar_puesto_monitoreo()" class="btn btn-default" role="button">Agregar Nuevo Puesto de Monitoreo</a>
         </div>
-            <?php require 'vistas/plantillas/pie_de_pagina.php' ?>
+        
         
        <!--agregar o editar-->
         <div id="ventana_oculta_1"> 
@@ -110,6 +124,7 @@
                     <hr>
                     
                     <input hidden id="ID_Puesto_Monitoreo" name="ID_Puesto_Monitoreo" type="text">
+                    <input hidden id="tiempo_revision_original" name="tiempo_revision_original" type="text">
                     
                     <label for="nombre">Nombre</label>
                     <input class="form-control espacio-abajo" required id="nombre" name="nombre" placeholder="Nombre" type="text">
@@ -129,5 +144,6 @@
             </div>
         <!--Cierre agregar teléfono a Punto BCR-->
         </div>
+       <?php require 'vistas/plantillas/pie_de_pagina.php' ?>
     </body>
 </html>

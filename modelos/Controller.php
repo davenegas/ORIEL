@@ -427,12 +427,15 @@
         $obj_unidades_de_video= new cls_unidad_video();
         $obj_unidades_de_video->obtiene_unidades_de_video_que_tienen_punto_bcr();
         $params=$obj_unidades_de_video->getArreglo();
-        
-        
+       
         $obj_puesto_de_monitoreo= new cls_puestos_de_monitoreo();        
         $obj_puesto_de_monitoreo->setCondicion("T_PuestoMonitoreoUnidadVideo.ID_Puesto_Monitoreo=".$_GET['id']);
         $obj_puesto_de_monitoreo->obtiene_todas_las_unidades_asociadas_a_un_puesto_de_monitoreo();
         $unidades_asociadas_al_puesto=$obj_puesto_de_monitoreo->getArreglo();
+        
+        $obj_unidades_de_video->setCondicion("t_unidadvideo.Estado=0 AND not t_unidadvideo.ID_Unidad_Video In (Select ID_Unidad_Video From T_PuestoMonitoreoUnidadVideo)");
+        $obj_unidades_de_video->obtiene_unidades_de_video_que_tienen_punto_bcr();
+        $unidades_video_sin_puesto_monitoreo=$obj_unidades_de_video->getArreglo();
               
         //echo $_GET['id'];
         require __DIR__ . '/../vistas/plantillas/frm_puestos_de_monitoreo_editar.php';
@@ -5511,9 +5514,6 @@
             $obj_puntos->setCondicion("T_PuntoBCR.Estado=1 AND not T_PuntoBCR.ID_PuntoBCR In (Select ID_PuntoBCR From t_unidadvideo)");
             $obj_puntos->obtiene_todos_los_puntos_bcr();
             $puntosbcr_sin_video=$obj_puntos->getArreglo();
-            /*echo '<pre>';
-            print_r($params);
-            echo '</pre>';*/
            
             require __DIR__ . '/../vistas/plantillas/frm_unidades_de_video_listar.php';
         }else{
@@ -9680,11 +9680,30 @@
                 }else{  
                            $obj_puesto_monitoreo->setCondicion("ID_Puesto_Monitoreo='".$_POST['ID_Puesto_Monitoreo']."'");
                            $obj_puesto_monitoreo->edita_puesto_monitoreo();
+                           $obj_puesto_monitoreo->setCondicion("ID_Puesto_Monitoreo='".$_POST['ID_Puesto_Monitoreo']."' AND Tiempo_Personalizado_Revision=".$_POST['tiempo_revision_original']);
+                           $obj_puesto_monitoreo->edita_tiempo_en_unidades_de_video_ligadas_al_puesto();
                    
                 }       
            $obj_puesto_monitoreo->setCondicion("");    
            $obj_puesto_monitoreo->obtiene_todos_puestos_de_monitoreo();
            $params =$obj_puesto_monitoreo->getArreglo();
+           
+            $vector_estadisticas=array ();
+           //$vector_estadisticas[]=array ("","","");
+           
+           for ($i = 0; $i < count($params); $i++) {
+                
+               $obj_puesto_monitoreo->setCondicion("T_PuestoMonitoreoUnidadVideo.ID_Puesto_Monitoreo=".$params[$i]['ID_Puesto_Monitoreo']);
+               $obj_puesto_monitoreo->obtiene_estadistica_general_puestos_de_monitoreo();
+               $vector_temporal=$obj_puesto_monitoreo->getArreglo();
+               
+               if (count($vector_temporal)>0){
+                  $vector_estadisticas[]=$vector_temporal[0];
+                }else{
+                  $vector_estadisticas[]=array("Total_Minutos"=>"0","Total_Unidades"=>"0","Total_Camaras"=>"0");
+                }
+            }
+            
            require __DIR__.'/../vistas/plantillas/frm_puestos_de_monitoreo_listar.php';
         }
         else {
