@@ -74,7 +74,15 @@ $(document).ready(function(){
             ocupacion = document.getElementById('ocupacion').value
             //ejecuta una funcion del index para guardar la información
             if (document.getElementById('Distrito').value == '0') {
-                alert("Seleccione la el Distrito de la persona!");
+                alert("Seleccione la el Distrito de la persona!!");
+            } if (document.getElementById('fecha_ingreso').value == '') {
+                alert("Ingrese la fecha de ingreso de la persona!!");
+            } if (document.getElementById('apellido').value == '') {
+                alert("Ingrese el(los) apellido(s) de la persona!!");
+            } if (document.getElementById('nombre').value == '') {
+                alert("Ingrese el nombre de la persona!!");
+            } if (document.getElementById('identificacion').value == '') {
+                alert("Ingrese el número de identificación de la persona!!");
             } else {
                 $.post("index.php?ctl=persona_externa_guardar_informacion", 
                 { id_persona:id_persona, identificacion: identificacion, empresa:empresa, nombre:nombre,

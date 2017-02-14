@@ -54,44 +54,44 @@
         </script>
     </head>
     <body>
-    <?php require_once 'encabezado.php';?>
-    <div class="container">
-    <h2>Listado General de Gerente de Zona BCR</h2>
-    <p>A continuación se detallan los diferentes Gerentes que están registrados en el sistema por Zona:</p>            
-    <table id="tabla" class="display" cellspacing="0">
-        <thead>
-            <tr>
-                <th style="text-align:center">Zona de Gerente</th>
-                <th style="text-align:center">Nombre del Gerente</th>
-                <th style="text-align:center">Observaciones</th>
-                <th style="text-align:center">Estado</th>
-                <th style="text-align:center">Cambiar Estado</th>
-                <th style="text-align:center">Mantenmiento</th>
-            </tr>
-        </thead>
-        <tbody>
-        <?php 
-        $tam=count($params);  
-        for ($i = 0; $i <$tam; $i++) {  ?>
-            <tr>
-                <td><?php echo $params[$i]['Zona_Gerencia_BCR'];?></td>
-                <td><?php echo $params[$i]['Apellido_Nombre'];?></td>
-                <td><?php echo $params[$i]['Observaciones'];?></td>
-                <?php if ($params[$i]['Estado']==1){?>  
-                    <td style="text-align:center">Activo</td>
-                <?php }else {?>  
-                    <td style="text-align:center">Inactivo</td>
-                <?php }?>
-                <td style="text-align:center"><a href="index.php?ctl=gerente_zona_cambiar_estado&id=<?php echo $params[$i]['ID_Gerente_Zona']?>&estado=<?php echo $params[$i]['Estado']?>">
-                    Activar/Desactivar</a></td>
-                <td style="text-align:center"><a role="button" onclick="editar_gerente('<?php echo $params[$i]['ID_Gerente_Zona'];?>',<?php echo $params [$i]['ID_Persona'];?>,
-                    '<?php echo $params [$i]['Zona_Gerencia_BCR'];?>','<?php echo $params [$i]['Observaciones'];?>')">
-                    Editar</a></td>
-            </tr>     
-        <?php } ?>
-        </tbody>
-    </table>
-        <a id="popup" onclick="guardar_gerente()" class="btn btn-default" role="button">Agregar</a>
+        <?php require_once 'encabezado.php';?>
+        <div class="container">
+            <h2>Listado General de Gerente de Zona BCR</h2>
+            <p>A continuación se detallan los diferentes Gerentes que están registrados en el sistema por Zona:</p>            
+            <table id="tabla" class="display" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th style="text-align:center">Zona de Gerente</th>
+                        <th style="text-align:center">Nombre del Gerente</th>
+                        <th style="text-align:center">Observaciones</th>
+                        <th style="text-align:center">Estado</th>
+                        <th style="text-align:center">Cambiar Estado</th>
+                        <th style="text-align:center">Mantenmiento</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php 
+                    $tam=count($params);  
+                    for ($i = 0; $i <$tam; $i++) {  ?>
+                        <tr>
+                            <td><?php echo $params[$i]['Zona_Gerencia_BCR'];?></td>
+                            <td><?php echo $params[$i]['Apellido_Nombre'];?></td>
+                            <td><?php echo $params[$i]['Observaciones'];?></td>
+                            <?php if ($params[$i]['Estado']==1){?>  
+                                <td style="text-align:center">Activo</td>
+                            <?php }else {?>  
+                                <td style="text-align:center">Inactivo</td>
+                            <?php }?>
+                            <td style="text-align:center"><a href="index.php?ctl=gerente_zona_cambiar_estado&id=<?php echo $params[$i]['ID_Gerente_Zona']?>&estado=<?php echo $params[$i]['Estado']?>">
+                                Activar/Desactivar</a></td>
+                            <td style="text-align:center"><a role="button" onclick="editar_gerente('<?php echo $params[$i]['ID_Gerente_Zona'];?>',<?php echo $params [$i]['ID_Persona'];?>,
+                                '<?php echo $params [$i]['Zona_Gerencia_BCR'];?>','<?php echo $params [$i]['Observaciones'];?>')">
+                                Editar</a></td>
+                        </tr>     
+                    <?php } ?>
+                </tbody>
+            </table>
+            <a id="popup" onclick="guardar_gerente()" class="btn btn-default" role="button">Agregar</a>
         </div>
         <?php require 'vistas/plantillas/pie_de_pagina.php' ?>
         <!--editar-->
@@ -123,8 +123,8 @@
                 
             </div>
          </div>
-         <!--agregar-->
-         <div id="ventana_oculta_2"> 
+        <!--agregar-->
+        <div id="ventana_oculta_2"> 
             <div id="popupventana2">
                 <!--Formulario para guardar gerente nuevo-->
                 <form id="ventana2" method="POST" name="form" action="index.php?ctl=gerente_zona_guardar">
@@ -135,17 +135,14 @@
                     <input hidden id="ID_Gerente_Zona" name="ID_Gerente_Zona" type="text">
                     
                     <div class="form-group">
-                        
-                    <label for="nombre2">Nombre del Gerente</label>
-                    <select class="form-control" id="nombre2" name="nombre2">
-                        
+                        <label for="nombre2">Nombre del Gerente</label>
+                        <select class="form-control" id="nombre2" name="nombre2">
                             <?php
                             $tam = count($nombre);
-                            for($i=0; $i<$tam;$i++)
-                            {  ?>
-                            <option value="<?php echo $nombre[$i]['ID_Persona']?>"><?php echo $nombre[$i]['Apellido_Nombre']?></option>   
+                            for($i=0; $i<$tam;$i++) {  ?>
+                                <option value="<?php echo $nombre[$i]['ID_Persona']?>"><?php echo $nombre[$i]['Apellido_Nombre']?></option>   
                             <?php }  ?>
-                            </select>
+                        </select>
                     </div>
                     <br>
                     <label for="zona_gerencia2">Zona de Gerencia</label>
@@ -155,19 +152,16 @@
                     <input type="text" class="form-control espacio-abajo" id="observaciones2" name="observaciones2" placeholder="Observaciones">       
                     
                     <div class="form-group">
-                    <label for="sel1">Estado</label>
-                    <select class="form-control" id="estado2" name="estado2">  
-                    <option value="1" selected='true'>Activo</option>
-                    <option value="0">Inactivo</option>
-                    </select>
+                        <label for="sel1">Estado</label>
+                        <select class="form-control" id="estado2" name="estado2">  
+                            <option value="1" selected='true'>Activo</option>
+                            <option value="0">Inactivo</option>
+                        </select>
                     </div>
-                    
                    <button><a href="javascript:%20check_empty_G()" id="submit">Guardar</a></button>
-                   
                 </form> 
             </div>
         </div>
-       
     </body>
 </html>
 

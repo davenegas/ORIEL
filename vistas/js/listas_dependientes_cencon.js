@@ -212,7 +212,9 @@ function agregar_evento_cencon(){
     }
 }
 function evento_cencon_cerrar(ide){
-    $.confirm({title: 'Confirmación!', content: 'Desea cerrar este cajero?', 
+    var f=new Date();
+    cad=f.getHours()+":"+f.getMinutes(); 
+    $.confirm({title: 'Confirmación!', content: 'Desea ingresar el cierre de este cajero a las '+cad+'?', 
         confirm: function(){
             id_evento_cencon= ide;
             $.post("index.php?ctl=evento_cencon_cerrar", { id_evento_cencon: id_evento_cencon}, function(data){

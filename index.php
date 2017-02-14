@@ -89,6 +89,8 @@ require_once __DIR__ . '/controladores/cls_nacionalidad.php';
 require_once __DIR__ . '/controladores/cls_nivel_academico.php';
 //Libreria de clases --> Control de Cencon
 require_once __DIR__ . '/controladores/cls_cencon.php';
+//
+require_once __DIR__ . '/controladores/cls_reporteria.php';
 
 
 /*
@@ -144,6 +146,9 @@ $map = array(
     'manual_personal_externo_publico'=>array('controller'=>'Controller', 'action'=>'manual_personal_externo_publico'),
     'manual_personal_externo'=>array('controller'=>'Controller', 'action'=>'manual_personal_externo'),
     
+    //Controlador de Reportes
+    'reporte_seguimiento_eventos'=>array('controller'=>'Controller', 'action'=>'reporte_seguimiento_eventos'),
+    'reporte_eventos_provincia'=>array('controller'=>'Controller', 'action'=>'reporte_eventos_provincia'),
     
     //Información pública
     'personal_listar_publico'=>array('controller'=>'Controller', 'action'=>'personal_listar_publico'),

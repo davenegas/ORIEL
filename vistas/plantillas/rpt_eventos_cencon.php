@@ -82,7 +82,6 @@
                         <td style="text-align:center"><?php echo $params[$i]['Observaciones'];?></td>
                     </tr>
             <?php } ?>
-            
             </tbody>
         </table>
         
