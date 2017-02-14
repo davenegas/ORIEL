@@ -9,6 +9,7 @@
         <?php require_once 'frm_librerias_head.html'; ?>  
     </head>
     <body>
+        
         <?php require_once 'encabezado.php';?>
         <div class="container-fluid text-center">
             <h2>Bitácora Digital de Cencon</h2> 
@@ -101,17 +102,17 @@
                                 <?php 
                                 $tam=count($params);
                                 for ($i = 0; $i <$tam; $i++) { ?>  
-                                <tr>
-                                    <td hidden style="text-align:center"><?php echo $params[$i]['ID_Evento_Cencon'];?></td>
-                                    <td style="text-align:center"><?php echo $params[$i]['Fecha_Apertura'];?></td>
-                                    <td style="text-align:center"><?php echo $params[$i]['Hora_Apertura'];?></td>
-                                    <td style="text-align:center"><?php echo $params[$i]['Codigo']." - ".$params[$i]['Nombre'];?></td>
-                                    <td style="text-align:center" onclick="reasignar_apertura('<?php echo $params[$i]['ID_Evento_Cencon'];?>','<?php echo $params[$i]['ID_PuntoBCR'];?>');"><?php echo $params[$i]['Nombre_Persona'];?></td>
-                                    <td style="text-align:center" onclick="editar_observaciones('<?php echo $params[$i]['ID_Evento_Cencon'];?>','<?php echo $params[$i]['Observaciones'];?>')"><?php echo $params[$i]['Observaciones'];?></td>
-                                    <td style="text-align:center" onclick="editar_seguimiento('<?php echo $params[$i]['ID_Evento_Cencon'];?>','<?php echo $params[$i]['Seguimiento'];?>')"><?php echo $params[$i]['Seguimiento'];?></td>
-                                    <td style="text-align:center"><a class="btn" role="button" onclick="evento_cencon_cerrar(<?php echo $params[$i]['ID_Evento_Cencon'];?>);">
-                                            Cerrar Cajero</a></td>
-                                </tr>
+                                    <tr>
+                                        <td hidden style="text-align:center"><?php echo $params[$i]['ID_Evento_Cencon'];?></td>
+                                        <td style="text-align:center"><?php echo $params[$i]['Fecha_Apertura'];?></td>
+                                        <td style="text-align:center"><?php echo $params[$i]['Hora_Apertura'];?></td>
+                                        <td style="text-align:center"><?php echo $params[$i]['Codigo']." - ".$params[$i]['Nombre'];?></td>
+                                        <td style="text-align:center" onclick="reasignar_apertura('<?php echo $params[$i]['ID_Evento_Cencon'];?>','<?php echo $params[$i]['ID_PuntoBCR'];?>');"><?php echo $params[$i]['Nombre_Persona'];?></td>
+                                        <td style="text-align:center" onclick="editar_observaciones('<?php echo $params[$i]['ID_Evento_Cencon'];?>','<?php echo $params[$i]['Observaciones'];?>')"><?php echo $params[$i]['Observaciones'];?></td>
+                                        <td style="text-align:center" onclick="editar_seguimiento('<?php echo $params[$i]['ID_Evento_Cencon'];?>','<?php echo $params[$i]['Seguimiento'];?>')"><?php echo $params[$i]['Seguimiento'];?></td>
+                                        <td style="text-align:center"><a class="btn" role="button" onclick="evento_cencon_cerrar(<?php echo $params[$i]['ID_Evento_Cencon'];?>);">
+                                                Cerrar Cajero</a></td>
+                                    </tr>
                                 <?php } ?>
                             </tbody>
                         </table>
@@ -136,61 +137,62 @@
             </div>
         </div>
         <?php require 'vistas/plantillas/pie_de_pagina.php' ?>
+    
+    
+        <div id="ventana_oculta_1"> 
+            <div id="popupventana">
+                <div id="ventana">
+                    <img id="close" src='vistas/Imagenes/cerrar.png' width="25" onclick ="ocultar_elemento()"> 
+                    <h2 align="center" id="titulo_ventana_oculta">Evento Cencon Observaciones</h2>
+                    <hr>
+                    <input hidden id="ID_Evento_Cencon" name="ID_Evento_Cencon" type="text" value="">
+
+                    <label for="observaciones_evento">Observaciones</label>
+                    <input class="form-control" id="observaciones_evento" name="observaciones_evento" type="text">            
+                    <hr>
+                    <button onclick="guardar_observaciones_evento();">Guardar</a></button>
+                </div>
+            </div>
+        </div>
+
+        <div id="ventana_oculta_2"> 
+            <div id="popupventana">
+                <div id="ventana">
+                    <img id="close" src='vistas/Imagenes/cerrar.png' width="25" onclick ="ocultar_elemento()"> 
+                    <h2 align="center" id="titulo_ventana_oculta">Reasignar apertura Cencon</h2>
+                    <hr>
+    <!--                <input hidden id="ID_Evento_Cencon" name="ID_Evento_Cencon" type="text" value="">-->
+                    <input hidden id="numero_cajero" name="numero_cajero" type="text" value="">
+
+                    <label for="Cedula_persona">Número de Cédula</label>
+                    <input class="form-control" id="Cedula_persona" name="Cedula_persona" type="text">            
+                    <hr>
+                    <button onclick="reasignar_apertura_cencon();">Guardar</a></button>
+                </div>
+            </div>
+        </div>
+
+        <div id="ventana_oculta_3"> 
+            <div id="popupventana">
+                <div id="ventana">
+                    <img id="close" src='vistas/Imagenes/cerrar.png' width="25" onclick ="ocultar_elemento()"> 
+                    <h2 align="center" id="titulo_ventana_oculta">Evento Cencon Seguimiento</h2>
+                    <hr>
+                    <!--<input hidden id="ID_Evento_Cencon" name="ID_Evento_Cencon" type="text" value="">-->
+                    <label for="seguimiento_evento">Seguimiento</label>
+                        <select class="form-control" id="seguimiento_evento" name="seguimiento_evento" >
+                            <option value=""></option>
+                            <option value="Se envió correo al funcionario">Se envió correo al funcionario</option>
+                            <option value="Se envió correo al encargado">Se envió correo al encargado</option>
+                            <option value="Se le informó al coordinador">Se le informó al coordinador</option>
+                            <option value="Arqueo de ATM">Arqueo de ATM</option>
+                            <option value="ATM en Mantenimiento">ATM en Mantenimiento</option>
+                            <option value="Apertura con llave Azul">Apertura con llave Azul</option>
+                        </select>          
+                    <hr>
+                    <button onclick="guardar_seguimiento_evento();">Guardar</a></button>
+                </div>
+            </div>
+        </div>
     </body>
-    
-    <div id="ventana_oculta_1"> 
-        <div id="popupventana">
-            <div id="ventana">
-                <img id="close" src='vistas/Imagenes/cerrar.png' width="25" onclick ="ocultar_elemento()"> 
-                <h2 align="center" id="titulo_ventana_oculta">Evento Cencon Observaciones</h2>
-                <hr>
-                <input hidden id="ID_Evento_Cencon" name="ID_Evento_Cencon" type="text" value="">
-                
-                <label for="observaciones_evento">Observaciones</label>
-                <input class="form-control" id="observaciones_evento" name="observaciones_evento" type="text">            
-                <hr>
-                <button onclick="guardar_observaciones_evento();">Guardar</a></button>
-            </div>
-        </div>
-    </div>
-    
-    <div id="ventana_oculta_2"> 
-        <div id="popupventana">
-            <div id="ventana">
-                <img id="close" src='vistas/Imagenes/cerrar.png' width="25" onclick ="ocultar_elemento()"> 
-                <h2 align="center" id="titulo_ventana_oculta">Reasignar apertura Cencon</h2>
-                <hr>
-<!--                <input hidden id="ID_Evento_Cencon" name="ID_Evento_Cencon" type="text" value="">-->
-                <input hidden id="numero_cajero" name="numero_cajero" type="text" value="">
-                
-                <label for="Cedula_persona">Número de Cédula</label>
-                <input class="form-control" id="Cedula_persona" name="Cedula_persona" type="text">            
-                <hr>
-                <button onclick="reasignar_apertura_cencon();">Guardar</a></button>
-            </div>
-        </div>
-    </div>
-    
-    <div id="ventana_oculta_3"> 
-        <div id="popupventana">
-            <div id="ventana">
-                <img id="close" src='vistas/Imagenes/cerrar.png' width="25" onclick ="ocultar_elemento()"> 
-                <h2 align="center" id="titulo_ventana_oculta">Evento Cencon Seguimiento</h2>
-                <hr>
-                <!--<input hidden id="ID_Evento_Cencon" name="ID_Evento_Cencon" type="text" value="">-->
-                <label for="seguimiento_evento">Seguimiento</label>
-                    <select class="form-control" id="seguimiento_evento" name="seguimiento_evento" >
-                        <option value=""></option>
-                        <option value="Se envió correo al funcionario">Se envió correo al funcionario</option>
-                        <option value="Se envió correo al encargado">Se envió correo al encargado</option>
-                        <option value="Se le informó al coordinador">Se le informó al coordinador</option>
-                        <option value="Arqueo de ATM">Arqueo de ATM</option>
-                        <option value="ATM en Mantenimiento">ATM en Mantenimiento</option>
-                        <option value="Apertura con llave Azul">Apertura con llave Azul</option>
-                    </select>          
-                <hr>
-                <button onclick="guardar_seguimiento_evento();">Guardar</a></button>
-            </div>
-        </div>
-    </div>
 </html>

@@ -2818,6 +2818,7 @@
             //Obtiene el vector de registros correspondientes
             $params= $obj_eventos->getArreglo();
             $puesto_enviado=0;
+            $check_continuidad=1;
             //Implementación para obtener el último seguimiento de cada evento, además del último usuario que lo agregó
             
             //Saca el tamaño del vector de registros 
@@ -2907,6 +2908,7 @@
             //Vector que almacena un si o uno dependiendo si el evento en cuestion pertenece a alguna mezcla
             $eventos_con_mezcla=array();
             //Creación de una instancia de un objeto de la clase eventos.
+
             $obj_eventos = new cls_eventos();
             //Verifica para cual puesto de monitoreo fue realizada la solicitud, esto mediante el metodo post 
             if($_POST['puesto']==1){
@@ -2949,6 +2951,13 @@
                 $puesto_enviado=0;
                 //Establecer la condición de filtrado por puesto para la consulta SQL a la base de datos
                 $obj_eventos->setCondicion("T_Evento.ID_EstadoEvento<>3 AND T_Evento.ID_EstadoEvento<>5");
+            }
+            
+            if(isset($_POST['continuidad'])){
+                $check_continuidad=1;
+            } else{
+                $check_continuidad=0;
+                $obj_eventos->setCondicion($obj_eventos->getCondicion()." AND T_Evento.ID_Tipo_Evento<>39");
             }
             //Ejecuta la consulta SQL con el filtro correspondiente
             $obj_eventos ->obtiene_todos_los_eventos(); 
@@ -8118,49 +8127,68 @@
             //Convierta la fecha a formto aaaa/mm/dd hh:mm
             $fecha_actual= $fecha_actual['year']."-".$fecha_actual['mon']."-".$fecha_actual['mday'].' '.$fecha_actual['hours'].':'.$fecha_actual['minutes'];
             //asigna la fecha actual a un arreglo formato DateTime
-            $date1 = new DateTime($fecha_actual);
+            $fecha1 = new DateTime($fecha_actual);
             $diff="";
             for ($i = 0; $i <$tam; $i++) {
                 //asigna da date2 la fecha que trae en el arreglo
-                $date2 = new DateTime($params[$i]['Fecha_Apertura'].' '.$params[$i]['Hora_Apertura']);
-                $diff = $date1->diff($date2);
+                $fecha2 = new DateTime($params[$i]['Fecha_Apertura'].' '.$params[$i]['Hora_Apertura']);
+                $diff = $fecha1->diff($fecha2);
                 //print_r($diff);
                 $vencidos[$i]['tiempo']=(intval($diff->d)*1440)+(intval($diff->h)*60)+(intval($diff->i)*1);
                 $vencidos[$i]['mensaje']= ("ATM #".$params[$i]['Codigo']." | D:". $diff->d." | Hr:". $diff->h." | Min:". $diff->i." \n "); 
-                if(!($params[$i]['Seguimiento']=="Arqueo de ATM" ||$params[$i]['Seguimiento']=="ATM en Mantenimiento"||$params[$i]['Seguimiento']=="Apertura con llave Azul")){
-                    if($vencidos[$i]['tiempo']>'40'){
-                        if($params[$i]['Seguimiento']=="Se envió correo al funcionario"||$params[$i]['Seguimiento']=="Se envió correo al encargado"||$params[$i]['Seguimiento']=="Se le informó al coordinador"){
-                            if($vencidos[$i]['tiempo']>'70'){
-                                if($params[$i]['Seguimiento']=="Se envió correo al encargado"||$params[$i]['Seguimiento']=="Se le informó al coordinador"){
-                                    if($vencidos[$i]['tiempo']>'100'){
-                                        if($params[$i]['Seguimiento']=="Se le informó al coordinador"){
-                                            $vencidos[$i]['color']="color: blueviolet";
-                                            //echo "blueviolet +100 informó".$params[$i]['Codigo']."\n||||";
+                
+                //Obtiene la hora actual del sistema
+                $hora_actual= getdate();
+                $hora_actual=$hora_actual['hours'];
+                if($hora_actual<19){
+                    if($vencidos[$i]['tiempo']<'660'){
+                        if(!($params[$i]['Seguimiento']=="Arqueo de ATM" ||$params[$i]['Seguimiento']=="ATM en Mantenimiento"||
+                            $params[$i]['Seguimiento']=="Apertura con llave Azul")){
+                            if($vencidos[$i]['tiempo']>'40'){
+                                if($params[$i]['Seguimiento']=="Se envió correo al funcionario"||$params[$i]['Seguimiento']=="Se envió correo al encargado"||
+                                    $params[$i]['Seguimiento']=="Se le informó al coordinador"){
+                                    if($vencidos[$i]['tiempo']>'70'){
+                                        if($params[$i]['Seguimiento']=="Se envió correo al encargado"||$params[$i]['Seguimiento']=="Se le informó al coordinador"){
+                                            if($vencidos[$i]['tiempo']>'100'){
+                                                if($params[$i]['Seguimiento']=="Se le informó al coordinador"){
+                                                    $vencidos[$i]['color']="color: blueviolet";
+                                                    //echo "blueviolet +100 informó".$params[$i]['Codigo']."\n||||";
+                                                }else{
+                                                    $vencidos[$i]['color']="color: red";
+                                                    //echo "rojo +100 sin informar".$params[$i]['Codigo']."\n||||";
+                                                } 
+                                            }else{
+                                                $vencidos[$i]['color']="color: orange";
+                                                //echo "naranja -110".$params[$i]['Codigo']."\n|||||";
+                                            }
                                         }else{
                                             $vencidos[$i]['color']="color: red";
-                                            //echo "rojo +100 sin informar".$params[$i]['Codigo']."\n||||";
-                                        } 
+                                            //echo "rojo -correo encargado".$params[$i]['Codigo']."\n|||||";
+                                        }
                                     }else{
                                         $vencidos[$i]['color']="color: orange";
-                                        //echo "naranja -110".$params[$i]['Codigo']."\n|||||";
+                                        //echo "naranja -70 y correo".$params[$i]['Codigo']."\n|||||";
                                     }
                                 }else{
                                     $vencidos[$i]['color']="color: red";
-                                    //echo "rojo -correo encargado".$params[$i]['Codigo']."\n|||||";
+                                    //echo "rojo +40 sin correo".$params[$i]['Codigo']."\n||||";
                                 }
-                            }else{
-                                $vencidos[$i]['color']="color: orange";
-                                //echo "naranja -70 y correo".$params[$i]['Codigo']."\n|||||";
+                            } else{
+                                //echo "nada".$params[$i]['Codigo']."\n||||";
                             }
-                        }else{
-                            $vencidos[$i]['color']="color: red";
-                            //echo "rojo +40 sin correo".$params[$i]['Codigo']."\n||||";
-                        }
-                    } else{
-                        //echo "nada".$params[$i]['Codigo']."\n||||";
+                        } else{
+                                //echo "nada".$params[$i]['Codigo']."\n||||";
+                        }    
+                    }else{
+                        $vencidos[$i]['color']="color: red";
+                        //echo "rojo +40 sin correo".$params[$i]['Codigo']."\n||||";
                     }
-                }
+                }else{
+                    $vencidos[$i]['color']="color: red";
+                    //echo "rojo +40 sin correo".$params[$i]['Codigo']."\n||||";
+                }    
             }
+            
             if(isset ($vencidos)){
                 rsort($vencidos);
             }

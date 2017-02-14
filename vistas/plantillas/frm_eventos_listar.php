@@ -26,6 +26,13 @@
             $(document).ready(function () {
                 puestoenviado=<?php echo $puesto_enviado ?>;
                 $("#puesto option[value="+puestoenviado+"]").attr("selected",true);
+                
+                check = <?php echo $check_continuidad ?>;
+                if(check=='0'){
+                    document.getElementById("continuidad").checked = false;
+                } else{
+                    document.getElementById("continuidad").checked = true;
+                }
             });
             function validar_puesto(pst){
                 puesto = pst;
@@ -141,8 +148,9 @@
                 <a href="index.php?ctl=frm_eventos_agregar&id=0" class="btn btn-default espacio-abajo" role="button">Agregar Nuevo Evento de Bitácora</a>
                 <a href="index.php?ctl=frm_eventos_lista_cerrados" class="btn btn-default espacio-abajo quitar-float" role="button">Eventos Cerrados</a> 
             </div>
-            <div class="col-md-2" style="margin-top: 35px;">
-                <form id="puestos" method="POST" name="form" action="index.php?ctl=eventos_listar_filtrado">
+            
+            <form id="puestos" method="POST" name="form" action="index.php?ctl=eventos_listar_filtrado">
+                <div class="col-md-2" style="margin-top: 35px;">    
                     <label for="puesto">Puesto</label>
                     <select class="form-control" id="puesto" name="puesto" onchange="validar_puesto(value);"> 
                         <option value="0">Todos</option>
@@ -152,8 +160,12 @@
                         <option value="4">Puesto 4</option>
                         <option value="5">Z2</option>
                     </select>
-                </form>  
-            </div>
+                </div>
+                <div class="checkbox col-md-2" style="margin-top: 65px;">
+                    <input type="checkbox" id="continuidad" name="continuidad" onchange="validar_puesto(value);">Mostrar Labores Continuidad
+                </div> 
+            </form>  
+            
             <?php 
             //Solamente los coordinadores ven esta opcion de agregar mezclas
             if($_SESSION['modulos']['Módulo-Bitácora Digital-Agregar Mezclas de Eventos']==1){ ?>
