@@ -147,15 +147,12 @@ class cls_marcas_descanso{
          if($this->condicion==""){
            $this->obj_data_provider->conectar();
            $this->arreglo=$this->obj_data_provider->trae_datos("t_descanso 
-INNER JOIN  t_ajus_descanso ON  t_descanso.ID_Ajus_Descanso =  t_ajus_descanso.ID_Ajus_Descanso 
-ORDER BY  Fecha_Descanso,Hora_Descanso_Salida,Hora_Descanso_Entrada "," t_descanso.ID_Descanso ,  t_descanso.ID_Usuario ,  t_descanso.Fecha_Descanso ,  t_descanso.Hora_Descanso_Salida , t_descanso.Hora_Descanso_Entrada ,  t_descanso.Justificar_Descanso ,  t_descanso.Validar_Descanso,  t_descanso.Total_Descanso , t_descanso.ID_Ajus_Descanso ,  t_ajus_descanso.Duracion_Descanso ,  t_ajus_descanso.ID_Ajus_Descanso ", "");
+           INNER JOIN  t_ajus_descanso ON  t_descanso.ID_Ajus_Descanso =  t_ajus_descanso.ID_Ajus_Descanso 
+           ORDER BY  Fecha_Descanso,Hora_Descanso_Salida,Hora_Descanso_Entrada "," t_descanso.ID_Descanso ,  t_descanso.ID_Usuario ,  t_descanso.Fecha_Descanso ,  t_descanso.Hora_Descanso_Salida , t_descanso.Hora_Descanso_Entrada ,  t_descanso.Justificar_Descanso ,  t_descanso.Validar_Descanso,  t_descanso.Total_Descanso , t_descanso.ID_Ajus_Descanso ,  t_ajus_descanso.Duracion_Descanso ,  t_ajus_descanso.ID_Ajus_Descanso ", "");
            $this->arreglo=$this->obj_data_provider->getArreglo();
            $this->obj_data_provider->desconectar();
            $this->resultado_operacion=true;
-         }
-
-         else
-         {
+         }else{
            $this->obj_data_provider->conectar();
            $this->arreglo=$this->obj_data_provider->trae_datos("T_Descanso", "*", $this->condicion);
            $this->arreglo=$this->obj_data_provider->getArreglo();

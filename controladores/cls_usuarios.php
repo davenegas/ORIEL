@@ -16,6 +16,10 @@ class cls_usuarios{
   public $rol;
   public $id_turno;
   public $id_horario;
+  public $turno;
+  public $horario;
+
+  
   function getId() {
       return $this->id;
   }
@@ -43,7 +47,22 @@ class cls_usuarios{
   function getCondicion() {
       return $this->condicion;
   }
-
+  function getID_Horariop() {
+      return $this->id_horario;
+  }
+  
+  function getID_Turno() {
+      return $this->id_turno;
+  }
+  
+  function getHorario() {
+      return $this->horario;
+  }
+  
+  function getTurno() {
+      return $this->turno;
+  }
+  
   function setId($id) {
       $this->id = $id;
   }
@@ -103,21 +122,26 @@ class cls_usuarios{
   function setRol($rol) {
       $this->rol = $rol;
   }
-  function getID_Rol() {
-      return $this->id_rol;
+  
+  function setID_Horariop($id_horario) {
+      $this->id_horario = $id_horario;
   }
-  function getID_Horario() {
-      return $this->id_horario;
+  
+  function setID_Turno($id_turno) {
+      $this->id_turno = $id_turno; 
   }
-  function getID_Turno() {
-      return $this->id_turno;
+  
+  function setHorario($horario) {
+      $this->horario = $horario;
   }
-
+  
+  function setTurno($turno) {
+      $this->turno = $turno; 
+  }
       
   public function __construct() {
       $this->nombre="";
       $this->apellido="";
-      $this->nombre_apellido="";
       $this->email="";
       $this->clave="";
       $this->arreglo;
@@ -129,6 +153,8 @@ class cls_usuarios{
       $this->rol="";
       $this->id_horario="";
       $this->id_turno="";
+      $this->horario="";
+      $this->turno="";
       
   }
   
@@ -149,7 +175,7 @@ class cls_usuarios{
         $this->resultado_operacion=true;
       }
   }  
-
+  
   public function existe_usuario($nombre_de_usuario){
       
 
@@ -333,19 +359,50 @@ class cls_usuarios{
 
       }
   }
-  
-  public function guarda_usuario() {
-        if($this->id=="0"){
+  public function obtiene_lista_usuariosp(){
+      if($this->condicion==""){
+        $this->obj_data_provider->conectar();
+        $this->arreglo=$this->obj_data_provider->trae_datos("T_usuario","*", "");
+        $this->arreglo=$this->obj_data_provider->getArreglo();
+        $this->obj_data_provider->desconectar();
+        $this->resultado_operacion=true;
+      }else{
+        $this->obj_data_provider->conectar();
+        $this->arreglo=$this->obj_data_provider->trae_datos("T_usuario", "*", $this->condicion);
+        $this->arreglo=$this->obj_data_provider->getArreglo();
+        $this->obj_data_provider->desconectar();
+        $this->resultado_operacion=true;
+      }
+  }
+  public function obtiene_todos_los_usuariosp(){
+     if($this->condicion==""){
+        $this->obj_data_provider->conectar();
+        $this->arreglo=$this->obj_data_provider->trae_datos("t_usuario
+        INNER JOIN t_turno ON t_usuario.ID_Turno = t_turno.ID_Turno
+        inner join t_horariop on T_usuario.ID_horariop = t_horariop.ID_horariop ","t_usuario.ID_Usuario,t_usuario.Cedula,t_usuario.Nombre,t_usuario.Apellido,t_usuario.Observaciones,t_usuario.Estado,t_horariop.Horariop,t_horariop.ID_Horariop,t_turno.Turno,t_horariop.ID_Horariop","");
+        $this->arreglo=$this->obj_data_provider->getArreglo();
+        $this->obj_data_provider->desconectar();
+        $this->resultado_operacion=true;
+      }else{
+        $this->obj_data_provider->conectar();
+        $this->arreglo=$this->obj_data_provider->trae_datos("T_Usuario", "*", $this->condicion);
+        $this->arreglo=$this->obj_data_provider->getArreglo();
+        $this->obj_data_provider->desconectar();
+        $this->resultado_operacion=true;
+      }
+  }
+  public function guardar_usuariop() {
+       if($this->id=="0"){
        $this->obj_data_provider->conectar();
-       $this->arreglo=$this->obj_data_provider->inserta_datos("t_usuario", "ID_Usuario,Cedula,Apellido_Nombre,Observaciones,Estado,ID_Horario,ID_Turno", "null,'".$this->cedula."','".$this->nombre_apellido."','".$this->observaciones."','".$this->estado."','".$this->id_horario."','".$this->id_turno."'");
+       $this->arreglo=$this->obj_data_provider->inserta_datos("t_usuario","ID_Usuario,Cedula,Nombre,Apellido,Observaciones,Estado,ID_Horariop,ID_Turno","null,'".$this->cedula."','".$this->nombre."','".$this->apellido."','".$this->observaciones."','".$this->estado."','".$this->id_horario."','".$this->id_turno."'");
        $this->arreglo=$this->obj_data_provider->getArreglo();
        $this->obj_data_provider->desconectar();
        }else{
-           $this->obj_data_provider->conectar();
-       $this->arreglo=$this->obj_data_provider->edita_datos("t_usuario", "Cedula='".$this->cedula."',Apellido_Nombre='".$this->nombre_apellido."',Observaciones='".$this->observaciones."',Estado='".$this->estado."',ID_Horario='".$this->id_horario."',ID_Turno='".$this->id_turno."'", "ID_Usuario='".$this->id."'");
+       $this->obj_data_provider->conectar();
+       $this->arreglo=$this->obj_data_provider->edita_datos("t_usuario","Cedula='".$this->cedula."',Nombre='".$this->nombre."',Apellido='".$this->apellido."',Observaciones='".$this->observaciones."',Estado='".$this->estado."',ID_Horariop='".$this->id_horario."',ID_Turno='".$this->id_turno."'", "ID_Usuario='".$this->id."'");
        $this->arreglo=$this->obj_data_provider->getArreglo();
        $this->obj_data_provider->desconectar();
-       }
-        
-    }
+       }  
+  }
+ 
 }

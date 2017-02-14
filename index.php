@@ -17,6 +17,8 @@ session_start();
 require_once __DIR__ . '/modelos/Data_Provider.php';
 //Libreria de clases --> Control de usuarios
 require_once __DIR__ . '/controladores/cls_usuarios.php';
+//Libreria de clases --> Control de personal
+//require_once __DIR__ . '/controladores/cls_usuariosp.php';
 //Libreria de clases --> Control de roles de usuarios
 require_once __DIR__ . '/controladores/cls_roles.php';
 //Libreria de clases --> Control de módulos y funcionalidades de seguridad
@@ -35,6 +37,8 @@ require_once __DIR__ . '/controladores/cls_personal.php';
 require_once __DIR__ . '/controladores/cls_personal_externo.php';
 //Libreria de clases --> Control de horarios
 require_once __DIR__ . '/controladores/cls_horario.php';
+//Libreria de clases --> Control de horarios personal
+require_once __DIR__ . '/controladores/cls_horariop.php';
 //Libreria de clases --> Control de direcciones IP
 require_once __DIR__ . '/controladores/cls_direccionIP.php';
 //Libreria de clases --> Control de trazabilidad (seguimiento a la actividad de usarios dentro del sistema)
@@ -68,11 +72,11 @@ require_once __DIR__ . '/controladores/cls_enlace_telecom.php';
 //Libreria de clases --> Control de marcas de asistencia
 require_once __DIR__ . '/controladores/cls_marcas.php';
 //Libreria de clases --> Control de turno
-//require_once __DIR__ . '/controlador/cls_turno.php';
+require_once __DIR__ . '/controladores/cls_turno.php';
 //Libreria de clases --> Control de descansos
-//require_once __DIR__ . '/controlador/cls_descansos.php';
+require_once __DIR__ . '/controladores/cls_descansos.php';
 //Libreria de clases --> Control de marcas de descanso
-//require_once __DIR__ . '/controlador/cls_marcas_descanso.php';
+require_once __DIR__ . '/controladores/cls_marcas_descanso.php';
 //Libreria de clases --> Control de estado civil
 require_once __DIR__ . '/controladores/cls_estado_civil.php';
 //Libreria de clases --> Control de estado del personal
@@ -162,6 +166,7 @@ $map = array(
     
     //Controlador de Unidades Ejecutoras
     'unidad_ejecutora_listar'=>array('controller'=>'Controller', 'action'=>'unidad_ejecutora_listar'),
+    'unidad_ejecutora_catalogo'=>array('controller'=>'Controller', 'action'=>'unidad_ejecutora_catalogo'),
     'unidad_ejecutora_guardar'=>array('controller'=>'Controller', 'action'=>'unidad_ejecutora_guardar'),
     'unidad_ejecutora_cambiar_estado'=>array('controller'=>'Controller', 'action'=>'unidad_ejecutora_cambiar_estado'),
    
@@ -246,34 +251,27 @@ $map = array(
     'actualiza_en_vivo_reporte_trazabilidad'=>array('controller'=>'Controller','action'=> 'actualiza_en_vivo_reporte_trazabilidad'),
     
     //Asistencia de Personal
-    'marcas'=>array('controller'=>'Controller','action'=> 'marcas'),
-    'obtiene_todas_las_marcas'=>array('controller'=>'Controller','action'=> 'obtiene_todas_las_marcas'),
-    'guardar_marcas'=>array('controller'=>'Controller','action'=> 'guardar_marcas'),
-    'guardar_contador'=>array('controller'=>'Controller','action'=> 'guardar_contador'),
-    'editar_usuario' => array('controller' =>'Controller', 'action' =>'editar_usuario'),
-    'obtiene_todos_los_descansos' => array('controller' =>'Controller', 'action' =>'obtiene_todos_los_descansos'),
-    'obtiene_todos_los_horarios' => array('controller' =>'Controller', 'action' =>'obtiene_todos_los_horarios'),
-    'obtiene_todos_los_turnos' => array('controller' =>'Controller', 'action' =>'obtiene_todos_los_turnos'),
-    'obtiene_todos_los_usuarios' => array('controller' =>'Controller', 'action' =>'obtiene_todos_los_usuarios'),
-    'listar' => array('controller' =>'Controller', 'action' =>'listar'),
-    'obtiene_lista' => array('controller' =>'Controller', 'action' =>'obtiene_lista'),
-    'obtiene_lista_horarios' => array('controller' =>'Controller', 'action' =>'obtiene_lista_horarios'),
-    'editar_horario' => array('controller' =>'Controller', 'action' =>'editar_horario'),
-    'obtiene_lista_turno' => array('controller' =>'Controller', 'action' =>'obtiene_lista_turno'),
-    'editar_turno' => array('controller' =>'Controller', 'action' =>'editar_turno'),
-    'obtiene_lista_descansos' => array('controller' =>'Controller', 'action' =>'obtiene_lista_descansos'),
-    'editar_descansos' => array('controller' =>'Controller', 'action' =>'editar_descansos'),
-    'guardar_turno' => array('controller' =>'Controller', 'action' =>'guardar_turno'),
-    'guardar_horario' => array('controller' =>'Controller', 'action' =>'guardar_horario'),
-    'guardar_descansos' => array('controller' =>'Controller', 'action' =>'guardar_descansos'),
-    'guardar_usuarios' => array('controller' =>'Controller', 'action' =>'guardar_usuarios'),
     'obtiene_lista_marcas' => array('controller' =>'Controller', 'action' =>'obtiene_lista_marcas'),
-    'guardar_marcas' => array('controller' =>'Controller', 'action' =>'guardar_marcas'),
-    'obtiene_todas_las_marcas_descansos' => array('controller' =>'Controller', 'action' =>'obtiene_lista_marcas_descansos'),
-    'guardar_marcas_descanso' => array('controller' =>'Controller', 'action' =>'guardar_marcas_descanso'),
+    'obtiene_lista' => array('controller' =>'Controller', 'action' =>'obtiene_lista'),
     'obtiene_lista_marcas_reportes' => array('controller' =>'Controller', 'action' =>'obtiene_lista_marcas_reportes'),
+    'guardar_marcas' => array('controller' =>'Controller', 'action' =>'guardar_marcas'),
+    'guardar_marcas_descanso' => array('controller' =>'Controller', 'action' =>'guardar_marcas_descanso'),
+    'obtiene_lista_usuariosp' => array('controller' =>'Controller', 'action' =>'obtiene_lista_usuariosp'),
+    'obtiene_todos_los_usuariosp' => array('controller' =>'Controller', 'action' =>'obtiene_todos_los_usuariosp'),
+    'editar_usuariop' => array('controller' =>'Controller', 'action' =>'editar_usuariop'),
+    'guarda_usuariop' => array('controller' =>'Controller', 'action' =>'guarda_usuariop'),
+    'obtiene_todos_los_descansos' => array('controller' =>'Controller', 'action' =>'obtiene_todos_los_descansos'),
+    'obtiene_lista_descansos' => array('controller' =>'Controller', 'action' =>'obtiene_lista_descansos'),
+    'guardar_justificacion_descanso' => array('controller' =>'Controller', 'action' =>'guardar_justificacion_descanso'),
+    'guardar_descansos' => array('controller' =>'Controller', 'action' =>'guardar_descansos'),
+    'obtiene_todos_los_turnos' => array('controller' =>'Controller', 'action' =>'obtiene_todos_los_turnos'),
+    'obtiene_lista_turno' => array('controller' =>'Controller', 'action' =>'obtiene_lista_turno'),
+    'guardar_turno' => array('controller' =>'Controller', 'action' =>'guardar_turno'),
+    'obtiene_todos_los_horarios' => array('controller' =>'Controller', 'action' =>'obtiene_todos_los_horarios'),
+    'obtiene_lista_horarios' => array('controller' =>'Controller', 'action' =>'obtiene_lista_horarios'),
+    'guardar_horariop' => array('controller' =>'Controller', 'action' =>'guardar_horariop'),
     
-    //PuntosBCR
+     //PuntosBCR
     'puntos_bcr_listar'=>array('controller'=>'Controller','action'=> 'puntos_bcr_listar'),
     'gestion_punto_bcr'=>array('controller'=>'Controller','action'=> 'gestion_punto_bcr'),
     'actualiza_en_vivo_canton'=>array('controller'=>'Controller','action'=> 'actualiza_en_vivo_canton'),

@@ -1,53 +1,36 @@
-<!DOCTYPE html>
-<html>
+<!DOCTYPE HTML>
+<html lang="es">
     <head>
         <meta charset="UTF-8">
-        <title>Pagina Inicio</title>
-         <meta charset="utf-8">
-    <link href="../../../bootstrap-3.3.6/dist/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+        <title>SLista de Asistencia Usuario</title>
+        <?php require_once 'frm_librerias_head.html';?>
+        <link rel="stylesheet" href="vistas/css/ventanaoculta.css">
             <script src="Vista/js/jquery-2.1.1.min.js"></script>        
             <script src="../../../bootstrap-3.3.6/dist/js/bootstrap.min.js"></script>
   
     </head>
     
     <body>
- <nav class="navbar navbar-inverse">
-  <div class="container-fluid">
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>  
-     </div>
-    <div class="collapse navbar-collapse" id="myNavbar">
-      <ul class="nav navbar-nav">
-      <li class="active"><a href="index.php?ctl=inicio">Inicio</a></li>
-      </ul>
-      <ul class="nav navbar-nav navbar-right">  
-          
-      <li><a href="#"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
-      </ul>
-  </div>
-  </div>
-</nav>
-        <h1>Reporte</h1>
+        <?php require_once 'encabezado.php';?>
+        <h3>Reportes Asistencia de Personal</h3>
         <br>
+        <div class="container">
         <table class="table">
             <thead>
                 <tr>
-                    <th>ID_Usuario</th>
-                    <th> Apellido y nombre  </th>  
-                    <th> Fecha  </th>
-                    <th> Hora de entrada  </th> 
-                    <th> Justificar entrada </th>       
-                    <th> Hora de salida </th>
-                    <th> Justificar salida </th>  
-                    <th> salida al descanso </th>
-                    <th> entrada del decanso </th>
-                    <th> Justificar descanso </th>
-                    <th> Total </th>
-                      <th> Duracion </th>               
+                    <th style="text-align:center">ID_Usuario</th>
+                    <th style="text-align:center">Cedula  </th>
+                    <th style="text-align:center">Nombre  </th>
+                    <th style="text-align:center">Fecha  </th>
+                    <th style="text-align:center">Hora de Entrada  </th> 
+                    <th style="text-align:center">Justificar Entrada </th>       
+                    <th style="text-align:center">Hora de Salida </th>
+                    <th style="text-align:center">Justificar Salida </th>  
+                    <th style="text-align:center">Salida al Descanso </th>
+                    <th style="text-align:center">Entrada del Descanso </th>
+                    <th style="text-align:center">Justificar Descanso </th>
+                    <th style="text-align:center">Total </th>
+                    <th style="text-align:center">Duracion </th>               
                  </tr>
              </thead>
             <tbody>
@@ -57,11 +40,12 @@
  
                ?>
                 <tr> 
-                     <td><?php echo $usuarios[$i]['ID_Usuario'] ?></td> 
-                     <td><?php echo $usuarios[$i]['Apellido_Nombre'] ?></td>
+                     <th style="text-align:center"><?php echo $usuarios[$i]['ID_Usuario'] ?></td> 
+                     <td><?php echo $usuarios[$i]['Cedula'] ?></td> 
+                     <td><?php echo $usuarios[$i]['Nombre']." ".$usuarios[$i]['Apellido'] ?></td>
                      <?php $tam_marcas=count($marcas);
                      for($i_marcas=0;$i_marcas<$tam_marcas;$i_marcas++){ ?>
-                        <td><?php echo $marcas[$i]['Fecha'] ?></td>
+                        <th style="text-align:center"><?php echo $marcas[$i]['Fecha'] ?></td>
                         <td><?php echo $marcas[$i]['Hora_Entrada_Turno'] ?></td>
                         <td><?php echo $marcas[$i]['Justificar_Entrada'] ?></td>
                         <td><?php echo $marcas[$i]['Hora_Salida_Turno']?></td>
@@ -74,21 +58,14 @@
                         <td><?php echo $marcas_descanso[$i]['Hora_Descanso_Salida'] ?></td>
                         <td><?php echo $marcas_descanso[$i]['Hora_Descanso_Entrada'] ?></td>
                         <td><?php echo $marcas_descanso[$i]['Justificar_Descanso'] ?></td>
-                        <td><?php echo $marcas_descanso[$i]['Total_Descanso'] ?></td> 
-                        <td><?php echo $marcas_descanso[$i]['Duracion_Descanso'] ?></td> 
+                        <th style="text-align:center"><?php echo $marcas_descanso[$i]['Total_Descanso'] ?></td> 
+                        <th style="text-align:center"><?php echo $marcas_descanso[$i]['Duracion_Descanso'] ?></td> 
                      <?php } ?>
                 </tr>     
                 <?php } ?>
-               
-                
-                    
-            
             </tbody>
-        </table>
-       
-      
-       
-            
-       
+        </table>  
+        </div>
+         <?php require 'vistas/plantillas/pie_de_pagina.php' ?>
       </body>
 </html>

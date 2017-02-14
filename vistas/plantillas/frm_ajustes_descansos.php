@@ -1,24 +1,26 @@
-<!DOCTYPE html>
-<html>
+<!DOCTYPE HTML>
+<html lang="es">
     <head>
-        <meta charset="UTF-8">
-        <title></title>
-        <link href="../../../bootstrap-3.3.6/dist/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
-        <script src="vistas/js/jquery.min.js"></script>        
-        <script src="../../../bootstrap-3.3.6/dist/js/bootstrap.min.js"></script>
+        <meta charset="utf-8"/>
+        <title>Lista Descansos</title>
+        <script language="javascript" src="vistas/js/jquery.js"></script>
+        <script language="javascript" src="vistas/js/listas_dependientes_trazabilidad.js"></script>
+        <?php require_once 'frm_librerias_head.html'; ?>     
     </head>
     <body>
+        <?php require_once 'encabezado.php';?>
+        
       <div class="container">
         
             <form class="form_horizontal" role="form" method="POST" name="form" action="index.php?ctl=guardar_descansos">
-                    
-               <h2>Editar descansos</h2>
+               <h3>Ajustes de Descanso</h3>    
                <hr>
-               <input hidden="" id="ID_Ajus_Descanso" name="ID_Ajus_Descanso" type="text" Value="<?php echo $vector[0]['ID_Ajus_Descanso'];?>">
-               <label for="nombre">Duracion de descansos</label>
-               <input class="form-control espacio-abajo"  id="Duracion_Descanso" name="Duracion" placeholder="Duracion de descanso" type="text" value="<?php echo $vector[0]['Duracion'];?>">
-                    
-               <label for="nombre">Observaciones</label>
+               <input hidden="" id="ID_Ajus_Descanso" name="ID_Ajus_Descanso" type="text" Value="<?php echo $vector[0]['ID_Ajus_Descanso'];?>">    
+              
+               <label for="Duracion_Descanso">Duracion de descansos</label>
+               <input class="form-control espacio-abajo"  id="Duracion_Descanso" name="Duracion" placeholder="Formato de Ingreso 00:00:00 h-m-s" type="text" value="<?php echo $vector[0]['Duracion'];?>"
+               
+               <label for="Observaciones">Observaciones</label>
                <input class="form-control espacio-abajo"  id="Observaciones" name="Observaciones" placeholder="Observaciones" type="text" value="<?php echo $vector[0]['Observaciones'];?>">
                <div class="form-grup">
                <label for="Estado">Estado</label>
@@ -39,9 +41,10 @@
                         }
                     ?>
                 </div>
-               
+               <br>
                <button type="submit">Guardar</button>
             </form>
         </div>
+        <?php require 'vistas/plantillas/pie_de_pagina.php' ?>    
     </body>
 </html>

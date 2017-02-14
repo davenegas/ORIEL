@@ -115,6 +115,10 @@
                 <?php  if ($_SESSION['modulos']['Catálogos-Horarios']==1){?>
                    <li><a href="index.php?ctl=tipo_punto_listar">Tipo Punto</a></li>
                 <?php  }; ?>
+                
+                <?php  if ($_SESSION['modulos']['Catálogos-Horarios']==1){?>
+                   <li><a href="index.php?ctl=editar_usuario">Editar Usuario</a></li>
+                <?php  }; ?>   
               
                 <?php  if ($_SESSION['modulos']['Catálogos-Horarios']==1){?>
                    <li><a href="index.php?ctl=gerente_zona_listar">Gerentes de Zona</a></li>
@@ -122,6 +126,22 @@
                    
                 <?php  if ($_SESSION['modulos']['Catálogos-Horarios']==1){?>
                    <li><a href="index.php?ctl=supervisor_zona_listar">Supervisor de Zona</a></li>
+                <?php  }; ?>
+                   
+                <?php  if ($_SESSION['modulos']['Catálogos-Horarios']==1){?>
+                   <li><a href="index.php?ctl=obtiene_lista_usuariosp">Operadores</a></li>
+                <?php  }; ?>   
+                   
+                <?php  if ($_SESSION['modulos']['Catálogos-Horarios']==1){?>
+                   <li><a href="index.php?ctl=obtiene_lista_horarios">Horario Operadores</a></li>
+                <?php  }; ?>
+                   
+                <?php  if ($_SESSION['modulos']['Catálogos-Horarios']==1){?>
+                   <li><a href="index.php?ctl=obtiene_lista_turno">Turnos Operadores</a></li>
+                <?php  }; ?>
+                   
+                <?php  if ($_SESSION['modulos']['Catálogos-Horarios']==1){?>
+                   <li><a href="index.php?ctl=obtiene_lista_descansos">Descansos Operadores</a></li>
                 <?php  }; ?>
                                      
                 <?php  if ($_SESSION['modulos']['Importar- Prontuario']==1){?>
@@ -158,7 +178,11 @@
 
                 <?php if ($_SESSION['modulos']['Reportes-Personal']==1){ ?>
                      <li><a href="index.php?ctl=principal">Personal</a></li>
-                <?php }; ?>   
+                <?php }; ?> 
+                     
+                <?php if ($_SESSION['modulos']['Reportes-Personal']==1){ ?>
+                     <li><a href="index.php?ctl=obtiene_lista_marcas_reportes">Registro Operadores</a></li>
+                <?php }; ?>        
 
                 <?php if ($_SESSION['modulos']['Reportes-Alertas']==1){ ?>
                     <li><a href="index.php?ctl=principal">Alertas</a></li> 
@@ -210,14 +234,13 @@
                 <?php }; ?>
                 
                 <?php if ($_SESSION['modulos']['Módulo-Personal']==1){ ?>
-                     <li><a href="index.php?ctl=marcas">Asistencia de Personal</a></li>
+                     <li><a href="index.php?ctl=obtiene_lista_marcas">Asistencia Operadores</a></li>
                 <?php }; ?>
                        
                 <?php if ($_SESSION['modulos']['Módulo-Áreas de Apoyo']==1){ ?>
                      <li><a href="index.php?ctl=areas_apoyo_listar">Áreas de Apoyo</a></li>
                 <?php }; ?>  
-
-
+                     
                 <?php if ($_SESSION['modulos']['Módulo-Control de Video']==1){?>
                     <!--<li><a href="#">Controles de Video</a></li>--> 
                 <?php }; ?>   
