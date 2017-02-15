@@ -119,7 +119,12 @@
             for ($i = 0; $i <$tam; $i++) {
             ?>
             <tr>
-            <td style="text-align:center"><?php echo $params[$i]['Categoria'];?></td>
+            <?php if ($params[$i]['Categoria']==0){ ?>
+            <td style="text-align:center">Día</td>
+            <?php }  else { ?>
+            <td style="text-align:center">Noche</td> 
+            <?php } ?>  
+           
             <td style="text-align:center"><?php echo $params[$i]['Nombre_Imagen'];?></td>
             <td style="text-align:center"><?php echo $params [$i]['Descripcion'];?></td>
             <td style="text-align:center"><a class="fancybox-button" rel="fancybox-button" href="../../../Padron_Fotografico_Unidades_Video/<?php echo $params[$i]['Nombre_Ruta'];?>" title="<?php echo $params[$i]['Nombre_Imagen'].' ('.$params[$i]['Descripcion'].')';?>">

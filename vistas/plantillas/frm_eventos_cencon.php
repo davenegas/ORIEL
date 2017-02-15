@@ -5,11 +5,10 @@
         <title>Bitácora Cencon</title>
         <script language="javascript" src="vistas/js/jquery.js"></script>
         <script language="javascript" src="vistas/js/listas_dependientes_cencon.js"></script>
-        <link rel="stylesheet" href="vistas/css/ventanaoculta.css"> 
-        <?php require_once 'frm_librerias_head.html'; ?>  
+        <link rel="stylesheet" href="vistas/css/ventanaoculta.css">  
+        <?php require_once 'frm_librerias_head.html'; ?> 
     </head>
     <body>
-        
         <?php require_once 'encabezado.php';?>
         <div class="container-fluid text-center">
             <h2>Bitácora Digital de Cencon</h2> 

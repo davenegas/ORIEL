@@ -211,6 +211,7 @@ function agregar_evento_cencon(){
         });
     }
 }
+
 function evento_cencon_cerrar(ide){
     var f=new Date();
     cad=f.getHours()+":"+f.getMinutes(); 
