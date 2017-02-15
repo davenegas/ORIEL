@@ -5,7 +5,7 @@ class cls_gerente_zona{
     public $arreglo;
     private $condicion;
     public $nombre;
-    public $numero;
+    public $zona;
     public $observaciones;
     public $estado;
     
@@ -37,10 +37,6 @@ class cls_gerente_zona{
         return $this->nombre;
     }
     
-     function getNumero() {
-        return $this->numero;
-    }
-    
     function setId($id) {
         $this->id = $id;
     }
@@ -67,8 +63,12 @@ class cls_gerente_zona{
         $this->nombre = $nombre;
     }
     
-    function setNumero($numero) {
-        $this->numero = $numero;
+    function getZona() {
+        return $this->zona;
+    }
+
+    function setZona($zona) {
+        $this->zona = $zona;
     }
 
     public function __construct() {
@@ -99,30 +99,31 @@ class cls_gerente_zona{
             $this->resultado_operacion=true;
         }
     }
+    
     public function guardar_gerente_zona(){
-         
         $this->obj_data_provider->conectar();
-        $this->obj_data_provider->inserta_datos("T_GerenteZonaBCR","ID_Gerente_Zona,ID_Persona,Zona_Gerencia_BCR,Observaciones,Estado","null,'".$this->nombre."','".$this->numero."','".$this->observaciones."','".$this->estado."'");
+        $this->obj_data_provider->inserta_datos("T_GerenteZonaBCR","ID_Gerente_Zona,ID_Persona,Zona_Gerencia_BCR,Observaciones,Estado","null,'".$this->nombre."','".$this->zona."','".$this->observaciones."','".$this->estado."'");
         $this->arreglo= $this->obj_data_provider->trae_datos("T_GerenteZonaBCR ORDER BY `ID_Gerente_Zona` DESC LIMIT 1", "*", $this->condicion);
         $this->arreglo=$this->obj_data_provider->getArreglo();
         $this->obj_data_provider->desconectar();
         $this->resultado_operacion=true;
-     }
+    }
+    
     public function editar_gerente_zona(){
-         
         $this->obj_data_provider->conectar();
-        $this->obj_data_provider->edita_datos("T_GerenteZonaBCR","ID_Persona='".$this->nombre."',Zona_Gerencia_BCR='".$this->numero."',Observaciones='".$this->observaciones."',Estado='".$this->estado."'",$this->condicion);
+        $this->obj_data_provider->edita_datos("T_GerenteZonaBCR","ID_Persona='".$this->nombre."',Zona_Gerencia_BCR='".$this->zona."',Observaciones='".$this->observaciones."'",$this->condicion);
         $this->obj_data_provider->desconectar();
-     }    
+    } 
+    
     public function obtener_nombre_gerente_zona(){
         $this->obj_data_provider->conectar();
         $this->arreglo=$this->obj_data_provider->trae_datos("T_Personal ORDER BY Apellido_Nombre DESC","*",$this->condicion);
         $this->arreglo=$this->obj_data_provider->getArreglo();
         $this->obj_data_provider->desconectar();
         $this->resultado_operacion=true;
-    }  
-    public function cambiar_estado_gerente_zona(){
-        
+    } 
+    
+    public function cambiar_estado_gerente_zona(){ 
         $this->obj_data_provider->conectar();
         $this->obj_data_provider->edita_datos("T_GerenteZonaBCR","Estado='".$this->estado."'",$this->condicion);
         $this->obj_data_provider->desconectar();

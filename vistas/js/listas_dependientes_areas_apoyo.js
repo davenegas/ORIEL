@@ -24,7 +24,7 @@ $(document).ready(function(){
 ////////////////////////////////////////////////////////////
 //Función para Ocultas ventanas
 function ocultar_elemento(){
-    document.getElementById('agregar_telefono').style.display = "none";
+    document.getElementById('ventana_oculta_1').style.display = "none";
 }
 ///////////////////////////////////////////////////////
 //Funciones para ventana oculta de Agregar Número PuntoBCR
@@ -34,14 +34,14 @@ function check_empty() {
     } else {
         //alert("Form Submitted Successfully...");
         document.getElementById('ventana').submit();
-        document.getElementById('agregar_telefono').style.display = "none";
+        document.getElementById('ventana_oculta_1').style.display = "none";
     }
 }
 function mostrar_agregar_telefono() {
     document.getElementById('ID_Telefono').value="0";
     document.getElementById('numero').value=null;
     document.getElementById('observaciones_tel').value=null;
-    document.getElementById('agregar_telefono').style.display = "block";
+    document.getElementById('ventana_oculta_1').style.display = "block";
 }
 function eliminar_telefono(ide){
     $.confirm({title: 'Confirmación!', content: 'Desea eliminar este número de teléfono?', 
@@ -62,5 +62,5 @@ function Editar_telefono(id_tel, tipo_tel, num, obser){
     document.getElementById('ID_Telefono').value=id_tel;
     document.getElementById('numero').value=num;
     document.getElementById('observaciones_tel').value=obser;
-    document.getElementById('agregar_telefono').style.display = "block";
+    document.getElementById('ventana_oculta_1').style.display = "block";
 };

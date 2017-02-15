@@ -25,6 +25,10 @@ require_once __DIR__ . '/controladores/cls_roles.php';
 require_once __DIR__ . '/controladores/cls_modulos.php';
 //Libreria de clases --> Control de eventos de bitácora
 require_once __DIR__ . '/controladores/cls_eventos.php';
+//Libreria de clases --> Control de Puestos de Monitoreo
+require_once __DIR__ . '/controladores/cls_puestos_de_monitoreo.php';
+//Libreria de clases --> Control de Unidades de Video
+require_once __DIR__ . '/controladores/cls_unidad_video.php';
 //Libreria de clases --> Control de áreas de apoyo
 require_once __DIR__ . '/controladores/cls_areasapoyo.php';
 //Libreria de clases --> Control de Puntos BCR
@@ -67,6 +71,8 @@ require_once __DIR__ . '/controladores/cls_tipo_enlace.php';
 require_once __DIR__ . '/controladores/cls_medio_enlace.php';
 //Libreria de clases --> Control de padrones fotográficos para puntos BCR
 require_once __DIR__ . '/controladores/cls_padron_fotografico_puntosbcr.php';
+//Libreria de clases --> Control de padrones fotográficos para unidades de video
+require_once __DIR__ . '/controladores/cls_padron_fotografico_unidades_de_video.php';
 //Libreria de clases --> Control de enlaces del departamento de telecomunicaciones
 require_once __DIR__ . '/controladores/cls_enlace_telecom.php';
 //Libreria de clases --> Control de marcas de asistencia
@@ -85,6 +91,10 @@ require_once __DIR__ . '/controladores/cls_estado_persona.php';
 require_once __DIR__ . '/controladores/cls_nacionalidad.php';
 //Libreria de clases --> Control de nivel academico
 require_once __DIR__ . '/controladores/cls_nivel_academico.php';
+//Libreria de clases --> Control de Cencon
+require_once __DIR__ . '/controladores/cls_cencon.php';
+//
+require_once __DIR__ . '/controladores/cls_reporteria.php';
 
 
 /*
@@ -134,10 +144,20 @@ $map = array(
     'nota_guardar' => array('controller' =>'Controller', 'action' =>'nota_guardar'),
     'nota_obtener' => array('controller' =>'Controller', 'action' =>'nota_obtener'),
     'iniciar_sesion' => array('controller' =>'Controller', 'action' =>'iniciar_sesion'),
-     
+    'ejecucion_automatico_proceso' => array('controller' =>'Controller', 'action' =>'ejecucion_automatico_proceso'),
+    
+    //Controlador de Manuales de ayuda
+    'manual_personal_externo_publico'=>array('controller'=>'Controller', 'action'=>'manual_personal_externo_publico'),
+    'manual_personal_externo'=>array('controller'=>'Controller', 'action'=>'manual_personal_externo'),
+    
+    //Controlador de Reportes
+    'reporte_seguimiento_eventos'=>array('controller'=>'Controller', 'action'=>'reporte_seguimiento_eventos'),
+    'reporte_eventos_provincia'=>array('controller'=>'Controller', 'action'=>'reporte_eventos_provincia'),
+    
     //Información pública
     'personal_listar_publico'=>array('controller'=>'Controller', 'action'=>'personal_listar_publico'),
     'puntobcr_listar_publico'=>array('controller'=>'Controller', 'action'=>'puntobcr_listar_publico'),
+    'personal_externo_listar_publico'=>array('controller'=>'Controller', 'action'=>'personal_externo_listar_publico'),
     'frm_contacto_publico'=>array('controller'=>'Controller', 'action'=>'frm_contacto_publico'),
     'cuenta_visitas_a_la_pagina'=>array('controller'=>'Controller', 'action'=>'cuenta_visitas_a_la_pagina'),
     'cuenta_visitas_a_personal_publico'=>array('controller'=>'Controller', 'action'=>'cuenta_visitas_a_personal_publico'),
@@ -146,6 +166,20 @@ $map = array(
     'cuenta_visitas_a_puntos_bcr_privado'=>array('controller'=>'Controller', 'action'=>'cuenta_visitas_a_puntos_bcr_privado'),
     'cuenta_visitas_a_bitacora_digital'=>array('controller'=>'Controller', 'action'=>'cuenta_visitas_a_bitacora_digital'),
     
+    //Controles de Video
+    'unidades_de_video_listar'=>array('controller'=>'Controller', 'action'=>'unidades_de_video_listar'),
+    'editar_campo_unidades_de_video'=>array('controller'=>'Controller', 'action'=>'editar_campo_unidades_de_video'),
+    'agregar_nueva_unidad_de_video'=>array('controller'=>'Controller', 'action'=>'agregar_nueva_unidad_de_video'),
+    'frm_unidades_de_video_padron_fotografico'=>array('controller'=>'Controller','action'=> 'frm_unidades_de_video_padron_fotografico'),
+    'guardar_imagen_unidades_de_video'=>array('controller'=>'Controller','action'=> 'guardar_imagen_unidades_de_video'), 
+    'eliminar_imagen_padron_unidades_de_video'=>array('controller'=>'Controller','action'=> 'eliminar_imagen_padron_unidades_de_video'), 
+    'puestos_de_monitoreo_listar'=>array('controller'=>'Controller','action'=> 'puestos_de_monitoreo_listar'), 
+    'puestos_de_monitoreo_editar'=>array('controller'=>'Controller','action'=> 'puestos_de_monitoreo_editar'), 
+    'puesto_monitoreo_guardar'=>array('controller'=>'Controller','action'=> 'puesto_monitoreo_guardar'), 
+    'puesto_monitoreo_cambiar_estado'=>array('controller'=>'Controller','action'=> 'puesto_monitoreo_cambiar_estado'), 
+    'actualiza_puesto_de_monitoreo'=>array('controller'=>'Controller','action'=> 'actualiza_puesto_de_monitoreo'), 
+    
+              
     //Información Proveedor enlaces
     'proveedor_listar'=>array('controller'=>'Controller', 'action'=>'proveedor_listar'),
     'proveedor_enlace_guardar'=>array('controller'=>'Controller', 'action'=>'proveedor_enlace_guardar'),
@@ -209,6 +243,25 @@ $map = array(
     'cambiar_estado_rol' => array('controller' =>'Controller', 'action' =>'cambiar_estado_rol'),
     'gestion_roles'=>array('controller'=>'Controller', 'action'=>'gestion_roles'),
      
+    //Controlador de Cencon
+    'eventos_cencon'=>array('controller'=>'Controller', 'action'=>'eventos_cencon'),
+    'cencon_gestion'=>array('controller'=>'Controller', 'action'=>'cencon_gestion'),
+    'cencon_agregar_relacion'=>array('controller'=>'Controller', 'action'=>'cencon_agregar_relacion'),
+    'cencon_buscar_relaciones'=>array('controller'=>'Controller', 'action'=>'cencon_buscar_relaciones'),
+    'cencon_eliminar_relacion'=>array('controller'=>'Controller', 'action'=>'cencon_eliminar_relacion'),
+    'evento_buscar_cajero'=>array('controller'=>'Controller', 'action'=>'evento_buscar_cajero'),
+    'evento_buscar_persona'=>array('controller'=>'Controller', 'action'=>'evento_buscar_persona'),
+    'evento_buscar_relaciones'=>array('controller'=>'Controller', 'action'=>'evento_buscar_relaciones'),
+    'evento_nuevo_guardar'=>array('controller'=>'Controller', 'action'=>'evento_nuevo_guardar'),
+    'evento_cencon_cerrar'=>array('controller'=>'Controller', 'action'=>'evento_cencon_cerrar'),
+    'evento_cencon_observaciones'=>array('controller'=>'Controller', 'action'=>'evento_cencon_observaciones'),
+    'evento_cencon_seguimiento'=>array('controller'=>'Controller', 'action'=>'evento_cencon_seguimiento'),
+    'cencon_observaciones'=>array('controller'=>'Controller', 'action'=>'cencon_observaciones'),
+    'evento_cencon_reasignar'=>array('controller'=>'Controller', 'action'=>'evento_cencon_reasignar'),
+    'reporte_cencon'=>array('controller'=>'Controller', 'action'=>'reporte_cencon'),
+    'actualiza_en_vivo_reporte_cencon'=>array('controller'=>'Controller', 'action'=>'actualiza_en_vivo_reporte_cencon'),
+    'todos_cajero_relacion'=>array('controller'=>'Controller', 'action'=>'todos_cajero_relacion'),
+    
     //Controlador de Eventos (Bitacora Digital)
     'frm_eventos_listar' =>  array('controller'=>'Controller','action'=>'frm_eventos_listar'),
     'frm_eventos_agregar' =>  array('controller'=>'Controller','action'=>'frm_eventos_agregar'),
@@ -322,6 +375,7 @@ $map = array(
     'persona_externa_guardar_informacion'=>array('controller'=>'Controller','action'=> 'persona_externa_guardar_informacion'), 
     'guardar_imagen_persona_externa'=>array('controller'=>'Controller','action'=> 'guardar_imagen_persona_externa'), 
     'eliminar_imagen_personal_externo'=>array('controller'=>'Controller','action'=> 'eliminar_imagen_personal_externo'), 
+    'personal_externo_validar'=>array('controller'=>'Controller','action'=> 'personal_externo_validar'), 
     
     //Importación de Prontuario
     'frm_importar_prontuario_paso_1'=>array('controller'=>'Controller','action'=> 'frm_importar_prontuario_paso_1'),
@@ -346,6 +400,9 @@ $map = array(
     'recordar_password'=>array('controller'=>'Controller', 'action'=>'recordar_password'),
     'iniciar_sistema_cambiando_clave'=>array('controller'=>'Controller', 'action'=>'iniciar_sistema_cambiando_clave'),
     'cambia_clave_usuario_post'=>array('controller'=>'Controller', 'action'=>'cambia_clave_usuario_post')
+    
+    //Pruebas y nuevas implementaciones
+    
     
     );
  

@@ -343,8 +343,10 @@ class Data_Provider{
         //Reemplaza los paréntesis redondos con cuadrados
         $cadena_sql = str_replace(")","]",$cadena_sql);
         
-        //Inserta el registro de trazabilidad del sistema con el id de usuario, fecha, hora, valores nuevos y antiguos, etc.
-        $consulta=$this->conexion->query("insert into t_traza (ID_Traza,Fecha,Hora,ID_Usuario,Tabla_Afectada,Dato_Anterior,Dato_Actualizado) values(null,'".date("Y-m-d")."','".date("H:i:s", time())."',".$_SESSION['id'].",'".$table."','".$valores_iniciales. "','".$cadena_sql."');");       
+         if(isset($_SESSION['nombre'])){
+            //Inserta el registro de trazabilidad del sistema con el id de usuario, fecha, hora, valores nuevos y antiguos, etc.
+            $consulta=$this->conexion->query("insert into t_traza (ID_Traza,Fecha,Hora,ID_Usuario,Tabla_Afectada,Dato_Anterior,Dato_Actualizado) values(null,'".date("Y-m-d")."','".date("H:i:s", time())."',".$_SESSION['id'].",'".$table."','".$valores_iniciales. "','".$cadena_sql."');");       
+        }
         
    }
    

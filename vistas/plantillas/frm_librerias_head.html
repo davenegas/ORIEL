@@ -4,8 +4,34 @@ To change this license header, choose License Headers in Project Properties.
 To change this template file, choose Tools | Templates
 and open the template in the editor.
 -->
+
 <html>
+
+    <script>
+        function alertDGC(mensaje){
+                var dgcTiempo=300
+                var ventanaCS='<div class="dgcAlert"><div class="dgcVentana"><div class="dgcCerrar"></div><div class="dgcMensaje">'+mensaje+'<br><div class="dgcAceptar">Aceptar</div></div></div></div>';
+                $('body').append(ventanaCS);
+                var alVentana=$('.dgcVentana').height();
+                var alNav=$(window).height();
+                var supNav=$(window).scrollTop();
+                $('.dgcAlert').css('height',$(document).height());
+                $('.dgcVentana').css('top',((alNav-alVentana)/2+supNav-100)+'px');
+                $('.dgcAlert').css('display','block');
+                $('.dgcAlert').animate({opacity:1},dgcTiempo);
+                $('.dgcCerrar,.dgcAceptar').click(function(e) {
+                        $('.dgcAlert').animate({opacity:0},dgcTiempo);
+                        setTimeout("$('.dgcAlert').remove()",dgcTiempo);
+                });
+        }
+        window.alert = function (message) {
+          alertDGC(message);
+        };
+
+    </script>
+
     <!--Bootstrap-->
+        <link rel="shortcut icon" href="vistas/Imagenes/Oriel.ico">
         <link href="../../../bootstrap-3.3.6/dist/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
         <script src="vistas/js/jquery.min.js"></script>     
 <!--        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script> -->     
@@ -21,7 +47,7 @@ and open the template in the editor.
         <script src="vistas/js/jquery-confirm.min.js"></script>
 	<!--<script src="http://code.jquery.com/jquery-2.1.1.min.js"></script>-->
         <script type="text/javascript" src="vistas/js/jquery.dataTables.min.js"></script>
-	<!--<script type="text/javascript" src="http://cdn.datatables.net/1.10.2/js/jquery.dataTables.min.js"></script>-->
+        <!--<script type="text/javascript" src="http://cdn.datatables.net/1.10.2/js/jquery.dataTables.min.js"></script>-->
         <script src="vistas/js/table.js"></script>
         
         <!--Libreria para gestión de images-->
@@ -41,4 +67,5 @@ and open the template in the editor.
 
         <link rel="stylesheet" href="../../../Fancyapps/source/helpers/jquery.fancybox-thumbs.css?v=1.0.7" type="text/css" media="screen" />
         <script type="text/javascript" src="../../../Fancyapps/source/helpers/jquery.fancybox-thumbs.js?v=1.0.7"></script>
+
 </html>
