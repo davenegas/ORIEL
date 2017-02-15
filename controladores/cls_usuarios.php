@@ -359,50 +359,5 @@ class cls_usuarios{
 
       }
   }
-  public function obtiene_lista_usuariosp(){
-      if($this->condicion==""){
-        $this->obj_data_provider->conectar();
-        $this->arreglo=$this->obj_data_provider->trae_datos("T_usuario","*", "");
-        $this->arreglo=$this->obj_data_provider->getArreglo();
-        $this->obj_data_provider->desconectar();
-        $this->resultado_operacion=true;
-      }else{
-        $this->obj_data_provider->conectar();
-        $this->arreglo=$this->obj_data_provider->trae_datos("T_usuario", "*", $this->condicion);
-        $this->arreglo=$this->obj_data_provider->getArreglo();
-        $this->obj_data_provider->desconectar();
-        $this->resultado_operacion=true;
-      }
-  }
-  public function obtiene_todos_los_usuariosp(){
-     if($this->condicion==""){
-        $this->obj_data_provider->conectar();
-        $this->arreglo=$this->obj_data_provider->trae_datos("t_usuario
-        INNER JOIN t_turno ON t_usuario.ID_Turno = t_turno.ID_Turno
-        inner join t_horariop on T_usuario.ID_horariop = t_horariop.ID_horariop ","t_usuario.ID_Usuario,t_usuario.Cedula,t_usuario.Nombre,t_usuario.Apellido,t_usuario.Observaciones,t_usuario.Estado,t_horariop.Horariop,t_horariop.ID_Horariop,t_turno.Turno,t_horariop.ID_Horariop","");
-        $this->arreglo=$this->obj_data_provider->getArreglo();
-        $this->obj_data_provider->desconectar();
-        $this->resultado_operacion=true;
-      }else{
-        $this->obj_data_provider->conectar();
-        $this->arreglo=$this->obj_data_provider->trae_datos("T_Usuario", "*", $this->condicion);
-        $this->arreglo=$this->obj_data_provider->getArreglo();
-        $this->obj_data_provider->desconectar();
-        $this->resultado_operacion=true;
-      }
-  }
-  public function guardar_usuariop() {
-       if($this->id=="0"){
-       $this->obj_data_provider->conectar();
-       $this->arreglo=$this->obj_data_provider->inserta_datos("t_usuario","ID_Usuario,Cedula,Nombre,Apellido,Observaciones,Estado,ID_Horariop,ID_Turno","null,'".$this->cedula."','".$this->nombre."','".$this->apellido."','".$this->observaciones."','".$this->estado."','".$this->id_horario."','".$this->id_turno."'");
-       $this->arreglo=$this->obj_data_provider->getArreglo();
-       $this->obj_data_provider->desconectar();
-       }else{
-       $this->obj_data_provider->conectar();
-       $this->arreglo=$this->obj_data_provider->edita_datos("t_usuario","Cedula='".$this->cedula."',Nombre='".$this->nombre."',Apellido='".$this->apellido."',Observaciones='".$this->observaciones."',Estado='".$this->estado."',ID_Horariop='".$this->id_horario."',ID_Turno='".$this->id_turno."'", "ID_Usuario='".$this->id."'");
-       $this->arreglo=$this->obj_data_provider->getArreglo();
-       $this->obj_data_provider->desconectar();
-       }  
-  }
  
 }
