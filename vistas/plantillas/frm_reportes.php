@@ -1,17 +1,17 @@
+
 <!DOCTYPE HTML>
 <html lang="es">
     <head>
         <meta charset="UTF-8">
-        <title>SLista de Asistencia Usuario</title>
+        <title>Lista de Asistencia Usuario</title>
         <?php require_once 'frm_librerias_head.html';?>
         <link rel="stylesheet" href="vistas/css/ventanaoculta.css">
-            <script src="Vista/js/jquery-2.1.1.min.js"></script>        
-            <script src="../../../bootstrap-3.3.6/dist/js/bootstrap.min.js"></script>
-  
+        <script src="Vista/js/jquery-2.1.1.min.js"></script>        
+        <script src="../../../bootstrap-3.3.6/dist/js/bootstrap.min.js"></script>
     </head>
     
     <body>
-        <?php require_once 'encabezado.php';?>
+         <?php require_once 'encabezado.php';?>
         <h3>Reportes Asistencia de Personal</h3>
         <br>
         <div class="container">
