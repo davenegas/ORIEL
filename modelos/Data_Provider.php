@@ -191,7 +191,7 @@ class Data_Provider{
    //Este metodo recibe el nombre de la tabla, campos de la misma y la condición de búsqueda en caso de que exista
     public function trae_datos($table,$campos,$condicion){
        
-        echo "select ".$campos." from ".$table." where ".$condicion.";";
+        //echo "select ".$campos." from ".$table." where ".$condicion.";";
             //Elimina la instancia del arreglo
         unset($this->arreglo);
        
@@ -199,14 +199,14 @@ class Data_Provider{
         if ($condicion==""){
             //En caso de no tener condición, agrega campos y nombre de la tabla solamente
             $consulta=$this->conexion->query("select ".$campos." from ".$table.";");
-            echo ("select ".$campos." from ".$table.";");
+            //echo ("select ".$campos." from ".$table.";");
         }else{
             //De lo contrario asigna la condición a la consulta SQL
             $consulta=$this->conexion->query("select ".$campos." from ".$table." where ".$condicion.";");
-            echo ("select ".$campos." from ".$table." where ".$condicion.";");
+            //echo ("select ".$campos." from ".$table." where ".$condicion.";");
         } 
         
-        echo "select ".$campos." from ".$table." where ".$condicion.";";
+        //echo "select ".$campos." from ".$table." where ".$condicion.";";
         
         //Una vez ejecutada la consulta verifica si trae resultados,
         if ($consulta!=null){
