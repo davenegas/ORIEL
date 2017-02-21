@@ -152,8 +152,10 @@
                 <?php 
                 //************************************************Pinta Menu de Reportes***************************************************************
                 if (($_SESSION['modulos']['Reportes-Eventos']==1)||($_SESSION['modulos']['Reportes-Oficinas']==1)||
-                       ($_SESSION['modulos']['Reportes-Personal']==1)||($_SESSION['modulos']['Reportes-Alertas']==1)||
-                       ($_SESSION['modulos']['Reportes-Enlaces Telecom']==1)||($_SESSION['modulos']['Reportes-Trazabilidad']==1)){ ?>
+                        ($_SESSION['modulos']['Reportes-Personal']==1)||($_SESSION['modulos']['Reportes-Alertas']==1)||
+                        ($_SESSION['modulos']['Reportes-Enlaces Telecom']==1)||($_SESSION['modulos']['Reportes-Líneas teléfonicas']==1)||
+                        ($_SESSION['modulos']['Reportes-Trazabilidad']==1)||($_SESSION['modulos']['Reportes-Historico seguimientos']==1)||
+                        ($_SESSION['modulos']['Reportes-Activaciones provincia']==1)||($_SESSION['modulos']['Reportes-Cencon']==1)){ ?>
 
                     <li class="dropdown">
                         <a class="dropdown-toggle" data-toggle="dropdown" href="#">Reportes
@@ -179,19 +181,23 @@
                             <?php if ($_SESSION['modulos']['Reportes-Enlaces Telecom']==1){ ?>
                                 <li><a href="index.php?ctl=enlace_reporte">Enlaces Telecom</a></li> 
                             <?php }; ?>
-
-                            <?php if ($_SESSION['modulos']['Reportes-Enlaces Telecom']==1){ ?>
+    
+                            <?php if ($_SESSION['modulos']['Reportes-Líneas teléfonicas']==1){ ?>
+                                <li><a href="index.php?ctl=reporte_lineas_telefonicas">Líneas teléfonicas</a></li> 
+                            <?php }; ?>
+                             
+                            <?php if ($_SESSION['modulos']['Reportes-Cencon']==1){ ?>
                                 <li><a href="index.php?ctl=reporte_cencon">Reporte Cencon</a></li> 
                             <?php }; ?>
-
-                            <?php if ($_SESSION['modulos']['Reportes-Trazabilidad']==1){ ?>
+                            
+                            <?php if ($_SESSION['modulos']['Reportes-Historico seguimientos']==1){ ?>
                                 <li><a href="index.php?ctl=reporte_seguimiento_eventos">Historico Seguimiento Usuarios</a></li> 
                             <?php }; ?>
 
-                            <?php if ($_SESSION['modulos']['Reportes-Trazabilidad']==1){ ?>
+                            <?php if ($_SESSION['modulos']['Reportes-Activaciones provincia']==1){ ?>
                                 <li><a href="index.php?ctl=reporte_eventos_provincia">Activaciones por Provincia</a></li> 
                             <?php }; ?>
-
+                            
                             <?php if ($_SESSION['modulos']['Reportes-Trazabilidad']==1){ ?>
                                 <li><a href="index.php?ctl=frm_trazabilidad_listar">Trazabilidad</a></li> 
                             <?php }; ?>   
@@ -206,8 +212,9 @@
                 //************************************************Pinta Menu de Módulos***************************************************************
                 if (($_SESSION['modulos']['Módulo-Bitácora Digital']==1)||($_SESSION['modulos']['Módulo-MRI BCR']==1)||
                         ($_SESSION['modulos']['Módulo-Control de Video']==1)||($_SESSION['modulos']['Módulo-PuntosBCR']==1)||
-                        ($_SESSION['modulos']['Módulo-Personal']==1)||($_SESSION['modulos']['Módulo-Áreas de Apoyo']==1||
-                          $_SESSION['modulos']['Módulo-Personal Externo']==1)){?>
+                        ($_SESSION['modulos']['Módulo-Personal']==1)||($_SESSION['modulos']['Módulo-Áreas de Apoyo']==1)||
+                        ($_SESSION['modulos']['Módulo-Personal Externo']==1)||($_SESSION['modulos']['Módulo-Cencon']==1)||
+                        ($_SESSION['modulos']['Módulo-Pruebas alarma']==1)){?>
 
                     <li class="dropdown">
                         <a class="dropdown-toggle" data-toggle="dropdown" href="#">Módulos
@@ -250,6 +257,10 @@
                                 <li><a href="index.php?ctl=eventos_cencon">Cencon</a></li> 
                             <?php }; ?>
 
+                            <?php if ($_SESSION['modulos']['Módulo-Pruebas alarma']==1){?>
+                                <li><a href="index.php?ctl=pruebas_alarma">Pruebas alarma</a></li> 
+                            <?php }; ?>
+                                
                             <?php if ($_SESSION['modulos']['Módulo-Control de Video']==1){?>
                                 <li><a href="http://10.170.5.80/Operaciones_de_Seguridad/ctrlvideo/consulta.html">Controles de Video</a></li>
                             <?php }; ?>   
@@ -268,6 +279,10 @@
                         <ul class="dropdown-menu">
                             <?php if ($_SESSION['modulos']['Módulo-Personal Externo']==1){ ?>
                                 <li><a href="index.php?ctl=manual_personal_externo">Manual Personal Externo</a></li>
+                            <?php }; ?>
+                             
+                            <?php if ($_SESSION['modulos']['Módulo-Cencon']==1){ ?>
+                                <li><a href="index.php?ctl=manual_cencon">Manual Cencon</a></li>
                             <?php }; ?>
                         </ul>
                     </li>

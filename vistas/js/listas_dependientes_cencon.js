@@ -105,7 +105,8 @@ function todos_cajero(funcion){
     });
 }
 ////////////////////////////////////////////////////////////////////////////////
-///////////////////////////FUNCIONES DE MÓDULO CENCON//////////////////////////
+///////////////////////////FUNCIONES DE MÓDULO CENCON///////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 function evento_buscar_cajero(){
     id= document.getElementById('numero_atm').value;
     var datos = new Array;
@@ -115,6 +116,20 @@ function evento_buscar_cajero(){
         document.getElementById('nombre_atm').value=datos['Nombre'];
         document.getElementById('tipo_atm').value=datos['Tipo_Punto'];
         document.getElementById('ID_PuntoBCR').value=datos['ID_PuntoBCR'];
+        
+        var d = new Date();
+        hora_actual=d.getHours()+':'+d.getMinutes();
+        if((String(d.getHours()).length)==1){
+            hora_actual = "0"+d.getHours();
+        } else {
+            hora_actual=d.getHours();
+        }
+        if((String(d.getMinutes()).length)==1){
+            hora_actual=hora_actual+":0"+d.getMinutes();
+        } else{
+            hora_actual=hora_actual+":"+d.getMinutes();
+        }
+        document.getElementById('hora').value= hora_actual;
     });
 }
 function evento_buscar_persona(){
@@ -136,7 +151,6 @@ function evento_buscar_persona(){
             document.getElementById('unidad_ejecutora').value=datos['Empresa'];
             document.getElementById('ID_Persona').value=datos['ID_Persona_Externa'];
         }
-        
     });
     //Busca lista de cajeros con acceso de la persona
     var cajeros= new Array();

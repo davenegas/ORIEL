@@ -256,4 +256,14 @@ class cls_cencon {
         $this->obj_data_provider->desconectar();
         $this->resultado_operacion=true;
     }
+    
+    public function informacion_reporte(){
+        $this->obj_data_provider->conectar();
+        $this->arreglo=$this->obj_data_provider->trae_datos("T_EventoCencon", 
+                        "COUNT(*) TOTAL",
+                        $this->condicion);
+        $this->arreglo=$this->obj_data_provider->getArreglo();
+        $this->obj_data_provider->desconectar();
+        $this->resultado_operacion=true;
+    }
 }?>

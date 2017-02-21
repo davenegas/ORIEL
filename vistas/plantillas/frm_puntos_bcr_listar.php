@@ -10,6 +10,7 @@
                 $('#cargando').hide();
                 $.post("index.php?ctl=cuenta_visitas_a_puntos_bcr_privado");
             });
+            
             $(document).ready(function () {
                 if ( $.fn.dataTable.isDataTable('#tabla') ) {
                     table = $('#tabla').DataTable();

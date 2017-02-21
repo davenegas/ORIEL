@@ -2815,13 +2815,13 @@
             $eventos_con_mezcla=array();
             
             //Establece el criterio de filtrado correspondiente para buscar los eventos.
-            $obj_eventos->setCondicion("T_Evento.ID_EstadoEvento<>3 AND T_Evento.ID_EstadoEvento<>5");
+            $obj_eventos->setCondicion("T_Evento.ID_EstadoEvento<>3 AND T_Evento.ID_EstadoEvento<>5 AND T_Evento.ID_Tipo_Evento<>39");
             //Ejecuta la sentencia SQL
             $obj_eventos ->obtiene_todos_los_eventos(); 
             //Obtiene el vector de registros correspondientes
             $params= $obj_eventos->getArreglo();
             $puesto_enviado=0;
-            $check_continuidad=1;
+            $check_continuidad=0;
             //Implementación para obtener el último seguimiento de cada evento, además del último usuario que lo agregó
             
             //Saca el tamaño del vector de registros 
@@ -5846,8 +5846,7 @@
                 if($tam>0){
                     for ($i = 0; $i <$tam; $i++) {
                         $condicion=$condicion."T_UnidadEjecutora.Numero_UE='".$unidad_ejecutora[$i]['Numero_UE']."'";
-                        if($tam>$i && $tam-1<>$i)
-                        {
+                        if($tam>$i && $tam-1<>$i){
                             $condicion=$condicion." OR ";
                         }
                     }
@@ -7584,17 +7583,24 @@
             $obj_cencon = new cls_cencon();
             
             //Obtiene todo el personal BCR
+            $obj_personal->setCondicion("T_Personal.Estado=1");
             $obj_personal->obtiene_todo_el_personal();
             $personal_bcr = $obj_personal->getArreglo();
             
             //Obtiene todo el personal externo
+            $obj_externo->setCondicion("T_PersonalExterno.ID_Estado_Persona=1");
             $obj_externo->obtiene_todo_el_personal_externo();
             $personal_externo = $obj_externo->getArreglo();
             
             //Obtiene los puntos BCR que sean tipo ATM
-            $obj_puntos->setCondicion("T_Puntobcr.ID_Tipo_Punto=2 OR T_Puntobcr.ID_Tipo_Punto=3 OR T_Puntobcr.ID_Tipo_Punto=4 OR T_Puntobcr.ID_Tipo_Punto=8");
+            $obj_puntos->setCondicion("(T_Puntobcr.ID_Tipo_Punto=2 OR T_Puntobcr.ID_Tipo_Punto=3 OR T_Puntobcr.ID_Tipo_Punto=4 OR T_Puntobcr.ID_Tipo_Punto=8) AND T_PuntoBCR.Estado=1");
             $obj_puntos->obtiene_todos_los_puntos_bcr();
             $puntosbcr = $obj_puntos->getArreglo();
+            
+            unset($obj_cencon); 
+            unset($obj_personal);
+            unset($obj_externo);
+            unset($obj_puntos);
             
             require __DIR__.'/../vistas/plantillas/frm_cencon_gestion.php';
         }
@@ -7664,6 +7670,9 @@
             }  
             $html.='</tbody> 
                     </table>';
+            
+            unset($obj_cencon);
+            
             echo $html;
         }
         else {
@@ -7678,19 +7687,19 @@
         if(isset($_SESSION['nombre'])){
             $obj_cencon = new cls_cencon();
             //Obtiene todas las relaciones de la persona, debe tener la empresa
-            $obj_cencon->setCondicion("T_Cencon.ID_Persona=".$_POST['id_persona']);
+            $obj_cencon->setCondicion("T_Cencon.ID_Persona=".$_POST['id_persona']." AND T_Cencon.ID_Empresa=".$_POST['empresa']);
             $obj_cencon->setEmpresa($_POST['empresa']);
             $obj_cencon->obtener_todas_relaciones();
             $cajeros =  $obj_cencon->getArreglo();
             
-           //Procedimiento para crear la tabla y enviarla al html
+            //Procedimiento para crear la tabla y enviarla al html
             $tam = count($cajeros);
             $html="";
             $html.='<thead> 
-                            <th style="text-align:center">Número ATM</th>
-                            <th style="text-align:center">Nombre de ATM</th>
-                            <th style="text-align:center">Observaciones</th>
-                            <th style="text-align:center">Opciones</th>
+                        <th style="text-align:center">Número ATM</th>
+                        <th style="text-align:center">Nombre de ATM</th>
+                        <th style="text-align:center">Observaciones</th>
+                        <th style="text-align:center">Opciones</th>
                         </thead>
                         <tbody>';
             for($i=0; $i<$tam;$i++){
@@ -7703,6 +7712,9 @@
             }  
             $html.='</tbody> 
                     </table>';
+            
+            unset($obj_cencon);
+            
             echo $html;
         }
         else {
@@ -7723,7 +7735,7 @@
             $obj_cencon->eliminar_relacion_persona_puntobcr();
             
             //Obtiene nuevamente la lista de Cajeros del usuario
-            $obj_cencon->setCondicion("T_Cencon.ID_Persona=".$_POST['id_persona']);
+            $obj_cencon->setCondicion("T_Cencon.ID_Persona=".$_POST['id_persona']." AND T_Cencon.ID_Empresa=".$_POST['empresa']);
             $obj_cencon->obtener_todas_relaciones();
             $cajeros =  $obj_cencon->getArreglo();
            
@@ -7747,6 +7759,8 @@
             }  
             $html.='</tbody> 
                     </table>';
+            
+            unset($obj_cencon);
             echo $html;
         }
         else {
@@ -7764,6 +7778,7 @@
             $obj_cencon->setCondicion("T_Cencon.ID_Cencon=".$_POST['id_cencon']);
             $obj_cencon->setObservaciones($_POST['observaciones']);
             $obj_cencon->editar_observaciones_cencon();
+            unset($obj_cencon);
         }
         else {
             $tipo_de_alerta="alert alert-warning";
@@ -7786,7 +7801,7 @@
                 $puntosbcr = $obj_puntos->getArreglo();
                 
                 //Elimina las relaciones de la persona para no repetir cajeros
-                $obj_cencon->setCondicion("ID_Persona=".$_POST['id_persona']);
+                $obj_cencon->setCondicion("ID_Persona=".$_POST['id_persona']." AND ID_Empresa=".$_POST['empresa']);
                 $obj_cencon->eliminar_relacion_persona_puntobcr();
                 
                 //obtiene el tamaño del vector
@@ -7803,11 +7818,11 @@
             }
             if($_POST['accion']=='eliminar'){
                 //Define la condicion para eliminar
-                $obj_cencon->setCondicion("ID_Persona=".$_POST['id_persona']);
+                $obj_cencon->setCondicion("ID_Persona=".$_POST['id_persona']." AND ID_Empresa=".$_POST['empresa']);
                 $obj_cencon->eliminar_relacion_persona_puntobcr();
             }
             $obj_cencon->setEmpresa($_POST['empresa']);
-            $obj_cencon->setCondicion("T_Cencon.ID_Persona=".$_POST['id_persona']);
+            $obj_cencon->setCondicion("T_Cencon.ID_Persona=".$_POST['id_persona']." AND T_Cencon.ID_Empresa=".$_POST['empresa']);
             $obj_cencon->obtener_todas_relaciones();
             $cajeros =  $obj_cencon->getArreglo();
            
@@ -7830,6 +7845,9 @@
             }  
             $html.='</tbody> 
                     </table>';
+            
+            unset($obj_cencon);
+            
             echo $html;
         }
         else {
@@ -7841,16 +7859,129 @@
     
     /////////////////////Eventos Módulo Cencon /////////////////////////////////
     //Función que permite buscar la información de un PuntoBCR y enviarla a JavaScript
+    public function eventos_cencon(){
+        if(isset($_SESSION['nombre'])){
+            $obj_cencon = new cls_cencon();
+            $obj_personal = new cls_personal();
+            $obj_externo = new cls_personal_externo();
+            
+            $obj_cencon->setCondicion("Hora_Cierre is null");
+            $obj_cencon->obtener_todos_eventos_cencon();
+            $params= $obj_cencon->getArreglo();
+            
+            $tam=count($params);
+            for($i=0;$i<$tam;$i++){
+                if($params[$i]['ID_Empresa']==1){
+                    $obj_personal->setCondicion("ID_Persona='".$params[$i]['ID_Persona']."'");
+                    $obj_personal->obtener_personas_prontuario();
+                    $persona = $obj_personal->getArreglo();
+                    $params[$i] = array_merge((['Nombre_Persona' =>($persona[0]['Apellido_Nombre'])]),(['Correo' =>($persona[0]['Correo'])]),$params[$i]);
+                } else{
+                    $obj_externo->setCondicion("T_PersonalExterno.ID_Persona_Externa='".$params[$i]['ID_Persona']."'");
+                    $obj_externo->obtiene_todo_el_personal_externo();
+                    $persona = $obj_externo->getArreglo();
+                    $params[$i] = array_merge((['Nombre_Persona' =>($persona[0]['Apellido']." ".$persona[0]['Nombre'])]),(['Correo' =>($persona[0]['Correo'])]),$params[$i]);
+                }
+            }
+            //Obtiene la fecha del servidor en un arreglo
+            $fecha_actual= getdate();
+            //Convierta la fecha a formto aaaa/mm/dd hh:mm
+            $fecha_actual= $fecha_actual['year']."-".$fecha_actual['mon']."-".$fecha_actual['mday'].' '.$fecha_actual['hours'].':'.$fecha_actual['minutes'];
+            //asigna la fecha actual a un arreglo formato DateTime
+            $fecha1 = new DateTime($fecha_actual);
+            $diff="";
+            for ($i = 0; $i <$tam; $i++) {
+                //asigna da date2 la fecha que trae en el arreglo
+                $fecha2 = new DateTime($params[$i]['Fecha_Apertura'].' '.$params[$i]['Hora_Apertura']);
+                $diff = $fecha1->diff($fecha2);
+                //print_r($diff);
+                $vencidos[$i]['tiempo']=(intval($diff->d)*1440)+(intval($diff->h)*60)+(intval($diff->i)*1);
+                $vencidos[$i]['mensaje']= ("ATM #".$params[$i]['Codigo']." | D:". $diff->d." | Hr:". $diff->h." | Min:". $diff->i." \n "); 
+                
+                //Obtiene la hora actual del sistema
+                $hora_actual= getdate();
+                $hora_actual=$hora_actual['hours'];
+                if($hora_actual<19){
+                    if($vencidos[$i]['tiempo']<'300'){
+                        if(!($params[$i]['Seguimiento']=="Arqueo de ATM" ||$params[$i]['Seguimiento']=="ATM en Mantenimiento"||
+                            $params[$i]['Seguimiento']=="Apertura con llave Azul"||$params[$i]['Seguimiento']=="Permiso Especial")){
+                            if($vencidos[$i]['tiempo']>'40'){
+                                if($params[$i]['Seguimiento']=="Se envió correo al funcionario"||$params[$i]['Seguimiento']=="Se envió correo al encargado"||
+                                    $params[$i]['Seguimiento']=="Se le informó al coordinador"){
+                                    if($vencidos[$i]['tiempo']>'70'){
+                                        if($params[$i]['Seguimiento']=="Se envió correo al encargado"||
+                                            $params[$i]['Seguimiento']=="Se le informó al coordinador"){
+                                            if($vencidos[$i]['tiempo']>'100'){
+                                                if($params[$i]['Seguimiento']=="Se le informó al coordinador"){
+                                                    $vencidos[$i]['color']="color: blueviolet";
+                                                    //echo "blueviolet +100 informó".$params[$i]['Codigo']."\n||||";
+                                                }else{
+                                                    $vencidos[$i]['color']="color: red";
+                                                    //echo "rojo +100 sin informar".$params[$i]['Codigo']."\n||||";
+                                                } 
+                                            }else{
+                                                $vencidos[$i]['color']="color: orange";
+                                                //echo "naranja -110".$params[$i]['Codigo']."\n|||||";
+                                            }
+                                        }else{
+                                            $vencidos[$i]['color']="color: red";
+                                            //echo "rojo -correo encargado".$params[$i]['Codigo']."\n|||||";
+                                        }
+                                    }else{
+                                        $vencidos[$i]['color']="color: orange";
+                                        //echo "naranja -70 y correo".$params[$i]['Codigo']."\n|||||";
+                                    }
+                                }else{
+                                    $vencidos[$i]['color']="color: red";
+                                    //echo "rojo +40 sin correo".$params[$i]['Codigo']."\n||||";
+                                }
+                            } else{
+                                $vencidos[$i]['color']="color: black";
+                                //echo "nada".$params[$i]['Codigo']."\n||||";
+                            }
+                        } else{
+                            $vencidos[$i]['color']="color: black";
+                            //echo "nada".$params[$i]['Codigo']."\n||||";
+                        }    
+                    }else{
+                        $vencidos[$i]['color']="color: red";
+                        //echo "rojo +40 sin correo".$params[$i]['Codigo']."\n||||";
+                    }
+                }else{
+                    $vencidos[$i]['color']="color: red";
+                    //echo "rojo +40 sin correo".$params[$i]['Codigo']."\n||||";
+                }    
+            }
+            
+            if(isset ($vencidos)){
+                rsort($vencidos);
+            }
+           
+            unset($obj_cencon); 
+            unset($obj_personal);
+            unset($obj_externo);
+            
+            require __DIR__.'/../vistas/plantillas/frm_eventos_cencon.php';
+        }
+        else {
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }
+    }
+    
     public function evento_buscar_cajero() {
         if(isset($_SESSION['nombre'])){
             $obj_cencon = new cls_cencon();
             $obj_punto = new cls_puntosBCR();
             //Buscar la información de un PuntoBCR basado en el código del cajero
-            $obj_punto->setCondicion("T_PuntoBCR.Codigo=".$_POST['id']);
+            $obj_punto->setCondicion("T_PuntoBCR.Codigo=".$_POST['id']." AND T_PuntoBCR.Estado=1");
             $obj_punto->obtiene_todos_los_puntos_bcr();
             $cajero = $obj_punto->getArreglo();
             
             //Convierte la información en un json para enviarlo a JavaScript
+            unset($obj_cencon);
+            unset($obj_punto);
             echo json_encode($cajero[0], JSON_FORCE_OBJECT);
         }
         else {
@@ -7887,6 +8018,9 @@
             }
             
             //Convierte la información en un json para enviarlo a JavaScript
+            unset($obj_cencon); 
+            unset($obj_persona);
+            unset($obj_externo);
             echo json_encode($funcionario[0], JSON_FORCE_OBJECT);
         }
         else {
@@ -7907,6 +8041,7 @@
             $obj_cencon->obtener_todas_relaciones();
             $cajeros =  $obj_cencon->getArreglo();
             
+            unset($obj_cencon);
             //Convierte la información en un json para enviarlo a JavaScript
             echo json_encode($cajeros, JSON_FORCE_OBJECT);
         }
@@ -8034,6 +8169,12 @@
                 //Ingresa el seguimiento
                 $obj_eventos->ingresar_seguimiento_evento();  
             }
+            
+            unset($obj_cencon); 
+            unset($obj_eventos);
+            unset($obj_puntobcr);
+            unset($obj_personal);
+            unset($obj_externo);
         }
         else {
             $tipo_de_alerta="alert alert-warning";
@@ -8090,115 +8231,16 @@
             if($tam==2){
                 $obj_eventos->edita_estado_evento("3");
             }
+            
+            unset($obj_cencon); 
+            unset($obj_eventos);
+            unset($obj_puntobcr);
         }
         else {
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }  
-    }
-    
-    public function eventos_cencon(){
-        if(isset($_SESSION['nombre'])){
-            $obj_cencon = new cls_cencon();
-            $obj_personal = new cls_personal();
-            $obj_externo = new cls_personal_externo();
-            
-            $obj_cencon->setCondicion("Hora_Cierre is null");
-            $obj_cencon->obtener_todos_eventos_cencon();
-            $params= $obj_cencon->getArreglo();
-            
-            $tam=count($params);
-            for($i=0;$i<$tam;$i++){
-                if($params[$i]['ID_Empresa']==1){
-                    $obj_personal->setCondicion("ID_Persona='".$params[$i]['ID_Persona']."'");
-                    $obj_personal->obtener_personas_prontuario();
-                    $persona = $obj_personal->getArreglo();
-                    $params[$i] = array_merge((['Nombre_Persona' =>($persona[0]['Apellido_Nombre'])]),$params[$i]);
-                } else{
-                    $obj_externo->setCondicion("T_PersonalExterno.ID_Persona_Externa='".$params[$i]['ID_Persona']."'");
-                    $obj_externo->obtiene_todo_el_personal_externo();
-                    $persona = $obj_externo->getArreglo();
-                    $params[$i] = array_merge((['Nombre_Persona' =>($persona[0]['Apellido']." ".$persona[0]['Nombre'])]),$params[$i]);
-                }
-            }
-            //Obtiene la fecha del servidor en un arreglo
-            $fecha_actual= getdate();
-            //Convierta la fecha a formto aaaa/mm/dd hh:mm
-            $fecha_actual= $fecha_actual['year']."-".$fecha_actual['mon']."-".$fecha_actual['mday'].' '.$fecha_actual['hours'].':'.$fecha_actual['minutes'];
-            //asigna la fecha actual a un arreglo formato DateTime
-            $fecha1 = new DateTime($fecha_actual);
-            $diff="";
-            for ($i = 0; $i <$tam; $i++) {
-                //asigna da date2 la fecha que trae en el arreglo
-                $fecha2 = new DateTime($params[$i]['Fecha_Apertura'].' '.$params[$i]['Hora_Apertura']);
-                $diff = $fecha1->diff($fecha2);
-                //print_r($diff);
-                $vencidos[$i]['tiempo']=(intval($diff->d)*1440)+(intval($diff->h)*60)+(intval($diff->i)*1);
-                $vencidos[$i]['mensaje']= ("ATM #".$params[$i]['Codigo']." | D:". $diff->d." | Hr:". $diff->h." | Min:". $diff->i." \n "); 
-                
-                //Obtiene la hora actual del sistema
-                $hora_actual= getdate();
-                $hora_actual=$hora_actual['hours'];
-                if($hora_actual<19){
-                    if($vencidos[$i]['tiempo']<'660'){
-                        if(!($params[$i]['Seguimiento']=="Arqueo de ATM" ||$params[$i]['Seguimiento']=="ATM en Mantenimiento"||
-                            $params[$i]['Seguimiento']=="Apertura con llave Azul")){
-                            if($vencidos[$i]['tiempo']>'40'){
-                                if($params[$i]['Seguimiento']=="Se envió correo al funcionario"||$params[$i]['Seguimiento']=="Se envió correo al encargado"||
-                                    $params[$i]['Seguimiento']=="Se le informó al coordinador"){
-                                    if($vencidos[$i]['tiempo']>'70'){
-                                        if($params[$i]['Seguimiento']=="Se envió correo al encargado"||$params[$i]['Seguimiento']=="Se le informó al coordinador"){
-                                            if($vencidos[$i]['tiempo']>'100'){
-                                                if($params[$i]['Seguimiento']=="Se le informó al coordinador"){
-                                                    $vencidos[$i]['color']="color: blueviolet";
-                                                    //echo "blueviolet +100 informó".$params[$i]['Codigo']."\n||||";
-                                                }else{
-                                                    $vencidos[$i]['color']="color: red";
-                                                    //echo "rojo +100 sin informar".$params[$i]['Codigo']."\n||||";
-                                                } 
-                                            }else{
-                                                $vencidos[$i]['color']="color: orange";
-                                                //echo "naranja -110".$params[$i]['Codigo']."\n|||||";
-                                            }
-                                        }else{
-                                            $vencidos[$i]['color']="color: red";
-                                            //echo "rojo -correo encargado".$params[$i]['Codigo']."\n|||||";
-                                        }
-                                    }else{
-                                        $vencidos[$i]['color']="color: orange";
-                                        //echo "naranja -70 y correo".$params[$i]['Codigo']."\n|||||";
-                                    }
-                                }else{
-                                    $vencidos[$i]['color']="color: red";
-                                    //echo "rojo +40 sin correo".$params[$i]['Codigo']."\n||||";
-                                }
-                            } else{
-                                //echo "nada".$params[$i]['Codigo']."\n||||";
-                            }
-                        } else{
-                                //echo "nada".$params[$i]['Codigo']."\n||||";
-                        }    
-                    }else{
-                        $vencidos[$i]['color']="color: red";
-                        //echo "rojo +40 sin correo".$params[$i]['Codigo']."\n||||";
-                    }
-                }else{
-                    $vencidos[$i]['color']="color: red";
-                    //echo "rojo +40 sin correo".$params[$i]['Codigo']."\n||||";
-                }    
-            }
-            
-            if(isset ($vencidos)){
-                rsort($vencidos);
-            }
-            require __DIR__.'/../vistas/plantillas/frm_eventos_cencon.php';
-        }
-        else {
-            $tipo_de_alerta="alert alert-warning";
-            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
-            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
-        }
     }
     
     public function evento_cencon_observaciones(){
@@ -8254,161 +8296,6 @@
         }
     }
     
-    public function reporte_cencon(){
-        if(isset($_SESSION['nombre'])){
-            $obj_cencon = new cls_cencon();
-            $obj_personal = new cls_personal();
-            $obj_externo = new cls_personal_externo();
-            
-            $obj_cencon->setCondicion("T_EventoCencon.Fecha_Apertura='".date("Y-m-d")."'");
-            $obj_cencon->obtener_todos_eventos_cencon();
-            $params= $obj_cencon->getArreglo();
-            
-            $tam=count($params);
-            for($i=0;$i<$tam;$i++){
-                if($params[$i]['ID_Empresa']==1){
-                    $obj_personal->setCondicion("ID_Persona='".$params[$i]['ID_Persona']."'");
-                    $obj_personal->obtener_personas_prontuario();
-                    $persona = $obj_personal->getArreglo();
-                    $params[$i] = array_merge((['Nombre_Persona' =>($persona[0]['Apellido_Nombre'])]),$params[$i]);
-                } else{
-                    $obj_externo->setCondicion("T_PersonalExterno.ID_Persona_Externa='".$params[$i]['ID_Persona']."'");
-                    $obj_externo->obtiene_todo_el_personal_externo();
-                    $persona = $obj_externo->getArreglo();
-                    $params[$i] = array_merge((['Nombre_Persona' =>($persona[0]['Apellido']." ".$persona[0]['Nombre'])]),$params[$i]);
-                }
-            }
-            
-            require __DIR__.'/../vistas/plantillas/rpt_eventos_cencon.php';
-        }
-        else {
-            $tipo_de_alerta="alert alert-warning";
-            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
-            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
-        }  
-    }
-    
-    public function actualiza_en_vivo_reporte_cencon(){
-        //Espera 2 segundos antes de iniciar la ejecución del método, para mostrar un gift de espera en pantalla
-        sleep(2);       
-        //Validación para verificar si el usuario está logeado en el sistema
-        if(isset($_SESSION['nombre'])){
-            //Creación de un nuevo objeto de la clase eventos
-            $obj_cencon = new cls_cencon();
-            $obj_personal = new cls_personal();
-            $obj_externo = new cls_personal_externo();
-            //Recibe la fecha inicial del reporte
-            $fecha_inicial=$_POST['fecha_inicial'];
-            //Recibe la fecha final del reporte
-            $fecha_final=$_POST['fecha_final'];
-                              
-            //Establece la condición SQL para definir el rango de fechas del reporte
-            //Establece la condicion de la consulta
-            $obj_cencon->setCondicion("(T_EventoCencon.Fecha_Apertura between '".$fecha_inicial."' AND '".$fecha_final."')");
-            //Obtiene los eventos de acuerdo a la condicion.
-            $obj_cencon->obtener_todos_eventos_cencon();
-            //Obtiene el arreglo de resultados
-            $params= $obj_cencon->getArreglo();
-            
-            // Busca la información de la persona de acuerdo a la empresa y el ID_Persona y luego lo agrega al vactor de params
-            $tamano=count($params);
-            for($i=0;$i<$tamano;$i++){
-                if($params[$i]['ID_Empresa']==1){
-                    $obj_personal->setCondicion("ID_Persona='".$params[$i]['ID_Persona']."'");
-                    $obj_personal->obtener_personas_prontuario();
-                    $persona = $obj_personal->getArreglo();
-                    $params[$i] = array_merge((['Nombre_Persona' =>($persona[0]['Apellido_Nombre'])]),$params[$i]);
-                } else{
-                    $obj_externo->setCondicion("T_PersonalExterno.ID_Persona_Externa='".$params[$i]['ID_Persona']."'");
-                    $obj_externo->obtiene_todo_el_personal_externo();
-                    $persona = $obj_externo->getArreglo();
-                    $params[$i] = array_merge((['Nombre_Persona' =>($persona[0]['Apellido']." ".$persona[0]['Nombre'])]),$params[$i]);
-                }
-            }
-            //verifica que hayan resultados en la consulta, para empezar a pintar la tabla HTML que se mostrará en pantalla al formulario
-            if (count($params)>0){
-                //Creación de la tabla
-                $html='<table id="tabla" class="display2">';
-                //Creación de la cabecera de la tabla
-                $html.='<thead>';
-                //Creación de la fila de títulos de la tabla
-                $html.='<tr>';
-                //Columna id evento, la cual está oculta en la tabla
-                $html.='<th hidden>ID_Evento_Cencon</th>';
-                //Resto de columnas de la tabla, de acuerdo a lo requerido en la consulta SQL
-                $html.='<th style="text-align:center">Fecha Apertura</th>';
-                $html.='<th style="text-align:center">Hora Apertura</th>';
-                $html.='<th style="text-align:center">Fecha Cierre</th>';
-                $html.='<th style="text-align:center">Hora Cierre</th>';
-                $html.='<th style="text-align:center">Nombre Cajero</th>';
-                $html.='<th style="text-align:center">Funcionario</th>';
-                $html.='<th style="text-align:center">Empresa</th>';
-                $html.='<th style="text-align:center">Usuario</th> ';
-                $html.='<th style="text-align:center">Observaciones</th>';
-                //termina la fila de cabeceras
-                $html.='</tr>';
-                //termina la cabecera de la tabla
-                $html.='</thead>';
-                  
-                //Inicializa el cuerpo de la tabla
-                $html.='<tbody id="cuerpo">';
-                //Retorna el tamaño del vector que almacena la consulta sql
-                $tam=count($params);
-                    
-                //Vector que recorre registro por registros de la consulta SQL
-                for ($i = 0; $i <$tam; $i++) {
-                    //Agrega a la fila de cada evento, un comentario interno con el detalle del último seguimiento
-                    $html.='<tr>';
-                    //Pinta y oculta el id del evento 
-                    $html.='<td hidden >'.$params[$i]['ID_Evento_Cencon'].'</td>';
-                    //Pinta las columnas correspondientes al reporte de eventos
-                    $html.='<td>'.$params[$i]['Fecha_Apertura'].'</td>';
-                    $html.='<td>'.$params[$i]['Hora_Apertura'].'</td>';
-                    $html.='<td>'.$params[$i]['Fecha_Cierre'].'</td>';
-                    $html.='<td>'.$params[$i]['Hora_Cierre'].'</td>';
-                    $html.='<td>'.$params[$i]['Codigo'].' - '.$params[$i]['Nombre'].'</td>';
-                    $html.='<td>'.$params[$i]['Nombre_Persona'].'</td>';
-                    $html.='<td>'.$params[$i]['Empresa'].'</td>';
-                    $html.='<td>'.$params[$i]['Nombre_usuario'].' '.$params[$i]['Apellido_usuario'].'</td>';
-                    $html.='<td>'.$params[$i]['Observaciones'].'</td>';
-                        
-                    //Cierra la fila del registro del evento en cuestión.
-                    $html.='</tr>';
-                    }
-
-                    //Finaliza el cuerpo de la tabla
-                $html.='</tbody>';
-
-                //Culmina la tabla
-                $html.='</table>';
-                    
-                //Imprime en pantalla el codigo html estructurado en este metodo
-                echo $html;
-                    //Sale del metodo
-                exit;
-            }else{
-                //En caso de que no hayan resultados, muestra la información correspondiente.
-                $html="<h4>No se encontraron eventos para este filtro.</h4>";
-                //Imprime la variable html
-                echo $html;
-                //Sale del metodo
-                exit;
-            }    
-                //Imprime la variable html y sale del metodo
-            echo $html;
-        }else {
-            /*
-             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
-             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
-             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
-             * En la última línea llama a la pagina de inicio de sesión.
-             */
-            $tipo_de_alerta="alert alert-warning";
-            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
-            //Llamada al formulario correspondiente de la vista
-            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
-        }
-    }
     
     ////////////////////MANTENIMIENTO DE PERSONAL EXTERNO///////////////////////
     ////////////////////////////////////////////////////////////////////////////
@@ -8455,7 +8342,7 @@
             $tam=count($params);
             $cantidad=0;
             for ($i = 0; $i <$tam; $i++) {
-                if($params[$i]['Fecha_Vencimiento_Portacion']<>"0000-00-00" && $params[$i]['ID_Estado_Persona']==1){
+                if($params[$i]['Fecha_Vencimiento_Portacion']<>"0000-00-00" && $params[$i]['ID_Estado_Persona']<>2){
                     $dias = (strtotime($params[$i]['Fecha_Vencimiento_Portacion'])-strtotime($fecha_actual))/86400;
                     //echo ("Faltan ".$dias." para vencer portación de ".$params[$i]['Identificacion'])."<br>";
                     if($dias<60){
@@ -9683,7 +9570,17 @@
         }
     }
     
-    //SINCRONIZACIÓN 11 ENERO, 12MD: NOMBRE REPETIDO
+    public function manual_cencon(){
+        if(isset($_SESSION['nombre'])){
+            //Llamada al formulario correspondiente de la vista
+            require __DIR__ . '/../vistas/plantillas/frm_ayuda_cencon.php';
+        } else {
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }
+    }
+    
     public function puestos_de_monitoreo_listar() {
        if(isset($_SESSION['nombre'])){
            $obj_puesto_monitoreo = new cls_puestos_de_monitoreo();
@@ -9893,7 +9790,118 @@
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
-
         }
+    }
+    
+    public function reporte_lineas_telefonicas(){
+        if(isset($_SESSION['nombre'])){
+            $obj_puntobcr= new cls_puntosBCR();
+            //Trae de la base de datos la lista de puntos BCR disponibles
+            $obj_puntobcr->obtiene_todos_los_puntos_bcr_telefonos();
+            //Inicializa un vector con el total de registros de la base de datos
+            $params = $obj_puntobcr->getArreglo();
+            
+            require __DIR__ . '/../vistas/plantillas/rpt_lineas_telefonicas.php';
+        }else{
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }  
+    }
+    
+    public function reporte_cencon(){
+        if(isset($_SESSION['nombre'])){
+            $obj_cencon = new cls_cencon();
+            $obj_personal = new cls_personal();
+            $obj_externo = new cls_personal_externo();
+            
+            if(isset($_POST['fecha_inicial'])){
+                $fecha_inicio = $_POST['fecha_inicial'];
+                $fecha_fin= $_POST['fecha_final'];
+                $obj_cencon->setCondicion("(T_EventoCencon.Fecha_Apertura between '".$fecha_inicio."' AND '".$fecha_fin."')");
+                $titulo = "Eventos de Cencon del ".$fecha_inicio." al ".$fecha_fin;
+            } else{
+                $fecha_inicio = date("Y-m-d");
+                $fecha_fin= date("Y-m-d");
+                $obj_cencon->setCondicion("(T_EventoCencon.Fecha_Apertura between '".$fecha_inicio."' AND '".$fecha_fin."')");
+                $titulo = "Eventos de Cencon de hoy: ".$fecha_inicio;
+            }
+            $obj_cencon->setCondicion("(T_EventoCencon.Fecha_Apertura between '".$fecha_inicio."' AND '".$fecha_fin."')");
+            $obj_cencon->obtener_todos_eventos_cencon();
+            $params= $obj_cencon->getArreglo();
+            
+            $tam=count($params);
+            for($i=0;$i<$tam;$i++){
+                if($params[$i]['ID_Empresa']==1){
+                    $obj_personal->setCondicion("ID_Persona='".$params[$i]['ID_Persona']."'");
+                    $obj_personal->obtener_personas_prontuario();
+                    $persona = $obj_personal->getArreglo();
+                    $params[$i] = array_merge((['Nombre_Persona' =>($persona[0]['Apellido_Nombre'])]),$params[$i]);
+                } else{
+                    $obj_externo->setCondicion("T_PersonalExterno.ID_Persona_Externa='".$params[$i]['ID_Persona']."'");
+                    $obj_externo->obtiene_todo_el_personal_externo();
+                    $persona = $obj_externo->getArreglo();
+                    $params[$i] = array_merge((['Nombre_Persona' =>($persona[0]['Apellido']." ".$persona[0]['Nombre'])]),$params[$i]);
+                }
+            }
+            
+            $reporte_aperturas;
+            for($i=6;$i<20;$i++){
+                $hora_inicio=$i.':00';
+                $hora_final= ($i+1).':00';
+                $obj_cencon->setCondicion("(Hora_Apertura>'".$hora_inicio."' AND Hora_Apertura<'".$hora_final."') AND Fecha_Apertura between '".$fecha_inicio."' AND '".$fecha_fin."'");
+                $obj_cencon->informacion_reporte();
+                $total= $obj_cencon->getArreglo();
+                $reporte_aperturas[$i] = array_merge((['Horas' =>($hora_inicio.'-'.$hora_final)]),$total[0]);
+            }
+//            echo "<pre>";
+//            print_r($reporte_aperturas);
+//            echo "</pre>";
+            require __DIR__.'/../vistas/plantillas/rpt_eventos_cencon.php';
+        }
+        else {
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }  
+    }
+    
+    ////////////////////////////////////////////////////////////////////////////
+    //////////////////////Funciones para Pruebas de alarma//////////////////////  
+    ////////////////////////////////////////////////////////////////////////////
+    
+    public function pruebas_alarma(){
+        if(isset($_SESSION['nombre'])){
+            
+            require __DIR__ . '/../vistas/plantillas/frm_pruebas_alarma.php';
+        }
+        else {
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }
+    }
+    
+    public function buscar_punto_prueba_alarma() {
+        if(isset($_SESSION['nombre'])){
+            $obj_punto = new cls_puntosBCR();
+            //Buscar la información de un PuntoBCR basado en el código del cajero
+            $obj_punto->setCondicion("T_PuntoBCR.Codigo=".$_POST['id']);
+            $obj_punto->obtiene_todos_los_puntos_bcr();
+            $cajero = $obj_punto->getArreglo();
+            
+            //Convierte la información en un json para enviarlo a JavaScript
+            echo json_encode($cajero[0], JSON_FORCE_OBJECT);
+        }
+        else {
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }
+    }
+    
+    public function prueba(){
+        return "<a>hola</a>";
+        
     }
 }

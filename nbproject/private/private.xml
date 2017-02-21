@@ -3,9 +3,10 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/wamp/www/ORIEL/vistas/plantillas/frm_puestos_de_monitoreo_listar.php</file>
-            <file>file:/C:/wamp/www/ORIEL/vistas/plantillas/frm_puestos_de_monitoreo_editar.php</file>
-            <file>file:/C:/wamp/www/ORIEL/modelos/Controller.php</file>
+            <file>file:/C:/xampp/htdocs/ORIEL/modelos/Controller.php</file>
+            <file>file:/C:/xampp/htdocs/ORIEL/vistas/plantillas/frm_eventos_cencon.php</file>
+            <file>file:/C:/xampp/htdocs/ORIEL/controladores/cls_personal.php</file>
+            <file>file:/C:/xampp/htdocs/ORIEL/vistas/plantillas/frm_personal_listar_publico.php</file>
         </group>
     </open-files>
 </project-private>
