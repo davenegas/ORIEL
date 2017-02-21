@@ -7853,6 +7853,8 @@
             
             //Convierte la información en un json para enviarlo a JavaScript
             echo json_encode($cajero[0], JSON_FORCE_OBJECT);
+            //echo json_encode($cajero);
+            //print_r($cajero[0]);
         }
         else {
             $tipo_de_alerta="alert alert-warning";
