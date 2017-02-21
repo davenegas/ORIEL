@@ -4,9 +4,6 @@ class cls_horario{
     
     private $id;
     private $id2;
-    public $id_horario;
-    public $horario;
-    public $horas_laboradas;
     private $descripcion;
     private $observaciones;
     private $estado;
@@ -251,6 +248,7 @@ class cls_horario{
        $this->arreglo;
        $this->obj_data_provider=new Data_Provider();
        $this->condicion="";
+       $this->observaciones="";
        $this->hora_apertura_domingo="";
        $this->hora_cierre_domingo="";
        $this->hora_apertura_lunes="";
@@ -319,8 +317,8 @@ class cls_horario{
         $this->obj_data_provider->edita_datos("T_PuntoBCR", "ID_Horario=null", $this->condicion);
         $this->obj_data_provider->desconectar();
     }
-        public function guardar_horario() {
-        if($this->id_horario=="0"){
+    public function guardar_horario() {
+       if($this->id_horario=="0"){
        $this->obj_data_provider->conectar();
        $this->arreglo=$this->obj_data_provider->inserta_datos("T_horario", "ID_Horario,Horario,Observaciones,Estado", "null,'".$this->horario."','".$this->observaciones."','".$this->estado."'");
        $this->arreglo=$this->obj_data_provider->getArreglo();

@@ -1,4 +1,4 @@
-$(document).ready(function(){
+ $(document).ready(function(){
 
     $("#tipo_funcionario").change(function () {
         document.getElementById('ID_Persona').value="";
@@ -109,10 +109,13 @@ function todos_cajero(funcion){
 ////////////////////////////////////////////////////////////////////////////////
 function evento_buscar_cajero(){
     id= document.getElementById('numero_atm').value;
-    var datos = new Array;
+
     $.post("index.php?ctl=evento_buscar_cajero", { id: id}, function(data){
-        //alert(data);
-        datos =JSON.parse(data);
+       
+        var res = data.substring(data.indexOf("{"), data.length);
+       
+        var datos =JSON.parse(res);
+       
         document.getElementById('nombre_atm').value=datos['Nombre'];
         document.getElementById('tipo_atm').value=datos['Tipo_Punto'];
         document.getElementById('ID_PuntoBCR').value=datos['ID_PuntoBCR'];
@@ -140,7 +143,8 @@ function evento_buscar_persona(){
     var datos = new Array;
     $.post("index.php?ctl=evento_buscar_persona", { id: id}, function(data){
         //alert(data);
-        datos =JSON.parse(data);
+        var res = data.substring(data.indexOf("{"), data.length);
+        datos =JSON.parse(res);
         document.getElementById('ID_Empresa').value=datos['ID_Empresa'];
         if(datos['ID_Empresa']==1){
             document.getElementById('nombre_persona').value=datos['Apellido_Nombre'];
@@ -158,7 +162,8 @@ function evento_buscar_persona(){
     empresa = document.getElementById('ID_Empresa').value;
     $.post("index.php?ctl=evento_buscar_relaciones", { id: id, empresa:empresa}, function(data){
         //alert (data);
-        cajeros= JSON.parse(data);
+        var r = data.substring(data.indexOf("{"), data.length);
+        cajeros= JSON.parse(r);
         var result=[];
         for (var i in cajeros){
             result.push([i,cajeros[i]]);
@@ -185,7 +190,8 @@ function agregar_evento_cencon(){
         var result=[];
         var valida_cajero=0;
         $.post("index.php?ctl=evento_buscar_relaciones", { id: id, empresa:empresa}, function(data){
-            cajeros= JSON.parse(data);
+            var r = data.substring(data.indexOf("{"), data.length);
+            cajeros= JSON.parse(r);
 
             for (var i in cajeros){
                 result.push([i,cajeros[i]]);
@@ -225,6 +231,7 @@ function agregar_evento_cencon(){
         });
     }
 }
+
 function evento_cencon_cerrar(ide){
     var f=new Date();
     cad=f.getHours()+":"+f.getMinutes(); 

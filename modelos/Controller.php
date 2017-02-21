@@ -9482,7 +9482,9 @@
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
       }      
-    }   
+
+    }
+
     public function obtiene_todos_los_horarios(){
         if(isset($_SESSION['nombre'])){
         $obj_horario= new cls_horariop();

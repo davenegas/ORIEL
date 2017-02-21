@@ -168,7 +168,7 @@ class cls_marcas{
       if($this->condicion==""){
         $this->obj_data_provider->conectar();
         $this->arreglo=$this->obj_data_provider->trae_datos("t_asistencia
-INNER JOIN  t_usuario ON  t_asistencia.ID_Usuario = t_usuario.ID_Usuario ","t_asistencia.ID_Asistencia,t_asistencia.ID_Usuario,Hora_Entrada_Turno,Justificar_Entrada,Validar_Entrada ,Hora_Salida_Turno,Justificar_Salida,Validar_Salida,t_asistencia.Fecha,t_asistencia.Contador,t_usuario.Apellido_Nombre", "");
+INNER JOIN  t_jornadaoperadores ON  t_asistencia.ID_Operadores = t_jornadaoperadores.ID_Operadores ","t_asistencia.ID_Asistencia,t_asistencia.ID_Operadores,Hora_Entrada_Turno,Justificar_Entrada,Validar_Entrada ,Hora_Salida_Turno,Justificar_Salida,Validar_Salida,t_asistencia.Fecha,t_asistencia.Contador,t_Operadores.Nombre,t_Operadores.Apellido", "");
         $this->arreglo=$this->obj_data_provider->getArreglo();
         $this->obj_data_provider->desconectar();
         $this->resultado_operacion=true;
@@ -178,7 +178,7 @@ INNER JOIN  t_usuario ON  t_asistencia.ID_Usuario = t_usuario.ID_Usuario ","t_as
       {
         $this->obj_data_provider->conectar();
         $this->arreglo=$this->obj_data_provider->trae_datos("t_asistencia
-INNER JOIN  t_usuario ON  t_asistencia.ID_Usuario = t_usuario.ID_Usuario ","t_asistencia.ID_Asistencia,t_asistencia.ID_Usuario,Hora_Entrada_Turno,Justificar_Entrada,Validar_Entrada ,Hora_Salida_Turno,Justificar_Salida,Validar_Salida,t_asistencia.Fecha,t_asistencia.Contador,t_usuario.Apellido_Nombre", $this->condicion);
+INNER JOIN  t_jornadaoperadores ON  t_asistencia.ID_Operadores = t_jornadaoperadores.ID_Operadores ","t_asistencia.ID_Asistencia,t_asistencia.ID_Operadores,Hora_Entrada_Turno,Justificar_Entrada,Validar_Entrada ,Hora_Salida_Turno,Justificar_Salida,Validar_Salida,t_asistencia.Fecha,t_asistencia.Contador,t_jornadaoperadores.Nombre,t_jornadaoperadores.Nombre", $this->condicion);
         $this->arreglo=$this->obj_data_provider->getArreglo();
         $this->obj_data_provider->desconectar();
         $this->resultado_operacion=true;
@@ -189,7 +189,7 @@ public function guardar_marcas() {
     //echo $this->justificar_entrada;
     if($this->condicion==""){
         $this->obj_data_provider->conectar();
-        $this->arreglo=$this->obj_data_provider->inserta_datos("t_asistencia", "ID_Asistencia,ID_Usuario,Hora_Entrada_Turno,Justificar_Entrada,Hora_Salida_Turno,Justificar_Salida,Fecha,Contador", "null,".$this->id__usuario.",'".$this->hora_entrada_turno."','".$this->justificar_entrada."','".$this->hora_salida_turno."','".$this->justificar_salida."','".$this->fecha."',1");
+        $this->arreglo=$this->obj_data_provider->inserta_datos("t_asistencia", "ID_Asistencia,ID_Operadores,Hora_Entrada_Turno,Justificar_Entrada,Hora_Salida_Turno,Justificar_Salida,Fecha,Contador", "null,".$this->id__usuario.",'".$this->hora_entrada_turno."','".$this->justificar_entrada."','".$this->hora_salida_turno."','".$this->justificar_salida."','".$this->fecha."',1");
         $this->arreglo=$this->obj_data_provider->getArreglo();
         $this->obj_data_provider->desconectar();
     }else{

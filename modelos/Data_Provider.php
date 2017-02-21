@@ -192,10 +192,10 @@ class Data_Provider{
     public function trae_datos($table,$campos,$condicion){
        
         //echo "select ".$campos." from ".$table." where ".$condicion.";";
-        // Elimina la instancia del arreglo
+            //Elimina la instancia del arreglo
         unset($this->arreglo);
        
-        // Verifica si la consulta SQL tiene una condición de búsqueda
+            //Verifica si la consulta SQL tiene una condición de búsqueda
         if ($condicion==""){
             //En caso de no tener condición, agrega campos y nombre de la tabla solamente
             $consulta=$this->conexion->query("select ".$campos." from ".$table.";");
@@ -208,7 +208,7 @@ class Data_Provider{
         
         //echo "select ".$campos." from ".$table." where ".$condicion.";";
         
-        // Una vez ejecutada la consulta verifica si trae resultados,
+        //Una vez ejecutada la consulta verifica si trae resultados,
         if ($consulta!=null){
             // De tener resultados, agrega cada registro dentro del vector arreglo
             while($filas=$consulta->fetch_assoc()){
@@ -216,7 +216,7 @@ class Data_Provider{
                 $this->arreglo[]=$filas;   
             }
 
-            // Si el arreglo no está establecido, lo inicializa en null
+            //Si el arreglo no está establecido, lo inicializa en null
             if (!(isset($this->arreglo))){
                 //Inicializa en null
                 $this->arreglo=null;
@@ -237,7 +237,7 @@ class Data_Provider{
    public function inserta_datos($table,$campos,$valores){
             
         // Gestión de insercion del metodo de la clase
-       //Arma el insert SQL, de acuerdo a los parámetros recibidos por usuario
+        //Arma el insert SQL, de acuerdo a los parámetros recibidos por usuario
 
         //echo "insert into ".$table."(".$campos.") values(".$valores.");";
 
@@ -247,12 +247,12 @@ class Data_Provider{
         $this->resultado_operacion=true;
         
         
-         //Registro de la trazabilidad del sistema
-        // Define una variable cadena que almacenará la consulta SQL, Quita mediante la función replace las comas (coloca guiones en su lugar), para no tener conflictos en el momeno de insertar la variable al campo de la tabla traza
+        //Registro de la trazabilidad del sistema
+        //Define una variable cadena que almacenará la consulta SQL, Quita mediante la función replace las comas (coloca guiones en su lugar), para no tener conflictos en el momeno de insertar la variable al campo de la tabla traza
         $cadena_sql=str_replace(","," - ","insert into ".$table."(".$campos.") values(".$valores.");");
         //Reemplaza las comillas con espacios en blanco
         $cadena_sql=str_replace("'"," ",$cadena_sql);
-        // Reemplaza los paréntesis redondos con cuadrados
+        //Reemplaza los paréntesis redondos con cuadrados
         $cadena_sql = str_replace("(","[",$cadena_sql);
         //Reemplaza los paréntesis redondos con cuadradps
         $cadena_sql = str_replace(")","]",$cadena_sql);
@@ -282,7 +282,7 @@ class Data_Provider{
        //Arma el insert SQL, de acuerdo a los parámetros recibidos por usuario
        
         $consulta=$this->conexion->query("insert into ".$table."(".$campos.") ".$valores.";");
-        //echo ("insert into ".$table."(".$campos.") values(".$valores.");");
+        echo ("insert into ".$table."(".$campos.") values(".$valores.");");
         //Establece a true el resultado de operación
         $this->resultado_operacion=true;
   
@@ -333,14 +333,14 @@ class Data_Provider{
         $this->resultado_operacion=true;
         
         
-         //Registro de la trazabilidad del sistema
-        // Define una variable cadena que almacenará la consulta SQL, Quita mediante la función replace las comas (coloca guiones en su lugar), para no tener conflictos en el momeno de insertar la variable al campo de la tabla traza
+        //Registro de la trazabilidad del sistema
+        //Define una variable cadena que almacenará la consulta SQL, Quita mediante la función replace las comas (coloca guiones en su lugar), para no tener conflictos en el momeno de insertar la variable al campo de la tabla traza
         $cadena_sql=str_replace(","," - ","update ".$table." set ".$campos_valores." where ".$condicion.";");
         //Reemplaza las comillas con espacios en blanco
         $cadena_sql=str_replace("'"," ",$cadena_sql);
-        // Reemplaza los paréntesis redondos con cuadrados
+        //Reemplaza los paréntesis redondos con cuadrados
         $cadena_sql = str_replace("(","[",$cadena_sql);
-        // Reemplaza los paréntesis redondos con cuadrados
+        //Reemplaza los paréntesis redondos con cuadrados
         $cadena_sql = str_replace(")","]",$cadena_sql);
         
          if(isset($_SESSION['nombre'])){

@@ -6,7 +6,6 @@
     return $notas;
 } ?>
     
-
 <html lang="en"> 
     <head>
         <link rel="stylesheet" href="vistas/css/main.css">
@@ -71,6 +70,8 @@
                        $_SESSION['modulos']['Catálogos-Horarios']==1||$_SESSION['modulos']['Catálogos-Unidades Ejecutoras']==1||
                        $_SESSION['modulos']['Catálogos-Tipo Teléfono']==1||$_SESSION['modulos']['Catálogos-Tipo Punto']==1||
                        $_SESSION['modulos']['Catálogos-Gerente Zona']==1|| $_SESSION['modulos']['Catálogos-Supervisor Zona']==1||
+                       $_SESSION['modulos']['Catálogos-Operadores']==1|| $_SESSION['modulos']['Catálogos-Horario-Operadores']==1||
+                       $_SESSION['modulos']['Catálogos-Descanso-Operadores']==1|| $_SESSION['modulos']['Catálogos-Turno-Operadores']==1||
                        $_SESSION['modulos']['Catálogos-Proveedor enlaces']==1||$_SESSION['modulos']['Catálogos-Tipo enlaces']==1||
                        $_SESSION['modulos']['Catálogos-Medio enlaces']==1|| $_SESSION['modulos']['Catálogos-Unidades de Video']==1||
                        $_SESSION['modulos']['Catálogos-Cencon']==1 || $_SESSION['modulos']['Catálogos-Puestos de Monitoreo']==1)){  ?>
@@ -115,6 +116,23 @@
                             <?php  if ($_SESSION['modulos']['Catálogos-Supervisor Zona']==1){?>
                                 <li><a href="index.php?ctl=supervisor_zona_listar">Supervisor de Zona</a></li>
                             <?php  }; ?>
+                                
+                            <?php  if ($_SESSION['modulos']['Catálogos-Operadores']==1){?>
+
+                                <li><a href="index.php?ctl=obtiene_lista_operadores">Operadores</a></li>
+                            <?php  }; ?>   
+                                
+                            <?php  if ($_SESSION['modulos']['Catálogos-Horario-Operadores']==1){?>
+                                <li><a href="index.php?ctl=obtiene_lista_horarios">Horario-Operadores</a></li>
+                            <?php  }; ?>   
+                                
+                            <?php  if ($_SESSION['modulos']['Catálogos-Descanso-Operadores']==1){?>
+                                <li><a href="index.php?ctl=obtiene_lista_descansos">Descanso-Operadores</a></li>
+                            <?php  }; ?>   
+                                
+                            <?php  if ($_SESSION['modulos']['Catálogos-Turno-Operadores']==1){?>
+                                <li><a href="index.php?ctl=obtiene_todos_los_turnos">Turno-Operadores</a></li>
+                            <?php  }; ?>   
 
                             <?php  if ($_SESSION['modulos']['Catálogos-Proveedor enlaces']==1){?>
                                 <li><a href="index.php?ctl=proveedor_listar">Proveedores enlaces</a></li> 
@@ -152,11 +170,11 @@
                 <?php 
                 //************************************************Pinta Menu de Reportes***************************************************************
                 if (($_SESSION['modulos']['Reportes-Eventos']==1)||($_SESSION['modulos']['Reportes-Oficinas']==1)||
+
                         ($_SESSION['modulos']['Reportes-Personal']==1)||($_SESSION['modulos']['Reportes-Alertas']==1)||
                         ($_SESSION['modulos']['Reportes-Enlaces Telecom']==1)||($_SESSION['modulos']['Reportes-Líneas teléfonicas']==1)||
                         ($_SESSION['modulos']['Reportes-Trazabilidad']==1)||($_SESSION['modulos']['Reportes-Historico seguimientos']==1)||
                         ($_SESSION['modulos']['Reportes-Activaciones provincia']==1)||($_SESSION['modulos']['Reportes-Cencon']==1)){ ?>
-
                     <li class="dropdown">
                         <a class="dropdown-toggle" data-toggle="dropdown" href="#">Reportes
                         <span class="caret"></span></a>
@@ -201,7 +219,10 @@
                             <?php if ($_SESSION['modulos']['Reportes-Trazabilidad']==1){ ?>
                                 <li><a href="index.php?ctl=frm_trazabilidad_listar">Trazabilidad</a></li> 
                             <?php }; ?>   
-
+                                
+                            <?php if ($_SESSION['modulos']['Reportes-Operadores']==1){ ?>
+                                <li><a href="index.php?ctl=obtiene_lista_marcas_reportes">Operadores</a></li> 
+                            <?php }; ?>   
                         </ul>
                     </li>
 
@@ -241,8 +262,9 @@
                                 <li><a href="index.php?ctl=personal_externo_listar">Personal Externo</a></li>
                             <?php }; ?>
 
+
                             <?php if ($_SESSION['modulos']['Módulo-Asistencia de Personal']==1){ ?>
-                                <li><a href="index.php?ctl=marcas">Asistencia de Personal</a></li>
+                                <li><a href="index.php?ctl=marcas">Asistencia de Operadores</a></li>
                             <?php }; ?>
 
                             <?php if ($_SESSION['modulos']['Módulo-Áreas de Apoyo']==1){ ?>
@@ -252,7 +274,7 @@
                             <?php if ($_SESSION['modulos']['Módulo-Control de Video']==1){?>
                                 <!--<li><a href="#">Controles de Video</a></li>--> 
                             <?php }; ?>   
-
+                                
                             <?php if ($_SESSION['modulos']['Módulo-Cencon']==1){?>
                                 <li><a href="index.php?ctl=eventos_cencon">Cencon</a></li> 
                             <?php }; ?>
@@ -296,4 +318,3 @@
       </div>
     </nav>
 </html>
-

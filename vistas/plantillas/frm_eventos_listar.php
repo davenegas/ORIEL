@@ -20,8 +20,9 @@
                 table = $('#tabla').DataTable( {
                     stateSave: true,
                     "lengthMenu": [[10, 25, 50,100,-1], [10, 25, 50,100,"All"]]
-                });       
+                });           
             });
+        
             
             $(document).ready(function () {
                 puestoenviado=<?php echo $puesto_enviado ?>;
@@ -73,6 +74,8 @@
                     document.getElementById('observaciones').value=notas;
                 }
                 document.getElementById('ventana_oculta_1').style.display = "block";
+                
+                copyToClipboard();
             }
              //Funcion para editar notas de supervisión
             function mostrar_resumen_de_seguimientos(prueb) {
@@ -137,10 +140,22 @@
                     }
                 }
             }
+            
+             //fin del boton de copia
+        //Funcion copytoClipboard
+        function copyToClipboard() {
+        $("body").append("<input type='text' id='temp'>"); // Acá se crea un input dinamicamente con un id para luego asignarle un valor sombreado
+        var s="Carlo Fuentes";
+        $("#temp").val(s).select(); // Acá se obtiene el id del boton que hemos creado antes y se le agrega un valor y luego se le sombrea con select(). Para agregar lo que se quiere copiar editas val("EDITAESTOAQUÍ")
+        document.execCommand("copy"); // document.execCommand("copy") manda a copiar el texto seleccionado en el documento
+        $("#temp").remove();
+
+        }
         </script>
     </head>
     <body>
         <?php require_once 'encabezado.php';?>
+
         <div class="container animated fadeIn col-xs-10 quitar-float">
             <div class="col-md-5">
                 <h2>Listado de Eventos</h2>
@@ -306,6 +321,8 @@
             </div>
         </div>
         <!--Cierre agregar teléfono a Punto BCR-->
+        
+        <input id="alex" name="alex" type="text" hidden="" value="alex">
         
         <!--agregar o editar seguimientos de coordinación -->
         <div id="ventana_oculta_2"> 
