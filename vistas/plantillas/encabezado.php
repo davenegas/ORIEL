@@ -118,19 +118,20 @@
                             <?php  }; ?>
                                 
                             <?php  if ($_SESSION['modulos']['Catálogos-Operadores']==1){?>
-                                <li><a href="index.php?ctl=obtiene_lista_usuariosp">Jornada Operadores</a></li>
+
+                                <li><a href="index.php?ctl=obtiene_lista_operadores">Operadores</a></li>
                             <?php  }; ?>   
                                 
                             <?php  if ($_SESSION['modulos']['Catálogos-Horario-Operadores']==1){?>
-                                <li><a href="index.php?ctl=obtiene_lista_horarios">Horario Operadores</a></li>
+                                <li><a href="index.php?ctl=obtiene_lista_horarios">Horario-Operadores</a></li>
                             <?php  }; ?>   
                                 
                             <?php  if ($_SESSION['modulos']['Catálogos-Descanso-Operadores']==1){?>
-                                <li><a href="index.php?ctl=obtiene_lista_descansos">Descansos Operadores</a></li>
+                                <li><a href="index.php?ctl=obtiene_lista_descansos">Descanso-Operadores</a></li>
                             <?php  }; ?>   
                                 
                             <?php  if ($_SESSION['modulos']['Catálogos-Turno-Operadores']==1){?>
-                                <li><a href="index.php?ctl=obtiene_todos_los_turnos">Turno Operadores</a></li>
+                                <li><a href="index.php?ctl=obtiene_todos_los_turnos">Turno-Operadores</a></li>
                             <?php  }; ?>   
 
                             <?php  if ($_SESSION['modulos']['Catálogos-Proveedor enlaces']==1){?>
