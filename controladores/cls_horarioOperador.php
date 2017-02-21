@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <?php
 
-class cls_horariop{
+class cls_horarioOperador{
         
   public $id_horario;
   public $horario;
-  public $horas_laboradas; //es el campo pasword
+  public $horas_laboradas; 
   public $arreglo;
   public $obj_data_provider;
   public $condicion;
@@ -88,10 +88,10 @@ class cls_horariop{
       $this->estado ="";
   }
 
-  public function obtiene_todos_los_horariosp(){
+  public function obtiene_todos_los_HorarioOperador(){
      if($this->condicion==""){
         $this->obj_data_provider->conectar();
-        $this->arreglo=$this->obj_data_provider->trae_datos("T_horariop","*", "");
+        $this->arreglo=$this->obj_data_provider->trae_datos("T_HorarioOperador","*", "");
         $this->arreglo=$this->obj_data_provider->getArreglo();
         $this->obj_data_provider->desconectar();
         $this->resultado_operacion=true;
@@ -99,22 +99,22 @@ class cls_horariop{
       else
       {
         $this->obj_data_provider->conectar();
-        $this->arreglo=$this->obj_data_provider->trae_datos("T_horariop", "*", $this->condicion);
+        $this->arreglo=$this->obj_data_provider->trae_datos("T_HorarioOperador", "*", $this->condicion);
         $this->arreglo=$this->obj_data_provider->getArreglo();
         $this->obj_data_provider->desconectar();
         $this->resultado_operacion=true;
       }
   
     }
-    public function guardar_horariop() {
+    public function guardar_HorarioOperador() {
     if($this->id_horario=="0"){
        $this->obj_data_provider->conectar();
-       $this->arreglo=$this->obj_data_provider->inserta_datos("T_horariop", "ID_Horariop,Horario,Observaciones,Estado", "null,'".$this->horario."','".$this->observaciones."','".$this->estado."'");
+       $this->arreglo=$this->obj_data_provider->inserta_datos("T_HorarioOperador", "ID_HorarioOperador,Horario,Observaciones,Estado", "null,'".$this->horario."','".$this->observaciones."','".$this->estado."'");
        $this->arreglo=$this->obj_data_provider->getArreglo();
        $this->obj_data_provider->desconectar();
        }else{
        $this->obj_data_provider->conectar();
-       $this->arreglo=$this->obj_data_provider->edita_datos("T_horariop", "Horario='".$this->horario."',Observaciones='".$this->observaciones."',Estado='".$this->estado."'","ID_Horariop=".$this->id_horario);
+       $this->arreglo=$this->obj_data_provider->edita_datos("T_HorarioOperador", "Horario='".$this->horario."',Observaciones='".$this->observaciones."',Estado='".$this->estado."'","ID_HorarioOperador=".$this->id_horario);
        $this->arreglo=$this->obj_data_provider->getArreglo();
        $this->obj_data_provider->desconectar();
        }

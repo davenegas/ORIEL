@@ -17,8 +17,8 @@ session_start();
 require_once __DIR__ . '/modelos/Data_Provider.php';
 //Libreria de clases --> Control de usuarios
 require_once __DIR__ . '/controladores/cls_usuarios.php';
-//Libreria de clases --> Control de personal
-//require_once __DIR__ . '/controladores/cls_usuariosp.php';
+//Libreria de clases --> Control de operadores
+require_once __DIR__ . '/controladores/cls_operadores.php';
 //Libreria de clases --> Control de roles de usuarios
 require_once __DIR__ . '/controladores/cls_roles.php';
 //Libreria de clases --> Control de módulos y funcionalidades de seguridad
@@ -41,8 +41,8 @@ require_once __DIR__ . '/controladores/cls_personal.php';
 require_once __DIR__ . '/controladores/cls_personal_externo.php';
 //Libreria de clases --> Control de horarios
 require_once __DIR__ . '/controladores/cls_horario.php';
-//Libreria de clases --> Control de horarios personal
-require_once __DIR__ . '/controladores/cls_horariop.php';
+//Libreria de clases --> Control de horarios Operadores
+require_once __DIR__ . '/controladores/cls_horarioOperador.php';
 //Libreria de clases --> Control de direcciones IP
 require_once __DIR__ . '/controladores/cls_direccionIP.php';
 //Libreria de clases --> Control de trazabilidad (seguimiento a la actividad de usarios dentro del sistema)
@@ -309,10 +309,10 @@ $map = array(
     'obtiene_lista_marcas_reportes' => array('controller' =>'Controller', 'action' =>'obtiene_lista_marcas_reportes'),
     'guardar_marcas' => array('controller' =>'Controller', 'action' =>'guardar_marcas'),
     'guardar_marcas_descanso' => array('controller' =>'Controller', 'action' =>'guardar_marcas_descanso'),
-    'obtiene_lista_usuariosp' => array('controller' =>'Controller', 'action' =>'obtiene_lista_usuariosp'),
-    'obtiene_todos_los_usuariosp' => array('controller' =>'Controller', 'action' =>'obtiene_todos_los_usuariosp'),
-    'editar_usuariop' => array('controller' =>'Controller', 'action' =>'editar_usuariop'),
-    'guarda_usuariop' => array('controller' =>'Controller', 'action' =>'guarda_usuariop'),
+    'obtiene_lista_operadores' => array('controller' =>'Controller', 'action' =>'obtiene_lista_operadores'),
+    'obtiene_todos_los_operadores' => array('controller' =>'Controller', 'action' =>'obtiene_todos_los_operadores'),
+    'editar_operadores' => array('controller' =>'Controller', 'action' =>'editar_operadores'),
+    'guarda_operadores' => array('controller' =>'Controller', 'action' =>'guarda_operadores'),
     'obtiene_todos_los_descansos' => array('controller' =>'Controller', 'action' =>'obtiene_todos_los_descansos'),
     'obtiene_lista_descansos' => array('controller' =>'Controller', 'action' =>'obtiene_lista_descansos'),
     'guardar_justificacion_descanso' => array('controller' =>'Controller', 'action' =>'guardar_justificacion_descanso'),
@@ -322,7 +322,7 @@ $map = array(
     'guardar_turno' => array('controller' =>'Controller', 'action' =>'guardar_turno'),
     'obtiene_todos_los_horarios' => array('controller' =>'Controller', 'action' =>'obtiene_todos_los_horarios'),
     'obtiene_lista_horarios' => array('controller' =>'Controller', 'action' =>'obtiene_lista_horarios'),
-    'guardar_horariop' => array('controller' =>'Controller', 'action' =>'guardar_horariop'),
+    'guardar_horario' => array('controller' =>'Controller', 'action' =>'guardar_horario'),
     
      //PuntosBCR
     'puntos_bcr_listar'=>array('controller'=>'Controller','action'=> 'puntos_bcr_listar'),
