@@ -7010,6 +7010,7 @@
     ////////////////////////////////////////////////////////////////////////////
     /////////////Funciones para Horarios ///////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////
+   
     public function horario_listar(){
         if(isset($_SESSION['nombre'])){
             $obj_horario = new cls_horario();
@@ -7567,7 +7568,7 @@
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }  
     }
-        
+
     ////////////////////////////////////////////////////////////////////////////
     ///////////////////////Funciones de CENCON /////////////////////////////////          
     ////////////////////////////////////////////////////////////////////////////
@@ -7983,6 +7984,8 @@
             unset($obj_cencon);
             unset($obj_punto);
             echo json_encode($cajero[0], JSON_FORCE_OBJECT);
+            //echo json_encode($cajero);
+            //print_r($cajero[0]);
         }
         else {
             $tipo_de_alerta="alert alert-warning";
@@ -8895,7 +8898,7 @@
     }
     ////////////////////////////////////////////////////////////////////////////
     /////////////////////////Funciones de Tipo Telefono/////////////////////////
-    /////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////
 
     public function tipo_telefono_listar() {
        if(isset($_SESSION['nombre'])){
@@ -9066,6 +9069,7 @@
     ////////////////////////////////////////////////////////////////////////////
     ////////////////////////////Gerentes de Zona////////////////////////////////          
     ////////////////////////////////////////////////////////////////////////////
+    
     public function gerente_zona_listar() {
        if(isset($_SESSION['nombre'])){
            $obj_gerentezona = new cls_gerente_zona();
@@ -9151,6 +9155,7 @@
     ////////////////////////////////////////////////////////////////////////////
     ////////////////////////////Supervisor de Zona//////////////////////////////      
     ////////////////////////////////////////////////////////////////////////////
+    
     public function supervisor_zona_listar() {
         if(isset($_SESSION['nombre'])){
             $obj_supervisorzona = new cls_supervisor_zona();
@@ -9170,7 +9175,6 @@
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }  
     } 
-    
     public function supervisor_zona_guardar(){
         if(isset($_SESSION['nombre'])){   
             $obj_supervisorzona = new cls_supervisor_zona();
@@ -9186,7 +9190,6 @@
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }  
     }
-    
     public function supervisor_zona_editar(){
         if(isset($_SESSION['nombre'])){
             $obj_supervisorzona = new cls_supervisor_zona();
@@ -9205,7 +9208,6 @@
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }  
     }
-    
     public function supervisor_zona_cambiar_estado() {
        if(isset($_SESSION['nombre'])){
            $obj_supervisorzona = new cls_supervisor_zona();
@@ -9232,122 +9234,171 @@
         }  
     }
     ////////////////////////////////////////////////////////////////////////////
-    /////////////////////////Asistencia de Personal/////////////////////////////  
+    /////////////////////////Asistencia de Operadores///////////////////////////  
     ////////////////////////////////////////////////////////////////////////////
     
-    public function marcas() {
-       if(isset($_SESSION['nombre'])){
-           $obj_marcas = new cls_usuarios();
-           $obj_marcas->setCondicion("");
-           $obj_marcas->obtiene_todos_los_usuarios();
-           $params =$obj_marcas->getArreglo();
-          
-           require __DIR__.'/../vistas/plantillas/frm_marcas.php';
-        }
-        else {
+    public function obtiene_lista_usuariosp(){
+        if(isset($_SESSION['nombre'])){
+        $obj_usuario= new cls_usuarios();
+        $obj_usuario->obtiene_lista_usuariosp();
+        $vector= $obj_usuario->arreglo;
+        $obj_usuario->obtiene_todos_los_usuariosp();
+        $vector= $obj_usuario->getArreglo();
+        
+        require __DIR__ . '/../vistas/plantillas/frm_lista_usuario.php';
+        
+      }else{
+              /*
+             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+             * En la última línea llama a la pagina de inicio de sesión.
+             */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
-        }  
-    } 
-    public function editar_usuario(){
-        //echo($_GET['id']);
-        $obj_usuario= new cls_usuarios();
-        $obj_usuario->setCondicion("ID_Usuario=".$_GET['id']);
-        $obj_usuario->obtiene_todos_los_usuarios();
-        $vector=$obj_usuario->getArreglo();
-         $obj_turno= new cls_turno();
-        $obj_turno->obtiene_todos_los_turnos();
-        $vector_turno= $obj_turno->getArreglo();
-        
-                
-        require __DIR__ . '/../vista/plantillas/frm_editar_usuario.php';
-    }
-    public function obtiene_todos_los_usuarios(){
-        $obj_usuarios= new cls_usuarios();
+      }      
+   }
+   public function obtiene_todos_los_usuariosp(){
+        if(isset($_SESSION['nombre'])){
+        $obj_usuarios= new cls_usuarios(); 
         if($_GET['id']=="0"){
             $vector[0]['ID_Usuario']="0";
             $vector[0]['Cedula']="";
-            $vector[0]['Apellido_Nombre']="";
+            $vector[0]['Nombre']="";
+            $vector[0]['Apellido']="";
             $vector[0]['Observaciones']="";
-            $vector[0]['turno']="";
+            $vector[0]['Turno']="";
             $vector[0]['Horario']="";
             $vector[0]['Estado']=$_GET['Estado'];
         }else{
-//            $vector[0]['ID_Usuario']=$_GET['id'];
-//            $vector[0]['Cedula']=$_GET['Cedula'];
-//            $vector[0]['apellido_nombre']=$_GET['Apellido_Nombre'];
-//            $vector[0]['Observaciones']=$_GET['Observaciones'];
-//            $vector[0]['turno']=$_GET['Turno'];
-//            $vector[0]['Horario']=$_GET['horario'];
-//            $vector[0]['Estado']=$_GET['Estado'];
-            $obj_usuarios->setCondicion("ID_Usuario=".$_GET['id']);
-            $obj_usuarios->obtiene_todos_los_usuarios();
-            $vector=$obj_usuarios->getArreglo();
-            
-        }
+            $vector[0]['ID_Usuario']=$_GET['id'];
+            $vector[0]['Cedula']=$_GET['Cedula'];
+            $vector[0]['Nombre']=$_GET['Nombre'];
+            $vector[0]['Apellido']=$_GET['Apellido'];
+            $vector[0]['Observaciones']=$_GET['Observaciones'];
+            $vector[0]['Turno']=$_GET['ID_Turno'];
+            $vector[0]['Horario']=$_GET['ID_Horariop'];
+            $vector[0]['Estado']=$_GET['Estado'];
+          
+        }  
+        
         $obj_turno= new cls_turno();
         $obj_turno->obtiene_todos_los_turnos();
         $vector_turno= $obj_turno->getArreglo();
         
-        $obj_horario= new cls_horario();
-        $obj_horario->obtiene_todos_los_horarios();
+        $obj_horario= new cls_horariop();
+        $obj_horario->obtiene_todos_los_horariosp();
         $vector_horario= $obj_horario->getArreglo();
-         
-        # $vector=$obj_turno->arreglo;
-//         echo "<pre>";
-//               print_r($vector);
-//         echo "</pre>";       
-        require __DIR__ . '/../vista/plantillas/frm_editar_usuario.php';
+        
+        require __DIR__ . '/../vistas/plantillas/frm_editar_usuario.php';
+        
+      }else{
+              /*
+             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+             * En la última línea llama a la pagina de inicio de sesión.
+             */
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+      }      
     }
-    public function guardar_usuarios() {
+    public function guarda_usuariop(){
+        if(isset($_SESSION['nombre'])){
         $obj_usuarios= new cls_usuarios();
-        $obj_usuarios->setCedula($_POST['Cedula']);
-        $obj_usuarios->setNombre_Apellido($_POST['apellido_nombre']);
-        $obj_usuarios->setObservaciones($_POST['Observaciones']);        
-        $obj_usuarios->setEstado($_POST['Estado']);
-        $obj_usuarios->setID_Turno($_POST['turno']);
-        $obj_usuarios->setID_Horario($_POST['Horario']);
         $obj_usuarios->setId($_POST['ID_Usuario']);
-        $obj_usuarios->guardar_usuario();
-        header("location:/Practica/index.php?ctl=obtiene_lista");
+        $obj_usuarios->setNombre($_POST['Nombre']);
+        $obj_usuarios->setApellido($_POST['Apellido']);
+        $obj_usuarios->setCedula($_POST['Cedula']);
+        $obj_usuarios->setObservaciones($_POST['Observaciones']);
+        $obj_usuarios->setID_Turno($_POST['Turno']);
+        $obj_usuarios->setID_Horariop($_POST['Horario']);
+        $obj_usuarios->setEstado($_POST['Estado']);
+        $obj_usuarios->guardar_usuariop();
+        header("location:/ORIEL/index.php?ctl=obtiene_lista_usuariosp");
+      }else{
+              /*
+             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+             * En la última línea llama a la pagina de inicio de sesión.
+             */
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+      }      
     }
     public function obtiene_todos_los_descansos(){
+        if(isset($_SESSION['nombre'])){ 
         $obj_descansos= new cls_descansos();
         if($_GET['id']=="0"){
             $vector[0]['ID_Ajus_Descanso']="0";
-           
             $vector[0]['Duracion']="";
             $vector[0]['Observaciones']="";
             $vector[0]['Estado']=$_GET['estado'];
         }else{
             $vector[0]['ID_Ajus_Descanso']=$_GET['id'];
-          
             $vector[0]['Duracion']=$_GET['Duracion_Descanso'];
             $vector[0]['Observaciones']=$_GET['Observaciones'];
             $vector[0]['Estado']=$_GET['estado'];
             
         } 
-        # $vector=$obj_turno->arreglo;
-        require __DIR__ . '/../vista/plantillas/frm_ajustes_descansos.php';
-    }     
+        require __DIR__ . '/../vistas/plantillas/frm_ajustes_descansos.php';
+   }else{
+              /*
+             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+             * En la última línea llama a la pagina de inicio de sesión.
+             */
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+      }      
+    }        
     public function guardar_descansos() {
+      if(isset($_SESSION['nombre'])){ 
         $obj_descansos= new cls_descansos();
-       
         $obj_descansos->setEstado($_POST['Estado']);
         $obj_descansos->setDuracion_descanso($_POST['Duracion']);
         $obj_descansos->setObservaciones($_POST['Observaciones']);
         $obj_descansos->setID_Ajus_Descanso($_POST['ID_Ajus_Descanso']);
         $obj_descansos->guardar_descansos();
-        header("location:/Practica/index.php?ctl=obtiene_lista_descansos");
-    }
-    public function obtiene_lista_descansos() {
+        header("location:/ORIEL/index.php?ctl=obtiene_lista_descansos");
+      }else{
+              /*
+             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+             * En la última línea llama a la pagina de inicio de sesión.
+             */
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+      }      
+    }     
+    public function obtiene_lista_descansos(){
+      if(isset($_SESSION['nombre'])){
         $obj_usuario= new cls_descansos();
         $obj_usuario->obtiene_todos_los_descansos();
         $vector= $obj_usuario->arreglo;
-        require __DIR__ . '/../vista/plantillas/frm_lista_descansos.php';
-    }
-    public function obtiene_todos_los_turnos() {
+        require __DIR__ . '/../vistas/plantillas/frm_lista_descansos.php';
+      }else{
+              /*
+             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+             * En la última línea llama a la pagina de inicio de sesión.
+             */
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+      }      
+    }     
+    public function obtiene_todos_los_turnos(){
+        if(isset($_SESSION['nombre'])){
         $obj_turno= new cls_turno();
         if($_GET['id']=="0"){
             $vector[0]['ID_Turno']="0";
@@ -9362,83 +9413,150 @@
             //echo $_GET['estado'];
         } 
         # $vector=$obj_turno->arreglo;
-        require __DIR__ . '/../vista/plantillas/frm_ajustes_turno.php';
-    }
-    public function guardar_turno() {
+        require __DIR__ . '/../vistas/plantillas/frm_ajustes_turno.php';
+     }else{
+              /*
+             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+             * En la última línea llama a la pagina de inicio de sesión.
+             */
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+      }      
+    }     
+    public function guardar_turno(){
+        if(isset($_SESSION['nombre'])){
         $obj_turno= new cls_turno();
         $obj_turno->setTurno($_POST['nombre']);
         $obj_turno->setObservaciones($_POST['observaciones']);
         $obj_turno->setEstado($_POST['Estado']);
         $obj_turno->setId__turno($_POST['ID_Turno']);
         $obj_turno->guardar_turno();
-        header("location:/Practica/index.php?ctl=obtiene_lista_turno");
-    }
-    public function obtiene_lista_turno() {
+        header("location:/ORIEL/index.php?ctl=obtiene_lista_turno");
+     }else{
+              /*
+             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+             * En la última línea llama a la pagina de inicio de sesión.
+             */
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+      }      
+    }     
+    public function obtiene_lista_turno(){
+        if(isset($_SESSION['nombre'])){
         $obj_usuario= new cls_turno();
         $obj_usuario->obtiene_todos_los_turnos();
         $vector= $obj_usuario->arreglo;
-        require __DIR__ . '/../vista/plantillas/frm_lista_turno.php';
-    }
-    public function obtiene_lista_horarios() {
-        $obj_usuario= new cls_horario();
-        $obj_usuario->obtiene_todos_los_horarios();
+        require __DIR__ . '/../vistas/plantillas/frm_lista_turno.php';
+     }else{
+              /*
+             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+             * En la última línea llama a la pagina de inicio de sesión.
+             */
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+      }      
+    }     
+    public function obtiene_lista_horarios(){
+        if(isset($_SESSION['nombre'])){
+        $obj_usuario= new cls_horariop();
+        $obj_usuario->obtiene_todos_los_horariosp();
         $vector= $obj_usuario->arreglo;
-        require __DIR__ . '/../vista/plantillas/fmr_lista_horario.php';
-    }
-    public function obtiene_todos_los_horarios() {
-        $obj_horario= new cls_horario();
+        require __DIR__ . '/../vistas/plantillas/frm_lista_horario.php';
+     }else{
+              /*
+             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+             * En la última línea llama a la pagina de inicio de sesión.
+             */
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+      }      
+    }   
+    public function obtiene_todos_los_horarios(){
+        if(isset($_SESSION['nombre'])){
+        $obj_horario= new cls_horariop();
         if($_GET['id']=="0"){
-            $vector[0]['ID_Horario']="0";
+            $vector[0]['ID_Horariop']="0";
             $vector[0]['horario']="";
             $vector[0]['Observaciones']="";
             $vector[0]['Estado']=$_GET['Estado'];
         }else{
-            $vector[0]['ID_Horario']=$_GET['id'];
+            $vector[0]['ID_Horariop']=$_GET['id'];
             $vector[0]['horario']=$_GET['Horario'];
             $vector[0]['Observaciones']=$_GET['Obser'];
             $vector[0]['Estado']=$_GET['Estado'];
             //echo $_GET['id'];
         } 
         # $vector=$obj_turno->arreglo;
-        require __DIR__ . '/../vista/plantillas/frm_ajuste_horario.php';
-    }
-    public function guardar_horario() {
-        $obj_horario= new cls_horario();
+        require __DIR__ . '/../vistas/plantillas/frm_ajuste_horario.php';
+     }else{
+              /*
+             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+             * En la última línea llama a la pagina de inicio de sesión.
+             */
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+      }      
+    }     
+    public function guardar_horariop(){
+        if(isset($_SESSION['nombre'])){
+        $obj_horario= new cls_horariop();
         $obj_horario->setHorario($_POST['horario']);
         $obj_horario->setObservaciones($_POST['observaciones']);
         $obj_horario->setEstado($_POST['Estado']);
-        $obj_horario->setId_horario($_POST['ID_Horario']);
-        $obj_horario->guardar_horario();
-        header("location:/Practica/index.php?ctl=obtiene_lista_horarios");
-    }
-    public function obtiene_lista() {
-        $obj_usuario= new cls_usuarios();
-        $obj_usuario->obtiene_todos_los_usuarios();
-        $vector= $obj_usuario->getArreglo();      
-        require __DIR__ . '/../vista/plantillas/frm_lista_usuario.php';
-       
-    }
-    public function obtiene_lista_marcas() {
+        $obj_horario->setId_horario($_POST['ID_Horariop']);
+        $obj_horario->guardar_horariop();
+        header("location:/ORIEL/index.php?ctl=obtiene_lista_horarios");
+     }else{
+              /*
+             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+             * En la última línea llama a la pagina de inicio de sesión.
+             */
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+      }      
+    }     
+    public function obtiene_lista_marcas(){
+        if(isset($_SESSION['nombre'])){
         $obj_marcas= new cls_marcas;
         $obj_descanso= new cls_marcas_descanso();
+        
         $obj_ajus_descanso= new cls_descansos();
         $obj_ajus_descanso->obtiene_todos_los_descansos();
         $cantidad_descanso=$obj_ajus_descanso->getArreglo();
-        $tiempos_descanso[0]['ID_Descanso']=0;
         
+            $tiempos_descanso[0]['ID_Descanso']=0;
             $tiempos_descanso[0]['Hora_Descanso_Salida']="";
             $tiempos_descanso[0]['Justificar_Descanso']="";
             $tiempos_descanso[0]['Hora_Descanso_Entrada']="";
             $tiempos_descanso[0]['Total_Descanso']="";
             $tiempos_descanso[0]['Fecha_Descanso']="";
             
-        $obj_marcas->setCondicion("Hora_Salida_Turno='00:00:00'");
-        $obj_marcas->obtiene_todas_las_marcas();
-        $params=$obj_marcas->getArreglo();
+            $obj_marcas->setCondicion("");
+            $obj_marcas->obtiene_todas_las_marcas();
+            $params=$obj_marcas->getArreglo();
         
         
-        if($params!=null){
-            $obj_descanso= new cls_marcas_descanso();
+           if($params!=null){
+            
+           $obj_descanso= new cls_marcas_descanso();
            $obj_descanso->setCondicion("Hora_Descanso_Entrada='00:00:00'");
            $obj_descanso->obtiene_todas_las_marcas_descansos();
            $tiempos_descanso=$obj_descanso->getArreglo();
@@ -9464,37 +9582,59 @@
             
         }
         $obj_marcas->setCondicion("");
-         $obj_marcas->obtiene_todas_las_marcas();
-         $marcas= $obj_marcas->getArreglo();
+        $obj_marcas->obtiene_todas_las_marcas();
+        $marcas= $obj_marcas->getArreglo();
          
         $obj_descanso->setCondicion("");
-         $obj_descanso->obtiene_todas_las_marcas_descansos();
-         $descanso= $obj_descanso->getArreglo();
+        $obj_descanso->obtiene_todas_las_marcas_descansos();
+        $descanso= $obj_descanso->getArreglo();
+        
 //        echo '<pre>';
 //        print_r($descanso);
-//        
-//         echo '</pre>';
-        require __DIR__ . '/../vista/plantillas/frm_marcas.php';
-    }
-    public function obtiene_lista_marcas_reportes() {
+//        echo '</pre>';
+        
+        require __DIR__ . '/../vistas/plantillas/frm_marcas.php';
+     }else{
+              /*
+             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+             * En la última línea llama a la pagina de inicio de sesión.
+             */
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+      }      
+    }     
+    public function obtiene_lista_marcas_reportes(){
+        if(isset($_SESSION['nombre'])){
         $obj_marcas= new cls_marcas();
         $obj_marcas->obtiene_todas_las_marcas();
         $marcas=$obj_marcas->getArreglo();
         $obj_descanso= new cls_marcas_descanso();
         $obj_descanso->obtiene_todas_las_marcas_descansos();
         $marcas_descanso=$obj_descanso->getArreglo();    
-        $obj_usuarios= new cls_usuarios();
-        $obj_usuarios->obtiene_todos_los_usuarios();
+        $obj_usuarios= new cls_usuariosp();
+        $obj_usuarios->obtiene_todos_los_usuariosp();
         $usuarios=$obj_usuarios->getArreglo();
         
-        
-        require __DIR__ . '/../vista/plantillas/frm_reportes.php';
-    }
-    public function guardar_marcas() {
-         //echo $_POST['justificar_entrada'];
+        require __DIR__ . '/../vistas/plantillas/frm_reportes.php';
+     }else{
+              /*
+             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+             * En la última línea llama a la pagina de inicio de sesión.
+             */
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+      }      
+    }     
+    public function guardar_marcas(){
+    if(isset($_SESSION['nombre'])){
         $obj_marcas= new cls_marcas();
-       // echo $_POST['justificar_entrada'];
-        if($_POST['id_marcas']==0){
+        if($_POST['id']==0){
             $obj_marcas->setId__usuario("1");
             $obj_marcas->setHora_entrada_turno($_POST['hora_entrada']);
             $obj_marcas->setFecha($_POST['fecha']);
@@ -9502,54 +9642,72 @@
             $obj_marcas->setHora_salida_turno("");
             $obj_marcas->setJustificar_salida("");
             $obj_marcas->setCondicion("");
-        }
-        else{
-            $obj_marcas->setId__asistencia($_POST['id_marcas']);
+        }else{
+            $obj_marcas->setId__asistencia($_POST['id']);
             $obj_marcas->setId__usuario("1");
-            
             $obj_marcas->setJustificar_entrada($_POST['justificar_entrada']);
             $obj_marcas->setHora_salida_turno($_POST['hora_salida']);
             $obj_marcas->setJustificar_salida($_POST['justificar_salida']);
-            $obj_marcas->setCondicion("ID_Asistencia='".$_POST['id_marcas']."'");
+            $obj_marcas->setCondicion("ID_Asistencia='".$_POST['id']."'");
         }       
         $obj_marcas->guardar_marcas();
-       
-            }
- 
-    public function guardar_marcas_descanso() {
-                
-         $obj_descanso= new cls_marcas_descanso();
-         
+
+     }else{
+              /*
+             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+             * En la última línea llama a la pagina de inicio de sesión.
+             */
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+      }      
+    }     
+    public function guardar_marcas_descanso(){
+    if(isset($_SESSION['nombre'])){
+        $obj_descanso= new cls_marcas_descanso();
         if($_POST['id']==0){
             $obj_descanso->setId_usuario("1");
             $obj_descanso->setHora_descanso_salida($_POST['Hora_Descanso_Salida']);
             $obj_descanso->setFecha_Descanso(Date('y-m-d'));
             $obj_descanso->setJustificar_descanso("");
             $obj_descanso->setHora_descanso_entrada("");
-             $obj_descanso->setTotal_descanso("");
-             $obj_descanso->setId_ajus_descanso($_POST['id_ajus_descanso']);
+            $obj_descanso->setTotal_descanso("");
+            $obj_descanso->setId_ajus_descanso($_POST['id_ajus_descanso']);
             $obj_descanso->setCondicion("");
-        }
-        else{
-          //echo $_POST['justificar_descanso'];
+        }else{
+            //echo $_POST['justificar_descanso'];
             $obj_descanso->setId_descanso($_POST['id']);
             $obj_descanso->setId_usuario("1");
-           
             $obj_descanso->setJustificar_descanso($_POST['justificar_descanso']);
             $obj_descanso->setHora_descanso_entrada($_POST['Hora_Descanso_Entrada']);
             $obj_descanso->setTotal_descanso($_POST['Total']);
-           
             $obj_descanso->setCondicion("ID_Descanso='".$_POST['id']."'");
             
             $obj_contador= new cls_marcas;
            
             $obj_contador->setContador($_POST['contador']);
-            $obj_contador->setCondicion("ID_Asistencia='".$_POST['id_marcas']."'");
+            $obj_contador->setCondicion("ID_Asistencia='".$_POST['id']."'");
             $obj_contador->guardar_contador();
             
         }       
-        $obj_descanso->guardar_marcas_descanso();   
-        }
+
+        $obj_descanso->guardar_marcas_descanso(); 
+        
+        
+        }else{
+              /*
+             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+             * En la última línea llama a la pagina de inicio de sesión.
+             */
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+      }      
+    }
     
     ////////////////////////////////////////////////////////////////////////////
     /////////////////////////Manuales de Ayuda//////////////////////////////////  
@@ -9792,7 +9950,7 @@
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }
     }
-    
+
     public function reporte_lineas_telefonicas(){
         if(isset($_SESSION['nombre'])){
             $obj_puntobcr= new cls_puntosBCR();
@@ -9899,9 +10057,5 @@
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }
     }
-    
-    public function prueba(){
-        return "<a>hola</a>";
-        
-    }
+
 }
