@@ -149,10 +149,14 @@ $map = array(
     //Controlador de Manuales de ayuda
     'manual_personal_externo_publico'=>array('controller'=>'Controller', 'action'=>'manual_personal_externo_publico'),
     'manual_personal_externo'=>array('controller'=>'Controller', 'action'=>'manual_personal_externo'),
+    'manual_cencon'=>array('controller'=>'Controller', 'action'=>'manual_cencon'),
+    'prueba'=>array('controller'=>'Controller', 'action'=>'prueba'),
+    
     
     //Controlador de Reportes
     'reporte_seguimiento_eventos'=>array('controller'=>'Controller', 'action'=>'reporte_seguimiento_eventos'),
     'reporte_eventos_provincia'=>array('controller'=>'Controller', 'action'=>'reporte_eventos_provincia'),
+    'reporte_lineas_telefonicas'=>array('controller'=>'Controller', 'action'=>'reporte_lineas_telefonicas'),
     
     //Información pública
     'personal_listar_publico'=>array('controller'=>'Controller', 'action'=>'personal_listar_publico'),
@@ -178,7 +182,6 @@ $map = array(
     'puesto_monitoreo_guardar'=>array('controller'=>'Controller','action'=> 'puesto_monitoreo_guardar'), 
     'puesto_monitoreo_cambiar_estado'=>array('controller'=>'Controller','action'=> 'puesto_monitoreo_cambiar_estado'), 
     'actualiza_puesto_de_monitoreo'=>array('controller'=>'Controller','action'=> 'actualiza_puesto_de_monitoreo'), 
-    
               
     //Información Proveedor enlaces
     'proveedor_listar'=>array('controller'=>'Controller', 'action'=>'proveedor_listar'),
@@ -261,6 +264,10 @@ $map = array(
     'reporte_cencon'=>array('controller'=>'Controller', 'action'=>'reporte_cencon'),
     'actualiza_en_vivo_reporte_cencon'=>array('controller'=>'Controller', 'action'=>'actualiza_en_vivo_reporte_cencon'),
     'todos_cajero_relacion'=>array('controller'=>'Controller', 'action'=>'todos_cajero_relacion'),
+    
+    //Controlador de pruebas de alarma
+    'pruebas_alarma'=>array('controller'=>'Controller', 'action'=>'pruebas_alarma'),
+    'buscar_punto_prueba_alarma'=>array('controller'=>'Controller', 'action'=>'buscar_punto_prueba_alarma'),
     
     //Controlador de Eventos (Bitacora Digital)
     'frm_eventos_listar' =>  array('controller'=>'Controller','action'=>'frm_eventos_listar'),

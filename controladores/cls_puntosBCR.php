@@ -395,4 +395,27 @@ class cls_puntosBCR{
             $this->resultado_operacion=true;
         }
     }
+    
+    public function obtiene_todos_los_puntos_bcr_telefonos(){
+        $this->obj_data_provider->conectar();
+        if($this->condicion==""){
+            $this->arreglo=$this->obj_data_provider->trae_datos(
+                    "T_PuntoBCR
+			LEFT OUTER JOIN T_TipoPuntoBCR ON T_PuntoBCR.ID_Tipo_Punto = T_TipoPuntoBCR.ID_Tipo_Punto
+			LEFT OUTER JOIN T_UE_PuntoBCR ON T_PuntoBCR.ID_PuntoBCR= T_UE_PuntoBCR.ID_PuntoBCR
+			LEFT OUTER JOIN T_UnidadEjecutora ON T_UE_PuntoBCR.ID_Unidad_Ejecutora = T_UnidadEjecutora.ID_Unidad_Ejecutora
+                        LEFT OUTER JOIN T_Telefono on T_PuntoBCR.ID_PuntoBCR = T_Telefono.ID
+			LEFT OUTER JOIN T_TipoTelefono ON T_Telefono.ID_Tipo_Telefono = T_TipoTelefono.ID_Tipo_Telefono", 
+                    "T_PuntoBCR.ID_PuntoBCR, T_PuntoBCR.Nombre, T_PuntoBCR.Direccion, T_PuntoBCR.Codigo,
+			T_TipoPuntoBCR.ID_Tipo_Punto, T_TipoPuntoBCR.Tipo_Punto,
+			T_UnidadEjecutora.ID_Unidad_Ejecutora, T_UnidadEjecutora.Departamento,
+                        GROUP_CONCAT(char(10),T_TipoTelefono.Tipo_Telefono,': ',T_Telefono.Numero) as Numero",
+                    "(T_TipoTelefono.ID_Tipo_Telefono = '1' OR T_TipoTelefono.ID_Tipo_Telefono = '6') 
+                        AND (T_PuntoBCR.Estado='1') 
+                        group by T_PuntoBCR.ID_PuntoBCR");
+            $this->arreglo=$this->obj_data_provider->getArreglo();
+            $this->obj_data_provider->desconectar();
+            $this->resultado_operacion=true;
+        }
+    }
 }?>

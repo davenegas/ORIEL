@@ -324,7 +324,7 @@ class cls_personal{
                     "T_SupervisorZona.*, 
 			T_PersonalExterno.Apellido,T_PersonalExterno.Nombre,
 			GROUP_CONCAT(T_TipoTelefono.Tipo_Telefono,': ',T_Telefono.Numero) as Numero",
-                    "(T_TipoTelefono.ID_Tipo_Telefono = '3')
+                    "(T_TipoTelefono.ID_Tipo_Telefono = '28' OR T_TipoTelefono.ID_Tipo_Telefono = '29')
 			GROUP BY T_SupervisorZona.ID_Supervisor_Zona");
             $this->arreglo=$this->obj_data_provider->getArreglo();
             $this->obj_data_provider->desconectar();

@@ -9,7 +9,6 @@
             // Una vez se cargue al completo la página desaparecerá el div "cargando"
             $('#cargando').hide();
             $.post("index.php?ctl=cuenta_visitas_a_puntos_bcr_privado");
-            
              if ( $.fn.dataTable.isDataTable('#tabla') ) {
                     table = $('#tabla').DataTable();
                 }
@@ -18,20 +17,18 @@
                     stateSave: true,
                     "lengthMenu": [[10, 25, 50,100,-1], [10, 25, 50,100,"All"]]
                 });           
-          });
+            
+            });
         </script>
     </head>
     <body>
         <?php require_once 'encabezado.php';?>
-         <div id="cargando">
+        <div id="cargando">
             <center><img align="center" src="vistas/Imagenes/Espere.gif"/></center>
         </div>
         <div class="container">
         <h2>Listado General de Puntos BCR</h2>
         <p>A continuación se detallan los Puntos BCR que están registrados en el sistema:</p>   
-<!--        <pre>
-            <?php print_r($params)?>;
-        </pre>-->
         <table id="tabla" class="display" cellspacing="0" width="100%">
             <thead>
                 <tr>
@@ -103,8 +100,7 @@
         <?php if($_SESSION['modulos']['Editar- Puntos BCR']==1){ ?>
         <a href="index.php?ctl=gestion_punto_bcr&id=0" class="btn btn-default" role="button">Agregar Nuevo Punto BCR</a>
         <?php }?>
-        </div> 
-        
+        </div>  
         <?php require 'vistas/plantillas/pie_de_pagina.php' ?>
         
     </body>

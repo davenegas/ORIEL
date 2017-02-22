@@ -2,20 +2,17 @@
 <html>
     <head>
         <meta charset="UTF-8">
-        <title>Bitácora Cencon</title>
+        <title>Pruebas Alarma</title>
         <script language="javascript" src="vistas/js/jquery.js"></script>
-        <script language="javascript" src="vistas/js/listas_dependientes_cencon.js"></script>
+        <script language="javascript" src="vistas/js/listas_dependientes_pruebas.js"></script>
         <link rel="stylesheet" href="vistas/css/ventanaoculta.css"> 
-        <?php require_once 'frm_librerias_head.html'; ?> 
+        <?php require_once 'frm_librerias_head.html'; ?>  
     </head>
     <body>
         
         <?php require_once 'encabezado.php';?>
         <div class="container-fluid text-center">
-            <!-- <pre>
-                <?php print_r($params)?>
-            </pre>-->
-            <h2>Bitácora Digital de Cencon</h2> 
+            <h2>Pruebas de Alarma</h2> 
             <div class="row content">
                 <!--Se mantienen este div para dejar espacio a la izquierda de la tabla-->    
                 <div class="col-sm-1 sidenav">
@@ -23,28 +20,19 @@
                 <!--DIV central contiene la tabla con el personal externo-->    
                 <div class="col-sm-8 container">
                     <div>
-                        <h4>Ingresar nueva apertura de cajero automático</h4>
+                        <h4>Registrar pruebas de alarma</h4>
                         <form class="bordegris" id="nuevo_evento_cencon" method="post" name="form" action="index.php?ctl=">
                             <div class="col-sm-4 espacio-abajo-5">
-                                <label for="numero_atm">Número de Cajero Automático</label>
-                                <input type="text" class="form-control" id="numero_atm" name="numero_atm" onblur="evento_buscar_cajero();" placeholder="Digite el número del cajero automático">
+                                <label for="numero_punto">Código de agencia</label>
+                                <input type="text" class="form-control" id="numero_punto" name="numero_punto" onblur="evento_buscar_puntobcr();" placeholder="Digite el número del cajero automático">
                             </div>
                             <div class="col-sm-4 espacio-abajo-5">
-                                <label for="nombre_atm">Nombre del Cajero Automático</label>
-                                <input type="text" class="form-control" disabled id="nombre_atm" name="nombre_atm" placeholder="">
+                                <label for="nombre_punto">Nombre de la agencia</label>
+                                <input type="text" class="form-control" disabled id="nombre_punto" name="nombre_punto" placeholder="">
                             </div>
                             <div class="col-sm-4 espacio-abajo-5">
-                                <label for="tipo_atm">Tipo de Cajero</label>
-                                <input type="text" class="form-control" disabled id="tipo_atm" name="tipo_atm" placeholder="">
-                            </div>
-                            <div class="col-sm-4 espacio-abajo-5">
-                                <label for="cedula">Número de Cedula</label>
-                                <input type="text" class="form-control" id="cedula" name="cedula" onblur="evento_buscar_persona();" placeholder="Digite el número de cedula">
-                            </div>
-                            <div>
-                                <input hidden type="text" id="ID_Empresa">
-                                <input hidden type="text" id="ID_PuntoBCR">
-                                <input hidden type="text" id="ID_Persona">
+                                <label for="tipo_punto">Tipo de agencia</label>
+                                <input type="text" class="form-control" disabled id="tipo_punto" name="tipo_punto" placeholder="">
                             </div>
                             <div class="col-sm-4 espacio-abajo-5">
                                 <label for="nombre_persona">Nombre del Funcionario</label>
@@ -55,35 +43,39 @@
                                 <input type="text" class="form-control" disabled id="unidad_ejecutora" name="unidad_ejecutora" placeholder="">
                             </div>
                             <div class="col-sm-4 espacio-abajo-5">
-                                <label for="fecha">Fecha</label>
-                                <input type="date" class="form-control" id="fecha" name="fecha" value="<?php echo date("Y-m-d");?>">
+                                <label for="seguimiento">Tipo Prueba</label>
+                                <select class="form-control" id="seguimiento" disabled name="seguimiento" >
+                                    <option value="Panico" selected="selected">Activación de Panico</option>
+                                    <option value="Intrusion">Activación de Intrusión</option>
+                                    <option value="Fuego">Activación de Fuego</option>
+                                </select>
                             </div>
                             <div class="col-sm-4 espacio-abajo-5">
-                                <label for="hora">Hora</label>
-                                <input type="time" class="form-control" id="hora" name="hora" value="<?php echo date("H:i", time());?>">
+                                <label for="hora">Hora apertura</label>
+                                <input type="time" disabled class="form-control" id="hora" name="hora" value="">
                             </div>
                             <div class="col-sm-4 espacio-abajo-5">
-                                <label for="acceso_atms">Acceso a cajeros</label>
+                                <label for="hora">Hora prueba</label>
+                                <input type="time" disabled class="form-control" id="hora" name="hora" value="">
+                            </div>
+                            <div class="col-sm-4 espacio-abajo-5">
+                                <label for="acceso_atms">Número de zona</label>
                                 <input type="text" disabled class="form-control" id="acceso_atms" name="acceso_atms" placeholder="">
+                            </div>
+                            <div class="col-sm-4 espacio-abajo-5">
+                                <label for="hora">Hora cierre</label>
+                                <input type="time" disabled class="form-control" id="hora" name="hora" value="">
                             </div>
                             <div class="col-sm-6 espacio-abajo-5">
                                 <label for="observaciones">Observaciones</label>
-                                <input type="text"  class="form-control" id="observaciones" name="observaciones" placeholder="Observaciones o comentarios de la apertura">
+                                <input type="text" disabled class="form-control" id="observaciones" name="observaciones" placeholder="Observaciones o comentarios de la prueba de alarma">
                             </div>
-                            <div class="col-sm-6 espacio-abajo-5">
-                                <label for="seguimiento">Seguimiento</label>
-                                <select class="form-control" id="seguimiento" name="seguimiento" >
-                                    <option value="" selected="selected"></option>
-                                    <option value="Se envió correo al funcionario">Se envió correo al funcionario</option>
-                                    <option value="Se envió correo al encargado">Se envió correo al encargado</option>
-                                    <option value="Se le informó al coordinador">Se le informó al coordinador</option>
-                                    <option value="Arqueo de ATM">Arqueo de ATM</option>
-                                    <option value="ATM en Mantenimiento">ATM en Mantenimiento</option>
-                                    <option value="Apertura con llave Azul">Apertura con llave Azul</option>
-                                    <option value="Permiso Especial">Permiso Especial</option>
-                                </select>
+                            <div class="col-sm-2 espacio-abajo-5">
+                                <label for="observaciones">Revisión cajeros</label>
+                                <input type="checkbox" id="revision" name="revision" class="form-control">
                             </div>
-                            <input type="button" class="quitar-float espacio-abajo espacio-arriba" value="Agregar apertura" onclick="agregar_evento_cencon();">
+                            
+                            <input type="button" class="quitar-float espacio-abajo espacio-arriba" value="Guardar" onclick="guardar_prueba();">
                         </form>
                     </div>
                     
@@ -114,10 +106,8 @@
                                         <td style="text-align:center" onclick="reasignar_apertura('<?php echo $params[$i]['ID_Evento_Cencon'];?>','<?php echo $params[$i]['ID_PuntoBCR'];?>');"><?php echo $params[$i]['Nombre_Persona'];?></td>
                                         <td style="text-align:center" onclick="editar_observaciones('<?php echo $params[$i]['ID_Evento_Cencon'];?>','<?php echo $params[$i]['Observaciones'];?>')"><?php echo $params[$i]['Observaciones'];?></td>
                                         <td style="text-align:center" onclick="editar_seguimiento('<?php echo $params[$i]['ID_Evento_Cencon'];?>','<?php echo $params[$i]['Seguimiento'];?>')"><?php echo $params[$i]['Seguimiento'];?></td>
-                                        <td style="text-align:center">
-                                            <a class="btn" role="button" title="Realizar el cierre de Cencon" onclick="evento_cencon_cerrar(<?php echo $params[$i]['ID_Evento_Cencon'];?>);">Cerrar Cajero</a>
-                                            <a href="mailto:<?php echo $params[$i]['Correo'];?>?cc=Coordinacion_Centro_de_Control@bancobcr.com&subject=Solicitud de cierre Cencon ATM <?php echo $params[$i]['Codigo']." - ".$params[$i]['Nombre'];?>" title="Abrir correo electrónico">Correo</a>
-                                        </td>
+                                        <td style="text-align:center"><a class="btn" role="button" onclick="evento_cencon_cerrar(<?php echo $params[$i]['ID_Evento_Cencon'];?>);">
+                                                Cerrar Cajero</a></td>
                                     </tr>
                                 <?php } ?>
                             </tbody>
@@ -129,7 +119,7 @@
                     <div class="well">
                         <p>Alerta de tiempo de apertura:</p>
                     </div>
-                    <?php if(isset($vencidos)){ ?>
+                    <?php if(isset($vencidos)){?>
                         <div class="well" align="left">
                             <p><b> | ATM | Días | Horas | Minutos</b></p>
                             <?php 
@@ -138,7 +128,7 @@
                                 <p style="<?php echo $vencidos[$i]['color']?>"><?php echo "- ".$vencidos[$i]['mensaje'];?> <br></p>
                             <?php }?>   
                         </div>
-                    <?php } ?>
+                <?php } ?>
                 </div>
             </div>
         </div>
@@ -194,7 +184,6 @@
                             <option value="Arqueo de ATM">Arqueo de ATM</option>
                             <option value="ATM en Mantenimiento">ATM en Mantenimiento</option>
                             <option value="Apertura con llave Azul">Apertura con llave Azul</option>
-                            <option value="Permiso Especial">Permiso Especial</option>
                         </select>          
                     <hr>
                     <button onclick="guardar_seguimiento_evento();">Guardar</a></button>
