@@ -16,6 +16,7 @@
                 }
                 table.destroy();
                 table = $('#tabla').DataTable( {
+                    stateSave: true,
                     "lengthMenu": [[10, 25, 50,100,-1], [10, 25, 50,100,"All"]]
                 });       
             });
@@ -41,6 +42,7 @@
                         <!--<th style="text-align:center">Empresa</th>-->
                         <!--<th>Tipo Telefono</th>-->
                         <th style="text-align:center">Telefonos</th>
+                        <th style="text-align:center">Observaciones</th>
                         <!--<th>Observaciones</th>-->
                         <?php if($_SESSION['modulos']['Editar- Personal']==1){ ?>
                           <th style="text-align:center">Estado</th>              
@@ -63,7 +65,15 @@
                             <!--<td style="text-align:center"><?php echo $personas[$i]['Empresa'];?></td>-->
                             <!--<td><?php echo $personas[$i]['Tipo_Telefono'];?></td>-->
                             <td style="text-align:center"><?php echo $personas[$i]['Numero'];?></td>
+                            
                             <!--<td><?php echo $personas[$i]['Observaciones'];?></td>-->
+                            
+                            <?php if (strlen(trim($personas[$i]['Observaciones']))==0){?>  
+                                 <td style="text-align:center">Sin Actualizar</td>
+                            <?php }  else    {?>  
+                                 <td style="text-align:center"><?php echo $personas[$i]['Observaciones'];?></td> 
+                            <?php   }   ?>
+                              
                             <?php if($_SESSION['modulos']['Editar- Personal']==1){
                                 if ($personas[$i]['Estado']==1){?>  
                                     <td style="text-align:center">Activo</td>

@@ -77,6 +77,7 @@
               <th style="text-align:center">Cambiar Estado</th>
               <th style="text-align:center">Mantenimiento</th>
               <th style="text-align:center">Control de Video</th>
+              <th style="text-align:center">Acciones</th>
             </tr>
           </thead>
     <tbody>
@@ -106,8 +107,10 @@
                     
             <td style="text-align:center"><a href="index.php?ctl=puestos_de_monitoreo_editar&id=<?php echo $params[$i]['ID_Puesto_Monitoreo']?>&tiempo_revision=<?php echo $params[$i]['Tiempo_Estandar_Revision']?>&nombre=<?php echo $params[$i]['Nombre']?>">
                    Lista de Unidades</a></td>
+             <td style="text-align:center"><a href="index.php?ctl=puestos_de_monitoreo_editar&id=<?php echo $params[$i]['ID_Puesto_Monitoreo']?>&tiempo_revision=<?php echo $params[$i]['Tiempo_Estandar_Revision']?>&nombre=<?php echo $params[$i]['Nombre']?>">
+                   Tomar Puesto</a></td>
             </tr>     
-            <?php } ?>
+                    <?php } ?>
             </tbody>
         </table>
         <a id="popup" onclick="mostrar_agregar_puesto_monitoreo()" class="btn btn-default" role="button">Agregar Nuevo Puesto de Monitoreo</a>

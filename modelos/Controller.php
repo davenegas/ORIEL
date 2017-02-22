@@ -451,11 +451,11 @@
         $obj_puestos_de_monitoreo->setCondicion("ID_Puesto_Monitoreo=".$elementos[0][0]);
         $obj_puestos_de_monitoreo->eliminar_registros_puesto_de_monitoreo();
         
-        if($tam>1){
-              
+        if($tam>1){   
             for ($i = 1; $i < $tam; $i++) {
                 $obj_puestos_de_monitoreo->setId_puesto_monitoreo($elementos[0][$i]);
                 $obj_puestos_de_monitoreo->setId_unidad_video($elementos[1][$i]);
+                $obj_puestos_de_monitoreo->setPosicion($i);
                 $obj_puestos_de_monitoreo->setTiempo_personalizado_revision($elementos[6][$i]);
                 $obj_puestos_de_monitoreo->agregar_nueva_unidad_de_video_a_puesto_de_monitoreo();
                 
@@ -6506,6 +6506,9 @@
             $obj_personal=new cls_personal();
             $obj_personal->obtiene_todo_el_personal_modulo_personas();
             $personas= $obj_personal->getArreglo();
+           // echo "<pre>";
+            //print_r($personas);
+            //echo "</pre>";
             require __DIR__ . '/../vistas/plantillas/frm_personal_listar.php';
         }else{
               /*

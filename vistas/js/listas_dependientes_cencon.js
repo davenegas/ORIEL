@@ -164,7 +164,7 @@ function evento_buscar_persona(){
     });
     
 }
-function agregar_evento_cencon(){
+ function agregar_evento_cencon(){
     
     if (document.getElementById('cedula').value == "" || document.getElementById('numero_atm').value == "") {
         alert("Digite el número de cajero y el número de cedula para generar una apertura!");
@@ -192,6 +192,7 @@ function agregar_evento_cencon(){
                     id_empresa= document.getElementById('ID_Empresa').value;
                     observaciones = document.getElementById('observaciones').value;
                     seguimiento = document.getElementById('seguimiento').value;
+                    
                     $.post("index.php?ctl=evento_nuevo_guardar", { fecha_apertura: fecha_apertura, hora_apertura:hora_apertura,
                     id_puntobcr:id_puntobcr, id_persona:id_persona, id_empresa:id_empresa, observaciones:observaciones, seguimiento:seguimiento}, function(data){
                         //alert (data);
@@ -205,6 +206,11 @@ function agregar_evento_cencon(){
                                 alert("Esta cajero tiene una apertura pendiente de cierre");
                             }
                         } else{
+                            $("body").append("<input type='text' id='temp'>");
+                            var s=document.getElementById('cedula').value;
+                            $("#temp").val(s).select();
+                            document.execCommand("copy");
+                            $("#temp").remove();
                             location.reload();
                         }
                     });
@@ -214,6 +220,7 @@ function agregar_evento_cencon(){
             if(valida_cajero==0){
                 alert("Esta persona no puede abrir este cajero \nPor favor intente nuevamente");
             }
+            
         });
     }
 }

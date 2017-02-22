@@ -9,6 +9,15 @@
             // Una vez se cargue al completo la página desaparecerá el div "cargando"
             $('#cargando').hide();
             $.post("index.php?ctl=cuenta_visitas_a_puntos_bcr_privado");
+            
+             if ( $.fn.dataTable.isDataTable('#tabla') ) {
+                    table = $('#tabla').DataTable();
+                }
+                table.destroy();
+                table = $('#tabla').DataTable( {
+                    stateSave: true,
+                    "lengthMenu": [[10, 25, 50,100,-1], [10, 25, 50,100,"All"]]
+                });           
           });
         </script>
     </head>
@@ -34,6 +43,7 @@
                     <th hidden>Direccion IP</th>
                     <th style="text-align:center">Cuenta SIS</th>
                     <th style="text-align:center">Tipo de Punto</th>
+                    <th style="text-align:center">Horario</th>
                     <th style="text-align:center">Observaciones</th>
                     <?php if($_SESSION['modulos']['Editar Estado- Puntos BCR']==1){ ?> 
                         <th>Estado</th>
@@ -62,6 +72,11 @@
                     <td style="text-align:center"><?php echo $params[$i]['Cuenta_SIS'];?></td>
                     <td style="text-align:center"><?php echo $params[$i]['Tipo_Punto'];?></td>
                     <td style="text-align:center"><?php echo $params[$i]['Observaciones'];?></td>
+                    <?php if (strlen(trim($params[$i]['Observaciones_Punto']))==0){?>  
+                               <td style="text-align:center">Sin Actualizar</td>
+                          <?php }  else    {?>  
+                               <td style="text-align:center"><?php echo $params[$i]['Observaciones_Punto'];?></td> 
+                    <?php   }   ?>
                     <?php if($_SESSION['modulos']['Editar Estado- Puntos BCR']==1){ 
                         if ($params[$i]['Estado_Punto']==1){  ?>  
                             <td style="text-align:center">Activo</td>

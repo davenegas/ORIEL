@@ -645,7 +645,7 @@ class cls_personal{
 			LEFT OUTER JOIN T_Telefono on T_Personal.ID_Persona = T_Telefono.ID
 			LEFT OUTER JOIN T_TipoTelefono ON T_Telefono.ID_Tipo_Telefono = T_TipoTelefono.ID_Tipo_Telefono
 			LEFT OUTER JOIN T_Puesto ON T_Personal.ID_Puesto = T_Puesto.ID_Puesto", 
-                    " T_Personal.ID_Persona, T_Personal.Cedula, T_Personal.Apellido_Nombre,T_Personal.Estado,
+                    " T_Personal.ID_Persona, T_Personal.Cedula, T_Personal.Apellido_Nombre,T_Personal.Estado,T_Personal.Observaciones,
 			T_UnidadEjecutora.ID_Unidad_Ejecutora, T_UnidadEjecutora.Departamento,
 			T_Empresa.ID_Empresa, T_Empresa.Empresa,
 			T_TipoTelefono.Tipo_Telefono, T_TipoTelefono.ID_Tipo_Telefono,

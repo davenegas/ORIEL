@@ -13,8 +13,17 @@ class cls_puestos_de_monitoreo{
     public $estado;
     public $campos_valores;
     public $observaciones;
+    public $posicion;
     public $tiempo_estandar_revision;
     public $tiempo_personalizado_revision;
+    
+    function getPosicion() {
+        return $this->posicion;
+    }
+
+    function setPosicion($posicion) {
+        $this->posicion = $posicion;
+    }
     
     function getId_puesto_monitoreo_unidad_video() {
         return $this->id_puesto_monitoreo_unidad_video;
@@ -140,6 +149,7 @@ class cls_puestos_de_monitoreo{
         $this->estado="";
         $this->id_puesto_monitoreo_unidad_video="";
         $this->id_unidad_video="";
+        $this->posicion="";
         $this->tiempo_personalizado_revision="";
     
    }
@@ -327,7 +337,7 @@ class cls_puestos_de_monitoreo{
     
      public function agregar_nueva_unidad_de_video_a_puesto_de_monitoreo(){
         $this->obj_data_provider->conectar();
-        $this->obj_data_provider->inserta_datos("T_PuestoMonitoreoUnidadVideo", "`ID_Puesto_Monitoreo_Unidad_Video`,`ID_Puesto_Monitoreo`,`ID_Unidad_Video`,`Tiempo_Personalizado_Revision`", "null,".$this->id_puesto_monitoreo.",".$this->id_unidad_video.",".$this->tiempo_personalizado_revision);
+        $this->obj_data_provider->inserta_datos("T_PuestoMonitoreoUnidadVideo", "`ID_Puesto_Monitoreo_Unidad_Video`,`ID_Puesto_Monitoreo`,`ID_Unidad_Video`,`Tiempo_Personalizado_Revision`,`Posicion`", "null,".$this->id_puesto_monitoreo.",".$this->id_unidad_video.",".$this->tiempo_personalizado_revision.",".$this->posicion);
         $this->arreglo=$this->obj_data_provider->getArreglo();
         $this->obj_data_provider->desconectar();
     }

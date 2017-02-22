@@ -165,7 +165,16 @@
                     if ((document.getElementById('campo_a_editar').value=='Cuadros_Por_Segundo')||(document.getElementById('campo_a_editar').value=='Camaras_Habilitadas')||(document.getElementById('campo_a_editar').value=='Cantidad_Entradas_Video')||(document.getElementById('campo_a_editar').value=='Regulacion')||(document.getElementById('campo_a_editar').value=='Calidad')||(document.getElementById('campo_a_editar').value=='Version_Software')||(document.getElementById('campo_a_editar').value=='Capacidad_Disco_Duro')||(document.getElementById('campo_a_editar').value=='Promedio_Dias')){
                         if (!isNaN(document.getElementById('detalle').value)){
                             if (document.getElementById('detalle').value!=document.getElementById(document.getElementById('ID_Unidad_Video').value+'-'+document.getElementById('campo_a_editar').value).value){
-                               document.getElementById(document.getElementById('ID_Unidad_Video').value+'-'+document.getElementById('campo_a_editar').value).innerHTML=document.getElementById('detalle').value; 
+                               if (document.getElementById('campo_a_editar').value=='Regulacion'){
+                                    if (document.getElementById('detalle').value=='0'){
+                                        document.getElementById(document.getElementById('ID_Unidad_Video').value+'-'+document.getElementById('campo_a_editar').value).innerHTML='N/A'; 
+                                    }else{
+                                        document.getElementById(document.getElementById('ID_Unidad_Video').value+'-'+document.getElementById('campo_a_editar').value).innerHTML=document.getElementById('detalle').value; 
+                                    }
+                               }else{
+                                   document.getElementById(document.getElementById('ID_Unidad_Video').value+'-'+document.getElementById('campo_a_editar').value).innerHTML=document.getElementById('detalle').value; 
+                               }
+                               
                                document.getElementById(document.getElementById('ID_Unidad_Video').value+'-Fecha_Actualizacion').innerHTML=fecha_actual; 
                                $.post("index.php?ctl=editar_campo_unidades_de_video", { id_unidad_video:document.getElementById('ID_Unidad_Video').value ,campo_a_editar:document.getElementById('campo_a_editar').value,valor:document.getElementById('detalle').value}, function(data){
                                document.getElementById('ventana_oculta_1').style.display = "none";
@@ -379,7 +388,11 @@
                     <td style="text-align:center" id="<?php echo $params[$i]['ID_Unidad_Video'].'-Capacidad_Disco_Duro';?>" onclick="edita_dato('<?php echo $params[$i]['ID_Unidad_Video'];?>','<?php echo $params[$i]['Capacidad_Disco_Duro'];?>','Capacidad_Disco_Duro','Disco Duro(GB)')"><?php echo $params[$i]['Capacidad_Disco_Duro'];?></td>
                     <td style="text-align:center" id="<?php echo $params[$i]['ID_Unidad_Video'].'-Version_Software';?>" onclick="edita_dato('<?php echo $params[$i]['ID_Unidad_Video'];?>','<?php echo $params[$i]['Version_Software'];?>','Version_Software','Versión Software')"><?php echo $params[$i]['Version_Software'];?></td>
                     <td style="text-align:center" id="<?php echo $params[$i]['ID_Unidad_Video'].'-Mac_Address';?>" onclick="edita_dato('<?php echo $params[$i]['ID_Unidad_Video'];?>','<?php echo $params[$i]['Mac_Address'];?>','Mac_Address','Mac Address')"><?php echo $params[$i]['Mac_Address'];?></td>
-                    <td style="text-align:center" id="<?php echo $params[$i]['ID_Unidad_Video'].'-Regulacion';?>" onclick="edita_dato('<?php echo $params[$i]['ID_Unidad_Video'];?>','<?php echo $params[$i]['Regulacion'];?>','Regulacion','Regulación(Kbps)')"><?php echo $params[$i]['Regulacion'];?></td>
+                    <?php if ($params[$i]['Regulacion']=="0"){?>  
+                               <td style="text-align:center" id="<?php echo $params[$i]['ID_Unidad_Video'].'-Regulacion';?>" onclick="edita_dato('<?php echo $params[$i]['ID_Unidad_Video'];?>','<?php echo $params[$i]['Regulacion'];?>','Regulacion','Regulación(Kbps)')">N/A</td>
+                          <?php }  else    {?>  
+                               <td style="text-align:center" id="<?php echo $params[$i]['ID_Unidad_Video'].'-Regulacion';?>" onclick="edita_dato('<?php echo $params[$i]['ID_Unidad_Video'];?>','<?php echo $params[$i]['Regulacion'];?>','Regulacion','Regulación(Kbps)')"><?php echo $params[$i]['Regulacion'];?></td>
+                    <?php   }   ?>
                     <td style="text-align:center" id="<?php echo $params[$i]['ID_Unidad_Video'].'-Cantidad_Entradas_Video';?>" onclick="edita_dato('<?php echo $params[$i]['ID_Unidad_Video'];?>','<?php echo $params[$i]['Cantidad_Entradas_Video'];?>','Cantidad_Entradas_Video','#Entradas de Video')"><?php echo $params[$i]['Cantidad_Entradas_Video'];?></td>
                     <td style="text-align:center" id="<?php echo $params[$i]['ID_Unidad_Video'].'-Camaras_Habilitadas';?>" onclick="edita_dato('<?php echo $params[$i]['ID_Unidad_Video'];?>','<?php echo $params[$i]['Camaras_Habilitadas'];?>','Camaras_Habilitadas','#Cámaras')"><?php echo $params[$i]['Camaras_Habilitadas'];?></td>
                     <td style="text-align:center" id="<?php echo $params[$i]['ID_Unidad_Video'].'-Cuadros_Por_Segundo';?>" onclick="edita_dato('<?php echo $params[$i]['ID_Unidad_Video'];?>','<?php echo $params[$i]['Cuadros_Por_Segundo'];?>','Cuadros_Por_Segundo','Cuadros/Segundo(FS)')"><?php echo $params[$i]['Cuadros_Por_Segundo'];?></td>
