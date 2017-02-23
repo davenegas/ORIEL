@@ -7470,6 +7470,7 @@
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }   
     }
+    
     ////////////////////////////////////////////////////////////////////////////
     //////////////////////////////Trazabilidad//////////////////////////////////
     /////////////////////FUNCIONES PARA EVENTOS/////////////////////////////////
@@ -8325,7 +8326,7 @@
                 $obj_personal->setCondicion("T_PersonalExterno.ID_Empresa=15 OR T_PersonalExterno.ID_Empresa=16");
             }
             //Muestra solamente información de personal externo NOVUS(8) y Correos de Costa Rica(9), rol 7 Servicios Auxiliar
-            if($_SESSION['rol']==7){
+            if($_SESSION['rol']==7 || $_SESSION['rol']==4){
                 $obj_personal->setCondicion("T_PersonalExterno.ID_Empresa=8 OR T_PersonalExterno.ID_Empresa=9");
             }
             //Muestra solamente información de personal externo SELOSA SA(10), CLIMA TECNICA REFRIGERACIÓN INDUST(11),
@@ -8448,7 +8449,7 @@
                 $obj_empresa->setCondicion("T_Empresa.ID_Empresa=15 OR T_Empresa.ID_Empresa=16");
             }
             //Muestra solamente información de personal externo NOVUS(8) y Correos de Costa Rica(9), rol 7 Servicios Auxiliar
-            if($_SESSION['rol']==7){
+            if($_SESSION['rol']==7 || $_SESSION['rol']==4){
                 $obj_empresa->setCondicion("T_Empresa.ID_Empresa=8 OR T_Empresa.ID_Empresa=9");
             }
             //Muestra solamente información de personal externo SELOSA SA(10), CLIMA TECNICA REFRIGERACIÓN INDUST(11),
@@ -10049,7 +10050,7 @@
         if(isset($_SESSION['nombre'])){
             $obj_punto = new cls_puntosBCR();
             //Buscar la información de un PuntoBCR basado en el código del cajero
-            $obj_punto->setCondicion("T_PuntoBCR.Codigo=".$_POST['id']);
+            $obj_punto->setCondicion("T_PuntoBCR.Codigo=".$_POST['id']." AND T_PuntoBCR.Estado=1");
             $obj_punto->obtiene_todos_los_puntos_bcr();
             $cajero = $obj_punto->getArreglo();
             

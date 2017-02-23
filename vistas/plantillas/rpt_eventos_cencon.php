@@ -7,20 +7,6 @@
         <?php require_once 'frm_librerias_head.html'; ?>   
         
         <script type="text/javascript">
-            function hacer_click(){
-                $('#cuerpo').html('<center><img align="center" src="vistas/Imagenes/loading.gif"/></center>');
-
-                fecha_inicial=document.getElementById('fecha_inicial').value;
-                fecha_final=document.getElementById('fecha_final').value;
-
-                $.post("index.php?ctl=actualiza_en_vivo_reporte_cencon", {fecha_inicial: fecha_inicial,fecha_final:fecha_final}, function(data){
-                    $("#titulo").html("Eventos de acuerdo a parámetros:");  
-                    $("#tabla").html(data);   
-                    $("#tabla").dataTable().fnDestroy();
-                    $("#tabla").dataTable().draw();
-                });    
-            }
-            
             $(function () {
                 $('#container').highcharts({
                     chart: {
@@ -67,7 +53,7 @@
         </script>
     </head>
     <body>
-        <script src="https://code.highcharts.com/highcharts.js"></script>
+        <script src="vistas/js/highstock.js"></script>
         <script src="vistas/js/exporting.js"></script>
         
         <?php require_once 'encabezado.php';?>

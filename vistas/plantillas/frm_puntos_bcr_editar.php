@@ -30,7 +30,11 @@
                         <input class="quitar-float" type="checkbox" id="chk_informacion_general" name="chk_ubicacion">
                     <?php }?>
                     <a href="index.php?ctl=frm_puntos_bcr_padron_fotografico&id=<?php echo $params[0]['ID_PuntoBCR']?>" align="right"><img src="vistas/Imagenes/gallery.gif" width="40" height="40"></a>
+                    <?php if($_SESSION['modulos']['Módulo-Bitácora Digital']==1){ ?> 
+                        <a href="index.php?ctl=frm_eventos_agregar&id=<?php echo $params[0]['ID_PuntoBCR']?>"><font size="3">Ingresar Evento</font></a>
+                    <?php } ?>
                 </h3>
+                
                 <div class="col-md-4">
                     <label for="ID_PuntoBCR">ID Punto</label>
                     <input type="text" required="ID_PuntoBCR" readonly class="form-control" id="ID_PuntoBCR" name="ID_PuntoBCR" value="<?php echo $params[0]['ID_PuntoBCR'];?>">
