@@ -182,7 +182,11 @@ $map = array(
     'puesto_monitoreo_guardar'=>array('controller'=>'Controller','action'=> 'puesto_monitoreo_guardar'), 
     'puesto_monitoreo_cambiar_estado'=>array('controller'=>'Controller','action'=> 'puesto_monitoreo_cambiar_estado'), 
     'actualiza_puesto_de_monitoreo'=>array('controller'=>'Controller','action'=> 'actualiza_puesto_de_monitoreo'), 
-              
+    'tomar_puesto_de_monitoreo'=>array('controller'=>'Controller','action'=> 'tomar_puesto_de_monitoreo'),
+    'liberar_puesto_de_monitoreo'=>array('controller'=>'Controller','action'=> 'liberar_puesto_de_monitoreo'),    
+    'controles_de_video_listar'=>array('controller'=>'Controller','action'=> 'controles_de_video_listar'),    
+    'actualiza_segundero_revision_video'=>array('controller'=>'Controller','action'=> 'actualiza_segundero_revision_video'),    
+             
     //Información Proveedor enlaces
     'proveedor_listar'=>array('controller'=>'Controller', 'action'=>'proveedor_listar'),
     'proveedor_enlace_guardar'=>array('controller'=>'Controller', 'action'=>'proveedor_enlace_guardar'),
