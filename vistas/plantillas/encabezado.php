@@ -270,19 +270,14 @@
                             <?php if ($_SESSION['modulos']['Módulo-Cencon']==1){?>
                                 <li><a href="index.php?ctl=eventos_cencon">Cencon</a></li> 
                             <?php }; ?>
-                                
-<<<<<<< HEAD
-                            <?php if ($_SESSION['modulos']['Módulo-Control de Video']==1){?>
-                                <li><a href="index.php?ctl=puestos_de_monitoreo_listar"> Puestos de Monitoreo</a></li>
-                            <?php }; ?>
-=======
+
                              <?php if ($_SESSION['modulos']['Seguridad-Trazabilidad']==1){?>
                                 <li><a href="index.php?ctl=puestos_de_monitoreo_listar">Puestos de Monitoreo</a></li>
                             <?php }; ?>   
-                                <?php if ($_SESSION['modulos']['Seguridad-Trazabilidad']==1){?>
-                                <li><a href="index.php?ctl=controles_de_video_listar">Controles de Video</a></li>
+                            
+                            <?php if ($_SESSION['modulos']['Seguridad-Trazabilidad']==1){?>
+                                <li><a href="index.php?ctl=controles_de_video_listar">Controles de Video Nuevo</a></li>
                             <?php }; ?>   
->>>>>>> origin/master
 
                             <?php if ($_SESSION['modulos']['Módulo-Pruebas alarma']==1){?>
                                 <li><a href="index.php?ctl=pruebas_alarma">Pruebas alarma</a></li> 
