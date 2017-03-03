@@ -51,7 +51,101 @@
                 document.getElementById('ventana_oculta_1').style.display = "block";
             };
             
-             
+            function tomar_puesto_de_monitoreo(id_puesto,nom){
+                $.confirm({
+                    title: 'Confirmación!',
+                    content: 'Desea tomar el puesto de monitoreo: '+nom+' ?',
+                    confirm: function(){
+                        $.post("index.php?ctl=tomar_puesto_de_monitoreo", {id_puesto: id_puesto},function(data){
+                            var srt = data;
+                            var n= srt.search("Inactivo");
+                           
+                            if(n>0){
+                                $.alert({
+                                    title: 'Información!',
+                                    content: 'Este puesto de monitoreo se encuentra inactivo, favor notifique a su Supervisor!!!',
+                                });
+                            }else{
+                                 n= srt.search("En otro puesto");
+                                 if(n>0){
+                                    $.alert({
+                                       title: 'Información!',
+                                       content: 'Solo es posible tener como máximo un puesto de monitoreo a la vez. Por favor libere el actual!!!',
+                                   });
+                                 }else{
+                                     n= srt.search("Ocupado");
+                                    if(n>0){
+                                         $.alert({
+                                          title: 'Información!',
+                                          content: 'Este puesto se encuentra bloqueado, no es posible tomarlo!!! Solamente la Persona que lo tiene o un Encargado lo puede liberar.',
+                                         });
+                                    }else{
+                                        n= srt.search("Sin_Unidades");
+                                        if(n>0){
+                                         $.alert({
+                                          title: 'Información!',
+                                          content: 'Este puesto de monitoreo no tiene unidades de video asignadas para revisar. Favor contacte a su Supervisor!!!',
+                                         });
+                                        }else{
+                                             $.alert({
+                                                title: 'Información!',
+                                                content: 'Puesto tomado exitosamente!!!',
+                                                });
+                                           //     alert(data);
+                                                location.reload(); 
+                                        }
+                                       
+
+                                    }
+                                     
+                                     
+                                 }
+                                 
+                            }
+                        });  
+                    
+                    },
+                    cancel: function(){
+              
+                    }
+                });
+            }
+            
+            function liberar_puesto_de_monitoreo(id_puesto,nom,id_us){
+                
+                 //alert(id_us);
+                <?php 
+            //Solamente los coordinadores ven esta opcion de agregar mezclas
+            if($_SESSION['modulos']['Módulo-Control de Video-Liberar Puestos']==1){ ?>
+               $.confirm({
+                    title: 'Confirmación!',
+                    content: 'Desea liberar el puesto de monitoreo: '+nom+' ?',
+                    confirm: function(){
+                        $.post("index.php?ctl=liberar_puesto_de_monitoreo", {id_puesto: id_puesto},function(data){
+                            var srt = data;
+                            var n= srt.search("liberado");
+                           
+                            if(n>0){
+                                $.alert({
+                                    title: 'Información!',
+                                    content: 'Puesto liberado correctamente!!!',
+                                });
+                                location.reload();
+                            }else{
+                                //alert(data);
+                                alert("No fue posible liberar este puesto de monitoreo!!!Contacte a su Supervisor.");
+                            }
+                        });  
+                    
+                    },
+                    cancel: function(){
+              
+                    }
+                });
+            <?php }else{ ?>
+                    alert("No puedes liberar este puesto de monitoreo!!!Contacte a su Supervisor.");
+             <?php }?>
+            }
             
         </script>
         
@@ -59,7 +153,7 @@
          <body>
    <?php require_once 'encabezado.php';?>
         
-        <div class="container">
+        <div class="container animated fadeIn col-xs-10 quitar-float">
         <h2>Listado General de Puestos de Monitoreo (Control de Video)</h2>
         <p>A continuación se detallan los diferentes puestos de monitoreo registrados en el sistema:</p>            
         <table id="tabla" class="display" cellspacing="0">
@@ -68,6 +162,7 @@
               <th hidden="hidden">ID_Puesto_Monitoreo</th>
               <th style="text-align:center">Nombre</th>
               <th style="text-align:center">Descripción</th>
+              <th style="text-align:center">Usuario Actual</th>
               <th style="text-align:center">Observaciones</th>
               <th style="text-align:center">Tiempo Estándar Revisión (Segundos)</th>
               <th style="text-align:center">Total de Unidades</th>
@@ -77,7 +172,8 @@
               <th style="text-align:center">Cambiar Estado</th>
               <th style="text-align:center">Mantenimiento</th>
               <th style="text-align:center">Control de Video</th>
-              <th style="text-align:center">Acciones</th>
+              <th style="text-align:center">Tomar</th>
+              <th style="text-align:center">Liberar</th>
             </tr>
           </thead>
     <tbody>
@@ -89,6 +185,7 @@
                 <td hidden="hidden"><?php echo $params[$i]['ID_Puesto_Monitoreo'];?></td>
                 <td style="text-align:center"><?php echo $params[$i]['Nombre'];?></td>
                 <td style="text-align:center"><?php echo $params[$i]['Descripcion'];?></td>
+                <td style="text-align:center"><?php echo $params[$i]['Nombre_Completo'];?></td>
                 <td style="text-align:center"><?php echo $params[$i]['Observaciones'];?></td>
                 <td style="text-align:center"><?php echo $params[$i]['Tiempo_Estandar_Revision'];?></td>
                 <td style="text-align:center"><?php echo $vector_estadisticas[$i]['Total_Unidades'];?></td>
@@ -107,9 +204,14 @@
                     
             <td style="text-align:center"><a href="index.php?ctl=puestos_de_monitoreo_editar&id=<?php echo $params[$i]['ID_Puesto_Monitoreo']?>&tiempo_revision=<?php echo $params[$i]['Tiempo_Estandar_Revision']?>&nombre=<?php echo $params[$i]['Nombre']?>">
                    Lista de Unidades</a></td>
-             <td style="text-align:center"><a href="index.php?ctl=puestos_de_monitoreo_editar&id=<?php echo $params[$i]['ID_Puesto_Monitoreo']?>&tiempo_revision=<?php echo $params[$i]['Tiempo_Estandar_Revision']?>&nombre=<?php echo $params[$i]['Nombre']?>">
-                   Tomar Puesto</a></td>
+                   
+            <td style="text-align:center"><a href="#" onclick="tomar_puesto_de_monitoreo('<?php echo $params[$i]['ID_Puesto_Monitoreo'];?>','<?php echo $params[$i]['Nombre'];?>');">
+            Tomar Puesto</a></td>
+            
+            <td style="text-align:center"><a href="#" onclick="liberar_puesto_de_monitoreo('<?php echo $params[$i]['ID_Puesto_Monitoreo'];?>','<?php echo $params[$i]['Nombre'];?>','<?php echo $params[$i]['ID_Usuario'];?>');">
+            Liberar Puesto</a></td>
             </tr>     
+           
                     <?php } ?>
             </tbody>
         </table>

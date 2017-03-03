@@ -18,7 +18,9 @@
                     confirm: function(){
                         //alert (prueba+" "+ prueba2 + " " + prueba3 );
                         $.post("index.php?ctl=frm_eventos_recuperar", { id_evento: prueba,id_puntobcr:prueba2,id_tipo_evento:prueba3 },function(data){
-                            if (data=="1"){
+                            var srt = data;
+                            var n= srt.search("0");
+                            if(n<0){
                                 $.alert({
                                     title: 'Información!',
                                     content: 'Ya existe este evento abierto para este punto BCR. Proceda a cerrarlo o agregue un seguimiento!!!',

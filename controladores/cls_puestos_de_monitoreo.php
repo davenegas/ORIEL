@@ -1,11 +1,30 @@
-<?php
+  <?php
 class cls_puestos_de_monitoreo{
     
     public $obj_data_provider;
     public $id_puesto_monitoreo;
     public $id_puesto_monitoreo_unidad_video;
+    public $id_bitacora_control_puesto_monitoreo;
+    public $id_bitacora_revision_video;
+    public $fecha_toma_control;
+    public $hora_toma_control;
+    public $fecha_libera_control;
+    public $hora_libera_control;
+    public $fecha_inicia_revision;
+    public $hora_inicia_revision;
+    public $id_ultimo_toma_puesto_ingresada;
+    public $fecha_termina_revision;
+    public $hora_termina_revision;
     public $id_unidad_video;
     public $id_usuario;
+    public $retraso_segundos;
+    public $justificacion_retraso;
+    public $resultado_conexion;
+    public $duracion_revision;
+    public $posicion;
+    public $ultima_posicion_concluida;
+    public $requirio_mantenimiento;
+    public $reporta_situacion;
     public $descripcion;
     public $arreglo;
     private $condicion;
@@ -13,10 +32,154 @@ class cls_puestos_de_monitoreo{
     public $estado;
     public $campos_valores;
     public $observaciones;
-    public $posicion;
     public $tiempo_estandar_revision;
     public $tiempo_personalizado_revision;
     
+    function getUltima_posicion_concluida() {
+        return $this->ultima_posicion_concluida;
+    }
+
+    function setUltima_posicion_concluida($ultima_posicion_concluida) {
+        $this->ultima_posicion_concluida = $ultima_posicion_concluida;
+    }
+    
+    function getId_ultimo_toma_puesto_ingresada() {
+        return $this->id_ultimo_toma_puesto_ingresada;
+    }
+
+    function setId_ultimo_toma_puesto_ingresada($id_ultimo_toma_puesto_ingresada) {
+        $this->id_ultimo_toma_puesto_ingresada = $id_ultimo_toma_puesto_ingresada;
+    }
+
+        
+    function getId_bitacora_revision_video() {
+        return $this->id_bitacora_revision_video;
+    }
+
+    function getFecha_inicia_revision() {
+        return $this->fecha_inicia_revision;
+    }
+
+    function getHora_inicia_revision() {
+        return $this->hora_inicia_revision;
+    }
+
+    function getFecha_termina_revision() {
+        return $this->fecha_termina_revision;
+    }
+
+    function getHora_termina_revision() {
+        return $this->hora_termina_revision;
+    }
+
+    function getRetraso_segundos() {
+        return $this->retraso_segundos;
+    }
+
+    function getJustificacion_retraso() {
+        return $this->justificacion_retraso;
+    }
+
+    function getResultado_conexion() {
+        return $this->resultado_conexion;
+    }
+
+    function getDuracion_revision() {
+        return $this->duracion_revision;
+    }
+
+    function getRequirio_mantenimiento() {
+        return $this->requirio_mantenimiento;
+    }
+
+    function getReporta_situacion() {
+        return $this->reporta_situacion;
+    }
+
+    function setId_bitacora_revision_video($id_bitacora_revision_video) {
+        $this->id_bitacora_revision_video = $id_bitacora_revision_video;
+    }
+
+    function setFecha_inicia_revision($fecha_inicia_revision) {
+        $this->fecha_inicia_revision = $fecha_inicia_revision;
+    }
+
+    function setHora_inicia_revision($hora_inicia_revision) {
+        $this->hora_inicia_revision = $hora_inicia_revision;
+    }
+
+    function setFecha_termina_revision($fecha_termina_revision) {
+        $this->fecha_termina_revision = $fecha_termina_revision;
+    }
+
+    function setHora_termina_revision($hora_termina_revision) {
+        $this->hora_termina_revision = $hora_termina_revision;
+    }
+
+    function setRetraso_segundos($retraso_segundos) {
+        $this->retraso_segundos = $retraso_segundos;
+    }
+
+    function setJustificacion_retraso($justificacion_retraso) {
+        $this->justificacion_retraso = $justificacion_retraso;
+    }
+
+    function setResultado_conexion($resultado_conexion) {
+        $this->resultado_conexion = $resultado_conexion;
+    }
+
+    function setDuracion_revision($duracion_revision) {
+        $this->duracion_revision = $duracion_revision;
+    }
+
+    function setRequirio_mantenimiento($requirio_mantenimiento) {
+        $this->requirio_mantenimiento = $requirio_mantenimiento;
+    }
+
+    function setReporta_situacion($reporta_situacion) {
+        $this->reporta_situacion = $reporta_situacion;
+    }
+    
+    function getId_bitacora_control_puesto_monitoreo() {
+        return $this->id_bitacora_control_puesto_monitoreo;
+    }
+
+    function getFecha_toma_control() {
+        return $this->fecha_toma_control;
+    }
+
+    function getHora_toma_control() {
+        return $this->hora_toma_control;
+    }
+
+    function getFecha_libera_control() {
+        return $this->fecha_libera_control;
+    }
+
+    function getHora_libera_control() {
+        return $this->hora_libera_control;
+    }
+
+    function setId_bitacora_control_puesto_monitoreo($id_bitacora_control_puesto_monitoreo) {
+        $this->id_bitacora_control_puesto_monitoreo = $id_bitacora_control_puesto_monitoreo;
+    }
+
+    function setFecha_toma_control($fecha_toma_control) {
+        $this->fecha_toma_control = $fecha_toma_control;
+    }
+
+    function setHora_toma_control($hora_toma_control) {
+        $this->hora_toma_control = $hora_toma_control;
+    }
+
+    function setFecha_libera_control($fecha_libera_control) {
+        $this->fecha_libera_control = $fecha_libera_control;
+    }
+
+    function setHora_libera_control($hora_libera_control) {
+        $this->hora_libera_control = $hora_libera_control;
+    }
+
     function getPosicion() {
         return $this->posicion;
     }
@@ -139,8 +302,26 @@ class cls_puestos_de_monitoreo{
 
         public function __construct() {
         $this->id_puesto_monitoreo="";
+        $this->id_bitacora_control_puesto_monitoreo="";
+        $this->fecha_toma_control="";
+        $this->fecha_libera_control="";
+        $this->hora_libera_control="";
+        $this->hora_toma_control="";
         $this->id_usuario="";
         $this->obj_data_provider=new Data_Provider();
+        $this->id_bitacora_revision_video="";
+        $this->fecha_inicia_revision="";
+        $this->fecha_termina_revision="";
+        $this->hora_inicia_revision="";
+        $this->hora_termina_revision="";
+        $this->retraso_segundos="";
+        $this->justificacion_retraso="";
+        $this->resultado_conexion="";
+        $this->duracion_revision="";
+        $this->requirio_mantenimiento="";
+        $this->id_ultimo_toma_puesto_ingresada="";
+        $this->ultima_posicion_concluida="";
+        $this->reporta_situacion="";
         $this->condicion="";
         $this->arreglo;
         $this->descripcion="";
@@ -172,11 +353,31 @@ class cls_puestos_de_monitoreo{
       }    
   }
     
-   public function obtiene_todos_puestos_de_monitoreo(){
+  public function obtiene_todos_puestos_de_monitoreo(){
         $this->obj_data_provider->conectar();
         if($this->condicion==""){
             $this->arreglo=$this->obj_data_provider->trae_datos(
-                    "T_PuestoMonitoreo", 
+                    "t_puestomonitoreo left outer join t_usuario on t_puestomonitoreo.ID_Usuario=t_usuario.ID_Usuario", 
+                    "t_puestomonitoreo.*,IFNULL(concat(concat(t_usuario.Nombre,' '),t_usuario.Apellido),'Libre') Nombre_Completo",
+                    "");
+            $this->arreglo=$this->obj_data_provider->getArreglo();
+            $this->obj_data_provider->desconectar();
+        }
+        else{
+            $this->arreglo=$this->obj_data_provider->trae_datos(
+                    "t_puestomonitoreo left outer join t_usuario on t_puestomonitoreo.ID_Usuario=t_usuario.ID_Usuario", 
+                    "t_puestomonitoreo.*,IFNULL(concat(concat(t_usuario.Nombre,' '),t_usuario.Apellido),'Libre') Nombre_Completo",
+                    $this->condicion);
+            $this->arreglo=$this->obj_data_provider->getArreglo();
+            $this->obj_data_provider->desconectar();
+        } 
+    }
+     
+    public function obtiene_bitacora_puestos_de_monitoreo(){
+        $this->obj_data_provider->conectar();
+        if($this->condicion==""){
+            $this->arreglo=$this->obj_data_provider->trae_datos(
+                    "t_bitacoracontrolpuestomonitoreo", 
                     "*",
                     "");
             $this->arreglo=$this->obj_data_provider->getArreglo();
@@ -184,7 +385,7 @@ class cls_puestos_de_monitoreo{
         }
         else{
             $this->arreglo=$this->obj_data_provider->trae_datos(
-                    "T_PuestoMonitoreo", 
+                    "t_bitacoracontrolpuestomonitoreo", 
                     "*",
                     $this->condicion);
             $this->arreglo=$this->obj_data_provider->getArreglo();
@@ -213,8 +414,6 @@ class cls_puestos_de_monitoreo{
             $this->obj_data_provider->desconectar();
         } 
     }
-    
-    
     
     public function obtiene_todas_las_unidades_asociadas_a_un_puesto_de_monitoreo(){
         $this->obj_data_provider->conectar();
@@ -248,6 +447,13 @@ class cls_puestos_de_monitoreo{
         } 
     }
     
+    function liberar_puesto_monitoreo(){
+        
+        $this->obj_data_provider->conectar();
+        $this->obj_data_provider->edita_datos("t_PuestoMonitoreo","ID_Usuario=0",$this->condicion);
+        $this->obj_data_provider->edita_datos("t_bitacoracontrolpuestomonitoreo","Estado=".$this->estado.",Fecha_Libera_Control='".$this->fecha_libera_control."',Hora_Libera_Control='".$this->hora_libera_control."'",$this->condicion);
+        $this->obj_data_provider->desconectar();
+    }
     
     function cambiar_estado_puesto_monitoreo(){
         
@@ -258,7 +464,14 @@ class cls_puestos_de_monitoreo{
     
     public function agregar_nuevo_puesto_monitoreo(){
         $this->obj_data_provider->conectar();
-        $this->obj_data_provider->inserta_datos("t_PuestoMonitoreo", "ID_Puesto_Monitoreo, Nombre,Descripcion, Observaciones,Tiempo_Estandar_Revision,Estado", "null,'".$this->nombre."','".$this->descripcion."','".$this->observaciones."',".$this->tiempo_estandar_revision.",".$this->estado);
+        $this->obj_data_provider->inserta_datos("t_PuestoMonitoreo", "ID_Puesto_Monitoreo, Nombre,Descripcion, Observaciones,Tiempo_Estandar_Revision,Estado,ID_Usuario", "null,'".$this->nombre."','".$this->descripcion."','".$this->observaciones."',".$this->tiempo_estandar_revision.",".$this->estado.",0");
+        $this->obj_data_provider->desconectar();
+    }
+    
+     public function insertar_toma_de_puesto_de_monitoreo(){
+        $this->obj_data_provider->conectar();
+        $this->obj_data_provider->inserta_datos("t_bitacoracontrolpuestomonitoreo", "ID_Bitacora_Control_Puesto_Monitoreo, Fecha_Toma_Control,Hora_Toma_Control,ID_Usuario,ID_Puesto_Monitoreo,Estado", "null,'".$this->fecha_toma_control."','".$this->hora_toma_control."',".$this->id_usuario.",".$this->id_puesto_monitoreo.",".$this->estado);
+        $this->obj_data_provider->edita_datos("t_PuestoMonitoreo","ID_Usuario=".$this->id_usuario,$this->condicion);
         $this->obj_data_provider->desconectar();
     }
     
@@ -341,4 +554,129 @@ class cls_puestos_de_monitoreo{
         $this->arreglo=$this->obj_data_provider->getArreglo();
         $this->obj_data_provider->desconectar();
     }
+    
+     //Valida que no se ingrese el mismo tipo de evento en un sitio, si ya hay uno pendiente
+    function existe_revision_de_video_pendiente_en_bitacora(){
+      //Establece la conexión con la bd
+      $this->obj_data_provider->conectar();
+      $this->obj_data_provider->trae_datos("T_BitacoraRevisionesVideo","*",$this->condicion);
+      $this->arreglo=$this->obj_data_provider->getArreglo();
+      $this->obj_data_provider->desconectar();
+      $this->resultado_operacion=true;
+      
+      if (count($this->arreglo)>0){
+        return true;
+      }else
+      {
+        return false;
+      }    
+    }
+    
+    //Este metodo realiza la modificación del estado del modulo, de activo a inactivo o viceversa en la bd
+    function edita_usuario_y_tiempo_de_inicio_en_revision_de_video(){
+        $this->obj_data_provider->conectar();
+        //Llama al metodo para editar los datos correspondientes
+        $this->obj_data_provider->edita_datos("T_BitacoraRevisionesVideo","Fecha_Inicia_Revision='".$this->fecha_inicia_revision."',Hora_Inicia_Revision='".$this->hora_inicia_revision."',ID_Usuario=".$this->id_usuario.",ID_Bitacora_Control_Puesto_Monitoreo=".$this->id_ultimo_toma_puesto_ingresada,$this->condicion);
+        //Metodo de la clase data provider que desconecta la sesión con la base de datos
+        $this->obj_data_provider->desconectar();
+       
+    }
+    
+    //Este metodo realiza la modificación del estado del modulo, de activo a inactivo o viceversa en la bd
+    function edita_toma_de_puesto_en_revision_de_video_pendiente(){
+        $this->obj_data_provider->conectar();
+        //Llama al metodo para editar los datos correspondientes
+        $this->obj_data_provider->edita_datos("T_BitacoraRevisionesVideo","ID_Bitacora_Control_Puesto_Monitoreo=".$this->id_ultimo_toma_puesto_ingresada,$this->condicion);
+        //Metodo de la clase data provider que desconecta la sesión con la base de datos
+        $this->obj_data_provider->desconectar();
+       
+    }
+    
+    //Obtener el último id de evento para saber que se debe ingresar
+    function obtiene_id_ultimo_toma_puesto_ingresada(){
+        //Establece la conexión con la bd
+        $this->obj_data_provider->conectar();
+
+        $this->obj_data_provider->trae_datos("t_bitacoracontrolpuestomonitoreo","max(ID_Bitacora_Control_Puesto_Monitoreo) ID_Bitacora_Control_Puesto_Monitoreo",$this->condicion);
+
+        $this->arreglo=$this->obj_data_provider->getArreglo();
+
+        $this->obj_data_provider->desconectar();
+
+        if (count($this->arreglo)>0){
+            $this->setId_ultimo_toma_puesto_ingresada($this->arreglo[0]['ID_Bitacora_Control_Puesto_Monitoreo']);
+
+        }else
+        {
+            $this->setId_ultimo_toma_puesto_ingresada(0);
+      }   
+    }
+    
+    
+     //Obtener el último id de evento para saber que se debe ingresar
+    function obtiene_ultima_posicion_concluida_en_puesto_de_monitoreo(){
+        //Establece la conexión con la bd
+        $this->obj_data_provider->conectar();
+
+        $this->obj_data_provider->trae_datos("t_bitacorarevisionesvideo","max(ID_Bitacora_Revision_Video) ID_Bitacora_Revision_Video,Posicion",$this->condicion);
+
+        $this->arreglo=$this->obj_data_provider->getArreglo();
+
+        $this->obj_data_provider->desconectar();
+
+        if (count($this->arreglo)>0){
+            $this->setUltima_posicion_concluida($this->arreglo[0]['Posicion']);
+
+        }else
+        {
+            $this->setUltima_posicion_concluida(0);
+        }   
+           
+    }
+    
+     //Valida que no se ingrese el mismo tipo de evento en un sitio, si ya hay uno pendiente
+    function existe_esta_posicion_en_este_puesto_de_monitoreo(){
+      //Establece la conexión con la bd
+      $this->obj_data_provider->conectar();
+      $this->obj_data_provider->trae_datos("t_puestomonitoreounidadvideo","*",$this->condicion);
+      $this->arreglo=$this->obj_data_provider->getArreglo();
+      $this->obj_data_provider->desconectar();
+      $this->resultado_operacion=true;
+      
+      if (count($this->arreglo)>0){
+        $this->setId_unidad_video($this->arreglo[0]['ID_Unidad_Video']);
+        return true;
+      }else
+      {
+        return false;
+      }    
+    }
+    
+    public function agregar_nuevo_registro_bitacora_revisiones_de_video(){
+        $this->obj_data_provider->conectar();
+        $this->obj_data_provider->inserta_datos("t_bitacorarevisionesvideo", "ID_Bitacora_Revision_Video,Fecha_Inicia_Revision,Hora_Inicia_Revision,ID_Bitacora_Control_Puesto_Monitoreo,ID_Usuario,ID_Unidad_Video,ID_Puesto_Monitoreo,Posicion,Observaciones,Estado", "null,'".$this->fecha_inicia_revision."','".$this->hora_inicia_revision."',".$this->id_ultimo_toma_puesto_ingresada.",".$this->id_usuario.",".$this->id_unidad_video.",".$this->id_puesto_monitoreo.",".$this->posicion.",'".$this->observaciones."',".$this->estado);
+        $this->arreglo=$this->obj_data_provider->getArreglo();
+        $this->obj_data_provider->desconectar();
+    }
+ 
+    public function obtiene_revisiones_de_video(){
+        $this->obj_data_provider->conectar();
+        if($this->condicion==""){
+            $this->arreglo=$this->obj_data_provider->trae_datos(
+                    "t_bitacorarevisionesvideo", 
+                    "*",
+                    "");
+            $this->arreglo=$this->obj_data_provider->getArreglo();
+            $this->obj_data_provider->desconectar();
+        }
+        else{
+            $this->arreglo=$this->obj_data_provider->trae_datos(
+                    "t_bitacorarevisionesvideo", 
+                    "*",
+                    $this->condicion);
+            $this->arreglo=$this->obj_data_provider->getArreglo();
+            $this->obj_data_provider->desconectar();
+        } 
+    }
+    
 }?>
