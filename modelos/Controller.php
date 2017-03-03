@@ -10214,7 +10214,350 @@
     
     public function pruebas_alarma(){
         if(isset($_SESSION['nombre'])){
+            $obj_persona = new cls_personal();
+            $obj_externo = new cls_personal_externo();
+            $obj_Puntosbcr = new cls_puntosBCR();
+            $obj_prueba = new cls_prueba_alarma();
             
+            //Obtiene informacion básica del Personal BCR
+            $obj_persona->obtiene_todo_el_personal_pruebas_alarma();
+            $personas= $obj_persona->getArreglo();
+            
+            //Obtiene informacion básica del Personal Externo
+            $obj_externo->obtiene_todo_el_personal_externo_prueba_alarma();
+            $externos = $obj_externo->getArreglo();
+            
+            //Une la informacion de las personas 
+            $params = array_merge($personas,$externos);
+            
+            //Obtiene información del Punto BCR
+            $obj_Puntosbcr->setCondicion("(T_PuntoBCR.ID_Tipo_Punto=1 OR T_PuntoBCR.ID_Tipo_Punto=5 OR T_PuntoBCR.ID_Tipo_Punto=9 OR
+                T_PuntoBCR.ID_Tipo_Punto=10 OR T_PuntoBCR.ID_Tipo_Punto=11) AND T_PuntoBCR.Estado=1");
+            $obj_Puntosbcr->obtiene_todos_los_puntos_bcr();
+            $Oficinas = $obj_Puntosbcr->getArreglo();
+            
+            //Vectores enviados a la pagina
+            //$aperturas_pendietes ="";
+            $contador_aperturas =0;
+            //$pruebas_pendientes="";
+            $contador_pruebas=0;
+            //$cierres_pendientes="";
+            $contador_cierres=0;
+            //Obtiene la fecha del servidor en un arreglo
+            $fecha_actual= getdate();
+            //Convierta la fecha a formto aaaa/mm/dd hh:mm
+            $fecha_actual= $fecha_actual['year']."-".$fecha_actual['mon']."-".$fecha_actual['mday'].' '.$fecha_actual['hours'].':'.$fecha_actual['minutes'];
+            //asigna la fecha actual a un arreglo formato DateTime
+            $fecha1 = new DateTime($fecha_actual);
+            $fecha_actual= getdate();
+            $diff="";
+            
+            $tam=count($Oficinas);
+            for($i=0;$i<$tam;$i++){
+                $prueba="";
+                $obj_prueba->setCondicion("T_PruebaAlarma.ID_PuntoBCR=".$Oficinas[$i]['ID_PuntoBCR']." AND Fecha='".date('Y-m-d')."'");
+		$obj_prueba->obtener_prueba_alarma();
+		$prueba= $obj_prueba->getArreglo();
+                //print_r($prueba);
+                switch ($fecha_actual['weekday']) {
+                    case 'Monday':
+                        if($Oficinas[$i]['Hora_Apertura_Lunes']!="" || $Oficinas[$i]['Hora_Apertura_Lunes']!=null){
+                            $fecha2 = new DateTime(date('Y-m-d').' '.$Oficinas[$i]['Hora_Apertura_Lunes']);
+                            $diff = $fecha1->diff($fecha2); 
+                            $difencia_tiempo=(intval($diff->h)*60)+(intval($diff->i)*1);
+                            
+                            //Información de apertura de alarma pendientes y Urgentes
+                            if($prueba[0]['Hora_Apertura_Alarma']=="" || $prueba[0]['Hora_Apertura_Alarma']==null){
+                                if($diff->invert==1 && $difencia_tiempo>1) {
+                                    $aperturas_pendietes[$contador_aperturas]['Mensaje']= $Oficinas[$i]['Nombre'];
+                                    $aperturas_pendietes[$contador_aperturas]['Color']="color: red";
+                                    $contador_aperturas++;
+                                }
+                            }
+                            //Información de pruebas de alarma pendientes y urgentes
+                            if($prueba[0]['Hora_Prueba_Alarma']=="" || $prueba[0]['Hora_Prueba_Alarma']==null){
+                                if($diff->invert==0 && $difencia_tiempo<30) {
+                                    $pruebas_pendientes[$contador_pruebas]['Mensaje']= $Oficinas[$i]['Nombre'];
+                                    $pruebas_pendientes[$contador_pruebas]['Color']="color: orange";
+                                    $contador_pruebas++;
+                                } if($diff->invert==1 && $difencia_tiempo>1) {
+                                    $pruebas_pendientes[$contador_pruebas]['Mensaje']= $Oficinas[$i]['Nombre'];
+                                    $pruebas_pendientes[$contador_pruebas]['Color']="color: red";
+                                    $contador_pruebas++;
+                                }
+                            }
+                            //Información de pruebas de alarma pendientes y urgentes
+                            if($prueba[0]['Hora_Cierre_Alarma']=="" || $prueba[0]['Hora_Cierre_Alarma']==null){
+                                $fecha2 = new DateTime(date('Y-m-d').' '.$Oficinas[$i]['Hora_Cierre_Lunes']);//Día
+                                $diff = $fecha1->diff($fecha2); 
+                                $difencia_tiempo=(intval($diff->h)*60)+(intval($diff->i)*1);
+                                
+                                if($diff->invert==1 && $difencia_tiempo>240) {
+                                    $cierres_pendientes[$contador_cierres]['Mensaje']= $Oficinas[$i]['Nombre'];
+                                    $cierres_pendientes[$contador_cierres]['Color']="color: orange";
+                                    $contador_cierres++;
+                                }
+                            }    
+                        }
+                        break;
+                    case 'Tuesday':
+                        if($Oficinas[$i]['Hora_Apertura_Martes']!="" || $Oficinas[$i]['Hora_Apertura_Martes']!=null){
+                            $fecha2 = new DateTime(date('Y-m-d').' '.$Oficinas[$i]['Hora_Apertura_Martes']);
+                            $diff = $fecha1->diff($fecha2); 
+                            $difencia_tiempo=(intval($diff->h)*60)+(intval($diff->i)*1);
+                            
+                            //Información de apertura de alarma pendientes y Urgentes
+                            if($prueba[0]['Hora_Apertura_Alarma']=="" || $prueba[0]['Hora_Apertura_Alarma']==null){
+                                if($diff->invert==1 && $difencia_tiempo>1) {
+                                    $aperturas_pendietes[$contador_aperturas]['Mensaje']= $Oficinas[$i]['Nombre'];
+                                    $aperturas_pendietes[$contador_aperturas]['Color']="color: red";
+                                    $contador_aperturas++;
+                                }
+                            }
+                            //Información de pruebas de alarma pendientes y urgentes
+                            if($prueba[0]['Hora_Prueba_Alarma']=="" || $prueba[0]['Hora_Prueba_Alarma']==null){
+                                if($diff->invert==0 && $difencia_tiempo<30) {
+                                    $pruebas_pendientes[$contador_pruebas]['Mensaje']= $Oficinas[$i]['Nombre'];
+                                    $pruebas_pendientes[$contador_pruebas]['Color']="color: orange";
+                                    $contador_pruebas++;
+                                } if($diff->invert==1 && $difencia_tiempo>1) {
+                                    $pruebas_pendientes[$contador_pruebas]['Mensaje']= $Oficinas[$i]['Nombre'];
+                                    $pruebas_pendientes[$contador_pruebas]['Color']="color: red";
+                                    $contador_pruebas++;
+                                }
+                            }
+                            //Información de pruebas de alarma pendientes y urgentes
+                            if($prueba[0]['Hora_Cierre_Alarma']=="" || $prueba[0]['Hora_Cierre_Alarma']==null){
+                                $fecha2 = new DateTime(date('Y-m-d').' '.$Oficinas[$i]['Hora_Cierre_Martes']);//Día
+                                $diff = $fecha1->diff($fecha2); 
+                                $difencia_tiempo=(intval($diff->h)*60)+(intval($diff->i)*1);
+                                
+                                if($diff->invert==1 && $difencia_tiempo>240) {
+                                    $cierres_pendientes[$contador_cierres]['Mensaje']= $Oficinas[$i]['Nombre'];
+                                    $cierres_pendientes[$contador_cierres]['Color']="color: orange";
+                                    $contador_cierres++;
+                                }
+                            }    
+                        }
+                        break;
+                    case 'Wednesday':
+                        if($Oficinas[$i]['Hora_Apertura_Miercoles']!="" || $Oficinas[$i]['Hora_Apertura_Miercoles']!=null){
+                            
+                            $fecha2 = new DateTime(date('Y-m-d').' '.$Oficinas[$i]['Hora_Apertura_Miercoles']);
+                            $diff = $fecha1->diff($fecha2); 
+                            $difencia_tiempo=(intval($diff->h)*60)+(intval($diff->i)*1);
+                            
+                            //Información de apertura de alarma pendientes y Urgentes
+                            if($prueba[0]['Hora_Apertura_Alarma']=="" || $prueba[0]['Hora_Apertura_Alarma']==null){
+                                if($diff->invert==1 && $difencia_tiempo>1) {
+                                    $aperturas_pendietes[$contador_aperturas]['Mensaje']= $Oficinas[$i]['Nombre'];
+                                    $aperturas_pendietes[$contador_aperturas]['Color']="color: red";
+                                    $contador_aperturas++;
+                                }
+                            }
+                            //Información de pruebas de alarma pendientes y urgentes
+                            if($prueba[0]['Hora_Prueba_Alarma']=="" || $prueba[0]['Hora_Prueba_Alarma']==null){
+                                if($diff->invert==0 && $difencia_tiempo<30) {
+                                    $pruebas_pendientes[$contador_pruebas]['Mensaje']= $Oficinas[$i]['Nombre'];
+                                    $pruebas_pendientes[$contador_pruebas]['Color']="color: orange";
+                                    $contador_pruebas++;
+                                } if($diff->invert==1 && $difencia_tiempo>1) {
+                                    $pruebas_pendientes[$contador_pruebas]['Mensaje']= $Oficinas[$i]['Nombre'];
+                                    $pruebas_pendientes[$contador_pruebas]['Color']="color: red";
+                                    $contador_pruebas++;
+                                }
+                            }
+                            //Información de pruebas de alarma pendientes y urgentes
+                            if($prueba[0]['Hora_Cierre_Alarma']=="" || $prueba[0]['Hora_Cierre_Alarma']==null){
+                                $fecha2 = new DateTime(date('Y-m-d').' '.$Oficinas[$i]['Hora_Cierre_Miercoles']);//Día
+                                $diff = $fecha1->diff($fecha2); 
+                                $difencia_tiempo=(intval($diff->h)*60)+(intval($diff->i)*1);
+                                
+                                if($diff->invert==1 && $difencia_tiempo>240) {
+                                    $cierres_pendientes[$contador_cierres]['Mensaje']= $Oficinas[$i]['Nombre'];
+                                    $cierres_pendientes[$contador_cierres]['Color']="color: orange";
+                                    $contador_cierres++;
+                                }
+                            }    
+                        }
+                        break;
+                    case 'Thursday':
+                        if($Oficinas[$i]['Hora_Apertura_Jueves']!="" || $Oficinas[$i]['Hora_Apertura_Jueves']!=null){
+                            
+                            $fecha2 = new DateTime(date('Y-m-d').' '.$Oficinas[$i]['Hora_Apertura_Jueves']);
+                            $diff = $fecha1->diff($fecha2); 
+                            $difencia_tiempo=(intval($diff->h)*60)+(intval($diff->i)*1);
+                            
+                            //Información de apertura de alarma pendientes y Urgentes
+                            if($prueba[0]['Hora_Apertura_Alarma']=="" || $prueba[0]['Hora_Apertura_Alarma']==null){
+                                if($diff->invert==1 && $difencia_tiempo>1) {
+                                    $aperturas_pendietes[$contador_aperturas]['Mensaje']= $Oficinas[$i]['Nombre'];
+                                    $aperturas_pendietes[$contador_aperturas]['Color']="color: red";
+                                    $contador_aperturas++;
+                                }
+                            }
+                            //Información de pruebas de alarma pendientes y urgentes
+                            if($prueba[0]['Hora_Prueba_Alarma']=="" || $prueba[0]['Hora_Prueba_Alarma']==null){
+                                if($diff->invert==0 && $difencia_tiempo<30) {
+                                    $pruebas_pendientes[$contador_pruebas]['Mensaje']= $Oficinas[$i]['Nombre'];
+                                    $pruebas_pendientes[$contador_pruebas]['Color']="color: orange";
+                                    $contador_pruebas++;
+                                } if($diff->invert==1 && $difencia_tiempo>1) {
+                                    $pruebas_pendientes[$contador_pruebas]['Mensaje']= $Oficinas[$i]['Nombre'];
+                                    $pruebas_pendientes[$contador_pruebas]['Color']="color: red";
+                                    $contador_pruebas++;
+                                }
+                            }
+                            //Información de pruebas de alarma pendientes y urgentes
+                            if($prueba[0]['Hora_Cierre_Alarma']=="" || $prueba[0]['Hora_Cierre_Alarma']==null){
+                                $fecha2 = new DateTime(date('Y-m-d').' '.$Oficinas[$i]['Hora_Cierre_Jueves']);//Día
+                                $diff = $fecha1->diff($fecha2); 
+                                $difencia_tiempo=(intval($diff->h)*60)+(intval($diff->i)*1);
+                                
+                                if($diff->invert==1 && $difencia_tiempo>240) {
+                                    $cierres_pendientes[$contador_cierres]['Mensaje']= $Oficinas[$i]['Nombre'];
+                                    $cierres_pendientes[$contador_cierres]['Color']="color: orange";
+                                    $contador_cierres++;
+                                }
+                            }    
+                        }
+                        break;
+                    case 'Friday':
+                        if($Oficinas[$i]['Hora_Apertura_Viernes']!="" || $Oficinas[$i]['Hora_Apertura_Viernes']!=null){
+                            
+                            $fecha2 = new DateTime(date('Y-m-d').' '.$Oficinas[$i]['Hora_Apertura_Viernes']);
+                            $diff = $fecha1->diff($fecha2); 
+                            $difencia_tiempo=(intval($diff->h)*60)+(intval($diff->i)*1);
+                            
+                            //Información de apertura de alarma pendientes y Urgentes
+                            if($prueba[0]['Hora_Apertura_Alarma']=="" || $prueba[0]['Hora_Apertura_Alarma']==null){
+                                if($diff->invert==1 && $difencia_tiempo>1) {
+                                    $aperturas_pendietes[$contador_aperturas]['Mensaje']= $Oficinas[$i]['Nombre'];
+                                    $aperturas_pendietes[$contador_aperturas]['Color']="color: red";
+                                    $contador_aperturas++;
+                                }
+                            }
+                            //Información de pruebas de alarma pendientes y urgentes
+                            if($prueba[0]['Hora_Prueba_Alarma']=="" || $prueba[0]['Hora_Prueba_Alarma']==null){
+                                if($diff->invert==0 && $difencia_tiempo<30) {
+                                    $pruebas_pendientes[$contador_pruebas]['Mensaje']= $Oficinas[$i]['Nombre'];
+                                    $pruebas_pendientes[$contador_pruebas]['Color']="color: orange";
+                                    $contador_pruebas++;
+                                } if($diff->invert==1 && $difencia_tiempo>1) {
+                                    $pruebas_pendientes[$contador_pruebas]['Mensaje']= $Oficinas[$i]['Nombre'];
+                                    $pruebas_pendientes[$contador_pruebas]['Color']="color: red";
+                                    $contador_pruebas++;
+                                }
+                            }
+                            //Información de pruebas de alarma pendientes y urgentes
+                            if($prueba[0]['Hora_Cierre_Alarma']=="" || $prueba[0]['Hora_Cierre_Alarma']==null){
+                                $fecha2 = new DateTime(date('Y-m-d').' '.$Oficinas[$i]['Hora_Cierre_Viernes']);//Día
+                                $diff = $fecha1->diff($fecha2); 
+                                $difencia_tiempo=(intval($diff->h)*60)+(intval($diff->i)*1);
+                                
+                                if($diff->invert==1 && $difencia_tiempo>240) {
+                                    $cierres_pendientes[$contador_cierres]['Mensaje']= $Oficinas[$i]['Nombre'];
+                                    $cierres_pendientes[$contador_cierres]['Color']="color: orange";
+                                    $contador_cierres++;
+                                }
+                            }
+                        }
+                        break;
+                    case 'Saturday':
+                        if($Oficinas[$i]['Hora_Apertura_Sabado']!="" || $Oficinas[$i]['Hora_Apertura_Sabado']!=null){
+                            
+                            $fecha2 = new DateTime(date('Y-m-d').' '.$Oficinas[$i]['Hora_Apertura_Sabado']);
+                            $diff = $fecha1->diff($fecha2); 
+                            $difencia_tiempo=(intval($diff->h)*60)+(intval($diff->i)*1);
+                            
+                            //Información de apertura de alarma pendientes y Urgentes
+                            if($prueba[0]['Hora_Apertura_Alarma']=="" || $prueba[0]['Hora_Apertura_Alarma']==null){
+                                if($diff->invert==1 && $difencia_tiempo>1) {
+                                    $aperturas_pendietes[$contador_aperturas]['Mensaje']= $Oficinas[$i]['Nombre'];
+                                    $aperturas_pendietes[$contador_aperturas]['Color']="color: red";
+                                    $contador_aperturas++;
+                                }
+                            }
+                            //Información de pruebas de alarma pendientes y urgentes
+                            if($prueba[0]['Hora_Prueba_Alarma']=="" || $prueba[0]['Hora_Prueba_Alarma']==null){
+                                if($diff->invert==0 && $difencia_tiempo<30) {
+                                    $pruebas_pendientes[$contador_pruebas]['Mensaje']= $Oficinas[$i]['Nombre'];
+                                    $pruebas_pendientes[$contador_pruebas]['Color']="color: orange";
+                                    $contador_pruebas++;
+                                } if($diff->invert==1 && $difencia_tiempo>1) {
+                                    $pruebas_pendientes[$contador_pruebas]['Mensaje']= $Oficinas[$i]['Nombre'];
+                                    $pruebas_pendientes[$contador_pruebas]['Color']="color: red";
+                                    $contador_pruebas++;
+                                }
+                            }
+                            //Información de pruebas de alarma pendientes y urgentes
+                            if($prueba[0]['Hora_Cierre_Alarma']=="" || $prueba[0]['Hora_Cierre_Alarma']==null){
+                                $fecha2 = new DateTime(date('Y-m-d').' '.$Oficinas[$i]['Hora_Cierre_Sabado']);//Día
+                                $diff = $fecha1->diff($fecha2); 
+                                $difencia_tiempo=(intval($diff->h)*60)+(intval($diff->i)*1);
+                                
+                                if($diff->invert==1 && $difencia_tiempo>240) {
+                                    $cierres_pendientes[$contador_cierres]['Mensaje']= $Oficinas[$i]['Nombre'];
+                                    $cierres_pendientes[$contador_cierres]['Color']="color: orange";
+                                    $contador_cierres++;
+                                }
+                            }    
+                        }
+                        break;
+                    case 'Sunday':
+                        if($Oficinas[$i]['Hora_Apertura_Domingo']!="" || $Oficinas[$i]['Hora_Apertura_Domingo']!=null){
+                            
+                            $fecha2 = new DateTime(date('Y-m-d').' '.$Oficinas[$i]['Hora_Apertura_Domingo']);
+                            $diff = $fecha1->diff($fecha2); 
+                            $difencia_tiempo=(intval($diff->h)*60)+(intval($diff->i)*1);
+                            
+                            //Información de apertura de alarma pendientes y Urgentes
+                            if($prueba[0]['Hora_Apertura_Alarma']=="" || $prueba[0]['Hora_Apertura_Alarma']==null){
+                                if($diff->invert==1 && $difencia_tiempo>1) {
+                                    $aperturas_pendietes[$contador_aperturas]['Mensaje']= $Oficinas[$i]['Nombre'];
+                                    $aperturas_pendietes[$contador_aperturas]['Color']="color: red";
+                                    $contador_aperturas++;
+                                }
+                            }
+                            //Información de pruebas de alarma pendientes y urgentes
+                            if($prueba[0]['Hora_Prueba_Alarma']=="" || $prueba[0]['Hora_Prueba_Alarma']==null){
+                                if($diff->invert==0 && $difencia_tiempo<30) {
+                                    $pruebas_pendientes[$contador_pruebas]['Mensaje']= $Oficinas[$i]['Nombre'];
+                                    $pruebas_pendientes[$contador_pruebas]['Color']="color: orange";
+                                    $contador_pruebas++;
+                                } if($diff->invert==1 && $difencia_tiempo>1) {
+                                    $pruebas_pendientes[$contador_pruebas]['Mensaje']= $Oficinas[$i]['Nombre'];
+                                    $pruebas_pendientes[$contador_pruebas]['Color']="color: red";
+                                    $contador_pruebas++;
+                                }
+                            }
+                            //Información de pruebas de alarma pendientes y urgentes
+                            if($prueba[0]['Hora_Cierre_Alarma']=="" || $prueba[0]['Hora_Cierre_Alarma']==null){
+                                $fecha2 = new DateTime(date('Y-m-d').' '.$Oficinas[$i]['Hora_Cierre_Domingo']);//Día
+                                $diff = $fecha1->diff($fecha2); 
+                                $difencia_tiempo=(intval($diff->h)*60)+(intval($diff->i)*1);
+                                
+                                if($diff->invert==1 && $difencia_tiempo>240) {
+                                    $cierres_pendientes[$contador_cierres]['Mensaje']= $Oficinas[$i]['Nombre'];
+                                    $cierres_pendientes[$contador_cierres]['Color']="color: orange";
+                                    $contador_cierres++;
+                                }
+                            }    
+                        }
+                        break;
+                }
+            }
+
+            if(isset ($aperturas_pendietes)){
+                rsort($aperturas_pendietes);
+            }
+            if(isset ($pruebas_pendientes)){
+                rsort($pruebas_pendientes);
+            }
+            if(isset ($cierres_pendientes)){
+                rsort($cierres_pendientes);
+            }
+  
             require __DIR__ . '/../vistas/plantillas/frm_pruebas_alarma.php';
         }
         else {
@@ -10228,12 +10571,201 @@
         if(isset($_SESSION['nombre'])){
             $obj_punto = new cls_puntosBCR();
             //Buscar la información de un PuntoBCR basado en el código del cajero
-            $obj_punto->setCondicion("T_PuntoBCR.Codigo=".$_POST['id']." AND T_PuntoBCR.Estado=1");
+             $obj_punto->setCondicion("T_PuntoBCR.Codigo='".strtoupper($_POST['id'])."' AND T_PuntoBCR.Estado=1");
             $obj_punto->obtiene_todos_los_puntos_bcr();
             $cajero = $obj_punto->getArreglo();
             
             //Convierte la información en un json para enviarlo a JavaScript
             echo json_encode($cajero[0], JSON_FORCE_OBJECT);
+        }
+        else {
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }
+    }
+    
+    public function buscar_prueba_alarma(){
+        if(isset($_SESSION['nombre'])){
+            $obj_prueba = new cls_prueba_alarma();
+            $obj_personal = new cls_personal();
+            $obj_externo = new cls_personal_externo();
+            $obj_usuario = new cls_usuarios();
+            //
+            $obj_prueba->setCondicion("T_PruebaAlarma.ID_PuntoBCR='".$_POST['id_puntobcr']."' AND T_PruebaAlarma.Fecha='".date("Y-m-d")."'");
+            $obj_prueba->obtener_prueba_alarma();
+            $prueba= $obj_prueba->getArreglo();
+            
+            if($prueba<>null){
+                if($prueba[0]['ID_Empresa_Persona_Apertura']==1){
+                    $obj_personal->setCondicion("ID_Persona='".$prueba[0]['ID_Persona_Reporta_Apertura']."'");
+                    $obj_personal->obtener_personas_prontuario();
+                    $persona = $obj_personal->getArreglo();
+                    $prueba[0] = array_merge((['Nombre_Persona_Apertura' =>($persona[0]['Apellido_Nombre'])]),$prueba[0]);
+                } else{
+                    $obj_externo->setCondicion("T_PersonalExterno.ID_Persona_Externa='".$prueba[0]['ID_Persona_Reporta_Apertura']."'");
+                    $obj_externo->obtiene_todo_el_personal_externo();
+                    $persona = $obj_externo->getArreglo();
+                    $prueba[0] = array_merge((['Nombre_Persona_Apertura' =>($persona[0]['Apellido']." ".$persona[0]['Nombre'])]),$prueba[0]);
+                }
+                if($prueba[0]['ID_Empresa_Persona_Cierra']==1){
+                    $obj_personal->setCondicion("ID_Persona='".$prueba[0]['ID_Persona_Reporta_Cierre']."'");
+                    $obj_personal->obtener_personas_prontuario();
+                    $persona = $obj_personal->getArreglo();
+                    $prueba[0] = array_merge((['Nombre_Persona_Cierre' =>($persona[0]['Apellido_Nombre'])]),$prueba[0]);
+                } else{
+                    $obj_externo->setCondicion("T_PersonalExterno.ID_Persona_Externa='".$prueba[0]['ID_Persona_Reporta_Cierre']."'");
+                    $obj_externo->obtiene_todo_el_personal_externo();
+                    $persona = $obj_externo->getArreglo();
+                    $prueba[0] = array_merge((['Nombre_Persona_Cierre' =>($persona[0]['Apellido']." ".$persona[0]['Nombre'])]),$prueba[0]);
+                }
+                //Obtiene la información de los Usuarios que ingresan la información a la tabla
+                if($prueba[0]['ID_Usuario_reporte']!=null){
+                    $obj_usuario->setCondicion("ID_Usuario=".$prueba[0]['ID_Usuario_reporte']);
+                    $obj_usuario->obtiene_todos_los_usuarios();
+                    $persona = $obj_usuario->getArreglo();
+                    $prueba[0] = array_merge((['Nombre_Usuario_Reporte' =>($persona[0]['Apellido']." ".$persona[0]['Nombre'])]),$prueba[0]);
+                }
+                if($prueba[0]['ID_Usuario_Prueba']!=null){
+                    $obj_usuario->setCondicion("ID_Usuario=".$prueba[0]['ID_Usuario_Prueba']);
+                    $obj_usuario->obtiene_todos_los_usuarios();
+                    $persona = $obj_usuario->getArreglo();
+                    $prueba[0] = array_merge((['Nombre_Usuario_Prueba' =>($persona[0]['Apellido']." ".$persona[0]['Nombre'])]),$prueba[0]);
+                }
+                if($prueba[0]['ID_Usuario_Reporte_Cierre']!=null){
+                    $obj_usuario->setCondicion("ID_Usuario=".$prueba[0]['ID_Usuario_Reporte_Cierre']);
+                    $obj_usuario->obtiene_todos_los_usuarios();
+                    $persona = $obj_usuario->getArreglo();
+                    $prueba[0] = array_merge((['Nombre_Usuario_Reporte_Cierre' =>($persona[0]['Apellido']." ".$persona[0]['Nombre'])]),$prueba[0]);
+                }
+                if($prueba[0]['ID_Usuario_Cierra']!=null){
+                    $obj_usuario->setCondicion("ID_Usuario=".$prueba[0]['ID_Usuario_Cierra']);
+                    $obj_usuario->obtiene_todos_los_usuarios();
+                    $persona = $obj_usuario->getArreglo();
+                    $prueba[0] = array_merge((['Nombre_Usuario_Cierra' =>($persona[0]['Apellido']." ".$persona[0]['Nombre'])]),$prueba[0]);
+                }
+                
+            } else{
+                echo "No se encontró prueba de alarma";
+                exit();
+            }
+            //print_r($prueba);
+            //Convierte la información en un json para enviarlo a JavaScript
+            echo json_encode($prueba[0], JSON_FORCE_OBJECT);
+        }
+        else {
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }
+    }
+    
+    public function prueba_alarma_guardar(){
+        if(isset($_SESSION['nombre'])){
+            $obj_prueba = new cls_prueba_alarma();
+            
+            switch ($_POST['tipo']) {
+                case 'Persona_Prueba':
+                    $obj_prueba->setId_punto($_POST['punto_bcr']);
+                    $obj_prueba->setId_prueba($_POST['id_prueba']);
+                    $obj_prueba->setId_persona($_POST['id_persona']);
+                    $obj_prueba->setEmpresa($_POST['id_empresa']);
+                    $obj_prueba->setTipo_prueba($_POST['tipo_prueba']);
+                    $obj_prueba->setRevision($_POST['revision_atm']);
+                    $obj_prueba->setId_usuario($_SESSION['id']);
+                    $obj_prueba->guardar_reporte_prueba();
+                    if($_POST['id_prueba']=="0"){
+                        $ultimo = $obj_prueba->getArreglo();
+                        echo $ultimo[0]['ID_Prueba_Alarma'];
+                    }
+                    break;
+                case 'Tipo_Prueba':
+                    $obj_prueba->setId_punto($_POST['punto_bcr']);
+                    $obj_prueba->setId_prueba($_POST['id_prueba']);
+                    $obj_prueba->setTipo_prueba($_POST['tipo_prueba']);
+                    $obj_prueba->setRevision($_POST['revision_atm']);
+                    $obj_prueba->setId_usuario($_SESSION['id']);
+                    $obj_prueba->guardar_reporte_tipo_prueba();
+                    if($_POST['id_prueba']=="0"){
+                        $ultimo = $obj_prueba->getArreglo();
+                        echo $ultimo[0]['ID_Prueba_Alarma'];
+                    }
+                    break;
+                case 'Apertura_Alarma_SIS':
+                    $obj_prueba->setId_punto($_POST['punto_bcr']);
+                    $obj_prueba->setId_prueba($_POST['id_prueba']);
+                    $obj_prueba->setHora1($_POST['hora_apertura']);
+                    $obj_prueba->setId_usuario($_SESSION['id']);
+                    $obj_prueba->guardar_apertura_alarma();
+                    if($_POST['id_prueba']=="0"){
+                        $ultimo = $obj_prueba->getArreglo();
+                        echo $ultimo[0]['ID_Prueba_Alarma'];
+                    }
+                    break;
+                case 'Hora_Prueba_Alarma_SIS':
+                    $obj_prueba->setId_prueba($_POST['id_prueba']);
+                    $obj_prueba->setHora2($_POST['hora_prueba']);
+                    $obj_prueba->setZona($_POST['zona']);
+                    $obj_prueba->setId_usuario($_SESSION['id']);
+                    $obj_prueba->guardar_prueba_alarma();
+                    
+                    break;
+                case 'Reporte_Cierre':
+                    $obj_prueba->setId_punto($_POST['punto_bcr']);
+                    $obj_prueba->setId_prueba($_POST['id_prueba']);
+                    $obj_prueba->setId_persona($_POST['id_persona']);
+                    $obj_prueba->setEmpresa($_POST['id_empresa']);
+                    $obj_prueba->setId_usuario($_SESSION['id']);
+                    $obj_prueba->guardar_reporte_cierre();
+                    if($_POST['id_prueba']=="0"){
+                        $ultimo = $obj_prueba->getArreglo();
+                        echo $ultimo[0]['ID_Prueba_Alarma'];
+                    }
+                    break;
+                case 'Reporte_Informacion_Cierre':
+                    $obj_prueba->setId_punto($_POST['punto_bcr']);
+                    $obj_prueba->setId_prueba($_POST['id_prueba']);
+                    $obj_prueba->setCuenta_secundaria($_POST['cuenta_secundaria']);
+                    $obj_prueba->setCuenta_principal($_POST['cuenta_principal']);
+                    $obj_prueba->setId_usuario($_SESSION['id']);
+                    $obj_prueba->guarda_informacion_cierres();
+                    if($_POST['id_prueba']=="0"){
+                        $ultimo = $obj_prueba->getArreglo();
+                        echo $ultimo[0]['ID_Prueba_Alarma'];
+                    }
+                    break;
+                case 'Cierre_Agencia':
+                    $obj_prueba->setId_punto($_POST['punto_bcr']);
+                    $obj_prueba->setId_prueba($_POST['id_prueba']);
+                    $obj_prueba->setCierre($_POST['cierre']);
+                    $obj_prueba->setId_usuario($_SESSION['id']);
+                    $obj_prueba->guardar_cierre();
+                    if($_POST['id_prueba']=="0"){
+                        $ultimo = $obj_prueba->getArreglo();
+                        echo $ultimo[0]['ID_Prueba_Alarma'];
+                    }
+                    break;
+                case 'Observaciones_Prueba':
+                    $obj_prueba->setId_prueba($_POST['id_prueba']);
+                    $obj_prueba->setObservaciones($_POST['observaciones']);
+                    $obj_prueba->guardar_observaciones();
+                default:
+                    break;
+            }
+        }
+        else {
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }
+    }
+    
+    public function prueba_alarma_eliminar(){
+        if(isset($_SESSION['nombre'])){
+            $obj_prueba = new cls_prueba_alarma();
+            
+            $obj_prueba->setCondicion("ID_Prueba_Alarma=".$_POST['id_prueba']);
+            $obj_prueba->eliminar_registro_prueba_alarma();
         }
         else {
             $tipo_de_alerta="alert alert-warning";
