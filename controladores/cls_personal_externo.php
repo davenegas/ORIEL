@@ -350,4 +350,18 @@ class cls_personal_externo{
         //Metodo de la clase data provider que desconecta la sesión con la base de datos
         $this->obj_data_provider->desconectar();
     }
+    
+    public function obtiene_todo_el_personal_externo_prueba_alarma(){
+        $this->obj_data_provider->conectar();
+        $this->arreglo=$this->obj_data_provider->trae_datos(
+                "T_PersonalExterno
+                    LEFT OUTER JOIN T_Empresa ON T_Empresa.ID_Empresa = T_PersonalExterno.ID_Empresa", 
+                "T_PersonalExterno.ID_Persona_Externa as ID_Persona, T_PersonalExterno.Identificacion as Cedula,T_PersonalExterno.ID_Empresa,
+                    GROUP_CONCAT(T_PersonalExterno.Apellido,' ', T_PersonalExterno.Nombre) as Apellido_Nombre,
+                    T_Empresa.Empresa",
+                "(T_PersonalExterno.ID_Empresa=2 OR T_PersonalExterno.ID_Empresa=3) AND (T_PersonalExterno.ID_Estado_Persona=1) GROUP BY T_PersonalExterno.Identificacion");
+        $this->arreglo=$this->obj_data_provider->getArreglo();
+        $this->obj_data_provider->desconectar();
+        $this->resultado_operacion=true;
+    }
 }?>

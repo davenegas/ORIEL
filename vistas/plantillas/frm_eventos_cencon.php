@@ -115,7 +115,7 @@
                                         <td style="text-align:center" onclick="editar_observaciones('<?php echo $params[$i]['ID_Evento_Cencon'];?>','<?php echo $params[$i]['Observaciones'];?>')"><?php echo $params[$i]['Observaciones'];?></td>
                                         <td style="text-align:center" onclick="editar_seguimiento('<?php echo $params[$i]['ID_Evento_Cencon'];?>','<?php echo $params[$i]['Seguimiento'];?>')"><?php echo $params[$i]['Seguimiento'];?></td>
                                         <td style="text-align:center">
-                                            <a class="btn" role="button" title="Realizar el cierre de Cencon" onclick="evento_cencon_cerrar(<?php echo $params[$i]['ID_Evento_Cencon'];?>);">Cerrar Cajero</a>
+                                            <a class="btn" role="button" title="Realizar el cierre de Cencon" onclick="evento_cencon_cerrar(<?php echo $params[$i]['ID_Evento_Cencon'];?>,'<?php echo $params[$i]['Codigo'];?>');">Cerrar Cajero</a>
                                             <a href="mailto:<?php echo $params[$i]['Correo'];?>?cc=Coordinacion_Centro_de_Control@bancobcr.com&subject=Solicitud de cierre Cencon ATM <?php echo $params[$i]['Codigo']." - ".$params[$i]['Nombre'];?>" title="Abrir correo electrónico">Correo</a>
                                         </td>
                                     </tr>

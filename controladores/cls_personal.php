@@ -683,4 +683,19 @@ class cls_personal{
             $this->resultado_operacion=true;
         }
     }
+    
+    public function obtiene_todo_el_personal_pruebas_alarma(){
+        $this->obj_data_provider->conectar();
+        $this->arreglo=$this->obj_data_provider->trae_datos(
+                "T_Personal
+                    LEFT OUTER JOIN T_UnidadEjecutora ON T_Personal.ID_Unidad_Ejecutora = T_UnidadEjecutora.ID_Unidad_Ejecutora
+                    LEFT OUTER JOIN T_Empresa ON T_Empresa.ID_Empresa = T_Personal.ID_Empresa", 
+                " T_Personal.ID_Persona, T_Personal.Cedula, T_Personal.ID_Empresa, T_Personal.Apellido_Nombre,
+                    T_UnidadEjecutora.Departamento, T_Empresa.Empresa",
+                "T_Personal.Estado='1'");
+        $this->arreglo=$this->obj_data_provider->getArreglo();
+        $this->obj_data_provider->desconectar();
+        $this->resultado_operacion=true;
+    }
+    
 }?>

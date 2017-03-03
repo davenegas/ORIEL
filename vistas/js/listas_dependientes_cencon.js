@@ -1,5 +1,4 @@
- $(document).ready(function(){
-
+$(document).ready(function(){
     $("#tipo_funcionario").change(function () {
         document.getElementById('ID_Persona').value="";
         document.getElementById('ID_Empresa').value="";
@@ -9,7 +8,6 @@
         document.getElementById('cedula_persona').readOnly=true;
         $("#cajeros_persona").html("");
     });
-
 });
 ////////////////////////////////////////////////////////////////////////////////
 ////////////Función para ventanas ocultas General///////////////////////////////
@@ -41,9 +39,9 @@ function agregar_persona(id,ident, nombre, depart, empresa){
     document.getElementById('ventana_oculta_1').style.display = "none";
     document.getElementById('ventana_oculta_2').style.display = "none";
     $.post("index.php?ctl=cencon_buscar_relaciones", { id_persona:id, empresa:empresa}, function(data){
-            //alert(data);
-            $("#cajeros_persona").html(data);
-          });
+        //alert(data);
+        $("#cajeros_persona").html(data);
+    });
 }
 function cencon_observaciones(ide, obser){
     document.getElementById('ID_Cencon').value=ide;
@@ -68,13 +66,11 @@ function agregar_atm(id){
     id_persona = document.getElementById('ID_Persona').value;
     cedula = document.getElementById('cedula_persona').value;
     empresa = document.getElementById('ID_Empresa').value;
-    $.post("index.php?ctl=cencon_agregar_relacion", { id_atm: id_atm, 
-        id_persona:id_persona, cedula: cedula, empresa: empresa}, function(data){
-            //alert(data);
-            $("#cajeros_persona").html(data);
-          });
-    document.getElementById('ventana_oculta_3').style.display = "none";
-    
+    $.post("index.php?ctl=cencon_agregar_relacion", { id_atm: id_atm, id_persona:id_persona, cedula: cedula, empresa: empresa}, function(data){
+        //alert(data);
+        $("#cajeros_persona").html(data);
+    });
+    document.getElementById('ventana_oculta_3').style.display = "none";    
 }
 function eliminar_cajero(id){
     id_cencon= id;
@@ -109,13 +105,10 @@ function todos_cajero(funcion){
 ////////////////////////////////////////////////////////////////////////////////
 function evento_buscar_cajero(){
     id= document.getElementById('numero_atm').value;
-
     $.post("index.php?ctl=evento_buscar_cajero", { id: id}, function(data){
-       
         var res = data.substring(data.indexOf("{"), data.length);
-       
         var datos =JSON.parse(res);
-       
+        
         document.getElementById('nombre_atm').value=datos['Nombre'];
         document.getElementById('tipo_atm').value=datos['Tipo_Punto'];
         document.getElementById('ID_PuntoBCR').value=datos['ID_PuntoBCR'];
@@ -168,18 +161,15 @@ function evento_buscar_persona(){
         for (var i in cajeros){
             result.push([i,cajeros[i]]);
         }
-
         //alert (result.length);
         for( var j=0; j<result.length;j++){
             accesos+=" -"+(cajeros[j]['Codigo']);
         }
         document.getElementById('acceso_atms').value= accesos;
-        
     });
     
 }
- function agregar_evento_cencon(){
-    
+function agregar_evento_cencon(){
     if (document.getElementById('cedula').value == "" || document.getElementById('numero_atm').value == "") {
         alert("Digite el número de cajero y el número de cedula para generar una apertura!");
     } else{
@@ -234,24 +224,22 @@ function evento_buscar_persona(){
             if(valida_cajero==0){
                 alert("Esta persona no puede abrir este cajero \nPor favor intente nuevamente");
             }
-            
         });
     }
 }
-
-function evento_cencon_cerrar(ide){
+function evento_cencon_cerrar(ide, numero){
     var f=new Date();
     cad=f.getHours()+":"+f.getMinutes(); 
-    $.confirm({title: 'Confirmación!', content: 'Desea ingresar el cierre de este cajero a las '+cad+'?', 
+    $.confirm({title: 'Confirmación!', content: 'Desea ingresar el cierre del cajero '+numero+' a las '+cad+'?', 
         confirm: function(){
             id_evento_cencon= ide;
             $.post("index.php?ctl=evento_cencon_cerrar", { id_evento_cencon: id_evento_cencon}, function(data){
                 location.reload();
                 //alert (data);
-              });
+            });
         },
         cancel: function(){
-                //$.alert('Canceled!')
+            //$.alert('Canceled!')
         }
     });
 }
@@ -264,9 +252,9 @@ function guardar_observaciones_evento(){
     id_evento_cencon= document.getElementById('ID_Evento_Cencon').value;
     observaciones= document.getElementById('observaciones_evento').value;
     $.post("index.php?ctl=evento_cencon_observaciones",{id_evento_cencon:id_evento_cencon, observaciones:observaciones}, function(data){
-                location.reload();
-                //alert (data);
-              });
+        location.reload();
+        //alert (data);
+    });
     document.getElementById('ventana_oculta_1').style.display = "none";
 }
 function editar_seguimiento(ide, seguimiento){
@@ -279,9 +267,9 @@ function guardar_seguimiento_evento(){
     seguimiento= document.getElementById('seguimiento_evento').value;
     
     $.post("index.php?ctl=evento_cencon_seguimiento",{id_evento_cencon:id_evento_cencon, seguimiento:seguimiento}, function(data){
-                location.reload();
-                //alert (data);
-              });
+        location.reload();
+        //alert (data);
+    });
     document.getElementById('ventana_oculta_3').style.display = "none";
 }
 function reasignar_apertura(ide,cajero, obser){
@@ -299,10 +287,10 @@ function reasignar_apertura_cencon(){
             $.post("index.php?ctl=evento_cencon_reasignar", { id_evento_cencon: id_evento_cencon, numero_cajero:numero_cajero, cedula_cencon:cedula_cencon}, function(data){
                 location.reload();
                 //alert (data);
-              });
+            });
         },
         cancel: function(){
-                //$.alert('Canceled!')
+            //$.alert('Canceled!')
         }
     });
 }

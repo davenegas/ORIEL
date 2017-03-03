@@ -106,9 +106,9 @@
                     data[cell][row] = $(this).text();
                 });
             });
-             $.post("index.php?ctl=actualiza_puesto_de_monitoreo", {data: data});
-                       
-             document.location.href="index.php?ctl=puestos_de_monitoreo_listar";
+            $.post("index.php?ctl=actualiza_puesto_de_monitoreo", {data: data});
+   
+            document.location.href="index.php?ctl=puestos_de_monitoreo_listar";
         }
         
          //Valida informacion completa de formulario de notas de coordinacion

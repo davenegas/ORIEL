@@ -93,7 +93,9 @@ require_once __DIR__ . '/controladores/cls_nacionalidad.php';
 require_once __DIR__ . '/controladores/cls_nivel_academico.php';
 //Libreria de clases --> Control de Cencon
 require_once __DIR__ . '/controladores/cls_cencon.php';
-//
+//Libreria de clases --> Control de Pruebas de alarma
+require_once __DIR__ . '/controladores/cls_prueba_alarma.php';
+//Libreria de clases --> Control para sistemad de reportes
 require_once __DIR__ . '/controladores/cls_reporteria.php';
 
 
@@ -268,6 +270,9 @@ $map = array(
     //Controlador de pruebas de alarma
     'pruebas_alarma'=>array('controller'=>'Controller', 'action'=>'pruebas_alarma'),
     'buscar_punto_prueba_alarma'=>array('controller'=>'Controller', 'action'=>'buscar_punto_prueba_alarma'),
+    'buscar_prueba_alarma'=>array('controller'=>'Controller', 'action'=>'buscar_prueba_alarma'),
+    'prueba_alarma_guardar'=>array('controller'=>'Controller', 'action'=>'prueba_alarma_guardar'),
+    'prueba_alarma_eliminar'=>array('controller'=>'Controller', 'action'=>'prueba_alarma_eliminar'),
     
     //Controlador de Eventos (Bitacora Digital)
     'frm_eventos_listar' =>  array('controller'=>'Controller','action'=>'frm_eventos_listar'),

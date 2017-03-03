@@ -16,7 +16,7 @@
                         text: (function() { var data = [];  data.push(['<?php echo $titulo?>']); return data; })()
                     },
                     subtitle: {
-                        text: ''
+                        text: 'Cantidad de aperturas por rango de hora'
                     },
                     xAxis: {
                         categories: (function() { var data = [];
@@ -74,7 +74,7 @@
                 </form>
             </div>
             <!--Div para gráfico-->
-            <div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+            <div id="container" style="min-width: 310px; height: 400px; margin: 0 auto; margin-top: 10px;"></div>
             
             <div class="container animated fadeIn">
                 <h3 id="titulo">Listado de Eventos Cencon del día de hoy:</h3>

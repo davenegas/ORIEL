@@ -259,22 +259,21 @@
                                 <li><a href="index.php?ctl=personal_externo_listar">Personal Externo</a></li>
                             <?php }; ?>
 
-
                             <?php if ($_SESSION['modulos']['Módulo-Asistencia de Personal']==1){ ?>
                                 <li><a href="index.php?ctl=marcas">Asistencia de Operadores</a></li>
                             <?php }; ?>
 
                             <?php if ($_SESSION['modulos']['Módulo-Áreas de Apoyo']==1){ ?>
                                 <li><a href="index.php?ctl=areas_apoyo_listar">Áreas de Apoyo</a></li>
-                            <?php }; ?>  
+                            <?php }; ?>
                                
                             <?php if ($_SESSION['modulos']['Módulo-Cencon']==1){?>
                                 <li><a href="index.php?ctl=eventos_cencon">Cencon</a></li> 
                             <?php }; ?>
                                 
-                             <?php if ($_SESSION['modulos']['Módulo-Control de Video']==1){?>
+                            <?php if ($_SESSION['modulos']['Módulo-Control de Video']==1){?>
                                 <li><a href="index.php?ctl=puestos_de_monitoreo_listar"> Puestos de Monitoreo</a></li>
-                            <?php }; ?>   
+                            <?php }; ?>
 
                             <?php if ($_SESSION['modulos']['Módulo-Pruebas alarma']==1){?>
                                 <li><a href="index.php?ctl=pruebas_alarma">Pruebas alarma</a></li> 
@@ -282,7 +281,7 @@
                                 
                             <?php if ($_SESSION['modulos']['Módulo-Control de Video']==1){?>
                                 <li><a href="http://10.170.5.80/Operaciones_de_Seguridad/ctrlvideo/consulta.html">Controles de Video</a></li>
-                            <?php }; ?>   
+                            <?php }; ?>
 
                         </ul>
                     </li>

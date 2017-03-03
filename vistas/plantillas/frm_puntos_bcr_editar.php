@@ -24,7 +24,7 @@
             
             <!--Información General del Punto BCR, Telecom, UE-->
             <div class="bordegris">
-                
+                <!--controles de sitio-->
                 <h3>Información General del Punto BCR
                     <?php if($_SESSION['modulos']['Editar- Puntos BCR']==1){ ?>
                         <input class="quitar-float" type="checkbox" id="chk_informacion_general" name="chk_ubicacion">
@@ -67,7 +67,7 @@
                 </div>
                 <!--Información de Teléfono del Punto BCR-->
                 <div class="bordegris"  >
-                    <?php if($_SESSION['modulos']['Editar- Puntos BCR']==1){ ?>
+                    <?php if($_SESSION['modulos']['Editar- Teléfono Puntos BCR']==1){ ?>
                         <h3 class="quitar-float">Información de teléfonos del Punto BCR <a id="popup" onclick="mostrar_agregar_telefono()" class="btn azul" role="button">Agregar número</a></h3> 
                     <?php } else {?>
                         <h3 class="quitar-float">Información de teléfonos del Punto BCR</h3>
@@ -105,62 +105,61 @@
                 </div>
                 <!--Información de telecomunicaciones--> 
                 <?php if($_SESSION['modulos']['Vista info Telecomunicaciones- PuntosBCR']==1){ ?>     
-                
-                <div class="bordegris" >
-                    <?php if($_SESSION['modulos']['Editar Telecomunicaciones- Puntos BCR']==1){ ?>   
-                        <h3 class="quitar-float">Información de Telecom <a id="popup" onclick="mostrar_enlace_telecom()" class="btn azul" role="button">Agregar Enlace</a></h3> 
-                    <?php } else {?>
-                        <h3 class="quitar-float">Información de Telecom</h3>
-                    <?php } ?>
-                    <div>
-                        <table class="display col-md-12  table-striped quitar-float espacio-abajo" id="telecom">
-                            <thead> 
-                                <th style="text-align:center">Enlace</th>
-                                <th style="text-align:center">Interface</th>
-                                <th style="text-align:center">Línea</th>
-                                <th style="text-align:center">Proveedor</th>
-                                <th style="text-align:center">Tipo enlace</th>
-                                <th style="text-align:center">Bandwidth(kbps)</th>
-                                <th style="text-align:center">Medio enlace</th>
-                                <th style="text-align:center">Observaciones</th>
-                                <?php if($_SESSION['modulos']['Editar Telecomunicaciones- Puntos BCR']==1){ ?>
-                                <th style="text-align:center" colspan="2">Funciones</th>
-                                <?php } ?>
-                            </thead>
-                            <tbody>
-                                <?php 
-                                $tam=count($telecom);
-                                for ($i = 0; $i <$tam; $i++) {
-                                ?>
-                                <tr>
-                                    <td style="text-align:center"><?php echo $telecom[$i]['Enlace'];?></td>
-                                    <td style="text-align:center"><?php echo $telecom[$i]['Interface_Enlace'];?></td>
-                                    <td style="text-align:center"><?php echo $telecom[$i]['Numero_Linea'];?></td>
-                                    <td style="text-align:center"><?php echo $telecom[$i]['Nombre_Proveedor'];?></td>
-                                    <td style="text-align:center"><?php echo $telecom[$i]['Tipo_Enlace'];?></td>
-                                    <td style="text-align:center"><?php echo $telecom[$i]['Bandwidth'];?></td>
-                                    <td style="text-align:center"><?php echo $telecom[$i]['Medio_Enlace'];?></td>
-                                    <td style="text-align:center"><?php echo $telecom[$i]['Observaciones'];?></td>
+                    <div class="bordegris" >
+                        <?php if($_SESSION['modulos']['Editar Telecomunicaciones- Puntos BCR']==1){ ?>   
+                            <h3 class="quitar-float">Información de Telecom <a id="popup" onclick="mostrar_enlace_telecom()" class="btn azul" role="button">Agregar Enlace</a></h3> 
+                        <?php } else {?>
+                            <h3 class="quitar-float">Información de Telecom</h3>
+                        <?php } ?>
+                        <div>
+                            <table class="display col-md-12  table-striped quitar-float espacio-abajo" id="telecom">
+                                <thead> 
+                                    <th style="text-align:center">Enlace</th>
+                                    <th style="text-align:center">Interface</th>
+                                    <th style="text-align:center">Línea</th>
+                                    <th style="text-align:center">Proveedor</th>
+                                    <th style="text-align:center">Tipo enlace</th>
+                                    <th style="text-align:center">Bandwidth(kbps)</th>
+                                    <th style="text-align:center">Medio enlace</th>
+                                    <th style="text-align:center">Observaciones</th>
                                     <?php if($_SESSION['modulos']['Editar Telecomunicaciones- Puntos BCR']==1){ ?>
-                                        <td style="text-align:center"><a class="btn" role="button" onclick="mostrar_editar_enlace(<?php echo $telecom[$i]['ID_Enlace'];?>,'<?php echo $telecom[$i]['Enlace'];?>',
-                                                    '<?php echo $telecom[$i]['Interface_Enlace'];?>','<?php echo $telecom[$i]['Numero_Linea'];?>','<?php echo $telecom[$i]['ID_Proveedor'];?>','<?php echo $telecom[$i]['ID_Tipo_Enlace'];?>',
-                                                    '<?php echo $telecom[$i]['Bandwidth'];?>','<?php echo $telecom[$i]['ID_Medio_Enlace'];?>','<?php echo $telecom[$i]['Observaciones'];?>');">
-                                            Editar</a></td>
-                                        <td style="text-align:center"><a class="btn" role="button" onclick="eliminar_enlace('<?php echo $telecom[$i]['ID_Enlace'];?>');">
-                                            Eliminar</a></td>    
+                                    <th style="text-align:center" colspan="2">Funciones</th>
                                     <?php } ?>
-                                </tr>
-                                <?php } ?>
-                            </tbody> 
-                        </table>
+                                </thead>
+                                <tbody>
+                                    <?php 
+                                    $tam=count($telecom);
+                                    for ($i = 0; $i <$tam; $i++) { ?>
+                                        <tr>
+                                            <td style="text-align:center"><?php echo $telecom[$i]['Enlace'];?></td>
+                                            <td style="text-align:center"><?php echo $telecom[$i]['Interface_Enlace'];?></td>
+                                            <td style="text-align:center"><?php echo $telecom[$i]['Numero_Linea'];?></td>
+                                            <td style="text-align:center"><?php echo $telecom[$i]['Nombre_Proveedor'];?></td>
+                                            <td style="text-align:center"><?php echo $telecom[$i]['Tipo_Enlace'];?></td>
+                                            <td style="text-align:center"><?php echo $telecom[$i]['Bandwidth'];?></td>
+                                            <td style="text-align:center"><?php echo $telecom[$i]['Medio_Enlace'];?></td>
+                                            <td style="text-align:center"><?php echo $telecom[$i]['Observaciones'];?></td>
+                                            <?php if($_SESSION['modulos']['Editar Telecomunicaciones- Puntos BCR']==1){ ?>
+                                                <td style="text-align:center"><a class="btn" role="button" onclick="mostrar_editar_enlace(<?php echo $telecom[$i]['ID_Enlace'];?>,'<?php echo $telecom[$i]['Enlace'];?>',
+                                                            '<?php echo $telecom[$i]['Interface_Enlace'];?>','<?php echo $telecom[$i]['Numero_Linea'];?>','<?php echo $telecom[$i]['ID_Proveedor'];?>','<?php echo $telecom[$i]['ID_Tipo_Enlace'];?>',
+                                                            '<?php echo $telecom[$i]['Bandwidth'];?>','<?php echo $telecom[$i]['ID_Medio_Enlace'];?>','<?php echo $telecom[$i]['Observaciones'];?>');">
+                                                Editar</a></td>
+                                                <td style="text-align:center"><a class="btn" role="button" onclick="eliminar_enlace('<?php echo $telecom[$i]['ID_Enlace'];?>');">
+                                                Eliminar</a></td>    
+                                            <?php } ?>
+                                        </tr>
+                                    <?php } ?>
+                                </tbody> 
+                            </table>
+                        </div>
                     </div>
-                </div>
                 <?php } ?>
                 <?php if($_SESSION['modulos']['Editar- Puntos BCR']==1){ ?>   
-                <h3 class="quitar-float">Unidades Ejecutoras asociadas al PuntoBCR <a id="popup" onclick="mostrar_lista_ue()" class="btn azul" role="button">Agregar UE</a></h3> 
+                    <h3 class="quitar-float">Unidades Ejecutoras asociadas al PuntoBCR <a id="popup" onclick="mostrar_lista_ue()" class="btn azul" role="button">Agregar UE</a></h3> 
                 <?php } else {?>
-                <h3 class="quitar-float">Unidades Ejecutoras asociadas al PuntoBCR</h3>
+                    <h3 class="quitar-float">Unidades Ejecutoras asociadas al PuntoBCR</h3>
                 <?php } ?>
+                <!--Información Unidades Ejecutoras-->
                 <div>
                     <table class="display col-md-12  table-striped quitar-float espacio-abajo" id="unidad_ejecutora">
                         <thead>
@@ -511,8 +510,8 @@
                         $tam = count($tipo_telefono);
                         for($i=0; $i<$tam;$i++){  
                             if($tipo_telefono[$i]['ID_Tipo_Telefono']==1||$tipo_telefono[$i]['ID_Tipo_Telefono']==5||$tipo_telefono[$i]['ID_Tipo_Telefono']==6||
-                                $tipo_telefono[$i]['ID_Tipo_Telefono']==7||$tipo_telefono[$i]['ID_Tipo_Telefono']==8||$tipo_telefono[$i]['ID_Tipo_Telefono']==9||
-                                    $tipo_telefono[$i]['ID_Tipo_Telefono']==10){?>
+                            $tipo_telefono[$i]['ID_Tipo_Telefono']==7||$tipo_telefono[$i]['ID_Tipo_Telefono']==8||$tipo_telefono[$i]['ID_Tipo_Telefono']==9||
+                            $tipo_telefono[$i]['ID_Tipo_Telefono']==10){?>
                                 <option value="<?php echo $tipo_telefono[$i]['ID_Tipo_Telefono']?>" ><?php echo $tipo_telefono[$i]['Tipo_Telefono']?></option>   
                         <?php }}  ?>
                     </select>
