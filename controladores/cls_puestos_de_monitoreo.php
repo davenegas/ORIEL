@@ -583,6 +583,26 @@ class cls_puestos_de_monitoreo{
     }
     
     //Este metodo realiza la modificación del estado del modulo, de activo a inactivo o viceversa en la bd
+    function guarda_y_concluye_una_revision_de_video(){
+        $this->obj_data_provider->conectar();
+        //Llama al metodo para editar los datos correspondientes
+        $this->obj_data_provider->edita_datos("T_BitacoraRevisionesVideo","Fecha_Termina_Revision='".$this->fecha_termina_revision."',Hora_Termina_Revision='".$this->hora_termina_revision."',Estado=".$this->estado.",Requirio_Mantenimiento=".$this->requirio_mantenimiento.",Duracion_Revision=".$this->duracion_revision.",Retraso_Segundos=".$this->retraso_segundos.",Resultado_Conexion=".$this->resultado_conexion.",Reporta_Situacion='".$this->reporta_situacion."',Justificacion_Retraso='".$this->justificacion_retraso."'",$this->condicion);
+        //Metodo de la clase data provider que desconecta la sesión con la base de datos
+        $this->obj_data_provider->desconectar();
+       
+    }
+    
+    //Este metodo realiza la modificación del estado del modulo, de activo a inactivo o viceversa en la bd
+    function agrega_justificacion_en_retraso_de_una_revision_de_video(){
+        $this->obj_data_provider->conectar();
+        //Llama al metodo para editar los datos correspondientes
+        $this->obj_data_provider->edita_datos("T_BitacoraRevisionesVideo","Justificacion_Retraso='".$this->justificacion_retraso."'",$this->condicion);
+        //Metodo de la clase data provider que desconecta la sesión con la base de datos
+        $this->obj_data_provider->desconectar();
+       
+    }
+    
+    //Este metodo realiza la modificación del estado del modulo, de activo a inactivo o viceversa en la bd
     function edita_toma_de_puesto_en_revision_de_video_pendiente(){
         $this->obj_data_provider->conectar();
         //Llama al metodo para editar los datos correspondientes
@@ -618,8 +638,8 @@ class cls_puestos_de_monitoreo{
         //Establece la conexión con la bd
         $this->obj_data_provider->conectar();
 
-        $this->obj_data_provider->trae_datos("t_bitacorarevisionesvideo","max(ID_Bitacora_Revision_Video) ID_Bitacora_Revision_Video,Posicion",$this->condicion);
-
+        //$this->obj_data_provider->trae_datos("t_bitacorarevisionesvideo","max(ID_Bitacora_Revision_Video) ID_Bitacora_Revision_Video,Posicion",$this->condicion);
+        $this->obj_data_provider->trae_datos("t_bitacorarevisionesvideo","ID_Bitacora_Revision_Video,Posicion",$this->condicion);
         $this->arreglo=$this->obj_data_provider->getArreglo();
 
         $this->obj_data_provider->desconectar();

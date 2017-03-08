@@ -5,7 +5,7 @@
         <?php require_once 'frm_librerias_head.html';?>
         <link rel="stylesheet" href="vistas/css/ventanaoculta.css">
         <script>
-             $(document).ready(function () {
+            $(document).ready(function () {
                 if ( $.fn.dataTable.isDataTable('#tabla') ) {
                     table = $('#tabla').DataTable();
                 }
@@ -15,11 +15,14 @@
                     "lengthMenu": [[10, 25, 50,100,-1], [10, 25, 50,100,"All"]]
                 });     
             });
+            
             //Funcion para ocultar ventana de mantenimiento de proveedor
             function ocultar_elemento(){
                 document.getElementById('ventana_oculta_1').style.display = "none";
             }
-            //Valida informacion completa de formulario de proveedor
+            
+            
+             //Valida informacion completa de formulario de proveedor
             function check_empty() {
                 if (document.getElementById('nombre').value =="") {
                     alert("Digita el nombre del Puesto de Monitoreo!");
@@ -32,6 +35,7 @@
                     }
                 }
             }
+            
             //Funcion para agregar un nuevo tipo de telefono- formulario en blanco
             function mostrar_agregar_puesto_monitoreo() {
                 document.getElementById('ID_Puesto_Monitoreo').value="0";
@@ -49,9 +53,10 @@
                 document.getElementById('tiempo_estandar_revision').value=tiempo;
                 document.getElementById('tiempo_revision_original').value=tiempo;
                 document.getElementById('ventana_oculta_1').style.display = "block";
-            };
-            
-            function tomar_puesto_de_monitoreo(id_puesto,nom){
+            }
+           
+           function tomar_puesto_de_monitoreo(id_puesto,nom){
+                //alert(nom);
                 $.confirm({
                     title: 'Confirmación!',
                     content: 'Desea tomar el puesto de monitoreo: '+nom+' ?',
@@ -59,7 +64,7 @@
                         $.post("index.php?ctl=tomar_puesto_de_monitoreo", {id_puesto: id_puesto},function(data){
                             var srt = data;
                             var n= srt.search("Inactivo");
-                           
+                           //alert(data);
                             if(n>0){
                                 $.alert({
                                     title: 'Información!',
@@ -111,13 +116,24 @@
                 });
             }
             
-            function liberar_puesto_de_monitoreo(id_puesto,nom,id_us){
+     function liberar_puesto_de_monitoreo(id_puesto,nom,id_us){
                 
                  //alert(id_us);
+            var bandera=0;
+            
                 <?php 
             //Solamente los coordinadores ven esta opcion de agregar mezclas
             if($_SESSION['modulos']['Módulo-Control de Video-Liberar Puestos']==1){ ?>
-               $.confirm({
+                    bandera=1;
+            <?php }else{ ?>
+                    if (id_us==<?php echo $_SESSION['id'];?>){
+                        bandera=1;
+                    }
+                    //
+             <?php }?>
+                 
+            if (bandera==1){
+                 $.confirm({
                     title: 'Confirmación!',
                     content: 'Desea liberar el puesto de monitoreo: '+nom+' ?',
                     confirm: function(){
@@ -142,9 +158,10 @@
               
                     }
                 });
-            <?php }else{ ?>
-                    alert("No puedes liberar este puesto de monitoreo!!!Contacte a su Supervisor.");
-             <?php }?>
+            }else{
+                alert("No puedes liberar este puesto de monitoreo!!!Contacte a su Supervisor.");
+            }
+                
             }
             
         </script>
@@ -205,10 +222,9 @@
             <td style="text-align:center"><a href="index.php?ctl=puestos_de_monitoreo_editar&id=<?php echo $params[$i]['ID_Puesto_Monitoreo']?>&tiempo_revision=<?php echo $params[$i]['Tiempo_Estandar_Revision']?>&nombre=<?php echo $params[$i]['Nombre']?>">
                    Lista de Unidades</a></td>
                    
-            <td style="text-align:center"><a href="#" onclick="tomar_puesto_de_monitoreo('<?php echo $params[$i]['ID_Puesto_Monitoreo'];?>','<?php echo $params[$i]['Nombre'];?>');">
-            Tomar Puesto</a></td>
+            <td style="text-align:center"><a href="#" onclick="tomar_puesto_de_monitoreo('<?php echo $params[$i]['ID_Puesto_Monitoreo'];?>','<?php echo $params[$i]['Nombre'];?>');">Tomar Puesto</a></td>
             
-            <td style="text-align:center"><a href="#" onclick="liberar_puesto_de_monitoreo('<?php echo $params[$i]['ID_Puesto_Monitoreo'];?>','<?php echo $params[$i]['Nombre'];?>','<?php echo $params[$i]['ID_Usuario'];?>');">
+            <td style="text-align:center"><a href="#" onclick="liberar_puesto_de_monitoreo('<?php echo $params[$i]['ID_Puesto_Monitoreo'];?>','<?php echo $params[$i]['ID_Usuario'];?>','<?php echo $params[$i]['ID_Usuario'];?>');">
             Liberar Puesto</a></td>
             </tr>     
            
@@ -217,15 +233,13 @@
         </table>
         <a id="popup" onclick="mostrar_agregar_puesto_monitoreo()" class="btn btn-default" role="button">Agregar Nuevo Puesto de Monitoreo</a>
         </div>
-        
-        
        <!--agregar o editar-->
         <div id="ventana_oculta_1"> 
             <div id="popupventana">
                 <!--Formulario para proveedor de enlaces de telecomunicaciones-->
                 <form id="ventana" method="POST" name="form" action="index.php?ctl=puesto_monitoreo_guardar">
                     <img id="close" src='vistas/Imagenes/cerrar.png' width="25" onclick ="ocultar_elemento()">
-                    <h2>Puesto de Montoreo</h2>
+                    <h2>Puesto de Monitoreo</h2>
                     <hr>
                     
                     <input hidden id="ID_Puesto_Monitoreo" name="ID_Puesto_Monitoreo" type="text">

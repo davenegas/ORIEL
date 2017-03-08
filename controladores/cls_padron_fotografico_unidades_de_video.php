@@ -111,14 +111,14 @@ class cls_padron_fotografico_unidades_de_video{
         if($this->condicion==""){
             $this->obj_data_provider->conectar();
             //Llama al metodo que realiza la consulta a la bd
-            $this->obj_data_provider->trae_datos("T_PadronFotograficoUnidadVideo", "*", "");
+            $this->obj_data_provider->trae_datos("T_PadronFotograficoUnidadVideo", "*,IF(Categoria = 0, 'Día', 'Noche') Categoria_Nombre", "");
             $this->arreglo=$this->obj_data_provider->getArreglo();
             $this->obj_data_provider->desconectar();
         }
         else{
             $this->obj_data_provider->conectar();
             //Llama al metodo que realiza la consulta a la bd
-            $this->obj_data_provider->trae_datos("T_PadronFotograficoUnidadVideo", "*", $this->condicion);
+            $this->obj_data_provider->trae_datos("T_PadronFotograficoUnidadVideo", "*,IF(Categoria = 0, 'Día', 'Noche') Categoria_Nombre", $this->condicion);
             $this->arreglo=$this->obj_data_provider->getArreglo();
             $this->obj_data_provider->desconectar();
         }

@@ -394,8 +394,7 @@ class cls_puntosBCR{
             $this->obj_data_provider->desconectar();
             $this->resultado_operacion=true;
         }
-    }
-    
+    }  
     public function obtiene_todos_los_puntos_bcr_telefonos(){
         $this->obj_data_provider->conectar();
         if($this->condicion==""){

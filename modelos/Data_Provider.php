@@ -282,7 +282,7 @@ class Data_Provider{
        //Arma el insert SQL, de acuerdo a los parámetros recibidos por usuario
        
         $consulta=$this->conexion->query("insert into ".$table."(".$campos.") ".$valores.";");
-        echo ("insert into ".$table."(".$campos.") values(".$valores.");");
+        //echo ("insert into ".$table."(".$campos.") values(".$valores.");");
         //Establece a true el resultado de operación
         $this->resultado_operacion=true;
   
