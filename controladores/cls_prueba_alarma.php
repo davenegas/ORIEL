@@ -17,6 +17,7 @@ class cls_prueba_alarma{
     public $cierre;
     public $cuenta_secundaria;
     public $cuenta_principal;
+    public $seguimiento;
     public $estado;
     public $obj_data_provider;
     public $arreglo;
@@ -182,6 +183,14 @@ class cls_prueba_alarma{
         $this->cuenta_principal = $cuenta_principal;
     }
   
+    function getSeguimiento() {
+        return $this->seguimiento;
+    }
+
+    function setSeguimiento($seguimiento) {
+        $this->seguimiento = $seguimiento;
+    }
+
     public function __construct() {
         $this->id_prueba="";
         $this->id_punto="";
@@ -200,6 +209,7 @@ class cls_prueba_alarma{
         $this->estado="";
         $this->cuenta_secundaria="";
         $this->cuenta_principal="";
+        $this->seguimiento="";
         $this->obj_data_provider= new Data_Provider();
         $this->arreglo;
         $this->condicion="";
@@ -341,12 +351,19 @@ class cls_prueba_alarma{
         }
     }
     public function guardar_observaciones(){
-        $this->obj_data_provider->conectar();
-        //Llama al metodo para editar los datos correspondientes
-        $this->obj_data_provider->edita_datos("T_PruebaAlarma", "Observaciones='".$this->observaciones."'",
-            "T_PruebaAlarma.ID_Prueba_Alarma='".$this->id_prueba."'");
-        //Metodo de la clase data provider que desconecta la sesión con la base de datos
-        $this->obj_data_provider->desconectar();
+        if($this->id_prueba==0){
+            $this->obj_data_provider->conectar();
+            $this->obj_data_provider->inserta_datos("T_PruebaAlarma", "ID_PuntoBCR, Fecha, Observaciones", 
+                "'".$this->id_punto."','".date('Y-m-d')."','".$this->observaciones."'");
+            $this->obj_data_provider->trae_datos("T_PruebaAlarma","max(ID_Prueba_Alarma) ID_Prueba_Alarma","");
+            $this->arreglo=$this->obj_data_provider->getArreglo();
+            $this->obj_data_provider->desconectar();
+        }   else {
+            $this->obj_data_provider->conectar();
+            $this->obj_data_provider->edita_datos("T_PruebaAlarma", "Observaciones='".$this->observaciones."'",
+                "T_PruebaAlarma.ID_Prueba_Alarma='".$this->id_prueba."'");
+            $this->obj_data_provider->desconectar();
+        }
     }
     
     public function eliminar_registro_prueba_alarma() {
@@ -354,6 +371,22 @@ class cls_prueba_alarma{
         $this->arreglo=$this->obj_data_provider->eliminar_datos("T_PruebaAlarma", $this->condicion);
         $this->obj_data_provider->desconectar();
         $this->resultado_operacion=true;
+    }
+    
+    public function guardar_seguimiento(){
+        if($this->id_prueba==0){
+            $this->obj_data_provider->conectar();
+            $this->obj_data_provider->inserta_datos("T_PruebaAlarma", "ID_PuntoBCR, Fecha, Seguimiento", 
+                "'".$this->id_punto."','".date('Y-m-d')."','".$this->seguimiento."'");
+            $this->obj_data_provider->trae_datos("T_PruebaAlarma","max(ID_Prueba_Alarma) ID_Prueba_Alarma","");
+            $this->arreglo=$this->obj_data_provider->getArreglo();
+            $this->obj_data_provider->desconectar();
+        }   else {
+            $this->obj_data_provider->conectar();
+            $this->obj_data_provider->edita_datos("T_PruebaAlarma", "Seguimiento='".$this->seguimiento."'",
+                "T_PruebaAlarma.ID_Prueba_Alarma='".$this->id_prueba."'");
+            $this->obj_data_provider->desconectar();
+        }
     }
     
 } ?>

@@ -154,7 +154,6 @@ $map = array(
     'manual_cencon'=>array('controller'=>'Controller', 'action'=>'manual_cencon'),
     'prueba'=>array('controller'=>'Controller', 'action'=>'prueba'),
     
-    
     //Controlador de Reportes
     'reporte_seguimiento_eventos'=>array('controller'=>'Controller', 'action'=>'reporte_seguimiento_eventos'),
     'reporte_eventos_provincia'=>array('controller'=>'Controller', 'action'=>'reporte_eventos_provincia'),
@@ -279,6 +278,7 @@ $map = array(
     'buscar_prueba_alarma'=>array('controller'=>'Controller', 'action'=>'buscar_prueba_alarma'),
     'prueba_alarma_guardar'=>array('controller'=>'Controller', 'action'=>'prueba_alarma_guardar'),
     'prueba_alarma_eliminar'=>array('controller'=>'Controller', 'action'=>'prueba_alarma_eliminar'),
+    'reporte_prueba_alarma'=>array('controller'=>'Controller', 'action'=>'reporte_prueba_alarma'),
     
     //Controlador de Eventos (Bitacora Digital)
     'frm_eventos_listar' =>  array('controller'=>'Controller','action'=>'frm_eventos_listar'),
@@ -342,7 +342,7 @@ $map = array(
     'obtiene_lista_horarios' => array('controller' =>'Controller', 'action' =>'obtiene_lista_horarios'),
     'guardar_horario' => array('controller' =>'Controller', 'action' =>'guardar_horario'),
     
-     //PuntosBCR
+    //PuntosBCR
     'puntos_bcr_listar'=>array('controller'=>'Controller','action'=> 'puntos_bcr_listar'),
     'gestion_punto_bcr'=>array('controller'=>'Controller','action'=> 'gestion_punto_bcr'),
     'actualiza_en_vivo_canton'=>array('controller'=>'Controller','action'=> 'actualiza_en_vivo_canton'),

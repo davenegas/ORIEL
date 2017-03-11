@@ -359,7 +359,7 @@ class cls_personal_externo{
                 "T_PersonalExterno.ID_Persona_Externa as ID_Persona, T_PersonalExterno.Identificacion as Cedula,T_PersonalExterno.ID_Empresa,
                     GROUP_CONCAT(T_PersonalExterno.Apellido,' ', T_PersonalExterno.Nombre) as Apellido_Nombre,
                     T_Empresa.Empresa",
-                "(T_PersonalExterno.ID_Empresa=2 OR T_PersonalExterno.ID_Empresa=3) AND (T_PersonalExterno.ID_Estado_Persona=1) GROUP BY T_PersonalExterno.Identificacion");
+                "(T_PersonalExterno.ID_Empresa=2 OR T_PersonalExterno.ID_Empresa=3) AND (T_PersonalExterno.ID_Estado_Persona<>2) GROUP BY T_PersonalExterno.Identificacion");
         $this->arreglo=$this->obj_data_provider->getArreglo();
         $this->obj_data_provider->desconectar();
         $this->resultado_operacion=true;

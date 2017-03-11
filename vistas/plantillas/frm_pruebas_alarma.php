@@ -104,11 +104,11 @@
                     </div>
                     <div class="col-sm-4 espacio-abajo">
                         <label for="hora_apertura">Hora apertura agencia SIS</label>
-                        <input type="time"  class="form-control" id="hora_apertura" name="hora_apertura" value="" onchange="guardar_apertura();" title="Usuario no Disponible">
+                        <input type="time"  class="form-control" id="hora_apertura" name="hora_apertura" value="" onblur="guardar_apertura();" title="Usuario no Disponible">
                     </div>
                     <div class="col-sm-4 espacio-abajo">
                         <label for="hora_prueba">Hora prueba de alarma</label>
-                        <input type="time"  class="form-control" id="hora_prueba" name="hora_prueba" value="" onchange="guardar_prueba_alarma();">
+                        <input type="time"  class="form-control" id="hora_prueba" name="hora_prueba" value="" onblur="guardar_prueba_alarma();">
                     </div>
                     <div class="col-sm-4 espacio-abajo">
                         <label for="zona_prueba">Número de zona prueba</label>
@@ -123,7 +123,7 @@
                         <select class="form-control" id="cuentas_secundarias" name="cuentas_secundarias" onchange="guarda_reporte_cuenta();">
                             <option value=""></option>
                             <option value="Se confirman los cierres">Se confirman los cierres</option>
-                            <option value="Partición(es) abierta(s)">Partición abierta</option>
+                            <option value="Partición(es) abierta(s)">Partición(es) abierta(s)</option>
                         </select>
                     </div>
                     <div class="col-sm-4 espacio-abajo-5">
@@ -135,14 +135,23 @@
                         </select>
                     </div>
                     <div class="col-sm-4 espacio-abajo-5">
-                        <label for="hora_cierre">Hora cierre Alarma SIS</label>
-                        <input type="time"  class="form-control" id="hora_cierre" name="hora_cierre" onchange="guardar_cierre();" title="Usuario no Disponible">
+                        <label for="hora_cierre">Hora cierre agencia SIS</label>
+                        <input type="time"  class="form-control" id="hora_cierre" name="hora_cierre" onblur="guardar_cierre();" title="Usuario no Disponible">
                     </div>
-                    <div class="col-md-8 espacio-abajo-5">
+                    <div class="col-sm-4 espacio-abajo-5">
+                        <label for="seguimiento">Seguimiento</label>
+                        <select class="form-control" id="seguimiento" name="seguimiento" onchange="guarda_seguimiento();">
+                            <option value="0"></option>
+                            <option value="Se solicitó la prueba">Se solicitó la prueba</option>
+                            <option value="Oficina en asueto">Oficina en Asueto</option>
+                            <option value="Oficina con trabajos">Oficina con Trabajos</option>
+                        </select>
+                    </div>  
+                    <div class="col-md-4 espacio-abajo-5">
                         <label for="observaciones">Observaciones</label>
                         <input type="text"  class="form-control" id="observaciones" name="observaciones" onchange="guardar_observaciones();" placeholder="Observaciones o comentarios de la prueba de alarma">
                     </div>
-
+                      
                     <!--<div>
                         <h4><b>Pruebas de alarma Reportadas</b></h4>
                         <table id="tabla4" class="display" cellspacing="0" width="100%">
@@ -175,7 +184,7 @@
                     
                     <?php if(isset($cierres_pendientes)){?>
                         <div class="well" align="left">
-                            <p><b>Pruebas pendientes</b></p>
+                            <p><b>Cierres pendientes</b></p>
                             <?php 
                             $tam=$tam=count($cierres_pendientes);
                             for ($i = 0; $i <$tam; $i++) {?>

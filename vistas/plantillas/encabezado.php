@@ -213,6 +213,10 @@
                                 <li><a href="index.php?ctl=reporte_eventos_provincia">Activaciones por Provincia</a></li> 
                             <?php }; ?>
                             
+                            <?php if ($_SESSION['modulos']['Módulo-Pruebas alarma']==1){ ?>
+                                <li><a href="index.php?ctl=reporte_prueba_alarma">Pruebas alarma reportadas</a></li> 
+                            <?php }; ?>
+                            
                             <?php if ($_SESSION['modulos']['Reportes-Trazabilidad']==1){ ?>
                                 <li><a href="index.php?ctl=frm_trazabilidad_listar">Trazabilidad</a></li> 
                             <?php }; ?>   

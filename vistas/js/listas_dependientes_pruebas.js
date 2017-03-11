@@ -24,12 +24,50 @@ function borrar_datos(){
     document.getElementById('ID_Prueba_Alarma').value="0";
     document.getElementById('ID_Persona_Reporta_Apertura').value="0";
     document.getElementById('ID_Persona_Reporta_Cierre').value="0";
+    document.getElementById("hora_apertura").removeAttribute("style");
+    document.getElementById("hora_prueba").removeAttribute("style");
+    document.getElementById("hora_cierre").removeAttribute("style");
     buscar_pruebas_alarma(0);
+}
+function listas_desplegables(){
+    //Limpia la listas deplegables para cargar nuevamente la información
+
+    //Lista de Tipo Prueba
+    var tipo_prueba='<option value="Panico">Panico</option>';
+    var tipo_prueba=tipo_prueba+'<option value="Intrusion">Intrusión</option>';
+    var tipo_prueba=tipo_prueba+'<option value="Fuego">Fuego</option>';
+    $('#tipo_prueba').html(tipo_prueba);
+    
+    //Lista de Revisión de cajero
+    var revision_atm='<option value="NO">No</option>';
+    var revision_atm=revision_atm+'<option value="SI">Si</option>';
+    var revision_atm=revision_atm+'<option value="NA">NA</option>';
+    $('#revision_atm').html(revision_atm);
+    
+    //Lista de Revisión de cuenta secundaria
+    var cuentas_secundarias='<option value=""></option>';
+    var cuentas_secundarias=cuentas_secundarias+'<option value="Se confirman los cierres">Se confirman los cierres</option>';
+    var cuentas_secundarias=cuentas_secundarias+'<option value="Partición(es) abierta(s)">Partición(es) abierta(s)</option>';
+    $('#cuentas_secundarias').html(cuentas_secundarias);
+    
+    //Lista de Revisión de cuenta principal
+    var cuenta_principal='<option value=""></option>';
+    var cuenta_principal=cuenta_principal+'<option value="Se confirma el cierre">Se confirma el cierre</option>';
+    var cuenta_principal=cuenta_principal+'<option value="Partición abierta">Partición abierta</option>';
+    $('#cuenta_principal').html(cuenta_principal);
+    
+    //Lista de Seguimiento
+    var seguimiento='<option value=value=""></option>';
+    var seguimiento=seguimiento+'<option value=value="Se solicitó la prueba">Se solicitó la prueba</option>';
+    var seguimiento=seguimiento+'<option value="Oficina en asueto">Oficina en Asueto</option>';
+    var seguimiento=seguimiento+'<option value="Oficina con trabajos">Oficina con Trabajos</option>';
+    $('#seguimiento').html(seguimiento);
 }
 function buscar_pruebas_alarma(id_puntobcr){
     $.post("index.php?ctl=buscar_prueba_alarma", { id_puntobcr: id_puntobcr}, function(data){
             //alert(data);
             //Verificar si encontró prueba de alarma de hoy al Punto BCR
+            listas_desplegables();
             var n= data.search("No se encontró");
             if(n==-1){
                 //Si encontró información la carga en la ventana
@@ -51,6 +89,7 @@ function buscar_pruebas_alarma(id_puntobcr){
                 $("#cuenta_principal option[value='"+datos['Particion_Principal_Cierre']+"']").attr("selected",true);
                 document.getElementById('hora_cierre').value=datos['Hora_Cierre_Alarma'];
                 document.getElementById('observaciones').value=datos['Observaciones'];
+                $("#seguimiento option[value='"+datos['Seguimiento']+"']").attr("selected",true);
                 
                 //Agrega titulos a las ventanas con Usuarios que ingresan la información
                 document.getElementById('nombre_persona_prueba').title="Usuario: "+datos['Nombre_Usuario_Reporte'];
@@ -75,14 +114,10 @@ function buscar_pruebas_alarma(id_puntobcr){
                 document.getElementById('ID_Persona_Reporta_Cierre').value="0";
                 document.getElementById('empresa_persona').value="";
                 document.getElementById('nombre_persona_prueba').value="";
-                $("#tipo_prueba option[value='Panico']").attr("selected",true);
-                $("#revision_atm option[value='NO']").attr("selected",true);
                 document.getElementById('hora_apertura').value="";
                 document.getElementById('hora_prueba').value="";
                 document.getElementById('zona_prueba').value="";
                 document.getElementById('nombre_persona_cierre').value="";
-                $("#cuentas_secundarias option[value='']").attr("selected",true);
-                $("#cuenta_principal option[value='']").attr("selected",true);
                 document.getElementById('hora_cierre').value="";
                 document.getElementById('observaciones').value="";
                 
@@ -92,7 +127,6 @@ function buscar_pruebas_alarma(id_puntobcr){
                 document.getElementById('nombre_persona_cierre').title="Usuario no Disponible";
                 document.getElementById('hora_cierre').title="Usuario no Disponible";
             }
-            
         });
 }
 function buscar_persona_prueba(){
@@ -104,22 +138,24 @@ function agregar_persona_prueba(id,cedula, nombre, depart, id_empresa){
     if(document.getElementById('ID_PuntoBCR').value=="0"){
         alert("Por favor seleccione una agencia para guardar la información");
     } else{
-        document.getElementById('nombre_persona_prueba').value=nombre;
-        document.getElementById('empresa_persona').value=depart;
-        document.getElementById('ventana_oculta_1').style.display = "none";
-        id_prueba = document.getElementById('ID_Prueba_Alarma').value;
-        tipo_prueba = document.getElementById('tipo_prueba').value;
-        revision_atm = document.getElementById('revision_atm').value;
-        punto_bcr = document.getElementById('ID_PuntoBCR').value;
-        tipo = "Persona_Prueba";
-        $.post("index.php?ctl=prueba_alarma_guardar", { id_prueba: id_prueba, tipo:tipo, id_persona: id, id_empresa:id_empresa, punto_bcr:punto_bcr,tipo_prueba:tipo_prueba,revision_atm:revision_atm}, function(data){
-            //alert(data);
-            numero= data.replace(/\D/g,'');
-            if(numero>0){
-                numero= parseInt(numero);
-                document.getElementById('ID_Prueba_Alarma').value=numero;
-            }
-        });
+        if(document.getElementById('ID_Persona_Reporta_Apertura').value==0){
+            document.getElementById('nombre_persona_prueba').value=nombre;
+            document.getElementById('empresa_persona').value=depart;
+            document.getElementById('ventana_oculta_1').style.display = "none";
+            id_prueba = document.getElementById('ID_Prueba_Alarma').value;
+            tipo_prueba = document.getElementById('tipo_prueba').value;
+            revision_atm = document.getElementById('revision_atm').value;
+            punto_bcr = document.getElementById('ID_PuntoBCR').value;
+            tipo = "Persona_Prueba";
+            $.post("index.php?ctl=prueba_alarma_guardar", { id_prueba: id_prueba, tipo:tipo, id_persona: id, id_empresa:id_empresa, punto_bcr:punto_bcr,tipo_prueba:tipo_prueba,revision_atm:revision_atm}, function(data){
+                //alert(data);
+                numero= data.replace(/\D/g,'');
+                if(numero>0){
+                    numero= parseInt(numero);
+                    document.getElementById('ID_Prueba_Alarma').value=numero;
+                }
+            });
+        }
     }
 }
 function guardar_registro_prueba(tipo){
@@ -145,31 +181,43 @@ function guardar_apertura(){
     if(document.getElementById('ID_PuntoBCR').value=="0" ){
         alert("Por favor seleccione una agencia para guardar la información");
     } else {
-        id_prueba = document.getElementById('ID_Prueba_Alarma').value;
+        
         hora_apertura=document.getElementById('hora_apertura').value;
-        tipo = "Apertura_Alarma_SIS";
-        punto_bcr = document.getElementById('ID_PuntoBCR').value;
-        $.post("index.php?ctl=prueba_alarma_guardar", { id_prueba: id_prueba, tipo: tipo, punto_bcr:punto_bcr, hora_apertura:hora_apertura}, function(data){
-            // alert(data);
-            numero= data.replace(/\D/g,'');
-            if(numero>0){
-                numero= parseInt(numero);
-                document.getElementById('ID_Prueba_Alarma').value=numero;
-            }
-        });
+        if(hora_apertura=="" || hora_apertura==null ){
+            document.getElementById("hora_apertura").style.border="2px solid red";
+        } else {
+            document.getElementById("hora_apertura").removeAttribute("style");
+            id_prueba = document.getElementById('ID_Prueba_Alarma').value;
+            tipo = "Apertura_Alarma_SIS";
+            punto_bcr = document.getElementById('ID_PuntoBCR').value;
+
+            $.post("index.php?ctl=prueba_alarma_guardar", { id_prueba: id_prueba, tipo: tipo, punto_bcr:punto_bcr, hora_apertura:hora_apertura}, function(data){
+                // alert(data);
+                numero= data.replace(/\D/g,'');
+                if(numero>0){
+                    numero= parseInt(numero);
+                    document.getElementById('ID_Prueba_Alarma').value=numero;
+                }
+            });
+        }
     }
 }
 function guardar_prueba_alarma(){
     if(document.getElementById('empresa_persona').value=="" ){
         alert("Es necesaria registrar la persona que realiza reporte de prueba");
     } else {
-        id_prueba = document.getElementById('ID_Prueba_Alarma').value;
         hora_prueba=document.getElementById('hora_prueba').value;
-        zona= document.getElementById('zona_prueba').value;
-        tipo = "Hora_Prueba_Alarma_SIS";
-        $.post("index.php?ctl=prueba_alarma_guardar", { id_prueba: id_prueba, tipo: tipo, hora_prueba:hora_prueba, zona:zona}, function(data){
-            //alert(data);
-        });
+        if(hora_prueba=="" || hora_prueba==null ){
+            document.getElementById("hora_prueba").style.border="2px solid red";
+        } else {
+            document.getElementById("hora_prueba").removeAttribute("style");
+            id_prueba = document.getElementById('ID_Prueba_Alarma').value;
+            zona= document.getElementById('zona_prueba').value;
+            tipo = "Hora_Prueba_Alarma_SIS";
+            $.post("index.php?ctl=prueba_alarma_guardar", { id_prueba: id_prueba, tipo: tipo, hora_prueba:hora_prueba, zona:zona}, function(data){
+                //alert(data);
+            });
+        }
     }
 }
 function agregar_persona_cierre(id,cedula, nombre, depart, id_empresa){
@@ -222,18 +270,23 @@ function guardar_cierre(){
    if(document.getElementById('ID_PuntoBCR').value=="0"){
         alert("Por favor seleccione una agencia para guardar la información");
     } else {
-        punto_bcr = document.getElementById('ID_PuntoBCR').value;
-        id_prueba=document.getElementById('ID_Prueba_Alarma').value;
         cierre = document.getElementById('hora_cierre').value;
-        tipo = "Cierre_Agencia";
-        $.post("index.php?ctl=prueba_alarma_guardar", { id_prueba: id_prueba, punto_bcr:punto_bcr, tipo:tipo, cierre:cierre}, function(data){
-            //alert(data);
-            numero= data.replace(/\D/g,'');
-            if(numero>0){
-                numero= parseInt(numero);
-                document.getElementById('ID_Prueba_Alarma').value=numero;
-            }
-        });
+        if(cierre=="" || cierre==null ){
+            document.getElementById("hora_cierre").style.border="2px solid red";
+        } else {
+            document.getElementById("hora_cierre").removeAttribute("style");
+            punto_bcr = document.getElementById('ID_PuntoBCR').value;
+            id_prueba=document.getElementById('ID_Prueba_Alarma').value;
+            tipo = "Cierre_Agencia";
+            $.post("index.php?ctl=prueba_alarma_guardar", { id_prueba: id_prueba, punto_bcr:punto_bcr, tipo:tipo, cierre:cierre}, function(data){
+                //alert(data);
+                numero= data.replace(/\D/g,'');
+                if(numero>0){
+                    numero= parseInt(numero);
+                    document.getElementById('ID_Prueba_Alarma').value=numero;
+                }
+            });
+        }
     } 
 }
 function guardar_observaciones(){
@@ -241,12 +294,18 @@ function guardar_observaciones(){
         alert("Por favor seleccione una agencia para guardar la información");
     } else {
         id_prueba=document.getElementById('ID_Prueba_Alarma').value;
+        punto_bcr = document.getElementById('ID_PuntoBCR').value;
         observaciones = document.getElementById('observaciones').value;
         tipo = "Observaciones_Prueba";
-        $.post("index.php?ctl=prueba_alarma_guardar", { id_prueba: id_prueba,tipo:tipo, observaciones:observaciones}, function(data){
+        $.post("index.php?ctl=prueba_alarma_guardar", { id_prueba: id_prueba,tipo:tipo, punto_bcr:punto_bcr, observaciones:observaciones}, function(data){
             //alert(data);
+            numero= data.replace(/\D/g,'');
+                if(numero>0){
+                    numero= parseInt(numero);
+                    document.getElementById('ID_Prueba_Alarma').value=numero;
+                }
         });
-    } 
+    }
 }
 function eliminar_registro_prueba(){
     $.confirm({title: 'Confirmación!', content: 'Realmente desea eliminar el reporte de prueba de alarma?', 
@@ -266,4 +325,17 @@ function eliminar_registro_prueba(){
             //$.alert('Canceled!')
         }
     });
+}
+function guarda_seguimiento(){
+    if(document.getElementById('ID_PuntoBCR').value=="0"){
+        alert("Por favor seleccione una agencia para guardar la información");
+    } else {
+        id_prueba=document.getElementById('ID_Prueba_Alarma').value;
+        seguimiento = document.getElementById('seguimiento').value;
+        punto_bcr = document.getElementById('ID_PuntoBCR').value;
+        tipo = "Seguimiento_Prueba";
+        $.post("index.php?ctl=prueba_alarma_guardar", { id_prueba: id_prueba,tipo:tipo, punto_bcr:punto_bcr, seguimiento:seguimiento}, function(data){
+            //alert(data);
+        });
+    }
 }

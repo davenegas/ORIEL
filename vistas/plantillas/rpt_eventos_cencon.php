@@ -2,7 +2,7 @@
 <html lang="es">
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-        <title>Lista de Eventos Cerrados</title>
+        <title>Reporte de Eventos Cencon</title>
         <script language="javascript" src="vistas/js/jquery.js"></script>
         <?php require_once 'frm_librerias_head.html'; ?>   
         

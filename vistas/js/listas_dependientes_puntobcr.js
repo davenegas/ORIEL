@@ -44,16 +44,17 @@ $(document).ready(function(){
     
     //Check para habilitar edicion de Información General del PuntoBCR
     $("#chk_informacion_general").change(function(){
-        if (document.getElementById('Codigo').readOnly==true){
-            document.getElementById('Codigo').readOnly=false;
+        if (document.getElementById('Cuenta_SIS').readOnly==true){
             document.getElementById('Cuenta_SIS').readOnly =false;
-            document.getElementById('Nombre').readOnly =false;
             $("#Tipo_Punto").attr("disabled",false);
+            //document.getElementById('Codigo').readOnly=false;
+            //document.getElementById('Nombre').readOnly =false;
         }else{
-            document.getElementById('Codigo').readOnly=true;
             document.getElementById('Cuenta_SIS').readOnly =true;
-            document.getElementById('Nombre').readOnly =true;
             $("#Tipo_Punto").attr("disabled",true);
+            //document.getElementById('Codigo').readOnly=true;
+            //document.getElementById('Nombre').readOnly =true;
+            
             //Guarda codigo, cuenta_SIS, Nombre y tipo de punto en tabla  T_PuntoBCR
             id_puntobcr = document.getElementById('ID_PuntoBCR').value;
             codigo=document.getElementById('Codigo').value;

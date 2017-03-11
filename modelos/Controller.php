@@ -10330,6 +10330,93 @@
         }  
     }
     
+    public function reporte_prueba_alarma(){
+        if(isset($_SESSION['nombre'])){
+            
+            $obj_prueba = new cls_prueba_alarma();
+            $obj_personal = new cls_personal();
+            $obj_externo = new cls_personal_externo();
+            $obj_usuario = new cls_usuarios();
+            
+            if(isset($_POST['fecha_inicial'])){
+                $fecha_inicio = $_POST['fecha_inicial'];
+                $fecha_fin= $_POST['fecha_final'];
+                //$titulo = "Eventos de Cencon del ".$fecha_inicio." al ".$fecha_fin;
+            } else{
+                $fecha_inicio = date("Y-m-d");
+                $fecha_fin= date("Y-m-d");
+                //$titulo = "Eventos de Cencon de hoy: ".$fecha_inicio;
+            }
+            $obj_prueba->setCondicion("(T_PruebaAlarma.Fecha between '".$fecha_inicio."' AND '".$fecha_fin."')");
+            $obj_prueba->obtener_prueba_alarma();
+            $prueba= $obj_prueba->getArreglo();
+            
+            $tam=count($prueba);
+            for($i=0;$i<$tam;$i++){
+                if($prueba[$i]['ID_Empresa_Persona_Apertura']==1){
+                    $obj_personal->setCondicion("ID_Persona='".$prueba[$i]['ID_Persona_Reporta_Apertura']."'");
+                    $obj_personal->obtener_personas_prontuario();
+                    $persona = $obj_personal->getArreglo();
+                    $prueba[$i] = array_merge((['Nombre_Persona_Apertura' =>($persona[0]['Apellido_Nombre'])]),$prueba[$i]);
+                } else{
+                    $obj_externo->setCondicion("T_PersonalExterno.ID_Persona_Externa='".$prueba[$i]['ID_Persona_Reporta_Apertura']."'");
+                    $obj_externo->obtiene_todo_el_personal_externo();
+                    $persona = $obj_externo->getArreglo();
+                    $prueba[$i] = array_merge((['Nombre_Persona_Apertura' =>($persona[0]['Apellido']." ".$persona[0]['Nombre'])]),$prueba[$i]);
+                }
+                if($prueba[$i]['ID_Empresa_Persona_Cierra']==1){
+                    $obj_personal->setCondicion("ID_Persona='".$prueba[$i]['ID_Persona_Reporta_Cierre']."'");
+                    $obj_personal->obtener_personas_prontuario();
+                    $persona = $obj_personal->getArreglo();
+                    $prueba[$i] = array_merge((['Nombre_Persona_Cierre' =>($persona[0]['Apellido_Nombre'])]),$prueba[$i]);
+                } else{
+                    $obj_externo->setCondicion("T_PersonalExterno.ID_Persona_Externa='".$prueba[$i]['ID_Persona_Reporta_Cierre']."'");
+                    $obj_externo->obtiene_todo_el_personal_externo();
+                    $persona = $obj_externo->getArreglo();
+                    $prueba[$i] = array_merge((['Nombre_Persona_Cierre' =>($persona[0]['Apellido']." ".$persona[0]['Nombre'])]),$prueba[$i]);
+                }
+                //Obtiene la información de los Usuarios que ingresan la información a la tabla
+                if($prueba[$i]['ID_Usuario_reporte']!=null){
+                    $obj_usuario->setCondicion("ID_Usuario=".$prueba[$i]['ID_Usuario_reporte']);
+                    $obj_usuario->obtiene_todos_los_usuarios();
+                    $persona = $obj_usuario->getArreglo();
+                    $prueba[$i] = array_merge((['Nombre_Usuario_Reporte' =>($persona[0]['Apellido']." ".$persona[0]['Nombre'])]),$prueba[$i]);
+                } else{
+                    $prueba[$i] = array_merge((['Nombre_Usuario_Reporte' =>""]),$prueba[$i]);
+                }
+                if($prueba[$i]['ID_Usuario_Prueba']!=null){
+                    $obj_usuario->setCondicion("ID_Usuario=".$prueba[$i]['ID_Usuario_Prueba']);
+                    $obj_usuario->obtiene_todos_los_usuarios();
+                    $persona = $obj_usuario->getArreglo();
+                    $prueba[$i] = array_merge((['Nombre_Usuario_Prueba' =>($persona[0]['Apellido']." ".$persona[0]['Nombre'])]),$prueba[$i]);
+                } else{
+                    $prueba[$i] = array_merge((['Nombre_Usuario_Prueba' =>""]),$prueba[$i]);
+                }
+                if($prueba[$i]['ID_Usuario_Reporte_Cierre']!=null){
+                    $obj_usuario->setCondicion("ID_Usuario=".$prueba[$i]['ID_Usuario_Reporte_Cierre']);
+                    $obj_usuario->obtiene_todos_los_usuarios();
+                    $persona = $obj_usuario->getArreglo();
+                    $prueba[$i] = array_merge((['Nombre_Usuario_Reporte_Cierre' =>($persona[0]['Apellido']." ".$persona[0]['Nombre'])]),$prueba[$i]);
+                } else {
+                    $prueba[$i] = array_merge((['Nombre_Usuario_Reporte_Cierre' =>""]),$prueba[$i]);
+                }
+                if($prueba[$i]['ID_Usuario_Cierra']!=null){
+                    $obj_usuario->setCondicion("ID_Usuario=".$prueba[$i]['ID_Usuario_Cierra']);
+                    $obj_usuario->obtiene_todos_los_usuarios();
+                    $persona = $obj_usuario->getArreglo();
+                    $prueba[$i] = array_merge((['Nombre_Usuario_Cierra' =>($persona[0]['Apellido']." ".$persona[0]['Nombre'])]),$prueba[$i ]);
+                }else{
+                    $prueba[$i] = array_merge((['Nombre_Usuario_Cierra' =>""]),$prueba[$i]);
+                }
+            }
+            require __DIR__.'/../vistas/plantillas/rpt_prueba_alarma.php';
+        }
+        else {
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }
+    }
     ////////////////////////////////////////////////////////////////////////////
     //////////////////////Funciones para Pruebas de alarma//////////////////////  
     ////////////////////////////////////////////////////////////////////////////
@@ -10868,9 +10955,25 @@
                     }
                     break;
                 case 'Observaciones_Prueba':
+                    $obj_prueba->setId_punto($_POST['punto_bcr']);
                     $obj_prueba->setId_prueba($_POST['id_prueba']);
                     $obj_prueba->setObservaciones($_POST['observaciones']);
                     $obj_prueba->guardar_observaciones();
+                    if($_POST['id_prueba']=="0"){
+                        $ultimo = $obj_prueba->getArreglo();
+                        echo $ultimo[0]['ID_Prueba_Alarma'];
+                    }
+                    break;
+                case 'Seguimiento_Prueba':
+                    $obj_prueba->setId_punto($_POST['punto_bcr']);
+                    $obj_prueba->setId_prueba($_POST['id_prueba']);
+                    $obj_prueba->setSeguimiento($_POST['seguimiento']);
+                    $obj_prueba->guardar_seguimiento();
+                    if($_POST['id_prueba']=="0"){
+                        $ultimo = $obj_prueba->getArreglo();
+                        echo $ultimo[0]['ID_Prueba_Alarma'];
+                    }
+                    break;
                 default:
                     break;
             }
@@ -10895,5 +10998,5 @@
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }
     }
-
+    
 }
