@@ -12,8 +12,17 @@ function evento_buscar_puntobcr(){
         document.getElementById('nombre_punto').value=datos['Nombre'];
         document.getElementById('tipo_punto').value=datos['Tipo_Punto'];
         document.getElementById('ID_PuntoBCR').value=datos['ID_PuntoBCR'];
-        
+        document.getElementById('Hora_Apertura_Publico').value=datos['Hora_Apertura_Publico'];
+        document.getElementById('Hora_Cierre_Publico').value=datos['Hora_Cierre_Publico'];
         buscar_pruebas_alarma(datos['ID_PuntoBCR']);
+        
+        if(document.getElementById('Hora_Apertura_Publico').value==""){
+            //alert("hoy no abre");
+            document.getElementById("codigo_agencia").innerHTML="Código de agencia- NO ABRE";
+            document.getElementById("numero_punto").style.border="2px solid red";
+            //animated bounceInUp
+            //$('#codigo_agencia').html("Código de agencia- hoy no abre");
+        }
     });
 }
 function borrar_datos(){
@@ -24,16 +33,20 @@ function borrar_datos(){
     document.getElementById('ID_Prueba_Alarma').value="0";
     document.getElementById('ID_Persona_Reporta_Apertura').value="0";
     document.getElementById('ID_Persona_Reporta_Cierre').value="0";
+    document.getElementById('Hora_Apertura_Publico').value=null;
+    document.getElementById('Hora_Cierre_Publico').value=null;
+    document.getElementById("codigo_agencia").innerHTML="Código de agencia";
+    document.getElementById("numero_punto").removeAttribute("style");
     document.getElementById("hora_apertura").removeAttribute("style");
     document.getElementById("hora_prueba").removeAttribute("style");
-    document.getElementById("hora_cierre").removeAttribute("style");
+    document.getElementById("hora_cierre").removeAttribute("style"); 
     buscar_pruebas_alarma(0);
 }
 function listas_desplegables(){
     //Limpia la listas deplegables para cargar nuevamente la información
 
     //Lista de Tipo Prueba
-    var tipo_prueba='<option value="Panico">Panico</option>';
+    var tipo_prueba='<option value="Pánico">Pánico</option>';
     var tipo_prueba=tipo_prueba+'<option value="Intrusion">Intrusión</option>';
     var tipo_prueba=tipo_prueba+'<option value="Fuego">Fuego</option>';
     $('#tipo_prueba').html(tipo_prueba);
@@ -186,19 +199,67 @@ function guardar_apertura(){
         if(hora_apertura=="" || hora_apertura==null ){
             document.getElementById("hora_apertura").style.border="2px solid red";
         } else {
-            document.getElementById("hora_apertura").removeAttribute("style");
-            id_prueba = document.getElementById('ID_Prueba_Alarma').value;
-            tipo = "Apertura_Alarma_SIS";
-            punto_bcr = document.getElementById('ID_PuntoBCR').value;
+            //Calculo diferencias en horas
+            var fecha1 = new Date("2017/01/01 "+document.getElementById('hora_apertura').value);
+            var fecha2= new Date("2017/01/01 "+document.getElementById('Hora_Apertura_Publico').value);
+            var diff= ((fecha2-fecha1)/60000);
+            
+            if(diff>90){
+                $.confirm({title: 'Confirmación!', content: 'La apertura indicada es antes de lo establecido por normativa, si continua deberá ingresar un evento para justificar la apertura temprana.', 
+                confirm: function(){
+                    document.getElementById("hora_apertura").removeAttribute("style");
+                    id_prueba = document.getElementById('ID_Prueba_Alarma').value;
+                    tipo = "Apertura_Alarma_SIS";
+                    punto_bcr = document.getElementById('ID_PuntoBCR').value;
 
-            $.post("index.php?ctl=prueba_alarma_guardar", { id_prueba: id_prueba, tipo: tipo, punto_bcr:punto_bcr, hora_apertura:hora_apertura}, function(data){
-                // alert(data);
-                numero= data.replace(/\D/g,'');
-                if(numero>0){
-                    numero= parseInt(numero);
-                    document.getElementById('ID_Prueba_Alarma').value=numero;
-                }
-            });
+                    $.post("index.php?ctl=prueba_alarma_guardar", { id_prueba: id_prueba, tipo: tipo, punto_bcr:punto_bcr, hora_apertura:hora_apertura}, function(data){
+                        // alert(data);
+                        numero= data.replace(/\D/g,'');
+                        if(numero>0){
+                            numero= parseInt(numero);
+                            document.getElementById('ID_Prueba_Alarma').value=numero;
+                        }
+                    });
+                    window.open('index.php?ctl=frm_eventos_agregar&id='+document.getElementById('ID_PuntoBCR').value);
+                },
+                cancel: function(){}
+                });
+            } if(diff<=-1){
+                $.confirm({title: 'Confirmación!', content: 'La apertura esta fuera de horario, si continua debera ingresar un evento para justificar la apertura.', 
+                confirm: function(){
+                    document.getElementById("hora_apertura").removeAttribute("style");
+                    id_prueba = document.getElementById('ID_Prueba_Alarma').value;
+                    tipo = "Apertura_Alarma_SIS";
+                    punto_bcr = document.getElementById('ID_PuntoBCR').value;
+
+                    $.post("index.php?ctl=prueba_alarma_guardar", { id_prueba: id_prueba, tipo: tipo, punto_bcr:punto_bcr, hora_apertura:hora_apertura}, function(data){
+                        // alert(data);
+                        numero= data.replace(/\D/g,'');
+                        if(numero>0){
+                            numero= parseInt(numero);
+                            document.getElementById('ID_Prueba_Alarma').value=numero;
+                        }
+                    });
+                    window.open('index.php?ctl=frm_eventos_agregar&id='+document.getElementById('ID_PuntoBCR').value);
+                },
+                cancel: function(){}
+                });
+            } if(diff<90 && diff>=0) {
+                document.getElementById("hora_apertura").removeAttribute("style");
+                id_prueba = document.getElementById('ID_Prueba_Alarma').value;
+                tipo = "Apertura_Alarma_SIS";
+                punto_bcr = document.getElementById('ID_PuntoBCR').value;
+
+                $.post("index.php?ctl=prueba_alarma_guardar", { id_prueba: id_prueba, tipo: tipo, punto_bcr:punto_bcr, hora_apertura:hora_apertura}, function(data){
+                    // alert(data);
+                    numero= data.replace(/\D/g,'');
+                    if(numero>0){
+                        numero= parseInt(numero);
+                        document.getElementById('ID_Prueba_Alarma').value=numero;
+                    }
+                });
+            }
+            
         }
     }
 }
@@ -274,18 +335,66 @@ function guardar_cierre(){
         if(cierre=="" || cierre==null ){
             document.getElementById("hora_cierre").style.border="2px solid red";
         } else {
-            document.getElementById("hora_cierre").removeAttribute("style");
-            punto_bcr = document.getElementById('ID_PuntoBCR').value;
-            id_prueba=document.getElementById('ID_Prueba_Alarma').value;
-            tipo = "Cierre_Agencia";
-            $.post("index.php?ctl=prueba_alarma_guardar", { id_prueba: id_prueba, punto_bcr:punto_bcr, tipo:tipo, cierre:cierre}, function(data){
-                //alert(data);
-                numero= data.replace(/\D/g,'');
-                if(numero>0){
-                    numero= parseInt(numero);
-                    document.getElementById('ID_Prueba_Alarma').value=numero;
-                }
-            });
+            
+            var fecha1 = new Date("2017/01/01 "+document.getElementById('hora_cierre').value);
+            var fecha2= new Date("2017/01/01 "+document.getElementById('Hora_Cierre_Publico').value);
+            var diff= ((fecha1-fecha2)/60000);
+            
+            console.log(diff);
+            if(diff<0){
+                $.confirm({title: 'Confirmación!', content: 'El cierre indicado es antes del cierre a público, si continua deberá ingresar un evento para justificar el cierre temprano', 
+                confirm: function(){
+                    document.getElementById("hora_cierre").removeAttribute("style");
+                    punto_bcr = document.getElementById('ID_PuntoBCR').value;
+                    id_prueba=document.getElementById('ID_Prueba_Alarma').value;
+                    tipo = "Cierre_Agencia";
+                    $.post("index.php?ctl=prueba_alarma_guardar", { id_prueba: id_prueba, punto_bcr:punto_bcr, tipo:tipo, cierre:cierre}, function(data){
+                        //alert(data);
+                        numero= data.replace(/\D/g,'');
+                        if(numero>0){
+                            numero= parseInt(numero);
+                            document.getElementById('ID_Prueba_Alarma').value=numero;
+                        }
+                    });
+                    window.open('index.php?ctl=frm_eventos_agregar&id='+document.getElementById('ID_PuntoBCR').value);
+                },
+                cancel: function(){}
+                });
+            }
+            if(diff>240){
+               $.confirm({title: 'Confirmación!', content: 'El cierre indicado es 4 horas después del cierre a público, si continua deberá ingresar un evento para justificar el cierre tardío', 
+                confirm: function(){
+                    document.getElementById("hora_cierre").removeAttribute("style");
+                    punto_bcr = document.getElementById('ID_PuntoBCR').value;
+                    id_prueba=document.getElementById('ID_Prueba_Alarma').value;
+                    tipo = "Cierre_Agencia";
+                    $.post("index.php?ctl=prueba_alarma_guardar", { id_prueba: id_prueba, punto_bcr:punto_bcr, tipo:tipo, cierre:cierre}, function(data){
+                        //alert(data);
+                        numero= data.replace(/\D/g,'');
+                        if(numero>0){
+                            numero= parseInt(numero);
+                            document.getElementById('ID_Prueba_Alarma').value=numero;
+                        }
+                    });
+                    window.open('index.php?ctl=frm_eventos_agregar&id='+document.getElementById('ID_PuntoBCR').value);
+                },
+                cancel: function(){}
+                }); 
+            }
+            if(diff>=0 && diff<=240){
+                document.getElementById("hora_cierre").removeAttribute("style");
+                punto_bcr = document.getElementById('ID_PuntoBCR').value;
+                id_prueba=document.getElementById('ID_Prueba_Alarma').value;
+                tipo = "Cierre_Agencia";
+                $.post("index.php?ctl=prueba_alarma_guardar", { id_prueba: id_prueba, punto_bcr:punto_bcr, tipo:tipo, cierre:cierre}, function(data){
+                    //alert(data);
+                    numero= data.replace(/\D/g,'');
+                    if(numero>0){
+                        numero= parseInt(numero);
+                        document.getElementById('ID_Prueba_Alarma').value=numero;
+                    }
+                });  
+            }
         }
     } 
 }

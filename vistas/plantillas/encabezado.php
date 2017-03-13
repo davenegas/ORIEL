@@ -310,6 +310,10 @@
                             <?php if ($_SESSION['modulos']['Módulo-Cencon']==1){ ?>
                                 <li><a href="index.php?ctl=manual_cencon">Manual Cencon</a></li>
                             <?php }; ?>
+                                
+                            <?php if ($_SESSION['modulos']['Módulo-Pruebas alarma']==1){ ?>
+                                <li><a href="index.php?ctl=manual_prueba_alarma">Manual Pruebas Alarma</a></li>
+                            <?php }; ?>    
                         </ul>
                     </li>
                 <?php }; ?>       

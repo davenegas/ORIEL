@@ -106,13 +106,19 @@ function todos_cajero(funcion){
 function evento_buscar_cajero(){
     id= document.getElementById('numero_atm').value;
     $.post("index.php?ctl=evento_buscar_cajero", { id: id}, function(data){
-        var res = data.substring(data.indexOf("{"), data.length);
-        var datos =JSON.parse(res);
-        
-        document.getElementById('nombre_atm').value=datos['Nombre'];
-        document.getElementById('tipo_atm').value=datos['Tipo_Punto'];
-        document.getElementById('ID_PuntoBCR').value=datos['ID_PuntoBCR'];
-        
+        var n= data.search("No se encontró");
+        if(n==-1){
+            var res = data.substring(data.indexOf("{"), data.length);
+            var datos =JSON.parse(res);
+            
+            document.getElementById('ID_PuntoBCR').value=datos['ID_PuntoBCR'];
+            document.getElementById('nombre_atm').value=datos['Nombre'];
+            document.getElementById('tipo_atm').value=datos['Tipo_Punto'];
+        } else{
+            document.getElementById('nombre_atm').value="No se encontró el cajero";
+            document.getElementById('tipo_atm').value="";
+            document.getElementById('ID_PuntoBCR').value="0";
+        }
         var d = new Date();
         hora_actual=d.getHours()+':'+d.getMinutes();
         if((String(d.getHours()).length)==1){
@@ -134,40 +140,47 @@ function evento_buscar_persona(){
     
     //Busca información de la cedula digitada
     var datos = new Array;
+    var n=-1;
     $.post("index.php?ctl=evento_buscar_persona", { id: id}, function(data){
         //alert(data);
-        var res = data.substring(data.indexOf("{"), data.length);
-        datos =JSON.parse(res);
-        document.getElementById('ID_Empresa').value=datos['ID_Empresa'];
-        if(datos['ID_Empresa']==1){
-            document.getElementById('nombre_persona').value=datos['Apellido_Nombre'];
-            document.getElementById('unidad_ejecutora').value=datos['Departamento'];
-            document.getElementById('ID_Persona').value=datos['ID_Persona'];
+        n= data.search("No se encontró");
+        if(n==-1){
+            var res = data.substring(data.indexOf("{"), data.length);
+            datos =JSON.parse(res);
+            document.getElementById('ID_Empresa').value=datos['ID_Empresa'];
+            if(datos['ID_Empresa']==1){
+                document.getElementById('nombre_persona').value=datos['Apellido_Nombre'];
+                document.getElementById('unidad_ejecutora').value=datos['Departamento'];
+                document.getElementById('ID_Persona').value=datos['ID_Persona'];
+            } else {
+                document.getElementById('nombre_persona').value=datos['Apellido']+datos['Nombre'];
+                document.getElementById('unidad_ejecutora').value=datos['Empresa'];
+                document.getElementById('ID_Persona').value=datos['ID_Persona_Externa'];
+            }
         } else {
-            document.getElementById('nombre_persona').value=datos['Apellido']+datos['Nombre'];
-            document.getElementById('unidad_ejecutora').value=datos['Empresa'];
-            document.getElementById('ID_Persona').value=datos['ID_Persona_Externa'];
+            document.getElementById('nombre_persona').value="No se encontró la persona";
+            document.getElementById('unidad_ejecutora').value="";
+            document.getElementById('ID_Persona').value="0";
         }
     });
     //Busca lista de cajeros con acceso de la persona
     var cajeros= new Array();
     var accesos = "";
     empresa = document.getElementById('ID_Empresa').value;
-    $.post("index.php?ctl=evento_buscar_relaciones", { id: id, empresa:empresa}, function(data){
-        //alert (data);
-        var r = data.substring(data.indexOf("{"), data.length);
-        cajeros= JSON.parse(r);
-        var result=[];
-        for (var i in cajeros){
-            result.push([i,cajeros[i]]);
-        }
-        //alert (result.length);
-        for( var j=0; j<result.length;j++){
-            accesos+=" -"+(cajeros[j]['Codigo']);
-        }
-        document.getElementById('acceso_atms').value= accesos;
-    });
-    
+        $.post("index.php?ctl=evento_buscar_relaciones", { id: id, empresa:empresa}, function(data){
+            //alert (data);
+            var r = data.substring(data.indexOf("{"), data.length);
+            cajeros= JSON.parse(r);
+            var result=[];
+            for (var i in cajeros){
+                result.push([i,cajeros[i]]);
+            }
+            //alert (result.length);
+            for( var j=0; j<result.length;j++){
+                accesos+=" -"+(cajeros[j]['Codigo']);
+            }
+            document.getElementById('acceso_atms').value= accesos;
+        });
 }
 function agregar_evento_cencon(){
     if (document.getElementById('cedula').value == "" || document.getElementById('numero_atm').value == "") {
@@ -293,4 +306,15 @@ function reasignar_apertura_cencon(){
             //$.alert('Canceled!')
         }
     });
+}
+function limpiar_info_cajero(){
+    document.getElementById('nombre_atm').value="";
+    document.getElementById('tipo_atm').value="";
+    document.getElementById('ID_PuntoBCR').value="0";
+}
+function limpiar_info_persona(){
+    document.getElementById('nombre_persona').value="";
+    document.getElementById('unidad_ejecutora').value="";
+    document.getElementById('ID_Persona').value="0";
+    document.getElementById('acceso_atms').value= "";
 }

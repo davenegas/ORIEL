@@ -228,12 +228,13 @@
                     <label for="validado">Validado</label>
                     <?php if($_SESSION['modulos']['Validar- Personal Externo']==1){ ?>
                     <select class="form-control" id="validado" name="validado" onchange="validar_persona_externa();">
-                        <?php if($params[0]['Validado']=='0'){?>
-                            <option value="0" selected style="color: red">No Validado</option>
-                            <option value="1">Validado</option>
-                        <?php } else { ?>
+                        <?php if($params[0]['Validado']=='1'){?>
                             <option value="0" style="color: red">No Validado</option>
                             <option value="1" selected>Validado</option>
+                            
+                        <?php } else { ?>
+                            <option value="0" selected style="color: red">No Validado</option>
+                            <option value="1">Validado</option>
                         <?php }?>  
                     </select>
                     <?php } else{ ?>

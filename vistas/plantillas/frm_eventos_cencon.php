@@ -27,7 +27,7 @@
                         <form class="bordegris" id="nuevo_evento_cencon" method="post" name="form" action="index.php?ctl=">
                             <div class="col-sm-4 espacio-abajo-5">
                                 <label for="numero_atm">Número de Cajero Automático</label>
-                                <input type="text" class="form-control" id="numero_atm" name="numero_atm" onblur="evento_buscar_cajero();" placeholder="Digite el número del cajero automático">
+                                <input type="text" class="form-control" id="numero_atm" name="numero_atm" onclick="limpiar_info_cajero();" onblur="evento_buscar_cajero();" placeholder="Digite el número del cajero automático">
                             </div>
                             <div class="col-sm-4 espacio-abajo-5">
                                 <label for="nombre_atm">Nombre del Cajero Automático</label>
@@ -39,7 +39,7 @@
                             </div>
                             <div class="col-sm-4 espacio-abajo-5">
                                 <label for="cedula">Número de Cedula</label>
-                                <input type="text" class="form-control" id="cedula" name="cedula" onblur="evento_buscar_persona();" placeholder="Digite el número de cedula">
+                                <input type="text" class="form-control" id="cedula" name="cedula" onclick="limpiar_info_persona();" onblur="evento_buscar_persona();" placeholder="Digite el número de cedula">
                             </div>
                             <div>
                                 <input hidden type="text" id="ID_Empresa">

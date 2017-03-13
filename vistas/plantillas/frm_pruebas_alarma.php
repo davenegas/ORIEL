@@ -65,18 +65,23 @@
                     <input type="text" hidden id="ID_Prueba_Alarma" name="ID_Prueba_Alarma" value="0">
                     <input type="text" hidden id="ID_Persona_Reporta_Apertura" name="ID_Persona_Reporta_Apertura"  value="0">
                     <input type="text" hidden id="ID_Persona_Reporta_Cierre" name="ID_Persona_Reporta_Cierre"  value="0">
+                    <input type="text" hidden id="tipo_punto" name="tipo_punto" placeholder="">
                     
                     <div class="col-sm-4 espacio-abajo-5">
-                        <label for="numero_punto">Código de agencia</label>
+                        <label for="numero_punto" id="codigo_agencia">Código de agencia</label>
                         <input type="text" class="form-control" id="numero_punto" name="numero_punto" onblur="evento_buscar_puntobcr();" onfocus="borrar_datos();" placeholder="Digite el código de la agencia">
                     </div>
                     <div class="col-sm-4 espacio-abajo-5">
                         <label for="nombre_punto">Nombre de la agencia</label>
                         <input type="text" class="form-control" disabled id="nombre_punto" name="nombre_punto" placeholder="">
                     </div>
-                    <div class="col-sm-4 espacio-abajo-5">
-                        <label for="tipo_punto">Tipo de agencia</label>
-                        <input type="text" class="form-control" disabled id="tipo_punto" name="tipo_punto" placeholder="">
+                    <div class="col-sm-2 espacio-abajo-5">
+                        <label for="tipo_punto">Apertura público</label>
+                        <input type="time" class="form-control" disabled id="Hora_Apertura_Publico" name="Hora_Apertura_Publico">
+                    </div>
+                    <div class="col-sm-2 espacio-abajo-5">
+                        <label for="tipo_punto">Cierre público</label>
+                        <input type="time" class="form-control" disabled id="Hora_Cierre_Publico" name="Hora_Cierre_Publico">
                     </div>
                     <div class="col-sm-4 espacio-abajo">
                         <label for="nombre_persona_prueba">Persona reporta prueba alarma</label>
@@ -89,7 +94,7 @@
                     <div class="col-sm-2 espacio-abajo">
                         <label for="tipo_prueba">Tipo Prueba</label>
                         <select class="form-control" id="tipo_prueba" name="tipo_prueba" onchange="guardar_registro_prueba('Tipo_Prueba');">
-                            <option value="Panico">Panico</option>
+                            <option value="Pánico">Pánico</option>
                             <option value="Intrusion">Intrusión</option>
                             <option value="Fuego">Fuego</option>
                         </select>

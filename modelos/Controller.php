@@ -7942,9 +7942,12 @@
             //Convierte la información en un json para enviarlo a JavaScript
             unset($obj_cencon);
             unset($obj_punto);
-            echo json_encode($cajero[0], JSON_FORCE_OBJECT);
-            //echo json_encode($cajero);
-            //print_r($cajero[0]);
+            
+            if($cajero[0]!=null){
+                echo json_encode($cajero[0], JSON_FORCE_OBJECT);
+            } else {
+                echo "No se encontró la persona";
+            }
         }
         else {
             $tipo_de_alerta="alert alert-warning";
@@ -7983,7 +7986,12 @@
             unset($obj_cencon); 
             unset($obj_persona);
             unset($obj_externo);
-            echo json_encode($funcionario[0], JSON_FORCE_OBJECT);
+            
+            if($funcionario[0]!=null){
+                echo json_encode($funcionario[0], JSON_FORCE_OBJECT);
+            } else {
+                echo "No se encontró la persona";
+            }
         }
         else {
             $tipo_de_alerta="alert alert-warning";
@@ -9699,7 +9707,18 @@
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }
     }
-     
+    
+    public function manual_prueba_alarma(){
+       if(isset($_SESSION['nombre'])){
+            //Llamada al formulario correspondiente de la vista
+            require __DIR__ . '/../vistas/plantillas/frm_ayuda_pruebas_alarma.php';
+        } else {
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        } 
+    }
+    
     public function guarda_revision_de_video_actual() {
        if(isset($_SESSION['nombre'])){
            $obj_puesto_monitoreo = new cls_puestos_de_monitoreo();
@@ -10782,10 +10801,41 @@
             //Buscar la información de un PuntoBCR basado en el código del cajero
              $obj_punto->setCondicion("T_PuntoBCR.Codigo='".strtoupper($_POST['id'])."' AND T_PuntoBCR.Estado=1");
             $obj_punto->obtiene_todos_los_puntos_bcr();
-            $cajero = $obj_punto->getArreglo();
+            $puntobcr = $obj_punto->getArreglo();
             
+            $fecha_actual= getdate();
+            switch ($fecha_actual['weekday']) {
+                    case 'Monday':
+                        $puntobcr[0] = array_merge((['Hora_Apertura_Publico' =>($puntobcr[0]['Hora_Apertura_Lunes'])]),$puntobcr[0]);
+                        $puntobcr[0] = array_merge((['Hora_Cierre_Publico' =>($puntobcr[0]['Hora_Cierre_Lunes'])]),$puntobcr[0]);
+                        break;
+                    case 'Tuesday':
+                        $puntobcr[0] = array_merge((['Hora_Apertura_Publico' =>($puntobcr[0]['Hora_Apertura_Martes'])]),$puntobcr[0]);
+                        $puntobcr[0] = array_merge((['Hora_Cierre_Publico' =>($puntobcr[0]['Hora_Cierre_Martes'])]),$puntobcr[0]);
+                        break;
+                    case 'Wednesday':
+                        $puntobcr[0] = array_merge((['Hora_Apertura_Publico' =>($puntobcr[0]['Hora_Apertura_Miercoles'])]),$puntobcr[0]);
+                        $puntobcr[0] = array_merge((['Hora_Cierre_Publico' =>($puntobcr[0]['Hora_Cierre_Miercoles'])]),$puntobcr[0]);
+                        break;
+                    case 'Thursday':
+                        $puntobcr[0] = array_merge((['Hora_Apertura_Publico' =>($puntobcr[0]['Hora_Apertura_Jueves'])]),$puntobcr[0]);
+                        $puntobcr[0] = array_merge((['Hora_Cierre_Publico' =>($puntobcr[0]['Hora_Cierre_Jueves'])]),$puntobcr[0]);
+                        break;
+                    case 'Friday':
+                        $puntobcr[0] = array_merge((['Hora_Apertura_Publico' =>($puntobcr[0]['Hora_Apertura_Viernes'])]),$puntobcr[0]);
+                        $puntobcr[0] = array_merge((['Hora_Cierre_Publico' =>($puntobcr[0]['Hora_Cierre_Viernes'])]),$puntobcr[0]);
+                        break;
+                    case 'Saturday':
+                        $puntobcr[0] = array_merge((['Hora_Apertura_Publico' =>($puntobcr[0]['Hora_Apertura_Sabado'])]),$puntobcr[0]);
+                        $puntobcr[0] = array_merge((['Hora_Cierre_Publico' =>($puntobcr[0]['Hora_Cierre_Sabado'])]),$puntobcr[0]);
+                        break;
+                    case 'Sunday':
+                        $puntobcr[0] = array_merge((['Hora_Apertura_Publico' =>($puntobcr[0]['Hora_Apertura_Domingo'])]),$puntobcr[0]);
+                        $puntobcr[0] = array_merge((['Hora_Cierre_Publico' =>($puntobcr[0]['Hora_Cierre_Domingo'])]),$puntobcr[0]);
+                        break;
+                }
             //Convierte la información en un json para enviarlo a JavaScript
-            echo json_encode($cajero[0], JSON_FORCE_OBJECT);
+            echo json_encode($puntobcr[0], JSON_FORCE_OBJECT);
         }
         else {
             $tipo_de_alerta="alert alert-warning";
