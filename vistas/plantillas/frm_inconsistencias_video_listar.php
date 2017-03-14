@@ -1,7 +1,7 @@
 <html lang="es">
     <head>
         <meta charset="utf-8"/>
-        <title>Lista de Puestos de Monitoreo</title>
+        <title>Inconsistencias de Video</title>
         <?php require_once 'frm_librerias_head.html';?>
         <link rel="stylesheet" href="vistas/css/ventanaoculta.css">
         <script>
@@ -172,29 +172,22 @@
    <?php require_once 'encabezado.php';?>
         
         <div class="container animated fadeIn col-xs-10 quitar-float">
-        <h2>Listado General de Puestos de Monitoreo (Control de Video)</h2>
-        <h4><a href="index.php?ctl=inconsistencias_de_video_listar">Inconsistencias de Video</a></h4>
+        <h2>Listado General de Inconsistencias Generadas desde el Control de Video</h2>
         <p>A continuación se detallan los diferentes puestos de monitoreo registrados en el sistema:</p>            
         <table id="tabla" class="display" cellspacing="0">
           <thead>
             <tr>
-              <th hidden="hidden">ID_Puesto_Monitoreo</th>
-              <th style="text-align:center">Nombre</th>
-              <th style="text-align:center">Descripción</th>
-              <th style="text-align:center">Usuario Actual</th>
-              <th style="text-align:center">Observaciones</th>
-              <?php if ($_SESSION['modulos']['Catálogos-Puestos de Monitoreo']==1){?>  
-                <th style="text-align:center">Tiempo Estándar Revisión (Segundos)</th>
-                <th style="text-align:center">Total de Unidades</th>
-                <th style="text-align:center">Total Cámaras</th>
-                <th style="text-align:center">Total Minutos</th>
-                <th style="text-align:center">Estado</th>
-                <th style="text-align:center">Cambiar Estado</th>
-                <th style="text-align:center">Mantenimiento</th>
-                <th style="text-align:center">Control de Video</th>
-               <?php }?>
-              <th style="text-align:center">Tomar</th>
-              <th style="text-align:center">Liberar</th>
+              <th hidden="hidden">ID_Inconsistencia_Video</th>
+              <th hidden="hidden">ID_Bitacora_Revision_Video</th>
+              <th hidden="hidden">ID_Unidad_Video</th>
+              <th style="text-align:center">Estado</th>
+              <th style="text-align:center">Unidad Video</th>
+              <th style="text-align:center">Detectado por</th>
+              <th style="text-align:center">Detalle</th>
+              <th style="text-align:center">Puesto de Monitoreo</th>
+              <th style="text-align:center">Validado por</th>
+              <th style="text-align:center">Reportado por</th>
+              <th style="text-align:center">Solventado por</th>
             </tr>
           </thead>
     <tbody>
@@ -203,52 +196,24 @@
             for ($i = 0; $i <$tam; $i++) {
             ?>
             <tr>
-                <td hidden="hidden"><?php echo $params[$i]['ID_Puesto_Monitoreo'];?></td>
-                <td style="text-align:center"><?php echo $params[$i]['Nombre'];?></td>
+                <td hidden="hidden"><?php echo $params[$i]['ID_Inconsistencia_Video'];?></td>
+                <td hidden="hidden"><?php echo $params[$i]['ID_Bitacora_Revision_Video'];?></td>
+                <td hidden="hidden"><?php echo $params[$i]['ID_Unidad_Video'];?></td>
+                <td style="text-align:center"><?php echo $params[$i]['Estado_Traducido'];?></td>
                 <td style="text-align:center"><?php echo $params[$i]['Descripcion'];?></td>
-                <td style="text-align:center"><?php echo $params[$i]['Nombre_Completo'];?></td>
-                <td style="text-align:center"><?php echo $params[$i]['Observaciones'];?></td>
-                <?php if ($_SESSION['modulos']['Catálogos-Puestos de Monitoreo']==1){?> 
-                <td style="text-align:center"><?php echo $params[$i]['Tiempo_Estandar_Revision'];?></td>
-                <td style="text-align:center"><?php echo $vector_estadisticas[$i]['Total_Unidades'];?></td>
-                <td style="text-align:center"><?php echo $vector_estadisticas[$i]['Total_Camaras'];?></td>
-                <td style="text-align:center"><?php echo $vector_estadisticas[$i]['Total_Minutos'];?></td>
-                <?php if ($params[$i]['Estado']==1){?>  
-                    <td style="text-align:center">Activo</td>
-                <?php }else {?>  
-                    <td style="text-align:center">Inactivo</td>
-                <?php }?>
-                  <td style="text-align:center"><a href="index.php?ctl=puesto_monitoreo_cambiar_estado&id=<?php echo $params[$i]['ID_Puesto_Monitoreo']?>&estado=<?php echo $params[$i]['Estado']?>">
-                    Activar/Desactivar</a></td>
-                
-             <td style="text-align:center"><a role="button" onclick="Editar_Puesto_Monitoreo('<?php echo $params[$i]['ID_Puesto_Monitoreo'];?>','<?php echo $params [$i]['Nombre'];?>',
-             '<?php echo $params [$i]['Descripcion'];?>','<?php echo $params [$i]['Observaciones'];?>','<?php echo $params [$i]['Tiempo_Estandar_Revision'];?>')">Editar</a></td>
-                    
-            <td style="text-align:center"><a href="index.php?ctl=puestos_de_monitoreo_editar&id=<?php echo $params[$i]['ID_Puesto_Monitoreo']?>&tiempo_revision=<?php echo $params[$i]['Tiempo_Estandar_Revision']?>&nombre=<?php echo $params[$i]['Nombre']?>">
-                   Lista de Unidades</a></td>
-             <?php }?>
-             <?php if ($params[$i]['Nombre_Completo']=="Libre"){?>  
-                    <td style="text-align:center"><a href="#" onclick="tomar_puesto_de_monitoreo('<?php echo $params[$i]['ID_Puesto_Monitoreo'];?>','<?php echo $params[$i]['Nombre'];?>');">Tomar Puesto</a></td>
-                <?php }else {?>  
-                    <td style="text-align:center"></td>
-             <?php }?>
-                    
-             <?php if ($params[$i]['Nombre_Completo']=="Libre"){?>  
-                    <td style="text-align:center"></td>
-                <?php }else {?>  
-                    <td style="text-align:center"><a href="#" onclick="liberar_puesto_de_monitoreo('<?php echo $params[$i]['ID_Puesto_Monitoreo'];?>','<?php echo $params[$i]['ID_Usuario'];?>','<?php echo $params[$i]['ID_Usuario'];?>');">Liberar Puesto</a></td>
-                    
-             <?php }?>       
-                    
-            
-            
-            
+                <td style="text-align:center"><?php echo $params[$i]['Detectado_Por'];?></td>
+                <td style="text-align:center"><?php echo $params[$i]['Reporta_Situacion'];?></td>
+                <td style="text-align:center"><?php echo $params[$i]['Nombre_Puesto'];?></td>
+                <td style="text-align:center"><?php echo $params[$i]['ID_Usuario_Valida'];?></td>
+                <td style="text-align:center"><?php echo $params[$i]['ID_Usuario_Reporta_SE'];?></td>
+                <td style="text-align:center"><?php echo $params[$i]['ID_Usuario_Reporta_Solucionada'];?></td>
+                               
             </tr>     
            
-                    <?php } ?>
+            <?php } ?>
             </tbody>
         </table>
-        <a id="popup" onclick="mostrar_agregar_puesto_monitoreo()" class="btn btn-default" role="button">Agregar Nuevo Puesto de Monitoreo</a>
+        <!--<a id="popup" onclick="mostrar_agregar_puesto_monitoreo()" class="btn btn-default" role="button">Agregar Nuevo Puesto de Monitoreo</a>-->
         </div>
        <!--agregar o editar-->
         <div id="ventana_oculta_1"> 

@@ -35,6 +35,26 @@ class cls_puestos_de_monitoreo{
     public $tiempo_estandar_revision;
     public $tiempo_personalizado_revision;
     
+    public $id_inconsistencia_video;
+    public $estado_inconsistencia;
+    
+    function getEstado_inconsistencia() {
+        return $this->estado_inconsistencia;
+    }
+
+    function setEstado_inconsistencia($estado_inconsistencia) {
+        $this->estado_inconsistencia = $estado_inconsistencia;
+    }
+   
+    function getId_inconsistencia_video() {
+        return $this->id_inconsistencia_video;
+    }
+
+    function setId_inconsistencia_video($id_inconsistencia_video) {
+        $this->id_inconsistencia_video = $id_inconsistencia_video;
+    }
+
+        
     function getUltima_posicion_concluida() {
         return $this->ultima_posicion_concluida;
     }
@@ -328,10 +348,12 @@ class cls_puestos_de_monitoreo{
         $this->nombre="";
         $this->observaciones="";
         $this->estado="";
+        $this->estado_inconsistencia="";
         $this->id_puesto_monitoreo_unidad_video="";
         $this->id_unidad_video="";
         $this->posicion="";
         $this->tiempo_personalizado_revision="";
+        $this->id_inconsistencia_video="";
     
    }
    
@@ -506,6 +528,33 @@ class cls_puestos_de_monitoreo{
         } 
     }
    
+    public function obtiene_inconsistencias_de_video(){
+        $this->obj_data_provider->conectar();
+        if($this->condicion==""){
+            $this->arreglo=$this->obj_data_provider->trae_datos(" t_inconsistenciavideo INNER JOIN t_bitacorarevisionesvideo ON t_bitacorarevisionesvideo.ID_Bitacora_Revision_Video = t_inconsistenciavideo.ID_Bitacora_Revision_Video
+                    INNER JOIN t_usuario ON t_usuario.ID_Usuario = T_BitacoraRevisionesVideo.ID_Usuario
+                    Inner join t_unidadvideo on t_unidadvideo.ID_Unidad_Video=t_bitacorarevisionesvideo.ID_Unidad_Video
+                    inner join T_PuestoMonitoreo on T_PuestoMonitoreo.ID_Puesto_Monitoreo=t_bitacorarevisionesvideo.ID_Puesto_Monitoreo
+                    order by ID_Inconsistencia_Video",
+                    "t_inconsistenciavideo . * ,T_BitacoraRevisionesVideo.ID_Unidad_Video ,T_BitacoraRevisionesVideo.Reporta_Situacion, CONCAT( CONCAT( t_usuario.Nombre,  ' ' ) , t_usuario.Apellido ) AS Detectado_Por,case t_inconsistenciavideo.Estado  when 0 then 'Pendiente'  when 1 then 'Atendida'  when 2 then 'Validada' when 3 then 'Reparada' end as Estado_Traducido,t_unidadvideo.Descripcion,T_PuestoMonitoreo.Nombre as Nombre_Puesto","");
+            $this->arreglo=$this->obj_data_provider->getArreglo();
+            $this->obj_data_provider->desconectar();
+        }
+        else{
+$this->arreglo=$this->obj_data_provider->trae_datos(" t_inconsistenciavideo INNER JOIN t_bitacorarevisionesvideo ON t_bitacorarevisionesvideo.ID_Bitacora_Revision_Video = t_inconsistenciavideo.ID_Bitacora_Revision_Video
+                    INNER JOIN t_usuario ON t_usuario.ID_Usuario = T_BitacoraRevisionesVideo.ID_Usuario
+                    Inner join t_unidadvideo on t_unidadvideo.ID_Unidad_Video=t_bitacorarevisionesvideo.ID_Unidad_Video
+                    inner join T_PuestoMonitoreo on T_PuestoMonitoreo.ID_Puesto_Monitoreo=t_bitacorarevisionesvideo.ID_Puesto_Monitoreo
+                    order by ID_Inconsistencia_Video",
+                    "t_inconsistenciavideo . * ,T_BitacoraRevisionesVideo.ID_Unidad_Video ,T_BitacoraRevisionesVideo.Reporta_Situacion, CONCAT( CONCAT( t_usuario.Nombre,  ' ' ) , t_usuario.Apellido ) AS Detectado_Por,case t_inconsistenciavideo.Estado  when 0 then 'Pendiente'  when 1 then 'Atendida'  when 2 then 'Validada' when 3 then 'Reparada' end as Estado_Traducido,t_unidadvideo.Descripcion,T_PuestoMonitoreo.Nombre as Nombre_Puesto",
+                    $this->condicion." order by ID_Inconsistencia_Video");
+            $this->arreglo=$this->obj_data_provider->getArreglo();
+            $this->obj_data_provider->desconectar();
+        } 
+    }
+   
+    
+    
     public function actualizar_campo_unidades_de_video(){
         $this->obj_data_provider->conectar();
         $this->arreglo=$this->obj_data_provider->edita_datos("t_unidadvideo", $this->campos_valores ,$this->condicion);
@@ -675,6 +724,13 @@ class cls_puestos_de_monitoreo{
     public function agregar_nuevo_registro_bitacora_revisiones_de_video(){
         $this->obj_data_provider->conectar();
         $this->obj_data_provider->inserta_datos("t_bitacorarevisionesvideo", "ID_Bitacora_Revision_Video,Fecha_Inicia_Revision,Hora_Inicia_Revision,ID_Bitacora_Control_Puesto_Monitoreo,ID_Usuario,ID_Unidad_Video,ID_Puesto_Monitoreo,Posicion,Observaciones,Estado", "null,'".$this->fecha_inicia_revision."','".$this->hora_inicia_revision."',".$this->id_ultimo_toma_puesto_ingresada.",".$this->id_usuario.",".$this->id_unidad_video.",".$this->id_puesto_monitoreo.",".$this->posicion.",'".$this->observaciones."',".$this->estado);
+        $this->arreglo=$this->obj_data_provider->getArreglo();
+        $this->obj_data_provider->desconectar();
+    }
+    
+     public function agregar_nuevo_registro_inconsistencias_de_video(){
+        $this->obj_data_provider->conectar();
+        $this->obj_data_provider->inserta_datos("T_InconsistenciaVideo", "ID_Inconsistencia_Video,ID_Bitacora_Revision_Video,Estado", "null,".$this->id_bitacora_revision_video.",".$this->estado_inconsistencia);
         $this->arreglo=$this->obj_data_provider->getArreglo();
         $this->obj_data_provider->desconectar();
     }

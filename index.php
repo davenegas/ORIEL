@@ -189,6 +189,7 @@ $map = array(
     'actualiza_segundero_revision_video'=>array('controller'=>'Controller','action'=> 'actualiza_segundero_revision_video'),    
     'guarda_revision_de_video_actual'=>array('controller'=>'Controller','action'=> 'guarda_revision_de_video_actual'),    
     'guarda_justificacion_retraso_control_de_video'=>array('controller'=>'Controller','action'=> 'guarda_justificacion_retraso_control_de_video'),    
+    'inconsistencias_de_video_listar'=>array('controller'=>'Controller','action'=> 'inconsistencias_de_video_listar'),    
                      
     //Información Proveedor enlaces
     'proveedor_listar'=>array('controller'=>'Controller', 'action'=>'proveedor_listar'),

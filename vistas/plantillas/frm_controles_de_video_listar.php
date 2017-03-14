@@ -56,13 +56,18 @@
             
              //Valida informacion completa de formulario de proveedor
             function check_empty() {
-                if (document.getElementById('txt_retraso').value =="") {
+                var str=document.getElementById('txt_retraso').value.trim();
+                if (str =="") {
                     alert("Una justificación del retraso es requerida para continuar!!!");
                 } else {
+                        if (str.length >14) {
                         //alert (document.getElementById('txt_retraso').value + document.getElementById('id_bitacora_revision_actual').value);
                         document.getElementById('ventana').submit();
                         document.getElementById('ventana_oculta_1').style.display = "none";                        
                         //document.location.href="index.php?ctl=controles_de_video_listar";
+                        }else{
+                            alert("Debe detallar correctamente la justificación del retraso!!!");
+                        }
                 }
             }
             
@@ -165,6 +170,39 @@
             function prueba(){
                 //alert(Segundos.innerHTML);
             }
+            
+             function liberar_puesto_de_monitoreo(id_puesto){
+                
+           
+                 $.confirm({
+                    title: 'Confirmación!',
+                    content: 'Desea liberar el puesto de monitoreo?',
+                    confirm: function(){
+                        $.post("index.php?ctl=liberar_puesto_de_monitoreo", {id_puesto: id_puesto},function(data){
+                            var srt = data;
+                            var n= srt.search("liberado");
+                           
+                            if(n>0){
+                                $.alert({
+                                    title: 'Información!',
+                                    content: 'Puesto liberado correctamente!!!',
+                                });
+                                //location.reload();
+                                document.location.href="index.php?ctl=puestos_de_monitoreo_listar";
+                            }else{
+                                //alert(data);
+                                alert("No fue posible liberar este puesto de monitoreo!!!Contacte a su Supervisor.");
+                            }
+                        });  
+                    
+                    },
+                    cancel: function(){
+              
+                    }
+                });
+           
+            }
+            
         </script>
         <style>
             
@@ -206,10 +244,12 @@
     </head>
     <!--<body onfocus='javascript:location.reload()'>-->
     <body onfocus="actualiza_segundero_en_pantalla();">
-    <?php require_once 'encabezado.php';?>
+    <?php require_once 'encabezado.php';?> 
         <div class="container animated fadeIn col-xs-10 quitar-float" style="text-align:center">
             <h2 style="text-align:center">Control de Video <?php echo $vector_puesto_de_monitoreo_actual[0]['Nombre'];?></h2>
             <h4 style="text-align:center">Unidad de Video Actual: <?php echo $vector_informacion_unidad_video[0]['Descripcion'];?> (<?php echo $vector_punto_bcr[0]['Codigo'];?>) </h4>
+            <h4><a href="#" onclick="liberar_puesto_de_monitoreo('<?php echo $vector_revision_de_video_actual[0]['ID_Puesto_Monitoreo'];?>');">
+            Liberar Puesto de Monitoreo</a></h4>
                 <!--<p>A continuación se detallan los diferentes puestos de monitoreo registrados en el sistema:</p>-->            
                <table id="myTable" class="table table-hover" style="text-align:center">
                   <tbody>

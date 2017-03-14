@@ -148,7 +148,7 @@
                             <?php  }; ?>
 
                             <?php  if ($_SESSION['modulos']['Catálogos-Puestos de Monitoreo']==1){?>
-                               <li><a href="index.php?ctl=puestos_de_monitoreo_listar"> Puestos de Monitoreo</a></li>
+                               <li><a href="index.php?ctl=puestos_de_monitoreo_listar">Puestos de Monitoreo</a></li>
                             <?php  }; ?>
 
                             <?php  if ($_SESSION['modulos']['Catálogos-Cencon']==1){?>
@@ -275,11 +275,11 @@
                                 <li><a href="index.php?ctl=eventos_cencon">Cencon</a></li> 
                             <?php }; ?>
 
-                             <?php if ($_SESSION['modulos']['Seguridad-Trazabilidad']==1){?>
+                             <?php if ($_SESSION['modulos']['Módulo-Puestos de Monitoreo']==1){?>
                                 <li><a href="index.php?ctl=puestos_de_monitoreo_listar">Puestos de Monitoreo</a></li>
                             <?php }; ?>   
                             
-                            <?php if ($_SESSION['modulos']['Seguridad-Trazabilidad']==1){?>
+                            <?php if ($_SESSION['modulos']['Módulo-Puestos de Monitoreo']==1){?>
                                 <li><a href="index.php?ctl=controles_de_video_listar">Controles de Video Nuevo</a></li>
                             <?php }; ?>   
 

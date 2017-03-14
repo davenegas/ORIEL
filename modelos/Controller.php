@@ -9733,6 +9733,12 @@
            $obj_puesto_monitoreo->setResultado_conexion($_POST['res_conexion']);
            $obj_puesto_monitoreo->setReporta_situacion($_POST['rep_situacion']);
            
+           if (strlen(trim($_POST['rep_situacion']))>5){
+               $obj_puesto_monitoreo->setId_bitacora_revision_video($_POST['id_revis']);
+               $obj_puesto_monitoreo->setEstado_inconsistencia("0");
+               $obj_puesto_monitoreo->agregar_nuevo_registro_inconsistencias_de_video();
+           }
+           
            $fechaInicialRevision = $_POST['fecha_ini']." ".$_POST['hora_ini'];     
            $fechaActual =date("Y-m-d")." ".date("H:i:s", time());
            $diferenciasegundos = intval(strtotime($fechaActual) - strtotime($fechaInicialRevision));
@@ -9807,9 +9813,11 @@
                      
            $obj_puesto_monitoreo->setCondicion("ID_Bitacora_Revision_Video=".$_POST['id_bitacora_revision_actual']);
            
-           if (strlen(trim($_POST['txt_retraso']))>15){
+           if (strlen(trim($_POST['txt_retraso']))>14){
                $obj_puesto_monitoreo->setJustificacion_retraso($_POST['txt_retraso']);
                $obj_puesto_monitoreo->agrega_justificacion_en_retraso_de_una_revision_de_video();
+               header ("location:/ORIEL/index.php?ctl=controles_de_video_listar");
+           }else{
                header ("location:/ORIEL/index.php?ctl=controles_de_video_listar");
            }
         }
@@ -9945,6 +9953,22 @@
         }  
     }
     
+    public function inconsistencias_de_video_listar() {
+       if(isset($_SESSION['nombre'])){
+           $obj_puesto_monitoreo = new cls_puestos_de_monitoreo();
+           $obj_puesto_monitoreo->obtiene_inconsistencias_de_video();
+           $params =$obj_puesto_monitoreo->getArreglo();
+           
+            //print_r($vector_estadisticas);
+            require __DIR__.'/../vistas/plantillas/frm_inconsistencias_video_listar.php';
+        }
+        else {
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }  
+    } 
+    
     public function puestos_de_monitoreo_listar() {
        if(isset($_SESSION['nombre'])){
            $obj_puesto_monitoreo = new cls_puestos_de_monitoreo();
@@ -9992,7 +10016,7 @@
              if (count($obj_puesto_monitoreo->getArreglo())>0){
                  
                 //Vector revision de video actual en bitacora 2
-                $obj_puesto_monitoreo->setCondicion("Estado=0 AND ID_Usuario=".$_SESSION['id']);
+                $obj_puesto_monitoreo->setCondicion("Estado=0 AND ID_Usuario=".$_SESSION['id']." AND ID_Puesto_Monitoreo=".$vector_puesto_de_monitoreo_actual[0]['ID_Puesto_Monitoreo']);
                 $obj_puesto_monitoreo->obtiene_revisiones_de_video();
                 $vector_revision_de_video_actual=$obj_puesto_monitoreo->getArreglo();
                 //termina la consulta 
