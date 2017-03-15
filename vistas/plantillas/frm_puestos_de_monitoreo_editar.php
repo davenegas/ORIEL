@@ -50,6 +50,8 @@
 
         function agregar_unidad_de_video_al_puesto(id_uni,nom,tipo,desc,cam,tie,id_pues){
               var table = document.getElementById("myTable");
+              //alert("_"+id_uni+"_");
+              //alert("Alex");
         //    
         //    alert (table.rows.length);
         
@@ -237,7 +239,7 @@
         <table id="tabla" class="display" cellspacing="0" width="100%">
             <thead>
                 <tr>
-                    <th hidden style="text-align:center">ID Unidad de Video</th>
+                    <th hidden="hidden" style="text-align:center">ID Unidad de Video</th>
                     <th style="text-align:center">Punto BCR</th>
                     <th style="text-align:center">Provincia</th>
                     <th style="text-align:center">Descripción</th>
@@ -254,8 +256,8 @@
                 //Solamente muestra los puntos activos o todos a quien puede cambiar el estado             
                 ?>
                 <tr>
-                    <td hidden style="text-align:center"><?php echo $params[$i]['ID_Unidad_Video'];?></td>                   
-                    <td style="text-align:center"><a href="#" onclick="agregar_unidad_de_video_al_puesto('<?php echo $params[$i]['ID_Unidad_Video'];?>','<?php echo $params[$i]['Nombre'];?>','<?php echo $params[$i]['Tipo_Punto'];?>','<?php echo $params[$i]['Descripcion'];?>','<?php echo $params[$i]['Camaras_Habilitadas'];?>','<?php echo $tiempo_estandar;?>','<?php echo $_GET['id'];?>');"><?php echo $params[$i]['Nombre'];?></a></td>
+                    <td hidden="hidden" style="text-align:center"><?php echo $params[$i]['ID_Unidad_Video'];?></td>                   
+                    <td style="text-align:center"><a href="#" onclick="agregar_unidad_de_video_al_puesto('<?php echo $params[$i]['ID_Unidad_Video'];?>','<?php echo $params[$i]['Nombre'];?>','<?php echo $params[$i]['Tipo_Punto'];?>','<?php echo str_replace("'", "",$params[$i]['Descripcion']);?>','<?php echo $params[$i]['Camaras_Habilitadas'];?>','<?php echo $tiempo_estandar;?>','<?php echo $_GET['id'];?>');"><?php echo $params[$i]['Nombre'];?></a></td>
                     
                     <td style="text-align:center"><?php echo $params[$i]['Nombre_Provincia'];?></td>
                     <td style="text-align:center"><?php echo $params[$i]['Descripcion'];?></td>

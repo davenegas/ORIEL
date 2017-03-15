@@ -2,6 +2,7 @@
     <head>
         <meta charset="utf-8"/>
         <title>Inconsistencias de Video</title>
+        <META HTTP-EQUIV="REFRESH" CONTENT="300">
         <?php require_once 'frm_librerias_head.html';?>
         <link rel="stylesheet" href="vistas/css/ventanaoculta.css">
         <script>
@@ -92,6 +93,7 @@
               <th hidden="hidden">ID_Inconsistencia_Video</th>
               <th hidden="hidden">ID_Bitacora_Revision_Video</th>
               <th hidden="hidden">ID_Unidad_Video</th>
+              <th style="text-align:center"></th>
               <th style="text-align:center">Estado</th>
               <th style="text-align:center">Unidad Video</th>
               <th style="text-align:center">Detectado por</th>
@@ -113,6 +115,12 @@
                 <td hidden="hidden"><?php echo $params[$i]['ID_Inconsistencia_Video'];?></td>
                 <td hidden="hidden"><?php echo $params[$i]['ID_Bitacora_Revision_Video'];?></td>
                 <td hidden="hidden"><?php echo $params[$i]['ID_Unidad_Video'];?></td>
+                <!--<td style="text-align:center" data-toggle="tooltip" title="<?php echo $params[$i]['Observaciones_Evento'];?>"><a href="javascript:void(null)" style="color:#FFFFFF">3<img src="vistas/Imagenes/Agregar Nota.jpg" class="img-rounded" alt="Cinque Terre" width="25" height="25" onClick="editar_notas_supervision('<?php echo $params[$i]['ID_Evento'];?>','<?php echo $params[$i]['Observaciones_Evento'];?>')"></a></td>-->
+                <?php if ($params[$i]['Estado_Traducido']=="Pendiente"){?> 
+                <td style="text-align:center" data-toggle="tooltip" title="Inconsistencia Pendiente de Validar por Parte de Z2"><a style="color:#FFFFFF">1<img src="vistas/Imagenes/airflow_arrows.gif" class="img-rounded" alt="Cinque Terre" width="25" height="25"></a></td>
+                <?php }else{?>
+                <td style="text-align:center"><a style="color:#FFFFFF">1</a></td>
+                <?php }?>
                 <td style="text-align:center"><?php echo $params[$i]['Estado_Traducido'];?></td>
                 <td style="text-align:center"><?php echo $params[$i]['Descripcion'];?></td>
                 <td style="text-align:center"><?php echo $params[$i]['Detectado_Por'];?></td>

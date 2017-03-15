@@ -9838,7 +9838,7 @@
            }else{
                $diferenciasegundos=$diferenciasegundos-$tiempo_maximo_revision;
                $obj_puesto_monitoreo->setRetraso_segundos($diferenciasegundos);
-               $obj_puesto_monitoreo->setJustificacion_retraso("Usuario: ".$_SESSION['name']." ".$_SESSION['apellido']." Cédula: ".$_SESSION['nombre']." Id:".$_SESSION['id']." no justificó el retraso de ".$diferenciasegundos." segundos, en la revisión de video actual.");
+               $obj_puesto_monitoreo->setJustificacion_retraso("Usuario: ".$_SESSION['name']." ".$_SESSION['apellido']." Cédula: ".$_SESSION['nombre']." Id:".$_SESSION['id']." no justificó el retraso de ".$diferenciasegundos." segundos, en la revisión de video actual. La ventana de justificación fue omitida o cerrada de manera anticipada.");
                $obj_puesto_monitoreo->guarda_y_concluye_una_revision_de_video();
                $resultado= 'retraso';
            }
