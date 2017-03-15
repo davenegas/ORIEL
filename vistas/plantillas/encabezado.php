@@ -72,7 +72,8 @@
                        $_SESSION['modulos']['Catálogos-Gerente Zona']==1|| $_SESSION['modulos']['Catálogos-Supervisor Zona']==1||
                        $_SESSION['modulos']['Catálogos-Proveedor enlaces']==1||$_SESSION['modulos']['Catálogos-Tipo enlaces']==1||
                        $_SESSION['modulos']['Catálogos-Medio enlaces']==1|| $_SESSION['modulos']['Catálogos-Unidades de Video']==1||
-                       $_SESSION['modulos']['Catálogos-Cencon']==1 || $_SESSION['modulos']['Catálogos-Puestos de Monitoreo']==1)){  ?>
+                       $_SESSION['modulos']['Catálogos-Cencon']==1 || $_SESSION['modulos']['Catálogos-Puestos de Monitoreo']==1
+                        || $_SESSION['modulos']['Catálogos-Inconsistencias de Video']==1)){  ?>
 
                     <li class="dropdown">
                         <a class="dropdown-toggle" data-toggle="dropdown" href="#">Catálogos
@@ -145,6 +146,10 @@
 
                             <?php  if ($_SESSION['modulos']['Catálogos-Unidades de Video']==1){?>
                                <li><a href="index.php?ctl=unidades_de_video_listar">Unidades de Video</a></li>
+                            <?php  }; ?>
+                               
+                            <?php  if ($_SESSION['modulos']['Catálogos-Inconsistencias de Video']==1){?>
+                               <li><a href="index.php?ctl=inconsistencias_de_video_listar">Inconsistencias de Video</a></li>
                             <?php  }; ?>
 
                             <?php  if ($_SESSION['modulos']['Catálogos-Puestos de Monitoreo']==1){?>
@@ -275,9 +280,9 @@
                                 <li><a href="index.php?ctl=eventos_cencon">Cencon</a></li> 
                             <?php }; ?>
 
-                             <?php if ($_SESSION['modulos']['Módulo-Puestos de Monitoreo']==1){?>
+<!--                             <?php if ($_SESSION['modulos']['Módulo-Puestos de Monitoreo']==1){?>
                                 <li><a href="index.php?ctl=puestos_de_monitoreo_listar">Puestos de Monitoreo</a></li>
-                            <?php }; ?>   
+                            <?php }; ?>   -->
                             
                             <?php if ($_SESSION['modulos']['Módulo-Puestos de Monitoreo']==1){?>
                                 <li><a href="index.php?ctl=controles_de_video_listar">Controles de Video Nuevo</a></li>

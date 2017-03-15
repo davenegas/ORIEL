@@ -173,7 +173,9 @@
         
         <div class="container animated fadeIn col-xs-10 quitar-float">
         <h2>Listado General de Puestos de Monitoreo (Control de Video)</h2>
-        <h4><a href="index.php?ctl=inconsistencias_de_video_listar">Inconsistencias de Video</a></h4>
+        <?php if ($_SESSION['modulos']['Catálogos-Inconsistencias de Video']==1){ ?>
+             <h4><a href="index.php?ctl=inconsistencias_de_video_listar">Inconsistencias de Video</a></h4>             
+        <?php };?>   
         <p>A continuación se detallan los diferentes puestos de monitoreo registrados en el sistema:</p>            
         <table id="tabla" class="display" cellspacing="0">
           <thead>
@@ -248,7 +250,10 @@
                     <?php } ?>
             </tbody>
         </table>
-        <a id="popup" onclick="mostrar_agregar_puesto_monitoreo()" class="btn btn-default" role="button">Agregar Nuevo Puesto de Monitoreo</a>
+         <?php if ($_SESSION['modulos']['Catálogos-Puestos de Monitoreo']==1){ ?>
+            <a id="popup" onclick="mostrar_agregar_puesto_monitoreo()" class="btn btn-default" role="button">Agregar Nuevo Puesto de Monitoreo</a>
+        <?php };?>   
+        
         </div>
        <!--agregar o editar-->
         <div id="ventana_oculta_1"> 

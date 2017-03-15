@@ -9718,6 +9718,88 @@
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         } 
     }
+       
+    public function validar_inconsistencias_video_guardar() {
+       if(isset($_SESSION['nombre'])){
+           $obj_puesto_monitoreo = new cls_puestos_de_monitoreo();
+           
+           $obj_puesto_monitoreo->setCondicion("ID_Inconsistencia_Video=".$_POST['ID_Inconsistencia_Video']);
+           
+           
+           $obj_puesto_monitoreo->setId_usuario($_SESSION['id']);
+           
+           $obj_puesto_monitoreo->setFecha_validacion(date("Y-m-d"));
+           $obj_puesto_monitoreo->setHora_validacion(date("H:i:s", time()));
+           $obj_puesto_monitoreo->setEstado($_POST['estado_validacion']);
+           $obj_puesto_monitoreo->setTipo_inconsistencia($_POST['tipo_inconsistencia']);
+           $obj_puesto_monitoreo->setObservaciones($_POST['observaciones_validacion']);
+           
+           $obj_puesto_monitoreo->edita_validacion_inconsistencia_de_video();
+           
+           header ("location:/ORIEL/index.php?ctl=inconsistencias_de_video_listar");
+                    
+        }
+        else {
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }  
+    }
+            
+    public function solucionar_inconsistencias_video_guardar() {
+       if(isset($_SESSION['nombre'])){
+           $obj_puesto_monitoreo = new cls_puestos_de_monitoreo();
+           
+           $obj_puesto_monitoreo->setCondicion("ID_Inconsistencia_Video=".$_POST['ID_Inconsistencia_Video_SO']);
+           
+           
+           $obj_puesto_monitoreo->setId_usuario($_SESSION['id']);
+           
+           $obj_puesto_monitoreo->setFecha_solucion(date("Y-m-d"));
+           $obj_puesto_monitoreo->setHora_solucion(date("H:i:s", time()));
+           $obj_puesto_monitoreo->setEstado($_POST['estado_solucion']);
+           $obj_puesto_monitoreo->setObservaciones($_POST['observaciones_solucion']);
+           
+           $obj_puesto_monitoreo->edita_solucion_inconsistencia_de_video();
+           
+           header ("location:/ORIEL/index.php?ctl=inconsistencias_de_video_listar");
+                    
+        }
+        else {
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }  
+    }
+    
+    
+    public function reportar_inconsistencias_video_guardar() {
+       if(isset($_SESSION['nombre'])){
+           $obj_puesto_monitoreo = new cls_puestos_de_monitoreo();
+           
+           $obj_puesto_monitoreo->setCondicion("ID_Inconsistencia_Video=".$_POST['ID_Inconsistencia_Video_RE']);
+           
+           
+           $obj_puesto_monitoreo->setId_usuario($_SESSION['id']);
+           
+           $obj_puesto_monitoreo->setFecha_reporta(date("Y-m-d"));
+           $obj_puesto_monitoreo->setHora_reporta(date("H:i:s", time()));
+           $obj_puesto_monitoreo->setEstado($_POST['estado_reporte']);
+           $obj_puesto_monitoreo->setId_averia($_POST['id_averia']);
+           $obj_puesto_monitoreo->setObservaciones($_POST['observaciones_reporte']);
+           
+           $obj_puesto_monitoreo->edita_reporte_inconsistencia_de_video();
+           
+           header ("location:/ORIEL/index.php?ctl=inconsistencias_de_video_listar");
+                    
+        }
+        else {
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }  
+    }
+    
     
     public function guarda_revision_de_video_actual() {
        if(isset($_SESSION['nombre'])){
@@ -9736,6 +9818,7 @@
            if (strlen(trim($_POST['rep_situacion']))>5){
                $obj_puesto_monitoreo->setId_bitacora_revision_video($_POST['id_revis']);
                $obj_puesto_monitoreo->setEstado_inconsistencia("0");
+               $obj_puesto_monitoreo->setTipo_inconsistencia("0");
                $obj_puesto_monitoreo->agregar_nuevo_registro_inconsistencias_de_video();
            }
            

@@ -19,150 +19,62 @@
             //Funcion para ocultar ventana de mantenimiento de proveedor
             function ocultar_elemento(){
                 document.getElementById('ventana_oculta_1').style.display = "none";
+                document.getElementById('ventana_oculta_2').style.display = "none";
+                document.getElementById('ventana_oculta_3').style.display = "none";
             }
             
             
              //Valida informacion completa de formulario de proveedor
-            function check_empty() {
-                if (document.getElementById('nombre').value =="") {
-                    alert("Digita el nombre del Puesto de Monitoreo!");
-                } else {
-                    if (isNaN(document.getElementById('tiempo_estandar_revision').value)) {
-                        alert("Digita un valor númerico para el tiempo estándar del puesto de monitoreo!");
-                    }  else{ 
-                        document.getElementById('ventana').submit();
-                        document.getElementById('ventana_oculta_1').style.display = "none";
-                    }
-                }
+            function check_empty_va() {
+                
+                document.getElementById('ventana').submit();
+                document.getElementById('ventana_oculta_1').style.display = "none";
+                   
             }
             
-            //Funcion para agregar un nuevo tipo de telefono- formulario en blanco
-            function mostrar_agregar_puesto_monitoreo() {
-                document.getElementById('ID_Puesto_Monitoreo').value="0";
-                document.getElementById('nombre').value=null;
-                document.getElementById('descripcion').value=null;
-                document.getElementById('observaciones').value=null;
-                document.getElementById('ventana_oculta_1').style.display = "block";
+             //Valida informacion completa de formulario de proveedor
+            function check_empty_re() {
+                
+                document.getElementById('ingresar_reporte_inconsistencia').submit();
+                document.getElementById('ventana_oculta_2').style.display = "none";
+                   
             }
+            
+             //Valida informacion completa de formulario de proveedor
+            function check_empty_so() {
+                
+                document.getElementById('ingresar_solucion_inconsistencia').submit();
+                document.getElementById('ventana_oculta_3').style.display = "none";
+                   
+            }
+            
             //Funcion para editar informacion de tipo telefono
-            function Editar_Puesto_Monitoreo(id_puest,nomb,descrip,obser,tiempo){
-                document.getElementById('ID_Puesto_Monitoreo').value=id_puest;
-                document.getElementById('nombre').value=nomb;
-                document.getElementById('descripcion').value=descrip;
-                document.getElementById('observaciones').value=obser;
-                document.getElementById('tiempo_estandar_revision').value=tiempo;
-                document.getElementById('tiempo_revision_original').value=tiempo;
-                document.getElementById('ventana_oculta_1').style.display = "block";
+            function edita_reportado_por(id_in,id_rev,est,id_ave,obs){     
+                document.getElementById('ID_Inconsistencia_Video_RE').value=id_in;
+                document.getElementById('ID_Bitacora_Revision_Video_RE').value=id_rev;
+                $("#estado_reporte option[value="+est+"]").attr("selected",true);
+                document.getElementById('observaciones_reporte').value=obs;
+                document.getElementById('id_averia').value=id_ave;
+                document.getElementById('ventana_oculta_2').style.display = "block";
             }
            
-           function tomar_puesto_de_monitoreo(id_puesto,nom){
-                //alert(nom);
-                $.confirm({
-                    title: 'Confirmación!',
-                    content: 'Desea tomar el puesto de monitoreo: '+nom+' ?',
-                    confirm: function(){
-                        $.post("index.php?ctl=tomar_puesto_de_monitoreo", {id_puesto: id_puesto},function(data){
-                            var srt = data;
-                            var n= srt.search("Inactivo");
-                           //alert(data);
-                            if(n>0){
-                                $.alert({
-                                    title: 'Información!',
-                                    content: 'Este puesto de monitoreo se encuentra inactivo, favor notifique a su Supervisor!!!',
-                                });
-                            }else{
-                                 n= srt.search("En otro puesto");
-                                 if(n>0){
-                                    $.alert({
-                                       title: 'Información!',
-                                       content: 'Solo es posible tener como máximo un puesto de monitoreo a la vez. Por favor libere el actual!!!',
-                                   });
-                                 }else{
-                                     n= srt.search("Ocupado");
-                                    if(n>0){
-                                         $.alert({
-                                          title: 'Información!',
-                                          content: 'Este puesto se encuentra bloqueado, no es posible tomarlo!!! Solamente la Persona que lo tiene o un Encargado lo puede liberar.',
-                                         });
-                                    }else{
-                                        n= srt.search("Sin_Unidades");
-                                        if(n>0){
-                                         $.alert({
-                                          title: 'Información!',
-                                          content: 'Este puesto de monitoreo no tiene unidades de video asignadas para revisar. Favor contacte a su Supervisor!!!',
-                                         });
-                                        }else{
-                                             $.alert({
-                                                title: 'Información!',
-                                                content: 'Puesto tomado exitosamente!!!',
-                                                });
-                                           //     alert(data);
-                                           //     location.reload(); 
-                                           document.location.href="index.php?ctl=controles_de_video_listar";
-                                        }
-                                       
-
-                                    }
-                                     
-                                     
-                                 }
-                                 
-                            }
-                        });  
-                    
-                    },
-                    cancel: function(){
-              
-                    }
-                });
+            //Funcion para editar informacion de tipo telefono
+            function edita_validado_por(id_in,id_rev,est,tip_in,obs){     
+                document.getElementById('ID_Inconsistencia_Video').value=id_in;
+                document.getElementById('ID_Bitacora_Revision_Video').value=id_rev;
+                $("#tipo_inconsistencia option[value="+tip_in+"]").attr("selected",true);
+                $("#estado_validacion option[value="+est+"]").attr("selected",true);
+                document.getElementById('observaciones_validacion').value=obs;
+                document.getElementById('ventana_oculta_1').style.display = "block";
             }
             
-     function liberar_puesto_de_monitoreo(id_puesto,nom,id_us){
-                
-                 //alert(id_us);
-            var bandera=0;
-            
-                <?php 
-            //Solamente los coordinadores ven esta opcion de agregar mezclas
-            if($_SESSION['modulos']['Catálogos-Puestos de Monitoreo']==1){ ?>
-                    bandera=1;
-            <?php }else{ ?>
-                    if (id_us==<?php echo $_SESSION['id'];?>){
-                        bandera=1;
-                    }
-                    //
-             <?php }?>
-                 
-            if (bandera==1){
-                 $.confirm({
-                    title: 'Confirmación!',
-                    content: 'Desea liberar el puesto de monitoreo: '+nom+' ?',
-                    confirm: function(){
-                        $.post("index.php?ctl=liberar_puesto_de_monitoreo", {id_puesto: id_puesto},function(data){
-                            var srt = data;
-                            var n= srt.search("liberado");
-                           
-                            if(n>0){
-                                $.alert({
-                                    title: 'Información!',
-                                    content: 'Puesto liberado correctamente!!!',
-                                });
-                                location.reload();
-                            }else{
-                                //alert(data);
-                                alert("No fue posible liberar este puesto de monitoreo!!!Contacte a su Supervisor.");
-                            }
-                        });  
-                    
-                    },
-                    cancel: function(){
-              
-                    }
-                });
-            }else{
-                alert("No puedes liberar este puesto de monitoreo!!!Contacte a su Supervisor.");
-            }
-                
+            //Funcion para editar informacion de tipo telefono
+            function edita_solucionado_por(id_in,id_rev,est,obs){     
+                document.getElementById('ID_Inconsistencia_Video_SO').value=id_in;
+                document.getElementById('ID_Bitacora_Revision_Video_SO').value=id_rev;
+                $("#estado_solucion option[value="+est+"]").attr("selected",true);
+                document.getElementById('observaciones_solucion').value=obs;
+                document.getElementById('ventana_oculta_3').style.display = "block";
             }
             
         </script>
@@ -196,6 +108,8 @@
             for ($i = 0; $i <$tam; $i++) {
             ?>
             <tr>
+                <!--<td style="text-align:center" id="<?php echo $params[$i]['ID_Unidad_Video'].'-ID_PuntoBCR';?>" onclick="edita_dato('<?php echo $params[$i]['ID_Unidad_Video'];?>','<?php echo $params[$i]['ID_PuntoBCR'];?>','ID_PuntoBCR','Punto BCR')"><?php echo $params[$i]['Nombre'];?></td>-->
+                
                 <td hidden="hidden"><?php echo $params[$i]['ID_Inconsistencia_Video'];?></td>
                 <td hidden="hidden"><?php echo $params[$i]['ID_Bitacora_Revision_Video'];?></td>
                 <td hidden="hidden"><?php echo $params[$i]['ID_Unidad_Video'];?></td>
@@ -204,9 +118,9 @@
                 <td style="text-align:center"><?php echo $params[$i]['Detectado_Por'];?></td>
                 <td style="text-align:center"><?php echo $params[$i]['Reporta_Situacion'];?></td>
                 <td style="text-align:center"><?php echo $params[$i]['Nombre_Puesto'];?></td>
-                <td style="text-align:center"><?php echo $params[$i]['ID_Usuario_Valida'];?></td>
-                <td style="text-align:center"><?php echo $params[$i]['ID_Usuario_Reporta_SE'];?></td>
-                <td style="text-align:center"><?php echo $params[$i]['ID_Usuario_Reporta_Solucionada'];?></td>
+                <td style="text-align:center" onclick="edita_validado_por('<?php echo $params[$i]['ID_Inconsistencia_Video'];?>','<?php echo $params[$i]['ID_Bitacora_Revision_Video'];?>','<?php echo $params[$i]['Estado'];?>','<?php echo $params[$i]['Tipo_Inconsistencia'];?>','<?php echo $params[$i]['Observaciones_Validacion'];?>')"><?php echo $params[$i]['Validado_Por'];?></td>
+                <td style="text-align:center" onclick="edita_reportado_por('<?php echo $params[$i]['ID_Inconsistencia_Video'];?>','<?php echo $params[$i]['ID_Bitacora_Revision_Video'];?>','<?php echo $params[$i]['Estado'];?>','<?php echo $params[$i]['ID_Averia'];?>','<?php echo $params[$i]['Observaciones_Reporte'];?>')"><?php echo $params[$i]['Reportado_Por'];?></td>
+                <td style="text-align:center" onclick="edita_solucionado_por('<?php echo $params[$i]['ID_Inconsistencia_Video'];?>','<?php echo $params[$i]['ID_Bitacora_Revision_Video'];?>','<?php echo $params[$i]['Estado'];?>','<?php echo $params[$i]['Observaciones_Solucionada'];?>')"><?php echo $params[$i]['Solucionado_Por'];?></td>
                                
             </tr>     
            
@@ -219,31 +133,101 @@
         <div id="ventana_oculta_1"> 
             <div id="popupventana">
                 <!--Formulario para proveedor de enlaces de telecomunicaciones-->
-                <form id="ventana" method="POST" name="form" action="index.php?ctl=puesto_monitoreo_guardar">
+                <form id="ventana" method="POST" name="form" action="index.php?ctl=validar_inconsistencias_video_guardar">
                     <img id="close" src='vistas/Imagenes/cerrar.png' width="25" onclick ="ocultar_elemento()">
-                    <h2>Puesto de Monitoreo</h2>
+                    <h2 align="center">Validar Inconsistencia de Video</h2>
                     <hr>
                     
-                    <input hidden id="ID_Puesto_Monitoreo" name="ID_Puesto_Monitoreo" type="text">
-                    <input hidden id="tiempo_revision_original" name="tiempo_revision_original" type="text">
+                    <input hidden id="ID_Inconsistencia_Video" name="ID_Inconsistencia_Video" type="text">
+                    <input hidden id="ID_Bitacora_Revision_Video" name="ID_Bitacora_Revision_Video" type="text">
                     
-                    <label for="nombre">Nombre</label>
-                    <input class="form-control espacio-abajo" required id="nombre" name="nombre" placeholder="Nombre" type="text">
+                    <label for="estado_validacion">Estado Actual</label>
+                    <select class="form-control" id="estado_validacion" name="estado_validacion" > 
+                        <option value="0">Pendiente</option>
+                        <option value="1">Atendida</option>
+                        <option value="2">Validada para Reportar a SE</option> 
+                    </select>
                     
-                    <label for="descripcion">Descripción</label>
-                    <input class="form-control espacio-abajo" required id="descripcion" name="descripcion" placeholder="Descripción" type="text">
-                    
-                    <label for="observaciones">Observaciones</label>
-                    <input type="text" class="form-control espacio-abajo" id="observaciones" name="observaciones" placeholder="Observaciones del Puesto">
-                    
-                    <label for="tiempo_estandar_revision">Tiempo Estándar Revisión (Unidad Segundos)</label>
-                    <input class="form-control espacio-abajo" required id="tiempo_estandar_revision" name="tiempo_estandar_revision" placeholder="Tiempo Estándar en Segundos" type="text">
-                   
-                   
-                   <button><a href="javascript:%20check_empty()" id="submit">Guardar</a></button>
+                     <label for="tipo_inconsistencia">Tipo Inconsistencia</label>
+                    <select class="form-control" id="tipo_inconsistencia" name="tipo_inconsistencia" > 
+                        <option value="0">Cámara(s) Movida(s)</option>
+                        <option value="1">Falla Color</option>
+                        <option value="2">Falla Imágen</option> 
+                        <option value="3">Cámara Desenfocada</option> 
+                        <option value="4">Diferencia Cantidad Cámaras</option> 
+                        <option value="5">Falla Grabador de Video</option> 
+                        <option value="6">Sin Problemas</option> 
+                    </select>
+            
+                    <label for="observaciones_validacion">Observaciones</label>
+                    <input type="text" class="form-control espacio-abajo" id="observaciones_validacion" name="observaciones_validacion" placeholder="Observaciones de la Validación">
+                                     
+                   <button><a href="javascript:%20check_empty_va()" id="submit">Guardar</a></button>
                 </form>
             </div>
-        <!--Cierre agregar teléfono a Punto BCR-->
+        </div>
+       
+       
+       <!--agregar o editar-->
+        <div id="ventana_oculta_2"> 
+            <div id="popupventana">
+                <div id="ventana">
+                <!--Formulario para proveedor de enlaces de telecomunicaciones-->
+                <form id="ingresar_reporte_inconsistencia" method="POST" name="ingresar_reporte_inconsistencia" action="index.php?ctl=reportar_inconsistencias_video_guardar">
+                    <img id="close" src='vistas/Imagenes/cerrar.png' width="25" onclick ="ocultar_elemento()">
+                    <h2 align="center">Reportar Inconsistencia de Video</h2>
+                    <hr>
+                    
+                    <input hidden id="ID_Inconsistencia_Video_RE" name="ID_Inconsistencia_Video_RE" type="text">
+                    <input hidden id="ID_Bitacora_Revision_Video_RE" name="ID_Bitacora_Revision_Video_RE" type="text">
+                    
+                    <label for="estado_reporte">Estado Actual</label>
+                    <select class="form-control" id="estado_reporte" name="estado_reporte" > 
+                        <option value="0">Pendiente</option>
+                        <option value="1">Atendida</option>
+                        <option value="3">Reportada a SE</option> 
+                    </select>
+                    
+                     <label for="id_averia">ID Reporte Avería</label>
+                    <input type="text" class="form-control espacio-abajo" id="id_averia" name="id_averia" placeholder="Número identificador de la avería">
+            
+                    <label for="observaciones_reporte">Observaciones</label>
+                    <input type="text" class="form-control espacio-abajo" id="observaciones_reporte" name="observaciones_reporte" placeholder="Observaciones del Reporte a SE">
+                                     
+                   <button><a href="javascript:%20check_empty_re()" id="submit">Guardar</a></button>
+                </form>
+                </div>
+            </div>
+        </div>
+       
+       
+       <!--agregar o editar-->
+        <div id="ventana_oculta_3"> 
+            <div id="popupventana">
+                <div id="ventana">
+                <!--Formulario para proveedor de enlaces de telecomunicaciones-->
+                <form id="ingresar_solucion_inconsistencia" method="POST" name="ingresar_solucion_inconsistencia" action="index.php?ctl=solucionar_inconsistencias_video_guardar">
+                    <img id="close" src='vistas/Imagenes/cerrar.png' width="25" onclick ="ocultar_elemento()">
+                    <h2 align="center">Registrar Solución de Inconsistencia de Video</h2>
+                    <hr>
+                    
+                    <input hidden id="ID_Inconsistencia_Video_SO" name="ID_Inconsistencia_Video_SO" type="text">
+                    <input hidden id="ID_Bitacora_Revision_Video_SO" name="ID_Bitacora_Revision_Video_SO" type="text">
+                    
+                    <label for="estado_solucion">Estado Actual</label>
+                    <select class="form-control" id="estado_solucion" name="estado_solucion" > 
+                        <option value="0">Pendiente</option>
+                        <option value="1">Atendida</option>
+                        <option value="4">Reparada por SE</option> 
+                    </select>
+
+                    <label for="observaciones_solucion">Observaciones</label>
+                    <input type="text" class="form-control espacio-abajo" id="observaciones_solucion" name="observaciones_solucion" placeholder="Observaciones del Reporte a SE">
+                                     
+                   <button><a href="javascript:%20check_empty_so()" id="submit">Guardar</a></button>
+                </form>
+                </div>
+            </div>
         </div>
        <?php require 'vistas/plantillas/pie_de_pagina.php' ?>
     </body>

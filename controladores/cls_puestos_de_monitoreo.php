@@ -37,7 +37,81 @@ class cls_puestos_de_monitoreo{
     
     public $id_inconsistencia_video;
     public $estado_inconsistencia;
+    public $tipo_inconsistencia;
+    public $fecha_validacion;
+    public $hora_validacion;
+    public $fecha_reporta;
+    public $hora_reporta;
+    public $fecha_solucion;
+    public $hora_solucion;
+    public $id_averia;
     
+    function getFecha_solucion() {
+        return $this->fecha_solucion;
+    }
+
+    function getHora_solucion() {
+        return $this->hora_solucion;
+    }
+
+    function setFecha_solucion($fecha_solucion) {
+        $this->fecha_solucion = $fecha_solucion;
+    }
+
+    function setHora_solucion($hora_solucion) {
+        $this->hora_solucion = $hora_solucion;
+    }
+   
+    function getFecha_reporta() {
+        return $this->fecha_reporta;
+    }
+
+    function getHora_reporta() {
+        return $this->hora_reporta;
+    }
+
+    function getId_averia() {
+        return $this->id_averia;
+    }
+
+    function setFecha_reporta($fecha_reporta) {
+        $this->fecha_reporta = $fecha_reporta;
+    }
+
+    function setHora_reporta($hora_reporta) {
+        $this->hora_reporta = $hora_reporta;
+    }
+
+    function setId_averia($id_averia) {
+        $this->id_averia = $id_averia;
+    }
+
+        function getFecha_validacion() {
+        return $this->fecha_validacion;
+    }
+
+    function getHora_validacion() {
+        return $this->hora_validacion;
+    }
+
+    function setFecha_validacion($fecha_validacion) {
+        $this->fecha_validacion = $fecha_validacion;
+    }
+
+    function setHora_validacion($hora_validacion) {
+        $this->hora_validacion = $hora_validacion;
+    }
+
+        
+    function getTipo_inconsistencia() {
+        return $this->tipo_inconsistencia;
+    }
+
+    function setTipo_inconsistencia($tipo_inconsistencia) {
+        $this->tipo_inconsistencia = $tipo_inconsistencia;
+    }
+
+        
     function getEstado_inconsistencia() {
         return $this->estado_inconsistencia;
     }
@@ -354,6 +428,7 @@ class cls_puestos_de_monitoreo{
         $this->posicion="";
         $this->tiempo_personalizado_revision="";
         $this->id_inconsistencia_video="";
+        $this->tipo_inconsistencia="";
     
    }
    
@@ -535,18 +610,23 @@ class cls_puestos_de_monitoreo{
                     INNER JOIN t_usuario ON t_usuario.ID_Usuario = T_BitacoraRevisionesVideo.ID_Usuario
                     Inner join t_unidadvideo on t_unidadvideo.ID_Unidad_Video=t_bitacorarevisionesvideo.ID_Unidad_Video
                     inner join T_PuestoMonitoreo on T_PuestoMonitoreo.ID_Puesto_Monitoreo=t_bitacorarevisionesvideo.ID_Puesto_Monitoreo
+                    left join t_usuario tuv on t_inconsistenciavideo.ID_Usuario_Valida=tuv.ID_Usuario
+                    left join t_usuario tur on t_inconsistenciavideo.ID_Usuario_Reporta_SE=tur.ID_Usuario
+                    left join t_usuario tus on t_inconsistenciavideo.ID_Usuario_Reporta_Solucionada=tus.ID_Usuario
                     order by ID_Inconsistencia_Video",
-                    "t_inconsistenciavideo . * ,T_BitacoraRevisionesVideo.ID_Unidad_Video ,T_BitacoraRevisionesVideo.Reporta_Situacion, CONCAT( CONCAT( t_usuario.Nombre,  ' ' ) , t_usuario.Apellido ) AS Detectado_Por,case t_inconsistenciavideo.Estado  when 0 then 'Pendiente'  when 1 then 'Atendida'  when 2 then 'Validada' when 3 then 'Reparada' end as Estado_Traducido,t_unidadvideo.Descripcion,T_PuestoMonitoreo.Nombre as Nombre_Puesto","");
+                    "t_inconsistenciavideo . * ,T_BitacoraRevisionesVideo.ID_Unidad_Video ,T_BitacoraRevisionesVideo.Reporta_Situacion, CONCAT( CONCAT( t_usuario.Nombre,  ' ' ) , t_usuario.Apellido ) AS Detectado_Por,CONCAT( CONCAT( tuv.Nombre,  ' ' ) , tuv.Apellido ) AS Validado_Por,CONCAT( CONCAT( tur.Nombre,  ' ' ) , tur.Apellido ) AS Reportado_Por,CONCAT( CONCAT( tus.Nombre,  ' ' ) , tus.Apellido ) AS Solucionado_Por,case t_inconsistenciavideo.Estado  when 0 then 'Pendiente'  when 1 then 'Atendida'  when 2 then 'Validada' when 3 then 'Reportada' when 4 then 'Reparada' end as Estado_Traducido,t_unidadvideo.Descripcion,T_PuestoMonitoreo.Nombre as Nombre_Puesto","");
             $this->arreglo=$this->obj_data_provider->getArreglo();
             $this->obj_data_provider->desconectar();
         }
         else{
-$this->arreglo=$this->obj_data_provider->trae_datos(" t_inconsistenciavideo INNER JOIN t_bitacorarevisionesvideo ON t_bitacorarevisionesvideo.ID_Bitacora_Revision_Video = t_inconsistenciavideo.ID_Bitacora_Revision_Video
+        $this->arreglo=$this->obj_data_provider->trae_datos(" t_inconsistenciavideo INNER JOIN t_bitacorarevisionesvideo ON t_bitacorarevisionesvideo.ID_Bitacora_Revision_Video = t_inconsistenciavideo.ID_Bitacora_Revision_Video
                     INNER JOIN t_usuario ON t_usuario.ID_Usuario = T_BitacoraRevisionesVideo.ID_Usuario
                     Inner join t_unidadvideo on t_unidadvideo.ID_Unidad_Video=t_bitacorarevisionesvideo.ID_Unidad_Video
                     inner join T_PuestoMonitoreo on T_PuestoMonitoreo.ID_Puesto_Monitoreo=t_bitacorarevisionesvideo.ID_Puesto_Monitoreo
-                    order by ID_Inconsistencia_Video",
-                    "t_inconsistenciavideo . * ,T_BitacoraRevisionesVideo.ID_Unidad_Video ,T_BitacoraRevisionesVideo.Reporta_Situacion, CONCAT( CONCAT( t_usuario.Nombre,  ' ' ) , t_usuario.Apellido ) AS Detectado_Por,case t_inconsistenciavideo.Estado  when 0 then 'Pendiente'  when 1 then 'Atendida'  when 2 then 'Validada' when 3 then 'Reparada' end as Estado_Traducido,t_unidadvideo.Descripcion,T_PuestoMonitoreo.Nombre as Nombre_Puesto",
+                    left join t_usuario tuv on t_inconsistenciavideo.ID_Usuario_Valida=tuv.ID_Usuario
+                    left join t_usuario tur on t_inconsistenciavideo.ID_Usuario_Reporta_SE=tur.ID_Usuario
+                    left join t_usuario tus on t_inconsistenciavideo.ID_Usuario_Reporta_Solucionada=tus.ID_Usuario",
+                    "t_inconsistenciavideo . * ,T_BitacoraRevisionesVideo.ID_Unidad_Video ,T_BitacoraRevisionesVideo.Reporta_Situacion, CONCAT( CONCAT( t_usuario.Nombre,  ' ' ) , t_usuario.Apellido ) AS Detectado_Por,CONCAT( CONCAT( tuv.Nombre,  ' ' ) , tuv.Apellido ) AS Validado_Por,CONCAT( CONCAT( tur.Nombre,  ' ' ) , tur.Apellido ) AS Reportado_Por,CONCAT( CONCAT( tus.Nombre,  ' ' ) , tus.Apellido ) AS Solucionado_Por,case t_inconsistenciavideo.Estado  when 0 then 'Pendiente'  when 1 then 'Atendida'  when 2 then 'Validada' when 3 then 'Reportada' when 4 then 'Reparada' end as Estado_Traducido,t_unidadvideo.Descripcion,T_PuestoMonitoreo.Nombre as Nombre_Puesto",
                     $this->condicion." order by ID_Inconsistencia_Video");
             $this->arreglo=$this->obj_data_provider->getArreglo();
             $this->obj_data_provider->desconectar();
@@ -728,9 +808,39 @@ $this->arreglo=$this->obj_data_provider->trae_datos(" t_inconsistenciavideo INNE
         $this->obj_data_provider->desconectar();
     }
     
+    //Este metodo realiza la modificación del estado del modulo, de activo a inactivo o viceversa en la bd
+    function edita_validacion_inconsistencia_de_video(){
+        $this->obj_data_provider->conectar();
+        //Llama al metodo para editar los datos correspondientes
+        $this->obj_data_provider->edita_datos("T_InconsistenciaVideo","ID_Usuario_Valida=".$this->id_usuario.",Fecha_Validacion='".$this->fecha_validacion."',Hora_Validacion='".$this->hora_validacion."',Estado=".$this->estado.",Tipo_Inconsistencia=".$this->tipo_inconsistencia.",Observaciones_Validacion='".$this->observaciones."'",$this->condicion);
+        //Metodo de la clase data provider que desconecta la sesión con la base de datos
+        $this->obj_data_provider->desconectar();
+       
+    }
+    
+    //Este metodo realiza la modificación del estado del modulo, de activo a inactivo o viceversa en la bd
+    function edita_reporte_inconsistencia_de_video(){
+        $this->obj_data_provider->conectar();
+        //Llama al metodo para editar los datos correspondientes
+        $this->obj_data_provider->edita_datos("T_InconsistenciaVideo","ID_Usuario_Reporta_SE=".$this->id_usuario.",Fecha_Reporta='".$this->fecha_reporta."',Hora_Reporta='".$this->hora_reporta."',Estado=".$this->estado.",ID_Averia='".$this->id_averia."',Observaciones_Reporte='".$this->observaciones."'",$this->condicion);
+        //Metodo de la clase data provider que desconecta la sesión con la base de datos
+        $this->obj_data_provider->desconectar();
+       
+    }
+    
+    //Este metodo realiza la modificación del estado del modulo, de activo a inactivo o viceversa en la bd
+    function edita_solucion_inconsistencia_de_video(){
+        $this->obj_data_provider->conectar();
+        //Llama al metodo para editar los datos correspondientes
+        $this->obj_data_provider->edita_datos("T_InconsistenciaVideo","ID_Usuario_Reporta_Solucionada=".$this->id_usuario.",Fecha_Solucionada='".$this->fecha_solucion."',Hora_Solucionada='".$this->hora_solucion."',Estado=".$this->estado.",Observaciones_Solucionada='".$this->observaciones."'",$this->condicion);
+        //Metodo de la clase data provider que desconecta la sesión con la base de datos
+        $this->obj_data_provider->desconectar();
+       
+    }
+    
      public function agregar_nuevo_registro_inconsistencias_de_video(){
         $this->obj_data_provider->conectar();
-        $this->obj_data_provider->inserta_datos("T_InconsistenciaVideo", "ID_Inconsistencia_Video,ID_Bitacora_Revision_Video,Estado", "null,".$this->id_bitacora_revision_video.",".$this->estado_inconsistencia);
+        $this->obj_data_provider->inserta_datos("T_InconsistenciaVideo", "ID_Inconsistencia_Video,ID_Bitacora_Revision_Video,Estado,Tipo_Inconsistencia", "null,".$this->id_bitacora_revision_video.",".$this->estado_inconsistencia.",".$this->tipo_inconsistencia);
         $this->arreglo=$this->obj_data_provider->getArreglo();
         $this->obj_data_provider->desconectar();
     }

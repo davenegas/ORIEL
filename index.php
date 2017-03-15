@@ -190,7 +190,11 @@ $map = array(
     'guarda_revision_de_video_actual'=>array('controller'=>'Controller','action'=> 'guarda_revision_de_video_actual'),    
     'guarda_justificacion_retraso_control_de_video'=>array('controller'=>'Controller','action'=> 'guarda_justificacion_retraso_control_de_video'),    
     'inconsistencias_de_video_listar'=>array('controller'=>'Controller','action'=> 'inconsistencias_de_video_listar'),    
-                     
+    'validar_inconsistencias_video_guardar'=>array('controller'=>'Controller','action'=> 'validar_inconsistencias_video_guardar'),    
+    'reportar_inconsistencias_video_guardar'=>array('controller'=>'Controller','action'=> 'reportar_inconsistencias_video_guardar'),    
+    'solucionar_inconsistencias_video_guardar'=>array('controller'=>'Controller','action'=> 'solucionar_inconsistencias_video_guardar'),    
+       
+    
     //Información Proveedor enlaces
     'proveedor_listar'=>array('controller'=>'Controller', 'action'=>'proveedor_listar'),
     'proveedor_enlace_guardar'=>array('controller'=>'Controller', 'action'=>'proveedor_enlace_guardar'),
