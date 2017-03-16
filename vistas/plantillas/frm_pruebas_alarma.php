@@ -69,7 +69,7 @@
                     
                     <div class="col-sm-4 espacio-abajo-5">
                         <label for="numero_punto" id="codigo_agencia">Código de agencia</label>
-                        <input type="text" class="form-control" id="numero_punto" name="numero_punto" onblur="evento_buscar_puntobcr();" onfocus="borrar_datos();" placeholder="Digite el código de la agencia">
+                        <input type="text" class="form-control" id="numero_punto" name="numero_punto" onblur="evento_buscar_puntobcr();" onfocus="borrar_datos();" onkeydown="if(event.keyCode==13)evento_buscar_puntobcr();" placeholder="Digite el código de la agencia">
                     </div>
                     <div class="col-sm-4 espacio-abajo-5">
                         <label for="nombre_punto">Nombre de la agencia</label>

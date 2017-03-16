@@ -244,13 +244,13 @@ function guardar_apertura(){
                 },
                 cancel: function(){}
                 });
-            } if(diff<90 && diff>=0) {
+            } if(diff<=90 && diff>=0) {
                 document.getElementById("hora_apertura").removeAttribute("style");
                 id_prueba = document.getElementById('ID_Prueba_Alarma').value;
                 tipo = "Apertura_Alarma_SIS";
                 punto_bcr = document.getElementById('ID_PuntoBCR').value;
 
-                $.post("index.php?ctl=prueba_alarma_guardar", { id_prueba: id_prueba, tipo: tipo, punto_bcr:punto_bcr, hora_apertura:hora_apertura}, function(data){
+                $.post("index.php?ctl=prueba_alarma_guardar", {id_prueba: id_prueba, tipo: tipo, punto_bcr:punto_bcr, hora_apertura:hora_apertura}, function(data){
                     // alert(data);
                     numero= data.replace(/\D/g,'');
                     if(numero>0){
