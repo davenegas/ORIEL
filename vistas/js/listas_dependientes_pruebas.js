@@ -71,9 +71,10 @@ function listas_desplegables(){
     
     //Lista de Seguimiento
     var seguimiento='<option value=value=""></option>';
-    var seguimiento=seguimiento+'<option value=value="Se solicitó la prueba">Se solicitó la prueba</option>';
-    var seguimiento=seguimiento+'<option value="Oficina en asueto">Oficina en Asueto</option>';
+    var seguimiento=seguimiento+'<option value="Se solicitó la prueba">Se solicitó la prueba</option>';
+    var seguimiento=seguimiento+'<option value="Oficina en Asueto">Oficina en Asueto</option>';
     var seguimiento=seguimiento+'<option value="Oficina con trabajos">Oficina con Trabajos</option>';
+    var seguimiento=seguimiento+'<option value="Oficina abierta 24 horas">Oficina abierta 24 horas</option>';
     $('#seguimiento').html(seguimiento);
 }
 function buscar_pruebas_alarma(id_puntobcr){

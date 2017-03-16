@@ -225,6 +225,10 @@
                             <?php if ($_SESSION['modulos']['Reportes-Trazabilidad']==1){ ?>
                                 <li><a href="index.php?ctl=frm_trazabilidad_listar">Trazabilidad</a></li> 
                             <?php }; ?>   
+                            
+                            <?php if ($_SESSION['modulos']['Reportes-Trazabilidad']==1){ ?>
+                                <li><a href="index.php?ctl=alertas_generales">Alertas Generales</a></li> 
+                            <?php }; ?> 
                                 
                             <?php if ($_SESSION['modulos']['Reportes-Trazabilidad']==1){ ?>
                                 <li><a href="index.php?ctl=obtiene_lista_marcas_reportes">Operadores</a></li> 

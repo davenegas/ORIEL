@@ -148,8 +148,9 @@
                         <select class="form-control" id="seguimiento" name="seguimiento" onchange="guarda_seguimiento();">
                             <option value="0"></option>
                             <option value="Se solicitó la prueba">Se solicitó la prueba</option>
-                            <option value="Oficina en asueto">Oficina en Asueto</option>
+                            <option value="Oficina en Asueto">Oficina en Asueto</option>
                             <option value="Oficina con trabajos">Oficina con Trabajos</option>
+                            <option value="Oficina abierta 24 horas">Oficina abierta 24 horas</option>
                         </select>
                     </div>  
                     <div class="col-md-4 espacio-abajo-5">
@@ -171,7 +172,7 @@
                             <?php 
                             $tam=$tam=count($pruebas_pendientes);
                             for ($i = 0; $i <$tam; $i++) {?>
-                                <p style="<?php echo $pruebas_pendientes[$i]['Color']?>"><?php echo "- ".$pruebas_pendientes[$i]['Mensaje'];?></p>
+                                <p style="<?php echo $pruebas_pendientes[$i]['Color']?>"><?php echo $pruebas_pendientes[$i]['Mensaje'];?></p>
                             <?php }?>   
                         </div>
                     <?php } ?>
@@ -182,7 +183,7 @@
                             <?php 
                             $tam=$tam=count($aperturas_pendietes);
                             for ($i = 0; $i <$tam; $i++) {?>
-                                <p style="<?php echo $aperturas_pendietes[$i]['Color']?>"><?php echo "- ".$aperturas_pendietes[$i]['Mensaje'];?></p>
+                                <p style="<?php echo $aperturas_pendietes[$i]['Color']?>"><?php echo $aperturas_pendietes[$i]['Mensaje'];?></p>
                             <?php }?>   
                         </div>
                     <?php } ?>
@@ -193,7 +194,7 @@
                             <?php 
                             $tam=$tam=count($cierres_pendientes);
                             for ($i = 0; $i <$tam; $i++) {?>
-                                <p style="<?php echo $cierres_pendientes[$i]['Color']?>"><?php echo "- ".$cierres_pendientes[$i]['Mensaje'];?></p>
+                                <p style="<?php echo $cierres_pendientes[$i]['Color']?>"><?php echo $cierres_pendientes[$i]['Mensaje'];?></p>
                             <?php }?>   
                         </div>
                     <?php } ?>

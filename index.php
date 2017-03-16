@@ -158,6 +158,7 @@ $map = array(
     'reporte_seguimiento_eventos'=>array('controller'=>'Controller', 'action'=>'reporte_seguimiento_eventos'),
     'reporte_eventos_provincia'=>array('controller'=>'Controller', 'action'=>'reporte_eventos_provincia'),
     'reporte_lineas_telefonicas'=>array('controller'=>'Controller', 'action'=>'reporte_lineas_telefonicas'),
+    'alertas_generales'=>array('controller'=>'Controller', 'action'=>'alertas_generales'),
     
     //Información pública
     'personal_listar_publico'=>array('controller'=>'Controller', 'action'=>'personal_listar_publico'),
