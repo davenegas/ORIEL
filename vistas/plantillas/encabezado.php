@@ -226,7 +226,7 @@
                                 <li><a href="index.php?ctl=frm_trazabilidad_listar">Trazabilidad</a></li> 
                             <?php }; ?>   
                             
-                            <?php if ($_SESSION['modulos']['Reportes-Trazabilidad']==1){ ?>
+                            <?php if ($_SESSION['modulos']['Reportes-Alertas Generales']==1){ ?>
                                 <li><a href="index.php?ctl=alertas_generales">Alertas Generales</a></li> 
                             <?php }; ?> 
                                 

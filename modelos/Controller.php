@@ -10957,7 +10957,7 @@
             $pendiente_puesto4[0]['Contador']=0;
             $pendiente_puestoZ2[0]['Contador']=0;
             //Eventos puesto 1
-            $obj_eventos->setCondicion("T_Evento.ID_EstadoEvento=1 AND (T_Evento.ID_Provincia=4 OR T_Evento.ID_Provincia=5 OR T_Evento.ID_Provincia=6) AND (T_Evento.ID_Tipo_Punto<>3 AND T_Evento.ID_Tipo_Punto<>4 AND T_Evento.ID_Tipo_Punto<>2)");
+            $obj_eventos->setCondicion("T_Evento.ID_EstadoEvento=1 AND (T_Evento.ID_Provincia=4 OR T_Evento.ID_Provincia=5 OR T_Evento.ID_Provincia=6) AND (T_Evento.ID_Tipo_Punto<>3 AND T_Evento.ID_Tipo_Punto<>4 AND T_Evento.ID_Tipo_Punto<>2 AND T_Evento.ID_Tipo_Punto<>8)");
             $obj_eventos ->obtiene_todos_los_eventos(); 
             $params= $obj_eventos->getArreglo();            
             $tam=count($params);
@@ -10967,7 +10967,7 @@
             }
             
             //Eventos puesto 2
-            $obj_eventos->setCondicion("T_Evento.ID_EstadoEvento=1 AND T_Evento.ID_Provincia=1 AND (T_Evento.ID_Tipo_Punto<>3 AND T_Evento.ID_Tipo_Punto<>4 AND T_Evento.ID_Tipo_Punto<>2)");
+            $obj_eventos->setCondicion("T_Evento.ID_EstadoEvento=1 AND T_Evento.ID_Provincia=1 AND (T_Evento.ID_Tipo_Punto<>3 AND T_Evento.ID_Tipo_Punto<>4 AND T_Evento.ID_Tipo_Punto<>2 AND T_Evento.ID_Tipo_Punto<>8)");
             $obj_eventos ->obtiene_todos_los_eventos(); 
             $params= $obj_eventos->getArreglo();            
             $tam=count($params);
@@ -10986,7 +10986,7 @@
                 $pendiente_puesto3[0]['Contador']=$i;
             }
             //Eventos puesto 4
-            $obj_eventos->setCondicion("T_Evento.ID_EstadoEvento=1 AND (T_Evento.ID_Provincia=2 OR T_Evento.ID_Provincia=3 OR T_Evento.ID_Provincia=7) AND (T_Evento.ID_Tipo_Punto<>3 AND T_Evento.ID_Tipo_Punto<>4 AND T_Evento.ID_Tipo_Punto<>2)");
+            $obj_eventos->setCondicion("T_Evento.ID_EstadoEvento=1 AND (T_Evento.ID_Provincia=2 OR T_Evento.ID_Provincia=3 OR T_Evento.ID_Provincia=7) AND (T_Evento.ID_Tipo_Punto<>3 AND T_Evento.ID_Tipo_Punto<>4 AND T_Evento.ID_Tipo_Punto<>2 AND T_Evento.ID_Tipo_Punto<>8)");
             $obj_eventos ->obtiene_todos_los_eventos(); 
             $params= $obj_eventos->getArreglo();            
             $tam=count($params);
