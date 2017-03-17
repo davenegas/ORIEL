@@ -12,21 +12,7 @@
         <script src="vistas/js/jquery-1-4-2-min.js"></script>
         <script language="javascript" src="vistas/js/listas_dependientes_encabezado.js"></script>
     </head>
-     <center><img src="vistas/Imagenes/Banner_Centro_de_Control.jpg" alt=""/></center>
-     <?php
-     if($_SESSION['modulos']['Notas Importantes']==1){ ?>
-        <!--Ventana de Notas Pendientes, deslizable-->
-        <div class="esthela" style="right: -400px;">
-            <div style="color: rgb(255, 255, 255); padding: 8px 5px 0pt 50px;">
-                <div class="">
-                    <?php $notas=nota_obtener();?>
-                    <label for="notas">Pendientes</label>
-                    <textarea class="form-control" rows="10" id="notas" name="notas" placeholder="Notas importantes para seguimientos" onchange="guardar_informacion();"><?php echo $notas[0]['Nota'];?> </textarea>
-                </div>
-            </div>
-        </div>
-     <?php } ?>
-     
+    <center><img src="vistas/Imagenes/Banner_Centro_de_Control.jpg" alt=""/></center>
     <nav class="navbar navbar-default" >
         <div class="container-fluid">
             <div class="navbar-header">

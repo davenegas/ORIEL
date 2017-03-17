@@ -155,7 +155,18 @@
     </head>
     <body>
         <?php require_once 'encabezado.php';?>
-
+        <?php if($_SESSION['modulos']['Notas Importantes']==1){ ?>
+            <!--Ventana de Notas Pendientes, deslizable-->
+            <div class="esthela" style="right: -400px;">
+                <div style="color: rgb(255, 255, 255); padding: 8px 5px 0pt 50px;">
+                    <div class="">
+                        <?php $notas=nota_obtener();?>
+                        <label for="notas">Pendientes</label>
+                        <textarea class="form-control" rows="10" id="notas" name="notas" placeholder="Notas importantes para seguimientos" onchange="guardar_informacion();"><?php echo $notas[0]['Nota'];?> </textarea>
+                    </div>
+                </div>
+            </div>
+         <?php } ?>
         <div class="container animated fadeIn col-xs-10 quitar-float">
             <div class="col-md-5">
                 <h2>Listado de Eventos</h2>

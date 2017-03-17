@@ -18,7 +18,10 @@
                             type: 'pie'
                         },
                         title: {
-                            text: 'Pruebas pendientes= <?php echo $pruebas_pendientes;?>'
+                            text: 'Pruebas pendientes: <?php echo $pruebas_pendientes;?>'
+                        },
+                        subtitle: {
+                            text: 'Pruebas recibidas: <?php echo $contador_pruebas;?>'
                         },
                         tooltip: {
                             pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
@@ -48,7 +51,10 @@
                             type: 'pie'
                         },
                         title: {
-                            text: 'Aperturas pendientes= <?php echo $aperturas_pendientes;?>'
+                            text: 'Aperturas pendientes: <?php echo $aperturas_pendientes;?>'
+                        },
+                        subtitle: {
+                            text: 'Pruebas recibidas: <?php echo $contador_aperturas;?>'
                         },
                         tooltip: {
                             pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
@@ -78,7 +84,10 @@
                             type: 'pie'
                         },
                         title: {
-                            text: 'Cierres pendientes= <?php echo $cierres_pendientes;?>'
+                            text: 'Cierres pendientes: <?php echo $cierres_pendientes;?>'
+                        },
+                        subtitle: {
+                            text: 'Pruebas recibidas: <?php echo $contador_cierres;?>'
                         },
                         tooltip: {
                             pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
@@ -154,9 +163,19 @@
         
         <div class="col-sm-4 sidenav espacio-abajo">
             <div class="well" align="center">SISTEMA DE ALARMA</div>
-            <div id="pruebas"  style="min-width: 300px; height: 350px; max-width: 500px; margin: 0 auto"></div>
-            <div id="aperturas" style="min-width: 300px; height: 350px; max-width: 500px; margin: 0 auto"></div>
-            <div id="cierres" style="min-width: 300px; height: 350px; max-width: 500px; margin: 0 auto"></div>
+            <?php if($contador_pruebas!=0 || $pruebas_pendientes!=0){ ?>
+                <div id="pruebas"  style="min-width: 300px; height: 350px; max-width: 500px; margin: 0 auto"></div>
+            <?php } ?>
+            <?php if($contador_aperturas!=0 || $aperturas_pendientes!=0){ ?>
+                <div id="aperturas" style="min-width: 300px; height: 350px; max-width: 500px; margin: 0 auto"></div>
+            <?php } ?>
+            <?php if($contador_cierres!=0 || $cierres_pendientes!=0){ ?>
+                <div id="cierres" style="min-width: 300px; height: 350px; max-width: 500px; margin: 0 auto"></div>
+            <?php } ?>
+            <?php if($contador_pruebas==0 && $pruebas_pendientes==0 && $contador_aperturas==0 && 
+                $aperturas_pendientes==0 && $contador_cierres==0 && $cierres_pendientes==0){?>
+                <div class="well" align="center">No hay pendientes con el sistema de alarma</div>
+             <?php } ?>    
         </div>
         
         <div class="col-sm-4 sidenav espacio-abajo">
@@ -176,35 +195,35 @@
             <div class="well" align="center">PENDIENTES POR PUESTO</div>
             <div style="text-align: justify;" >
                 <p><b>Puesto 1</b></p>
-                    <?php if (isset($pendiente_puesto1)){
+                    <?php if (isset($pendiente_puesto1[0]['Mensaje'])){
                         $tam=$tam=count($pendiente_puesto1);
                         for ($i = 0; $i <$tam; $i++) {?>
                             <p><?php echo "> ".$pendiente_puesto1[$i]['Mensaje'];?> <br></p>
                         <?php }   
                     } ?>
                 <p><b>Puesto 2</b></p>
-                    <?php if (isset($pendiente_puesto2)){
+                    <?php if (isset($pendiente_puesto2[0]['Mensaje'])){
                         $tam=$tam=count($pendiente_puesto2);
                         for ($i = 0; $i <$tam; $i++) {?>
                             <p><?php echo "> ".$pendiente_puesto2[$i]['Mensaje'];?> <br></p>
                         <?php }   
                     } ?>
                 <p><b>Puesto 3</b></p>
-                    <?php if (isset($pendiente_puesto3)){
+                    <?php if (isset($pendiente_puesto3[0]['Mensaje'])){
                         $tam=$tam=count($pendiente_puesto3);
                         for ($i = 0; $i <$tam; $i++) {?>
                             <p><?php echo "> ".$pendiente_puesto3[$i]['Mensaje'];?> <br></p>
                         <?php }   
                     } ?>
                 <p><b>Puesto 4</b></p>
-                    <?php if (isset($pendiente_puesto4)){
+                    <?php if (isset($pendiente_puesto4[0]['Mensaje'])){
                         $tam=$tam=count($pendiente_puesto4);
                         for ($i = 0; $i <$tam; $i++) {?>
                             <p><?php echo "> ".$pendiente_puesto4[$i]['Mensaje'];?> <br></p>
                         <?php }   
                     } ?>
                 <p><b>Puesto Z2</b></p>
-                    <?php if (isset($pendiente_puestoZ2)){
+                    <?php if (isset($pendiente_puestoZ2[0]['Mensaje'])){
                         $tam=$tam=count($pendiente_puestoZ2);
                         for ($i = 0; $i <$tam; $i++) {?>
                             <p><?php echo "> ".$pendiente_puestoZ2[$i]['Mensaje'];?> <br></p>
