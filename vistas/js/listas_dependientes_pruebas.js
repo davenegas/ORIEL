@@ -276,8 +276,10 @@ function guardar_prueba_alarma(){
             id_prueba = document.getElementById('ID_Prueba_Alarma').value;
             zona= document.getElementById('zona_prueba').value;
             tipo = "Hora_Prueba_Alarma_SIS";
-            $.post("index.php?ctl=prueba_alarma_guardar", { id_prueba: id_prueba, tipo: tipo, hora_prueba:hora_prueba, zona:zona}, function(data){
-                //alert(data);
+            punto_bcr = document.getElementById('ID_PuntoBCR').value;
+            $.post("index.php?ctl=prueba_alarma_guardar", { id_prueba: id_prueba, tipo: tipo, hora_prueba:hora_prueba, zona:zona, punto_bcr:punto_bcr}, function(data){
+//                alert(data);
+//                console.log(data);
             });
         }
     }

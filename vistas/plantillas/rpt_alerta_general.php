@@ -54,7 +54,7 @@
                             text: 'Aperturas pendientes: <?php echo $aperturas_pendientes;?>'
                         },
                         subtitle: {
-                            text: 'Pruebas recibidas: <?php echo $contador_aperturas;?>'
+                            text: 'Aperturas recibidas: <?php echo $contador_aperturas;?>'
                         },
                         tooltip: {
                             pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
@@ -87,7 +87,7 @@
                             text: 'Cierres pendientes: <?php echo $cierres_pendientes;?>'
                         },
                         subtitle: {
-                            text: 'Pruebas recibidas: <?php echo $contador_cierres;?>'
+                            text: 'Cierres recibidos: <?php echo $contador_cierres;?>'
                         },
                         tooltip: {
                             pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'

@@ -11058,8 +11058,8 @@
             
             $tam=count($Oficinas);
             for($i=0;$i<$tam;$i++){
-                $prueba="";
-                $obj_prueba->setCondicion("T_PruebaAlarma.ID_PuntoBCR=".$Oficinas[$i]['ID_PuntoBCR']." AND Fecha='".date('Y-m-d')."'");
+                unset($prueba);
+                $obj_prueba->setCondicion("T_PruebaAlarma.ID_PuntoBCR=".$Oficinas[$i]['ID_PuntoBCR']." AND T_PruebaAlarma.Fecha='".date('Y-m-d')."'");
 		$obj_prueba->obtener_prueba_alarma();
 		$prueba= $obj_prueba->getArreglo();
                 if($prueba[0]['Seguimiento']!='Oficina en Asueto'){
@@ -11233,7 +11233,7 @@
                                         $contador_cierres++;
                                     }
                                 }    
-                            }
+                            } 
                             break;
                         case 'Friday':
                             if($Oficinas[$i]['Hora_Apertura_Viernes']!="" || $Oficinas[$i]['Hora_Apertura_Viernes']!=null){
@@ -11514,7 +11514,14 @@
     public function prueba_alarma_guardar(){
         if(isset($_SESSION['nombre'])){
             $obj_prueba = new cls_prueba_alarma();
+            //Busca nuevamente la prueba de alarma
+            $obj_prueba->setCondicion("T_PruebaAlarma.ID_PuntoBCR='".$_POST['punto_bcr']."' AND T_PruebaAlarma.Fecha='".date("Y-m-d")."'");
+            $obj_prueba->obtener_prueba_alarma();
+            $prueba= $obj_prueba->getArreglo();
             
+            if($prueba!=null || $prueba==""){
+                $_POST['id_prueba']=$prueba[0]['ID_Prueba_Alarma'];
+            }
             switch ($_POST['tipo']) {
                 case 'Persona_Prueba':
                     $obj_prueba->setId_punto($_POST['punto_bcr']);
@@ -11615,8 +11622,6 @@
                         $ultimo = $obj_prueba->getArreglo();
                         echo $ultimo[0]['ID_Prueba_Alarma'];
                     }
-                    break;
-                default:
                     break;
             }
         }
