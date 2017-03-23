@@ -203,6 +203,16 @@
             <?php 
             $tam=count($params);  
             for ($i = 0; $i <$tam; $i++) {
+                
+                $bandera=0;
+                if ($params[$i]['Estado']==1){
+                    $bandera=1;
+                }else{
+                    if (($params[$i]['Estado']==0)&&($_SESSION['modulos']['Catálogos-Puestos de Monitoreo']==1)){
+                        $bandera=1;
+                    }
+                }
+                if ($bandera==1){
             ?>
             <tr>
                 <td hidden="hidden"><?php echo $params[$i]['ID_Puesto_Monitoreo'];?></td>
@@ -247,7 +257,9 @@
             
             </tr>     
            
-                    <?php } ?>
+                <?php }
+                
+                } ?>
             </tbody>
         </table>
          <?php if ($_SESSION['modulos']['Catálogos-Puestos de Monitoreo']==1){ ?>

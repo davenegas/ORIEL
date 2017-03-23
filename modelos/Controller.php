@@ -9892,6 +9892,8 @@
         }  
     }
     
+    
+    
     public function guarda_justificacion_retraso_control_de_video() {
        if(isset($_SESSION['nombre'])){
            $obj_puesto_monitoreo = new cls_puestos_de_monitoreo();
@@ -9901,6 +9903,12 @@
            if (strlen(trim($_POST['txt_retraso']))>14){
                $obj_puesto_monitoreo->setJustificacion_retraso($_POST['txt_retraso']);
                $obj_puesto_monitoreo->agrega_justificacion_en_retraso_de_una_revision_de_video();
+               $obj_puesto_monitoreo->setFecha_inicia_revision(date("Y-m-d"));
+               //$obj_puesto_monitoreo->setHora_inicia_revision(date("H:i:s", time()));
+               $obj_puesto_monitoreo->setHora_inicia_revision("ADDTIME(Hora_Inicia_Revision,'00:00:10')");
+               $obj_puesto_monitoreo->setCondicion("ID_Puesto_Monitoreo=".$_POST['id_puesto_justificacion']." AND ID_Usuario=".$_SESSION['id']." AND Estado=0");
+               $obj_puesto_monitoreo->edita_tiempo_de_inicio_en_revision_de_video();
+               
                header ("location:/ORIEL/index.php?ctl=controles_de_video_listar");
            }else{
                header ("location:/ORIEL/index.php?ctl=controles_de_video_listar");
@@ -10144,8 +10152,36 @@
                      $vector_padron_fotografico=$obj_padron_fotografico->getArreglo();
                      //termina la consulta 
                      
+                     //Vector 1 unidad siguiente
+                     $pos=$vector_revision_de_video_actual[0]['Posicion'];
+                     $pos=$pos+1;
+                     $obj_puesto_monitoreo->setCondicion("T_PuestoMonitoreoUnidadVideo.ID_Puesto_Monitoreo=".$vector_revision_de_video_actual[0]['ID_Puesto_Monitoreo']." AND (T_PuestoMonitoreoUnidadVideo.Posicion>".$vector_revision_de_video_actual[0]['Posicion']." AND T_PuestoMonitoreoUnidadVideo.Posicion<=".$pos.")");
+                     $obj_puesto_monitoreo->obtiene_las_unidades_siguientes_para_revision();
+                     $vector_proximas_unidades=$obj_puesto_monitoreo->getArreglo();
+                     
+                     //Vector 1 Unidades de Video Siguientes
+                    
+                     if (count($vector_proximas_unidades)==0){
+                         $pos=1;
+                         $obj_puesto_monitoreo->setCondicion("T_PuestoMonitoreoUnidadVideo.ID_Puesto_Monitoreo=".$vector_revision_de_video_actual[0]['ID_Puesto_Monitoreo']." AND T_PuestoMonitoreoUnidadVideo.Posicion=".$pos);
+                         $obj_puesto_monitoreo->obtiene_las_unidades_siguientes_para_revision();
+                         $vector_proximas_unidades=$obj_puesto_monitoreo->getArreglo();
+                       
+                     }
+                     
+                     $obj_unidad_video->setCondicion("t_unidadvideo.ID_Unidad_Video=".$vector_proximas_unidades[0]['ID_Unidad_Video']);
+                     $obj_unidad_video->obtiene_todas_las_unidades_de_video();
+                     $vector_informacion_unidad_video_siguiente=$obj_unidad_video->getArreglo();
+                     
+                     $obj_puntos_bcr->setCondicion("T_PuntoBCR.ID_PuntoBCR=".$vector_informacion_unidad_video_siguiente[0]['ID_PuntoBCR']);
+                     $obj_puntos_bcr->obtiene_todos_los_puntos_bcr();
+                     $vector_punto_bcr_siguiente=$obj_puntos_bcr->getArreglo(); 
+                                       
+                     //echo '<pre>';
+                     //print_r($vector_punto_bcr_siguiente);
+                     //echo '</pre>';
                      require __DIR__.'/../vistas/plantillas/frm_controles_de_video_listar.php';
-                     //echo $diferenciasegundos;
+                   
                 }
              
              } else{

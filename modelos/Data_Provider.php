@@ -227,6 +227,7 @@ class Data_Provider{
                 $this->resultado_operacion=true;
             }
         }else{
+            
             //Establece el arreglo a null, para que pueda ser validado cuando hay cero resultados en la consulta
               $arreglo=null;
         

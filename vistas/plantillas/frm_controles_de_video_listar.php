@@ -3,10 +3,12 @@
         <meta charset="utf-8"/>
         <title>Control de Video</title>
         <?php require_once 'frm_librerias_head.html';?>
+        <script language="javascript" src="vistas/js/valida_un_solo_click_en_formulario.js"></script>
         <link rel="stylesheet" href="vistas/css/ventanaoculta.css">
         <script>
             var centesimas = 0;
             var segundos = <?php echo $diferenciasegundos; ?>;
+            var limite_segundos = <?php echo $vector_puesto_monitoreo_unidad_video[0]['Tiempo_Personalizado_Revision'];?>;
             var minutos = 0;
             var horas = 0;
             function inicio () {
@@ -72,8 +74,10 @@
             }
             
              //Funcion para agregar un nuevo tipo de telefono- formulario en blanco
-            function mostrar_justificar_atraso_en_revision(id_revis) {
+            function mostrar_justificar_atraso_en_revision(id_revis,id_puesto) {
                 document.getElementById('id_bitacora_revision_actual').value=id_revis;
+                document.getElementById('id_puesto_justificacion').value=id_puesto;
+                
                 //document.getElementById('txt_retraso').value=null;
                 document.getElementById('ventana_oculta_1').style.display = "block";
             }
@@ -88,10 +92,20 @@
                             centesimas = -1;
                     }
                     if (centesimas == 0) {
+                        //alert(segundos);
+                        if (segundos<0){
+                            //alert(segundos);
+                            segundos=0;
+                        }
                             segundos ++;
                             //segundos=segundos+10;
                             if (segundos < 10) { segundos = "0"+segundos }
                             Segundos.innerHTML = segundos;
+                    }
+                    if(segundos>limite_segundos){
+                        document.getElementById("Segundos").style.color="red";
+                    }else{
+                        document.getElementById("Segundos").style.color="black";
                     }
                     //if (segundos == 59) {
                     //	segundos = -1;
@@ -122,53 +136,101 @@
                    var fecha_inicio= '<?php echo $fechaInicialRevision;?>';
                    $.post("index.php?ctl=actualiza_segundero_revision_video",{fecha_inicio: fecha_inicio},function(data){
                         var a=data.replace(/\D/g,''); 
-                        segundos=parseInt(a);
+                        segundos=parseInt(a);  
+                        if(segundos>limite_segundos){
+                             document.getElementById("Segundos").style.color="red";
+                        }else{
+                             document.getElementById("Segundos").style.color="black";
+                        }
                         }); 
             }
 
             function guarda_revision_de_video_actual(id_revis,fecha_ini,hora_ini,tiem,id_control_puesto,id_puesto){
-                //alert(id_revis);
-                var req_mantenimiento;
-                var res_conexion;
-                var rep_situacion="";
- 
-                var mantenimiento=document.getElementsByName("optradiomantenimiento");
-                var conex=document.getElementsByName("optradioconexion");
-                // Recorremos todos los valores del radio button para encontrar el
-                // seleccionado
-                for(var i=0;i<mantenimiento.length;i++)
-                {
-                    if(mantenimiento[i].checked)
-                        req_mantenimiento=mantenimiento[i].value;
+               //alert(segundos);
+                if (segundos<6){
+                     $.confirm({
+                        title: 'Confirmación!',
+                        content: 'Recuerde tomarse el tiempo necesario para revisar el video actual. Desea registrar esta revisión con este tiempo?',
+                        confirm: function(){
+                             if (enviado()==true){
+
+                                var req_mantenimiento;
+                                var res_conexion;
+                                var rep_situacion="";
+
+                                var mantenimiento=document.getElementsByName("optradiomantenimiento");
+                                var conex=document.getElementsByName("optradioconexion");
+                                // Recorremos todos los valores del radio button para encontrar el
+                                // seleccionado
+                                for(var i=0;i<mantenimiento.length;i++)
+                                {
+                                    if(mantenimiento[i].checked)
+                                        req_mantenimiento=mantenimiento[i].value;
+                                }
+
+                                for(var i=0;i<conex.length;i++)
+                                {
+                                    if(conex[i].checked)
+                                        res_conexion=conex[i].value;
+                                }
+
+                                rep_situacion=document.getElementById("txt_situacion").value;
+
+                                $.post("index.php?ctl=guarda_revision_de_video_actual", {id_revis: id_revis,req_mantenimiento:req_mantenimiento,res_conexion:res_conexion,rep_situacion:rep_situacion,fecha_ini:fecha_ini,hora_ini:hora_ini,tiem:tiem,id_control_puesto:id_control_puesto,id_puesto:id_puesto},function(data){
+                                            var srt = data;
+                                            var n= srt.search("on_time");
+                                           //alert(data);
+                                            if(n>0){
+                                                document.location.href="index.php?ctl=controles_de_video_listar";
+                                            }else{
+                                                mostrar_justificar_atraso_en_revision(id_revis,id_puesto);
+                                            }
+                                });  
+                            } 
+
+                        },
+                        cancel: function(){
+
+                        }
+                    });
+                    
+                }else{
+                    if (enviado()==true){
+
+                                var req_mantenimiento;
+                                var res_conexion;
+                                var rep_situacion="";
+
+                                var mantenimiento=document.getElementsByName("optradiomantenimiento");
+                                var conex=document.getElementsByName("optradioconexion");
+                                // Recorremos todos los valores del radio button para encontrar el
+                                // seleccionado
+                                for(var i=0;i<mantenimiento.length;i++)
+                                {
+                                    if(mantenimiento[i].checked)
+                                        req_mantenimiento=mantenimiento[i].value;
+                                }
+
+                                for(var i=0;i<conex.length;i++)
+                                {
+                                    if(conex[i].checked)
+                                        res_conexion=conex[i].value;
+                                }
+
+                                rep_situacion=document.getElementById("txt_situacion").value;
+
+                                $.post("index.php?ctl=guarda_revision_de_video_actual", {id_revis: id_revis,req_mantenimiento:req_mantenimiento,res_conexion:res_conexion,rep_situacion:rep_situacion,fecha_ini:fecha_ini,hora_ini:hora_ini,tiem:tiem,id_control_puesto:id_control_puesto,id_puesto:id_puesto},function(data){
+                                            var srt = data;
+                                            var n= srt.search("on_time");
+                                           //alert(data);
+                                            if(n>0){
+                                                document.location.href="index.php?ctl=controles_de_video_listar";
+                                            }else{
+                                                mostrar_justificar_atraso_en_revision(id_revis,id_puesto);
+                                            }
+                                });  
+                            } 
                 }
-                
-                for(var i=0;i<conex.length;i++)
-                {
-                    if(conex[i].checked)
-                        res_conexion=conex[i].value;
-                }
-                
-                
-                rep_situacion=document.getElementById("txt_situacion").value;
-                
-                
-                //alert(tiem);
-                
-                $.post("index.php?ctl=guarda_revision_de_video_actual", {id_revis: id_revis,req_mantenimiento:req_mantenimiento,res_conexion:res_conexion,rep_situacion:rep_situacion,fecha_ini:fecha_ini,hora_ini:hora_ini,tiem:tiem,id_control_puesto:id_control_puesto,id_puesto:id_puesto},function(data){
-                            var srt = data;
-                            var n= srt.search("on_time");
-                           //alert(data);
-                            if(n>0){
-                                document.location.href="index.php?ctl=controles_de_video_listar";
-                            }else{
-                                mostrar_justificar_atraso_en_revision(id_revis);
-                            }
-                });  
-                
-            }
-            
-            function prueba(){
-                //alert(Segundos.innerHTML);
             }
             
              function liberar_puesto_de_monitoreo(id_puesto){
@@ -304,13 +366,14 @@
                   
                   </tbody> 
               </table>
+            <div >
+           <a  href="#" class="btn btn-default" role="button" onclick="guarda_revision_de_video_actual('<?php echo $vector_revision_de_video_actual[0]['ID_Bitacora_Revision_Video'];?>','<?php echo $vector_revision_de_video_actual[0]['Fecha_Inicia_Revision'];?>','<?php echo $vector_revision_de_video_actual[0]['Hora_Inicia_Revision'];?>','<?php echo $vector_puesto_monitoreo_unidad_video[0]['Tiempo_Personalizado_Revision'];?>','<?php echo $vector_revision_de_video_actual[0]['ID_Bitacora_Control_Puesto_Monitoreo'];?>','<?php echo $vector_revision_de_video_actual[0]['ID_Puesto_Monitoreo'];?>');">Registrar Revisión</a>
+            </div>
+            <h4 style="float:right;"><?php echo $vector_informacion_unidad_video_siguiente[0]['Descripcion'];?> (<?php echo $vector_punto_bcr_siguiente[0]['Codigo'];?>)<b>>></b></h4>
       
-            <a href="#" class="btn btn-default" role="button" onclick="guarda_revision_de_video_actual('<?php echo $vector_revision_de_video_actual[0]['ID_Bitacora_Revision_Video'];?>','<?php echo $vector_revision_de_video_actual[0]['Fecha_Inicia_Revision'];?>','<?php echo $vector_revision_de_video_actual[0]['Hora_Inicia_Revision'];?>','<?php echo $vector_puesto_monitoreo_unidad_video[0]['Tiempo_Personalizado_Revision'];?>','<?php echo $vector_revision_de_video_actual[0]['ID_Bitacora_Control_Puesto_Monitoreo'];?>','<?php echo $vector_revision_de_video_actual[0]['ID_Puesto_Monitoreo'];?>');">Registrar Revisión</a>
-          
-            <!--<h3 align="left">Visualización de Imágenes</h3>-->
           <br> <br> <br>
           <div align="center">
-              <img align="center" src="../../../Padron_Fotografico_Unidades_Video/<?php echo $vector_padron_fotografico[0]['Nombre_Ruta'];?>" alt="" width="1500px" class="img-responsive" alt="Cinque Terre"> 
+              <img align="center" src="../../../Padron_Fotografico_Unidades_Video/<?php echo $vector_padron_fotografico[0]['Nombre_Ruta'];?>" alt="" width="800px" class="img-responsive" alt="Cinque Terre"> 
           </div>
           <br>
             <table id="tabla" class="display" cellspacing="0" width="100%">
@@ -354,7 +417,8 @@
                     <hr>
                     
                     <input hidden id="id_bitacora_revision_actual" name="id_bitacora_revision_actual" type="text">
-                                        
+                    <input hidden id="id_puesto_justificacion" name="id_puesto_justificacion" type="text">                    
+                    
                     <label for="txt_retraso">Detalle</label>
                     <input class="form-control espacio-abajo" required minlength="15" id="txt_retraso" name="txt_retraso" placeholder="Justifique el Retraso (Minimo 15 caracteres)" type="text">
                     

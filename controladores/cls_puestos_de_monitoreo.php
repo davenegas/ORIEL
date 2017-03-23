@@ -544,6 +544,39 @@ class cls_puestos_de_monitoreo{
         } 
     }
     
+    public function obtiene_las_unidades_siguientes_para_revision(){
+        $this->obj_data_provider->conectar();
+        if($this->condicion==""){
+            $this->arreglo=$this->obj_data_provider->trae_datos(
+                    "T_PuestoMonitoreoUnidadVideo
+                        inner join T_PuestoMonitoreo on T_PuestoMonitoreo.ID_Puesto_Monitoreo=T_PuestoMonitoreoUnidadVideo.ID_Puesto_Monitoreo
+                        inner join T_UnidadVideo on T_UnidadVideo.ID_Unidad_Video=T_PuestoMonitoreoUnidadVideo.ID_Unidad_Video
+                        inner join t_puntoBCR on t_unidadvideo.ID_PuntoBCR=t_puntoBCR.ID_PuntoBCR 
+                        inner join T_TipoPuntoBCR ON T_PuntoBCR.ID_Tipo_Punto = T_TipoPuntoBCR.ID_Tipo_Punto order by T_PuestoMonitoreoUnidadVideo.Posicion ", 
+                    "T_PuestoMonitoreoUnidadVideo.ID_Puesto_Monitoreo_Unidad_Video,T_PuestoMonitoreoUnidadVideo.ID_Puesto_Monitoreo,
+                        T_UnidadVideo.ID_Unidad_Video,t_puntoBCR.Nombre,T_UnidadVideo.Descripcion,T_TipoPuntoBCR.Tipo_Punto,
+                        T_UnidadVideo.Camaras_Habilitadas,Tiempo_Personalizado_Revision,T_PuestoMonitoreo.Tiempo_Estandar_Revision",
+                    "");
+            $this->arreglo=$this->obj_data_provider->getArreglo();
+            $this->obj_data_provider->desconectar();
+        }
+        else{
+            $this->arreglo=$this->obj_data_provider->trae_datos(
+                                   "T_PuestoMonitoreoUnidadVideo
+                                        inner join T_PuestoMonitoreo on T_PuestoMonitoreo.ID_Puesto_Monitoreo=T_PuestoMonitoreoUnidadVideo.ID_Puesto_Monitoreo
+                                        inner join T_UnidadVideo on T_UnidadVideo.ID_Unidad_Video=T_PuestoMonitoreoUnidadVideo.ID_Unidad_Video
+                                        inner join t_puntoBCR on t_unidadvideo.ID_PuntoBCR=t_puntoBCR.ID_PuntoBCR 
+                                        inner join T_TipoPuntoBCR ON T_PuntoBCR.ID_Tipo_Punto = T_TipoPuntoBCR.ID_Tipo_Punto", 
+                    "T_PuestoMonitoreoUnidadVideo.ID_Puesto_Monitoreo_Unidad_Video,T_PuestoMonitoreoUnidadVideo.ID_Puesto_Monitoreo,
+                        T_UnidadVideo.ID_Unidad_Video,t_puntoBCR.Nombre,T_UnidadVideo.Descripcion,T_TipoPuntoBCR.Tipo_Punto,
+                        T_UnidadVideo.Camaras_Habilitadas,Tiempo_Personalizado_Revision,T_PuestoMonitoreo.Tiempo_Estandar_Revision",
+                    $this->condicion. " order by T_PuestoMonitoreoUnidadVideo.Posicion ");
+            $this->arreglo=$this->obj_data_provider->getArreglo();
+            $this->obj_data_provider->desconectar();
+            
+        } 
+    }
+    
     function liberar_puesto_monitoreo(){
         
         $this->obj_data_provider->conectar();
@@ -706,6 +739,16 @@ class cls_puestos_de_monitoreo{
         $this->obj_data_provider->conectar();
         //Llama al metodo para editar los datos correspondientes
         $this->obj_data_provider->edita_datos("T_BitacoraRevisionesVideo","Fecha_Inicia_Revision='".$this->fecha_inicia_revision."',Hora_Inicia_Revision='".$this->hora_inicia_revision."',ID_Usuario=".$this->id_usuario.",ID_Bitacora_Control_Puesto_Monitoreo=".$this->id_ultimo_toma_puesto_ingresada,$this->condicion);
+        //Metodo de la clase data provider que desconecta la sesión con la base de datos
+        $this->obj_data_provider->desconectar();
+       
+    }
+    
+    //Este metodo realiza la modificación del estado del modulo, de activo a inactivo o viceversa en la bd
+    function edita_tiempo_de_inicio_en_revision_de_video(){
+        $this->obj_data_provider->conectar();
+        //Llama al metodo para editar los datos correspondientes
+        $this->obj_data_provider->edita_datos("T_BitacoraRevisionesVideo","Fecha_Inicia_Revision='".$this->fecha_inicia_revision."',Hora_inicia_Revision=".$this->hora_inicia_revision."",$this->condicion);
         //Metodo de la clase data provider que desconecta la sesión con la base de datos
         $this->obj_data_provider->desconectar();
        
