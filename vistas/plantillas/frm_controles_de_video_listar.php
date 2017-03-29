@@ -73,6 +73,14 @@
                 }
             }
             
+             //Valida informacion completa de formulario de proveedor
+            function no_justificar() {
+               
+                        document.getElementById('ventana_oculta_1').style.display = "none";                        
+                        document.location.href="index.php?ctl=controles_de_video_listar";
+                      
+            }
+            
              //Funcion para agregar un nuevo tipo de telefono- formulario en blanco
             function mostrar_justificar_atraso_en_revision(id_revis,id_puesto) {
                 document.getElementById('id_bitacora_revision_actual').value=id_revis;
@@ -183,9 +191,30 @@
                                             if(n>0){
                                                 document.location.href="index.php?ctl=controles_de_video_listar";
                                             }else{
-                                                mostrar_justificar_atraso_en_revision(id_revis,id_puesto);
+                                                n= srt.search("no_asignado");
+                                                if(n>0){
+                                                    document.location.href="index.php?ctl=controles_de_video_listar";
+                                                }else{
+                                                    n= srt.search("retraso");
+                                                    if(n>0){
+                                                         mostrar_justificar_atraso_en_revision(id_revis,id_puesto);
+                                                    }else{
+                                                        n= srt.search("revision_cerrada");
+                                                        if(n>0){
+                                                            document.location.href="index.php?ctl=controles_de_video_listar";
+                                                        }else{
+                                                            n= srt.search("justificado");
+                                                            if(n>0){
+                                                                 document.location.href="index.php?ctl=controles_de_video_listar";
+                                                            }
+                                                            
+                                                        }
+                                                    }
+                                                    
+                                                }
+                                                
                                             }
-                                });  
+                                });
                             } 
 
                         },
@@ -219,16 +248,37 @@
 
                                 rep_situacion=document.getElementById("txt_situacion").value;
 
-                                $.post("index.php?ctl=guarda_revision_de_video_actual", {id_revis: id_revis,req_mantenimiento:req_mantenimiento,res_conexion:res_conexion,rep_situacion:rep_situacion,fecha_ini:fecha_ini,hora_ini:hora_ini,tiem:tiem,id_control_puesto:id_control_puesto,id_puesto:id_puesto},function(data){
+                                 $.post("index.php?ctl=guarda_revision_de_video_actual", {id_revis: id_revis,req_mantenimiento:req_mantenimiento,res_conexion:res_conexion,rep_situacion:rep_situacion,fecha_ini:fecha_ini,hora_ini:hora_ini,tiem:tiem,id_control_puesto:id_control_puesto,id_puesto:id_puesto},function(data){
                                             var srt = data;
                                             var n= srt.search("on_time");
                                            //alert(data);
                                             if(n>0){
                                                 document.location.href="index.php?ctl=controles_de_video_listar";
                                             }else{
-                                                mostrar_justificar_atraso_en_revision(id_revis,id_puesto);
+                                                n= srt.search("no_asignado");
+                                                if(n>0){
+                                                    document.location.href="index.php?ctl=controles_de_video_listar";
+                                                }else{
+                                                    n= srt.search("retraso");
+                                                    if(n>0){
+                                                         mostrar_justificar_atraso_en_revision(id_revis,id_puesto);
+                                                    }else{
+                                                        n= srt.search("revision_cerrada");
+                                                        if(n>0){
+                                                            document.location.href="index.php?ctl=controles_de_video_listar";
+                                                        }else{
+                                                            n= srt.search("justificado");
+                                                            if(n>0){
+                                                                 document.location.href="index.php?ctl=controles_de_video_listar";
+                                                            }
+                                                            
+                                                        }
+                                                    }
+                                                    
+                                                }
+                                                
                                             }
-                                });  
+                                });
                             } 
                 }
             }
@@ -423,6 +473,7 @@
                     <input class="form-control espacio-abajo" required minlength="15" id="txt_retraso" name="txt_retraso" placeholder="Justifique el Retraso (Minimo 15 caracteres)" type="text">
                     
                     <button><a href="javascript:%20check_empty()" id="submit">Guardar</a></button>
+                    <button><a href="javascript:%20no_justificar()" id="nojustifica">No Justificar</a></button>
                 </form>
             </div>
         <!--Cierre agregar teléfono a Punto BCR-->

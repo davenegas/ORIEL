@@ -12,7 +12,7 @@
         <script>
             $(document).ready(function () {
                 $.post("index.php?ctl=cuenta_visitas_a_bitacora_digital");
-            
+                            
                 if ( $.fn.dataTable.isDataTable('#tabla') ) {
                     table = $('#tabla').DataTable();
                 }

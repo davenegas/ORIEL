@@ -131,7 +131,7 @@ class cls_trazabilidad{
         $this->apellido_usuario="";
         
     }
-    
+
     public function obtiene_trazabilidad() {
         $this->obj_data_provider->conectar();
         if($this->condicion==""){

@@ -124,6 +124,28 @@ class cls_padron_fotografico_unidades_de_video{
         }
     }
     
+    public function obtener_imagenes_unidades_de_video_desde_punto_bcr(){
+        
+        if($this->condicion==""){
+            $this->obj_data_provider->conectar();
+            //Llama al metodo que realiza la consulta a la bd
+            $this->obj_data_provider->trae_datos("t_puntobcr 
+                inner join t_unidadvideo on t_unidadvideo.ID_PuntoBCR=t_Puntobcr.ID_PuntoBCR
+                inner join t_padronfotograficounidadvideo on t_padronfotograficounidadvideo.ID_Unidad_Video=t_unidadvideo.ID_Unidad_Video order by t_padronfotograficounidadvideo.Categoria", "t_padronfotograficounidadvideo.*,IF(t_padronfotograficounidadvideo.Categoria = 0, 'Día', 'Noche') Categoria_Nombre", "");
+            $this->arreglo=$this->obj_data_provider->getArreglo();
+            $this->obj_data_provider->desconectar();
+        }
+        else{
+            $this->obj_data_provider->conectar();
+            //Llama al metodo que realiza la consulta a la bd
+            $this->obj_data_provider->trae_datos("t_puntobcr 
+                inner join t_unidadvideo on t_unidadvideo.ID_PuntoBCR=t_Puntobcr.ID_PuntoBCR
+                inner join t_padronfotograficounidadvideo on t_padronfotograficounidadvideo.ID_Unidad_Video=t_unidadvideo.ID_Unidad_Video", "t_padronfotograficounidadvideo.*,IF(t_padronfotograficounidadvideo.Categoria = 0, 'Día', 'Noche') Categoria_Nombre", $this->condicion." order by t_padronfotograficounidadvideo.Categoria");
+            $this->arreglo=$this->obj_data_provider->getArreglo();
+            $this->obj_data_provider->desconectar();
+        }
+    }
+    
     public function guardar_imagen_unidad_de_video(){
         if($this->condicion==""){
             $this->obj_data_provider->conectar();
