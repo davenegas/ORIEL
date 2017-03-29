@@ -36,7 +36,7 @@
                             <th style="text-align:center">Fecha</th>
                             <th style="text-align:center">Codigo</th>
                             <th style="text-align:center">Nombre</th>
-                            <th style="text-align:center">Nombre_Persona_Apertura</th>
+                            <th style="text-align:center">Nombre_Persona_Prueba</th>
                             <th style="text-align:center">Hora_Apertura_Alarma</th>
                             <th style="text-align:center">Hora_Prueba_Alarma</th>
                             <th style="text-align:center">Numero_Zona_Prueba</th>

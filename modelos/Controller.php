@@ -11,7 +11,7 @@
      
     /*Inicio del sitio web, llamada a la pantalla principal para inicio de sesion*/
     public function inicio(){
-        //Variables que muestran tipos de adventencia en pantalla según sea necesario
+        //Variables que muestran tipos de advertencia en pantalla según sea necesario
         $tipo_de_alerta="alert alert-info";
         $validacion="Verificación de Identidad";
         //Llamada al formulario correspondiente de la vista
@@ -2345,12 +2345,11 @@
                     header ("location:/ORIEL/index.php?ctl=listar_usuarios");
                    
                  }   else    {
-                   //Llama al metodo de la clase controller. 
-                   //Se cambió por el header, en caso de error, volver a colocar la llamada directa al metodo de la clase
+                    //Llama al metodo de la clase controller. 
+                    //Se cambió por el header, en caso de error, volver a colocar la llamada directa al metodo de la clase
                     //$this->gestion_usuarios();***
-                     
-                     //Llamada al formulario correspondiente de la vista
-                     header ("location:/ORIEL/index.php?ctl=gestion_usuarios");                    
+                    //Llamada al formulario correspondiente de la vista
+                    header ("location:/ORIEL/index.php?ctl=gestion_usuarios");                    
                 }
             }
             
@@ -5379,31 +5378,40 @@
                         $obj_prueba->obtener_prueba_alarma();
                         $inconsistencia_prueba= $obj_prueba->getArreglo();
 
-                        //Busca pruebas de alarma en 0
-                        $obj_prueba->setCondicion("T_PruebaAlarma.Fecha='".date("Y-m-d")."' AND (Numero_Zona_Prueba='0')");
+                        //Busca pruebas de alarma 
+                        $obj_prueba->setCondicion("T_PruebaAlarma.Fecha='".date("Y-m-d")."' AND (Numero_Zona_Prueba='0') OR (Numero_Zona_Prueba>'999')");
                         $obj_prueba->obtener_prueba_alarma();
                         $inconsistencia_zona= $obj_prueba->getArreglo();
-                        $cadena_incosistencias=" Acontinuación se detallan Puntos BCR con inconsistencias para revisión... \r\n";
-                        $cadena_incosistencias.=" Hora de apertura de alarma: \r\n";
-                        // Recorre la información del vector 
-                        for ($i = 0; $i < count($inconsistencia_apertura); $i++) {
-                            //Toma la información de cada visita en una variable cadena
-                            $cadena_incosistencias.="->".$inconsistencia_apertura[$i]['Nombre'].", apertura reportada: ".$inconsistencia_apertura[$i]['Hora_Apertura_Alarma']."\r\n";
+                        
+                        $cadena_incosistencias=" A continuación se detallan Puntos BCR con inconsistencias para revisión... \r\n";
+                        if(count($inconsistencia_apertura)>0){
+                            $cadena_incosistencias.=" Hora de apertura de alarma: \r\n";
+                            // Recorre la información del vector 
+                            for ($i = 0; $i < count($inconsistencia_apertura); $i++) {
+                                //Toma la información de cada visita en una variable cadena
+                                $cadena_incosistencias.="->".$inconsistencia_apertura[$i]['Nombre'].", apertura reportada: ".$inconsistencia_apertura[$i]['Hora_Apertura_Alarma']."\r\n";
+                            }
                         }
-                        $cadena_incosistencias.="// \r\n Hora de cierre de alarma: \r\n";
-                        for ($i = 0; $i < count($inconsistencia_cierre); $i++) {
-                            //Toma la información de cada visita en una variable cadena
-                            $cadena_incosistencias.="->".$inconsistencia_cierre[$i]['Nombre'].", Cierre reportada: ".$inconsistencia_cierre[$i]['Hora_Cierre_Alarma']."\r\n";
+                        if(count($inconsistencia_cierre)>0){
+                            $cadena_incosistencias.="// \r\n Hora de cierre de alarma: \r\n";
+                            for ($i = 0; $i < count($inconsistencia_cierre); $i++) {
+                                //Toma la información de cada visita en una variable cadena
+                                $cadena_incosistencias.="->".$inconsistencia_cierre[$i]['Nombre'].", Cierre reportada: ".$inconsistencia_cierre[$i]['Hora_Cierre_Alarma']."\r\n";
+                            }
                         }
-                        $cadena_incosistencias.="// \r\n Hora de prueba de alarma: \r\n";
-                        for ($i = 0; $i < count($inconsistencia_prueba); $i++) {
-                            //Toma la información de cada visita en una variable cadena
-                            $cadena_incosistencias.="->".$inconsistencia_prueba[$i]['Nombre'].", Hora prueba: ".$inconsistencia_prueba[$i]['Hora_Prueba_Alarma']."\r\n";
+                        if(count($inconsistencia_prueba)>0){
+                            $cadena_incosistencias.="// \r\n Hora de prueba de alarma: \r\n";
+                            for ($i = 0; $i < count($inconsistencia_prueba); $i++) {
+                                //Toma la información de cada visita en una variable cadena
+                                $cadena_incosistencias.="->".$inconsistencia_prueba[$i]['Nombre'].", Hora prueba: ".$inconsistencia_prueba[$i]['Hora_Prueba_Alarma']."\r\n";
+                            }
                         }
-                        $cadena_incosistencias.="// \r\n Pruebas en zona 0: \r\n";
-                        for ($i = 0; $i < count($inconsistencia_zona); $i++) {
-                            //Toma la información de cada visita en una variable cadena
-                            $cadena_incosistencias.="->".$inconsistencia_zona[$i]['Nombre'].", Zona reportada: ".$inconsistencia_zona[$i]['Numero_Zona_Prueba']."\r\n";
+                        if(count($inconsistencia_zona)>0){
+                            $cadena_incosistencias.="// \r\n Número de zona: \r\n";
+                            for ($i = 0; $i < count($inconsistencia_zona); $i++) {
+                                //Toma la información de cada visita en una variable cadena
+                                $cadena_incosistencias.="->".$inconsistencia_zona[$i]['Nombre'].", Zona reportada: ".$inconsistencia_zona[$i]['Numero_Zona_Prueba']."\r\n";
+                            }
                         }
                         //Abre el archivo para escribirle 
                         $fp = fopen($ruta,"w+"); //no olvidar crear al archivo visitantes.txt y poner el path correcto
@@ -5412,42 +5420,44 @@
                         //Cierra el archivo
                         fclose($fp);
                         //echo ($cadena_oficiales);
-                        
-                        //Establece los atributos de la clase para el ingreso del evento
-                        $obj_eventos->setFecha(date("Ymd", $time)); 
-                        $obj_eventos->setHora('21:00:00');
-                        $obj_eventos->setTipo_evento('37');
-                        $obj_eventos->setProvincia('1'); 
-                        $obj_eventos->setTipo_punto('6'); 
-                        $obj_eventos->setPunto_bcr('914');
-                        $obj_eventos->setEstado_evento('1');
-                        $obj_eventos->setId_usuario('82');
-                        $obj_eventos->setEstado(1);
+                        //echo strlen($cadena_incosistencias);
+                        if (strlen($cadena_incosistencias)>90){
+                            //Establece los atributos de la clase para el ingreso del evento
+                            $obj_eventos->setFecha(date("Ymd", $time)); 
+                            $obj_eventos->setHora(date("G:H:s", $time));
+                            $obj_eventos->setTipo_evento('37');
+                            $obj_eventos->setProvincia('1'); 
+                            $obj_eventos->setTipo_punto('6'); 
+                            $obj_eventos->setPunto_bcr('914');
+                            $obj_eventos->setEstado_evento('1');
+                            $obj_eventos->setId_usuario('82');
+                            $obj_eventos->setEstado(1);
 
-                        //Verifica que no exista este tipo de evento abierto para este punto BCR
-                        if (!$obj_eventos->existe_abierto_este_tipo_de_evento_en_este_sitio()){
-                            //Ingresa el evento mediante el metodo de la clase
-                            $obj_eventos->ingresar_evento();
+                            //Verifica que no exista este tipo de evento abierto para este punto BCR
+                            if (!$obj_eventos->existe_abierto_este_tipo_de_evento_en_este_sitio()){
+                                //Ingresa el evento mediante el metodo de la clase
+                                $obj_eventos->ingresar_evento();
 
-                            //Establece los atributos del seguimiento del evento de Z1
-                            $obj_eventos->setDetalle($cadena_incosistencias);
-                            $obj_eventos->setId2(0);
-                            //Obtiene el id del ultimo seguimiento para incluirlo en el nuevo
-                            $obj_eventos->obtiene_id_ultimo_evento_ingresado(); 
-                            //Establece el id correspondiente
-                            $obj_eventos->setId($obj_eventos->getId_ultimo_evento_ingresado());
-                            $obj_eventos->setAdjunto("N/A");
-                            //Ingresa el seguimiento
-                            $obj_eventos->ingresar_seguimiento_evento(); 
-                        }else{
-                            $obj_eventos->existe_abierto_este_tipo_de_evento_en_este_sitio();
-                            $id_evento= $obj_eventos->getArreglo();
-                            $obj_eventos->setDetalle($cadena_incosistencias);
-                            $obj_eventos->setId2(0);
-                            $obj_eventos->setId($id_evento[0]['ID_Evento']);
-                            $obj_eventos->setAdjunto("N/A");
-                            //Ingresa el seguimiento
-                            $obj_eventos->ingresar_seguimiento_evento();  
+                                //Establece los atributos del seguimiento del evento de Z1
+                                $obj_eventos->setDetalle($cadena_incosistencias);
+                                $obj_eventos->setId2(0);
+                                //Obtiene el id del ultimo seguimiento para incluirlo en el nuevo
+                                $obj_eventos->obtiene_id_ultimo_evento_ingresado(); 
+                                //Establece el id correspondiente
+                                $obj_eventos->setId($obj_eventos->getId_ultimo_evento_ingresado());
+                                $obj_eventos->setAdjunto("N/A");
+                                //Ingresa el seguimiento
+                                $obj_eventos->ingresar_seguimiento_evento(); 
+                            }else{
+                                $obj_eventos->existe_abierto_este_tipo_de_evento_en_este_sitio();
+                                $id_evento= $obj_eventos->getArreglo();
+                                $obj_eventos->setDetalle($cadena_incosistencias);
+                                $obj_eventos->setId2(0);
+                                $obj_eventos->setId($id_evento[0]['ID_Evento']);
+                                $obj_eventos->setAdjunto("N/A");
+                                //Ingresa el seguimiento
+                                $obj_eventos->ingresar_seguimiento_evento();  
+                            }
                         }
                     }
                 }
@@ -11276,17 +11286,19 @@
                                     }
                                 }
                                 //Información de cierre de alarma urgentes
-                                if($prueba[0]['Hora_Cierre_Alarma']=="" || $prueba[0]['Hora_Cierre_Alarma']==null){
-                                    $fecha2 = new DateTime(date('Y-m-d').' '.$Oficinas[$i]['Hora_Cierre_Lunes']);//Día
-                                    $diff = $fecha1->diff($fecha2); 
-                                    $difencia_tiempo=(intval($diff->h)*60)+(intval($diff->i)*1);
+                                if($prueba[0]['Seguimiento']!='Oficina abierta 24 horas'){
+                                    if($prueba[0]['Hora_Cierre_Alarma']=="" || $prueba[0]['Hora_Cierre_Alarma']==null){
+                                        $fecha2 = new DateTime(date('Y-m-d').' '.$Oficinas[$i]['Hora_Cierre_Lunes']);//Día
+                                        $diff = $fecha1->diff($fecha2); 
+                                        $difencia_tiempo=(intval($diff->h)*60)+(intval($diff->i)*1);
 
-                                    if($diff->invert==1 && $difencia_tiempo>240) {
-                                        $cierres_pendientes[$contador_cierres]['Mensaje']= $Oficinas[$i]['Codigo']." - ".$Oficinas[$i]['Nombre'];
-                                        $cierres_pendientes[$contador_cierres]['Color']="color: orange";
-                                        $contador_cierres++;
-                                    }
-                                }    
+                                        if($diff->invert==1 && $difencia_tiempo>240) {
+                                            $cierres_pendientes[$contador_cierres]['Mensaje']= $Oficinas[$i]['Codigo']." - ".$Oficinas[$i]['Nombre'];
+                                            $cierres_pendientes[$contador_cierres]['Color']="color: orange";
+                                            $contador_cierres++;
+                                        }
+                                    } 
+                                }
                             }
                             break;
                         case 'Tuesday':
@@ -11318,17 +11330,19 @@
                                     }
                                 }
                                 //Información de cirre de alarma urgentes
-                                if($prueba[0]['Hora_Cierre_Alarma']=="" || $prueba[0]['Hora_Cierre_Alarma']==null){
-                                    $fecha2 = new DateTime(date('Y-m-d').' '.$Oficinas[$i]['Hora_Cierre_Martes']);//Día
-                                    $diff = $fecha1->diff($fecha2); 
-                                    $difencia_tiempo=(intval($diff->h)*60)+(intval($diff->i)*1);
+                                if($prueba[0]['Seguimiento']!='Oficina abierta 24 horas'){
+                                    if($prueba[0]['Hora_Cierre_Alarma']=="" || $prueba[0]['Hora_Cierre_Alarma']==null){
+                                        $fecha2 = new DateTime(date('Y-m-d').' '.$Oficinas[$i]['Hora_Cierre_Martes']);//Día
+                                        $diff = $fecha1->diff($fecha2); 
+                                        $difencia_tiempo=(intval($diff->h)*60)+(intval($diff->i)*1);
 
-                                    if($diff->invert==1 && $difencia_tiempo>240) {
-                                        $cierres_pendientes[$contador_cierres]['Mensaje']= $Oficinas[$i]['Codigo']." - ".$Oficinas[$i]['Nombre'];
-                                        $cierres_pendientes[$contador_cierres]['Color']="color: orange";
-                                        $contador_cierres++;
-                                    }
-                                }    
+                                        if($diff->invert==1 && $difencia_tiempo>240) {
+                                            $cierres_pendientes[$contador_cierres]['Mensaje']= $Oficinas[$i]['Codigo']." - ".$Oficinas[$i]['Nombre'];
+                                            $cierres_pendientes[$contador_cierres]['Color']="color: orange";
+                                            $contador_cierres++;
+                                        }
+                                    }    
+                                }
                             }
                             break;
                         case 'Wednesday':
@@ -11361,17 +11375,19 @@
                                     }
                                 }
                                 //Información de cierre de alarma urgentes
-                                if($prueba[0]['Hora_Cierre_Alarma']=="" || $prueba[0]['Hora_Cierre_Alarma']==null){
-                                    $fecha2 = new DateTime(date('Y-m-d').' '.$Oficinas[$i]['Hora_Cierre_Miercoles']);//Día
-                                    $diff = $fecha1->diff($fecha2); 
-                                    $difencia_tiempo=(intval($diff->h)*60)+(intval($diff->i)*1);
+                                if($prueba[0]['Seguimiento']!='Oficina abierta 24 horas'){
+                                    if($prueba[0]['Hora_Cierre_Alarma']=="" || $prueba[0]['Hora_Cierre_Alarma']==null){
+                                        $fecha2 = new DateTime(date('Y-m-d').' '.$Oficinas[$i]['Hora_Cierre_Miercoles']);//Día
+                                        $diff = $fecha1->diff($fecha2); 
+                                        $difencia_tiempo=(intval($diff->h)*60)+(intval($diff->i)*1);
 
-                                    if($diff->invert==1 && $difencia_tiempo>240) {
-                                        $cierres_pendientes[$contador_cierres]['Mensaje']= $Oficinas[$i]['Codigo']." - ".$Oficinas[$i]['Nombre'];
-                                        $cierres_pendientes[$contador_cierres]['Color']="color: orange";
-                                        $contador_cierres++;
-                                    }
-                                }    
+                                        if($diff->invert==1 && $difencia_tiempo>240) {
+                                            $cierres_pendientes[$contador_cierres]['Mensaje']= $Oficinas[$i]['Codigo']." - ".$Oficinas[$i]['Nombre'];
+                                            $cierres_pendientes[$contador_cierres]['Color']="color: orange";
+                                            $contador_cierres++;
+                                        }
+                                    }  
+                                } 
                             }
                             break;
                         case 'Thursday':
@@ -11404,17 +11420,19 @@
                                     }
                                 }
                                 //Información de cierre de alarma urgentes
-                                if($prueba[0]['Hora_Cierre_Alarma']=="" || $prueba[0]['Hora_Cierre_Alarma']==null){
-                                    $fecha2 = new DateTime(date('Y-m-d').' '.$Oficinas[$i]['Hora_Cierre_Jueves']);//Día
-                                    $diff = $fecha1->diff($fecha2); 
-                                    $difencia_tiempo=(intval($diff->h)*60)+(intval($diff->i)*1);
+                                if($prueba[0]['Seguimiento']!='Oficina abierta 24 horas'){
+                                    if($prueba[0]['Hora_Cierre_Alarma']=="" || $prueba[0]['Hora_Cierre_Alarma']==null){
+                                        $fecha2 = new DateTime(date('Y-m-d').' '.$Oficinas[$i]['Hora_Cierre_Jueves']);//Día
+                                        $diff = $fecha1->diff($fecha2); 
+                                        $difencia_tiempo=(intval($diff->h)*60)+(intval($diff->i)*1);
 
-                                    if($diff->invert==1 && $difencia_tiempo>240) {
-                                        $cierres_pendientes[$contador_cierres]['Mensaje']= $Oficinas[$i]['Codigo']." - ".$Oficinas[$i]['Nombre'];
-                                        $cierres_pendientes[$contador_cierres]['Color']="color: orange";
-                                        $contador_cierres++;
+                                        if($diff->invert==1 && $difencia_tiempo>240) {
+                                            $cierres_pendientes[$contador_cierres]['Mensaje']= $Oficinas[$i]['Codigo']." - ".$Oficinas[$i]['Nombre'];
+                                            $cierres_pendientes[$contador_cierres]['Color']="color: orange";
+                                            $contador_cierres++;
+                                        }
                                     }
-                                }    
+                                }
                             } 
                             break;
                         case 'Friday':
@@ -11447,15 +11465,17 @@
                                     }
                                 }
                                 //Información de cierre de alarma urgentes
-                                if($prueba[0]['Hora_Cierre_Alarma']=="" || $prueba[0]['Hora_Cierre_Alarma']==null){
-                                    $fecha2 = new DateTime(date('Y-m-d').' '.$Oficinas[$i]['Hora_Cierre_Viernes']);//Día
-                                    $diff = $fecha1->diff($fecha2); 
-                                    $difencia_tiempo=(intval($diff->h)*60)+(intval($diff->i)*1);
+                                if($prueba[0]['Seguimiento']!='Oficina abierta 24 horas'){
+                                    if($prueba[0]['Hora_Cierre_Alarma']=="" || $prueba[0]['Hora_Cierre_Alarma']==null){
+                                        $fecha2 = new DateTime(date('Y-m-d').' '.$Oficinas[$i]['Hora_Cierre_Viernes']);//Día
+                                        $diff = $fecha1->diff($fecha2); 
+                                        $difencia_tiempo=(intval($diff->h)*60)+(intval($diff->i)*1);
 
-                                    if($diff->invert==1 && $difencia_tiempo>240) {
-                                        $cierres_pendientes[$contador_cierres]['Mensaje']= $Oficinas[$i]['Codigo']." - ".$Oficinas[$i]['Nombre'];
-                                        $cierres_pendientes[$contador_cierres]['Color']="color: orange";
-                                        $contador_cierres++;
+                                        if($diff->invert==1 && $difencia_tiempo>240) {
+                                            $cierres_pendientes[$contador_cierres]['Mensaje']= $Oficinas[$i]['Codigo']." - ".$Oficinas[$i]['Nombre'];
+                                            $cierres_pendientes[$contador_cierres]['Color']="color: orange";
+                                            $contador_cierres++;
+                                        }
                                     }
                                 }
                             }
@@ -11490,17 +11510,19 @@
                                     }
                                 }
                                 //Información de cierre de alarma urgentes
-                                if($prueba[0]['Hora_Cierre_Alarma']=="" || $prueba[0]['Hora_Cierre_Alarma']==null){
-                                    $fecha2 = new DateTime(date('Y-m-d').' '.$Oficinas[$i]['Hora_Cierre_Sabado']);//Día
-                                    $diff = $fecha1->diff($fecha2); 
-                                    $difencia_tiempo=(intval($diff->h)*60)+(intval($diff->i)*1);
+                                if($prueba[0]['Seguimiento']!='Oficina abierta 24 horas'){
+                                    if($prueba[0]['Hora_Cierre_Alarma']=="" || $prueba[0]['Hora_Cierre_Alarma']==null){
+                                        $fecha2 = new DateTime(date('Y-m-d').' '.$Oficinas[$i]['Hora_Cierre_Sabado']);//Día
+                                        $diff = $fecha1->diff($fecha2); 
+                                        $difencia_tiempo=(intval($diff->h)*60)+(intval($diff->i)*1);
 
-                                    if($diff->invert==1 && $difencia_tiempo>240) {
-                                        $cierres_pendientes[$contador_cierres]['Mensaje']= $Oficinas[$i]['Codigo']." - ".$Oficinas[$i]['Nombre'];
-                                        $cierres_pendientes[$contador_cierres]['Color']="color: orange";
-                                        $contador_cierres++;
-                                    }
-                                }    
+                                        if($diff->invert==1 && $difencia_tiempo>240) {
+                                            $cierres_pendientes[$contador_cierres]['Mensaje']= $Oficinas[$i]['Codigo']." - ".$Oficinas[$i]['Nombre'];
+                                            $cierres_pendientes[$contador_cierres]['Color']="color: orange";
+                                            $contador_cierres++;
+                                        }
+                                    }  
+                                }
                             }
                             break;
                         case 'Sunday':
@@ -11533,17 +11555,19 @@
                                     }
                                 }
                                 //Información de cierre de alarma urgentes
-                                if($prueba[0]['Hora_Cierre_Alarma']=="" || $prueba[0]['Hora_Cierre_Alarma']==null){
-                                    $fecha2 = new DateTime(date('Y-m-d').' '.$Oficinas[$i]['Hora_Cierre_Domingo']);//Día
-                                    $diff = $fecha1->diff($fecha2); 
-                                    $difencia_tiempo=(intval($diff->h)*60)+(intval($diff->i)*1);
+                                if($prueba[0]['Seguimiento']!='Oficina abierta 24 horas'){
+                                    if($prueba[0]['Hora_Cierre_Alarma']=="" || $prueba[0]['Hora_Cierre_Alarma']==null){
+                                        $fecha2 = new DateTime(date('Y-m-d').' '.$Oficinas[$i]['Hora_Cierre_Domingo']);//Día
+                                        $diff = $fecha1->diff($fecha2); 
+                                        $difencia_tiempo=(intval($diff->h)*60)+(intval($diff->i)*1);
 
-                                    if($diff->invert==1 && $difencia_tiempo>240) {
-                                        $cierres_pendientes[$contador_cierres]['Mensaje']= $Oficinas[$i]['Codigo']." - ".$Oficinas[$i]['Nombre'];
-                                        $cierres_pendientes[$contador_cierres]['Color']="color: orange";
-                                        $contador_cierres++;
+                                        if($diff->invert==1 && $difencia_tiempo>240) {
+                                            $cierres_pendientes[$contador_cierres]['Mensaje']= $Oficinas[$i]['Codigo']." - ".$Oficinas[$i]['Nombre'];
+                                            $cierres_pendientes[$contador_cierres]['Color']="color: orange";
+                                            $contador_cierres++;
+                                        }
                                     }
-                                }    
+                                }
                             }
                             break;
                     }
