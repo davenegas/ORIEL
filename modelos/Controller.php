@@ -73,8 +73,8 @@
         //Variables que muestran tipos de adventencia en pantalla según sea necesario
         $tipo_de_alerta="alert alert-info";
         $validacion="Verificación de Identidad";
-        //Llamada al formulario correspondiente de la vista
-        $this->ejecucion_automatico_proceso();        
+        //Llamada al formulario correspondiente de la vista   
+        $this->ejecucion_automatico_proceso("Oficiales");        
         require __DIR__ . '/../vistas/plantillas/inicio_sesion.php'; 
     }
     
@@ -2763,6 +2763,7 @@
     public function frm_eventos_listar(){
         //Validación para verificar si el usuario está logeado en el sistema
         if(isset($_SESSION['nombre'])){
+            $this->ejecucion_automatico_proceso("Pruebas");
             //Creacion de objeto de clase eventos
             $obj_eventos = new cls_eventos();
             
@@ -2863,6 +2864,7 @@
     public function eventos_listar_filtrado(){
         //Validación para verificar si el usuario está logeado en el sistema
         if(isset($_SESSION['nombre'])){
+            $this->ejecucion_automatico_proceso("Pruebas");
             //Vector que almacena un si o uno dependiendo si el evento en cuestion pertenece a alguna mezcla
             $eventos_con_mezcla=array();
             //Creación de una instancia de un objeto de la clase eventos.
@@ -4028,9 +4030,9 @@
     }
     
     
-     /*
-     * Metodo que permite recuperar un evento en estado cerrado o abierto por error.
-     */
+    /*
+    * Metodo que permite recuperar un evento en estado cerrado o abierto por error.
+    */
 
     //Metodo que permite recuperar un evento en estado cerrado o abierto por error.
     public function frm_eventos_recuperar(){
@@ -5294,7 +5296,7 @@
          
     }
     
-    public function ejecucion_automatico_proceso(){
+    public function ejecucion_automatico_proceso($proceso){
         //Obtiene el directorio raiz donde se encuentra localizado el proyecto ORIEL
         $raiz=$_SERVER['DOCUMENT_ROOT'];
         //Obtiene la hora actual del sistema
@@ -5303,41 +5305,145 @@
         if (substr($raiz,-1)!="/"){
             $raiz.="/";
         }
-        //Establece la ruta del archivo txt que lleva el control de visitas  a la pagina
-        $ruta=  $raiz."Cuenta_Visitas_Oriel/Ejecucion_Procesos/".date("Ymd", $time)." Revision_Oficiales.txt";
-        
-        if(!file_exists($ruta)){
-            //Abre el archivo , lo crea si no lo encuentra
-            $fp = fopen($ruta,"a+");
-            //Cierra el archivo
-            fclose($fp);
-            
-            $obj_personal=new cls_personal_externo();
-            $fecha_actual= getdate();
-            $fecha_actual= $fecha_actual['year']."-".$fecha_actual['mon']."-".$fecha_actual['mday'];
-            
-            $obj_personal->setCondicion("(Fecha_Vencimiento_Portacion<'".$fecha_actual."' AND Fecha_Vencimiento_Portacion<> '0000-00-00' AND Validado=1 ) "
-                    . "OR (Fecha_Vencimiento_Residencia<'".$fecha_actual."' AND Fecha_Vencimiento_Residencia<>'0000-00-00' AND Validado=1) "
-                    . "OR (Fecha_Salida<'".$fecha_actual."' AND Fecha_Salida<>'0000-00-00' AND Validado=1)");
-            $obj_personal->obtiene_todo_el_personal_externo();
-            $params= $obj_personal->getArreglo();
-            
-            $obj_personal->invalidar_personas_automatico();
+        switch ($proceso) {
+            case "Oficiales":
+                $ruta=  $raiz."Cuenta_Visitas_Oriel/Ejecucion_Procesos/".date("Ymd", $time)." Revision_Oficiales.txt";
+                if(!file_exists($ruta)){
+                    //Abre el archivo , lo crea si no lo encuentra
+                    $fp = fopen($ruta,"a+");
+                    //Cierra el archivo
+                    fclose($fp);
 
-            $cadena_oficiales="";
-                // Recorre la información del vector 
-                for ($i = 0; $i < count($params); $i++) {
-                    //Toma la información de cada visita en una variable cadena
-                    $cadena_oficiales.='Identificacion: '.$params[$i]['Identificacion'].",";
+                    $obj_personal=new cls_personal_externo();
+                    $fecha_actual= getdate();
+                    $fecha_actual= $fecha_actual['year']."-".$fecha_actual['mon']."-".$fecha_actual['mday'];
+
+                    $obj_personal->setCondicion("(Fecha_Vencimiento_Portacion<'".$fecha_actual."' AND Fecha_Vencimiento_Portacion<> '0000-00-00' AND Validado=1 ) "
+                            . "OR (Fecha_Vencimiento_Residencia<'".$fecha_actual."' AND Fecha_Vencimiento_Residencia<>'0000-00-00' AND Validado=1) "
+                            . "OR (Fecha_Salida<'".$fecha_actual."' AND Fecha_Salida<>'0000-00-00' AND Validado=1)");
+                    $obj_personal->obtiene_todo_el_personal_externo();
+                    $params= $obj_personal->getArreglo();
+
+                    $obj_personal->invalidar_personas_automatico();
+
+                    $cadena_oficiales="";
+                    // Recorre la información del vector 
+                    for ($i = 0; $i < count($params); $i++) {
+                        //Toma la información de cada visita en una variable cadena
+                        $cadena_oficiales.='Identificacion: '.$params[$i]['Identificacion'].",";
+                    }
+                    //Abre el archivo para escribirle 
+                    $fp = fopen($ruta,"w+"); //no olvidar crear al archivo visitantes.txt y poner el path correcto
+                    //Escribe en el archivo
+                    fwrite($fp, $cadena_oficiales);
+                    //Cierra el archivo
+                    fclose($fp);
+                    //echo ($cadena_oficiales);
                 }
-                //Abre el archivo para escribirle 
-                $fp = fopen($ruta,"w+"); //no olvidar crear al archivo visitantes.txt y poner el path correcto
-                //Escribe en el archivo
-                fwrite($fp, $cadena_oficiales);
-                //Cierra el archivo
-                fclose($fp);
-                //echo ($cadena_oficiales);
-        }
+                break;
+            case "Pruebas":
+                if(date("G:H:s", $time)>='21:00:00' && date("G:H:s", $time)<='22:00:00'){
+                    $ruta=  $raiz."Cuenta_Visitas_Oriel/Ejecucion_Procesos/".date("Ymd", $time)." Incosistencia_Pruebas.txt";
+                    if(!file_exists($ruta)){
+                        //Abre el archivo , lo crea si no lo encuentra
+                        $fp = fopen($ruta,"a+");
+                        //Cierra el archivo
+                        fclose($fp);
+
+                        $obj_prueba = new cls_prueba_alarma();
+                        $obj_eventos = new cls_eventos();
+                        //Busca información de apertura posiblemente incorrectas
+                        $obj_prueba->setCondicion("T_PruebaAlarma.Fecha='".date("Y-m-d")."' AND ((Hora_Apertura_Alarma>='00:00:00' AND Hora_Apertura_Alarma<='04:00:00') OR (Hora_Apertura_Alarma>='15:00:00' AND Hora_Apertura_Alarma<='23:59:00'))");
+                        $obj_prueba->obtener_prueba_alarma();
+                        $inconsistencia_apertura= $obj_prueba->getArreglo();
+
+                        //Busca información de cierre posiblemente incorrectas
+                        $obj_prueba->setCondicion("T_PruebaAlarma.Fecha='".date("Y-m-d")."' AND ((Hora_Cierre_Alarma>='00:00:00' AND Hora_Cierre_Alarma<='11:00:00'))");
+                        $obj_prueba->obtener_prueba_alarma();
+                        $inconsistencia_cierre= $obj_prueba->getArreglo();
+
+                        //Busca información de apertura posiblemente incorrectas
+                        $obj_prueba->setCondicion("T_PruebaAlarma.Fecha='".date("Y-m-d")."' AND ((Hora_Prueba_Alarma>='00:00:00' AND Hora_Prueba_Alarma<='04:00:00') OR (Hora_Prueba_Alarma>='15:00:00' AND Hora_Prueba_Alarma<='23:59:00'))");
+                        $obj_prueba->obtener_prueba_alarma();
+                        $inconsistencia_prueba= $obj_prueba->getArreglo();
+
+                        //Busca pruebas de alarma en 0
+                        $obj_prueba->setCondicion("T_PruebaAlarma.Fecha='".date("Y-m-d")."' AND (Numero_Zona_Prueba='0')");
+                        $obj_prueba->obtener_prueba_alarma();
+                        $inconsistencia_zona= $obj_prueba->getArreglo();
+                        $cadena_incosistencias=" Acontinuación se detallan Puntos BCR con inconsistencias para revisión... \r\n";
+                        $cadena_incosistencias.=" Hora de apertura de alarma: \r\n";
+                        // Recorre la información del vector 
+                        for ($i = 0; $i < count($inconsistencia_apertura); $i++) {
+                            //Toma la información de cada visita en una variable cadena
+                            $cadena_incosistencias.="->".$inconsistencia_apertura[$i]['Nombre'].", apertura reportada: ".$inconsistencia_apertura[$i]['Hora_Apertura_Alarma']."\r\n";
+                        }
+                        $cadena_incosistencias.="// \r\n Hora de cierre de alarma: \r\n";
+                        for ($i = 0; $i < count($inconsistencia_cierre); $i++) {
+                            //Toma la información de cada visita en una variable cadena
+                            $cadena_incosistencias.="->".$inconsistencia_cierre[$i]['Nombre'].", Cierre reportada: ".$inconsistencia_cierre[$i]['Hora_Cierre_Alarma']."\r\n";
+                        }
+                        $cadena_incosistencias.="// \r\n Hora de prueba de alarma: \r\n";
+                        for ($i = 0; $i < count($inconsistencia_prueba); $i++) {
+                            //Toma la información de cada visita en una variable cadena
+                            $cadena_incosistencias.="->".$inconsistencia_prueba[$i]['Nombre'].", Hora prueba: ".$inconsistencia_prueba[$i]['Hora_Prueba_Alarma']."\r\n";
+                        }
+                        $cadena_incosistencias.="// \r\n Pruebas en zona 0: \r\n";
+                        for ($i = 0; $i < count($inconsistencia_zona); $i++) {
+                            //Toma la información de cada visita en una variable cadena
+                            $cadena_incosistencias.="->".$inconsistencia_zona[$i]['Nombre'].", Zona reportada: ".$inconsistencia_zona[$i]['Numero_Zona_Prueba']."\r\n";
+                        }
+                        //Abre el archivo para escribirle 
+                        $fp = fopen($ruta,"w+"); //no olvidar crear al archivo visitantes.txt y poner el path correcto
+                        //Escribe en el archivo
+                        fwrite($fp, $cadena_incosistencias);
+                        //Cierra el archivo
+                        fclose($fp);
+                        //echo ($cadena_oficiales);
+                        
+                        //Establece los atributos de la clase para el ingreso del evento
+                        $obj_eventos->setFecha(date("Ymd", $time)); 
+                        $obj_eventos->setHora('21:00:00');
+                        $obj_eventos->setTipo_evento('37');
+                        $obj_eventos->setProvincia('1'); 
+                        $obj_eventos->setTipo_punto('6'); 
+                        $obj_eventos->setPunto_bcr('914');
+                        $obj_eventos->setEstado_evento('1');
+                        $obj_eventos->setId_usuario('82');
+                        $obj_eventos->setEstado(1);
+
+                        //Verifica que no exista este tipo de evento abierto para este punto BCR
+                        if (!$obj_eventos->existe_abierto_este_tipo_de_evento_en_este_sitio()){
+                            //Ingresa el evento mediante el metodo de la clase
+                            $obj_eventos->ingresar_evento();
+
+                            //Establece los atributos del seguimiento del evento de Z1
+                            $obj_eventos->setDetalle($cadena_incosistencias);
+                            $obj_eventos->setId2(0);
+                            //Obtiene el id del ultimo seguimiento para incluirlo en el nuevo
+                            $obj_eventos->obtiene_id_ultimo_evento_ingresado(); 
+                            //Establece el id correspondiente
+                            $obj_eventos->setId($obj_eventos->getId_ultimo_evento_ingresado());
+                            $obj_eventos->setAdjunto("N/A");
+                            //Ingresa el seguimiento
+                            $obj_eventos->ingresar_seguimiento_evento(); 
+                        }else{
+                            $obj_eventos->existe_abierto_este_tipo_de_evento_en_este_sitio();
+                            $id_evento= $obj_eventos->getArreglo();
+                            $obj_eventos->setDetalle($cadena_incosistencias);
+                            $obj_eventos->setId2(0);
+                            $obj_eventos->setId($id_evento[0]['ID_Evento']);
+                            $obj_eventos->setAdjunto("N/A");
+                            //Ingresa el seguimiento
+                            $obj_eventos->ingresar_seguimiento_evento();  
+                        }
+                    }
+                }
+                break;
+                    
+         }
+        //Establece la ruta del archivo txt que lleva el control de visitas  a la pagina
+       
         
     }
     
@@ -7900,7 +8006,7 @@
                                 //echo "nada".$params[$i]['Codigo']."\n||||";
                             }
                         } else{
-                            $vencidos[$i]['color']="color: black";
+                            $vencidos[$i]['color']="color:mediumblue; text-decoration: underline;";
                             //echo "nada".$params[$i]['Codigo']."\n||||";
                         }    
                     }else{
@@ -8105,7 +8211,7 @@
                 $obj_personal->obtener_personas_prontuario();
                 $personal = $obj_personal->getArreglo();
                 $persona=$personal[0]['Apellido_Nombre'];
-            } else{
+            } else {
                 $obj_externo->setCondicion("T_PersonalExterno.ID_Persona_Externa='".$_POST['id_persona']."'");
                 $obj_externo->obtiene_todo_el_personal_externo();
                 $personal = $obj_externo->getArreglo();

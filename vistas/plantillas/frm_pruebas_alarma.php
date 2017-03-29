@@ -43,6 +43,33 @@
                     }
                 }
             }
+            function agregar_persona_prueba(id,cedula, nombre, depart, id_empresa){
+                //alert (depart);
+                var variable= <?php echo $_SESSION['modulos']['Editar- Pruebas de Alarma']?>;
+                
+                if(document.getElementById('ID_PuntoBCR').value=="0"){
+                    alert("Por favor seleccione una agencia para guardar la información");
+                } else{
+                    if(document.getElementById('ID_Persona_Reporta_Apertura').value==0 || variable==1){
+                        document.getElementById('nombre_persona_prueba').value=nombre;
+                        document.getElementById('empresa_persona').value=depart;
+                        document.getElementById('ventana_oculta_1').style.display = "none";
+                        id_prueba = document.getElementById('ID_Prueba_Alarma').value;
+                        tipo_prueba = document.getElementById('tipo_prueba').value;
+                        revision_atm = document.getElementById('revision_atm').value;
+                        punto_bcr = document.getElementById('ID_PuntoBCR').value;
+                        tipo = "Persona_Prueba";
+                        $.post("index.php?ctl=prueba_alarma_guardar", { id_prueba: id_prueba, tipo:tipo, id_persona: id, id_empresa:id_empresa, punto_bcr:punto_bcr,tipo_prueba:tipo_prueba,revision_atm:revision_atm}, function(data){
+                            //alert(data);
+                            numero= data.replace(/\D/g,'');
+                            if(numero>0){
+                                numero= parseInt(numero);
+                                document.getElementById('ID_Prueba_Alarma').value=numero;
+                            }
+                        });
+                    } 
+                }
+            }
         </script>
     </head>
     <body>
@@ -69,7 +96,7 @@
                     
                     <div class="col-sm-4 espacio-abajo-5">
                         <label for="numero_punto" id="codigo_agencia">Código de agencia</label>
-                        <input type="text" class="form-control" id="numero_punto" name="numero_punto" onblur="evento_buscar_puntobcr();" onfocus="borrar_datos();" onkeydown="if(event.keyCode==13)evento_buscar_puntobcr();" placeholder="Digite el código de la agencia">
+                        <input type="text" class="form-control" style="color: mediumblue"id="numero_punto" name="numero_punto" onblur="evento_buscar_puntobcr();" onfocus="borrar_datos();" onkeydown="if(event.keyCode==13)evento_buscar_puntobcr();" placeholder="Digite el código de la agencia">
                     </div>
                     <div class="col-sm-4 espacio-abajo-5">
                         <label for="nombre_punto">Nombre de la agencia</label>
@@ -209,7 +236,20 @@
                 <div id="ventana2">
                     <img id="close" src='vistas/Imagenes/cerrar.png' width="25" onclick ="ocultar_elemento()"> 
                     <!--Tabla con la lista de Unidades Ejecutoras-->
-                    <table id="tabla2" class="display" cellspacing="0" width="100%">
+<!--                    <table id="tablas" class="display" cellspacing="0" width="100%">
+                        <thead>
+                            <tr>
+                                <th style="text-align:center">Cedula</th>
+                                <th style="text-align:center">Apellidos Nombre</th>
+                                <th style="text-align:center">Departamento</th>
+                                <th style="text-align:center">Opciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>-->
+                    
+                    <table id="tabla2" class="display espacio-arriba" cellspacing="0" width="100%">
                         <thead>
                             <tr>
                                 <th style="text-align:center">Cedula</th>

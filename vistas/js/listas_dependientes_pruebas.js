@@ -147,31 +147,7 @@ function buscar_persona_prueba(){
    document.getElementById('ventana_oculta_1').style.display = "block";
 
 }
-function agregar_persona_prueba(id,cedula, nombre, depart, id_empresa){
-    //alert (depart);
-    if(document.getElementById('ID_PuntoBCR').value=="0"){
-        alert("Por favor seleccione una agencia para guardar la información");
-    } else{
-        if(document.getElementById('ID_Persona_Reporta_Apertura').value==0){
-            document.getElementById('nombre_persona_prueba').value=nombre;
-            document.getElementById('empresa_persona').value=depart;
-            document.getElementById('ventana_oculta_1').style.display = "none";
-            id_prueba = document.getElementById('ID_Prueba_Alarma').value;
-            tipo_prueba = document.getElementById('tipo_prueba').value;
-            revision_atm = document.getElementById('revision_atm').value;
-            punto_bcr = document.getElementById('ID_PuntoBCR').value;
-            tipo = "Persona_Prueba";
-            $.post("index.php?ctl=prueba_alarma_guardar", { id_prueba: id_prueba, tipo:tipo, id_persona: id, id_empresa:id_empresa, punto_bcr:punto_bcr,tipo_prueba:tipo_prueba,revision_atm:revision_atm}, function(data){
-                //alert(data);
-                numero= data.replace(/\D/g,'');
-                if(numero>0){
-                    numero= parseInt(numero);
-                    document.getElementById('ID_Prueba_Alarma').value=numero;
-                }
-            });
-        }
-    }
-}
+
 function guardar_registro_prueba(tipo){
     if(document.getElementById('ID_PuntoBCR').value=="0"){
         alert("Por favor seleccione una agencia para guardar la información");
