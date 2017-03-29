@@ -9951,6 +9951,7 @@
                     $obj_puesto_monitoreo->setEstado("1");
                     $obj_puesto_monitoreo->setFecha_termina_revision(date("Y-m-d"));
                     $obj_puesto_monitoreo->setHora_termina_revision(date("H:i:s", time()));
+                    
                     $obj_puesto_monitoreo->setRequirio_mantenimiento($_POST['req_mantenimiento']);
                     $obj_puesto_monitoreo->setResultado_conexion($_POST['res_conexion']);
                     $obj_puesto_monitoreo->setReporta_situacion($_POST['rep_situacion']);

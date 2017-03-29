@@ -153,7 +153,7 @@
                         }); 
             }
 
-            function guarda_revision_de_video_actual(id_revis,fecha_ini,hora_ini,tiem,id_control_puesto,id_puesto){
+            function guarda_revision_de_video_actual(id_revis,fecha_ini,hora_ini,tiem,id_control_puesto,id_puesto,pos){
                //alert(segundos);
                 if (segundos<6){
                      $.confirm({
@@ -184,7 +184,7 @@
 
                                 rep_situacion=document.getElementById("txt_situacion").value;
 
-                                $.post("index.php?ctl=guarda_revision_de_video_actual", {id_revis: id_revis,req_mantenimiento:req_mantenimiento,res_conexion:res_conexion,rep_situacion:rep_situacion,fecha_ini:fecha_ini,hora_ini:hora_ini,tiem:tiem,id_control_puesto:id_control_puesto,id_puesto:id_puesto},function(data){
+                                $.post("index.php?ctl=guarda_revision_de_video_actual", {id_revis: id_revis,req_mantenimiento:req_mantenimiento,res_conexion:res_conexion,rep_situacion:rep_situacion,fecha_ini:fecha_ini,hora_ini:hora_ini,tiem:tiem,id_control_puesto:id_control_puesto,id_puesto:id_puesto,pos:pos},function(data){
                                             var srt = data;
                                             var n= srt.search("on_time");
                                            //alert(data);
@@ -248,7 +248,7 @@
 
                                 rep_situacion=document.getElementById("txt_situacion").value;
 
-                                 $.post("index.php?ctl=guarda_revision_de_video_actual", {id_revis: id_revis,req_mantenimiento:req_mantenimiento,res_conexion:res_conexion,rep_situacion:rep_situacion,fecha_ini:fecha_ini,hora_ini:hora_ini,tiem:tiem,id_control_puesto:id_control_puesto,id_puesto:id_puesto},function(data){
+                                 $.post("index.php?ctl=guarda_revision_de_video_actual", {id_revis: id_revis,req_mantenimiento:req_mantenimiento,res_conexion:res_conexion,rep_situacion:rep_situacion,fecha_ini:fecha_ini,hora_ini:hora_ini,tiem:tiem,id_control_puesto:id_control_puesto,id_puesto:id_puesto,pos:pos},function(data){
                                             var srt = data;
                                             var n= srt.search("on_time");
                                            //alert(data);
@@ -417,7 +417,7 @@
                   </tbody> 
               </table>
             <div >
-           <a  href="#" class="btn btn-default" role="button" onclick="guarda_revision_de_video_actual('<?php echo $vector_revision_de_video_actual[0]['ID_Bitacora_Revision_Video'];?>','<?php echo $vector_revision_de_video_actual[0]['Fecha_Inicia_Revision'];?>','<?php echo $vector_revision_de_video_actual[0]['Hora_Inicia_Revision'];?>','<?php echo $vector_puesto_monitoreo_unidad_video[0]['Tiempo_Personalizado_Revision'];?>','<?php echo $vector_revision_de_video_actual[0]['ID_Bitacora_Control_Puesto_Monitoreo'];?>','<?php echo $vector_revision_de_video_actual[0]['ID_Puesto_Monitoreo'];?>');">Registrar Revisión</a>
+           <a  href="#" class="btn btn-default" role="button" onclick="guarda_revision_de_video_actual('<?php echo $vector_revision_de_video_actual[0]['ID_Bitacora_Revision_Video'];?>','<?php echo $vector_revision_de_video_actual[0]['Fecha_Inicia_Revision'];?>','<?php echo $vector_revision_de_video_actual[0]['Hora_Inicia_Revision'];?>','<?php echo $vector_puesto_monitoreo_unidad_video[0]['Tiempo_Personalizado_Revision'];?>','<?php echo $vector_revision_de_video_actual[0]['ID_Bitacora_Control_Puesto_Monitoreo'];?>','<?php echo $vector_revision_de_video_actual[0]['ID_Puesto_Monitoreo'];?>','<?php echo $vector_revision_de_video_actual[0]['Posicion'];?>');">Registrar Revisión</a>
             </div>
             <h4 style="float:right;"><?php echo $vector_informacion_unidad_video_siguiente[0]['Descripcion'];?> (<?php echo $vector_punto_bcr_siguiente[0]['Codigo'];?>)<b>>></b></h4>
       
