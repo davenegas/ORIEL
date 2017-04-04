@@ -10021,6 +10021,9 @@
 
                                  }
                              } 
+                             
+                           
+                            
                              //Ingresa próxima revision de video en bitacora de revisiones de video.
                              $obj_puesto_monitoreo->setId_ultimo_toma_puesto_ingresada($_POST['id_control_puesto']);
                              $obj_puesto_monitoreo->setFecha_inicia_revision(date("Y-m-d"));
@@ -10238,6 +10241,14 @@
                 }
             }
             
+            $obj_puesto_monitoreo->setCondicion("t_unidadvideo.Estado=0");
+            $obj_puesto_monitoreo->obtiene_distribucion_unidades_de_video_en_puestos_de_monitoreo();
+            $vector_distribucion_unidades=$obj_puesto_monitoreo->getArreglo();
+            
+//            echo '<pre>';
+//                print_r($vector_distribucion_unidades);
+//            echo '</pre>';
+            
             //print_r($vector_estadisticas);
             require __DIR__.'/../vistas/plantillas/frm_puestos_de_monitoreo_listar.php';
         }
@@ -10335,7 +10346,10 @@
                      //echo '<pre>';
                      //print_r($vector_punto_bcr_siguiente);
                      //echo '</pre>';
-                     require __DIR__.'/../vistas/plantillas/frm_controles_de_video_listar.php';
+//                      echo '<pre>';
+//                      print_r($_SESSION['vector_temp_revision_video']);
+//                      echo '</pre>';
+                      require __DIR__.'/../vistas/plantillas/frm_controles_de_video_listar.php';
                    
                 }
              

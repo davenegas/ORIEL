@@ -185,6 +185,7 @@
                                 rep_situacion=document.getElementById("txt_situacion").value;
 
                                 $.post("index.php?ctl=guarda_revision_de_video_actual", {id_revis: id_revis,req_mantenimiento:req_mantenimiento,res_conexion:res_conexion,rep_situacion:rep_situacion,fecha_ini:fecha_ini,hora_ini:hora_ini,tiem:tiem,id_control_puesto:id_control_puesto,id_puesto:id_puesto,pos:pos},function(data){
+                                            //alert(data);
                                             var srt = data;
                                             var n= srt.search("on_time");
                                            //alert(data);
@@ -419,13 +420,15 @@
             <div >
            <a  href="#" class="btn btn-default" role="button" onclick="guarda_revision_de_video_actual('<?php echo $vector_revision_de_video_actual[0]['ID_Bitacora_Revision_Video'];?>','<?php echo $vector_revision_de_video_actual[0]['Fecha_Inicia_Revision'];?>','<?php echo $vector_revision_de_video_actual[0]['Hora_Inicia_Revision'];?>','<?php echo $vector_puesto_monitoreo_unidad_video[0]['Tiempo_Personalizado_Revision'];?>','<?php echo $vector_revision_de_video_actual[0]['ID_Bitacora_Control_Puesto_Monitoreo'];?>','<?php echo $vector_revision_de_video_actual[0]['ID_Puesto_Monitoreo'];?>','<?php echo $vector_revision_de_video_actual[0]['Posicion'];?>');">Registrar Revisión</a>
             </div>
-            <h4 style="float:right;"><?php echo $vector_informacion_unidad_video_siguiente[0]['Descripcion'];?> (<?php echo $vector_punto_bcr_siguiente[0]['Codigo'];?>)<b>>></b></h4>
+            
       
           <br> <br> <br>
           <div align="center">
               <img align="center" src="../../../Padron_Fotografico_Unidades_Video/<?php echo $vector_padron_fotografico[0]['Nombre_Ruta'];?>" alt="" width="800px" class="img-responsive" alt="Cinque Terre"> 
           </div>
-          <br>
+          <br> 
+          <h4 style="float:right;"><b><?php echo $vector_informacion_unidad_video_siguiente[0]['Descripcion'];?> (<?php echo $vector_punto_bcr_siguiente[0]['Codigo'];?>)>></b></h4>
+          <br><br><br>
             <table id="tabla" class="display" cellspacing="0" width="100%">
                 <thead>
                     <tr>  
@@ -478,6 +481,40 @@
             </div>
         <!--Cierre agregar teléfono a Punto BCR-->
         </div>
+            
+            
+                 <div id="ventana_oculta_6">
+            <div id="popupventana2">
+                <div id="ventana2">
+                <img id="close" src='vistas/Imagenes/cerrar.png' width="25" onclick ="ocultar_elemento()"> 
+                    <!--Tabla con la lista de Unidades Ejecutoras-->
+                    <table id="tabla4" class="display" cellspacing="0" width="100%">
+                    <thead>
+                        <tr>
+                            <th style="text-align:center"></th>
+                            <th style="text-align:center">Nombre</th>
+                            <th style="text-align:center">Tipo</th>
+                            <th style="text-align:center">Provincia</th>
+                          
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php 
+                        $tama=count($unidades_video_sin_puesto_monitoreo);
+                        for ($i = 0; $i <$tama; $i++) { ?>  
+                        <tr>
+                            <td style="text-align:center"><?php echo $unidades_video_sin_puesto_monitoreo[$i]['Nombre'];?></td>
+                            <td style="text-align:center"><?php echo $unidades_video_sin_puesto_monitoreo[$i]['Nombre_Provincia'];?></td>
+                            <td style="text-align:center"><?php echo $unidades_video_sin_puesto_monitoreo[$i]['Descripcion'];?></td>
+                            <td style="text-align:center"><?php echo $unidades_video_sin_puesto_monitoreo[$i]['Camaras_Habilitadas'];?></td>
+                        </tr>
+                        <?php } ?>
+                     </tbody>
+                  </table>
+                </div>
+            </div>
+        <!--Cierre Asignar UE a Punto BRC-->
+        </div> 
        <?php require 'vistas/plantillas/pie_de_pagina.php' ?>
     </body>
 </html>

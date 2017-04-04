@@ -666,7 +666,26 @@ class cls_puestos_de_monitoreo{
         } 
     }
    
-    
+    public function obtiene_distribucion_unidades_de_video_en_puestos_de_monitoreo(){
+        $this->obj_data_provider->conectar();
+        if($this->condicion==""){
+            $this->arreglo=$this->obj_data_provider->trae_datos("t_unidadvideo
+                left OUTER join t_puestomonitoreounidadvideo on t_puestomonitoreounidadvideo.ID_Unidad_Video = t_unidadvideo.ID_Unidad_Video
+                 LEFT OUTER JOIN t_puestomonitoreo ON t_puestomonitoreo.ID_Puesto_Monitoreo = t_puestomonitoreounidadvideo.ID_Puesto_Monitoreo GROUP BY t_unidadvideo.ID_Unidad_Video",
+                    "t_unidadvideo.Descripcion descrip, COUNT(t_puestomonitoreo.ID_Puesto_Monitoreo) Cantidad_Puestos, GROUP_CONCAT(t_puestomonitoreo.Nombre, ' ') Lista_Puestos,t_unidadvideo.Camaras_Habilitadas","");
+            $this->arreglo=$this->obj_data_provider->getArreglo();
+            $this->obj_data_provider->desconectar();
+        }
+        else{
+        $this->arreglo=$this->obj_data_provider->trae_datos("t_unidadvideo
+	left OUTER join t_puestomonitoreounidadvideo on t_puestomonitoreounidadvideo.ID_Unidad_Video = t_unidadvideo.ID_Unidad_Video
+    LEFT OUTER JOIN t_puestomonitoreo ON t_puestomonitoreo.ID_Puesto_Monitoreo = t_puestomonitoreounidadvideo.ID_Puesto_Monitoreo",
+                    "t_unidadvideo.Descripcion descrip, COUNT(t_puestomonitoreo.ID_Puesto_Monitoreo) Cantidad_Puestos, GROUP_CONCAT(t_puestomonitoreo.Nombre, ' ') Lista_Puestos,t_unidadvideo.Camaras_Habilitadas",
+                    $this->condicion." GROUP BY t_unidadvideo.ID_Unidad_Video");
+            $this->arreglo=$this->obj_data_provider->getArreglo();
+            $this->obj_data_provider->desconectar();
+        } 
+    }
     
     public function actualizar_campo_unidades_de_video(){
         $this->obj_data_provider->conectar();

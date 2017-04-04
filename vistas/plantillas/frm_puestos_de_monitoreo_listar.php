@@ -19,6 +19,7 @@
             //Funcion para ocultar ventana de mantenimiento de proveedor
             function ocultar_elemento(){
                 document.getElementById('ventana_oculta_1').style.display = "none";
+                document.getElementById('ventana_oculta_5').style.display = "none";
             }
             
             
@@ -116,7 +117,11 @@
                     }
                 });
             }
-            
+     function mostrar_distribucion_de_unidades_de_video_en_puestos_de_monitoreo() {
+           
+                  document.getElementById('ventana_oculta_5').style.display = "block";
+
+            }    
      function liberar_puesto_de_monitoreo(id_puesto,nom,id_us){
                 
                  //alert(id_us);
@@ -176,6 +181,7 @@
         <?php if ($_SESSION['modulos']['Catálogos-Inconsistencias de Video']==1){ ?>
              <h4><a href="index.php?ctl=inconsistencias_de_video_listar">Inconsistencias de Video</a></h4>             
         <?php };?>   
+             
         <p>A continuación se detallan los diferentes puestos de monitoreo registrados en el sistema:</p>            
         <table id="tabla" class="display" cellspacing="0">
           <thead>
@@ -262,6 +268,11 @@
                 } ?>
             </tbody>
         </table>
+        
+        <?php if ($_SESSION['modulos']['Catálogos-Puestos de Monitoreo']==1){ ?>
+             <h4><a role="button" onclick="mostrar_distribucion_de_unidades_de_video_en_puestos_de_monitoreo();">Distribución de Unidades de Video en Puestos de Monitoreo</a></h4>             
+        <?php };?> 
+        
          <?php if ($_SESSION['modulos']['Catálogos-Puestos de Monitoreo']==1){ ?>
             <a id="popup" onclick="mostrar_agregar_puesto_monitoreo()" class="btn btn-default" role="button">Agregar Nuevo Puesto de Monitoreo</a>
         <?php };?>   
@@ -297,6 +308,39 @@
             </div>
         <!--Cierre agregar teléfono a Punto BCR-->
         </div>
+       
+        <div id="ventana_oculta_5">
+            <div id="popupventana2">
+                <div id="ventana2">
+                <img id="close" src='vistas/Imagenes/cerrar.png' width="25" onclick ="ocultar_elemento()"> 
+                    <!--Tabla con la lista de Unidades Ejecutoras-->
+                    <table id="tabla4" class="display" cellspacing="0" width="100%">
+                    <thead>
+                        <tr>
+                            <th style="text-align:center">Unidad de Video</th>
+                            <th style="text-align:center">Cantidad Puestos</th>
+                            <th style="text-align:center">Nombre Puestos</th>
+                            <th style="text-align:center">Cámaras</th>
+                          
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php 
+                        $tama=count($vector_distribucion_unidades);
+                        for ($i = 0; $i <$tama; $i++) { ?>  
+                        <tr>
+                            <td style="text-align:center"><?php echo $vector_distribucion_unidades[$i]['descrip'];?></td>
+                            <td style="text-align:center"><?php echo $vector_distribucion_unidades[$i]['Cantidad_Puestos'];?></td>
+                            <td style="text-align:center"><?php echo $vector_distribucion_unidades[$i]['Lista_Puestos'];?></td>
+                            <td style="text-align:center"><?php echo $vector_distribucion_unidades[$i]['Camaras_Habilitadas'];?></td>
+                        </tr>
+                        <?php } ?>
+                     </tbody>
+                  </table>
+                </div>
+            </div>
+        <!--Cierre Asignar UE a Punto BRC-->
+        </div> 
        <?php require 'vistas/plantillas/pie_de_pagina.php' ?>
     </body>
 </html>

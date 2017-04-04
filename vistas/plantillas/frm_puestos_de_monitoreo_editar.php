@@ -119,6 +119,7 @@
                   document.getElementById('ventana_oculta_5').style.display = "block";
 
             }    
+                      
             
             //Valida informacion completa de formulario de notas de coordinacion
             function edita_dato(id_unidad,texto) {
@@ -235,6 +236,8 @@
          <div class="col-md-7">
             <h3>Lista de Unidades de Video</h3>    
             <a role="button" onclick="mostrar_unidades_de_video_sin_puesto_de_monitoreo();">Unidades de video no asignadas en puestos de monitoreo</a></td>
+         <br><br>
+            
             <p>A continuación se detallan las Unidades de Video que están registradas en el sistema con un Punto BCR relacionado:</p>   
         <table id="tabla" class="display" cellspacing="0" width="100%">
             <thead>
@@ -279,10 +282,10 @@
                     <table id="tabla4" class="display" cellspacing="0" width="100%">
                     <thead>
                         <tr>
-                            <th style="text-align:center">Código</th>
                             <th style="text-align:center">Nombre</th>
-                            <th style="text-align:center">Tipo</th>
                             <th style="text-align:center">Provincia</th>
+                            <th style="text-align:center">Descripción</th>
+                            <th style="text-align:center">Cámaras</th>
                           
                         </tr>
                     </thead>
@@ -304,7 +307,6 @@
         <!--Cierre Asignar UE a Punto BRC-->
         </div> 
         <!--</div>-->
-        
         
          <!--Agregar o Editar Campos de la tabla -->
         <div id="ventana_oculta_1"> 
