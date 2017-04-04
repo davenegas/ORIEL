@@ -2,7 +2,7 @@
 <html lang="es">
     <head>
         <meta charset="utf-8"/>
-        <title>Lista de Usuarios</title>
+        <title>Principal Oriel</title>
         <?php require_once 'frm_librerias_head.html'; ?>
         
     </head>

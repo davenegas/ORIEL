@@ -389,5 +389,14 @@ class cls_prueba_alarma{
         }
     }
     
+    public function obtener_zonas_alarma(){
+        $this->obj_data_provider->conectar();
+        $this->arreglo=$this->obj_data_provider->trae_datos("T_PruebaAlarma", 
+                "T_PruebaAlarma.Numero_Zona_Prueba, COUNT(*) Cantidad",
+                $this->condicion);
+        $this->arreglo=$this->obj_data_provider->getArreglo();
+        $this->obj_data_provider->desconectar();
+        $this->resultado_operacion=true;
+    }
 } ?>
 

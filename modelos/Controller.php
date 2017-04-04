@@ -4,12 +4,11 @@
  class Controller{
      
      //Declaración de métodos que envuelven toda la funcionalidad del sistema
-    /*
-     * A través del componente index se llaman cada uno de los eventos de la clase 
-     * controller para que sean ejecutados según sea necesario.
-    */
+    //
+    // A través del componente index se llaman cada uno de los eventos de la clase 
+    // controller para que sean ejecutados según sea necesario.
      
-    /*Inicio del sitio web, llamada a la pantalla principal para inicio de sesion*/
+    //Inicio del sitio web, llamada a la pantalla principal para inicio de sesión
     public function inicio(){
         //Variables que muestran tipos de advertencia en pantalla según sea necesario
         $tipo_de_alerta="alert alert-info";
@@ -76,8 +75,7 @@
         require __DIR__ . '/../vistas/plantillas/inicio_sesion.php'; 
     }
     
-    // Obtiene lista completa de roles del sistema
-    
+    //Obtiene lista completa de roles del sistema
     //Metodo que muestra el listado general de roles de seguridad establecidos en el sistema. Pantalla principal del mantenimiento.
     public function listar_roles(){
         //Validación para verificar si el usuario está logeado en el sistema
@@ -128,11 +126,11 @@
     ////////////////////////////////////////////////////////////////////////////
     
     /*
-     * Paso del utilitario, pantalla de bienvendida, desde esta pantalla es posible 
-     * seleccionar el archivo csv correspondiente con el listado total de personas
-     * que pertenecen al conglomerado BCR. Este archivo es enviado de manera semanal
-     * por parte de personal de capital humano.
-     */
+    * Paso del utilitario, pantalla de bienvendida, desde esta pantalla es posible 
+    * seleccionar el archivo csv correspondiente con el listado total de personas
+    * que pertenecen al conglomerado BCR. Este archivo es enviado de manera semanal
+    * por parte de personal de capital humano.
+    */
     public function frm_importar_prontuario_paso_1(){
         //Validación para verificar si el usuario está logeado en el sistema
         if(isset($_SESSION['nombre'])){
@@ -152,11 +150,11 @@
     }    
     
     /*
-     * Este metodo, el cual constituye el paso 2 de la importación del prontuario, permite
-     * leer el contenido del archivo correspondiente (una vez sea validado) y pasarlo directamente a 
-     * un vector como estructura propia de PHP. Una vez hecho esto será posible manipular la información
-     * en los pasos siguientes del asistente.
-     */
+    * Este metodo, el cual constituye el paso 2 de la importación del prontuario, permite
+    * leer el contenido del archivo correspondiente (una vez sea validado) y pasarlo directamente a 
+    * un vector como estructura propia de PHP. Una vez hecho esto será posible manipular la información
+    * en los pasos siguientes del asistente.
+    */
     public function frm_importar_prontuario_paso_2(){
         //Validación para verificar si el usuario está logeado en el sistema
         if(isset($_SESSION['nombre'])){
@@ -5353,7 +5351,7 @@
                 }
                 break;
             case "Pruebas":
-                if(date("G:H:s", $time)>='21:00:00' && date("G:H:s", $time)<='22:00:00'){
+                if(date("H:i:s", $time)>='21:00:00' && date("H:i:s", $time)<='22:00:00'){
                     $ruta=  $raiz."Cuenta_Visitas_Oriel/Ejecucion_Procesos/".date("Ymd", $time)." Incosistencia_Pruebas.txt";
                     if(!file_exists($ruta)){
                         //Abre el archivo , lo crea si no lo encuentra
@@ -5424,7 +5422,7 @@
                         if (strlen($cadena_incosistencias)>90){
                             //Establece los atributos de la clase para el ingreso del evento
                             $obj_eventos->setFecha(date("Ymd", $time)); 
-                            $obj_eventos->setHora(date("G:H:s", $time));
+                            $obj_eventos->setHora("21:00:00");
                             $obj_eventos->setTipo_evento('37');
                             $obj_eventos->setProvincia('1'); 
                             $obj_eventos->setTipo_punto('6'); 
@@ -9270,6 +9268,7 @@
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }  
     } 
+    
     public function supervisor_zona_guardar(){
         if(isset($_SESSION['nombre'])){   
             $obj_supervisorzona = new cls_supervisor_zona();
@@ -9285,6 +9284,7 @@
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }  
     }
+    
     public function supervisor_zona_editar(){
         if(isset($_SESSION['nombre'])){
             $obj_supervisorzona = new cls_supervisor_zona();
@@ -9303,6 +9303,7 @@
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }  
     }
+    
     public function supervisor_zona_cambiar_estado() {
        if(isset($_SESSION['nombre'])){
            $obj_supervisorzona = new cls_supervisor_zona();
@@ -9579,7 +9580,6 @@
       }      
 
     }
-
     public function obtiene_todos_los_horarios(){
         if(isset($_SESSION['nombre'])){
         $obj_horario= new cls_horariop();
@@ -10048,8 +10048,6 @@
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }  
     }
-    
-    
     
     public function guarda_justificacion_retraso_control_de_video() {
        if(isset($_SESSION['nombre'])){
@@ -11126,7 +11124,7 @@
                                 //echo "nada".$params[$i]['Codigo']."\n||||";
                             }
                         } else{
-                            $vencidos[$i]['color']="color: black";
+                            $vencidos[$i]['color']="color:mediumblue; text-decoration: underline;";
                             //echo "nada".$params[$i]['Codigo']."\n||||";
                         }    
                     }else{
@@ -11265,7 +11263,7 @@
                                 $difencia_tiempo=(intval($diff->h)*60)+(intval($diff->i)*1);
                                 
                                 //Información de apertura de alarma pendientes y Urgentes
-                                if($prueba[0]['Seguimiento']!='Oficina abierta 24 horas'){
+                                if($prueba[0]['Seguimiento']!='Alarma abierta 24 horas'){
                                     if($prueba[0]['Hora_Apertura_Alarma']=="" || $prueba[0]['Hora_Apertura_Alarma']==null){
                                         if($diff->invert==1 && $difencia_tiempo>1) {
                                             $aperturas_pendietes[$contador_aperturas]['Mensaje']= $Oficinas[$i]['Codigo']." - ".$Oficinas[$i]['Nombre'];
@@ -11287,7 +11285,7 @@
                                     }
                                 }
                                 //Información de cierre de alarma urgentes
-                                if($prueba[0]['Seguimiento']!='Oficina abierta 24 horas'){
+                                if($prueba[0]['Seguimiento']!='Alarma abierta 24 horas'){
                                     if($prueba[0]['Hora_Cierre_Alarma']=="" || $prueba[0]['Hora_Cierre_Alarma']==null){
                                         $fecha2 = new DateTime(date('Y-m-d').' '.$Oficinas[$i]['Hora_Cierre_Lunes']);//Día
                                         $diff = $fecha1->diff($fecha2); 
@@ -11309,7 +11307,7 @@
                                 $difencia_tiempo=(intval($diff->h)*60)+(intval($diff->i)*1);
 
                                 //Información de apertura de alarma pendientes y Urgentes
-                                if($prueba[0]['Seguimiento']!='Oficina abierta 24 horas'){
+                                if($prueba[0]['Seguimiento']!='Alarma abierta 24 horas'){
                                     if($prueba[0]['Hora_Apertura_Alarma']=="" || $prueba[0]['Hora_Apertura_Alarma']==null){
                                         if($diff->invert==1 && $difencia_tiempo>1) {
                                             $aperturas_pendietes[$contador_aperturas]['Mensaje']= $Oficinas[$i]['Codigo']." - ".$Oficinas[$i]['Nombre'];
@@ -11331,7 +11329,7 @@
                                     }
                                 }
                                 //Información de cirre de alarma urgentes
-                                if($prueba[0]['Seguimiento']!='Oficina abierta 24 horas'){
+                                if($prueba[0]['Seguimiento']!='Alarma abierta 24 horas'){
                                     if($prueba[0]['Hora_Cierre_Alarma']=="" || $prueba[0]['Hora_Cierre_Alarma']==null){
                                         $fecha2 = new DateTime(date('Y-m-d').' '.$Oficinas[$i]['Hora_Cierre_Martes']);//Día
                                         $diff = $fecha1->diff($fecha2); 
@@ -11354,7 +11352,7 @@
                                 $difencia_tiempo=(intval($diff->h)*60)+(intval($diff->i)*1);
 
                                 //Información de apertura de alarma pendientes y Urgentes
-                                if($prueba[0]['Seguimiento']!='Oficina abierta 24 horas'){
+                                if($prueba[0]['Seguimiento']!='Alarma abierta 24 horas'){
                                     if($prueba[0]['Hora_Apertura_Alarma']=="" || $prueba[0]['Hora_Apertura_Alarma']==null){
                                         if($diff->invert==1 && $difencia_tiempo>1) {
                                             $aperturas_pendietes[$contador_aperturas]['Mensaje']= $Oficinas[$i]['Codigo']." - ".$Oficinas[$i]['Nombre'];
@@ -11376,7 +11374,7 @@
                                     }
                                 }
                                 //Información de cierre de alarma urgentes
-                                if($prueba[0]['Seguimiento']!='Oficina abierta 24 horas'){
+                                if($prueba[0]['Seguimiento']!='Alarma abierta 24 horas'){
                                     if($prueba[0]['Hora_Cierre_Alarma']=="" || $prueba[0]['Hora_Cierre_Alarma']==null){
                                         $fecha2 = new DateTime(date('Y-m-d').' '.$Oficinas[$i]['Hora_Cierre_Miercoles']);//Día
                                         $diff = $fecha1->diff($fecha2); 
@@ -11399,7 +11397,7 @@
                                 $difencia_tiempo=(intval($diff->h)*60)+(intval($diff->i)*1);
 
                                 //Información de apertura de alarma pendientes y Urgentes
-                                if($prueba[0]['Seguimiento']!='Oficina abierta 24 horas'){
+                                if($prueba[0]['Seguimiento']!='Alarma abierta 24 horas'){
                                     if($prueba[0]['Hora_Apertura_Alarma']=="" || $prueba[0]['Hora_Apertura_Alarma']==null){
                                         if($diff->invert==1 && $difencia_tiempo>1) {
                                             $aperturas_pendietes[$contador_aperturas]['Mensaje']= $Oficinas[$i]['Codigo']." - ".$Oficinas[$i]['Nombre'];
@@ -11421,7 +11419,7 @@
                                     }
                                 }
                                 //Información de cierre de alarma urgentes
-                                if($prueba[0]['Seguimiento']!='Oficina abierta 24 horas'){
+                                if($prueba[0]['Seguimiento']!='Alarma abierta 24 horas'){
                                     if($prueba[0]['Hora_Cierre_Alarma']=="" || $prueba[0]['Hora_Cierre_Alarma']==null){
                                         $fecha2 = new DateTime(date('Y-m-d').' '.$Oficinas[$i]['Hora_Cierre_Jueves']);//Día
                                         $diff = $fecha1->diff($fecha2); 
@@ -11444,7 +11442,7 @@
                                 $difencia_tiempo=(intval($diff->h)*60)+(intval($diff->i)*1);
 
                                 //Información de apertura de alarma pendientes y Urgentes
-                                if($prueba[0]['Seguimiento']!='Oficina abierta 24 horas'){
+                                if($prueba[0]['Seguimiento']!='Alarma abierta 24 horas'){
                                     if($prueba[0]['Hora_Apertura_Alarma']=="" || $prueba[0]['Hora_Apertura_Alarma']==null){
                                         if($diff->invert==1 && $difencia_tiempo>1) {
                                             $aperturas_pendietes[$contador_aperturas]['Mensaje']= $Oficinas[$i]['Codigo']." - ".$Oficinas[$i]['Nombre'];
@@ -11466,7 +11464,7 @@
                                     }
                                 }
                                 //Información de cierre de alarma urgentes
-                                if($prueba[0]['Seguimiento']!='Oficina abierta 24 horas'){
+                                if($prueba[0]['Seguimiento']!='Alarma abierta 24 horas'){
                                     if($prueba[0]['Hora_Cierre_Alarma']=="" || $prueba[0]['Hora_Cierre_Alarma']==null){
                                         $fecha2 = new DateTime(date('Y-m-d').' '.$Oficinas[$i]['Hora_Cierre_Viernes']);//Día
                                         $diff = $fecha1->diff($fecha2); 
@@ -11489,7 +11487,7 @@
                                 $difencia_tiempo=(intval($diff->h)*60)+(intval($diff->i)*1);
 
                                 //Información de apertura de alarma pendientes y Urgentes
-                                if($prueba[0]['Seguimiento']!='Oficina abierta 24 horas'){
+                                if($prueba[0]['Seguimiento']!='Alarma abierta 24 horas'){
                                     if($prueba[0]['Hora_Apertura_Alarma']=="" || $prueba[0]['Hora_Apertura_Alarma']==null){
                                         if($diff->invert==1 && $difencia_tiempo>1) {
                                             $aperturas_pendietes[$contador_aperturas]['Mensaje']= $Oficinas[$i]['Codigo']." - ".$Oficinas[$i]['Nombre'];
@@ -11511,7 +11509,7 @@
                                     }
                                 }
                                 //Información de cierre de alarma urgentes
-                                if($prueba[0]['Seguimiento']!='Oficina abierta 24 horas'){
+                                if($prueba[0]['Seguimiento']!='Alarma abierta 24 horas'){
                                     if($prueba[0]['Hora_Cierre_Alarma']=="" || $prueba[0]['Hora_Cierre_Alarma']==null){
                                         $fecha2 = new DateTime(date('Y-m-d').' '.$Oficinas[$i]['Hora_Cierre_Sabado']);//Día
                                         $diff = $fecha1->diff($fecha2); 
@@ -11534,7 +11532,7 @@
                                 $difencia_tiempo=(intval($diff->h)*60)+(intval($diff->i)*1);
 
                                 //Información de apertura de alarma pendientes y Urgentes
-                                if($prueba[0]['Seguimiento']!='Oficina abierta 24 horas'){
+                                if($prueba[0]['Seguimiento']!='Alarma abierta 24 horas'){
                                     if($prueba[0]['Hora_Apertura_Alarma']=="" || $prueba[0]['Hora_Apertura_Alarma']==null){
                                         if($diff->invert==1 && $difencia_tiempo>1) {
                                             $aperturas_pendietes[$contador_aperturas]['Mensaje']= $Oficinas[$i]['Codigo']." - ".$Oficinas[$i]['Nombre'];
@@ -11556,7 +11554,7 @@
                                     }
                                 }
                                 //Información de cierre de alarma urgentes
-                                if($prueba[0]['Seguimiento']!='Oficina abierta 24 horas'){
+                                if($prueba[0]['Seguimiento']!='Alarma abierta 24 horas'){
                                     if($prueba[0]['Hora_Cierre_Alarma']=="" || $prueba[0]['Hora_Cierre_Alarma']==null){
                                         $fecha2 = new DateTime(date('Y-m-d').' '.$Oficinas[$i]['Hora_Cierre_Domingo']);//Día
                                         $diff = $fecha1->diff($fecha2); 
@@ -11604,35 +11602,35 @@
             
             $fecha_actual= getdate();
             switch ($fecha_actual['weekday']) {
-                    case 'Monday':
-                        $puntobcr[0] = array_merge((['Hora_Apertura_Publico' =>($puntobcr[0]['Hora_Apertura_Lunes'])]),$puntobcr[0]);
-                        $puntobcr[0] = array_merge((['Hora_Cierre_Publico' =>($puntobcr[0]['Hora_Cierre_Lunes'])]),$puntobcr[0]);
-                        break;
-                    case 'Tuesday':
-                        $puntobcr[0] = array_merge((['Hora_Apertura_Publico' =>($puntobcr[0]['Hora_Apertura_Martes'])]),$puntobcr[0]);
-                        $puntobcr[0] = array_merge((['Hora_Cierre_Publico' =>($puntobcr[0]['Hora_Cierre_Martes'])]),$puntobcr[0]);
-                        break;
-                    case 'Wednesday':
-                        $puntobcr[0] = array_merge((['Hora_Apertura_Publico' =>($puntobcr[0]['Hora_Apertura_Miercoles'])]),$puntobcr[0]);
-                        $puntobcr[0] = array_merge((['Hora_Cierre_Publico' =>($puntobcr[0]['Hora_Cierre_Miercoles'])]),$puntobcr[0]);
-                        break;
-                    case 'Thursday':
-                        $puntobcr[0] = array_merge((['Hora_Apertura_Publico' =>($puntobcr[0]['Hora_Apertura_Jueves'])]),$puntobcr[0]);
-                        $puntobcr[0] = array_merge((['Hora_Cierre_Publico' =>($puntobcr[0]['Hora_Cierre_Jueves'])]),$puntobcr[0]);
-                        break;
-                    case 'Friday':
-                        $puntobcr[0] = array_merge((['Hora_Apertura_Publico' =>($puntobcr[0]['Hora_Apertura_Viernes'])]),$puntobcr[0]);
-                        $puntobcr[0] = array_merge((['Hora_Cierre_Publico' =>($puntobcr[0]['Hora_Cierre_Viernes'])]),$puntobcr[0]);
-                        break;
-                    case 'Saturday':
-                        $puntobcr[0] = array_merge((['Hora_Apertura_Publico' =>($puntobcr[0]['Hora_Apertura_Sabado'])]),$puntobcr[0]);
-                        $puntobcr[0] = array_merge((['Hora_Cierre_Publico' =>($puntobcr[0]['Hora_Cierre_Sabado'])]),$puntobcr[0]);
-                        break;
-                    case 'Sunday':
-                        $puntobcr[0] = array_merge((['Hora_Apertura_Publico' =>($puntobcr[0]['Hora_Apertura_Domingo'])]),$puntobcr[0]);
-                        $puntobcr[0] = array_merge((['Hora_Cierre_Publico' =>($puntobcr[0]['Hora_Cierre_Domingo'])]),$puntobcr[0]);
-                        break;
-                }
+                case 'Monday':
+                    $puntobcr[0] = array_merge((['Hora_Apertura_Publico' =>($puntobcr[0]['Hora_Apertura_Lunes'])]),$puntobcr[0]);
+                    $puntobcr[0] = array_merge((['Hora_Cierre_Publico' =>($puntobcr[0]['Hora_Cierre_Lunes'])]),$puntobcr[0]);
+                    break;
+                case 'Tuesday':
+                    $puntobcr[0] = array_merge((['Hora_Apertura_Publico' =>($puntobcr[0]['Hora_Apertura_Martes'])]),$puntobcr[0]);
+                    $puntobcr[0] = array_merge((['Hora_Cierre_Publico' =>($puntobcr[0]['Hora_Cierre_Martes'])]),$puntobcr[0]);
+                    break;
+                case 'Wednesday':
+                    $puntobcr[0] = array_merge((['Hora_Apertura_Publico' =>($puntobcr[0]['Hora_Apertura_Miercoles'])]),$puntobcr[0]);
+                    $puntobcr[0] = array_merge((['Hora_Cierre_Publico' =>($puntobcr[0]['Hora_Cierre_Miercoles'])]),$puntobcr[0]);
+                    break;
+                case 'Thursday':
+                    $puntobcr[0] = array_merge((['Hora_Apertura_Publico' =>($puntobcr[0]['Hora_Apertura_Jueves'])]),$puntobcr[0]);
+                    $puntobcr[0] = array_merge((['Hora_Cierre_Publico' =>($puntobcr[0]['Hora_Cierre_Jueves'])]),$puntobcr[0]);
+                    break;
+                case 'Friday':
+                    $puntobcr[0] = array_merge((['Hora_Apertura_Publico' =>($puntobcr[0]['Hora_Apertura_Viernes'])]),$puntobcr[0]);
+                    $puntobcr[0] = array_merge((['Hora_Cierre_Publico' =>($puntobcr[0]['Hora_Cierre_Viernes'])]),$puntobcr[0]);
+                    break;
+                case 'Saturday':
+                    $puntobcr[0] = array_merge((['Hora_Apertura_Publico' =>($puntobcr[0]['Hora_Apertura_Sabado'])]),$puntobcr[0]);
+                    $puntobcr[0] = array_merge((['Hora_Cierre_Publico' =>($puntobcr[0]['Hora_Cierre_Sabado'])]),$puntobcr[0]);
+                    break;
+                case 'Sunday':
+                    $puntobcr[0] = array_merge((['Hora_Apertura_Publico' =>($puntobcr[0]['Hora_Apertura_Domingo'])]),$puntobcr[0]);
+                    $puntobcr[0] = array_merge((['Hora_Cierre_Publico' =>($puntobcr[0]['Hora_Cierre_Domingo'])]),$puntobcr[0]);
+                    break;
+            }
             //Convierte la información en un json para enviarlo a JavaScript
             echo json_encode($puntobcr[0], JSON_FORCE_OBJECT);
         }
@@ -11710,6 +11708,136 @@
             //print_r($prueba);
             //Convierte la información en un json para enviarlo a JavaScript
             echo json_encode($prueba[0], JSON_FORCE_OBJECT);
+        }
+        else {
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }
+    }
+    
+    public function pruebas_alarma_anteriores(){
+        if(isset($_SESSION['nombre'])){
+            $obj_prueba = new cls_prueba_alarma();
+            $obj_personal = new cls_personal();
+            $obj_externo = new cls_personal_externo();
+            $obj_usuario = new cls_usuarios();
+            //
+            $fecha_fin= date('Y-m-d');
+            $fecha_inicio= strtotime('-5 day', strtotime($fecha_fin));
+            $fecha_inicio= date ('Y-m-d', $fecha_inicio);
+            try{
+                $obj_prueba->setCondicion("T_PruebaAlarma.ID_PuntoBCR='".$_POST['id_puntobcr']."' AND (T_PruebaAlarma.Fecha between '".$fecha_inicio."' AND '".$fecha_fin."') GROUP BY t_pruebaalarma.ID_Persona_Reporta_Apertura");
+                $obj_prueba->obtener_prueba_alarma();
+                $pruebas_anteriores= $obj_prueba->getArreglo();
+
+                for ($i = 0; $i < count($pruebas_anteriores); $i++){
+                    if($pruebas_anteriores[$i]['ID_Empresa_Persona_Apertura']==1){
+                        $obj_personal->setCondicion("T_Personal.ID_Persona='".$pruebas_anteriores[$i]['ID_Persona_Reporta_Apertura']."'");
+                        $obj_personal->obtiene_todo_el_personal();
+                        $persona = $obj_personal->getArreglo();
+                        $pruebas_anteriores[$i] = array_merge((['Nombre_Persona_Apertura' =>($persona[0]['Apellido_Nombre'])]),(['Cedula'=> ($persona[0]['Cedula'])]),(['Empresa'=> ($persona[0]['Empresa'])]),$pruebas_anteriores[$i]);
+                    } 
+                    if($pruebas_anteriores[$i]['ID_Empresa_Persona_Apertura']!=1){
+                        $obj_externo->setCondicion("T_PersonalExterno.ID_Persona_Externa='".$pruebas_anteriores[$i]['ID_Persona_Reporta_Apertura']."'");
+                        $obj_externo->obtiene_todo_el_personal_externo();
+                        $persona = $obj_externo->getArreglo();
+                        $pruebas_anteriores[$i] = array_merge((['Nombre_Persona_Apertura' =>($persona[0]['Apellido']." ".$persona[0]['Nombre'])]),(['Cedula'=> ($persona[0]['Identificacion'])]),(['Empresa'=> ($persona[0]['Empresa'])]), $pruebas_anteriores[$i]);
+                    }
+                    if($pruebas_anteriores[$i]['ID_Empresa_Persona_Cierra']==1){
+                        $obj_personal->setCondicion("T_Personal.ID_Persona='".$pruebas_anteriores[$i]['ID_Persona_Reporta_Apertura']."'");
+                        $obj_personal->obtiene_todo_el_personal();
+                        $persona = $obj_personal->getArreglo();
+                        $pruebas_anteriores[$i] = array_merge((['Nombre_Persona_Cierre' =>($persona[0]['Apellido_Nombre'])]),(['Cedula_Cierre'=> ($persona[0]['Cedula'])]),(['Empresa_Cierre'=> ($persona[0]['Empresa'])]),$pruebas_anteriores[$i]);
+                    } 
+                    if($pruebas_anteriores[$i]['ID_Empresa_Persona_Cierra']!=1){
+                        $obj_externo->setCondicion("T_PersonalExterno.ID_Persona_Externa='".$pruebas_anteriores[$i]['ID_Persona_Reporta_Apertura']."'");
+                        $obj_externo->obtiene_todo_el_personal_externo();
+                        $persona = $obj_externo->getArreglo();
+                        $pruebas_anteriores[$i] = array_merge((['Nombre_Persona_Cierre' =>($persona[0]['Apellido']." ".$persona[0]['Nombre'])]),(['Cedula_Cierre'=> ($persona[0]['Identificacion'])]),(['Empresa_Cierre'=> ($persona[0]['Empresa'])]), $pruebas_anteriores[$i]);
+                    }
+                }
+                
+                $time= time();
+                $tam = count($pruebas_anteriores);
+                $html="";
+                $html.='<thead> 
+                            <th style="text-align:center">Cedula</th>
+                            <th style="text-align:center">Apellidos Nombre</th>
+                            <th style="text-align:center">Departamento</th>
+                            <th style="text-align:center">Opciones</th>
+                        </thead>
+                        <tbody>';
+                for($i=0; $i<$tam;$i++){
+                    if(date("H:i:s", $time)>='00:00:00' && date("H:i:s", $time)<='14:00:00'){
+                        $html .='<tr>'; 
+                        $html .='<td style="text-align:center">'.$pruebas_anteriores[$i]['Cedula'].'</td>';
+                        $html .='<td style="text-align:center">'.$pruebas_anteriores[$i]['Nombre_Persona_Apertura'].'</td>';
+                        $html .='<td style="text-align:center">'.$pruebas_anteriores[$i]['Empresa'].'</td>';
+                        $html .='<td style="text-align:center" '
+                                . 'onclick="agregar_persona_prueba('.$pruebas_anteriores[$i]['ID_Persona_Reporta_Apertura'].','
+                                . '&#39;'.$pruebas_anteriores[$i]['Cedula'].'&#39,'
+                                . '&#39;'.$pruebas_anteriores[$i]['Nombre_Persona_Apertura'].'&#39,'
+                                . '&#39;'.$pruebas_anteriores[$i]['Empresa'].'&#39,'
+                                . '&#39;'.$pruebas_anteriores[$i]['ID_Empresa_Persona_Apertura'].'&#39;)">'
+                                . '<a>Reporta Prueba</a></td>';
+                        $html .='</tr>'; 
+                    } else {
+                        $html .='<tr>'; 
+                        $html .='<td style="text-align:center">'.$pruebas_anteriores[$i]['Cedula_Cierre'].'</td>';
+                        $html .='<td style="text-align:center">'.$pruebas_anteriores[$i]['Nombre_Persona_Cierre'].'</td>';
+                        $html .='<td style="text-align:center">'.$pruebas_anteriores[$i]['Empresa_Cierre'].'</td>';
+                        $html .='<td style="text-align:center" '
+                                . 'onclick="agregar_persona_cierre('.$pruebas_anteriores[$i]['ID_Persona_Reporta_Cierre'].','
+                                . '&#39;'.$pruebas_anteriores[$i]['Cedula_Cierre'].'&#39,'
+                                . '&#39;'.$pruebas_anteriores[$i]['Nombre_Persona_Cierre'].'&#39,'
+                                . '&#39;'.$pruebas_anteriores[$i]['Empresa_Cierre'].'&#39,'
+                                . '&#39;'.$pruebas_anteriores[$i]['ID_Empresa_Persona_Cierra'].'&#39;)">'
+                                . '<a>Reporta Cierre</a></td>';
+                        $html .='</tr>'; 
+                    }
+                }  
+                $html.='</tbody> 
+                        </table>';
+                echo $html;
+            } catch(Exception $e){
+                
+            }
+            //print_r($prueba);
+            //Convierte la información en un json para enviarlo a JavaScript
+            
+            //echo json_encode($pruebas_anteriores, JSON_FORCE_OBJECT);
+        }
+        else {
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }
+    }
+    
+    public function numero_zona_prueba_realizadas(){
+        if(isset($_SESSION['nombre'])){
+            $obj_prueba = new cls_prueba_alarma();
+            
+            $fecha_fin= date('Y-m-d');
+            $fecha_inicio= strtotime('-7 day', strtotime($fecha_fin));
+            $fecha_inicio= date ('Y-m-d', $fecha_inicio);
+            
+            $obj_prueba->setCondicion("T_PruebaAlarma.ID_PuntoBCR='".$_POST['id_puntobcr']."' AND (T_PruebaAlarma.Fecha between '".$fecha_inicio."' AND '".$fecha_fin."') GROUP BY t_pruebaalarma.Numero_Zona_Prueba");
+            $obj_prueba->obtener_zonas_alarma();
+            $pruebas_anteriores= $obj_prueba->getArreglo();
+            
+            
+            $zonas_prueba="<p>";
+            for ($i = 0; $i < count($pruebas_anteriores); $i++){
+                if($_POST['id_tipo']==1 or $_POST['id_tipo']==9 or $_POST['id_tipo']==10){
+                    if($pruebas_anteriores[$i]['Cantidad']>1){
+                        $zonas_prueba.="<p>Zona ".$pruebas_anteriores[$i]['Numero_Zona_Prueba']." Cant: ".$pruebas_anteriores[$i]['Cantidad'].".</p>\n";
+                    }
+                }
+            }
+            $zonas_prueba.="</p>";
+            echo($zonas_prueba);
         }
         else {
             $tipo_de_alerta="alert alert-warning";

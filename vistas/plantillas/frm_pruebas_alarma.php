@@ -79,6 +79,10 @@
             <div class="row content">
                 <!--Se mantienen este div para dejar espacio a la izquierda de la tabla-->    
                 <div class="col-sm-1 sidenav">
+                    <div class="well">
+                        <h5>Pruebas anteriores:</h5>
+                        <p id="pruebas_anteriores"></p>
+                    </div>
                 </div>
                 <!--DIV central contiene la tabla con el personal externo-->    
                 <div class="col-sm-8 container">
@@ -88,6 +92,7 @@
                             <a onclick="eliminar_registro_prueba()" class="btn azul" role="button"><img src='vistas/Imagenes/cerrarAlert.jpg' width="25"></a>
                         <?php } ?>
                     </h4>
+                    
                     <input type="text" hidden id="ID_PuntoBCR" name="ID_PuntoBCR"  value="0">
                     <input type="text" hidden id="ID_Prueba_Alarma" name="ID_Prueba_Alarma" value="0">
                     <input type="text" hidden id="ID_Persona_Reporta_Apertura" name="ID_Persona_Reporta_Apertura"  value="0">
@@ -177,14 +182,14 @@
                             <option value="Se solicitó la prueba">Se solicitó la prueba</option>
                             <option value="Oficina en Asueto">Oficina en Asueto</option>
                             <option value="Oficina con trabajos">Oficina con Trabajos</option>
-                            <option value="Oficina abierta 24 horas">Oficina abierta 24 horas</option>
+                            <option value="Alarma abierta 24 horas">Alarma abierta 24 horas</option>
                         </select>
                     </div>  
                     <div class="col-md-4 espacio-abajo-5">
                         <label for="observaciones">Observaciones</label>
                         <input type="text"  class="form-control" id="observaciones" name="observaciones" onchange="guardar_observaciones();" placeholder="Observaciones o comentarios de la prueba de alarma">
                     </div>
-                      
+                    
                     <!--<div>
                         <h4><b>Pruebas de alarma Reportadas</b></h4>
                         <table id="tabla4" class="display" cellspacing="0" width="100%">
@@ -236,20 +241,13 @@
                 <div id="ventana2">
                     <img id="close" src='vistas/Imagenes/cerrar.png' width="25" onclick ="ocultar_elemento()"> 
                     <!--Tabla con la lista de Unidades Ejecutoras-->
-<!--                    <table id="tablas" class="display" cellspacing="0" width="100%">
-                        <thead>
-                            <tr>
-                                <th style="text-align:center">Cedula</th>
-                                <th style="text-align:center">Apellidos Nombre</th>
-                                <th style="text-align:center">Departamento</th>
-                                <th style="text-align:center">Opciones</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                        </tbody>
-                    </table>-->
-                    
-                    <table id="tabla2" class="display espacio-arriba" cellspacing="0" width="100%">
+                    <h4>Ultimas personas que han llamado para reportar apertura o cierre:</h4>
+                    <div class="well">
+                        <table id="personas_anteriores" class="display espacio-abajo borde-gris" cellspacing="0" width="100%">
+                        </table>
+                    </div>
+                    <br>
+                    <table id="tabla2" class="display espacio-arriba borde-gris" cellspacing="0" width="100%">
                         <thead>
                             <tr>
                                 <th style="text-align:center">Cedula</th>

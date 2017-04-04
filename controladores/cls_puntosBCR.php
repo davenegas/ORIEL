@@ -345,8 +345,6 @@ class cls_puntosBCR{
         $this->resultado_operacion=true;
     }
     
-    
-    
     public function guardar_punto_bcr(){
         $this->obj_data_provider->conectar();
         $this->obj_data_provider->inserta_datos("T_PuntoBCR", "`ID_PuntoBCR`, `Nombre`, `Direccion`, `Codigo`, `Cuenta_SIS`, `ID_Horario`, `ID_Tipo_Punto`, `ID_Empresa`, `ID_Gerente_Zona`, `ID_Supervisor_Zona`, `ID_Distrito`, `Observaciones`, `Estado`", "'".$this->id."','".$this->nombre."','".$this->direccion."','".$this->codigo."','".$this->cuentasis."','".$this->horaslaborales."','".$this->tipo_punto."','".$this->empresa."','"."1"."','"."1"."','".$this->distrito."','".$this->observaciones."','".$this->estado."'");
@@ -395,6 +393,7 @@ class cls_puntosBCR{
             $this->resultado_operacion=true;
         }
     }  
+    
     public function obtiene_todos_los_puntos_bcr_telefonos(){
         $this->obj_data_provider->conectar();
         if($this->condicion==""){

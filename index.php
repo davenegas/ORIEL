@@ -286,6 +286,8 @@ $map = array(
     'prueba_alarma_guardar'=>array('controller'=>'Controller', 'action'=>'prueba_alarma_guardar'),
     'prueba_alarma_eliminar'=>array('controller'=>'Controller', 'action'=>'prueba_alarma_eliminar'),
     'reporte_prueba_alarma'=>array('controller'=>'Controller', 'action'=>'reporte_prueba_alarma'),
+    'pruebas_alarma_anteriores'=>array('controller'=>'Controller', 'action'=>'pruebas_alarma_anteriores'),
+    'numero_zona_prueba_realizadas'=>array('controller'=>'Controller', 'action'=>'numero_zona_prueba_realizadas'),
     
     //Controlador de Eventos (Bitacora Digital)
     'frm_eventos_listar' =>  array('controller'=>'Controller','action'=>'frm_eventos_listar'),
