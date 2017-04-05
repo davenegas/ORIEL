@@ -3,7 +3,7 @@
 //Definición de la clase Controller. Componente principal de la lógica del negocio. 
  class Controller{
      
-     //Declaración de métodos que envuelven toda la funcionalidad del sistema
+    //Declaración de métodos que envuelven toda la funcionalidad del sistema
     //
     // A través del componente index se llaman cada uno de los eventos de la clase 
     // controller para que sean ejecutados según sea necesario.
@@ -125,12 +125,10 @@
     ///Serie de metodos que permiten crear un utilitario de importación de personal BCR ////////
     ////////////////////////////////////////////////////////////////////////////
     
-    /*
-    * Paso del utilitario, pantalla de bienvendida, desde esta pantalla es posible 
-    * seleccionar el archivo csv correspondiente con el listado total de personas
-    * que pertenecen al conglomerado BCR. Este archivo es enviado de manera semanal
-    * por parte de personal de capital humano.
-    */
+    //Paso del utilitario, pantalla de bienvendida, desde esta pantalla es posible 
+    //seleccionar el archivo csv correspondiente con el listado total de personas
+    //que pertenecen al conglomerado BCR. Este archivo es enviado de manera semanal
+    //por parte de personal de capital humano.
     public function frm_importar_prontuario_paso_1(){
         //Validación para verificar si el usuario está logeado en el sistema
         if(isset($_SESSION['nombre'])){
@@ -149,12 +147,10 @@
         }
     }    
     
-    /*
-    * Este metodo, el cual constituye el paso 2 de la importación del prontuario, permite
-    * leer el contenido del archivo correspondiente (una vez sea validado) y pasarlo directamente a 
-    * un vector como estructura propia de PHP. Una vez hecho esto será posible manipular la información
-    * en los pasos siguientes del asistente.
-    */
+    //Este metodo, el cual constituye el paso 2 de la importación del prontuario, permite
+    //leer el contenido del archivo correspondiente (una vez sea validado) y pasarlo directamente a 
+    //un vector como estructura propia de PHP. Una vez hecho esto será posible manipular la información
+    //en los pasos siguientes del asistente.
     public function frm_importar_prontuario_paso_2(){
         //Validación para verificar si el usuario está logeado en el sistema
         if(isset($_SESSION['nombre'])){
@@ -2511,12 +2507,9 @@
         }
     }
     
-    /*
-     * Este es uno de los metodos principales del sistema, permite hacer la validacion inicial de credenciales del usuario a nivel de seguridad
-     * para hacer ingreso a la parte privada del sistema. En este metodo se inicializan las variables de sesión del usuario, las cuales permiten
-     * navegar dentro de todas las funcionalidades de ORIEL.
-     * 
-     */
+    //Este es uno de los metodos principales del sistema, permite hacer la validacion inicial de credenciales del usuario a nivel de seguridad
+    //para hacer ingreso a la parte privada del sistema. En este metodo se inicializan las variables de sesión del usuario, las cuales permiten
+    //navegar dentro de todas las funcionalidades de ORIEL.
     public function listar(){
         //Inicializa las variables de control para notificar al usuario del resultado del proceso
         $validacion="";
@@ -2851,11 +2844,9 @@
         }
     }
     
-    /*
-     * Este metodo es llamado desde codigo javascript, especificamente en la pantalla que lista los eventos abiertos de bitácora. Tiene como proposito
-     * ordenar o visualizar en pantalla los eventos por puesto de monitoreo del centro de control Z1. Esto permite facilidad a la hora de realizar
-     * auditorías por puesto por parte del coordinador a cargo, así como enfocar el trabajo de cada operador de monitoreo.
-     */
+    //Este metodo es llamado desde codigo javascript, especificamente en la pantalla que lista los eventos abiertos de bitácora. Tiene como proposito
+    //ordenar o visualizar en pantalla los eventos por puesto de monitoreo del centro de control Z1. Esto permite facilidad a la hora de realizar
+    //auditorías por puesto por parte del coordinador a cargo, así como enfocar el trabajo de cada operador de monitoreo.
     public function eventos_listar_filtrado(){
         //Validación para verificar si el usuario está logeado en el sistema
         if(isset($_SESSION['nombre'])){
@@ -3463,11 +3454,9 @@
         }
     }
    
-    /*
-     * Este metodo permite actualizar en pantalla el listado de eventos de trazabilidad de acuerdo a los 
-     * parametros de busqueda suministrados por el usuario de consulta. Entre los parametros se encuentran,
-     * nombre de usuario, fecha, tabla, etc.
-     */
+    //Este metodo permite actualizar en pantalla el listado de eventos de trazabilidad de acuerdo a los 
+    //parametros de busqueda suministrados por el usuario de consulta. Entre los parametros se encuentran,
+    //nombre de usuario, fecha, tabla, etc.
     public function actualiza_en_vivo_reporte_trazabilidad(){
             //Realiza una pausa de 2 segundos
             sleep(2);       
@@ -3814,10 +3803,8 @@
             }
     }
     
-    /*
-     * Metodo utilizado desde javascript para el pintado de eventos relacionados a un sitio bcr, en el momento de ingresar un nuevo
-     * evento de bitacora digital. Esto con el fin de que el usuario pueda valorar la historia de un sitio antes de ingresar la información.
-     */
+    //Metodo utilizado desde javascript para el pintado de eventos relacionados a un sitio bcr, en el momento de ingresar un nuevo
+    //evento de bitacora digital. Esto con el fin de que el usuario pueda valorar la historia de un sitio antes de ingresar la información.
     public function dibuja_tabla_eventos_relacionados_a_punto_bcr(){
                 
        //valida si fue enviado el id del punto bcr mediante el evento post del formulario html
@@ -3973,10 +3960,8 @@
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }
     }
-    /*
-     * Metodo que permite eliminar una imagen del padron fotografico de puntos BCR
-     */
     
+    //Metodo que permite eliminar una imagen del padron fotografico de puntos BCR
     public function eliminar_imagen_padron_unidades_de_video(){
       //Validación para verificar si el usuario está logeado en el sistema  
         if(isset($_SESSION['nombre'])){
@@ -4024,11 +4009,6 @@
         }
     }
     
-    
-    /*
-    * Metodo que permite recuperar un evento en estado cerrado o abierto por error.
-    */
-
     //Metodo que permite recuperar un evento en estado cerrado o abierto por error.
     public function frm_eventos_recuperar(){
         //Validación para verificar si el usuario está logeado en el sistema
@@ -7094,7 +7074,6 @@
     ////////////////////////////////////////////////////////////////////////////
     /////////////Funciones para Horarios ///////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////
-   
     public function horario_listar(){
         if(isset($_SESSION['nombre'])){
             $obj_horario = new cls_horario();
@@ -7657,7 +7636,6 @@
     ////////////////////////////////////////////////////////////////////////////
     ///////////////////////Funciones de CENCON /////////////////////////////////          
     ////////////////////////////////////////////////////////////////////////////
-    
     //Funcion para cargar el catálogo Cencon.
     //Carga información de Personal BCR, Personal Externo y PuntosBCR
     public function cencon_gestion(){
@@ -8989,10 +8967,11 @@
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         } 
     }
+    
+    
     ////////////////////////////////////////////////////////////////////////////
     /////////////////////////Funciones de Tipo Telefono/////////////////////////
-    ////////////////////////////////////////////////////////////////////////////
-
+    ///////////////////////////////////////////////////////////////////////////
     public function tipo_telefono_listar() {
        if(isset($_SESSION['nombre'])){
            $obj_tipo_telefono = new cls_tipo_telefono();
@@ -9061,10 +9040,10 @@
         }  
     }
     
+    
     ////////////////////////////////////////////////////////////////////////////
     ///////////////////////Funciones de Tipo Punto/////////////////////          
     ////////////////////////////////////////////////////////////////////////////
-
     public function tipo_punto_listar() {
        if(isset($_SESSION['nombre'])){
            $obj_tipo_punto = new cls_tipo_punto();
@@ -9159,10 +9138,10 @@
         }  
     }
     
+    
     ////////////////////////////////////////////////////////////////////////////
     ////////////////////////////Gerentes de Zona////////////////////////////////          
     ////////////////////////////////////////////////////////////////////////////
-    
     public function gerente_zona_listar() {
        if(isset($_SESSION['nombre'])){
            $obj_gerentezona = new cls_gerente_zona();
@@ -9245,10 +9224,10 @@
         }  
     }
     
+    
     ////////////////////////////////////////////////////////////////////////////
     ////////////////////////////Supervisor de Zona//////////////////////////////      
     ////////////////////////////////////////////////////////////////////////////
-    
     public function supervisor_zona_listar() {
         if(isset($_SESSION['nombre'])){
             $obj_supervisorzona = new cls_supervisor_zona();
@@ -9329,10 +9308,11 @@
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }  
     }
+    
+    
     ////////////////////////////////////////////////////////////////////////////
     /////////////////////////Asistencia de Operadores///////////////////////////  
     ////////////////////////////////////////////////////////////////////////////
-    
     public function obtiene_lista_usuariosp(){
         if(isset($_SESSION['nombre'])){
         $obj_usuario= new cls_usuarios();
@@ -9355,7 +9335,7 @@
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
       }      
    }
-   public function obtiene_todos_los_usuariosp(){
+    public function obtiene_todos_los_usuariosp(){
         if(isset($_SESSION['nombre'])){
         $obj_usuarios= new cls_usuarios(); 
         if($_GET['id']=="0"){
@@ -9806,6 +9786,7 @@
       }      
     }
     
+    
     ////////////////////////////////////////////////////////////////////////////
     /////////////////////////Manuales de Ayuda//////////////////////////////////  
     ////////////////////////////////////////////////////////////////////////////    
@@ -9813,34 +9794,12 @@
         //Llamada al formulario correspondiente de la vista
         require __DIR__ . '/../vistas/plantillas/frm_ayuda_personal_externo_publico.php';
     }
-    
-    public function manual_personal_externo() {
+        
+    public function manual_ayuda_privado(){
         if(isset($_SESSION['nombre'])){
             //Llamada al formulario correspondiente de la vista
-            require __DIR__ . '/../vistas/plantillas/frm_ayuda_personal_externo.php';
-        } else {
-            $tipo_de_alerta="alert alert-warning";
-            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
-            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
-        }
-    }
-    
-    public function manual_cencon(){
-        if(isset($_SESSION['nombre'])){
-            //Llamada al formulario correspondiente de la vista
-            require __DIR__ . '/../vistas/plantillas/frm_ayuda_cencon.php';
-        } else {
-            $tipo_de_alerta="alert alert-warning";
-            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
-            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
-        }
-    }
-    
-    public function manual_prueba_alarma(){
-       if(isset($_SESSION['nombre'])){
-            //Llamada al formulario correspondiente de la vista
-            $manual="Prueba_Alarma";
-            require __DIR__ . '/../vistas/plantillas/frm_ayuda_pruebas_alarma.php';
+            $manual=$_GET['manual'];
+            require __DIR__ . '/../vistas/plantillas/ayuda_privado_manuales.php';
         } else {
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
@@ -9848,6 +9807,7 @@
         } 
     }
       
+    
     ////////////////////////////////////////////////////////////////////////////
     //////////////////////////Controles de Video////////////////////////////////  
     ////////////////////////////////////////////////////////////////////////////
@@ -10500,6 +10460,7 @@
         }
     }
 
+    
     ////////////////////////////////////////////////////////////////////////////
     ///////////////////////Funciones de Reportes////////////////////////////////  
     ////////////////////////////////////////////////////////////////////////////
@@ -10804,7 +10765,7 @@
                                 $difencia_tiempo=(intval($diff->h)*60)+(intval($diff->i)*1);
                                 
                                 //Información de apertura de alarma pendientes y Urgentes
-                                if($prueba[0]['Seguimiento']!='Oficina abierta 24 horas'){
+                                if($prueba[0]['Seguimiento']!='Alarma abierta 24 horas'){
                                     if($prueba[0]['Hora_Apertura_Alarma']=="" || $prueba[0]['Hora_Apertura_Alarma']==null){
                                         if($diff->invert==1 && $difencia_tiempo>1) {
                                             $aperturas_pendientes++;
@@ -10842,7 +10803,7 @@
                                 $difencia_tiempo=(intval($diff->h)*60)+(intval($diff->i)*1);
 
                                 //Información de apertura de alarma pendientes y Urgentes
-                                if($prueba[0]['Seguimiento']!='Oficina abierta 24 horas'){
+                                if($prueba[0]['Seguimiento']!='Alarma abierta 24 horas'){
                                     if($prueba[0]['Hora_Apertura_Alarma']=="" || $prueba[0]['Hora_Apertura_Alarma']==null){
                                         if($diff->invert==1 && $difencia_tiempo>1) {
                                             $aperturas_pendientes++;
@@ -10881,7 +10842,7 @@
                                 $difencia_tiempo=(intval($diff->h)*60)+(intval($diff->i)*1);
 
                                 //Información de apertura de alarma pendientes y Urgentes
-                                if($prueba[0]['Seguimiento']!='Oficina abierta 24 horas'){
+                                if($prueba[0]['Seguimiento']!='Alarma abierta 24 horas'){
                                     if($prueba[0]['Hora_Apertura_Alarma']=="" || $prueba[0]['Hora_Apertura_Alarma']==null){
                                         if($diff->invert==1 && $difencia_tiempo>1) {
                                             $aperturas_pendientes++;
@@ -10920,7 +10881,7 @@
                                 $difencia_tiempo=(intval($diff->h)*60)+(intval($diff->i)*1);
 
                                 //Información de apertura de alarma pendientes y Urgentes
-                                if($prueba[0]['Seguimiento']!='Oficina abierta 24 horas'){
+                                if($prueba[0]['Seguimiento']!='Alarma abierta 24 horas'){
                                     if($prueba[0]['Hora_Apertura_Alarma']=="" || $prueba[0]['Hora_Apertura_Alarma']==null){
                                         if($diff->invert==1 && $difencia_tiempo>1) {
                                             $aperturas_pendientes++;
@@ -10959,7 +10920,7 @@
                                 $difencia_tiempo=(intval($diff->h)*60)+(intval($diff->i)*1);
 
                                 //Información de apertura de alarma pendientes y Urgentes
-                                if($prueba[0]['Seguimiento']!='Oficina abierta 24 horas'){
+                                if($prueba[0]['Seguimiento']!='Alarma abierta 24 horas'){
                                     if($prueba[0]['Hora_Apertura_Alarma']=="" || $prueba[0]['Hora_Apertura_Alarma']==null){
                                         if($diff->invert==1 && $difencia_tiempo>1) {
                                             $aperturas_pendientes++;
@@ -10998,7 +10959,7 @@
                                 $difencia_tiempo=(intval($diff->h)*60)+(intval($diff->i)*1);
 
                                 //Información de apertura de alarma pendientes y Urgentes
-                                if($prueba[0]['Seguimiento']!='Oficina abierta 24 horas'){
+                                if($prueba[0]['Seguimiento']!='Alarma abierta 24 horas'){
                                     if($prueba[0]['Hora_Apertura_Alarma']=="" || $prueba[0]['Hora_Apertura_Alarma']==null){
                                         if($diff->invert==1 && $difencia_tiempo>1) {
                                             $aperturas_pendientes++;
@@ -11037,7 +10998,7 @@
                                 $difencia_tiempo=(intval($diff->h)*60)+(intval($diff->i)*1);
 
                                 //Información de apertura de alarma pendientes y Urgentes
-                                if($prueba[0]['Seguimiento']!='Oficina abierta 24 horas'){
+                                if($prueba[0]['Seguimiento']!='Alarma abierta 24 horas'){
                                     if($prueba[0]['Hora_Apertura_Alarma']=="" || $prueba[0]['Hora_Apertura_Alarma']==null){
                                         if($diff->invert==1 && $difencia_tiempo>1) {
                                             $aperturas_pendientes++;
@@ -11217,10 +11178,11 @@
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }  
     }
+    
+
     ////////////////////////////////////////////////////////////////////////////
     //////////////////////Funciones para Pruebas de alarma//////////////////////  
     ////////////////////////////////////////////////////////////////////////////
-    
     public function pruebas_alarma(){
         if(isset($_SESSION['nombre'])){
             $obj_persona = new cls_personal();

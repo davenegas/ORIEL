@@ -298,16 +298,22 @@
                         <a class="dropdown-toggle" data-toggle="dropdown" href="#">Ayuda
                         <span class="caret"></span></a>
                         <ul class="dropdown-menu">
+                            <li><a href="index.php?ctl=manual_ayuda_privado&manual=Usuario_Inicial">Manual Usuario Inicial</a></li>
+                                
                             <?php if ($_SESSION['modulos']['Módulo-Personal Externo']==1){ ?>
-                                <li><a href="index.php?ctl=manual_personal_externo">Manual Personal Externo</a></li>
+                                <li><a href="index.php?ctl=manual_ayuda_privado&manual=Personal_Externo">Manual Personal Externo</a></li>
                             <?php }; ?>
                              
                             <?php if ($_SESSION['modulos']['Módulo-Cencon']==1){ ?>
-                                <li><a href="index.php?ctl=manual_cencon">Manual Cencon</a></li>
+                                <li><a href="index.php?ctl=manual_ayuda_privado&manual=Cencon">Manual Cencon</a></li>
                             <?php }; ?>
                                 
                             <?php if ($_SESSION['modulos']['Módulo-Pruebas alarma']==1){ ?>
-                                <li><a href="index.php?ctl=manual_prueba_alarma">Manual Pruebas Alarma</a></li>
+                                <li><a href="index.php?ctl=manual_ayuda_privado&manual=Prueba_Alarma">Manual Pruebas Alarma</a></li>
+                            <?php }; ?>
+                                
+                            <?php if ($_SESSION['modulos']['Módulo-Bitácora Digital']==1){ ?>
+                                <li><a href="index.php?ctl=manual_ayuda_privado&manual=Bitacora_Digital">Manual Bitácora Digital</a></li>
                             <?php }; ?>    
                         </ul>
                     </li>
