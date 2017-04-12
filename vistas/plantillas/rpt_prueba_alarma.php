@@ -32,7 +32,7 @@
                 <table id="tabla" class="display2">
                     <thead>   
                         <tr>
-                            <th hidden>ID_Prueba_Alarma</th>
+                            <th hidden style="text-align:center">ID_Prueba_Alarma</th>
                             <th style="text-align:center">Fecha</th>
                             <th style="text-align:center">Codigo</th>
                             <th style="text-align:center">Nombre</th>
@@ -40,10 +40,12 @@
                             <th style="text-align:center">Hora_Apertura_Alarma</th>
                             <th style="text-align:center">Hora_Prueba_Alarma</th>
                             <th style="text-align:center">Numero_Zona_Prueba</th>
+                            <th style="text-align:center">Hora_Cierre_Alarma</th>
+                            <th style="text-align:center">Seguimiento</th>
                             <th style="text-align:center">Nombre_Persona_Cierre</th>
                             <th style="text-align:center">Particion_Secundaria_Cierre</th>
                             <th style="text-align:center">Particion_Principal_Cierre</th>
-                            <th style="text-align:center">Hora_Cierre_Alarma</th>
+                            
                         </tr>
                     </thead>
                     <tbody id="cuerpo">
@@ -59,10 +61,11 @@
                                 <td style="text-align:center"><?php echo $prueba[$i]['Hora_Apertura_Alarma'];?></td>
                                 <td style="text-align:center"><?php echo $prueba[$i]['Hora_Prueba_Alarma'];?></td>
                                 <td style="text-align:center"><?php echo $prueba[$i]['Numero_Zona_Prueba'];?></td>
+                                <td style="text-align:center"><?php echo $prueba[$i]['Hora_Cierre_Alarma'];?></td>
+                                <td style="text-align:center"><?php echo $prueba[$i]['Seguimiento'];?></td>
                                 <td style="text-align:center"><?php echo $prueba[$i]['Nombre_Persona_Cierre'];?></td>
                                 <td style="text-align:center"><?php echo $prueba[$i]['Particion_Secundaria_Cierre'];?></td>
                                 <td style="text-align:center"><?php echo $prueba[$i]['Particion_Principal_Cierre'];?></td>
-                                <td style="text-align:center"><?php echo $prueba[$i]['Hora_Cierre_Alarma'];?></td>
                             </tr>
                         <?php } ?>
                     </tbody>

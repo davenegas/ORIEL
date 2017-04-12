@@ -12,6 +12,14 @@
         <section class='container text-center espacio-arriba'>
             <!--<embed src="vistas/Manuales/ORIEL_MANUAL_USUARIO_PERSONAL_EXTERNO_VP.pdf#toolbar=0" width="900" height="450">-->
             <?php switch ($manual) {
+                case "Usuario_Inicial": ?>
+                    <embed src="vistas/Manuales/ORIEL_MANUAL_USUARIO_INICIAL.pdf" width="1000" height="600"> 
+                    <?php
+                    break;
+                case "Bitacora_Digital": ?>
+                    <embed src="vistas/Manuales/ORIEL_MANUAL_USUARIO_BITACORA_DIGITAL.pdf" width="1000" height="600"> 
+                    <?php
+                    break;
                 case "Personal_Externo":?>
                     <embed src="vistas/Manuales/ORIEL_MANUAL_USUARIO_PERSONAL_EXTERNO.pdf" width="1000" height="600">
                     <?php
@@ -24,11 +32,8 @@
                     <embed src="vistas/Manuales/ORIEL_MANUAL_USUARIO_PRUEBA_ALARMA.pdf" width="1000" height="600"> 
                     <?php
                     break;
-                default:
-                    break;
             }?>
         </section>
-
         <?php require_once 'pie_de_pagina.php' ?>
     </body>
 </html>

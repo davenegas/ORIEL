@@ -149,10 +149,8 @@ $map = array(
     'ejecucion_automatico_proceso' => array('controller' =>'Controller', 'action' =>'ejecucion_automatico_proceso'),
     
     //Controlador de Manuales de ayuda
+    'manual_ayuda_privado'=>array('controller'=>'Controller', 'action'=>'manual_ayuda_privado'),
     'manual_personal_externo_publico'=>array('controller'=>'Controller', 'action'=>'manual_personal_externo_publico'),
-    'manual_personal_externo'=>array('controller'=>'Controller', 'action'=>'manual_personal_externo'),
-    'manual_cencon'=>array('controller'=>'Controller', 'action'=>'manual_cencon'),
-    'manual_prueba_alarma'=>array('controller'=>'Controller', 'action'=>'manual_prueba_alarma'),
     
     //Controlador de Reportes
     'reporte_seguimiento_eventos'=>array('controller'=>'Controller', 'action'=>'reporte_seguimiento_eventos'),
