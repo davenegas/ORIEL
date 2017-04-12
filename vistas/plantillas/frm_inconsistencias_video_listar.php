@@ -90,9 +90,7 @@
         <table id="tabla" class="display" cellspacing="0">
           <thead>
             <tr>
-              <th hidden="hidden">ID_Inconsistencia_Video</th>
-              <th hidden="hidden">ID_Bitacora_Revision_Video</th>
-              <th hidden="hidden">ID_Unidad_Video</th>
+              <th hidden="hidden">Ordenamiento</th>
               <th style="text-align:center"></th>
               <th style="text-align:center">Estado</th>
               <th style="text-align:center">Unidad Video</th>
@@ -102,6 +100,9 @@
               <th style="text-align:center">Validado por</th>
               <th style="text-align:center">Reportado por</th>
               <th style="text-align:center">Solventado por</th>
+               <th hidden="hidden">ID_Inconsistencia_Video</th>
+              <th hidden="hidden">ID_Bitacora_Revision_Video</th>
+              <th hidden="hidden">ID_Unidad_Video</th>
             </tr>
           </thead>
     <tbody>
@@ -112,14 +113,15 @@
             <tr>
                 <!--<td style="text-align:center" id="<?php echo $params[$i]['ID_Unidad_Video'].'-ID_PuntoBCR';?>" onclick="edita_dato('<?php echo $params[$i]['ID_Unidad_Video'];?>','<?php echo $params[$i]['ID_PuntoBCR'];?>','ID_PuntoBCR','Punto BCR')"><?php echo $params[$i]['Nombre'];?></td>-->
                 
-                <td hidden="hidden"><?php echo $params[$i]['ID_Inconsistencia_Video'];?></td>
-                <td hidden="hidden"><?php echo $params[$i]['ID_Bitacora_Revision_Video'];?></td>
-                <td hidden="hidden"><?php echo $params[$i]['ID_Unidad_Video'];?></td>
+               
                 <!--<td style="text-align:center" data-toggle="tooltip" title="<?php echo $params[$i]['Observaciones_Evento'];?>"><a href="javascript:void(null)" style="color:#FFFFFF">3<img src="vistas/Imagenes/Agregar Nota.jpg" class="img-rounded" alt="Cinque Terre" width="25" height="25" onClick="editar_notas_supervision('<?php echo $params[$i]['ID_Evento'];?>','<?php echo $params[$i]['Observaciones_Evento'];?>')"></a></td>-->
                 <?php if ($params[$i]['Estado_Traducido']=="Pendiente"){?> 
-                <td style="text-align:center" data-toggle="tooltip" title="Inconsistencia Pendiente de Validar por Parte de Z2"><a style="color:#FFFFFF">1<img src="vistas/Imagenes/airflow_arrows.gif" class="img-rounded" alt="Cinque Terre" width="25" height="25"></a></td>
+                <td hidden="hidden" style="text-align:center"><a style="color:#FFFFFF">1</a></td>
+                <td style="text-align:center" data-toggle="tooltip" title="Inconsistencia Pendiente de Validar por Parte de Z2"><a style="color:#FFFFFF"><img src="vistas/Imagenes/airflow_arrows.gif" class="img-rounded" alt="Cinque Terre" width="25" height="25"></a></td>
                 <?php }else{?>
-                <td style="text-align:center"><a style="color:#FFFFFF">1</a></td>
+                <td hidden="hidden" style="text-align:center"><a style="color:#FFFFFF">0</a></td>
+                <td style="text-align:center"><a style="color:#FFFFFF"></a></td>
+                
                 <?php }?>
                 <td style="text-align:center"><?php echo $params[$i]['Estado_Traducido'];?></td>
                 <td style="text-align:center"><?php echo $params[$i]['Descripcion'];?></td>
@@ -129,7 +131,9 @@
                 <td style="text-align:center" onclick="edita_validado_por('<?php echo $params[$i]['ID_Inconsistencia_Video'];?>','<?php echo $params[$i]['ID_Bitacora_Revision_Video'];?>','<?php echo $params[$i]['Estado'];?>','<?php echo $params[$i]['Tipo_Inconsistencia'];?>','<?php echo $params[$i]['Observaciones_Validacion'];?>')"><?php echo $params[$i]['Validado_Por'];?></td>
                 <td style="text-align:center" onclick="edita_reportado_por('<?php echo $params[$i]['ID_Inconsistencia_Video'];?>','<?php echo $params[$i]['ID_Bitacora_Revision_Video'];?>','<?php echo $params[$i]['Estado'];?>','<?php echo $params[$i]['ID_Averia'];?>','<?php echo $params[$i]['Observaciones_Reporte'];?>')"><?php echo $params[$i]['Reportado_Por'];?></td>
                 <td style="text-align:center" onclick="edita_solucionado_por('<?php echo $params[$i]['ID_Inconsistencia_Video'];?>','<?php echo $params[$i]['ID_Bitacora_Revision_Video'];?>','<?php echo $params[$i]['Estado'];?>','<?php echo $params[$i]['Observaciones_Solucionada'];?>')"><?php echo $params[$i]['Solucionado_Por'];?></td>
-                               
+                <td hidden="hidden"><?php echo $params[$i]['ID_Inconsistencia_Video'];?></td>
+                <td hidden="hidden"><?php echo $params[$i]['ID_Bitacora_Revision_Video'];?></td>
+                <td hidden="hidden"><?php echo $params[$i]['ID_Unidad_Video'];?></td>               
             </tr>     
            
             <?php } ?>
@@ -154,6 +158,8 @@
                         <option value="0">Pendiente</option>
                         <option value="1">Atendida</option>
                         <option value="2">Validada para Reportar a SE</option> 
+                        <option value="3">Validada para Reportar a ATMs</option> 
+                        <option value="4">Validada para Reportar a Mantenimiento</option> 
                     </select>
                     
                      <label for="tipo_inconsistencia">Tipo Inconsistencia</label>
@@ -164,7 +170,8 @@
                         <option value="3">Cámara Desenfocada</option> 
                         <option value="4">Diferencia Cantidad Cámaras</option> 
                         <option value="5">Falla Grabador de Video</option> 
-                        <option value="6">Sin Problemas</option> 
+                        <option value="6">No Video</option> 
+                        <option value="7">Sin Problemas</option> 
                     </select>
             
                     <label for="observaciones_validacion">Observaciones</label>
@@ -193,7 +200,9 @@
                     <select class="form-control" id="estado_reporte" name="estado_reporte" > 
                         <option value="0">Pendiente</option>
                         <option value="1">Atendida</option>
-                        <option value="3">Reportada a SE</option> 
+                        <option value="5">Reportada a SE</option> 
+                        <option value="6">Reportada a ATMs</option> 
+                        <option value="7">Reportada a Mantenimiento</option> 
                     </select>
                     
                      <label for="id_averia">ID Reporte Avería</label>
@@ -226,7 +235,9 @@
                     <select class="form-control" id="estado_solucion" name="estado_solucion" > 
                         <option value="0">Pendiente</option>
                         <option value="1">Atendida</option>
-                        <option value="4">Reparada por SE</option> 
+                        <option value="8">Reparada por SE</option> 
+                        <option value="9">Reparada por ATMs</option> 
+                        <option value="10">Reparada por Mantenimiento</option> 
                     </select>
 
                     <label for="observaciones_solucion">Observaciones</label>

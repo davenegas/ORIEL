@@ -128,7 +128,7 @@
                 </tbody>
             </table>
             
-            
+            <?php if ($_SESSION['modulos']['Módulo-Puestos de Monitoreo']==1){?>
             <h3>Visualización de Capturas de Control de Video Referentes al Punto BCR</h3>
             
             
@@ -171,7 +171,7 @@
             </tbody>
         </table>
             
-            
+        <?php }; ?>     
         </div>
 
         <?php require 'vistas/plantillas/pie_de_pagina.php'?>

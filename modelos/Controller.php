@@ -10021,8 +10021,117 @@
 
                                  }
                              } 
-                             
                            
+                           //Validación que permite enviar un sitio 10 posiciones adelante
+                             
+                              $verifica_si_hay_para_revisar=-1;
+                              $verifica_si_hay_para_reacomodar=-1;
+                             
+                               if (($_POST['req_mantenimiento']=="1")&&($_POST['res_conexion']=="2")){
+                                   if (!isset($_SESSION['vector_temp_revision_video'])){
+                                       $vector_temp_revision_video=array();
+                                       $vector_temp_revision_video[]=array("ID_Puesto_Monitoreo"=>$_POST['id_puesto'],"Posicion"=>$_POST['pos'],"ID_Usuario"=>$_SESSION['id'],"Contador"=>0,"Posicion_Real"=>$obj_puesto_monitoreo->getPosicion());
+                                       $_SESSION['vector_temp_revision_video']=$vector_temp_revision_video;
+                                      
+                                   }else{
+                                       $tam=count($_SESSION['vector_temp_revision_video']);
+                                       $ya_existe_esta_posicion=0;
+                                       for ($i = 0; $i < $tam; $i++) {
+                                           if (($_SESSION['vector_temp_revision_video'][$i]['ID_Usuario']==$_SESSION['id'])&&($_SESSION['vector_temp_revision_video'][$i]['ID_Puesto_Monitoreo']==$_POST['id_puesto'])){
+                                               if ($_SESSION['vector_temp_revision_video'][$i]['Posicion']==$obj_puesto_monitoreo->getPosicion()){
+                                                    $ya_existe_esta_posicion=1;    
+                                               }
+                                               $temp=intval($_SESSION['vector_temp_revision_video'][$i]['Contador']);
+                                               $temp=$temp+1;
+                                               $_SESSION['vector_temp_revision_video'][$i]['Contador']=$temp;
+                                               
+                                               if ($_SESSION['vector_temp_revision_video'][$i]['Contador']<11){
+                                                   $_SESSION['vector_temp_revision_video'][$i]['Posicion_Real']=$obj_puesto_monitoreo->getPosicion();
+                                               }
+                                               
+                                               if ($_SESSION['vector_temp_revision_video'][$i]['Contador']==10){
+                                                   $verifica_si_hay_para_revisar=$i;
+                                               }
+                                               if ($_SESSION['vector_temp_revision_video'][$i]['Contador']==11){
+                                                   $verifica_si_hay_para_reacomodar=$i;
+                                               }
+                                           }
+                                       }
+                                       if ($ya_existe_esta_posicion==0){
+                                           $vector_temp_revision_video[]=array("ID_Puesto_Monitoreo"=>$_POST['id_puesto'],"Posicion"=>$_POST['pos'],"ID_Usuario"=>$_SESSION['id'],"Contador"=>0,"Posicion_Real"=>$obj_puesto_monitoreo->getPosicion());
+                                           $_SESSION['vector_temp_revision_video']=  array_merge($_SESSION['vector_temp_revision_video'],$vector_temp_revision_video);
+                                       }
+                                   }    
+                               }else{
+                                   if (isset($_SESSION['vector_temp_revision_video'])){
+                                       $tam=count($_SESSION['vector_temp_revision_video']);
+                                       for ($i = 0; $i < $tam; $i++) {
+                                           if (($_SESSION['vector_temp_revision_video'][$i]['ID_Usuario']==$_SESSION['id'])&&($_SESSION['vector_temp_revision_video'][$i]['ID_Puesto_Monitoreo']==$_POST['id_puesto'])){
+                                               $temp=intval($_SESSION['vector_temp_revision_video'][$i]['Contador']);
+                                               $temp=$temp+1;
+                                               $_SESSION['vector_temp_revision_video'][$i]['Contador']=$temp;
+                                               if ($_SESSION['vector_temp_revision_video'][$i]['Contador']<11){
+                                                   $_SESSION['vector_temp_revision_video'][$i]['Posicion_Real']=$obj_puesto_monitoreo->getPosicion();
+                                               }
+                                               
+                                               if ($_SESSION['vector_temp_revision_video'][$i]['Contador']==10){
+                                                   $verifica_si_hay_para_revisar=$i;
+                                               }
+                                               if ($_SESSION['vector_temp_revision_video'][$i]['Contador']==11){
+                                                   $verifica_si_hay_para_reacomodar=$i;
+                                               }
+                                           }
+                                       }
+                                   }
+                               }
+                            
+                             if ($verifica_si_hay_para_revisar>-1){
+                                $obj_puesto_monitoreo->setCondicion("ID_Puesto_Monitoreo=".$_SESSION['vector_temp_revision_video'][$verifica_si_hay_para_revisar]['ID_Puesto_Monitoreo']. " AND Posicion=".$_SESSION['vector_temp_revision_video'][$verifica_si_hay_para_revisar]['Posicion']);
+                                if ($obj_puesto_monitoreo->existe_esta_posicion_en_este_puesto_de_monitoreo()){
+                                      $obj_puesto_monitoreo->setPosicion($_SESSION['vector_temp_revision_video'][$verifica_si_hay_para_revisar]['Posicion']);
+                                }
+                                $verifica_si_hay_para_revisar=-1;
+                             }  
+                              if ($verifica_si_hay_para_reacomodar>-1){
+                                $obj_puesto_monitoreo->setCondicion("ID_Puesto_Monitoreo=".$_SESSION['vector_temp_revision_video'][$verifica_si_hay_para_reacomodar]['ID_Puesto_Monitoreo']. " AND Posicion=".$_SESSION['vector_temp_revision_video'][$verifica_si_hay_para_reacomodar]['Posicion_Real']);
+                                if ($obj_puesto_monitoreo->existe_esta_posicion_en_este_puesto_de_monitoreo()){
+                                      $obj_puesto_monitoreo->setPosicion($_SESSION['vector_temp_revision_video'][$verifica_si_hay_para_reacomodar]['Posicion_Real']);
+                                }
+                                unset($_SESSION['vector_temp_revision_video'][$verifica_si_hay_para_reacomodar]);
+                                if(count($_SESSION['vector_temp_revision_video'])==0){
+                                    unset($_SESSION['vector_temp_revision_video']);
+                                }else{
+                                    $_SESSION['vector_temp_revision_video'] = array_values($_SESSION['vector_temp_revision_video']);
+                                     if (isset($_SESSION['vector_temp_revision_video'])){
+                                        $tam=count($_SESSION['vector_temp_revision_video']);
+
+                                        for ($i = 0; $i < $tam; $i++) {
+                                            if (($_SESSION['vector_temp_revision_video'][$i]['ID_Usuario']==$_SESSION['id'])&&($_SESSION['vector_temp_revision_video'][$i]['ID_Puesto_Monitoreo']==$_POST['id_puesto'])){
+                                               if ($_SESSION['vector_temp_revision_video'][$i]['Contador']==10){
+                                                   $_SESSION['vector_temp_revision_video'][$i]['Contador']=9;
+                                               }
+                                               $obj_puesto_monitoreo->setCondicion("ID_Puesto_Monitoreo=".$_SESSION['vector_temp_revision_video'][$i]['ID_Puesto_Monitoreo']);   
+                                               $temp_ultima_posicion=$obj_puesto_monitoreo->obtiene_ultima_posicion_de_un_puesto_de_monitoreo();
+                                               if ($temp_ultima_posicion>0){
+                                                   $temp_pos_mas_diez=11 + intval($_SESSION['vector_temp_revision_video'][$i]['Posicion']);
+                                                   if ($temp_pos_mas_diez<$temp_ultima_posicion){
+                                                       $_SESSION['vector_temp_revision_video'][$i]['Posicion_Real']=$temp_pos_mas_diez;
+                                                   }else{
+                                                       if (($temp_pos_mas_diez-$temp_ultima_posicion)==0){
+                                                           $_SESSION['vector_temp_revision_video'][$i]['Posicion_Real']=1;
+                                                       }else{
+                                                           $_SESSION['vector_temp_revision_video'][$i]['Posicion_Real']=$temp_pos_mas_diez-$temp_ultima_posicion;
+                                                       }
+                                                   }
+                                               }
+                                            }
+                                        }
+                                    }
+                                }
+                                $verifica_si_hay_para_reacomodar=-1;
+                                
+                             }
+                             
                             
                              //Ingresa próxima revision de video en bitacora de revisiones de video.
                              $obj_puesto_monitoreo->setId_ultimo_toma_puesto_ingresada($_POST['id_control_puesto']);
@@ -10063,7 +10172,7 @@
                $obj_puesto_monitoreo->agrega_justificacion_en_retraso_de_una_revision_de_video();
                $obj_puesto_monitoreo->setFecha_inicia_revision(date("Y-m-d"));
                //$obj_puesto_monitoreo->setHora_inicia_revision(date("H:i:s", time()));
-               $obj_puesto_monitoreo->setHora_inicia_revision("ADDTIME(Hora_Inicia_Revision,'00:00:10')");
+               $obj_puesto_monitoreo->setHora_inicia_revision("ADDTIME(Hora_Inicia_Revision,'00:00:15')");
                $obj_puesto_monitoreo->setCondicion("ID_Puesto_Monitoreo=".$_POST['id_puesto_justificacion']." AND ID_Usuario=".$_SESSION['id']." AND Estado=0");
                $obj_puesto_monitoreo->edita_tiempo_de_inicio_en_revision_de_video();
                
@@ -10343,12 +10452,6 @@
                      $obj_puntos_bcr->obtiene_todos_los_puntos_bcr();
                      $vector_punto_bcr_siguiente=$obj_puntos_bcr->getArreglo(); 
                                        
-                     //echo '<pre>';
-                     //print_r($vector_punto_bcr_siguiente);
-                     //echo '</pre>';
-//                      echo '<pre>';
-//                      print_r($_SESSION['vector_temp_revision_video']);
-//                      echo '</pre>';
                       require __DIR__.'/../vistas/plantillas/frm_controles_de_video_listar.php';
                    
                 }
