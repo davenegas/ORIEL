@@ -101,23 +101,7 @@
                             <?php  if ($_SESSION['modulos']['Catálogos-Supervisor Zona']==1){?>
                                 <li><a href="index.php?ctl=supervisor_zona_listar">Supervisor de Zona</a></li>
                             <?php  }; ?>
-                                
-                            <?php  if ($_SESSION['modulos']['Catálogos-Horarios']==1){?>
-                                <li><a href="index.php?ctl=obtiene_lista_operadores">Operadores</a></li>
-                            <?php  }; ?>   
-                                
-                            <?php  if ($_SESSION['modulos']['Catálogos-Horarios']==1){?>
-                                <li><a href="index.php?ctl=obtiene_lista_horarios">Horario-Operadores</a></li>
-                            <?php  }; ?>   
-                                
-                            <?php  if ($_SESSION['modulos']['Catálogos-Horarios']==1){?>
-                                <li><a href="index.php?ctl=obtiene_lista_descansos">Descanso-Operadores</a></li>
-                            <?php  }; ?>   
-                                
-                            <?php  if ($_SESSION['modulos']['Catálogos-Horarios']==1){?>
-                                <li><a href="index.php?ctl=obtiene_todos_los_turnos">Turno-Operadores</a></li>
-                            <?php  }; ?>   
-
+                            
                             <?php  if ($_SESSION['modulos']['Catálogos-Proveedor enlaces']==1){?>
                                 <li><a href="index.php?ctl=proveedor_listar">Proveedores enlaces</a></li> 
                             <?php  }; ?>
@@ -214,10 +198,6 @@
                             
                             <?php if ($_SESSION['modulos']['Reportes-Alertas Generales']==1){ ?>
                                 <li><a href="index.php?ctl=alertas_generales">Alertas Generales</a></li> 
-                            <?php }; ?> 
-                               
-                            <?php if ($_SESSION['modulos']['Reportes-Trazabilidad']==1){ ?>
-                                <li><a href="index.php?ctl=obtiene_lista_marcas_reportes">Operadores</a></li> 
                             <?php }; ?>   
                         </ul>
                     </li>
@@ -256,10 +236,6 @@
 
                             <?php if ($_SESSION['modulos']['Módulo-Personal Externo']==1){?>
                                 <li><a href="index.php?ctl=personal_externo_listar">Personal Externo</a></li>
-                            <?php }; ?>
-
-                            <?php if ($_SESSION['modulos']['Módulo-Asistencia de Personal']==1){ ?>
-                                <li><a href="index.php?ctl=marcas">Asistencia de Operadores</a></li>
                             <?php }; ?>
 
                             <?php if ($_SESSION['modulos']['Módulo-Áreas de Apoyo']==1){ ?>

@@ -18,10 +18,10 @@
                             type: 'pie'
                         },
                         title: {
-                            text: 'Pruebas pendientes: <?php echo $pruebas_pendientes;?>'
+                            text: 'Pruebas pendientes: <?php echo $datos['cont_pruebas_pendientes'];?>'
                         },
                         subtitle: {
-                            text: 'Pruebas recibidas: <?php echo $contador_pruebas;?>'
+                            text: 'Pruebas recibidas: <?php echo $datos['contador_pruebas'];?>'
                         },
                         tooltip: {
                             pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
@@ -31,10 +31,10 @@
                             colorByPoint: true,
                             data: [{
                                 name: 'Pruebas recibidas',
-                                y: <?php echo $contador_pruebas?>
+                                y: <?php echo $datos['contador_pruebas']?>
                             }, {
                                 name: 'Pruebas pendientes',
-                                y: <?php echo $pruebas_pendientes?>,
+                                y: <?php echo $datos['cont_pruebas_pendientes']?>,
                                 sliced: true,
                                 selected: true
                             }]
@@ -51,10 +51,10 @@
                             type: 'pie'
                         },
                         title: {
-                            text: 'Aperturas pendientes: <?php echo $aperturas_pendientes;?>'
+                            text: 'Aperturas pendientes: <?php echo $datos['cont_aperturas_pendientes'];?>'
                         },
                         subtitle: {
-                            text: 'Aperturas recibidas: <?php echo $contador_aperturas;?>'
+                            text: 'Aperturas recibidas: <?php echo $datos['contador_aperturas'];?>'
                         },
                         tooltip: {
                             pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
@@ -64,10 +64,10 @@
                             colorByPoint: true,
                             data: [{
                                 name: 'Aperturas recibidas',
-                                y: <?php echo $contador_aperturas?>
+                                y: <?php echo $datos['contador_aperturas']?>
                             }, {
                                 name: 'Aperturas pendientes',
-                                y: <?php echo $aperturas_pendientes?>,
+                                y: <?php echo $datos['cont_aperturas_pendientes']?>,
                                 sliced: true,
                                 selected: true
                             }]
@@ -84,10 +84,10 @@
                             type: 'pie'
                         },
                         title: {
-                            text: 'Cierres pendientes: <?php echo $cierres_pendientes;?>'
+                            text: 'Cierres pendientes: <?php echo $datos['cont_cierres_pendientes'];?>'
                         },
                         subtitle: {
-                            text: 'Cierres recibidos: <?php echo $contador_cierres;?>'
+                            text: 'Cierres recibidos: <?php echo $datos['contador_cierres'];?>'
                         },
                         tooltip: {
                             pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
@@ -97,10 +97,10 @@
                             colorByPoint: true,
                             data: [{
                                 name: 'Cierres recibidos',
-                                y: <?php echo $contador_cierres?>
+                                y: <?php echo $datos['contador_cierres']?>
                             }, {
                                 name: 'Cierres pendientes',
-                                y: <?php echo $cierres_pendientes?>,
+                                y: <?php echo  $datos['cont_cierres_pendientes']?>,
                                 sliced: true,
                                 selected: true
                             }]
@@ -163,17 +163,17 @@
         
         <div class="col-sm-4 sidenav espacio-abajo">
             <div class="well" align="center">SISTEMA DE ALARMA</div>
-            <?php if($contador_pruebas!=0 || $pruebas_pendientes!=0){ ?>
+            <?php if($datos['contador_pruebas']!=0 || $datos['cont_pruebas_pendientes']!=0){ ?>
                 <div id="pruebas"  style="min-width: 300px; height: 350px; max-width: 500px; margin: 0 auto"></div>
             <?php } ?>
-            <?php if($contador_aperturas!=0 || $aperturas_pendientes!=0){ ?>
+            <?php if($datos['contador_aperturas']!=0 || $datos['cont_aperturas_pendientes']!=0){ ?>
                 <div id="aperturas" style="min-width: 300px; height: 350px; max-width: 500px; margin: 0 auto"></div>
             <?php } ?>
-            <?php if($contador_cierres!=0 || $cierres_pendientes!=0){ ?>
+            <?php if($datos['contador_cierres']!=0 || $datos['cont_cierres_pendientes']!=0){ ?>
                 <div id="cierres" style="min-width: 300px; height: 350px; max-width: 500px; margin: 0 auto"></div>
             <?php } ?>
-            <?php if($contador_pruebas==0 && $pruebas_pendientes==0 && $contador_aperturas==0 && 
-                $aperturas_pendientes==0 && $contador_cierres==0 && $cierres_pendientes==0){?>
+            <?php if($datos['contador_pruebas']==0 && $datos['cont_pruebas_pendientes']==0 && $datos['contador_aperturas']==0 && 
+                $datos['cont_aperturas_pendientes']==0 && $datos['contador_cierres']==0 && $datos['cierres_pendientes']==0){?>
                 <div class="well" align="center">No hay pendientes con el sistema de alarma</div>
              <?php } ?>    
         </div>

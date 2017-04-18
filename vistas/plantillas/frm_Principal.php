@@ -3,6 +3,7 @@
     <head>
         <meta charset="utf-8"/>
         <title>Principal Oriel</title>
+        <link rel="stylesheet" href="vistas/css/reloj.css">
         <?php require_once 'frm_librerias_head.html'; ?>
         
     </head>
@@ -12,10 +13,20 @@
         <div class="container animated fadeIn">
             <h2 align="center">Bienvenido(a):</h2>
             <h3 align="center"><?php echo $_SESSION['name']." ".$_SESSION['apellido'];?></h3>
+            <center>
+                <!-- <section class="" id="contReloj">
+                    <p id="pHoras"></p>
+                    <p>:</p>
+                    <p id="pMinutos"></p>
+                    <p>:</p>
+                    <p id="pSegundos"></p>
+                    <script language="javascript" src="vistas/js/listas_dependientes_asistencia.js"></script>
+                </section>-->
+
+                <img src="vistas/Imagenes/Objetivo Z1.jpg" alt=""/>
+            </center>
             
-            <center><img src="vistas/Imagenes/Objetivo Z1.jpg" alt=""/></center>
-            
-<!--            <h4 align="center" style="min-width: 800px; height: 70px; max-width: 300px; margin: 0 auto; margin-top: 30px;">
+            <!-- <h4 align="center" style="min-width: 800px; height: 70px; max-width: 300px; margin: 0 auto; margin-top: 30px;">
                 Objetivo del Centro de Control: Detectar, prevenir y atender situaciones que incrementen riesgos para el BCR, sus funcionarios y clientes, coordinando prontamente con los departamentos internos y externos necesarios para controlar el evento.
             </h4>-->
             <!--<iframe src="http://bancobcr.com" width=1000 height=600 frameborder=1 scrolling=auto></iframe></div>-->

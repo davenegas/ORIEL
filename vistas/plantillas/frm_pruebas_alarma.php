@@ -198,35 +198,35 @@
                 </div>
 
                 <div class="col-sm-3 sidenav">
-                    <?php if(isset($pruebas_pendientes)){?>
+                    <?php if(isset($datos['pruebas_pendientes'])){?>
                         <div class="well" align="left">
                             <p><b>Pruebas pendientes</b></p>
                             <?php 
-                            $tam=$tam=count($pruebas_pendientes);
+                            $tam=count($datos['pruebas_pendientes']);
                             for ($i = 0; $i <$tam; $i++) {?>
-                                <p style="<?php echo $pruebas_pendientes[$i]['Color']?>"><?php echo $pruebas_pendientes[$i]['Mensaje'];?></p>
+                                <p style="<?php echo $datos['pruebas_pendientes'][$i]['Color']?>"><?php echo $datos['pruebas_pendientes'][$i]['Mensaje'];?></p>
                             <?php }?>   
                         </div>
                     <?php } ?>
                     
-                    <?php if(isset($aperturas_pendietes)){?>
+                    <?php if(isset($datos['aperturas_pendietes'])){?>
                         <div class="well" align="left">
                             <p><b>Aperturas pendientes</b></p>
                             <?php 
-                            $tam=$tam=count($aperturas_pendietes);
+                            $tam=$tam=count($datos['aperturas_pendietes']);
                             for ($i = 0; $i <$tam; $i++) {?>
-                                <p style="<?php echo $aperturas_pendietes[$i]['Color']?>"><?php echo $aperturas_pendietes[$i]['Mensaje'];?></p>
+                                <p style="<?php echo $datos['aperturas_pendietes'][$i]['Color']?>"><?php echo $datos['aperturas_pendietes'][$i]['Mensaje'];?></p>
                             <?php }?>   
                         </div>
                     <?php } ?>
                     
-                    <?php if(isset($cierres_pendientes)){?>
+                    <?php if(isset($datos['cierres_pendientes'])){?>
                         <div class="well" align="left">
                             <p><b>Cierres pendientes</b></p>
                             <?php 
-                            $tam=$tam=count($cierres_pendientes);
+                            $tam=$tam=count($datos['cierres_pendientes']);
                             for ($i = 0; $i <$tam; $i++) {?>
-                                <p style="<?php echo $cierres_pendientes[$i]['Color']?>"><?php echo $cierres_pendientes[$i]['Mensaje'];?></p>
+                                <p style="<?php echo $datos['cierres_pendientes'][$i]['Color']?>"><?php echo $datos['cierres_pendientes'][$i]['Mensaje'];?></p>
                             <?php }?>   
                         </div>
                     <?php } ?>

@@ -5,7 +5,7 @@
  * trabaja de la mano y en conjunto con los roles, módulos y usuarios del sistema.
  */
 session_start();
- // carga del modelo y los controladores
+// carga del modelo y los controladores
 //Controlador requerido para la capa de datos
 /*
  En este momento y mediante la llamada del index, se realiza una sola vez la importación de todas
@@ -17,8 +17,6 @@ session_start();
 require_once __DIR__ . '/modelos/Data_Provider.php';
 //Libreria de clases --> Control de usuarios
 require_once __DIR__ . '/controladores/cls_usuarios.php';
-//Libreria de clases --> Control de operadores
-require_once __DIR__ . '/controladores/cls_operadores.php';
 //Libreria de clases --> Control de roles de usuarios
 require_once __DIR__ . '/controladores/cls_roles.php';
 //Libreria de clases --> Control de módulos y funcionalidades de seguridad
@@ -41,8 +39,6 @@ require_once __DIR__ . '/controladores/cls_personal.php';
 require_once __DIR__ . '/controladores/cls_personal_externo.php';
 //Libreria de clases --> Control de horarios
 require_once __DIR__ . '/controladores/cls_horario.php';
-//Libreria de clases --> Control de horarios Operadores
-require_once __DIR__ . '/controladores/cls_horarioOperador.php';
 //Libreria de clases --> Control de direcciones IP
 require_once __DIR__ . '/controladores/cls_direccionIP.php';
 //Libreria de clases --> Control de trazabilidad (seguimiento a la actividad de usarios dentro del sistema)
@@ -75,14 +71,6 @@ require_once __DIR__ . '/controladores/cls_padron_fotografico_puntosbcr.php';
 require_once __DIR__ . '/controladores/cls_padron_fotografico_unidades_de_video.php';
 //Libreria de clases --> Control de enlaces del departamento de telecomunicaciones
 require_once __DIR__ . '/controladores/cls_enlace_telecom.php';
-//Libreria de clases --> Control de marcas de asistencia
-require_once __DIR__ . '/controladores/cls_marcas.php';
-//Libreria de clases --> Control de turno
-require_once __DIR__ . '/controladores/cls_turno.php';
-//Libreria de clases --> Control de descansos
-require_once __DIR__ . '/controladores/cls_descansos.php';
-//Libreria de clases --> Control de marcas de descanso
-require_once __DIR__ . '/controladores/cls_marcas_descanso.php';
 //Libreria de clases --> Control de estado civil
 require_once __DIR__ . '/controladores/cls_estado_civil.php';
 //Libreria de clases --> Control de estado del personal
@@ -158,6 +146,7 @@ $map = array(
     'reporte_lineas_telefonicas'=>array('controller'=>'Controller', 'action'=>'reporte_lineas_telefonicas'),
     'alertas_generales'=>array('controller'=>'Controller', 'action'=>'alertas_generales'),
     'reporte_inconsistencias_pruebas'=>array('controller'=>'Controller', 'action'=>'reporte_inconsistencias_pruebas'),
+    'enlace_reporte'=>array('controller'=>'Controller', 'action'=>'enlace_reporte'),
     
     //Información pública
     'personal_listar_publico'=>array('controller'=>'Controller', 'action'=>'personal_listar_publico'),
@@ -209,9 +198,6 @@ $map = array(
     'medio_enlace_listar'=>array('controller'=>'Controller', 'action'=>'medio_enlace_listar'),
     'medio_enlace_guardar'=>array('controller'=>'Controller', 'action'=>'medio_enlace_guardar'),
     'medio_enlace_cambiar_estado'=>array('controller'=>'Controller', 'action'=>'medio_enlace_cambiar_estado'),
-    
-    //Controlador de Enlace Telecom
-    'enlace_reporte'=>array('controller'=>'Controller', 'action'=>'enlace_reporte'),
     
     //Controlador de Unidades Ejecutoras
     'unidad_ejecutora_listar'=>array('controller'=>'Controller', 'action'=>'unidad_ejecutora_listar'),
@@ -327,27 +313,6 @@ $map = array(
     //Trazabilidad
     'frm_trazabilidad_listar'=>array('controller'=>'Controller','action'=> 'frm_trazabilidad_listar'),
     'actualiza_en_vivo_reporte_trazabilidad'=>array('controller'=>'Controller','action'=> 'actualiza_en_vivo_reporte_trazabilidad'),
-    
-    //Asistencia de Personal
-    'obtiene_lista_marcas' => array('controller' =>'Controller', 'action' =>'obtiene_lista_marcas'),
-    'obtiene_lista' => array('controller' =>'Controller', 'action' =>'obtiene_lista'),
-    'obtiene_lista_marcas_reportes' => array('controller' =>'Controller', 'action' =>'obtiene_lista_marcas_reportes'),
-    'guardar_marcas' => array('controller' =>'Controller', 'action' =>'guardar_marcas'),
-    'guardar_marcas_descanso' => array('controller' =>'Controller', 'action' =>'guardar_marcas_descanso'),
-    'obtiene_lista_operadores' => array('controller' =>'Controller', 'action' =>'obtiene_lista_operadores'),
-    'obtiene_todos_los_operadores' => array('controller' =>'Controller', 'action' =>'obtiene_todos_los_operadores'),
-    'editar_operadores' => array('controller' =>'Controller', 'action' =>'editar_operadores'),
-    'guarda_operadores' => array('controller' =>'Controller', 'action' =>'guarda_operadores'),
-    'obtiene_todos_los_descansos' => array('controller' =>'Controller', 'action' =>'obtiene_todos_los_descansos'),
-    'obtiene_lista_descansos' => array('controller' =>'Controller', 'action' =>'obtiene_lista_descansos'),
-    'guardar_justificacion_descanso' => array('controller' =>'Controller', 'action' =>'guardar_justificacion_descanso'),
-    'guardar_descansos' => array('controller' =>'Controller', 'action' =>'guardar_descansos'),
-    'obtiene_todos_los_turnos' => array('controller' =>'Controller', 'action' =>'obtiene_todos_los_turnos'),
-    'obtiene_lista_turno' => array('controller' =>'Controller', 'action' =>'obtiene_lista_turno'),
-    'guardar_turno' => array('controller' =>'Controller', 'action' =>'guardar_turno'),
-    'obtiene_todos_los_horarios' => array('controller' =>'Controller', 'action' =>'obtiene_todos_los_horarios'),
-    'obtiene_lista_horarios' => array('controller' =>'Controller', 'action' =>'obtiene_lista_horarios'),
-    'guardar_horario' => array('controller' =>'Controller', 'action' =>'guardar_horario'),
     
     //PuntosBCR
     'puntos_bcr_listar'=>array('controller'=>'Controller','action'=> 'puntos_bcr_listar'),

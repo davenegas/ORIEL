@@ -4,7 +4,6 @@
  class Controller{
      
     //Declaración de métodos que envuelven toda la funcionalidad del sistema
-    //
     // A través del componente index se llaman cada uno de los eventos de la clase 
     // controller para que sean ejecutados según sea necesario.
      
@@ -9310,484 +9309,7 @@
     }
     
     
-    ////////////////////////////////////////////////////////////////////////////
-    /////////////////////////Asistencia de Operadores///////////////////////////  
-    ////////////////////////////////////////////////////////////////////////////
-    public function obtiene_lista_usuariosp(){
-        if(isset($_SESSION['nombre'])){
-        $obj_usuario= new cls_usuarios();
-        $obj_usuario->obtiene_lista_usuariosp();
-        $vector= $obj_usuario->arreglo;
-        $obj_usuario->obtiene_todos_los_usuariosp();
-        $vector= $obj_usuario->getArreglo();
-        
-        require __DIR__ . '/../vistas/plantillas/frm_lista_usuario.php';
-        
-      }else{
-              /*
-             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
-             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
-             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
-             * En la última línea llama a la pagina de inicio de sesión.
-             */
-            $tipo_de_alerta="alert alert-warning";
-            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
-            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
-      }      
-   }
-    public function obtiene_todos_los_usuariosp(){
-        if(isset($_SESSION['nombre'])){
-        $obj_usuarios= new cls_usuarios(); 
-        if($_GET['id']=="0"){
-            $vector[0]['ID_Usuario']="0";
-            $vector[0]['Cedula']="";
-            $vector[0]['Nombre']="";
-            $vector[0]['Apellido']="";
-            $vector[0]['Observaciones']="";
-            $vector[0]['Turno']="";
-            $vector[0]['Horario']="";
-            $vector[0]['Estado']=$_GET['Estado'];
-        }else{
-            $vector[0]['ID_Usuario']=$_GET['id'];
-            $vector[0]['Cedula']=$_GET['Cedula'];
-            $vector[0]['Nombre']=$_GET['Nombre'];
-            $vector[0]['Apellido']=$_GET['Apellido'];
-            $vector[0]['Observaciones']=$_GET['Observaciones'];
-            $vector[0]['Turno']=$_GET['ID_Turno'];
-            $vector[0]['Horario']=$_GET['ID_Horariop'];
-            $vector[0]['Estado']=$_GET['Estado'];
-          
-        }  
-        
-        $obj_turno= new cls_turno();
-        $obj_turno->obtiene_todos_los_turnos();
-        $vector_turno= $obj_turno->getArreglo();
-        
-        $obj_horario= new cls_horariop();
-        $obj_horario->obtiene_todos_los_horariosp();
-        $vector_horario= $obj_horario->getArreglo();
-        
-        require __DIR__ . '/../vistas/plantillas/frm_editar_usuario.php';
-        
-      }else{
-              /*
-             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
-             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
-             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
-             * En la última línea llama a la pagina de inicio de sesión.
-             */
-            $tipo_de_alerta="alert alert-warning";
-            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
-            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
-      }      
-    }
-    public function guarda_usuariop(){
-        if(isset($_SESSION['nombre'])){
-        $obj_usuarios= new cls_usuarios();
-        $obj_usuarios->setId($_POST['ID_Usuario']);
-        $obj_usuarios->setNombre($_POST['Nombre']);
-        $obj_usuarios->setApellido($_POST['Apellido']);
-        $obj_usuarios->setCedula($_POST['Cedula']);
-        $obj_usuarios->setObservaciones($_POST['Observaciones']);
-        $obj_usuarios->setID_Turno($_POST['Turno']);
-        $obj_usuarios->setID_Horariop($_POST['Horario']);
-        $obj_usuarios->setEstado($_POST['Estado']);
-        $obj_usuarios->guardar_usuariop();
-        header("location:/ORIEL/index.php?ctl=obtiene_lista_usuariosp");
-      }else{
-              /*
-             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
-             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
-             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
-             * En la última línea llama a la pagina de inicio de sesión.
-             */
-            $tipo_de_alerta="alert alert-warning";
-            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
-            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
-      }      
-    }
-    public function obtiene_todos_los_descansos(){
-        if(isset($_SESSION['nombre'])){ 
-        $obj_descansos= new cls_descansos();
-        if($_GET['id']=="0"){
-            $vector[0]['ID_Ajus_Descanso']="0";
-            $vector[0]['Duracion']="";
-            $vector[0]['Observaciones']="";
-            $vector[0]['Estado']=$_GET['estado'];
-        }else{
-            $vector[0]['ID_Ajus_Descanso']=$_GET['id'];
-            $vector[0]['Duracion']=$_GET['Duracion_Descanso'];
-            $vector[0]['Observaciones']=$_GET['Observaciones'];
-            $vector[0]['Estado']=$_GET['estado'];
-            
-        } 
-        require __DIR__ . '/../vistas/plantillas/frm_ajustes_descansos.php';
-   }else{
-              /*
-             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
-             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
-             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
-             * En la última línea llama a la pagina de inicio de sesión.
-             */
-            $tipo_de_alerta="alert alert-warning";
-            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
-            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
-      }      
-    }        
-    public function guardar_descansos() {
-      if(isset($_SESSION['nombre'])){ 
-        $obj_descansos= new cls_descansos();
-        $obj_descansos->setEstado($_POST['Estado']);
-        $obj_descansos->setDuracion_descanso($_POST['Duracion']);
-        $obj_descansos->setObservaciones($_POST['Observaciones']);
-        $obj_descansos->setID_Ajus_Descanso($_POST['ID_Ajus_Descanso']);
-        $obj_descansos->guardar_descansos();
-        header("location:/ORIEL/index.php?ctl=obtiene_lista_descansos");
-      }else{
-              /*
-             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
-             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
-             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
-             * En la última línea llama a la pagina de inicio de sesión.
-             */
-            $tipo_de_alerta="alert alert-warning";
-            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
-            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
-      }      
-    }     
-    public function obtiene_lista_descansos(){
-      if(isset($_SESSION['nombre'])){
-        $obj_usuario= new cls_descansos();
-        $obj_usuario->obtiene_todos_los_descansos();
-        $vector= $obj_usuario->arreglo;
-        require __DIR__ . '/../vistas/plantillas/frm_lista_descansos.php';
-      }else{
-              /*
-             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
-             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
-             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
-             * En la última línea llama a la pagina de inicio de sesión.
-             */
-            $tipo_de_alerta="alert alert-warning";
-            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
-            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
-      }      
-    }     
-    public function obtiene_todos_los_turnos(){
-        if(isset($_SESSION['nombre'])){
-        $obj_turno= new cls_turno();
-        if($_GET['id']=="0"){
-            $vector[0]['ID_Turno']="0";
-            $vector[0]['nombre']="";
-            $vector[0]['Observaciones']="";
-            $vector[0]['Estado']=$_GET['estado'];
-        }else{
-            $vector[0]['ID_Turno']=$_GET['id'];
-            $vector[0]['nombre']=$_GET['Turno'];
-            $vector[0]['Observaciones']=$_GET['obser'];
-            $vector[0]['Estado']=$_GET['estado'];
-            //echo $_GET['estado'];
-        } 
-        # $vector=$obj_turno->arreglo;
-        require __DIR__ . '/../vistas/plantillas/frm_ajustes_turno.php';
-     }else{
-              /*
-             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
-             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
-             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
-             * En la última línea llama a la pagina de inicio de sesión.
-             */
-            $tipo_de_alerta="alert alert-warning";
-            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
-            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
-      }      
-    }     
-    public function guardar_turno(){
-        if(isset($_SESSION['nombre'])){
-        $obj_turno= new cls_turno();
-        $obj_turno->setTurno($_POST['nombre']);
-        $obj_turno->setObservaciones($_POST['observaciones']);
-        $obj_turno->setEstado($_POST['Estado']);
-        $obj_turno->setId__turno($_POST['ID_Turno']);
-        $obj_turno->guardar_turno();
-        header("location:/ORIEL/index.php?ctl=obtiene_lista_turno");
-     }else{
-              /*
-             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
-             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
-             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
-             * En la última línea llama a la pagina de inicio de sesión.
-             */
-            $tipo_de_alerta="alert alert-warning";
-            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
-            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
-      }      
-    }     
-    public function obtiene_lista_turno(){
-        if(isset($_SESSION['nombre'])){
-        $obj_usuario= new cls_turno();
-        $obj_usuario->obtiene_todos_los_turnos();
-        $vector= $obj_usuario->arreglo;
-        require __DIR__ . '/../vistas/plantillas/frm_lista_turno.php';
-     }else{
-              /*
-             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
-             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
-             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
-             * En la última línea llama a la pagina de inicio de sesión.
-             */
-            $tipo_de_alerta="alert alert-warning";
-            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
-            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
-      }      
-    }     
-    public function obtiene_lista_horarios(){
-        if(isset($_SESSION['nombre'])){
-        $obj_usuario= new cls_horariop();
-        $obj_usuario->obtiene_todos_los_horariosp();
-        $vector= $obj_usuario->arreglo;
-        require __DIR__ . '/../vistas/plantillas/frm_lista_horario.php';
-     }else{
-              /*
-             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
-             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
-             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
-             * En la última línea llama a la pagina de inicio de sesión.
-             */
-            $tipo_de_alerta="alert alert-warning";
-            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
-            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
-      }      
-
-    }
-    public function obtiene_todos_los_horarios(){
-        if(isset($_SESSION['nombre'])){
-        $obj_horario= new cls_horariop();
-        if($_GET['id']=="0"){
-            $vector[0]['ID_Horariop']="0";
-            $vector[0]['horario']="";
-            $vector[0]['Observaciones']="";
-            $vector[0]['Estado']=$_GET['Estado'];
-        }else{
-            $vector[0]['ID_Horariop']=$_GET['id'];
-            $vector[0]['horario']=$_GET['Horario'];
-            $vector[0]['Observaciones']=$_GET['Obser'];
-            $vector[0]['Estado']=$_GET['Estado'];
-            //echo $_GET['id'];
-        } 
-        # $vector=$obj_turno->arreglo;
-        require __DIR__ . '/../vistas/plantillas/frm_ajuste_horario.php';
-     }else{
-              /*
-             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
-             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
-             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
-             * En la última línea llama a la pagina de inicio de sesión.
-             */
-            $tipo_de_alerta="alert alert-warning";
-            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
-            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
-      }      
-    }     
-    public function guardar_horariop(){
-        if(isset($_SESSION['nombre'])){
-        $obj_horario= new cls_horariop();
-        $obj_horario->setHorario($_POST['horario']);
-        $obj_horario->setObservaciones($_POST['observaciones']);
-        $obj_horario->setEstado($_POST['Estado']);
-        $obj_horario->setId_horario($_POST['ID_Horariop']);
-        $obj_horario->guardar_horariop();
-        header("location:/ORIEL/index.php?ctl=obtiene_lista_horarios");
-     }else{
-              /*
-             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
-             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
-             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
-             * En la última línea llama a la pagina de inicio de sesión.
-             */
-            $tipo_de_alerta="alert alert-warning";
-            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
-            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
-      }      
-    }     
-    public function obtiene_lista_marcas(){
-        if(isset($_SESSION['nombre'])){
-        $obj_marcas= new cls_marcas;
-        $obj_descanso= new cls_marcas_descanso();
-        
-        $obj_ajus_descanso= new cls_descansos();
-        $obj_ajus_descanso->obtiene_todos_los_descansos();
-        $cantidad_descanso=$obj_ajus_descanso->getArreglo();
-        
-            $tiempos_descanso[0]['ID_Descanso']=0;
-            $tiempos_descanso[0]['Hora_Descanso_Salida']="";
-            $tiempos_descanso[0]['Justificar_Descanso']="";
-            $tiempos_descanso[0]['Hora_Descanso_Entrada']="";
-            $tiempos_descanso[0]['Total_Descanso']="";
-            $tiempos_descanso[0]['Fecha_Descanso']="";
-            
-            $obj_marcas->setCondicion("");
-            $obj_marcas->obtiene_todas_las_marcas();
-            $params=$obj_marcas->getArreglo();
-        
-        
-           if($params!=null){
-            
-           $obj_descanso= new cls_marcas_descanso();
-           $obj_descanso->setCondicion("Hora_Descanso_Entrada='00:00:00'");
-           $obj_descanso->obtiene_todas_las_marcas_descansos();
-           $tiempos_descanso=$obj_descanso->getArreglo();
-            
-            if($descanso=null){
-             
-            $tiempos_descanso[0]['ID_Descanso']=0;
-            $tiempos_descanso[0]['Hora_Descanso_Salida']="";
-            $tiempos_descanso[0]['Justificar_Descanso']="";
-            $tiempos_descanso[0]['Hora_Descanso_Entrada']="";
-            $tiempos_descanso[0]['Total_Descanso']="";
-            $tiempos_descanso[0]['Fecha_Descanso']="";
-            
-            }
-        }else{
-            $params[0]['ID_Asistencia']=0;
-            $params[0]['Hora_Entrada_Turno']="";
-            $params[0]['Justificar_Entrada']="";
-            $params[0]['Hora_Salida_Turno']="";
-            $params[0]['Justificar_Salida']="";
-            $params[0]['Fecha']=Date('y-m-d');
-            $params[0]['Contador']="";
-            
-        }
-        $obj_marcas->setCondicion("");
-        $obj_marcas->obtiene_todas_las_marcas();
-        $marcas= $obj_marcas->getArreglo();
-         
-        $obj_descanso->setCondicion("");
-        $obj_descanso->obtiene_todas_las_marcas_descansos();
-        $descanso= $obj_descanso->getArreglo();
-        
-//        echo '<pre>';
-//        print_r($descanso);
-//        echo '</pre>';
-        
-        require __DIR__ . '/../vistas/plantillas/frm_marcas.php';
-     }else{
-              /*
-             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
-             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
-             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
-             * En la última línea llama a la pagina de inicio de sesión.
-             */
-            $tipo_de_alerta="alert alert-warning";
-            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
-            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
-      }      
-    }     
-    public function obtiene_lista_marcas_reportes(){
-        if(isset($_SESSION['nombre'])){
-        $obj_marcas= new cls_marcas();
-        $obj_marcas->obtiene_todas_las_marcas();
-        $marcas=$obj_marcas->getArreglo();
-        $obj_descanso= new cls_marcas_descanso();
-        $obj_descanso->obtiene_todas_las_marcas_descansos();
-        $marcas_descanso=$obj_descanso->getArreglo();    
-        $obj_usuarios= new cls_usuariosp();
-        $obj_usuarios->obtiene_todos_los_usuariosp();
-        $usuarios=$obj_usuarios->getArreglo();
-        
-        require __DIR__ . '/../vistas/plantillas/frm_reportes.php';
-     }else{
-              /*
-             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
-             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
-             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
-             * En la última línea llama a la pagina de inicio de sesión.
-             */
-            $tipo_de_alerta="alert alert-warning";
-            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
-            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
-      }      
-    }     
-    public function guardar_marcas(){
-    if(isset($_SESSION['nombre'])){
-        $obj_marcas= new cls_marcas();
-        if($_POST['id']==0){
-            $obj_marcas->setId__usuario("1");
-            $obj_marcas->setHora_entrada_turno($_POST['hora_entrada']);
-            $obj_marcas->setFecha($_POST['fecha']);
-            $obj_marcas->setJustificar_entrada("");
-            $obj_marcas->setHora_salida_turno("");
-            $obj_marcas->setJustificar_salida("");
-            $obj_marcas->setCondicion("");
-        }else{
-            $obj_marcas->setId__asistencia($_POST['id']);
-            $obj_marcas->setId__usuario("1");
-            $obj_marcas->setJustificar_entrada($_POST['justificar_entrada']);
-            $obj_marcas->setHora_salida_turno($_POST['hora_salida']);
-            $obj_marcas->setJustificar_salida($_POST['justificar_salida']);
-            $obj_marcas->setCondicion("ID_Asistencia='".$_POST['id']."'");
-        }       
-        $obj_marcas->guardar_marcas();
-
-     }else{
-              /*
-             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
-             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
-             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
-             * En la última línea llama a la pagina de inicio de sesión.
-             */
-            $tipo_de_alerta="alert alert-warning";
-            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
-            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
-      }      
-    }     
-    public function guardar_marcas_descanso(){
-    if(isset($_SESSION['nombre'])){
-        $obj_descanso= new cls_marcas_descanso();
-        if($_POST['id']==0){
-            $obj_descanso->setId_usuario("1");
-            $obj_descanso->setHora_descanso_salida($_POST['Hora_Descanso_Salida']);
-            $obj_descanso->setFecha_Descanso(Date('y-m-d'));
-            $obj_descanso->setJustificar_descanso("");
-            $obj_descanso->setHora_descanso_entrada("");
-            $obj_descanso->setTotal_descanso("");
-            $obj_descanso->setId_ajus_descanso($_POST['id_ajus_descanso']);
-            $obj_descanso->setCondicion("");
-        }else{
-            //echo $_POST['justificar_descanso'];
-            $obj_descanso->setId_descanso($_POST['id']);
-            $obj_descanso->setId_usuario("1");
-            $obj_descanso->setJustificar_descanso($_POST['justificar_descanso']);
-            $obj_descanso->setHora_descanso_entrada($_POST['Hora_Descanso_Entrada']);
-            $obj_descanso->setTotal_descanso($_POST['Total']);
-            $obj_descanso->setCondicion("ID_Descanso='".$_POST['id']."'");
-            
-            $obj_contador= new cls_marcas;
-           
-            $obj_contador->setContador($_POST['contador']);
-            $obj_contador->setCondicion("ID_Asistencia='".$_POST['id']."'");
-            $obj_contador->guardar_contador();
-            
-        }       
-
-        $obj_descanso->guardar_marcas_descanso(); 
-        
-        
-        }else{
-              /*
-             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
-             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
-             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
-             * En la última línea llama a la pagina de inicio de sesión.
-             */
-            $tipo_de_alerta="alert alert-warning";
-            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
-            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
-      }      
-    }
-    
-    
-    ////////////////////////////////////////////////////////////////////////////
+   ////////////////////////////////////////////////////////////////////////////
     /////////////////////////Manuales de Ayuda//////////////////////////////////  
     ////////////////////////////////////////////////////////////////////////////    
     public function manual_personal_externo_publico() {
@@ -10833,15 +10355,17 @@
             $Oficinas = $obj_Puntosbcr->getArreglo();
             
             //Contadores para gráficos
-            //Contadores de aperturas
-            $aperturas_pendientes =0;
-            $contador_aperturas =0;
-            //Contadores de pruebas
-            $pruebas_pendientes=0;
-            $contador_pruebas=0;
-            //Contadores de cierress
-            $cierres_pendientes=0;
-            $contador_cierres=0;
+            //Vectores nuevo para almacer toda la información del horario
+            $datos="";
+            //Contadores de aperturas realizadas y pendientes
+            $datos['contador_aperturas'] =0;
+            $datos['cont_aperturas_pendientes'] =0;
+            //Contadores de Pruebas, realizadas y pendientes
+            $datos['contador_pruebas']=0;
+            $datos['cont_pruebas_pendientes'] =0;
+            //Contadores de Cierres, realizados y pendientes
+            $datos['contador_cierres']=0;
+            $datos['cont_cierres_pendientes'] =0;
             
             //Obtiene la fecha del servidor en un arreglo
             $fecha_actual= getdate();
@@ -10863,273 +10387,47 @@
                     switch ($fecha_actual['weekday']) {
                         case 'Monday':
                             if($Oficinas[$i]['Hora_Apertura_Lunes']!="" || $Oficinas[$i]['Hora_Apertura_Lunes']!=null){
-                                $fecha2 = new DateTime(date('Y-m-d').' '.$Oficinas[$i]['Hora_Apertura_Lunes']);
-                                $diff = $fecha1->diff($fecha2); 
-                                $difencia_tiempo=(intval($diff->h)*60)+(intval($diff->i)*1);
-                                
-                                //Información de apertura de alarma pendientes y Urgentes
-                                if($prueba[0]['Seguimiento']!='Alarma abierta 24 horas'){
-                                    if($prueba[0]['Hora_Apertura_Alarma']=="" || $prueba[0]['Hora_Apertura_Alarma']==null){
-                                        if($diff->invert==1 && $difencia_tiempo>1) {
-                                            $aperturas_pendientes++;
-                                        } 
-                                    }else {
-                                        $contador_aperturas++;
-                                    }
-                                }
-                                //Información de pruebas de alarma pendientes y urgentes
-                                if($prueba[0]['Hora_Prueba_Alarma']=="" || $prueba[0]['Hora_Prueba_Alarma']==null){
-                                    if($diff->invert==1 && $difencia_tiempo>1) {
-                                        $pruebas_pendientes++;
-                                    } 
-                                }else{
-                                        $contador_pruebas++;
-                                    }
-                                //Información de cierre de alarma urgentes
-                                if($prueba[0]['Hora_Cierre_Alarma']=="" || $prueba[0]['Hora_Cierre_Alarma']==null){
-                                    $fecha2 = new DateTime(date('Y-m-d').' '.$Oficinas[$i]['Hora_Cierre_Lunes']);//Día
-                                    $diff = $fecha1->diff($fecha2); 
-                                    $difencia_tiempo=(intval($diff->h)*60)+(intval($diff->i)*1);
-
-                                    if($diff->invert==1 && $difencia_tiempo>240) {
-                                        $cierres_pendientes++;
-                                    } 
-                                }else {
-                                        $contador_cierres++;
-                                    }    
+                                /*
+                                //Función para verificar horarios de oficina, validar ingresos, cierres y preubas
+                                //Envia los siguientes parametros: 
+                                //  -Hora apertura (según el día de la semana)
+                                //  -Hora Cierre (según el día de la semana)
+                                //  -Información anterior almacenada (para almacenar nueva y devolver completa)
+                                //  -Información de prueba de hoy (horas de apertura, hora de prueba, hora de cierre, etc)
+                                //  -Información de la oficina (Nombre, código: para el mensaje cuando sea necesario)
+                                 */
+                                $datos=$this->verificar_horario_puntobcr($Oficinas[$i]['Hora_Apertura_Lunes'],$Oficinas[$i]['Hora_Cierre_Lunes'],$datos,$prueba,$Oficinas[$i]);
                             }
                             break;
                         case 'Tuesday':
                             if($Oficinas[$i]['Hora_Apertura_Martes']!="" || $Oficinas[$i]['Hora_Apertura_Martes']!=null){
-                                $fecha2 = new DateTime(date('Y-m-d').' '.$Oficinas[$i]['Hora_Apertura_Martes']);
-                                $diff = $fecha1->diff($fecha2); 
-                                $difencia_tiempo=(intval($diff->h)*60)+(intval($diff->i)*1);
-
-                                //Información de apertura de alarma pendientes y Urgentes
-                                if($prueba[0]['Seguimiento']!='Alarma abierta 24 horas'){
-                                    if($prueba[0]['Hora_Apertura_Alarma']=="" || $prueba[0]['Hora_Apertura_Alarma']==null){
-                                        if($diff->invert==1 && $difencia_tiempo>1) {
-                                            $aperturas_pendientes++;
-                                        } 
-                                    }else {
-                                        $contador_aperturas++;
-                                    }
-                                }
-                                //Información de pruebas de alarma pendientes y urgentes
-                                if($prueba[0]['Hora_Prueba_Alarma']=="" || $prueba[0]['Hora_Prueba_Alarma']==null){
-                                    if($diff->invert==1 && $difencia_tiempo>1) {
-                                        $pruebas_pendientes++;
-                                    } 
-                                }else{
-                                        $contador_pruebas++;
-                                    }
-                                //Información de cirre de alarma urgentes
-                                if($prueba[0]['Hora_Cierre_Alarma']=="" || $prueba[0]['Hora_Cierre_Alarma']==null){
-                                    $fecha2 = new DateTime(date('Y-m-d').' '.$Oficinas[$i]['Hora_Cierre_Martes']);//Día
-                                    $diff = $fecha1->diff($fecha2); 
-                                    $difencia_tiempo=(intval($diff->h)*60)+(intval($diff->i)*1);
-
-                                    if($diff->invert==1 && $difencia_tiempo>240) {
-                                        $cierres_pendientes++;
-                                    } 
-                                }else {
-                                        $contador_cierres++;
-                                    }    
+                                $datos=$this->verificar_horario_puntobcr($Oficinas[$i]['Hora_Apertura_Martes'],$Oficinas[$i]['Hora_Cierre_Martes'],$datos,$prueba,$Oficinas[$i]);
                             }
                             break;
                         case 'Wednesday':
                             if($Oficinas[$i]['Hora_Apertura_Miercoles']!="" || $Oficinas[$i]['Hora_Apertura_Miercoles']!=null){
-
-                                $fecha2 = new DateTime(date('Y-m-d').' '.$Oficinas[$i]['Hora_Apertura_Miercoles']);
-                                $diff = $fecha1->diff($fecha2); 
-                                $difencia_tiempo=(intval($diff->h)*60)+(intval($diff->i)*1);
-
-                                //Información de apertura de alarma pendientes y Urgentes
-                                if($prueba[0]['Seguimiento']!='Alarma abierta 24 horas'){
-                                    if($prueba[0]['Hora_Apertura_Alarma']=="" || $prueba[0]['Hora_Apertura_Alarma']==null){
-                                        if($diff->invert==1 && $difencia_tiempo>1) {
-                                            $aperturas_pendientes++;
-                                        } 
-                                    }else {
-                                        $contador_aperturas++;
-                                    }
-                                }
-                                //Información de pruebas de alarma pendientes y urgentes
-                                if($prueba[0]['Hora_Prueba_Alarma']=="" || $prueba[0]['Hora_Prueba_Alarma']==null){
-                                    if($diff->invert==1 && $difencia_tiempo>1) {
-                                        $pruebas_pendientes++;
-                                    } 
-                                }else{
-                                        $contador_pruebas++;
-                                    }
-                                //Información de cierre de alarma urgentes
-                                if($prueba[0]['Hora_Cierre_Alarma']=="" || $prueba[0]['Hora_Cierre_Alarma']==null){
-                                    $fecha2 = new DateTime(date('Y-m-d').' '.$Oficinas[$i]['Hora_Cierre_Miercoles']);//Día
-                                    $diff = $fecha1->diff($fecha2); 
-                                    $difencia_tiempo=(intval($diff->h)*60)+(intval($diff->i)*1);
-
-                                    if($diff->invert==1 && $difencia_tiempo>240) {
-                                        $cierres_pendientes++;
-                                    } 
-                                }else {
-                                        $contador_cierres++;
-                                    }    
+                                $datos=$this->verificar_horario_puntobcr($Oficinas[$i]['Hora_Apertura_Miercoles'],$Oficinas[$i]['Hora_Cierre_Miercoles'],$datos,$prueba,$Oficinas[$i]);
                             }
                             break;
                         case 'Thursday':
                             if($Oficinas[$i]['Hora_Apertura_Jueves']!="" || $Oficinas[$i]['Hora_Apertura_Jueves']!=null){
-
-                                $fecha2 = new DateTime(date('Y-m-d').' '.$Oficinas[$i]['Hora_Apertura_Jueves']);
-                                $diff = $fecha1->diff($fecha2); 
-                                $difencia_tiempo=(intval($diff->h)*60)+(intval($diff->i)*1);
-
-                                //Información de apertura de alarma pendientes y Urgentes
-                                if($prueba[0]['Seguimiento']!='Alarma abierta 24 horas'){
-                                    if($prueba[0]['Hora_Apertura_Alarma']=="" || $prueba[0]['Hora_Apertura_Alarma']==null){
-                                        if($diff->invert==1 && $difencia_tiempo>1) {
-                                            $aperturas_pendientes++;
-                                        }
-                                    }else {
-                                        $contador_aperturas++;
-                                    }
-                                }
-                                //Información de pruebas de alarma pendientes y urgentes
-                                if($prueba[0]['Hora_Prueba_Alarma']=="" || $prueba[0]['Hora_Prueba_Alarma']==null){
-                                    if($diff->invert==1 && $difencia_tiempo>1) {
-                                        $pruebas_pendientes++;
-                                    } 
-                                }else{
-                                        $contador_pruebas++;
-                                    }
-                                //Información de cierre de alarma urgentes
-                                if($prueba[0]['Hora_Cierre_Alarma']=="" || $prueba[0]['Hora_Cierre_Alarma']==null){
-                                    $fecha2 = new DateTime(date('Y-m-d').' '.$Oficinas[$i]['Hora_Cierre_Jueves']);//Día
-                                    $diff = $fecha1->diff($fecha2); 
-                                    $difencia_tiempo=(intval($diff->h)*60)+(intval($diff->i)*1);
-
-                                    if($diff->invert==1 && $difencia_tiempo>240) {
-                                        $cierres_pendientes++;
-                                    } 
-                                }   else {
-                                        $contador_cierres++;
-                                    } 
-                            }
+                                $datos=$this->verificar_horario_puntobcr($Oficinas[$i]['Hora_Apertura_Jueves'],$Oficinas[$i]['Hora_Cierre_Jueves'],$datos,$prueba,$Oficinas[$i]);
+                            } 
                             break;
                         case 'Friday':
                             if($Oficinas[$i]['Hora_Apertura_Viernes']!="" || $Oficinas[$i]['Hora_Apertura_Viernes']!=null){
-
-                                $fecha2 = new DateTime(date('Y-m-d').' '.$Oficinas[$i]['Hora_Apertura_Viernes']);
-                                $diff = $fecha1->diff($fecha2); 
-                                $difencia_tiempo=(intval($diff->h)*60)+(intval($diff->i)*1);
-
-                                //Información de apertura de alarma pendientes y Urgentes
-                                if($prueba[0]['Seguimiento']!='Alarma abierta 24 horas'){
-                                    if($prueba[0]['Hora_Apertura_Alarma']=="" || $prueba[0]['Hora_Apertura_Alarma']==null){
-                                        if($diff->invert==1 && $difencia_tiempo>1) {
-                                            $aperturas_pendientes++;
-                                        }
-                                    }else {
-                                        $contador_aperturas++;
-                                    }
-                                } 
-                                //Información de pruebas de alarma pendientes y urgentes
-                                if($prueba[0]['Hora_Prueba_Alarma']=="" || $prueba[0]['Hora_Prueba_Alarma']==null){
-                                    if($diff->invert==1 && $difencia_tiempo>1) {
-                                        $pruebas_pendientes++;
-                                    } 
-                                }else{
-                                        $contador_pruebas++;
-                                    }
-                                //Información de cierre de alarma urgentes
-                                if($prueba[0]['Hora_Cierre_Alarma']=="" || $prueba[0]['Hora_Cierre_Alarma']==null){
-                                    $fecha2 = new DateTime(date('Y-m-d').' '.$Oficinas[$i]['Hora_Cierre_Viernes']);//Día
-                                    $diff = $fecha1->diff($fecha2); 
-                                    $difencia_tiempo=(intval($diff->h)*60)+(intval($diff->i)*1);
-
-                                    if($diff->invert==1 && $difencia_tiempo>240) {
-                                        $cierres_pendientes++;
-                                    }
-                                }else {
-                                        $contador_cierres++;
-                                    }
+                                $datos=$this->verificar_horario_puntobcr($Oficinas[$i]['Hora_Apertura_Viernes'],$Oficinas[$i]['Hora_Cierre_Viernes'],$datos,$prueba,$Oficinas[$i]);
                             }
                             break;
                         case 'Saturday':
                             if($Oficinas[$i]['Hora_Apertura_Sabado']!="" || $Oficinas[$i]['Hora_Apertura_Sabado']!=null){
-
-                                $fecha2 = new DateTime(date('Y-m-d').' '.$Oficinas[$i]['Hora_Apertura_Sabado']);
-                                $diff = $fecha1->diff($fecha2); 
-                                $difencia_tiempo=(intval($diff->h)*60)+(intval($diff->i)*1);
-
-                                //Información de apertura de alarma pendientes y Urgentes
-                                if($prueba[0]['Seguimiento']!='Alarma abierta 24 horas'){
-                                    if($prueba[0]['Hora_Apertura_Alarma']=="" || $prueba[0]['Hora_Apertura_Alarma']==null){
-                                        if($diff->invert==1 && $difencia_tiempo>1) {
-                                            $aperturas_pendientes++;
-                                        } 
-                                    }else {
-                                        $contador_aperturas++;
-                                    }
-                                }
-                                //Información de pruebas de alarma pendientes y urgentes
-                                if($prueba[0]['Hora_Prueba_Alarma']=="" || $prueba[0]['Hora_Prueba_Alarma']==null){
-                                    if($diff->invert==1 && $difencia_tiempo>1) {
-                                        $pruebas_pendientes++;
-                                    } 
-                                }else{
-                                        $contador_pruebas++;
-                                    }
-                                //Información de cierre de alarma urgentes
-                                if($prueba[0]['Hora_Cierre_Alarma']=="" || $prueba[0]['Hora_Cierre_Alarma']==null){
-                                    $fecha2 = new DateTime(date('Y-m-d').' '.$Oficinas[$i]['Hora_Cierre_Sabado']);//Día
-                                    $diff = $fecha1->diff($fecha2); 
-                                    $difencia_tiempo=(intval($diff->h)*60)+(intval($diff->i)*1);
-
-                                    if($diff->invert==1 && $difencia_tiempo>240) {
-                                        $cierres_pendientes++;
-                                    } 
-                                }else {
-                                        $contador_cierres++;
-                                    }    
+                                
+                                $datos=$this->verificar_horario_puntobcr($Oficinas[$i]['Hora_Apertura_Sabado'],$Oficinas[$i]['Hora_Cierre_Sabado'],$datos,$prueba,$Oficinas[$i]);
                             }
                             break;
                         case 'Sunday':
                             if($Oficinas[$i]['Hora_Apertura_Domingo']!="" || $Oficinas[$i]['Hora_Apertura_Domingo']!=null){
-
-                                $fecha2 = new DateTime(date('Y-m-d').' '.$Oficinas[$i]['Hora_Apertura_Domingo']);
-                                $diff = $fecha1->diff($fecha2); 
-                                $difencia_tiempo=(intval($diff->h)*60)+(intval($diff->i)*1);
-
-                                //Información de apertura de alarma pendientes y Urgentes
-                                if($prueba[0]['Seguimiento']!='Alarma abierta 24 horas'){
-                                    if($prueba[0]['Hora_Apertura_Alarma']=="" || $prueba[0]['Hora_Apertura_Alarma']==null){
-                                        if($diff->invert==1 && $difencia_tiempo>1) {
-                                            $aperturas_pendientes++;
-                                        } 
-                                    }else {
-                                        $contador_aperturas++;
-                                    }
-                                }
-                                //Información de pruebas de alarma pendientes y urgentes
-                                if($prueba[0]['Hora_Prueba_Alarma']=="" || $prueba[0]['Hora_Prueba_Alarma']==null){
-                                    if($diff->invert==1 && $difencia_tiempo>1) {
-                                        $pruebas_pendientes++;
-                                    } 
-                                }else{
-                                        $contador_pruebas++;
-                                    }
-                                //Información de cierre de alarma urgentes
-                                if($prueba[0]['Hora_Cierre_Alarma']=="" || $prueba[0]['Hora_Cierre_Alarma']==null){
-                                    $fecha2 = new DateTime(date('Y-m-d').' '.$Oficinas[$i]['Hora_Cierre_Domingo']);//Día
-                                    $diff = $fecha1->diff($fecha2); 
-                                    $difencia_tiempo=(intval($diff->h)*60)+(intval($diff->i)*1);
-
-                                    if($diff->invert==1 && $difencia_tiempo>240) {
-                                        $cierres_pendientes++;
-                                    } 
-                                }else {
-                                        $contador_cierres++;
-                                    }    
+                                $datos=$this->verificar_horario_puntobcr($Oficinas[$i]['Hora_Apertura_Domingo'],$Oficinas[$i]['Hora_Cierre_Domingo'],$datos,$prueba,$Oficinas[$i]);
                             }
                             break;
                     }
@@ -11309,14 +10607,18 @@
                 T_PuntoBCR.ID_Tipo_Punto=10 OR T_PuntoBCR.ID_Tipo_Punto=11) AND T_PuntoBCR.Estado=1");
             $obj_Puntosbcr->obtiene_todos_los_puntos_bcr();
             $Oficinas = $obj_Puntosbcr->getArreglo();
-            
-            //Vectores enviados a la pagina
-            //$aperturas_pendietes ="";
-            $contador_aperturas =0;
-            //$pruebas_pendientes="";
-            $contador_pruebas=0;
-            //$cierres_pendientes="";
-            $contador_cierres=0;
+
+            //Vectores nuevo para almacer toda la información del horario
+            $datos="";
+            //Contadores de aperturas realizadas y pendientes
+            $datos['contador_aperturas'] =0;
+            $datos['cont_aperturas_pendientes'] =0;
+            //Contadores de Pruebas, realizadas y pendientes
+            $datos['contador_pruebas']=0;
+            $datos['cont_pruebas_pendientes'] =0;
+            //Contadores de Cierres, realizados y pendientes
+            $datos['contador_cierres']=0;
+            $datos['cont_cierres_pendientes'] =0;
             //Obtiene la fecha del servidor en un arreglo
             $fecha_actual= getdate();
             //Convierta la fecha a formto aaaa/mm/dd hh:mm
@@ -11337,331 +10639,62 @@
                     switch ($fecha_actual['weekday']) {
                         case 'Monday':
                             if($Oficinas[$i]['Hora_Apertura_Lunes']!="" || $Oficinas[$i]['Hora_Apertura_Lunes']!=null){
-                                $fecha2 = new DateTime(date('Y-m-d').' '.$Oficinas[$i]['Hora_Apertura_Lunes']);
-                                $diff = $fecha1->diff($fecha2); 
-                                $difencia_tiempo=(intval($diff->h)*60)+(intval($diff->i)*1);
-                                
-                                //Información de apertura de alarma pendientes y Urgentes
-                                if($prueba[0]['Seguimiento']!='Alarma abierta 24 horas'){
-                                    if($prueba[0]['Hora_Apertura_Alarma']=="" || $prueba[0]['Hora_Apertura_Alarma']==null){
-                                        if($diff->invert==1 && $difencia_tiempo>1) {
-                                            $aperturas_pendietes[$contador_aperturas]['Mensaje']= $Oficinas[$i]['Codigo']." - ".$Oficinas[$i]['Nombre'];
-                                            $aperturas_pendietes[$contador_aperturas]['Color']="color: red";
-                                            $contador_aperturas++;
-                                        }
-                                    }
-                                }
-                                //Información de pruebas de alarma pendientes y urgentes
-                                if($prueba[0]['Hora_Prueba_Alarma']=="" || $prueba[0]['Hora_Prueba_Alarma']==null){
-                                    if($diff->invert==0 && $difencia_tiempo<30) {
-                                        $pruebas_pendientes[$contador_pruebas]['Mensaje']= $Oficinas[$i]['Codigo']." - ".$Oficinas[$i]['Nombre'];
-                                        $pruebas_pendientes[$contador_pruebas]['Color']="color: orange";
-                                        $contador_pruebas++;
-                                    } if($diff->invert==1 && $difencia_tiempo>1) {
-                                        $pruebas_pendientes[$contador_pruebas]['Mensaje']= $Oficinas[$i]['Codigo']." - ".$Oficinas[$i]['Nombre'];
-                                        $pruebas_pendientes[$contador_pruebas]['Color']="color: red";
-                                        $contador_pruebas++;
-                                    }
-                                }
-                                //Información de cierre de alarma urgentes
-                                if($prueba[0]['Seguimiento']!='Alarma abierta 24 horas'){
-                                    if($prueba[0]['Hora_Cierre_Alarma']=="" || $prueba[0]['Hora_Cierre_Alarma']==null){
-                                        $fecha2 = new DateTime(date('Y-m-d').' '.$Oficinas[$i]['Hora_Cierre_Lunes']);//Día
-                                        $diff = $fecha1->diff($fecha2); 
-                                        $difencia_tiempo=(intval($diff->h)*60)+(intval($diff->i)*1);
-
-                                        if($diff->invert==1 && $difencia_tiempo>240) {
-                                            $cierres_pendientes[$contador_cierres]['Mensaje']= $Oficinas[$i]['Codigo']." - ".$Oficinas[$i]['Nombre'];
-                                            $cierres_pendientes[$contador_cierres]['Color']="color: orange";
-                                            $contador_cierres++;
-                                        }
-                                    } 
-                                }
+                                /*
+                                //Función para verificar horarios de oficina, validar ingresos, cierres y preubas
+                                //Envia los siguientes parametros: 
+                                //  -Hora apertura (según el día de la semana)
+                                //  -Hora Cierre (según el día de la semana)
+                                //  -Información anterior almacenada (para almacenar nueva y devolver completa)
+                                //  -Información de prueba de hoy (horas de apertura, hora de prueba, hora de cierre, etc)
+                                //  -Información de la oficina (Nombre, código: para el mensaje cuando sea necesario)
+                                 */
+                                $datos=$this->verificar_horario_puntobcr($Oficinas[$i]['Hora_Apertura_Lunes'],$Oficinas[$i]['Hora_Cierre_Lunes'],$datos,$prueba,$Oficinas[$i]);
                             }
                             break;
                         case 'Tuesday':
                             if($Oficinas[$i]['Hora_Apertura_Martes']!="" || $Oficinas[$i]['Hora_Apertura_Martes']!=null){
-                                $fecha2 = new DateTime(date('Y-m-d').' '.$Oficinas[$i]['Hora_Apertura_Martes']);
-                                $diff = $fecha1->diff($fecha2); 
-                                $difencia_tiempo=(intval($diff->h)*60)+(intval($diff->i)*1);
-
-                                //Información de apertura de alarma pendientes y Urgentes
-                                if($prueba[0]['Seguimiento']!='Alarma abierta 24 horas'){
-                                    if($prueba[0]['Hora_Apertura_Alarma']=="" || $prueba[0]['Hora_Apertura_Alarma']==null){
-                                        if($diff->invert==1 && $difencia_tiempo>1) {
-                                            $aperturas_pendietes[$contador_aperturas]['Mensaje']= $Oficinas[$i]['Codigo']." - ".$Oficinas[$i]['Nombre'];
-                                            $aperturas_pendietes[$contador_aperturas]['Color']="color: red";
-                                            $contador_aperturas++;
-                                        }
-                                    }
-                                }
-                                //Información de pruebas de alarma pendientes y urgentes
-                                if($prueba[0]['Hora_Prueba_Alarma']=="" || $prueba[0]['Hora_Prueba_Alarma']==null){
-                                    if($diff->invert==0 && $difencia_tiempo<30) {
-                                        $pruebas_pendientes[$contador_pruebas]['Mensaje']= $Oficinas[$i]['Codigo']." - ".$Oficinas[$i]['Nombre'];
-                                        $pruebas_pendientes[$contador_pruebas]['Color']="color: orange";
-                                        $contador_pruebas++;
-                                    } if($diff->invert==1 && $difencia_tiempo>1) {
-                                        $pruebas_pendientes[$contador_pruebas]['Mensaje']= $Oficinas[$i]['Codigo']." - ".$Oficinas[$i]['Nombre'];
-                                        $pruebas_pendientes[$contador_pruebas]['Color']="color: red";
-                                        $contador_pruebas++;
-                                    }
-                                }
-                                //Información de cirre de alarma urgentes
-                                if($prueba[0]['Seguimiento']!='Alarma abierta 24 horas'){
-                                    if($prueba[0]['Hora_Cierre_Alarma']=="" || $prueba[0]['Hora_Cierre_Alarma']==null){
-                                        $fecha2 = new DateTime(date('Y-m-d').' '.$Oficinas[$i]['Hora_Cierre_Martes']);//Día
-                                        $diff = $fecha1->diff($fecha2); 
-                                        $difencia_tiempo=(intval($diff->h)*60)+(intval($diff->i)*1);
-
-                                        if($diff->invert==1 && $difencia_tiempo>240) {
-                                            $cierres_pendientes[$contador_cierres]['Mensaje']= $Oficinas[$i]['Codigo']." - ".$Oficinas[$i]['Nombre'];
-                                            $cierres_pendientes[$contador_cierres]['Color']="color: orange";
-                                            $contador_cierres++;
-                                        }
-                                    }    
-                                }
+                                $datos=$this->verificar_horario_puntobcr($Oficinas[$i]['Hora_Apertura_Martes'],$Oficinas[$i]['Hora_Cierre_Martes'],$datos,$prueba,$Oficinas[$i]);
                             }
                             break;
                         case 'Wednesday':
                             if($Oficinas[$i]['Hora_Apertura_Miercoles']!="" || $Oficinas[$i]['Hora_Apertura_Miercoles']!=null){
-
-                                $fecha2 = new DateTime(date('Y-m-d').' '.$Oficinas[$i]['Hora_Apertura_Miercoles']);
-                                $diff = $fecha1->diff($fecha2); 
-                                $difencia_tiempo=(intval($diff->h)*60)+(intval($diff->i)*1);
-
-                                //Información de apertura de alarma pendientes y Urgentes
-                                if($prueba[0]['Seguimiento']!='Alarma abierta 24 horas'){
-                                    if($prueba[0]['Hora_Apertura_Alarma']=="" || $prueba[0]['Hora_Apertura_Alarma']==null){
-                                        if($diff->invert==1 && $difencia_tiempo>1) {
-                                            $aperturas_pendietes[$contador_aperturas]['Mensaje']= $Oficinas[$i]['Codigo']." - ".$Oficinas[$i]['Nombre'];
-                                            $aperturas_pendietes[$contador_aperturas]['Color']="color: red";
-                                            $contador_aperturas++;
-                                        }
-                                    }
-                                }
-                                //Información de pruebas de alarma pendientes y urgentes
-                                if($prueba[0]['Hora_Prueba_Alarma']=="" || $prueba[0]['Hora_Prueba_Alarma']==null){
-                                    if($diff->invert==0 && $difencia_tiempo<30) {
-                                        $pruebas_pendientes[$contador_pruebas]['Mensaje']= $Oficinas[$i]['Codigo']." - ".$Oficinas[$i]['Nombre'];
-                                        $pruebas_pendientes[$contador_pruebas]['Color']="color: orange";
-                                        $contador_pruebas++;
-                                    } if($diff->invert==1 && $difencia_tiempo>1) {
-                                        $pruebas_pendientes[$contador_pruebas]['Mensaje']= $Oficinas[$i]['Codigo']." - ".$Oficinas[$i]['Nombre'];
-                                        $pruebas_pendientes[$contador_pruebas]['Color']="color: red";
-                                        $contador_pruebas++;
-                                    }
-                                }
-                                //Información de cierre de alarma urgentes
-                                if($prueba[0]['Seguimiento']!='Alarma abierta 24 horas'){
-                                    if($prueba[0]['Hora_Cierre_Alarma']=="" || $prueba[0]['Hora_Cierre_Alarma']==null){
-                                        $fecha2 = new DateTime(date('Y-m-d').' '.$Oficinas[$i]['Hora_Cierre_Miercoles']);//Día
-                                        $diff = $fecha1->diff($fecha2); 
-                                        $difencia_tiempo=(intval($diff->h)*60)+(intval($diff->i)*1);
-
-                                        if($diff->invert==1 && $difencia_tiempo>240) {
-                                            $cierres_pendientes[$contador_cierres]['Mensaje']= $Oficinas[$i]['Codigo']." - ".$Oficinas[$i]['Nombre'];
-                                            $cierres_pendientes[$contador_cierres]['Color']="color: orange";
-                                            $contador_cierres++;
-                                        }
-                                    }  
-                                } 
+                                $datos=$this->verificar_horario_puntobcr($Oficinas[$i]['Hora_Apertura_Miercoles'],$Oficinas[$i]['Hora_Cierre_Miercoles'],$datos,$prueba,$Oficinas[$i]);
                             }
                             break;
                         case 'Thursday':
                             if($Oficinas[$i]['Hora_Apertura_Jueves']!="" || $Oficinas[$i]['Hora_Apertura_Jueves']!=null){
-
-                                $fecha2 = new DateTime(date('Y-m-d').' '.$Oficinas[$i]['Hora_Apertura_Jueves']);
-                                $diff = $fecha1->diff($fecha2); 
-                                $difencia_tiempo=(intval($diff->h)*60)+(intval($diff->i)*1);
-
-                                //Información de apertura de alarma pendientes y Urgentes
-                                if($prueba[0]['Seguimiento']!='Alarma abierta 24 horas'){
-                                    if($prueba[0]['Hora_Apertura_Alarma']=="" || $prueba[0]['Hora_Apertura_Alarma']==null){
-                                        if($diff->invert==1 && $difencia_tiempo>1) {
-                                            $aperturas_pendietes[$contador_aperturas]['Mensaje']= $Oficinas[$i]['Codigo']." - ".$Oficinas[$i]['Nombre'];
-                                            $aperturas_pendietes[$contador_aperturas]['Color']="color: red";
-                                            $contador_aperturas++;
-                                        }
-                                    }
-                                }
-                                //Información de pruebas de alarma pendientes y urgentes
-                                if($prueba[0]['Hora_Prueba_Alarma']=="" || $prueba[0]['Hora_Prueba_Alarma']==null){
-                                    if($diff->invert==0 && $difencia_tiempo<30) {
-                                        $pruebas_pendientes[$contador_pruebas]['Mensaje']= $Oficinas[$i]['Codigo']." - ".$Oficinas[$i]['Nombre'];
-                                        $pruebas_pendientes[$contador_pruebas]['Color']="color: orange";
-                                        $contador_pruebas++;
-                                    } if($diff->invert==1 && $difencia_tiempo>1) {
-                                        $pruebas_pendientes[$contador_pruebas]['Mensaje']= $Oficinas[$i]['Codigo']." - ".$Oficinas[$i]['Nombre'];
-                                        $pruebas_pendientes[$contador_pruebas]['Color']="color: red";
-                                        $contador_pruebas++;
-                                    }
-                                }
-                                //Información de cierre de alarma urgentes
-                                if($prueba[0]['Seguimiento']!='Alarma abierta 24 horas'){
-                                    if($prueba[0]['Hora_Cierre_Alarma']=="" || $prueba[0]['Hora_Cierre_Alarma']==null){
-                                        $fecha2 = new DateTime(date('Y-m-d').' '.$Oficinas[$i]['Hora_Cierre_Jueves']);//Día
-                                        $diff = $fecha1->diff($fecha2); 
-                                        $difencia_tiempo=(intval($diff->h)*60)+(intval($diff->i)*1);
-
-                                        if($diff->invert==1 && $difencia_tiempo>240) {
-                                            $cierres_pendientes[$contador_cierres]['Mensaje']= $Oficinas[$i]['Codigo']." - ".$Oficinas[$i]['Nombre'];
-                                            $cierres_pendientes[$contador_cierres]['Color']="color: orange";
-                                            $contador_cierres++;
-                                        }
-                                    }
-                                }
+                                $datos=$this->verificar_horario_puntobcr($Oficinas[$i]['Hora_Apertura_Jueves'],$Oficinas[$i]['Hora_Cierre_Jueves'],$datos,$prueba,$Oficinas[$i]);
                             } 
                             break;
                         case 'Friday':
                             if($Oficinas[$i]['Hora_Apertura_Viernes']!="" || $Oficinas[$i]['Hora_Apertura_Viernes']!=null){
-
-                                $fecha2 = new DateTime(date('Y-m-d').' '.$Oficinas[$i]['Hora_Apertura_Viernes']);
-                                $diff = $fecha1->diff($fecha2); 
-                                $difencia_tiempo=(intval($diff->h)*60)+(intval($diff->i)*1);
-
-                                //Información de apertura de alarma pendientes y Urgentes
-                                if($prueba[0]['Seguimiento']!='Alarma abierta 24 horas'){
-                                    if($prueba[0]['Hora_Apertura_Alarma']=="" || $prueba[0]['Hora_Apertura_Alarma']==null){
-                                        if($diff->invert==1 && $difencia_tiempo>1) {
-                                            $aperturas_pendietes[$contador_aperturas]['Mensaje']= $Oficinas[$i]['Codigo']." - ".$Oficinas[$i]['Nombre'];
-                                            $aperturas_pendietes[$contador_aperturas]['Color']="color: red";
-                                            $contador_aperturas++;
-                                        }
-                                    }
-                                }
-                                //Información de pruebas de alarma pendientes y urgentes
-                                if($prueba[0]['Hora_Prueba_Alarma']=="" || $prueba[0]['Hora_Prueba_Alarma']==null){
-                                    if($diff->invert==0 && $difencia_tiempo<30) {
-                                        $pruebas_pendientes[$contador_pruebas]['Mensaje']= $Oficinas[$i]['Codigo']." - ".$Oficinas[$i]['Nombre'];
-                                        $pruebas_pendientes[$contador_pruebas]['Color']="color: orange";
-                                        $contador_pruebas++;
-                                    } if($diff->invert==1 && $difencia_tiempo>1) {
-                                        $pruebas_pendientes[$contador_pruebas]['Mensaje']= $Oficinas[$i]['Codigo']." - ".$Oficinas[$i]['Nombre'];
-                                        $pruebas_pendientes[$contador_pruebas]['Color']="color: red";
-                                        $contador_pruebas++;
-                                    }
-                                }
-                                //Información de cierre de alarma urgentes
-                                if($prueba[0]['Seguimiento']!='Alarma abierta 24 horas'){
-                                    if($prueba[0]['Hora_Cierre_Alarma']=="" || $prueba[0]['Hora_Cierre_Alarma']==null){
-                                        $fecha2 = new DateTime(date('Y-m-d').' '.$Oficinas[$i]['Hora_Cierre_Viernes']);//Día
-                                        $diff = $fecha1->diff($fecha2); 
-                                        $difencia_tiempo=(intval($diff->h)*60)+(intval($diff->i)*1);
-
-                                        if($diff->invert==1 && $difencia_tiempo>240) {
-                                            $cierres_pendientes[$contador_cierres]['Mensaje']= $Oficinas[$i]['Codigo']." - ".$Oficinas[$i]['Nombre'];
-                                            $cierres_pendientes[$contador_cierres]['Color']="color: orange";
-                                            $contador_cierres++;
-                                        }
-                                    }
-                                }
+                                $datos=$this->verificar_horario_puntobcr($Oficinas[$i]['Hora_Apertura_Viernes'],$Oficinas[$i]['Hora_Cierre_Viernes'],$datos,$prueba,$Oficinas[$i]);
                             }
                             break;
                         case 'Saturday':
                             if($Oficinas[$i]['Hora_Apertura_Sabado']!="" || $Oficinas[$i]['Hora_Apertura_Sabado']!=null){
-
-                                $fecha2 = new DateTime(date('Y-m-d').' '.$Oficinas[$i]['Hora_Apertura_Sabado']);
-                                $diff = $fecha1->diff($fecha2); 
-                                $difencia_tiempo=(intval($diff->h)*60)+(intval($diff->i)*1);
-
-                                //Información de apertura de alarma pendientes y Urgentes
-                                if($prueba[0]['Seguimiento']!='Alarma abierta 24 horas'){
-                                    if($prueba[0]['Hora_Apertura_Alarma']=="" || $prueba[0]['Hora_Apertura_Alarma']==null){
-                                        if($diff->invert==1 && $difencia_tiempo>1) {
-                                            $aperturas_pendietes[$contador_aperturas]['Mensaje']= $Oficinas[$i]['Codigo']." - ".$Oficinas[$i]['Nombre'];
-                                            $aperturas_pendietes[$contador_aperturas]['Color']="color: red";
-                                            $contador_aperturas++;
-                                        }
-                                    }
-                                }
-                                //Información de pruebas de alarma pendientes y urgentes
-                                if($prueba[0]['Hora_Prueba_Alarma']=="" || $prueba[0]['Hora_Prueba_Alarma']==null){
-                                    if($diff->invert==0 && $difencia_tiempo<30) {
-                                        $pruebas_pendientes[$contador_pruebas]['Mensaje']= $Oficinas[$i]['Codigo']." - ".$Oficinas[$i]['Nombre'];
-                                        $pruebas_pendientes[$contador_pruebas]['Color']="color: orange";
-                                        $contador_pruebas++;
-                                    } if($diff->invert==1 && $difencia_tiempo>1) {
-                                        $pruebas_pendientes[$contador_pruebas]['Mensaje']= $Oficinas[$i]['Codigo']." - ".$Oficinas[$i]['Nombre'];
-                                        $pruebas_pendientes[$contador_pruebas]['Color']="color: red";
-                                        $contador_pruebas++;
-                                    }
-                                }
-                                //Información de cierre de alarma urgentes
-                                if($prueba[0]['Seguimiento']!='Alarma abierta 24 horas'){
-                                    if($prueba[0]['Hora_Cierre_Alarma']=="" || $prueba[0]['Hora_Cierre_Alarma']==null){
-                                        $fecha2 = new DateTime(date('Y-m-d').' '.$Oficinas[$i]['Hora_Cierre_Sabado']);//Día
-                                        $diff = $fecha1->diff($fecha2); 
-                                        $difencia_tiempo=(intval($diff->h)*60)+(intval($diff->i)*1);
-
-                                        if($diff->invert==1 && $difencia_tiempo>240) {
-                                            $cierres_pendientes[$contador_cierres]['Mensaje']= $Oficinas[$i]['Codigo']." - ".$Oficinas[$i]['Nombre'];
-                                            $cierres_pendientes[$contador_cierres]['Color']="color: orange";
-                                            $contador_cierres++;
-                                        }
-                                    }  
-                                }
+                                
+                                $datos=$this->verificar_horario_puntobcr($Oficinas[$i]['Hora_Apertura_Sabado'],$Oficinas[$i]['Hora_Cierre_Sabado'],$datos,$prueba,$Oficinas[$i]);
                             }
                             break;
                         case 'Sunday':
                             if($Oficinas[$i]['Hora_Apertura_Domingo']!="" || $Oficinas[$i]['Hora_Apertura_Domingo']!=null){
-
-                                $fecha2 = new DateTime(date('Y-m-d').' '.$Oficinas[$i]['Hora_Apertura_Domingo']);
-                                $diff = $fecha1->diff($fecha2); 
-                                $difencia_tiempo=(intval($diff->h)*60)+(intval($diff->i)*1);
-
-                                //Información de apertura de alarma pendientes y Urgentes
-                                if($prueba[0]['Seguimiento']!='Alarma abierta 24 horas'){
-                                    if($prueba[0]['Hora_Apertura_Alarma']=="" || $prueba[0]['Hora_Apertura_Alarma']==null){
-                                        if($diff->invert==1 && $difencia_tiempo>1) {
-                                            $aperturas_pendietes[$contador_aperturas]['Mensaje']= $Oficinas[$i]['Codigo']." - ".$Oficinas[$i]['Nombre'];
-                                            $aperturas_pendietes[$contador_aperturas]['Color']="color: red";
-                                            $contador_aperturas++;
-                                        }
-                                    }
-                                }
-                                //Información de pruebas de alarma pendientes y urgentes
-                                if($prueba[0]['Hora_Prueba_Alarma']=="" || $prueba[0]['Hora_Prueba_Alarma']==null){
-                                    if($diff->invert==0 && $difencia_tiempo<30) {
-                                        $pruebas_pendientes[$contador_pruebas]['Mensaje']= $Oficinas[$i]['Codigo']." - ".$Oficinas[$i]['Nombre'];
-                                        $pruebas_pendientes[$contador_pruebas]['Color']="color: orange";
-                                        $contador_pruebas++;
-                                    } if($diff->invert==1 && $difencia_tiempo>1) {
-                                        $pruebas_pendientes[$contador_pruebas]['Mensaje']= $Oficinas[$i]['Codigo']." - ".$Oficinas[$i]['Nombre'];
-                                        $pruebas_pendientes[$contador_pruebas]['Color']="color: red";
-                                        $contador_pruebas++;
-                                    }
-                                }
-                                //Información de cierre de alarma urgentes
-                                if($prueba[0]['Seguimiento']!='Alarma abierta 24 horas'){
-                                    if($prueba[0]['Hora_Cierre_Alarma']=="" || $prueba[0]['Hora_Cierre_Alarma']==null){
-                                        $fecha2 = new DateTime(date('Y-m-d').' '.$Oficinas[$i]['Hora_Cierre_Domingo']);//Día
-                                        $diff = $fecha1->diff($fecha2); 
-                                        $difencia_tiempo=(intval($diff->h)*60)+(intval($diff->i)*1);
-
-                                        if($diff->invert==1 && $difencia_tiempo>240) {
-                                            $cierres_pendientes[$contador_cierres]['Mensaje']= $Oficinas[$i]['Codigo']." - ".$Oficinas[$i]['Nombre'];
-                                            $cierres_pendientes[$contador_cierres]['Color']="color: orange";
-                                            $contador_cierres++;
-                                        }
-                                    }
-                                }
+                                $datos=$this->verificar_horario_puntobcr($Oficinas[$i]['Hora_Apertura_Domingo'],$Oficinas[$i]['Hora_Cierre_Domingo'],$datos,$prueba,$Oficinas[$i]);
                             }
                             break;
                     }
                 }
             }
+            if(isset($datos['aperturas_pendietes'])){
+                sort($datos['aperturas_pendietes']);
+            }
+            if(isset($datos['pruebas_pendientes'])){
+                sort($datos['pruebas_pendientes']);
+            }
+            if(isset($datos['cierres_pendientes'])){
+                sort($datos['cierres_pendientes']);            
+            }
 
-            if(isset ($aperturas_pendietes)){
-                sort($aperturas_pendietes);
-            }
-            if(isset ($pruebas_pendientes)){
-                sort($pruebas_pendientes);
-            }
-            if(isset ($cierres_pendientes)){
-                sort($cierres_pendientes);
-            }
-  
             require __DIR__ . '/../vistas/plantillas/frm_pruebas_alarma.php';
         }
         else {
@@ -12060,4 +11093,69 @@
         }
     }
     
+    /*
+    //Función para verificar horarios de oficina, validar ingresos, cierres y pruebas
+    //Recibe los siguientes parametros: 
+    //  -Hora apertura (según el día de la semana)
+    //  -Hora Cierre (según el día de la semana)
+    //  -Información anterior almacenada (para almacenar nueva y devolver completa)
+    //  -Información de prueba de hoy (horas de apertura, hora de prueba, hora de cierre, etc)
+    //  -Información de la oficina (Nombre, código: para el mensaje cuando sea necesario)
+    */
+    public function verificar_horario_puntobcr($hora_apertura,$hora_cierre, $datos, $prueba,$Oficina){
+        $fecha_actual= getdate();
+        //Convierta la fecha a formto aaaa/mm/dd hh:mm
+        $fecha_actual= $fecha_actual['year']."-".$fecha_actual['mon']."-".$fecha_actual['mday'].' '.$fecha_actual['hours'].':'.$fecha_actual['minutes'];
+        //asigna la fecha actual a un arreglo formato DateTime
+        $fecha1 = new DateTime($fecha_actual);
+        $fecha2 = new DateTime(date('Y-m-d').' '.$hora_apertura);
+        $diff = $fecha1->diff($fecha2); 
+        $difencia_tiempo=(intval($diff->h)*60)+(intval($diff->i)*1);
+
+        //Información de apertura de alarma pendientes y Urgentes
+        if($prueba[0]['Seguimiento']!='Alarma abierta 24 horas'){
+            if($prueba[0]['Hora_Apertura_Alarma']=="" || $prueba[0]['Hora_Apertura_Alarma']==null){
+                if($diff->invert==1 && $difencia_tiempo>1) {
+                    $datos['aperturas_pendietes'][$datos['cont_aperturas_pendientes']]['Mensaje']= $Oficina['Codigo']." - ".$Oficina['Nombre'];
+                    $datos['aperturas_pendietes'][$datos['cont_aperturas_pendientes']]['Color']="color: red";
+                    $datos['cont_aperturas_pendientes']++;
+                }
+            } else {
+                $datos['contador_aperturas']++;
+            }
+        }
+        //Información de pruebas de alarma pendientes y urgentes
+        if($prueba[0]['Hora_Prueba_Alarma']=="" || $prueba[0]['Hora_Prueba_Alarma']==null){
+            if($diff->invert==0 && $difencia_tiempo<30) {
+                $datos['pruebas_pendientes'][$datos['cont_pruebas_pendientes']]['Mensaje']= $Oficina['Codigo']." - ".$Oficina['Nombre'];
+                $datos['pruebas_pendientes'][$datos['cont_pruebas_pendientes']]['Color']="color: orange";
+                $datos['cont_pruebas_pendientes']++;
+                $datos['contador_pruebas']++;
+            } if($diff->invert==1 && $difencia_tiempo>1) {
+                $datos['pruebas_pendientes'][$datos['cont_pruebas_pendientes']]['Mensaje']= $Oficina['Codigo']." - ".$Oficina['Nombre'];
+                $datos['pruebas_pendientes'][$datos['cont_pruebas_pendientes']]['Color']="color: red";
+                $datos['cont_pruebas_pendientes']++;
+            } 
+        }else {
+               $datos['contador_pruebas']++; 
+            }
+        //Información de cierre de alarma urgentes
+        if($prueba[0]['Seguimiento']!='Alarma abierta 24 horas'){
+            if($prueba[0]['Hora_Cierre_Alarma']=="" || $prueba[0]['Hora_Cierre_Alarma']==null){
+                $fecha2 = new DateTime(date('Y-m-d').' '.$hora_cierre);//Día
+                $diff = $fecha1->diff($fecha2); 
+                $difencia_tiempo=(intval($diff->h)*60)+(intval($diff->i)*1);
+
+                if($diff->invert==1 && $difencia_tiempo>240) {
+                    $datos['cierres_pendientes'][$datos['cont_cierres_pendientes']]['Mensaje']= $Oficina['Codigo']." - ".$Oficina['Nombre'];
+                    $datos['cierres_pendientes'][$datos['cont_cierres_pendientes']]['Color']="color: orange";
+                    $datos['cont_cierres_pendientes']++;
+                }
+            } else {
+                $datos['contador_cierres']++;
+            }
+        }
+        
+        return $datos;
+    }
 }
