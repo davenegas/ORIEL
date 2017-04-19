@@ -445,11 +445,18 @@
                     <?php if($_SESSION['modulos']['Editar- Puntos BCR']==1){ ?> 
                         <h3>Horario Punto BCR
                             <a id="popup" onclick="mostrar_horario()" class="btn azul" role="button">Cambiar Horario</a> - 
-                            <a id="popup" onclick="eliminar_horario()" class="btn rojo" role="button">Eliminar Horario</a>                
+                            <a onclick="eliminar_horario('Público')" class="btn rojo" role="button">Eliminar Horario público</a>
+                            <a onclick="eliminar_horario('Oficina')" class="btn rojo" role="button">Eliminar Horario oficina</a>  
                         </h3>    
                     <?php } else {?>
                         <h3>Horario Punto BCR</h3>
-                    <?php } ?> 
+                        
+                    <?php } if ($horariopunto[0]['Tipo_Horario']=="Público"){
+                            $oficina=1; $publico=0;
+                        } else {
+                            $oficina=0; $publico=1;
+                        } ?> 
+                        
                     <table class="display col-md-12  table-striped quitar-float espacio-abajo" id="direccionIP">
                         <thead> 
                             <tr>
@@ -464,27 +471,62 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td style="text-align:center">Hora de apertura a público</td>
-                                <td style="text-align:center"><?php echo $horariopunto[0]['Hora_Apertura_Domingo'];?></td>
-                                <td style="text-align:center"><?php echo $horariopunto[0]['Hora_Apertura_Lunes'];?></td>
-                                <td style="text-align:center"><?php echo $horariopunto[0]['Hora_Apertura_Martes'];?></td>
-                                <td style="text-align:center"><?php echo $horariopunto[0]['Hora_Apertura_Miercoles'];?></td>
-                                <td style="text-align:center"><?php echo $horariopunto[0]['Hora_Apertura_Jueves'];?></td>
-                                <td style="text-align:center"><?php echo $horariopunto[0]['Hora_Apertura_Viernes'];?></td>
-                                <td style="text-align:center"><?php echo $horariopunto[0]['Hora_Apertura_Sabado'];?></td>
-                            </tr>
-                            <tr>
-                                <td style="text-align:center">Hora de cierre a público</td>
-                                <td style="text-align:center"><?php echo $horariopunto[0]['Hora_Cierre_Domingo'];?></td>
-                                <td style="text-align:center"><?php echo $horariopunto[0]['Hora_Cierre_Lunes'];?></td>
-                                <td style="text-align:center"><?php echo $horariopunto[0]['Hora_Cierre_Martes'];?></td>
-                                <td style="text-align:center"><?php echo $horariopunto[0]['Hora_Cierre_Miercoles'];?></td>
-                                <td style="text-align:center"><?php echo $horariopunto[0]['Hora_Cierre_Jueves'];?></td>
-                                <td style="text-align:center"><?php echo $horariopunto[0]['Hora_Cierre_Viernes'];?></td>
-                                <td style="text-align:center"><?php echo $horariopunto[0]['Hora_Cierre_Sabado'];?></td>
-                            </tr>
-                            <?php //}?>
+                                <tr>
+                                    <td style="text-align:center">Horario apertura oficina</td>
+                                    <?php if(isset($horariopunto[$oficina]['Tipo_Horario'])){ ?>
+                                        <td style="text-align:center"><?php echo $horariopunto[$oficina]['Hora_Apertura_Domingo'];?></td>
+                                        <td style="text-align:center"><?php echo $horariopunto[$oficina]['Hora_Apertura_Lunes'];?></td>
+                                        <td style="text-align:center"><?php echo $horariopunto[$oficina]['Hora_Apertura_Martes'];?></td>
+                                        <td style="text-align:center"><?php echo $horariopunto[$oficina]['Hora_Apertura_Miercoles'];?></td>
+                                        <td style="text-align:center"><?php echo $horariopunto[$oficina]['Hora_Apertura_Jueves'];?></td>
+                                        <td style="text-align:center"><?php echo $horariopunto[$oficina]['Hora_Apertura_Viernes'];?></td>
+                                        <td style="text-align:center"><?php echo $horariopunto[$oficina]['Hora_Apertura_Sabado'];?></td>
+                                    <?php } else {?>
+                                        <td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+                                    <?php } ?>
+                                </tr>
+                                <tr>
+                                    <td style="text-align:center">Horario apertura público</td>
+                                    <?php if(isset($horariopunto[$publico]['Tipo_Horario'])){ ?>
+                                        <td style="text-align:center"><?php echo $horariopunto[$publico]['Hora_Apertura_Domingo'];?></td>
+                                        <td style="text-align:center"><?php echo $horariopunto[$publico]['Hora_Apertura_Lunes'];?></td>
+                                        <td style="text-align:center"><?php echo $horariopunto[$publico]['Hora_Apertura_Martes'];?></td>
+                                        <td style="text-align:center"><?php echo $horariopunto[$publico]['Hora_Apertura_Miercoles'];?></td>
+                                        <td style="text-align:center"><?php echo $horariopunto[$publico]['Hora_Apertura_Jueves'];?></td>
+                                        <td style="text-align:center"><?php echo $horariopunto[$publico]['Hora_Apertura_Viernes'];?></td>
+                                        <td style="text-align:center"><?php echo $horariopunto[$publico]['Hora_Apertura_Sabado'];?></td>
+                                    <?php } else {?>
+                                        <td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+                                    <?php } ?>
+                                </tr>
+                                <tr>
+                                    <td style="text-align:center">Horario cierre público</td>
+                                    <?php if(isset($horariopunto[$publico]['Tipo_Horario'])){ ?>
+                                        <td style="text-align:center"><?php echo $horariopunto[$publico]['Hora_Cierre_Domingo'];?></td>
+                                        <td style="text-align:center"><?php echo $horariopunto[$publico]['Hora_Cierre_Lunes'];?></td>
+                                        <td style="text-align:center"><?php echo $horariopunto[$publico]['Hora_Cierre_Martes'];?></td>
+                                        <td style="text-align:center"><?php echo $horariopunto[$publico]['Hora_Cierre_Miercoles'];?></td>
+                                        <td style="text-align:center"><?php echo $horariopunto[$publico]['Hora_Cierre_Jueves'];?></td>
+                                        <td style="text-align:center"><?php echo $horariopunto[$publico]['Hora_Cierre_Viernes'];?></td>
+                                        <td style="text-align:center"><?php echo $horariopunto[$publico]['Hora_Cierre_Sabado'];?></td>
+                                    <?php } else {?>
+                                        <td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+                                    <?php } ?>
+                                </tr>
+                                <tr>
+                                    <td style="text-align:center">Horario cierre oficina</td>
+                                    <?php if(isset($horariopunto[$oficina]['Tipo_Horario'])){ ?>
+                                        <td style="text-align:center"><?php echo $horariopunto[$oficina]['Hora_Cierre_Domingo'];?></td>
+                                        <td style="text-align:center"><?php echo $horariopunto[$oficina]['Hora_Cierre_Lunes'];?></td>
+                                        <td style="text-align:center"><?php echo $horariopunto[$oficina]['Hora_Cierre_Martes'];?></td>
+                                        <td style="text-align:center"><?php echo $horariopunto[$oficina]['Hora_Cierre_Miercoles'];?></td>
+                                        <td style="text-align:center"><?php echo $horariopunto[$oficina]['Hora_Cierre_Jueves'];?></td>
+                                        <td style="text-align:center"><?php echo $horariopunto[$oficina]['Hora_Cierre_Viernes'];?></td>
+                                        <td style="text-align:center"><?php echo $horariopunto[$oficina]['Hora_Cierre_Sabado'];?></td>
+                                    <?php } else {?>
+                                        <td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+                                    <?php } ?>
+                                </tr>
                         </tbody> 
                     </table>
                 </div>
@@ -777,7 +819,11 @@
                             <?php $tam = count($horarios);
                             for($i=0; $i<$tam;$i++){?>
                                 <tr>
-                                    <td style="text-align:center">Horario público</td>
+                                    <?php if ($horarios[$i]['Tipo_Horario']=="Público"){?>
+                                        <td style="text-align:center">Horario público</td>
+                                    <?php } else { ?>
+                                        <td style="text-align:center">Horario oficina</td>
+                                    <?php } ?>
                                     <td style="text-align:center"><?php echo $horarios[$i]['Hora_Apertura_Domingo']." - ".$horarios[$i]['Hora_Cierre_Domingo'];?></td>
                                     <td style="text-align:center"><?php echo $horarios[$i]['Hora_Apertura_Lunes']." - ".$horarios[$i]['Hora_Cierre_Lunes'];?></td>
                                     <td style="text-align:center"><?php echo $horarios[$i]['Hora_Apertura_Martes']." - ".$horarios[$i]['Hora_Cierre_Martes'];?></td>
@@ -786,7 +832,7 @@
                                     <td style="text-align:center"><?php echo $horarios[$i]['Hora_Apertura_Viernes']." - ".$horarios[$i]['Hora_Cierre_Viernes'];?></td>
                                     <td style="text-align:center"><?php echo $horarios[$i]['Hora_Apertura_Sabado']." - ".$horarios[$i]['Hora_Cierre_Sabado'];?></td>
                                     <td style="text-align:center"><?php echo $horarios[$i]['Observaciones'];?></td>
-                                    <td style="text-align:center"><a class="btn" role="button" onclick="asignar_horario(<?php echo $horarios[$i]['ID_Horario'];?>);">
+                                    <td style="text-align:center"><a class="btn" role="button" onclick="asignar_horario(<?php echo $horarios[$i]['ID_Horario'];?>,'<?php echo $horarios[$i]['Tipo_Horario'];?>');">
                                                 Asignar al PuntoBCR</a></td>
                                 </tr>
                             <?php }?>

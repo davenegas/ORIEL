@@ -29,7 +29,11 @@
                     <?php $tam = count($horarios);
                     for($i=0; $i<$tam;$i++){ ?>
                         <tr>
-                            <td style="text-align:center">Horario público</td>
+                            <?php if ($horarios[$i]['Tipo_Horario']=="Público"){ ?>
+                                <td style="text-align:center">Horario público</td>
+                            <?php } else { ?>
+                                <td style="text-align:center">Horario oficina</td>
+                            <?php } ?>
                             <td style="text-align:center"><?php echo $horarios[$i]['Hora_Apertura_Domingo']." - ".$horarios[$i]['Hora_Cierre_Domingo'];?></td>
                             <td style="text-align:center"><?php echo $horarios[$i]['Hora_Apertura_Lunes']." - ".$horarios[$i]['Hora_Cierre_Lunes'];?></td>
                             <td style="text-align:center"><?php echo $horarios[$i]['Hora_Apertura_Martes']." - ".$horarios[$i]['Hora_Cierre_Martes'];?></td>

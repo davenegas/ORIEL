@@ -5929,7 +5929,7 @@
                 $horarios= $obj_horario->getArreglo();
                 
                 //Obtiene horario de oficina
-                $obj_horario->setCondicion("ID_Horario='".$params[0]['ID_Horario']."'");
+                $obj_horario->setCondicion("ID_Horario='".$params[0]['ID_Horario']."' OR ID_Horario='".$params[0]['ID_Horario_Apertura']."'");
                 $obj_horario->obtiene_todos_los_horarios();
                 $horariopunto= $obj_horario->getArreglo();
                 
@@ -5994,7 +5994,7 @@
                 //Obtiene la informacion de proveedor de enlaces
                 $obj_proveedor_enlace->obtener_proveedores();
                 $proveedor_enlace= $obj_proveedor_enlace->getArreglo();
-                
+
                 require __DIR__ . '/../vistas/plantillas/frm_puntos_bcr_editar.php';
             }
             
@@ -6466,6 +6466,11 @@
         if(isset($_SESSION['nombre'])){
             $obj_horario = new cls_horario();
             $obj_horario->setId($_POST['id_horario']);
+            if($_POST['tipo_horario']=="Público"){
+                $obj_horario->setEstado("0");
+            } else{
+                $obj_horario->setEstado("1");
+            }
             $obj_horario->setCondicion("ID_PuntoBCR='".$_POST['id_puntobcr']."'");
             $obj_horario->asignar_horario_puntobcr();  
         }else{
@@ -6485,6 +6490,11 @@
         if(isset($_SESSION['nombre'])){
             $obj_horario = new cls_horario();
             $obj_horario->setCondicion("ID_PuntoBCR='".$_POST['id_puntobcr']."'");
+            if($_POST['tipo_horario']=="Público"){
+                $obj_horario->setEstado("0");
+            } else{
+                $obj_horario->setEstado("1");
+            }
             $obj_horario->eliminar_horario_puntobcr(); 
         }else{
               /*
@@ -7100,9 +7110,22 @@
             $obj_horario = new cls_horario();
             if($_GET['ide']==0){
                 $params[0]['ID_Horario']="0";
-                $params[0]['Dia_Laboral']="";
-                $params[0]['Hora_Laboral']="";
+                $params[0]['Hora_Apertura_Domingo']="";
+                $params[0]['Hora_Cierre_Domingo']="";
+                $params[0]['Hora_Apertura_Lunes']="";
+                $params[0]['Hora_Cierre_Lunes']="";
+                $params[0]['Hora_Apertura_Martes']="";
+                $params[0]['Hora_Cierre_Martes']="";
+                $params[0]['Hora_Apertura_Miercoles']="";
+                $params[0]['Hora_Cierre_Miercoles']="";
+                $params[0]['Hora_Apertura_Jueves']="";
+                $params[0]['Hora_Cierre_Jueves']="";
+                $params[0]['Hora_Apertura_Viernes']="";
+                $params[0]['Hora_Cierre_Viernes']="";
+                $params[0]['Hora_Apertura_Sabado']="";
+                $params[0]['Hora_Cierre_Sabado']="";
                 $params[0]['Observaciones']="";
+                $params[0]['Tipo_Horario']="";
                 $params[0]['Estado']="1";
             }  else  {
                 $obj_horario->setCondicion("ID_Horario='".$_GET['ide']."'");
@@ -7215,6 +7238,7 @@
                 $obj_horario->setHora_cierre_sabado($_POST['salida_sabado']);
             }
             $obj_horario->setObservaciones($_POST['observaciones']);
+            $obj_horario->setTipo_horario($_POST['tipo_horario']);
             $obj_horario->setEstado($_POST['estado']);
             
             //valida si es Horario nuevo o actualizacion
@@ -7503,7 +7527,7 @@
             
             $obj_enlace->enlaces_reporte();
             $telecom = $obj_enlace->getArreglo();
-            
+
             $tam = count($telecom);
             
             for($i=0; $i<$tam;$i++){
@@ -7511,7 +7535,11 @@
                 $obj_ip->obtiene_direccionesIP();
                 $direcciones = $obj_ip->getArreglo();
                 //print_r($direcciones);
-                $params[]= array_merge($telecom[$i],[($direcciones[0]['Tipo_IP'])=>($direcciones[0]['Direccion_IP'])],[($direcciones[1]['Tipo_IP'])=>($direcciones[1]['Direccion_IP'])]);
+                if(isset($direcciones[1]['Tipo_IP'])){
+                    $params[$i]= array_merge($telecom[$i],[($direcciones[0]['Tipo_IP'])=>($direcciones[0]['Direccion_IP'])],[($direcciones[1]['Tipo_IP'])=>($direcciones[1]['Direccion_IP'])]);
+                } else {
+                    $params[$i]= array_merge($telecom[$i],[($direcciones[0]['Tipo_IP'])=>($direcciones[0]['Direccion_IP'])]);
+                }
             }
 //            echo("<pre>");
 //            print_r($params);
@@ -10590,7 +10618,7 @@
             $obj_externo = new cls_personal_externo();
             $obj_Puntosbcr = new cls_puntosBCR();
             $obj_prueba = new cls_prueba_alarma();
-            
+            $obj_horario = new cls_horario();
             //Obtiene informacion básica del Personal BCR
             $obj_persona->obtiene_todo_el_personal_pruebas_alarma();
             $personas= $obj_persona->getArreglo();
@@ -10636,6 +10664,10 @@
 		$prueba= $obj_prueba->getArreglo();
                 if($prueba[0]['Seguimiento']!='Oficina en Asueto'){
                     //print_r($prueba);
+                    $obj_horario->setCondicion("ID_Horario='".$Oficinas[$i]['ID_Horario_Apertura']."'");
+                    $obj_horario->obtiene_todos_los_horarios();
+                    $horariopunto= $obj_horario->getArreglo();
+                    
                     switch ($fecha_actual['weekday']) {
                         case 'Monday':
                             if($Oficinas[$i]['Hora_Apertura_Lunes']!="" || $Oficinas[$i]['Hora_Apertura_Lunes']!=null){
