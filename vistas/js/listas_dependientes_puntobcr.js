@@ -351,7 +351,7 @@ function eliminar_enlace(ide){
             id_puntobcr = document.getElementById('ID_PuntoBCR').value;
             $.post("index.php?ctl=puntobcr_eliminar_enlace", { id_enlace: id_enlace, id_puntobcr:id_puntobcr }, function(data){
                 location.reload();
-                alert (data);
+                //alert (data);
               });
         },
         cancel: function(){

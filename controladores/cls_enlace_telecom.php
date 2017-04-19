@@ -248,13 +248,12 @@ class cls_enlace_telecom{
                     LEFT OUTER JOIN T_TipoEnlace ON T_TipoEnlace.ID_Tipo_Enlace = T_EnlaceTelecomunicaciones.ID_Tipo_Enlace
                     ORDER BY  T_PuntoBCR.Nombre, T_EnlaceTelecomunicaciones.Enlace", 
                                         
-                                    "T_PuntoBCR.ID_PuntoBCR, T_PuntoBCR.Nombre, T_PuntoBCR.Codigo, 
+                        "T_PuntoBCR.ID_PuntoBCR, T_PuntoBCR.Nombre, T_PuntoBCR.Codigo, T_PuntoBCR.Estado Estado_Oficina,
                     T_UnidadEjecutora.ID_Unidad_Ejecutora, T_UnidadEjecutora.Departamento, T_UnidadEjecutora.Numero_UE,
                     T_EnlaceTelecomunicaciones.*,
                     T_MedioEnlace.ID_Medio_Enlace, T_MedioEnlace.Medio_Enlace,
                     T_Proveedor.ID_Proveedor, T_Proveedor.Nombre_Proveedor,
                     T_TipoEnlace.ID_Tipo_Enlace, T_TipoEnlace.Tipo_Enlace",   
-                
                                         "");
         $this->arreglo=$this->obj_data_provider->getArreglo();
         $this->obj_data_provider->desconectar();

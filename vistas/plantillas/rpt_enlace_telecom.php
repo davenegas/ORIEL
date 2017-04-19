@@ -37,6 +37,22 @@
                 // Simulamos el click al elemento creado para descargarlo
                 tmpElemento.click(); 
             }
+            
+            function eliminar_enlace(ide, puntobcr){
+                id_enlace= ide;
+                $.confirm({title: 'Confirmación!', content: 'Desea eliminar el enlace de Telecomunicaciones?', 
+                    confirm: function(){
+                        id_puntobcr = puntobcr;
+                        $.post("index.php?ctl=puntobcr_eliminar_enlace", { id_enlace: id_enlace, id_puntobcr:id_puntobcr }, function(data){
+                            location.reload();
+                            //alert (data);
+                          });
+                    },
+                    cancel: function(){
+                            //$.alert('Canceled!')
+                    }
+                });
+            }
         </script>
     </head>
     <body>
@@ -63,6 +79,8 @@
                             <th style="text-align:center">Bandwidth(kbps)</th>
                             <th style="text-align:center">Medio enlace</th>
                             <th style="text-align:center">Observaciones</th>
+                            <th style="text-align:center">Estado</th>
+                            <th style="text-align:center">Opciones</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -96,6 +114,13 @@
                                 <td style="text-align:center"><?php echo $params[$i]['Bandwidth'];?></td>
                                 <td style="text-align:center"><?php echo $params[$i]['Medio_Enlace'];?></td>
                                 <td style="text-align:center"><?php echo $params[$i]['Observaciones'];?></td>
+                                <?php if ($params[$i]['Estado_Oficina']==1){ ?>  
+                                    <td style="text-align:center">Activo</td>
+                                <?php } else{ ?>  
+                                    <td style="text-align:center">Inactivo</td>
+                                <?php } ?>
+                                <td style="text-align:center"><a class="btn" role="button" onclick="eliminar_enlace('<?php echo $telecom[$i]['ID_Enlace'];?>', '<?php echo $telecom[$i]['ID_PuntoBCR'];?>');">
+                                   Eliminar</a></td>   
                             </tr>
                         <?php } ?>
                     </tbody> 
