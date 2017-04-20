@@ -42,10 +42,12 @@
                     <th style="text-align:center">Tipo de Punto</th>
                     <th style="text-align:center">Horario</th>
                     <th style="text-align:center">Observaciones</th>
-                    <?php if($_SESSION['modulos']['Editar Estado- Puntos BCR']==1){ ?> 
+                    <?php if($_SESSION['modulos']['Editar Estado- Puntos BCR']==1||$_SESSION['modulos']['Ver inactivos- Puntos BCR']==1){ ?> 
                         <th>Estado</th>
-                        <th>Cambiar Estado</th>
                     <?php } ?>
+                    <?php if($_SESSION['modulos']['Editar Estado- Puntos BCR']==1){ ?> 
+                        <th>Cambiar Estado</th>
+                    <?php } ?>    
                     <th>Información</th>
                     <?php if($_SESSION['modulos']['Módulo-Bitácora Digital']==1){ ?> 
                         <th>Registrar</th>
@@ -57,7 +59,7 @@
                 $tam=count($params);
                 for ($i = 0; $i <$tam; $i++) {
                 //Solamente muestra los puntos activos o todos a quien puede cambiar el estado
-                if($_SESSION['modulos']['Editar Estado- Puntos BCR']==1||$params[$i]['Estado_Punto']==1){    
+                if($_SESSION['modulos']['Editar Estado- Puntos BCR']==1||$params[$i]['Estado_Punto']==1||$_SESSION['modulos']['Ver inactivos- Puntos BCR']==1){    
                 ?>
                 <tr>
                     <td hidden style="text-align:center"><?php echo $params[$i]['ID_PuntoBCR'];?></td>
@@ -74,12 +76,14 @@
                           <?php }  else    {?>  
                                <td style="text-align:center"><?php echo $params[$i]['Observaciones_Punto'];?></td> 
                     <?php   }   ?>
-                    <?php if($_SESSION['modulos']['Editar Estado- Puntos BCR']==1){ 
+                    <?php if($_SESSION['modulos']['Editar Estado- Puntos BCR']==1||$_SESSION['modulos']['Ver inactivos- Puntos BCR']==1){ 
                         if ($params[$i]['Estado_Punto']==1){  ?>  
                             <td style="text-align:center">Activo</td>
                         <?php } else {?>  
                             <td style="text-align:center">Inactivo</td>
                         <?php }?>
+                    <?php } ?>
+                    <?php if($_SESSION['modulos']['Editar Estado- Puntos BCR']==1){ ?>
                         <td style="text-align:center"><a href="index.php?ctl=punto_bcr_cambiar_estado&id=
                             <?php echo $params[$i]['ID_PuntoBCR']?>&estado=<?php echo $params[$i]['Estado_Punto']?>">
                             Activar/Desactivar</a></td>

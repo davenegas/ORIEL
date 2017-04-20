@@ -5552,25 +5552,7 @@
         }  
     }
        
-    public function puntos_bcr_listar(){
-        if(isset($_SESSION['nombre'])){
-            $obj_puntosbcr=new cls_puntosBCR();
-            $obj_puntosbcr->obtiene_todos_los_puntos_bcr();
-            $params= $obj_puntosbcr->getArreglo();
-            require __DIR__ . '/../vistas/plantillas/frm_puntos_bcr_listar.php';
-        }else{
-              /*
-             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
-             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
-             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
-             * En la última línea llama a la pagina de inicio de sesión.
-             */
-            $tipo_de_alerta="alert alert-warning";
-            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
-            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
-        }
-    }
-
+    
      public function unidades_de_video_listar(){
         if(isset($_SESSION['nombre'])){
             $obj_unidad_video=new cls_unidad_video();
@@ -5806,6 +5788,25 @@
     ////////////////////////////////////////////////////////////////////////////
     //Editar Punto BCR, información completa 
     ////////////////////////////////////////////////////////////////////////////
+    public function puntos_bcr_listar(){
+        if(isset($_SESSION['nombre'])){
+            $obj_puntosbcr=new cls_puntosBCR();
+            $obj_puntosbcr->obtiene_todos_los_puntos_bcr();
+            $params= $obj_puntosbcr->getArreglo();
+            require __DIR__ . '/../vistas/plantillas/frm_puntos_bcr_listar.php';
+        }else{
+              /*
+             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+             * En la última línea llama a la pagina de inicio de sesión.
+             */
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }
+    }
+
     public function gestion_punto_bcr(){
         if(isset($_SESSION['nombre'])){
             $obj_Puntobcr = new cls_puntosBCR();
@@ -6112,7 +6113,7 @@
                 $obj_Puntobcr->setTipo_punto($_POST['Tipo_Punto']);
                 $obj_Puntobcr->setDistrito($_POST['Distrito']);
                 $obj_Puntobcr->setEmpresa($_POST['Empresa']);
-                $obj_Puntobcr->sethoraslaborales("1");
+                $obj_Puntobcr->sethoraslaborales("");
 
                 $obj_Puntobcr->guardar_punto_bcr();
 
@@ -6567,6 +6568,40 @@
         }
     }
     
+    public function enlace_guardar(){
+       if(isset($_SESSION['nombre'])){
+            $obj_enlace = new cls_enlace_telecom();  
+            //Obtiene la información enviada por el formulario por POST
+            $obj_enlace->setEnlace($_POST['enlace']);
+            $obj_enlace->setInterface($_POST['interface']);
+            $obj_enlace->setLinea($_POST['linea']);
+            $obj_enlace->setBandwidth($_POST['bandwidth']);
+            $obj_enlace->setMedio_enlace($_POST['medio_enlace']);
+            $obj_enlace->setProveedor($_POST['proveedor_enlace']);
+            $obj_enlace->setTipo_enlace($_POST['tipo_enlace']);
+            $obj_enlace->setObservaciones($_POST['observaciones_enlace']);
+            //Valida si es un enlace nuevo o actualizacion y genera la condicion
+            if($_POST['ID_Enlace']=="0"){
+                $obj_enlace->setCondicion("");
+            }   else    {
+                $obj_enlace->setCondicion("ID_Enlace='".$_POST['ID_Enlace']."'");
+            }
+            //Guarda la informacion del enlace
+            $obj_enlace->guardar_enlaces_telecomunicaciones();
+            
+            header("location:/ORIEL/index.php?ctl=enlace_reporte");
+        }else{
+              /*
+             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+             * En la última línea llama a la pagina de inicio de sesión.
+             */
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        } 
+    }
     ////////////////////////////////////////////////////////////////////////////
     /////////////////////////MANTENIMIENTO DE PERSONAL//////////////////////////
     ////////////////////////////////////////////////////////////////////////////
@@ -7516,48 +7551,7 @@
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         } 
     }
-    
-    ////////////////////////////////////////////////////////////////////////////
-    //////////Funciones para Enlace Telecomunicaciones//////////////////////////
-    ////////////////////////////////////////////////////////////////////////////
-    public function enlace_reporte() {
-        if(isset($_SESSION['nombre'])){
-            $obj_enlace = new cls_enlace_telecom();
-            $obj_ip = new cls_direccionIP();
-            
-            $obj_enlace->enlaces_reporte();
-            $telecom = $obj_enlace->getArreglo();
 
-            $tam = count($telecom);
-            
-            for($i=0; $i<$tam;$i++){
-                $obj_ip->setCondicion("(T_TipoIP.ID_Tipo_IP = '7' OR  T_TipoIP.ID_Tipo_IP = '8') AND t_puntobcrdireccionip.ID_PuntoBCR='".$telecom[$i]['ID_PuntoBCR']."'");
-                $obj_ip->obtiene_direccionesIP();
-                $direcciones = $obj_ip->getArreglo();
-                //print_r($direcciones);
-                if(isset($direcciones[1]['Tipo_IP'])){
-                    $params[$i]= array_merge($telecom[$i],[($direcciones[0]['Tipo_IP'])=>($direcciones[0]['Direccion_IP'])],[($direcciones[1]['Tipo_IP'])=>($direcciones[1]['Direccion_IP'])]);
-                } else {
-                    $params[$i]= array_merge($telecom[$i],[($direcciones[0]['Tipo_IP'])=>($direcciones[0]['Direccion_IP'])]);
-                }
-            }
-//            echo("<pre>");
-//            print_r($params);
-//            echo("</pre>");
-           require __DIR__ . '/../vistas/plantillas/rpt_enlace_telecom.php';
-        }else{
-              /*
-             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
-             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
-             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
-             * En la última línea llama a la pagina de inicio de sesión.
-             */
-            $tipo_de_alerta="alert alert-warning";
-            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
-            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
-        }   
-    }
-    
     ////////////////////////////////////////////////////////////////////////////
     //////////////////////////////Trazabilidad//////////////////////////////////
     /////////////////////FUNCIONES PARA EVENTOS/////////////////////////////////
@@ -10608,6 +10602,57 @@
         }  
     }
     
+    public function enlace_reporte() {
+        if(isset($_SESSION['nombre'])){
+            $obj_enlace = new cls_enlace_telecom();
+            $obj_ip = new cls_direccionIP();
+            $obj_medio_enlace = new cls_medio_enlace();
+            $obj_tipo_enlace = new cls_tipo_enlace();
+            $obj_proveedor_enlace = new cls_proveedor_enlace();
+            
+            //Obtiene la información de medios de enlace
+            $obj_medio_enlace->obtener_medio_enlaces();
+            $medio_enlace = $obj_medio_enlace->getArreglo();
+
+            //Obtiene la informacion de tipos de enlace
+            $obj_tipo_enlace->obtener_tipo_enlaces();
+            $tipo_enlace =  $obj_tipo_enlace->getArreglo();
+
+            //Obtiene la informacion de proveedor de enlaces
+            $obj_proveedor_enlace->obtener_proveedores();
+            $proveedor_enlace= $obj_proveedor_enlace->getArreglo();
+            
+            $obj_enlace->enlaces_reporte();
+            $telecom = $obj_enlace->getArreglo();
+            
+            $tam = count($telecom);
+            for($i=0; $i<$tam;$i++){
+                $obj_ip->setCondicion("(T_TipoIP.ID_Tipo_IP = '7' OR  T_TipoIP.ID_Tipo_IP = '8') AND t_puntobcrdireccionip.ID_PuntoBCR='".$telecom[$i]['ID_PuntoBCR']."'");
+                $obj_ip->obtiene_direccionesIP();
+                $direcciones = $obj_ip->getArreglo();
+                //print_r($direcciones);
+                if(isset($direcciones[1]['Tipo_IP'])){
+                    $params[$i]= array_merge($telecom[$i],[($direcciones[0]['Tipo_IP'])=>($direcciones[0]['Direccion_IP'])],[($direcciones[1]['Tipo_IP'])=>($direcciones[1]['Direccion_IP'])]);
+                } else {
+                    $params[$i]= array_merge($telecom[$i],[($direcciones[0]['Tipo_IP'])=>($direcciones[0]['Direccion_IP'])]);
+                }
+            }
+//            echo("<pre>");
+//            print_r($params);
+//            echo("</pre>");
+           require __DIR__ . '/../vistas/plantillas/rpt_enlace_telecom.php';
+        }else{
+              /*
+             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+             * En la última línea llama a la pagina de inicio de sesión.
+             */
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }   
+    }
 
     ////////////////////////////////////////////////////////////////////////////
     //////////////////////Funciones para Pruebas de alarma//////////////////////  
@@ -10739,11 +10784,17 @@
     public function buscar_punto_prueba_alarma() {
         if(isset($_SESSION['nombre'])){
             $obj_punto = new cls_puntosBCR();
+            $obj_horario = new cls_horario();
             //Buscar la información de un PuntoBCR basado en el código del cajero
-             $obj_punto->setCondicion("T_PuntoBCR.Codigo='".strtoupper($_POST['id'])."' AND T_PuntoBCR.Estado=1");
+            $obj_punto->setCondicion("T_PuntoBCR.Codigo='".strtoupper($_POST['id'])."' AND T_PuntoBCR.Estado=1");
             $obj_punto->obtiene_todos_los_puntos_bcr();
             $puntobcr = $obj_punto->getArreglo();
             
+            //Obtiene horario de oficina
+            $obj_horario->setCondicion("ID_Horario='".$puntobcr[0]['ID_Horario_Apertura']."'");
+            $obj_horario->obtiene_todos_los_horarios();
+            $horariopunto= $obj_horario->getArreglo();
+                
             $fecha_actual= getdate();
             switch ($fecha_actual['weekday']) {
                 case 'Monday':
@@ -10761,6 +10812,8 @@
                 case 'Thursday':
                     $puntobcr[0] = array_merge((['Hora_Apertura_Publico' =>($puntobcr[0]['Hora_Apertura_Jueves'])]),$puntobcr[0]);
                     $puntobcr[0] = array_merge((['Hora_Cierre_Publico' =>($puntobcr[0]['Hora_Cierre_Jueves'])]),$puntobcr[0]);
+                    $puntobcr[0] = array_merge((['Hora_Apertura_Agencia' =>($horariopunto[0]['Hora_Apertura_Jueves'])]),$puntobcr[0]);
+                    $puntobcr[0] = array_merge((['Hora_Cierre_Agencia' =>($horariopunto[0]['Hora_Cierre_Jueves'])]),$puntobcr[0]);
                     break;
                 case 'Friday':
                     $puntobcr[0] = array_merge((['Hora_Apertura_Publico' =>($puntobcr[0]['Hora_Apertura_Viernes'])]),$puntobcr[0]);
@@ -11187,7 +11240,6 @@
                 $datos['contador_cierres']++;
             }
         }
-        
         return $datos;
     }
 }
