@@ -257,6 +257,10 @@
                             <?php if ($_SESSION['modulos']['Módulo-Pruebas alarma']==1){?>
                                 <li><a href="index.php?ctl=pruebas_alarma">Pruebas alarma</a></li> 
                             <?php }; ?>
+                               
+                            <?php if ($_SESSION['modulos']['Reportes-Trazabilidad']==1){?>
+                                <li><a href="index.php?ctl=asistencia_personal">Asistencia</a></li> 
+                            <?php }; ?>
                                 
                             <?php if ($_SESSION['modulos']['Módulo-Control de Video']==1){?>
                                 <li><a href="http://10.170.5.80/Operaciones_de_Seguridad/ctrlvideo/consulta.html">Controles de Video</a></li>

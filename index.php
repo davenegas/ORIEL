@@ -381,6 +381,9 @@ $map = array(
     'frm_importar_prontuario_paso_10'=>array('controller'=>'Controller','action'=> 'frm_importar_prontuario_paso_10'),
     'frm_importar_prontuario_paso_11'=>array('controller'=>'Controller','action'=> 'frm_importar_prontuario_paso_11'),
  
+    //Asistencia de Personal
+    'asistencia_personal'=>array('controller'=>'Controller','action'=> 'asistencia_personal'),
+ 
     //Controlador de Usuarios 
     'listar_usuarios'=> array('controller'=>'Controller','action'=>'listar_usuarios'),
     'gestion_usuarios' => array('controller'=> 'Controller','action'=>'gestion_usuarios'),

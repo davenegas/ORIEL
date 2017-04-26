@@ -107,12 +107,12 @@
            require __DIR__ . '/../vistas/plantillas/frm_principal.php';
            
         }else{
-              /*
-             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
-             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
-             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
-             * En la última línea llama a la pagina de inicio de sesión.
-             */
+            /*
+            * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+            * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+            * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+            * En la última línea llama a la pagina de inicio de sesión.
+            */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
             //Llamada al formulario correspondiente de la vista
@@ -664,8 +664,7 @@
 
                     //Compara las unidades ejecutoras (tanto la del documento de trabajo, como la que se encuentra en la bd)
                    if (!(strcmp($obj_ue->getId(), $obj_personal->getArreglo()[0]['ID_Unidad_Ejecutora']))==0){
-                       
-                       //define una condicion de busqueda en caso de que la ue del empleado sea diferente a la que trae el documento
+                        //define una condicion de busqueda en caso de que la ue del empleado sea diferente a la que trae el documento
                         $obj_ue->setCondicion("ID_Unidad_Ejecutora=".$obj_personal->getArreglo()[0]['ID_Unidad_Ejecutora']);
                         //Ejecuta la consulta SQL
                          $obj_ue->obtener_unidades_ejecutoras();
@@ -685,8 +684,7 @@
                 $obj_personal->setDireccion($arreglo_personal[$i][5]);
                 
                 //Establece el link de la foto
-
-                $obj_personal->setLinkfoto("http://bcr0157uco01/foto/".$arreglo_personal[$i][1].".jpg?rnd=7055");
+                $obj_personal->setLinkfoto("https://bcrcapitalhumano:2800/UCO/foto/".$arreglo_personal[$i][1].".jpg");
                 
                 //Establece la empresa, que en este caso 1 es para BCR
                 $obj_personal->setId_empresa("1");
@@ -11241,5 +11239,9 @@
             }
         }
         return $datos;
+    }
+    
+    public function asistencia_personal(){
+        require __DIR__ . '/../vistas/plantillas/frm_asistencia_personal.php';
     }
 }

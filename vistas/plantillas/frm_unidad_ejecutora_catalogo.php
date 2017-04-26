@@ -62,19 +62,19 @@
             for ($i = 0; $i <$tam; $i++) {
             ?>
             <tr>
-                <th style="text-align:center"><?php echo $params[$i]['ID_Unidad_Ejecutora'];?></td>
-                <th style="text-align:center"><?php echo $params[$i]['Numero_UE'];?></td>
-                <th><?php echo $params[$i]['Departamento'];?></td>
-                <th style="text-align:center"><?php echo $params[$i]['Observaciones'];?></td>
+                <td style="text-align:center"><?php echo $params[$i]['ID_Unidad_Ejecutora'];?></td>
+                <td style="text-align:center"><?php echo $params[$i]['Numero_UE'];?></td>
+                <td><?php echo $params[$i]['Departamento'];?></td>
+                <td style="text-align:center"><?php echo $params[$i]['Observaciones'];?></td>
                 <?php if ($params[$i]['Estado']==1){?>  
-                    <th style="text-align:center">Activo</td>
+                    <td style="text-align:center">Activo</td>
                 <?php }else {?>  
-                    <th style="text-align:center">Inactivo</td>
+                    <td style="text-align:center">Inactivo</td>
                 <?php }?>
-                
-                <th style="text-align:center"><a role="button" onclick="Editar_UE(<?php echo $params[$i]['ID_Unidad_Ejecutora'];?>,'<?php echo $params[$i]['Numero_UE'];?>',
-                                                        '<?php echo $params[$i]['Departamento'];?>','<?php echo $params[$i]['Observaciones'];?>', <?php echo $params[$i]['Estado'];?>)"> 
-                       Editar</a></td>
+                <td style="text-align:center"><a role="button" onclick="Editar_UE(<?php echo $params[$i]['ID_Unidad_Ejecutora'];?>,
+                    '<?php echo $params[$i]['Numero_UE'];?>', '<?php echo $params[$i]['Departamento'];?>','<?php echo $params[$i]['Observaciones'];?>', 
+                    <?php echo $params[$i]['Estado'];?>)"> 
+                        Editar</a></td>
             </tr>     
             <?php } ?>
             </tbody>
@@ -90,7 +90,7 @@
                 <form id="ventana" method="POST" name="form" action="index.php?ctl=unidad_ejecutora_guardar">
                     <img id="close" src='vistas/Imagenes/cerrar.png' width="25" onclick ="ocultar_elemento()">
                     <h2>Unidad Ejecutora</h2>
-                    <hr>
+                    <br>
                     <input hidden id="ID_Unidad_Ejecutora" name="ID_Unidad_Ejecutora" type="text">
                     
                     <label for="numero">Número de UE</label>

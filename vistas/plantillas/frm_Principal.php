@@ -3,7 +3,6 @@
     <head>
         <meta charset="utf-8"/>
         <title>Principal Oriel</title>
-        <link rel="stylesheet" href="vistas/css/reloj.css">
         <?php require_once 'frm_librerias_head.html'; ?>
         
     </head>
@@ -14,15 +13,6 @@
             <h2 align="center">Bienvenido(a):</h2>
             <h3 align="center"><?php echo $_SESSION['name']." ".$_SESSION['apellido'];?></h3>
             <center>
-                <!-- <section class="" id="contReloj">
-                    <p id="pHoras"></p>
-                    <p>:</p>
-                    <p id="pMinutos"></p>
-                    <p>:</p>
-                    <p id="pSegundos"></p>
-                    <script language="javascript" src="vistas/js/listas_dependientes_asistencia.js"></script>
-                </section>-->
-
                 <img src="vistas/Imagenes/Objetivo Z1.jpg" alt=""/>
             </center>
             
