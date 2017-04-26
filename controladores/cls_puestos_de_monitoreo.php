@@ -944,4 +944,27 @@ class cls_puestos_de_monitoreo{
         } 
     }
     
+    public function obtiene_lista_operadores_que_han_realizado_controles() {
+        $this->obj_data_provider->conectar();
+        if($this->condicion==""){
+            $this->arreglo=$this->obj_data_provider->trae_datos(
+                    "t_bitacorarevisionesvideo left outer join t_usuario on t_bitacorarevisionesvideo.ID_Usuario=t_usuario.ID_usuario order by Nombre_Completo", 
+                    "distinct(t_bitacorarevisionesvideo.ID_Usuario),concat(t_usuario.Nombre,' ',t_usuario.Apellido) as Nombre_Completo",
+                    "");
+            $this->arreglo=$this->obj_data_provider->getArreglo();
+            $this->obj_data_provider->desconectar();
+            $this->resultado_operacion=true;
+        }
+        else{
+            $this->arreglo=$this->obj_data_provider->trae_datos(
+                  "t_bitacorarevisionesvideo left outer join t_usuario on t_bitacorarevisionesvideo.ID_Usuario=t_usuario.ID_usuario", 
+                    "distinct(t_bitacorarevisionesvideo.ID_Usuario),concat(t_usuario.Nombre,' ',t_usuario.Apellido) as Nombre_Completo",
+                    $this->condicion. " order by Nombre_Completo");
+            $this->arreglo=$this->obj_data_provider->getArreglo();
+            $this->obj_data_provider->desconectar();
+            $this->resultado_operacion=true;
+        }  
+        
+    }
+    
 }?>

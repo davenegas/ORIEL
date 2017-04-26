@@ -10116,6 +10116,396 @@
         }
     }
     
+    
+    public function reporte_tl300_en_puntos_bcr_listar() {
+       if(isset($_SESSION['nombre'])){
+           $obj_reportes = new cls_reporteria();
+           $obj_reportes->obtiene_reporte_puntos_bcr_con_tl300();
+           $params =$obj_reportes->getArreglo();
+           
+            //print_r($vector_estadisticas);
+            require __DIR__.'/../vistas/plantillas/rpt_tl300_puntos_bcr.php';
+        }
+        else {
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }  
+    } 
+    public function reporte_controles_de_video_listar(){
+        if(isset($_SESSION['nombre'])){
+            $obj_pm = new cls_puestos_de_monitoreo();
+            $obj_reporte = new cls_reporteria();
+            $obj_pm->obtiene_lista_operadores_que_han_realizado_controles();
+            $lista_de_operadores=$obj_pm->getArreglo();
+            
+            if(isset($_POST['fecha_inicial'])){
+                $fecha_inicio = $_POST['fecha_inicial'];
+                $fecha_fin= $_POST['fecha_final'];
+                $operador=$_POST['lista_operadores'];
+                $turno=$_POST['turno_monitoreo'];
+                
+                if (($operador=="0")&&($turno=="0")){
+                     $obj_reporte->setCondicion("t_bitacorarevisionesvideo.Fecha_Inicia_Revision BETWEEN '".$fecha_inicio."' AND '".$fecha_fin."'");
+                     $titulo = "Gráfica Gerenal de Sitios Revisados por Operador en Control de Video (todos los puestos de monitoreo).";
+                     $subtitulo = "Del ".date('d-m-Y',strtotime($fecha_inicio))." al ".date('d-m-Y',strtotime($fecha_fin)).".";
+                     $tipo_grafico=1;
+                     $obj_reporte->revisiones_de_video_todos_los_operadores_todos_los_puestos();
+                     $params= $obj_reporte->getArreglo();
+                     
+                     $params2=array();
+                     $obj_reporte->setCondicion("(Fecha_Inicia_Revision BETWEEN '".$fecha_inicio."' AND '".$fecha_fin."') and Justificacion_Retraso LIKE 'JUSTIFICADO%' and Retraso_Segundos>0");
+                     $obj_reporte->inconsistencias_en_revisiones_de_video();
+                     $justificaciones = $obj_reporte->getArreglo();
+                     if (count($justificaciones)>0){
+                        $params2[]=$justificaciones[0];
+                     }else{
+                         $params2[]=array("Total"=>"0");
+                     }
+                    
+                     $obj_reporte->setCondicion("(Fecha_Inicia_Revision BETWEEN '".$fecha_inicio."' AND '".$fecha_fin."') and (Justificacion_Retraso NOT LIKE 'JUSTIFICADO%' and Justificacion_Retraso NOT LIKE 'INJUSTIFICADO%') and Retraso_Segundos>0");
+                     $obj_reporte->inconsistencias_en_revisiones_de_video();
+                     $justificaciones = $obj_reporte->getArreglo();
+                     if (count($justificaciones)>0){
+                        $params2[]=$justificaciones[0];
+                     }else{
+                         $params2[]=array("Total"=>"0");
+                     }
+                    
+                     $obj_reporte->setCondicion("(Fecha_Inicia_Revision BETWEEN '".$fecha_inicio."' AND '".$fecha_fin."') and Justificacion_Retraso LIKE 'INJUSTIFICADO%' and Retraso_Segundos>0");
+                     $obj_reporte->inconsistencias_en_revisiones_de_video();
+                     $justificaciones = $obj_reporte->getArreglo();
+                     if (count($justificaciones)>0){
+                        $params2[]=$justificaciones[0];
+                     }else{
+                         $params2[]=array("Total"=>"0");
+                     }
+                     
+                     $suma_revisiones=0;
+                     for ($i = 0; $i < count($params); $i++) {
+                        $suma_revisiones=$suma_revisiones+$params[$i]['TOTAL'];
+                     }
+                     $suma_inconsistencias=0;
+                     for ($i = 0; $i < count($params2); $i++) {
+                        $suma_inconsistencias=$suma_inconsistencias+$params2[$i]['Total'];
+                     }
+                     
+                     $titulo2 = "Retrasos en Revisiones de Video (todos los puestos).";
+                }
+                
+                 if (($operador!="0")&&($turno=="0")){
+                     $obj_reporte->setCondicion("(t_bitacorarevisionesvideo.Fecha_Inicia_Revision BETWEEN '".$fecha_inicio."' AND '".$fecha_fin."') and t_bitacorarevisionesvideo.ID_Usuario =".$operador);
+                     $titulo = "Cantidad de Revisiones de un Operador en Modulo de Control de Video (todos los puestos, ordenado por mes).";
+                     $subtitulo = "Del ".date('d-m-Y',strtotime($fecha_inicio))." al ".date('d-m-Y',strtotime($fecha_fin)).".";
+                     $tipo_grafico=2;
+                     $obj_reporte->revisiones_de_video_por_operador();
+                     $params= $obj_reporte->getArreglo();
+                     
+                     if (count($params)>0){
+                         $titulo = "Cantidad de Revisiones de ". $params[0]['Nombre']. " ".$params[0]['Apellido'] ." en el Modulo de Control de Video (todos los puestos, ordenado por mes).";
+                     }else{
+                         $titulo = "Cantidad de Revisiones de un Operador en Modulo de Control de Video (todos los puestos, ordenado por mes).";
+                     }
+                     
+                     $params2=array();
+                     $obj_reporte->setCondicion("(Fecha_Inicia_Revision BETWEEN '".$fecha_inicio."' AND '".$fecha_fin."') and Justificacion_Retraso LIKE 'JUSTIFICADO%' and Retraso_Segundos>0 and ID_Usuario =".$operador);
+                     $obj_reporte->inconsistencias_en_revisiones_de_video();
+                     $justificaciones = $obj_reporte->getArreglo();
+                     if (count($justificaciones)>0){
+                        $params2[]=$justificaciones[0];
+                     }else{
+                         $params2[]=array("Total"=>"0");
+                     }
+                    
+                     $obj_reporte->setCondicion("(Fecha_Inicia_Revision BETWEEN '".$fecha_inicio."' AND '".$fecha_fin."') and (Justificacion_Retraso NOT LIKE 'JUSTIFICADO%' and Justificacion_Retraso NOT LIKE 'INJUSTIFICADO%') and Retraso_Segundos>0 and ID_Usuario =".$operador);
+                     $obj_reporte->inconsistencias_en_revisiones_de_video();
+                     $justificaciones = $obj_reporte->getArreglo();
+                     if (count($justificaciones)>0){
+                        $params2[]=$justificaciones[0];
+                     }else{
+                         $params2[]=array("Total"=>"0");
+                     }
+                    
+                     $obj_reporte->setCondicion("(Fecha_Inicia_Revision BETWEEN '".$fecha_inicio."' AND '".$fecha_fin."') and Justificacion_Retraso LIKE 'INJUSTIFICADO%' and Retraso_Segundos>0 and ID_Usuario =".$operador);
+                     $obj_reporte->inconsistencias_en_revisiones_de_video();
+                     $justificaciones = $obj_reporte->getArreglo();
+                     if (count($justificaciones)>0){
+                        $params2[]=$justificaciones[0];
+                     }else{
+                         $params2[]=array("Total"=>"0");
+                     }
+                     
+                     if (count($params)>0){
+                         $titulo2 = "Retrasos en Revisiones de Video de ". $params[0]['Nombre']. " ".$params[0]['Apellido'] ." (todos los puestos).";
+                     }else{
+                         $titulo2 = "Retrasos en Revisiones de Video de un Operador (todos los puestos).";
+                     }
+                     
+                     $suma_revisiones=0;
+                     for ($i = 0; $i < count($params); $i++) {
+                        $suma_revisiones=$suma_revisiones+$params[$i]['numFilas'];
+                     }
+                     
+                     $suma_inconsistencias=0;
+                     for ($i = 0; $i < count($params2); $i++) {
+                        $suma_inconsistencias=$suma_inconsistencias+$params2[$i]['Total'];
+                     }
+                     
+                }
+                  
+                if (($operador!="0")&&($turno!="0")){
+                     if ($turno=="1"){
+                         $turno_Monitoreo=" and (t_bitacorarevisionesvideo.Hora_Inicia_Revision BETWEEN '05:54:00' and '13:56:00') "; 
+                         $nombre_turno="mañana";
+                         $esperado_individual=array("mes"=>"Esperado Individual Mensual","numFilas"=>"7840");
+                     }
+                     if ($turno=="2"){
+                         $turno_Monitoreo=" and (t_bitacorarevisionesvideo.Hora_Inicia_Revision BETWEEN '13:54:00' and '21:56:00') ";                          
+                         $nombre_turno="tarde";
+                         $esperado_individual=array("mes"=>"Esperado Individual Mensual","numFilas"=>"7840");
+                     }
+                     if ($turno=="3"){
+                         $turno_Monitoreo=" and ((t_bitacorarevisionesvideo.Hora_Inicia_Revision BETWEEN '21:54:00' and '23:59:00') or (t_bitacorarevisionesvideo.Hora_Inicia_Revision BETWEEN '00:00:00' and '05:56:00')) ";                                                   
+                         $nombre_turno="noche";
+                         $esperado_individual=array("mes"=>"Esperado Individual Mensual","numFilas"=>"9800");
+                     }
+                     $obj_reporte->setCondicion("(t_bitacorarevisionesvideo.Fecha_Inicia_Revision BETWEEN '".$fecha_inicio."' AND '".$fecha_fin."')". $turno_Monitoreo ."and t_bitacorarevisionesvideo.ID_Usuario =".$operador);
+                     $titulo = "Cantidad de Revisiones de un Operador en Modulo de Control de Video (un turno específico(".$nombre_turno.")".", ordenado por mes).";
+                     $subtitulo = "Del ".date('d-m-Y',strtotime($fecha_inicio))." al ".date('d-m-Y',strtotime($fecha_fin)).".";
+                     $tipo_grafico=2;
+                     $obj_reporte->revisiones_de_video_por_operador();
+                     $params= $obj_reporte->getArreglo();
+                     $params[]=$esperado_individual;
+                     
+                     if (count($params)>1){
+                         $titulo = "Cantidad de Revisiones de ". $params[0]['Nombre']. " ".$params[0]['Apellido'] ." en el Modulo de Control de Video (un puesto específico(".$nombre_turno."), ordenado por mes).";
+                     }else{
+                         $titulo = "Cantidad de Revisiones de un Operador en Modulo de Control de Video (un turno específico(".$nombre_turno."), ordenado por mes).";
+                     }
+                     
+                     $params2=array();
+                     if ($turno=="1"){
+                         $turno_Monitoreo=" and (Hora_Inicia_Revision BETWEEN '05:54:00' and '13:56:00') "; 
+                     }
+                     if ($turno=="2"){
+                         $turno_Monitoreo=" and (Hora_Inicia_Revision BETWEEN '13:54:00' and '21:56:00') ";                          
+                     }
+                     if ($turno=="3"){
+                         $turno_Monitoreo=" and ((Hora_Inicia_Revision BETWEEN '21:54:00' and '23:59:00') or (Hora_Inicia_Revision BETWEEN '00:00:00' and '05:56:00') ) ";                                                   
+                     }
+                     
+                     $obj_reporte->setCondicion("(Fecha_Inicia_Revision BETWEEN '".$fecha_inicio."' AND '".$fecha_fin."')".$turno_Monitoreo. "and Justificacion_Retraso LIKE 'JUSTIFICADO%' and Retraso_Segundos>0 and ID_Usuario =".$operador);
+                     $obj_reporte->inconsistencias_en_revisiones_de_video();
+                     $justificaciones = $obj_reporte->getArreglo();
+                     if (count($justificaciones)>0){
+                        $params2[]=$justificaciones[0];
+                     }else{
+                         $params2[]=array("Total"=>"0");
+                     }
+                    
+                     $obj_reporte->setCondicion("(Fecha_Inicia_Revision BETWEEN '".$fecha_inicio."' AND '".$fecha_fin."')".$turno_Monitoreo ."and (Justificacion_Retraso NOT LIKE 'JUSTIFICADO%' and Justificacion_Retraso NOT LIKE 'INJUSTIFICADO%') and Retraso_Segundos>0 and ID_Usuario =".$operador);
+                     $obj_reporte->inconsistencias_en_revisiones_de_video();
+                     $justificaciones = $obj_reporte->getArreglo();
+                     if (count($justificaciones)>0){
+                        $params2[]=$justificaciones[0];
+                     }else{
+                         $params2[]=array("Total"=>"0");
+                     }
+                    
+                     $obj_reporte->setCondicion("(Fecha_Inicia_Revision BETWEEN '".$fecha_inicio."' AND '".$fecha_fin."')". $turno_Monitoreo."and Justificacion_Retraso LIKE 'INJUSTIFICADO%' and Retraso_Segundos>0 and ID_Usuario =".$operador);
+                     $obj_reporte->inconsistencias_en_revisiones_de_video();
+                     $justificaciones = $obj_reporte->getArreglo();
+                     if (count($justificaciones)>0){
+                        $params2[]=$justificaciones[0];
+                     }else{
+                         $params2[]=array("Total"=>"0");
+                     }
+                     
+                     if (count($params)>1){
+                         $titulo2 = "Retrasos en Revisiones de Video de ". $params[0]['Nombre']. " ".$params[0]['Apellido'] ." (".$nombre_turno.").";
+                     }else{
+                         $titulo2 = "Retrasos en Revisiones de Video de un Operador (por turno específico(".$nombre_turno.")).";
+                     }
+                     
+                     $suma_revisiones=0;
+                     for ($i = 0; $i < count($params); $i++) {
+                        $suma_revisiones=$suma_revisiones+$params[$i]['numFilas'];
+                     }
+                     
+                     $suma_inconsistencias=0;
+                     for ($i = 0; $i < count($params2); $i++) {
+                        $suma_inconsistencias=$suma_inconsistencias+$params2[$i]['Total'];
+                     }
+                     
+                }
+                
+                 if (($operador=="0")&&($turno!="0")){
+                     if ($turno=="1"){
+                         $turno_Monitoreo=" and (t_bitacorarevisionesvideo.Hora_Inicia_Revision BETWEEN '05:54:00' and '13:56:00') "; 
+                         $nombre_turno="mañana";
+                         $esperado_grupal=array("mes"=>"Esperado Grupal Mensual","numFilas"=>"48608");
+                         $esperado_individual=array("Nombre"=>"Esperado Individual","TOTAL"=>"7840","Apellido"=>" Mensual");
+                     }
+                     if ($turno=="2"){
+                         $turno_Monitoreo=" and (t_bitacorarevisionesvideo.Hora_Inicia_Revision BETWEEN '13:54:00' and '21:56:00') ";                          
+                         $nombre_turno="tarde";
+                         $esperado_grupal=array("mes"=>"Esperado Grupal Mensual","numFilas"=>"48608");
+                         $esperado_individual=array("Nombre"=>"Esperado Individual","TOTAL"=>"7840","Apellido"=>" Mensual");
+                     }
+                     if ($turno=="3"){
+                         $turno_Monitoreo=" and ((t_bitacorarevisionesvideo.Hora_Inicia_Revision BETWEEN '21:54:00' and '23:59:00') or (t_bitacorarevisionesvideo.Hora_Inicia_Revision BETWEEN '00:00:00' and '05:56:00')) ";                                                   
+                         $nombre_turno="noche";
+                         $esperado_grupal=array("mes"=>"Esperado Grupal Mensual","numFilas"=>"60760");
+                         $$esperado_individual=array();
+                         $esperado_individual[]=array("Nombre"=>"Esperado Individual","TOTAL"=>"9800","Apellido"=>" Mensual");
+                     }
+                     $obj_reporte->setCondicion("(t_bitacorarevisionesvideo.Fecha_Inicia_Revision BETWEEN '".$fecha_inicio."' AND '".$fecha_fin."')". $turno_Monitoreo);
+                     $titulo = "Cantidad de Revisiones por Equipo de Trabajo en Modulo de Control de Video (un turno específico(".$nombre_turno.")".", ordenado por mes).";
+                     $subtitulo = "Del ".date('d-m-Y',strtotime($fecha_inicio))." al ".date('d-m-Y',strtotime($fecha_fin)).".";
+                     $tipo_grafico=3;
+                     $obj_reporte->revisiones_de_video_por_operador();
+                     $params= $obj_reporte->getArreglo();
+                     $params[]=$esperado_grupal;
+                                          
+                     $titulo3 = "Gráfica Gerenal Comparativa de Sitios Revisados por Operador en Control de Video (".$nombre_turno.").";
+                     $subtitulo3 = "Del ".date('d-m-Y',strtotime($fecha_inicio))." al ".date('d-m-Y',strtotime($fecha_fin)).".";
+                     $obj_reporte->revisiones_de_video_todos_los_operadores_todos_los_puestos();
+                     $params3= $obj_reporte->getArreglo();
+                     
+                     $vector_temporal=array();
+                     $vector_temporal[]=$esperado_individual;
+                     
+                     for ($i = 0; $i < count($params3); $i++) {
+                         $vector_temporal[]=$params3[$i];
+                     }
+                     
+                     $params3=$vector_temporal;
+                    // $params3= array_merge($esperado_individual,$params3 );
+                     
+                     $suma_revisiones2=0;
+                     for ($i = 0; $i < count($params3); $i++) {
+                        $suma_revisiones2=$suma_revisiones2+$params3[$i]['TOTAL'];
+                     }
+                     
+                     $params2=array();
+                     if ($turno=="1"){
+                         $turno_Monitoreo=" and (Hora_Inicia_Revision BETWEEN '05:54:00' and '13:56:00') "; 
+                     }
+                     if ($turno=="2"){
+                         $turno_Monitoreo=" and (Hora_Inicia_Revision BETWEEN '13:54:00' and '21:56:00') ";                          
+                     }
+                     if ($turno=="3"){
+                         $turno_Monitoreo=" and ((Hora_Inicia_Revision BETWEEN '21:54:00' and '23:59:00') or (Hora_Inicia_Revision BETWEEN '00:00:00' and '05:56:00') ) ";                                                   
+                     }
+                     
+                     $obj_reporte->setCondicion("(Fecha_Inicia_Revision BETWEEN '".$fecha_inicio."' AND '".$fecha_fin."')".$turno_Monitoreo. "and Justificacion_Retraso LIKE 'JUSTIFICADO%' and Retraso_Segundos>0");
+                     $obj_reporte->inconsistencias_en_revisiones_de_video();
+                     $justificaciones = $obj_reporte->getArreglo();
+                     if (count($justificaciones)>0){
+                        $params2[]=$justificaciones[0];
+                     }else{
+                         $params2[]=array("Total"=>"0");
+                     }
+                    
+                     $obj_reporte->setCondicion("(Fecha_Inicia_Revision BETWEEN '".$fecha_inicio."' AND '".$fecha_fin."')".$turno_Monitoreo ."and (Justificacion_Retraso NOT LIKE 'JUSTIFICADO%' and Justificacion_Retraso NOT LIKE 'INJUSTIFICADO%') and Retraso_Segundos>0");
+                     $obj_reporte->inconsistencias_en_revisiones_de_video();
+                     $justificaciones = $obj_reporte->getArreglo();
+                     if (count($justificaciones)>0){
+                        $params2[]=$justificaciones[0];
+                     }else{
+                         $params2[]=array("Total"=>"0");
+                     }
+                    
+                     $obj_reporte->setCondicion("(Fecha_Inicia_Revision BETWEEN '".$fecha_inicio."' AND '".$fecha_fin."')". $turno_Monitoreo."and Justificacion_Retraso LIKE 'INJUSTIFICADO%' and Retraso_Segundos>0");
+                     $obj_reporte->inconsistencias_en_revisiones_de_video();
+                     $justificaciones = $obj_reporte->getArreglo();
+                     if (count($justificaciones)>0){
+                        $params2[]=$justificaciones[0];
+                     }else{
+                         $params2[]=array("Total"=>"0");
+                     }
+                     
+                    
+                     $titulo2 = "Retrasos en Revisiones de Video por Equipo de Trabajo (por puesto específico(".$nombre_turno.")).";
+                    
+                     
+                     $suma_revisiones=0;
+                     for ($i = 0; $i < count($params); $i++) {
+                        $suma_revisiones=$suma_revisiones+$params[$i]['numFilas'];
+                     }
+                     
+                     $suma_inconsistencias=0;
+                     for ($i = 0; $i < count($params2); $i++) {
+                        $suma_inconsistencias=$suma_inconsistencias+$params2[$i]['Total'];
+                     }
+                     
+                  }
+                
+            }else{
+                $fecha_inicio = '2016-01-01';
+                $fecha_fin= date("Y-m-d");
+                $obj_reporte->setCondicion("t_bitacorarevisionesvideo.Fecha_Inicia_Revision BETWEEN '".$fecha_inicio."' AND '".$fecha_fin."'");
+                $titulo = "Gráfica Gerenal de Sitios Revisados por Operador en Control de Video (todos los puestos de monitoreo).";
+                $subtitulo = "Del ".date('d-m-Y',strtotime($fecha_inicio))." al ".date('d-m-Y',strtotime($fecha_fin)).".";
+                $tipo_grafico=1;
+                $obj_reporte->revisiones_de_video_todos_los_operadores_todos_los_puestos();
+                $params= $obj_reporte->getArreglo();
+                
+                $params2=array();
+                $obj_reporte->setCondicion("(Fecha_Inicia_Revision BETWEEN '".$fecha_inicio."' AND '".$fecha_fin."') and Justificacion_Retraso LIKE 'JUSTIFICADO%' and Retraso_Segundos>0");
+                $obj_reporte->inconsistencias_en_revisiones_de_video();
+                $justificaciones = $obj_reporte->getArreglo();
+                if (count($justificaciones)>0){
+                   $params2[]=$justificaciones[0];
+                }else{
+                    $params2[]=array("Total"=>"0");
+                }
+
+                $obj_reporte->setCondicion("(Fecha_Inicia_Revision BETWEEN '".$fecha_inicio."' AND '".$fecha_fin."') and (Justificacion_Retraso NOT LIKE 'JUSTIFICADO%' and Justificacion_Retraso NOT LIKE 'INJUSTIFICADO%') and Retraso_Segundos>0");
+                $obj_reporte->inconsistencias_en_revisiones_de_video();
+                $justificaciones = $obj_reporte->getArreglo();
+                if (count($justificaciones)>0){
+                   $params2[]=$justificaciones[0];
+                }else{
+                    $params2[]=array("Total"=>"0");
+                }
+
+                $obj_reporte->setCondicion("(Fecha_Inicia_Revision BETWEEN '".$fecha_inicio."' AND '".$fecha_fin."') and Justificacion_Retraso LIKE 'INJUSTIFICADO%' and Retraso_Segundos>0");
+                $obj_reporte->inconsistencias_en_revisiones_de_video();
+                $justificaciones = $obj_reporte->getArreglo();
+                if (count($justificaciones)>0){
+                   $params2[]=$justificaciones[0];
+                }else{
+                    $params2[]=array("Total"=>"0");
+                }
+                
+                $suma_revisiones=0;
+                for ($i = 0; $i < count($params); $i++) {
+                    $suma_revisiones=$suma_revisiones+$params[$i]['TOTAL'];
+                }
+                $suma_inconsistencias=0;
+                for ($i = 0; $i < count($params2); $i++) {
+                    $suma_inconsistencias=$suma_inconsistencias+$params2[$i]['Total'];
+                }
+
+                $titulo2 = "Retrasos en Revisiones de Video (todos los puestos).";
+                
+            }
+            require __DIR__ . '/../vistas/plantillas/rpt_controles_de_video.php';
+        }
+        else {
+              /*
+             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+             * En la última línea llama a la pagina de inicio de sesión.
+             */
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }
+    }
+
     public function reporte_eventos_provincia(){
         if(isset($_SESSION['nombre'])){
             $obj_reporte = new cls_reporteria();

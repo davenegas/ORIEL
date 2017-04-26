@@ -86,12 +86,12 @@ require_once __DIR__ . '/controladores/cls_prueba_alarma.php';
 //Libreria de clases --> Control para sistemad de reportes
 require_once __DIR__ . '/controladores/cls_reporteria.php';
 
-
 /*
  * El elemento controller, constituye la base y esencia de toda la lógica del negocio, en este
  * se almacenan cada una de las funcionales de ORIEl. El archivo en sí, se compone de "n" cantidad
  * de eventos de clase que son llamados según las necesidades del usuario y el sistema en si.
  */
+
 require_once __DIR__ . '/modelos/Controller.php';
 /*
  * Componente que permite realizar funciones especiales dentro del sistema, dentro de las cuales
@@ -147,6 +147,7 @@ $map = array(
     'alertas_generales'=>array('controller'=>'Controller', 'action'=>'alertas_generales'),
     'reporte_inconsistencias_pruebas'=>array('controller'=>'Controller', 'action'=>'reporte_inconsistencias_pruebas'),
     'enlace_reporte'=>array('controller'=>'Controller', 'action'=>'enlace_reporte'),
+    'reporte_tl300_en_puntos_bcr_listar'=>array('controller'=>'Controller', 'action'=>'reporte_tl300_en_puntos_bcr_listar'),
     
     //Información pública
     'personal_listar_publico'=>array('controller'=>'Controller', 'action'=>'personal_listar_publico'),
@@ -182,7 +183,8 @@ $map = array(
     'validar_inconsistencias_video_guardar'=>array('controller'=>'Controller','action'=> 'validar_inconsistencias_video_guardar'),    
     'reportar_inconsistencias_video_guardar'=>array('controller'=>'Controller','action'=> 'reportar_inconsistencias_video_guardar'),    
     'solucionar_inconsistencias_video_guardar'=>array('controller'=>'Controller','action'=> 'solucionar_inconsistencias_video_guardar'),    
-       
+    'reporte_controles_de_video'=>array('controller'=>'Controller', 'action'=>'reporte_controles_de_video'),  
+    'reporte_controles_de_video_listar'=>array('controller'=>'Controller', 'action'=>'reporte_controles_de_video_listar'),  
     
     //Información Proveedor enlaces
     'proveedor_listar'=>array('controller'=>'Controller', 'action'=>'proveedor_listar'),

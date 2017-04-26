@@ -186,6 +186,22 @@ class Data_Provider{
        $this->resultado_operacion=true;
     }
    
+     //Método que permite traer información de la base de datos mediante consultas SQL
+    //Este metodo recibe el nombre de la tabla, campos de la misma y la condición de búsqueda en caso de que exista
+    public function ejecuta_instruccion_sql($consulta_sql){
+       
+        unset($this->arreglo);
+       
+            //Verifica si la consulta SQL tiene una condición de búsqueda
+        if ($consulta_sql!=""){
+            //En caso de no tener condición, agrega campos y nombre de la tabla solamente
+            $consulta=$this->conexion->query($consulta_sql);
+            //echo ("select ".$campos." from ".$table.";");
+        }
+
+    }
+    
+    
     //Método que permite traer información de la base de datos mediante consultas SQL
     //Este metodo recibe el nombre de la tabla, campos de la misma y la condición de búsqueda en caso de que exista
     public function trae_datos($table,$campos,$condicion){
