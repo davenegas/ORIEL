@@ -1,6 +1,7 @@
 function ocultar_elemento(){
     document.getElementById('ventana_oculta_1').style.display = "none";
 }
+
 function evento_buscar_puntobcr(){
     id= document.getElementById('numero_punto').value;
     var datos = new Array;
@@ -14,6 +15,8 @@ function evento_buscar_puntobcr(){
         document.getElementById('ID_PuntoBCR').value=datos['ID_PuntoBCR'];
         document.getElementById('Hora_Apertura_Publico').value=datos['Hora_Apertura_Publico'];
         document.getElementById('Hora_Cierre_Publico').value=datos['Hora_Cierre_Publico'];
+        document.getElementById('Hora_Apertura_Agencia').value=datos['Hora_Apertura_Agencia'];
+        document.getElementById('Hora_Cierre_Agencia').value=datos['Hora_Cierre_Agencia'];
         buscar_pruebas_alarma(datos['ID_PuntoBCR']);
         
         if(document.getElementById('Hora_Apertura_Publico').value==""){
@@ -32,6 +35,7 @@ function evento_buscar_puntobcr(){
         });
     });
 }
+
 function borrar_datos(){
     document.getElementById('numero_punto').value="";
     document.getElementById('nombre_punto').value="";
@@ -42,6 +46,8 @@ function borrar_datos(){
     document.getElementById('ID_Persona_Reporta_Cierre').value="0";
     document.getElementById('Hora_Apertura_Publico').value=null;
     document.getElementById('Hora_Cierre_Publico').value=null;
+    document.getElementById('Hora_Apertura_Agencia').value=null;
+    document.getElementById('Hora_Cierre_Agencia').value=null;    
     document.getElementById("codigo_agencia").innerHTML="Código de agencia";
     document.getElementById("numero_punto").removeAttribute("style");
     document.getElementById("hora_apertura").removeAttribute("style");
@@ -50,6 +56,7 @@ function borrar_datos(){
     buscar_pruebas_alarma(0);
     $("#pruebas_anteriores").html("");
 }
+
 function listas_desplegables(){
     //Limpia la listas deplegables para cargar nuevamente la información
 
@@ -85,6 +92,7 @@ function listas_desplegables(){
     var seguimiento=seguimiento+'<option value="Alarma abierta 24 horas">Alarma abierta 24 horas</option>';
     $('#seguimiento').html(seguimiento);
 }
+
 function buscar_pruebas_alarma(id_puntobcr){
     $.post("index.php?ctl=buscar_prueba_alarma", { id_puntobcr: id_puntobcr}, function(data){
         //alert(data);
@@ -157,6 +165,7 @@ function buscar_pruebas_alarma(id_puntobcr){
         
     });
 }
+
 function buscar_persona_prueba(){
    document.getElementById('ventana_oculta_1').style.display = "block";
 
@@ -181,6 +190,7 @@ function guardar_registro_prueba(tipo){
         });
     }
 }
+
 function guardar_apertura(){
     if(document.getElementById('ID_PuntoBCR').value=="0" ){
         alert("Por favor seleccione una agencia para guardar la información");
@@ -254,6 +264,7 @@ function guardar_apertura(){
         }
     }
 }
+
 function guardar_prueba_alarma(){
     if(document.getElementById('empresa_persona').value=="" ){
         alert("Es necesaria registrar la persona que realiza reporte de prueba");
@@ -274,6 +285,7 @@ function guardar_prueba_alarma(){
         }
     }
 }
+
 function agregar_persona_cierre(id,cedula, nombre, depart, id_empresa){
     if(document.getElementById('ID_PuntoBCR').value=="0"){
         alert("Por favor seleccione una agencia para guardar la información");
@@ -299,6 +311,7 @@ function agregar_persona_cierre(id,cedula, nombre, depart, id_empresa){
         });
     }
 }
+
 function guarda_reporte_cuenta(){
     if(document.getElementById('ID_Persona_Reporta_Cierre').value=="0"){
         alert("Por favor seleccione la persona que reporta el cierre de alarma");
@@ -320,6 +333,7 @@ function guarda_reporte_cuenta(){
         });
     }
 }
+
 function guardar_cierre(){
    if(document.getElementById('ID_PuntoBCR').value=="0"){
         alert("Por favor seleccione una agencia para guardar la información");
@@ -391,6 +405,7 @@ function guardar_cierre(){
         }
     } 
 }
+
 function guardar_observaciones(){
     if(document.getElementById('ID_PuntoBCR').value=="0"){
         alert("Por favor seleccione una agencia para guardar la información");
@@ -409,6 +424,7 @@ function guardar_observaciones(){
         });
     }
 }
+
 function eliminar_registro_prueba(){
     $.confirm({title: 'Confirmación!', content: 'Realmente desea eliminar el reporte de prueba de alarma?', 
         confirm: function(){
@@ -428,6 +444,7 @@ function eliminar_registro_prueba(){
         }
     });
 }
+
 function guarda_seguimiento(){
     if(document.getElementById('ID_PuntoBCR').value=="0"){
         alert("Por favor seleccione una agencia para guardar la información");

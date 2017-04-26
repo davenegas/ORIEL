@@ -97,7 +97,9 @@
                     <input type="text" hidden id="ID_Prueba_Alarma" name="ID_Prueba_Alarma" value="0">
                     <input type="text" hidden id="ID_Persona_Reporta_Apertura" name="ID_Persona_Reporta_Apertura"  value="0">
                     <input type="text" hidden id="ID_Persona_Reporta_Cierre" name="ID_Persona_Reporta_Cierre"  value="0">
-                    <input type="text" hidden id="tipo_punto" name="tipo_punto" placeholder="">
+                    <input type="text" hidden id="tipo_punto" name="tipo_punto">
+                    <input type="time" hidden id="Hora_Apertura_Agencia" name="Hora_Apertura_Agencia">
+                    <input type="time" hidden id="Hora_Cierre_Agencia" name="Hora_Cierre_Agencia">
                     
                     <div class="col-sm-4 espacio-abajo-5">
                         <label for="numero_punto" id="codigo_agencia">Código de agencia</label>

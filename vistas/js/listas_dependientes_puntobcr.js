@@ -292,20 +292,22 @@ function editar_ip(ide, tipo, direc, obser){
 function mostrar_horario(){
     document.getElementById('ventana_oculta_5').style.display = "block";
 }
-function asignar_horario(id_hora){
+function asignar_horario(id_hora, tipo){
     id_horario = id_hora;
+    tipo_horario= tipo;
     id_puntobcr = document.getElementById('ID_PuntoBCR').value;
     document.getElementById('ventana_oculta_5').style.display = "none";
-    $.post("index.php?ctl=puntobcr_asignar_horario", { id_horario: id_horario, id_puntobcr:id_puntobcr}, function(data){
+    $.post("index.php?ctl=puntobcr_asignar_horario", { id_horario: id_horario, id_puntobcr:id_puntobcr, tipo_horario: tipo_horario}, function(data){
             //alert (data);
             location.reload();
           });
 }
-function eliminar_horario(){
+function eliminar_horario(tipo){
+    tipo_horario = tipo;
     $.confirm({title: 'Confirmación!', content: 'Desea eliminar el Horario del Punto?', 
         confirm: function(){
             id_puntobcr = document.getElementById('ID_PuntoBCR').value;
-            $.post("index.php?ctl=puntobcr_eliminar_horario", { id_puntobcr:id_puntobcr }, function(data){
+            $.post("index.php?ctl=puntobcr_eliminar_horario", { id_puntobcr:id_puntobcr, tipo_horario:tipo_horario}, function(data){
                 location.reload();
                 //alert (data);
               });
@@ -349,7 +351,7 @@ function eliminar_enlace(ide){
             id_puntobcr = document.getElementById('ID_PuntoBCR').value;
             $.post("index.php?ctl=puntobcr_eliminar_enlace", { id_enlace: id_enlace, id_puntobcr:id_puntobcr }, function(data){
                 location.reload();
-                alert (data);
+                //alert (data);
               });
         },
         cancel: function(){

@@ -90,6 +90,18 @@
                       <input type="text" class="form-control" id="observaciones" name="observaciones" value="<?php echo $params[0]['Observaciones'];?>">
                     </div>
                     <div class="form-group">
+                        <label for="sel1">Tipo de Horario</label>
+                        <select class="form-control" id="tipo_horario" name="tipo_horario">
+                            <?php if ($params[0]['Tipo_Horario']=="Público"){ ?>
+                                <option value="Público" selected="selected">Horario público</option>
+                                <option value="Oficina">Horario de oficina</option>  
+                            <?php }  else { ?>
+                                <option value="Público">Horario público</option>
+                                <option value="Oficina" selected="selected">Horario de oficina</option>
+                            <?php } ?>  
+                        </select>
+                    </div>
+                    <div class="form-group">
                         <label for="sel1">Estado</label>
                         <select class="form-control" id="estado" name="estado">
                             <?php if ($params[0]['Estado']==1){ ?>

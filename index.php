@@ -342,6 +342,7 @@ $map = array(
     'guardar_imagen_puntos_bcr'=>array('controller'=>'Controller','action'=> 'guardar_imagen_puntos_bcr'), 
     'eliminar_imagen_padron_puntobcr'=>array('controller'=>'Controller','action'=> 'eliminar_imagen_padron_puntobcr'), 
     'puntobcr_eliminar_horario'=>array('controller'=>'Controller','action'=> 'puntobcr_eliminar_horario'), 
+    'enlace_guardar'=>array('controller'=>'Controller','action'=> 'enlace_guardar'), 
    
     //Empresas
     'empresas_listar'=>array('controller'=>'Controller','action'=> 'empresas_listar'),
@@ -381,6 +382,9 @@ $map = array(
     'frm_importar_prontuario_paso_9'=>array('controller'=>'Controller','action'=> 'frm_importar_prontuario_paso_9'),
     'frm_importar_prontuario_paso_10'=>array('controller'=>'Controller','action'=> 'frm_importar_prontuario_paso_10'),
     'frm_importar_prontuario_paso_11'=>array('controller'=>'Controller','action'=> 'frm_importar_prontuario_paso_11'),
+ 
+    //Asistencia de Personal
+    'asistencia_personal'=>array('controller'=>'Controller','action'=> 'asistencia_personal'),
  
     //Controlador de Usuarios 
     'listar_usuarios'=> array('controller'=>'Controller','action'=>'listar_usuarios'),

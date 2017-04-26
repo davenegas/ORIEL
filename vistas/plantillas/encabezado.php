@@ -263,6 +263,10 @@
                             <?php if ($_SESSION['modulos']['Módulo-Pruebas alarma']==1){?>
                                 <li><a href="index.php?ctl=pruebas_alarma">Pruebas alarma</a></li> 
                             <?php }; ?>
+                               
+                            <?php if ($_SESSION['modulos']['Reportes-Trazabilidad']==1){?>
+                                <li><a href="index.php?ctl=asistencia_personal">Asistencia</a></li> 
+                            <?php }; ?>
                                 
                             <?php if ($_SESSION['modulos']['Módulo-Control de Video']==1){?>
                                 <li><a href="http://10.170.5.80/Operaciones_de_Seguridad/ctrlvideo/consulta.html">Controles de Video</a></li>
@@ -281,6 +285,14 @@
                         <span class="caret"></span></a>
                         <ul class="dropdown-menu">
                             <li><a href="index.php?ctl=manual_ayuda_privado&manual=Usuario_Inicial">Manual Usuario Inicial</a></li>
+                            
+                            <?php if ($_SESSION['modulos']['Módulo-Bitácora Digital']==1){ ?>
+                                <li><a href="index.php?ctl=manual_ayuda_privado&manual=Bitacora_Digital">Manual Bitácora Digital</a></li>
+                            <?php }; ?>    
+                                
+                            <?php if ($_SESSION['modulos']['Módulo-PuntosBCR']==1){ ?>
+                                <li><a href="index.php?ctl=manual_ayuda_privado&manual=Puntos_BCR">Manual Puntos BCR</a></li>
+                            <?php }; ?>
                                 
                             <?php if ($_SESSION['modulos']['Módulo-Personal Externo']==1){ ?>
                                 <li><a href="index.php?ctl=manual_ayuda_privado&manual=Personal_Externo">Manual Personal Externo</a></li>
@@ -290,13 +302,14 @@
                                 <li><a href="index.php?ctl=manual_ayuda_privado&manual=Cencon">Manual Cencon</a></li>
                             <?php }; ?>
                                 
+                            <?php if ($_SESSION['modulos']['Módulo-Puestos de Monitoreo']==1){ ?>
+                                <li><a href="index.php?ctl=manual_ayuda_privado&manual=Control_Video">Manual Control de Video</a></li>
+                            <?php }; ?>  
+                                
                             <?php if ($_SESSION['modulos']['Módulo-Pruebas alarma']==1){ ?>
                                 <li><a href="index.php?ctl=manual_ayuda_privado&manual=Prueba_Alarma">Manual Pruebas Alarma</a></li>
                             <?php }; ?>
-                                
-                            <?php if ($_SESSION['modulos']['Módulo-Bitácora Digital']==1){ ?>
-                                <li><a href="index.php?ctl=manual_ayuda_privado&manual=Bitacora_Digital">Manual Bitácora Digital</a></li>
-                            <?php }; ?>    
+                                 
                         </ul>
                     </li>
                 <?php }; ?>       

@@ -32,6 +32,15 @@
                     <embed src="vistas/Manuales/ORIEL_MANUAL_USUARIO_PRUEBA_ALARMA.pdf" width="1000" height="600"> 
                     <?php
                     break;
+                case "Puntos_BCR":?>
+                    <embed src="vistas/Manuales/ORIEL_MANUAL_USUARIO_PUNTOS_BCR.pdf" width="1000" height="600"> 
+                    <?php
+                    break;
+                case "Control_Video":?>
+                    <embed src="vistas/Manuales/ORIEL_MANUAL_USUARIO_CONTROL_VIDEO.pdf" width="1000" height="600"> 
+                    <?php
+                    break;
+                
             }?>
         </section>
         <?php require_once 'pie_de_pagina.php' ?>
