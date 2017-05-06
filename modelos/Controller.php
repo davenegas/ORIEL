@@ -9633,16 +9633,23 @@
                                 $verifica_si_hay_para_reacomodar=-1;
                                 
                              }
-                             
-                            
-                             //Ingresa próxima revision de video en bitacora de revisiones de video.
+                                                             
+                              //Ingresa próxima revision de video en bitacora de revisiones de video.
                              $obj_puesto_monitoreo->setId_ultimo_toma_puesto_ingresada($_POST['id_control_puesto']);
                              $obj_puesto_monitoreo->setFecha_inicia_revision(date("Y-m-d"));
                              $obj_puesto_monitoreo->setHora_inicia_revision(date("H:i:s", time()));
                              $obj_puesto_monitoreo->setId_usuario($_SESSION['id']);
                              $obj_puesto_monitoreo->setObservaciones("");
                              $obj_puesto_monitoreo->setEstado(0);
-                             $obj_puesto_monitoreo->agregar_nuevo_registro_bitacora_revisiones_de_video();
+                             
+                             $obj_puesto_monitoreo->setCondicion("ID_Puesto_Monitoreo=".$_POST['id_puesto']. " AND Estado=0");
+                             $obj_puesto_monitoreo->obtiene_revisiones_de_video();
+                             if ((count($obj_puesto_monitoreo->getArreglo())>0) && (!isset($_SESSION['vector_temp_revision_video']))){
+                               $obj_puesto_monitoreo->edita_usuario_y_tiempo_de_inicio_en_revision_de_video();
+                             }else{                                                     
+                                 $obj_puesto_monitoreo->agregar_nuevo_registro_bitacora_revisiones_de_video();
+                             }
+                                  
                           }
                     }
                     echo $resultado;
@@ -9750,6 +9757,7 @@
                                                 
                                             }
                                         } 
+                                                                             
                                         //Ingresa nuevo registro de bitacora en la tabla de revisiones de video.
                                         $obj_puesto_monitoreo->setFecha_inicia_revision(date("Y-m-d"));
                                         $obj_puesto_monitoreo->setHora_inicia_revision(date("H:i:s", time()));
