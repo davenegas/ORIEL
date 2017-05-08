@@ -5437,6 +5437,11 @@
                     }
                 }
                 break;
+            case "Asistencia":
+                if(date("H:i:s", $time)>='21:00:00' && date("H:i:s", $time)<='22:00:00'){
+                    $ruta=  $raiz."Cuenta_Visitas_Oriel/Ejecucion_Procesos/".date("Ymd", $time)." Incosistencia_Pruebas.txt";
+                }
+                break;
                     
          }
         //Establece la ruta del archivo txt que lleva el control de visitas  a la pagina
@@ -10798,14 +10803,20 @@
                 case 'Monday':
                     $puntobcr[0] = array_merge((['Hora_Apertura_Publico' =>($puntobcr[0]['Hora_Apertura_Lunes'])]),$puntobcr[0]);
                     $puntobcr[0] = array_merge((['Hora_Cierre_Publico' =>($puntobcr[0]['Hora_Cierre_Lunes'])]),$puntobcr[0]);
+                    $puntobcr[0] = array_merge((['Hora_Apertura_Agencia' =>($horariopunto[0]['Hora_Apertura_Lunes'])]),$puntobcr[0]);
+                    $puntobcr[0] = array_merge((['Hora_Cierre_Agencia' =>($horariopunto[0]['Hora_Cierre_Lunes'])]),$puntobcr[0]);
                     break;
                 case 'Tuesday':
                     $puntobcr[0] = array_merge((['Hora_Apertura_Publico' =>($puntobcr[0]['Hora_Apertura_Martes'])]),$puntobcr[0]);
                     $puntobcr[0] = array_merge((['Hora_Cierre_Publico' =>($puntobcr[0]['Hora_Cierre_Martes'])]),$puntobcr[0]);
+                    $puntobcr[0] = array_merge((['Hora_Apertura_Agencia' =>($horariopunto[0]['Hora_Apertura_Martes'])]),$puntobcr[0]);
+                    $puntobcr[0] = array_merge((['Hora_Cierre_Agencia' =>($horariopunto[0]['Hora_Cierre_Martes'])]),$puntobcr[0]);
                     break;
                 case 'Wednesday':
                     $puntobcr[0] = array_merge((['Hora_Apertura_Publico' =>($puntobcr[0]['Hora_Apertura_Miercoles'])]),$puntobcr[0]);
                     $puntobcr[0] = array_merge((['Hora_Cierre_Publico' =>($puntobcr[0]['Hora_Cierre_Miercoles'])]),$puntobcr[0]);
+                    $puntobcr[0] = array_merge((['Hora_Apertura_Agencia' =>($horariopunto[0]['Hora_Apertura_Miercoles'])]),$puntobcr[0]);
+                    $puntobcr[0] = array_merge((['Hora_Cierre_Agencia' =>($horariopunto[0]['Hora_Cierre_Miercoles'])]),$puntobcr[0]);
                     break;
                 case 'Thursday':
                     $puntobcr[0] = array_merge((['Hora_Apertura_Publico' =>($puntobcr[0]['Hora_Apertura_Jueves'])]),$puntobcr[0]);
@@ -10816,14 +10827,20 @@
                 case 'Friday':
                     $puntobcr[0] = array_merge((['Hora_Apertura_Publico' =>($puntobcr[0]['Hora_Apertura_Viernes'])]),$puntobcr[0]);
                     $puntobcr[0] = array_merge((['Hora_Cierre_Publico' =>($puntobcr[0]['Hora_Cierre_Viernes'])]),$puntobcr[0]);
+                    $puntobcr[0] = array_merge((['Hora_Apertura_Agencia' =>($horariopunto[0]['Hora_Apertura_Viernes'])]),$puntobcr[0]);
+                    $puntobcr[0] = array_merge((['Hora_Cierre_Agencia' =>($horariopunto[0]['Hora_Cierre_Viernes'])]),$puntobcr[0]);
                     break;
                 case 'Saturday':
                     $puntobcr[0] = array_merge((['Hora_Apertura_Publico' =>($puntobcr[0]['Hora_Apertura_Sabado'])]),$puntobcr[0]);
                     $puntobcr[0] = array_merge((['Hora_Cierre_Publico' =>($puntobcr[0]['Hora_Cierre_Sabado'])]),$puntobcr[0]);
+                    $puntobcr[0] = array_merge((['Hora_Apertura_Agencia' =>($horariopunto[0]['Hora_Apertura_Sabado'])]),$puntobcr[0]);
+                    $puntobcr[0] = array_merge((['Hora_Cierre_Agencia' =>($horariopunto[0]['Hora_Cierre_Sabado'])]),$puntobcr[0]);
                     break;
                 case 'Sunday':
                     $puntobcr[0] = array_merge((['Hora_Apertura_Publico' =>($puntobcr[0]['Hora_Apertura_Domingo'])]),$puntobcr[0]);
                     $puntobcr[0] = array_merge((['Hora_Cierre_Publico' =>($puntobcr[0]['Hora_Cierre_Domingo'])]),$puntobcr[0]);
+                    $puntobcr[0] = array_merge((['Hora_Apertura_Agencia' =>($horariopunto[0]['Hora_Apertura_Domingo'])]),$puntobcr[0]);
+                    $puntobcr[0] = array_merge((['Hora_Cierre_Agencia' =>($horariopunto[0]['Hora_Cierre_Domingo'])]),$puntobcr[0]);
                     break;
             }
             //Convierte la información en un json para enviarlo a JavaScript
@@ -11176,7 +11193,7 @@
         }
     }
     
-    /*
+        /*
     //Función para verificar horarios de oficina, validar ingresos, cierres y pruebas
     //Recibe los siguientes parametros: 
     //  -Hora apertura (según el día de la semana)
@@ -11241,7 +11258,548 @@
         return $datos;
     }
     
+    
+    ////////////////////////////////////////////////////////////////////////////
+    //////////////////////Funciones para módulo asistencia//////////////////////  
+    ////////////////////////////////////////////////////////////////////////////
     public function asistencia_personal(){
-        require __DIR__ . '/../vistas/plantillas/frm_asistencia_personal.php';
+        if(isset($_SESSION['nombre'])){
+            $obj_marca = new cls_marca_usuario();
+            $obj_horario = new cls_horario_usuario();
+            
+            //Obtiene información de marca de turno que se encuentren 15 horas atras
+            $fecha = date('Y-m-j H:i:s');
+            $nuevafecha = strtotime('-14 hour',strtotime($fecha));
+            $nuevafecha = date('Y-m-j H:i:s', $nuevafecha);
+            
+            $obj_marca->setCondicion("T_Marca.ID_Usuario=".$_SESSION['id']." AND T_Marca.Tipo_Marca='Turno' AND T_Marca.Marca_Entrada>'".$nuevafecha."'");
+            $obj_marca->obtener_marcas();
+            $marca_turno = $obj_marca->getArreglo();
+            
+            //Obtine información de marcas de descansos del dia (8 horas)
+            $fecha = date('Y-m-j H:i:s');
+            $nuevafecha = strtotime('-8 hour',strtotime($fecha));
+            $nuevafecha = date('Y-m-j H:i:s', $nuevafecha);
+            
+            $obj_marca->setCondicion("T_Marca.ID_Usuario=".$_SESSION['id']." AND T_Marca.Tipo_Marca='Descanso' AND T_Marca.Marca_Entrada>'".$nuevafecha."'");
+            $obj_marca->obtener_marcas();
+            $marca_descanso = $obj_marca->getArreglo();
+             
+            $fecha_actual= getdate();
+            
+            //Obtiene la información de los descansos del operador.
+            $obj_marca->setCondicion("T_AjusteDescanso.ID_Usuario=".$_SESSION['id']);
+            $obj_marca->obtener_descansos();
+            $info_descansos = $obj_marca->getArreglo();
+            
+            //Obtiene el o los horarios asignador al usuario
+            $fecha_actual= date("Y-m-d");
+            $obj_horario->setCondicion("T_HorarioUsuario.ID_Usuario=".$_SESSION['id']." AND (T_HorarioUsuario.Fecha_Inicio<='".$fecha_actual."' AND T_HorarioUsuario.Fecha_Final>='".$fecha_actual."') AND T_HorarioUsuario.Estado=1");
+            $obj_horario->obtener_horarios();
+            $horario_usuario = $obj_horario->getArreglo();
+            
+            $tam=count($horario_usuario);
+            for($i=0;$i<$tam;$i++){
+                if($horario_usuario[$i]['Tipo_Horario']=='Vacaciones'){
+                    $id_horario= $i;
+                    break;
+                } if ($horario_usuario[$i]['Tipo_Horario']=='Incapacidad'){
+                    $id_horario= $i;
+                    break;
+                }if($horario_usuario[$i]['Tipo_Horario']=='Normal'){
+                    $id_horario= $i;
+                }
+            }
+            $fecha_actual= getdate();
+            $horario_turno[0]= "";
+            if(isset($id_horario)){
+                switch ($fecha_actual['weekday']) {
+                    case 'Monday':
+                        $horario_turno[0] = array_merge((['Hora_Entrada' =>($horario_usuario[$id_horario]['Hora_Entrada_Lunes'])]));
+                        $horario_turno[0] = array_merge((['Hora_Salida' =>($horario_usuario[$id_horario]['Hora_Salida_Lunes'])]),$horario_turno[0]);
+                        $horario_turno[0] = array_merge((['Tipo_Horario' =>($horario_usuario[$id_horario]['Tipo_Horario'])]),$horario_turno[0]);
+                        break;
+                    case 'Tuesday':
+                        $horario_turno[0] = array_merge((['Hora_Entrada' =>($horario_usuario[$id_horario]['Hora_Entrada_Martes'])]));
+                        $horario_turno[0] = array_merge((['Hora_Salida' =>($horario_usuario[$id_horario]['Hora_Salida_Martes'])]),$horario_turno[0]);
+                        $horario_turno[0] = array_merge((['Tipo_Horario' =>($horario_usuario[$id_horario]['Tipo_Horario'])]),$horario_turno[0]);
+                        break;
+                    case 'Wednesday':
+                        $horario_turno[0] = array_merge((['Hora_Entrada' =>($horario_usuario[$id_horario]['Hora_Entrada_Miercoles'])]));
+                        $horario_turno[0] = array_merge((['Hora_Salida' =>($horario_usuario[$id_horario]['Hora_Salida_Miercoles'])]),$horario_turno[0]);
+                        $horario_turno[0] = array_merge((['Tipo_Horario' =>($horario_usuario[$id_horario]['Tipo_Horario'])]),$horario_turno[0]);
+                        break;
+                    case 'Thursday':
+                        $horario_turno[0] = array_merge((['Hora_Entrada' =>($horario_usuario[$id_horario]['Hora_Entrada_Jueves'])]));
+                        $horario_turno[0] = array_merge((['Hora_Salida' =>($horario_usuario[$id_horario]['Hora_Salida_Jueves'])]),$horario_turno[0]);
+                        $horario_turno[0] = array_merge((['Tipo_Horario' =>($horario_usuario[$id_horario]['Tipo_Horario'])]),$horario_turno[0]);
+                        break;
+                    case 'Friday':
+                        $horario_turno[0] = array_merge((['Hora_Entrada' =>($horario_usuario[$id_horario]['Hora_Entrada_Viernes'])]));
+                        $horario_turno[0] = array_merge((['Hora_Salida' =>($horario_usuario[$id_horario]['Hora_Salida_Viernes'])]),$horario_turno[0]);
+                        $horario_turno[0] = array_merge((['Tipo_Horario' =>($horario_usuario[$id_horario]['Tipo_Horario'])]),$horario_turno[0]);
+                        break;
+                    case 'Saturday':
+                        $horario_turno[0] = array_merge((['Hora_Entrada' =>($horario_usuario[$id_horario]['Hora_Entrada_Sabado'])]));
+                        $horario_turno[0] = array_merge((['Hora_Salida' =>($horario_usuario[$id_horario]['Hora_Salida_Sabado'])]),$horario_turno[0]);
+                        $horario_turno[0] = array_merge((['Tipo_Horario' =>($horario_usuario[$id_horario]['Tipo_Horario'])]),$horario_turno[0]);
+                        break;
+                    case 'Sunday':
+                        $horario_turno[0] = array_merge((['Hora_Entrada' =>($horario_usuario[$id_horario]['Hora_Entrada_Domingo'])]));
+                        $horario_turno[0] = array_merge((['Hora_Salida' =>($horario_usuario[$id_horario]['Hora_Salida_Domingo'])]),$horario_turno[0]);
+                        $horario_turno[0] = array_merge((['Tipo_Horario' =>($horario_usuario[$id_horario]['Tipo_Horario'])]),$horario_turno[0]);
+                        break;
+                }
+            } else {
+                $horario_turno[0] = array_merge((['Hora_Entrada' =>("NA")]));
+                $horario_turno[0] = array_merge((['Hora_Salida' =>("NA")]),$horario_turno[0]);
+                $horario_turno[0] = array_merge((['Tipo_Horario' =>("NA")]),$horario_turno[0]);
+            }
+            
+//            echo "<pre>";
+//            echo "Marcas del turno: \n";
+//            print_r($marca_turno);
+//            echo "Marcas de descanso: \n";
+//            print_r($marca_descanso);
+//            echo "Cantidad de descansos: \n";
+//            print_r($info_descansos);
+//            echo "Horario de usuario: \n";
+//            print_r($horario_turno);
+//            echo "</pre>";
+            require __DIR__ . '/../vistas/plantillas/frm_asistencia_personal.php';
+        }else {
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }
+    }
+    
+    public function marca_guardar(){
+        if(isset($_SESSION['nombre'])){
+            $obj_marca = new cls_marca_usuario();
+            
+            $fecha_actual= getdate();
+            //Convierta la fecha a formto aaaa/mm/dd hh:mm
+            $fecha_actual= $fecha_actual['year']."-".$fecha_actual['mon']."-".$fecha_actual['mday'].' '.$fecha_actual['hours'].':'.$fecha_actual['minutes'].':'.$fecha_actual['seconds'];
+            
+            switch ($_POST['tipo']) {
+                case 'Entrada_Turno':
+                    $obj_marca->setUsuario($_SESSION['id']);
+                    $obj_marca->setEntrada($fecha_actual);
+                    $obj_marca->setTipo("Turno");
+                    $obj_marca->setEstado("0");
+                    $obj_marca->guardar_marca_entrada();
+                    $id_marca = $obj_marca->getArreglo();
+                    echo $id_marca[0]['ID_Marca'];
+                    break;
+                case 'Salida_Turno':
+                    $obj_marca->setId($_POST['id_marca']);
+                    $obj_marca->setSalida($fecha_actual);
+                    $obj_marca->setTipo("Turno");
+                    $obj_marca->setEstado("1");
+                    $obj_marca->guardar_marca_salida();
+                    break;
+                case 'Inicio_Descanso':
+                    $obj_marca->setUsuario($_SESSION['id']);
+                    $obj_marca->setEntrada($fecha_actual);
+                    $obj_marca->setTipo("Descanso");
+                    $obj_marca->setEstado("0");
+                    $obj_marca->guardar_marca_entrada();
+                    $id_marca = $obj_marca->getArreglo();
+                    echo $id_marca[0]['ID_Marca'];
+                    break;
+                case 'Fin_Descanso':
+                    $obj_marca->setId($_POST['id_marca']);
+                    $obj_marca->setSalida($fecha_actual);
+                    $obj_marca->setTipo("Descanso");
+                    $obj_marca->setEstado("1");
+                    $obj_marca->guardar_marca_salida();
+                    break;
+            }
+            
+        }else {
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }
+    }
+    
+    public function asistencia_configuracion_usuarios(){
+        if(isset($_SESSION['nombre'])){
+            $obj_marca = new cls_marca_usuario();
+            $obj_usuario = new cls_usuarios();
+            
+            $obj_usuario->setCondicion("(T_Usuario.ID_Rol= 2 OR T_Usuario.ID_Rol= 3 OR T_Usuario.ID_Rol= 6 OR T_Usuario.ID_Rol= 5 OR T_Usuario.ID_Rol= 14) AND T_Usuario.Estado=1");
+            $obj_usuario->obtiene_todos_los_usuarios();
+            $usuarios= $obj_usuario->getArreglo();
+            
+//            echo "<pre>";
+////            print_r($usuarios);
+//            echo "</pre>";
+            require __DIR__ . '/../vistas/plantillas/frm_asistencia_configuracion_usuarios.php';
+            
+        }else {
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }
+    }
+    
+    public function asistencia_buscar_descanso(){
+        if(isset($_SESSION['nombre'])){
+            $obj_marca = new cls_marca_usuario();
+            $obj_usuario = new cls_usuarios();
+            
+            $obj_marca->setCondicion("T_AjusteDescanso.ID_Usuario=".$_POST['id']);
+            $obj_marca->obtener_descansos();
+            $descansos= $obj_marca->getArreglo();
+            
+            $tam = count($descansos);
+            $html="";
+            $html.='<thead> <tr>
+                            <th style="text-align:center">Tiempo</th>
+                            <th style="text-align:center">Detalle</th>
+                            <th style="text-align:center" colspan="2">Opciones</th>
+                       <tr> </thead>
+                        <tbody>';
+            for($i=0; $i<$tam;$i++){
+                $html .='<tr>'; 
+                $html .='<td style="text-align:center">'.$descansos[$i]['Tiempo'].'</td>';
+                $html .='<td style="text-align:center">'.$descansos[$i]['Detalle'].'</td>';
+                $html .='<td style="text-align:center"><a onclick="editar_descanso('.$descansos[$i]['ID_Ajuste_Descanso'].',&#39;'.$descansos[$i]['Tiempo'].'&#39;,&#39;'.$descansos[$i]['Detalle'].'&#39;);">Editar</a></td></td>';
+                $html .='<td style="text-align:center"><a onclick="eliminar_descanso('.$descansos[$i]['ID_Ajuste_Descanso'].');">Eliminar</a></td></td>';
+                $html .='</tr>'; 
+            }  
+            $html.='</tbody> 
+                    </table>';
+            echo $html;
+        }else {
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }
+    }
+    
+    public function asistencia_buscar_horarios(){
+        if(isset($_SESSION['nombre'])){
+            $obj_horario = new cls_horario_usuario();
+            $obj_usuario = new cls_usuarios();
+            
+            $obj_horario->setCondicion("T_HorarioUsuario.ID_Usuario=".$_POST['id']);
+            $obj_horario->obtener_horarios();
+            $horarios= $obj_horario->getArreglo();
+            
+            $tam = count($horarios);
+            $html="";
+            $html.='<thead> 
+                        <tr>
+                            <th style="text-align:center">Fecha Inicio</th>
+                            <th style="text-align:center">Fecha Fin</th>
+                            <th style="text-align:center">Domingo</th>
+                            <th style="text-align:center">Lunes</th>
+                            <th style="text-align:center">Martes</th>
+                            <th style="text-align:center">Miércoles</th>
+                            <th style="text-align:center">Jueves</th>
+                            <th style="text-align:center">Viernes</th>
+                            <th style="text-align:center">Sábado</th>
+                            <th style="text-align:center">Tipo</th>
+                            <th style="text-align:center">Observaciones</th>
+                       <tr> </thead>
+                        <tbody>';
+            for($i=0; $i<$tam;$i++){
+                $html .='<tr>'; 
+                $html .='<td style="text-align:center">'.$horarios[$i]['Fecha_Inicio'].'</td>';
+                $html .='<td style="text-align:center">'.$horarios[$i]['Fecha_Final'].'</td>';
+                $html .='<td style="text-align:center">'.$horarios[$i]['Hora_Entrada_Domingo'].' - '.$horarios[$i]['Hora_Salida_Domingo'].'</td>';
+                $html .='<td style="text-align:center">'.$horarios[$i]['Hora_Entrada_Lunes'].' - '.$horarios[$i]['Hora_Salida_Lunes'].'</td>';
+                $html .='<td style="text-align:center">'.$horarios[$i]['Hora_Entrada_Martes'].' - '.$horarios[$i]['Hora_Salida_Martes'].'</td>';
+                $html .='<td style="text-align:center">'.$horarios[$i]['Hora_Entrada_Miercoles'].' - '.$horarios[$i]['Hora_Salida_Miercoles'].'</td>';
+                $html .='<td style="text-align:center">'.$horarios[$i]['Hora_Entrada_Jueves'].' - '.$horarios[$i]['Hora_Salida_Jueves'].'</td>';
+                $html .='<td style="text-align:center">'.$horarios[$i]['Hora_Entrada_Viernes'].' - '.$horarios[$i]['Hora_Salida_Viernes'].'</td>';
+                $html .='<td style="text-align:center">'.$horarios[$i]['Hora_Entrada_Sabado'].' - '.$horarios[$i]['Hora_Salida_Sabado'].'</td>';
+                $html .='<td style="text-align:center">'.$horarios[$i]['Tipo_Horario'].'</td>';
+                $html .='<td style="text-align:center">'.$horarios[$i]['Observaciones'].'</td>';
+                $html .='</tr>'; 
+            }  
+            $html.='</tbody> 
+                    </table>';
+            echo $html;
+        }else {
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }
+    }
+    
+    public function asistencia_ajutes_descanso_usuario(){
+        if(isset($_SESSION['nombre'])){
+            $obj_marca = new cls_marca_usuario();
+            
+            $obj_marca->setUsuario($_POST['ID_Usuario_Descanso']);
+            $obj_marca->setTiempo($_POST['tiempo_descanso']);
+            $obj_marca->setDetalle($_POST['detalle_descanso']);
+            $obj_marca->setEstado("1");
+            
+            
+            if($_POST['ID_Ajuste_Descanso']=="0"){
+                $obj_marca->setCondicion("");
+               $obj_marca->guardar_ajuste_descanso_usuario();
+            } else {
+                $obj_marca->setCondicion("ID_Ajuste_Descanso=".$_POST['ID_Ajuste_Descanso']);
+                $obj_marca->guardar_ajuste_descanso_usuario();
+            }
+        }else {
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }
+    }
+    
+    public function asistencia_eliminar_descanso(){
+        if(isset($_SESSION['nombre'])){
+            $obj_marca = new cls_marca_usuario();
+            
+            $obj_marca->setCondicion("ID_Ajuste_Descanso='".$_POST['ID_Ajuste_Descanso']."' AND ID_Usuario='".$_POST['id']."'");
+            $obj_marca->eliminar_descanso_usuario();
+            
+        }else {
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }
+    }
+    
+    public function asistencia_guardar_horario_usuario(){
+         if(isset($_SESSION['nombre'])){
+            $obj_horario = new cls_horario_usuario();
+            
+            $obj_horario->setId($_POST['ID_Usuario']); 
+            //Valida informacion enviada por el formulario
+            //cuando la hora es 00:00 se agregará null
+            
+            //Valida Hora de entrada domingo
+            if($_POST['entrada_domingo']=="00:00:00" || $_POST['entrada_domingo']=="00:00"){
+                $obj_horario->setHora_entrada_domingo(null);
+            }else {
+                $obj_horario->setHora_entrada_domingo($_POST['entrada_domingo']);
+            }
+            //valida hora de cierre domingo
+            if($_POST['salida_domingo']=="00:00:00"|| $_POST['salida_domingo']=="00:00"){
+                $obj_horario->setHora_salida_domingo(null);
+            }else {
+                $obj_horario->setHora_salida_domingo($_POST['salida_domingo']);
+            }
+            //valida hora de entrada lunes
+            if($_POST['entrada_lunes']=="00:00:00"|| $_POST['entrada_lunes']=="00:00"){
+                $obj_horario->setHora_entrada_lunes(null);
+            }else {
+                $obj_horario->setHora_entrada_lunes($_POST['entrada_lunes']);
+            }
+            //valida hora de cierre lunes
+            if($_POST['salida_lunes']=="00:00:00"|| $_POST['salida_lunes']=="00:00"){
+                $obj_horario->setHora_salida_lunes(null);
+            }else {
+                $obj_horario->setHora_salida_lunes($_POST['salida_lunes']);
+            }
+            //valida hora de entrada de martes
+            if($_POST['entrada_martes']=="00:00:00"|| $_POST['entrada_martes']=="00:00"){
+                $obj_horario->setHora_entrada_martes(null);
+            }else {
+                $obj_horario->setHora_entrada_martes($_POST['entrada_martes']);
+            }
+            //Valida hora de cierre de martes
+            if($_POST['salida_martes']=="00:00:00"|| $_POST['salida_martes']=="00:00"){
+                $obj_horario->setHora_salida_martes(null);
+            }else {
+                $obj_horario->setHora_salida_martes($_POST['salida_martes']);
+            }
+            //valida hora de entrada de miercoles
+            if($_POST['entrada_miercoles']=="00:00:00"|| $_POST['entrada_miercoles']=="00:00"){
+                $obj_horario->setHora_entrada_miercoles(null);
+            }else {
+                $obj_horario->setHora_entrada_miercoles($_POST['entrada_miercoles']);
+            }
+            //Valida hora de cierre de miercoles
+            if($_POST['salida_miercoles']=="00:00:00"|| $_POST['salida_miercoles']=="00:00"){
+                $obj_horario->setHora_salida_miercoles(null);
+            }else {
+                $obj_horario->setHora_salida_miercoles($_POST['salida_miercoles']);
+            }
+            //Valida hora de entrada de jueves
+            if($_POST['entrada_jueves']=="00:00:00"|| $_POST['entrada_jueves']=="00:00"){
+                $obj_horario->setHora_entrada_jueves(null);
+            }else {
+                $obj_horario->setHora_entrada_jueves($_POST['entrada_jueves']);
+            }
+            //Valida hora de cierre de jueves
+            if($_POST['salida_jueves']=="00:00:00"|| $_POST['salida_jueves']=="00:00"){
+                $obj_horario->setHora_salida_jueves(null);
+            }else {
+                $obj_horario->setHora_salida_jueves($_POST['salida_jueves']);
+            }
+            //Valida hora de entrada de viernes
+            if($_POST['entrada_viernes']=="00:00:00"|| $_POST['entrada_viernes']=="00:00"){
+                $obj_horario->setHora_entrada_viernes(null);
+            }else {
+                $obj_horario->setHora_entrada_viernes($_POST['entrada_viernes']);
+            }
+            //Valida hora cierre de viernes
+            if($_POST['salida_viernes']=="00:00:00"|| $_POST['salida_viernes']=="00:00"){
+                $obj_horario->setHora_salida_viernes(null);
+            }else {
+                $obj_horario->setHora_salida_viernes($_POST['salida_viernes']);
+            }
+            //Valida hora de entrada de sabado
+            if($_POST['entrada_sabado']=="00:00:00"|| $_POST['entrada_sabado']=="00:00"){
+                $obj_horario->setHora_entrada_sabado(null);
+            }else {
+                $obj_horario->setHora_entrada_sabado($_POST['entrada_sabado']);
+            }
+            //valida de cierre de sabado
+            if($_POST['salida_sabado']=="00:00:00"|| $_POST['salida_sabado']=="00:00"){
+                $obj_horario->setHora_salida_sabado(null);
+            }else {
+                $obj_horario->setHora_salida_sabado($_POST['salida_sabado']);
+            }
+            
+            $obj_horario->setFecha_inicio($_POST['fecha_inicio_horario']);
+            $obj_horario->setFecha_final($_POST['fecha_fin_horario']);
+            $obj_horario->setTipo_horario($_POST['tipo_horario']);
+            $obj_horario->setEstado("1");
+            $obj_horario->agregar_horario();
+            
+            header ("location:/ORIEL/index.php?ctl=asistencia_configuracion_usuarios");
+        }else {
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }
+    }
+    
+    public function asistencia_lista_marcas(){
+        if(isset($_SESSION['nombre'])){
+            $obj_marcas = new cls_marca_usuario();
+            
+            //Según la fecha enviada o por defecto, define la condición de busqueda de marcas
+            if(isset($_POST['fecha_inicial'])){
+                $fecha_inicio = $_POST['fecha_inicial']." 00:00:00";
+                $fecha_fin= $_POST['fecha_final']." 23:59:59";
+                if($_SESSION['modulos']['Módulo-Asistencia encargado empresa']==1 || $_SESSION['modulos']['Módulo-Asistencia encargado Banco']==1){
+                    $obj_marcas->setCondicion("(T_Marca.Marca_Entrada between '".$fecha_inicio."' AND '".$fecha_fin."')");
+                } else{
+                    $obj_marcas->setCondicion("(T_Marca.Marca_Entrada between '".$fecha_inicio."' AND '".$fecha_fin."') AND T_Marca.ID_Usuario='".$_SESSION['id']."'");
+                }
+            } else{
+                $fecha_inicio = date("Y-m-d 00:00:00");
+                $fecha_fin= date("Y-m-d 23:59:59");
+                if($_SESSION['modulos']['Módulo-Asistencia encargado empresa']==1 || $_SESSION['modulos']['Módulo-Asistencia encargado Banco']==1){
+                    $obj_marcas->setCondicion("(T_Marca.Marca_Entrada between '".$fecha_inicio."' AND '".$fecha_fin."')");
+                } else{
+                    $obj_marcas->setCondicion("(T_Marca.Marca_Entrada between '".$fecha_inicio."' AND '".$fecha_fin."') AND T_Marca.ID_Usuario='".$_SESSION['id']."'");
+                }
+            }
+            
+            $obj_marcas->obtener_marcas();
+            $marcas = $obj_marcas->getArreglo();
+            
+            //Según la fecha enviada o por defecto, define la condición de busqueda de incosistencias
+            if(isset($_POST['fecha_inicial'])){
+                $fecha_inicio = $_POST['fecha_inicial'];
+                $fecha_fin= $_POST['fecha_final'];
+                if($_SESSION['modulos']['Módulo-Asistencia encargado empresa']==1 || $_SESSION['modulos']['Módulo-Asistencia encargado Banco']==1){
+                    $obj_marcas->setCondicion("(T_InconsistenciaMarca.Fecha_Inconsistencia between '".$fecha_inicio." 00:00:00' AND '".$fecha_fin." 23:59:59')");
+                } else{
+                    $obj_marcas->setCondicion("(T_InconsistenciaMarca.Fecha_Inconsistencia between '".$fecha_inicio." 00:00:00' AND '".$fecha_fin." 23:59:59') AND T_InconsistenciaMarca.ID_Usuario='".$_SESSION['id']."'");
+                }
+            } else{
+                $fecha_inicio = date("Y-m-d");
+                $fecha_fin= date("Y-m-d");
+                if($_SESSION['modulos']['Módulo-Asistencia encargado empresa']==1 || $_SESSION['modulos']['Módulo-Asistencia encargado Banco']==1){
+                    $obj_marcas->setCondicion("(T_InconsistenciaMarca.Fecha_Inconsistencia between '".$fecha_inicio." 00:00:00' AND '".$fecha_fin." 23:59:59')");
+                } else{
+                    $obj_marcas->setCondicion("(T_InconsistenciaMarca.Fecha_Inconsistencia between '".$fecha_inicio." 00:00:00' AND '".$fecha_fin." 23:59:59') AND T_InconsistenciaMarca.ID_Usuario='".$_SESSION['id']."'");
+                }
+            }
+            
+            $obj_marcas->obtener_inconsistencias_marcas();
+            $inconsistencias = $obj_marcas->getArreglo();
+            
+            $tam=count($inconsistencias);
+            for($i=0;$i<$tam;$i++){
+                $obj_marcas->setCondicion("T_Marca.ID_Marca=".$inconsistencias[$i]['ID_Marca']);
+                $obj_marcas->obtener_marcas();
+                $marca_temporal = $obj_marcas->getArreglo();
+                $inconsistencias[$i] = array_merge(
+                        (['Marca_Entrada' =>($marca_temporal[0]['Marca_Entrada'])]),
+                        (['Marca_Salida' =>($marca_temporal[0]['Marca_Salida'])]),
+                        (['Tipo_Marca' =>($marca_temporal[0]['Tipo_Marca'])]),
+                        $inconsistencias[$i]);
+            }
+//            echo "<pre>";
+//            print_r($inconsistencias);
+//            echo "</pre>";
+            require __DIR__ . '/../vistas/plantillas/frm_asistencia_lista_marcas.php';
+        }else {
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }
+    }
+    
+    public function asistencia_generar_inconsistencia(){
+        if(isset($_SESSION['nombre'])){
+            $obj_marca = new cls_marca_usuario();
+            $obj_usuario = new cls_usuarios();
+            
+            $fecha_actual= getdate();
+            //Convierta la fecha a formto aaaa/mm/dd hh:mm
+            $fecha_actual= $fecha_actual['year']."-".$fecha_actual['mon']."-".$fecha_actual['mday'].' '.$fecha_actual['hours'].':'.$fecha_actual['minutes'].':'.$fecha_actual['seconds'];
+            
+            $obj_marca->setUsuario($_SESSION['id']);
+            $obj_marca->setId($_POST['id_marca']);
+            $obj_marca->setEntrada($fecha_actual);
+            $obj_marca->setTipo($_POST['tipo_inconsistencia']);
+            $obj_marca->setEstado("1");
+            $obj_marca->guardar_inconsistencia();
+            
+        }else {
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }
+    }
+    
+    public function asistencia_inconsistencia_justificar(){
+        if(isset($_SESSION['nombre'])){
+            $obj_marcas = new cls_marca_usuario();
+            
+            //Obtiene información de la inconsistencia
+            $obj_marcas->setCondicion("ID_Inconsistencia_Marca=".$_GET['id']);
+            $obj_marcas->obtener_inconsistencias_marcas();
+            $inconsistencia= $obj_marcas->getArreglo();
+            
+            //Agrega a la inconsistencia información de la marca
+            $obj_marcas->setCondicion("T_Marca.ID_Marca=".$inconsistencia[0]['ID_Marca']);
+            $obj_marcas->obtener_marcas();
+            $marca_temporal = $obj_marcas->getArreglo();
+            $inconsistencia[0] = array_merge(
+                (['Marca_Entrada' =>($marca_temporal[0]['Marca_Entrada'])]),
+                (['Marca_Salida' =>($marca_temporal[0]['Marca_Salida'])]),
+                (['Tipo_Marca' =>($marca_temporal[0]['Tipo_Marca'])]),
+                $inconsistencia[0]);
+            
+//            echo "<pre>";
+//            print_r($inconsistencia);
+//            echo "</pre>";
+            require __DIR__ . '/../vistas/plantillas/frm_asistencia_inconsistencia.php';
+        }else {
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }
+    }
+    
+    public function asistencia_guardar_justificacion_inconsistencia(){
+        
     }
 }

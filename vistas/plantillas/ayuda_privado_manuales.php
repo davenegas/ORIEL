@@ -20,6 +20,10 @@
                     <embed src="vistas/Manuales/ORIEL_MANUAL_USUARIO_BITACORA_DIGITAL.pdf" width="1000" height="600"> 
                     <?php
                     break;
+                case "Personal_BCR":?>
+                    <embed src="vistas/Manuales/ORIEL_MANUAL_USUARIO_PERSONAL_BCR.pdf" width="1000" height="600">
+                    <?php
+                    break;
                 case "Personal_Externo":?>
                     <embed src="vistas/Manuales/ORIEL_MANUAL_USUARIO_PERSONAL_EXTERNO.pdf" width="1000" height="600">
                     <?php

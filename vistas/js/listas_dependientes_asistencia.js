@@ -1,3 +1,4 @@
+
 //Ejecuta la funcion de actualizar hora, cada 1000 milisegundos
 setInterval(ActualizarHora,1000);
 
@@ -24,5 +25,4 @@ function ActualizarHora(){
     }
     elementoSegundos.textContent = segundos;
 }
-
 

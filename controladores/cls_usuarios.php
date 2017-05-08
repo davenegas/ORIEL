@@ -169,7 +169,7 @@ class cls_usuarios{
       else
       {
         $this->obj_data_provider->conectar();
-        $this->arreglo=$this->obj_data_provider->trae_datos("T_Usuario", "*", $this->condicion);
+        $this->arreglo=$this->obj_data_provider->trae_datos("T_Usuario left outer join T_Rol on T_Usuario.ID_Rol = T_Rol.ID_Rol", "T_Usuario.*,T_Rol.ID_Rol,T_Rol.Descripcion", $this->condicion);
         $this->arreglo=$this->obj_data_provider->getArreglo();
         $this->obj_data_provider->desconectar();
         $this->resultado_operacion=true;

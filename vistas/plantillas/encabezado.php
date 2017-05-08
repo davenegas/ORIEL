@@ -258,7 +258,7 @@
                                 <li><a href="index.php?ctl=pruebas_alarma">Pruebas alarma</a></li> 
                             <?php }; ?>
                                
-                            <?php if ($_SESSION['modulos']['Reportes-Trazabilidad']==1){?>
+                            <?php if ($_SESSION['modulos']['Módulo-Asistencia de Personal']==1||$_SESSION['modulos']['Módulo-Asistencia encargado empresa']==1||$_SESSION['modulos']['Módulo-Asistencia encargado empresa']==1){?>
                                 <li><a href="index.php?ctl=asistencia_personal">Asistencia</a></li> 
                             <?php }; ?>
                                 
@@ -286,6 +286,10 @@
                                 
                             <?php if ($_SESSION['modulos']['Módulo-PuntosBCR']==1){ ?>
                                 <li><a href="index.php?ctl=manual_ayuda_privado&manual=Puntos_BCR">Manual Puntos BCR</a></li>
+                            <?php }; ?>
+                                
+                            <?php if ($_SESSION['modulos']['Módulo-Personal']==1){ ?>
+                                <li><a href="index.php?ctl=manual_ayuda_privado&manual=Personal_BCR">Manual Personal BCR</a></li>
                             <?php }; ?>
                                 
                             <?php if ($_SESSION['modulos']['Módulo-Personal Externo']==1){ ?>

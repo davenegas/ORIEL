@@ -202,10 +202,10 @@ function guardar_apertura(){
         } else {
             //Calculo diferencias en horas
             var fecha1 = new Date("2017/01/01 "+document.getElementById('hora_apertura').value);
-            var fecha2= new Date("2017/01/01 "+document.getElementById('Hora_Apertura_Publico').value);
+            var fecha2= new Date("2017/01/01 "+document.getElementById('Hora_Apertura_Agencia').value);
             var diff= ((fecha2-fecha1)/60000);
             
-            if(diff>90){
+            if(diff>0){
                 $.confirm({title: 'Confirmación!', content: 'La apertura indicada es antes de lo establecido por normativa, si continua deberá ingresar un evento para justificar la apertura temprana.', 
                 confirm: function(){
                     document.getElementById("hora_apertura").removeAttribute("style");
@@ -225,15 +225,38 @@ function guardar_apertura(){
                 },
                 cancel: function(){}
                 });
-            } if(diff<=-1){
-                $.confirm({title: 'Confirmación!', content: 'La apertura esta fuera de horario, si continua debera ingresar un evento para justificar la apertura.', 
-                confirm: function(){
+            } if(diff<=0){
+                var fecha1 = new Date("2017/01/01 "+document.getElementById('hora_apertura').value);
+                var fecha2= new Date("2017/01/01 "+document.getElementById('Hora_Apertura_Publico').value);
+                var diff2= ((fecha2-fecha1)/60000);
+                
+                if(diff2<0){
+                    $.confirm({title: 'Confirmación!', content: 'La apertura es posterior a la apertura a público, si continua debera ingresar un evento para justificar la apertura tardía.', 
+                    confirm: function(){
+                        document.getElementById("hora_apertura").removeAttribute("style");
+                        id_prueba = document.getElementById('ID_Prueba_Alarma').value;
+                        tipo = "Apertura_Alarma_SIS";
+                        punto_bcr = document.getElementById('ID_PuntoBCR').value;
+
+                        $.post("index.php?ctl=prueba_alarma_guardar", { id_prueba: id_prueba, tipo: tipo, punto_bcr:punto_bcr, hora_apertura:hora_apertura}, function(data){
+                            // alert(data);
+                            numero= data.replace(/\D/g,'');
+                            if(numero>0){
+                                numero= parseInt(numero);
+                                document.getElementById('ID_Prueba_Alarma').value=numero;
+                            }
+                        });
+                        window.open('index.php?ctl=frm_eventos_agregar&id='+document.getElementById('ID_PuntoBCR').value);
+                    },
+                    cancel: function(){}
+                    });
+                } else {
                     document.getElementById("hora_apertura").removeAttribute("style");
                     id_prueba = document.getElementById('ID_Prueba_Alarma').value;
                     tipo = "Apertura_Alarma_SIS";
                     punto_bcr = document.getElementById('ID_PuntoBCR').value;
 
-                    $.post("index.php?ctl=prueba_alarma_guardar", { id_prueba: id_prueba, tipo: tipo, punto_bcr:punto_bcr, hora_apertura:hora_apertura}, function(data){
+                    $.post("index.php?ctl=prueba_alarma_guardar", {id_prueba: id_prueba, tipo: tipo, punto_bcr:punto_bcr, hora_apertura:hora_apertura}, function(data){
                         // alert(data);
                         numero= data.replace(/\D/g,'');
                         if(numero>0){
@@ -241,26 +264,8 @@ function guardar_apertura(){
                             document.getElementById('ID_Prueba_Alarma').value=numero;
                         }
                     });
-                    window.open('index.php?ctl=frm_eventos_agregar&id='+document.getElementById('ID_PuntoBCR').value);
-                },
-                cancel: function(){}
-                });
-            } if(diff<=90 && diff>=0) {
-                document.getElementById("hora_apertura").removeAttribute("style");
-                id_prueba = document.getElementById('ID_Prueba_Alarma').value;
-                tipo = "Apertura_Alarma_SIS";
-                punto_bcr = document.getElementById('ID_PuntoBCR').value;
-
-                $.post("index.php?ctl=prueba_alarma_guardar", {id_prueba: id_prueba, tipo: tipo, punto_bcr:punto_bcr, hora_apertura:hora_apertura}, function(data){
-                    // alert(data);
-                    numero= data.replace(/\D/g,'');
-                    if(numero>0){
-                        numero= parseInt(numero);
-                        document.getElementById('ID_Prueba_Alarma').value=numero;
-                    }
-                });
+                }
             }
-            
         }
     }
 }
@@ -342,13 +347,19 @@ function guardar_cierre(){
         if(cierre=="" || cierre==null ){
             document.getElementById("hora_cierre").style.border="2px solid red";
         } else {
-            
+            //Calculo de tiempo con cierre de la agencia
             var fecha1 = new Date("2017/01/01 "+document.getElementById('hora_cierre').value);
-            var fecha2= new Date("2017/01/01 "+document.getElementById('Hora_Cierre_Publico').value);
+            var fecha2= new Date("2017/01/01 "+document.getElementById('Hora_Cierre_Agencia').value);
             var diff= ((fecha1-fecha2)/60000);
             
-            console.log(diff);
-            if(diff<0){
+            //Calculo de tiempo con cierre al público
+            var fecha1 = new Date("2017/01/01 "+document.getElementById('hora_cierre').value);
+            var fecha2= new Date("2017/01/01 "+document.getElementById('Hora_Cierre_Publico').value);
+            var diff2= ((fecha1-fecha2)/60000);
+            
+            console.log("diff agencia: "+diff);
+            console.log("diff2 público: "+diff2);
+            if(diff2<0){
                 $.confirm({title: 'Confirmación!', content: 'El cierre indicado es antes del cierre a público, si continua deberá ingresar un evento para justificar el cierre temprano', 
                 confirm: function(){
                     document.getElementById("hora_cierre").removeAttribute("style");
@@ -368,7 +379,7 @@ function guardar_cierre(){
                 cancel: function(){}
                 });
             }
-            if(diff>240){
+            if(diff>0){
                $.confirm({title: 'Confirmación!', content: 'El cierre indicado es 4 horas después del cierre a público, si continua deberá ingresar un evento para justificar el cierre tardío', 
                 confirm: function(){
                     document.getElementById("hora_cierre").removeAttribute("style");
@@ -388,7 +399,7 @@ function guardar_cierre(){
                 cancel: function(){}
                 }); 
             }
-            if(diff>=0 && diff<=240){
+            if(diff2>=0 && diff<=0){
                 document.getElementById("hora_cierre").removeAttribute("style");
                 punto_bcr = document.getElementById('ID_PuntoBCR').value;
                 id_prueba=document.getElementById('ID_Prueba_Alarma').value;

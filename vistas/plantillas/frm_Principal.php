@@ -23,5 +23,6 @@
             
         </div>
      <?php require 'vistas/plantillas/pie_de_pagina.php' ?>
+        
     </body>
 </html>

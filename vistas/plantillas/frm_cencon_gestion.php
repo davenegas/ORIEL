@@ -77,7 +77,7 @@
                 <div id="ventana2">
                     <img id="close" src='vistas/Imagenes/cerrar.png' width="25" onclick ="ocultar_elemento()"> 
                     <!--Tabla con la lista de Unidades Ejecutoras-->
-                    <table id="tabla2" class="display" cellspacing="0" width="100%">
+                    <table id="tabla" class="display" cellspacing="0" width="100%">
                         <thead>
                             <tr>
                                 <th style="text-align:center">Cedula</th>
