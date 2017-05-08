@@ -684,7 +684,7 @@
                 $obj_personal->setDireccion($arreglo_personal[$i][5]);
                 
                 //Establece el link de la foto
-                $obj_personal->setLinkfoto("https://bcrcapitalhumano:2800/UCO/foto/".$arreglo_personal[$i][1].".jpg");
+                $obj_personal->setLinkfoto("https://bcrcapitalhumano:28000/UCO/foto/".$arreglo_personal[$i][1].".jpg");
                 
                 //Establece la empresa, que en este caso 1 es para BCR
                 $obj_personal->setId_empresa("1");
