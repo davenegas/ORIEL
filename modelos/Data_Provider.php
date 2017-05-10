@@ -343,13 +343,13 @@ class Data_Provider{
             $consulta=$this->conexion->query("delete from ".$table.";");
             //Reemplaza en la consulta SQL las comillas con guiones para efecto de insertar la consulta en la tabla traza
             $cadena_sql=str_replace(","," - ","delete from ".$table.";");
-            echo("delete from ".$table.";");
+            //echo("delete from ".$table.";");
        }else{
            //Caso contrario asigna la condiciónd de búsqueda al SQL y procede a eliminar en la tabla
             $consulta=$this->conexion->query("delete from ".$table." where ".$condicion.";");
             //Reemplaza en la consulta SQL, las comillas con guiones para efecto de insertar la consulta en la tabla traza
             $cadena_sql=str_replace(","," - ","delete from ".$table." where ".$condicion.";");
-            echo("delete from ".$table." where ".$condicion.";");
+            //echo("delete from ".$table." where ".$condicion.";");
        }    
        //echo $consulta;
         //Registro de la trazabilidad del sistema

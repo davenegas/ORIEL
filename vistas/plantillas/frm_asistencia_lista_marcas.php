@@ -84,8 +84,12 @@
                                     <td style="text-align:center"><?php echo $inconsistencias[$i]['Justificacion_Usuario'];?></td>
                                     <td style="text-align:center"><?php echo $inconsistencias[$i]['Tipo_Inconsistencia'];?></td>
                                     <td style="text-align:center"><?php echo $inconsistencias[$i]['Estado_Inconsistencia'];?></td>
-                                    <td style="text-align:center"><a href="index.php?ctl=asistencia_inconsistencia_justificar&id=<?php echo $inconsistencias[$i]['ID_Inconsistencia_Marca'];?>">
-                                        Justificar inconsistencia</a></td>
+                                    <?php if($inconsistencias[$i]['ID_Estado_Inconsistencia']==1 || $_SESSION['modulos']['Módulo-Asistencia encargado empresa']==1|| $_SESSION['modulos']['Módulo-Asistencia encargado Banco']==1) {?>
+                                        <td style="text-align:center"><a href="index.php?ctl=asistencia_inconsistencia_justificar&id=<?php echo $inconsistencias[$i]['ID_Inconsistencia_Marca'];?>">
+                                            Justificar inconsistencia</a></td>
+                                    <?php } else {?>
+                                        <td style="text-align:center"></td> 
+                                    <?php }?>
                                 </tr>
                             <?php }} ?>
                         </tbody>

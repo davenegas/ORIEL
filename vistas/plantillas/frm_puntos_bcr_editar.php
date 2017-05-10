@@ -8,6 +8,17 @@
         <script language="javascript" src="vistas/js/listas_dependientes_puntobcr.js"></script>
         <link rel="stylesheet" href="vistas/css/ventanaoculta.css">
         <?php require_once 'frm_librerias_head.html'; ?>
+        <script>
+            $(document).ready(function(){
+                $("iframe").hide();
+                $("#hide").click(function(){
+                    $("iframe").hide(1000);
+                });
+                $("#show").click(function(){
+                    $("iframe").show(1000);
+                });
+            });
+        </script>
     </head>
     <body>
         <?php require_once 'encabezado.php';?>
@@ -246,6 +257,11 @@
                 <div class="col-md-12 espacio-abajo">
                     <label for="Direccion">Direccion</label>
                     <input type="text" required="required" readonly class="form-control" id="Direccion" name="Direccion" value="<?php echo $params[0]['Direccion'];?>">
+                </div>
+                <button id="hide">Ocultar ubicación</button>
+                <button id="show">Mostrar ubicación</button>
+                <div class="col-md-12 espacio-abajo text-center">
+                    <iframe id="localizacion"src="<?php echo $params[0]['Geolocalizacion'];?>" width="800" height="600" frameborder="0" style="border:0" allowfullscreen></iframe>
                 </div>
             </div>
             

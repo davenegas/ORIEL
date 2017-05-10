@@ -244,7 +244,7 @@
                     <div class="col-sm-12">  
                         <div class="row">
                             <div class="col-sm-12 well">
-                                <h4>Información de los usuario <a onclick="buscar_usuario();" class="glyphicon glyphicon-user"></a></h4>
+                                <h4>Información de los usuario <a onclick="buscar_usuario();" class="glyphicon glyphicon-user" title="Seleccionar usuario de una lista"></a></h4>
                                 <div class="col-sm-4">
                                     <div class="well form-group">
                                         <label for="nombre_usuario">Nombre del usuario</label>
@@ -267,7 +267,7 @@
                         </div>
                         <div class="row">
                             <div class="col-sm-12 well">
-                                <h4>Descansos del usuario <a onclick="frm_descanso_usuario();" class="glyphicon glyphicon-plus"></a></h4>
+                                <h4>Descansos del usuario <a onclick="frm_descanso_usuario();" class="glyphicon glyphicon-plus" title="Agregar un descanso al usuario"></a></h4>
                                 <div class="col-sm-12">
                                     <div class="well">
                                         <table id="descanso_usuario" class="display" cellspacing="0" width="100%">
@@ -287,11 +287,14 @@
                         </div>
                         <div class="row">
                             <div class="col-sm-12 well">
-                                <h4>Horario del usuario <a onclick="ver_horarios();" class="glyphicon glyphicon-zoom-in"></a><br>
+                                
+                                <h4>Horario del usuario <a onclick="ver_horarios();" class="glyphicon glyphicon-zoom-in" title="Ver horarios asignados al usuario"></a><br>
                                     <input type="radio" name="radio_turno_horario" id="rth_1" onclick="horario_defecto('Mañana');" value="Mañana">Mañana
                                     <input type="radio" name="radio_turno_horario" id="rth_2" onclick="horario_defecto('Tarde');" value="Tarde">Tarde
                                     <input type="radio" name="radio_turno_horario" id="rth_3" onclick="horario_defecto('Noche');" value="Noche">Noche
                                 </h4>
+                                <p>El horario es asignado al usuario seleccionado y debe tener una vigencia mínima de 7 días.</p>
+                                <!--<p>Para ver horario(s) asignado al usuario, dar click a la lupa que se encuentra arriba.</p>-->
                                 <form class="form-horizontal text-center" id="frm_horario_usuario"role="form" method="POST" action="index.php?ctl=asistencia_guardar_horario_usuario">
                                     <input type="text" hidden id="ID_Usuario" name="ID_Usuario" value="0">
                                     <div class="col-sm-12">

@@ -214,7 +214,8 @@ class cls_puntosBCR{
 			GROUP by T_PuntoBCR.ID_PuntoBCR  order by T_TipoPuntoBCR.Tipo_Punto", 
                     "T_PuntoBCR.ID_PuntoBCR, T_PuntoBCR.Nombre, T_PuntoBCR.Direccion, T_PuntoBCR.Codigo, 
 			T_PuntoBCR.Cuenta_SIS, T_PuntoBCR.Observaciones as Observaciones_Punto, 
-                        T_PuntoBCR.Estado as Estado_Punto, T_PuntoBCR.ID_Gerente_Zona, T_PuntoBCR.ID_Supervisor_Zona, T_PuntoBCR.ID_Horario_Apertura,
+                        T_PuntoBCR.Estado as Estado_Punto, T_PuntoBCR.ID_Gerente_Zona, T_PuntoBCR.ID_Supervisor_Zona, 
+                        T_PuntoBCR.ID_Horario_Apertura, T_PuntoBCR.Geolocalizacion,
 			T_Horario.*, T_Provincia.Nombre_Provincia,T_Provincia.ID_Provincia,
 			T_TipoPuntoBCR.ID_Tipo_Punto, T_TipoPuntoBCR.Tipo_Punto,
 			T_Empresa.ID_Empresa, T_Empresa.Empresa,
@@ -244,7 +245,8 @@ class cls_puntosBCR{
 			LEFT OUTER JOIN T_DireccionIP ON T_DireccionIP.ID_Direccion_IP = T_PuntoBCRDireccionIP.ID_Direccion_IP", 
                     "T_PuntoBCR.ID_PuntoBCR, T_PuntoBCR.Nombre, T_PuntoBCR.Direccion, T_PuntoBCR.Codigo, 
 			T_PuntoBCR.Cuenta_SIS, T_PuntoBCR.Observaciones as Observaciones_Punto, 
-                        T_PuntoBCR.Estado as Estado_Punto, T_PuntoBCR.ID_Gerente_Zona, T_PuntoBCR.ID_Supervisor_Zona,T_PuntoBCR.ID_Horario_Apertura,
+                        T_PuntoBCR.Estado as Estado_Punto, T_PuntoBCR.ID_Gerente_Zona, T_PuntoBCR.ID_Supervisor_Zona,
+                        T_PuntoBCR.ID_Horario_Apertura,T_PuntoBCR.Geolocalizacion,
 			T_Horario.*, t_Provincia.Nombre_Provincia,T_Provincia.ID_Provincia,
 			T_TipoPuntoBCR.ID_Tipo_Punto, T_TipoPuntoBCR.Tipo_Punto,
 			T_Empresa.ID_Empresa, T_Empresa.Empresa,
@@ -379,7 +381,7 @@ class cls_puntosBCR{
 			LEFT OUTER JOIN T_UnidadEjecutora ON T_UE_PuntoBCR.ID_Unidad_Ejecutora = T_UnidadEjecutora.ID_Unidad_Ejecutora
                         LEFT OUTER JOIN T_Telefono on T_PuntoBCR.ID_PuntoBCR = T_Telefono.ID
 			LEFT OUTER JOIN T_TipoTelefono ON T_Telefono.ID_Tipo_Telefono = T_TipoTelefono.ID_Tipo_Telefono", 
-                    "T_PuntoBCR.ID_PuntoBCR, T_PuntoBCR.Nombre, T_PuntoBCR.Direccion,
+                    "T_PuntoBCR.ID_PuntoBCR, T_PuntoBCR.Nombre, T_PuntoBCR.Direccion,T_PuntoBCR.Geolocalizacion,
 			T_Horario.*,
 			T_TipoPuntoBCR.ID_Tipo_Punto, T_TipoPuntoBCR.Tipo_Punto,
 			T_UnidadEjecutora.ID_Unidad_Ejecutora, T_UnidadEjecutora.Departamento,

@@ -2,6 +2,8 @@
 class cls_marca_usuario {
     public $id;
     public $id2;
+    public $id_empresa;
+    public $id_banco;
     public $usuario;
     public $entrada;
     public $salida;
@@ -10,6 +12,8 @@ class cls_marca_usuario {
     public $tiempo;
     public $detalle;
     public $observaciones;
+    public $justificacion;
+    public $seguimiento;
     public $obj_data_provider;
     public $arreglo;
     private $condicion;
@@ -118,9 +122,44 @@ class cls_marca_usuario {
         $this->detalle = $detalle;
     }
 
+    function getId_empresa() {
+        return $this->id_empresa;
+    }
+
+    function getId_banco() {
+        return $this->id_banco;
+    }
+
+    function getJustificacion() {
+        return $this->justificacion;
+    }
+
+    function getSeguimiento() {
+        return $this->seguimiento;
+    }
+
+    function setId_empresa($id_empresa) {
+        $this->id_empresa = $id_empresa;
+    }
+
+    function setId_banco($id_banco) {
+        $this->id_banco = $id_banco;
+    }
+
+    function setJustificacion($justificacion) {
+        $this->justificacion = $justificacion;
+    }
+
+    function setSeguimiento($seguimiento) {
+        $this->seguimiento = $seguimiento;
+    }
+
+        
     public function __construct() {
         $this->id="";
         $this->id2="";
+        $this->id_empresa="";
+        $this->id_banco="";
         $this->usuario="";
         $this->entrada="";
         $this->salida="";
@@ -129,6 +168,8 @@ class cls_marca_usuario {
         $this->tiempo="";
         $this->detalle="";
         $this->observaciones="";
+        $this->seguimiento="";
+        $this->justificacion="";
         $this->obj_data_provider= new Data_Provider();
         $this->arreglo;
         $this->condicion="";
@@ -235,5 +276,40 @@ class cls_marca_usuario {
         $this->obj_data_provider->trae_datos("T_InconsistenciaMarca","max(ID_Inconsistencia_Marca) ID_Inconsistencia_Marca","");
         $this->arreglo=$this->obj_data_provider->getArreglo();
         $this->obj_data_provider->desconectar();
+    }
+    
+    public function guardar_justificacion_usuario(){
+        $this->obj_data_provider->conectar();
+        $this->obj_data_provider->edita_datos("T_InconsistenciaMarca", "Justificacion_Usuario='".$this->justificacion."', ID_Estado_Inconsistencia='".$this->estado."'", $this->condicion);
+        $this->arreglo=$this->obj_data_provider->getArreglo();
+        $this->obj_data_provider->desconectar(); 
+    }
+    
+    public function guardar_observaciones_banco(){
+        $this->obj_data_provider->conectar();
+        $this->obj_data_provider->edita_datos("T_InconsistenciaMarca", "Observaciones_Banco='".$this->observaciones."', ID_Supervisor_Banco='".$this->id_banco."'", $this->condicion);
+        $this->arreglo=$this->obj_data_provider->getArreglo();
+        $this->obj_data_provider->desconectar(); 
+    }
+    
+    public function guardar_estado_inconsistencia_banco(){
+        $this->obj_data_provider->conectar();
+        $this->obj_data_provider->edita_datos("T_InconsistenciaMarca", "ID_Supervisor_Banco='".$this->id_banco."', ID_Estado_Inconsistencia='".$this->estado."'", $this->condicion);
+        $this->arreglo=$this->obj_data_provider->getArreglo();
+        $this->obj_data_provider->desconectar(); 
+    }
+    
+    public function guardar_tipo_inconsistencia_banco(){
+        $this->obj_data_provider->conectar();
+        $this->obj_data_provider->edita_datos("T_InconsistenciaMarca", "ID_Supervisor_Banco='".$this->id_banco."', ID_Tipo_Inconsistencia='".$this->tipo."'", $this->condicion);
+        $this->arreglo=$this->obj_data_provider->getArreglo();
+        $this->obj_data_provider->desconectar(); 
+    }
+    
+    public function guardar_justificacion_empresa(){
+        $this->obj_data_provider->conectar();
+        $this->obj_data_provider->edita_datos("T_InconsistenciaMarca", "Seguimiento_Empresa='".$this->seguimiento."', ID_Supervisor_Empresa='".$this->id_empresa."', ID_Estado_Inconsistencia='".$this->estado."'", $this->condicion);
+        $this->arreglo=$this->obj_data_provider->getArreglo();
+        $this->obj_data_provider->desconectar(); 
     }
 }

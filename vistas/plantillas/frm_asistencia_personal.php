@@ -302,9 +302,9 @@
                             <div class="well ancho">
                                 <h3>Inconsistencias</h3>
                                 <br><br>
-                                <h4>Cantidad de inconsistencias personas sin justificar</h4>
-                                <h1><a href="index.php?ctl=asistencia_lista_marcas">#</a></h1>
-                                <h4>Se horario está próximo a vencer, por favor comuníquese con su supervisor inmediato para la actualización del mismo</h4>
+                                <h4>Cantidad de inconsistencias personales sin justificar</h4>
+                                <h1><a href="index.php?ctl=asistencia_lista_marcas"><?php echo $cant_inconsistencias?></a></h1>
+                                <!--<h4>Se horario está próximo a vencer, por favor comuníquese con su supervisor inmediato para la actualización del mismo</h4>-->
                             </div>
                         </div>
                     </div>
@@ -312,46 +312,59 @@
                     <div class="row">
                         <div class="col-sm-6">
                             <div class="well ancho">
-                                <h3>Registro Descanso</h3>
-                                <br><br>
-                                <h4>Total de descansos por turno: 
-                                    <?php if(isset($info_descansos[0]['ID_Ajuste_Descanso'])){echo count($info_descansos);} ?>
-                                </h4><br>
-                                <section id='marca_descanso'>
-                                    <input hidden id="ID_Marca_Descanso" value="0">
-                                    <label for="entrada_turno">Salida descanso:
-                                        <?php $cant_descan_actual = count($marca_descanso); 
-                                            if (isset($marca_descanso[$cant_descan_actual-1]['Marca_Entrada'])){
-                                            $date= date_create($marca_descanso[$cant_descan_actual-1]['Marca_Entrada']); ?>
-                                            <span id="tiempo_descanso"><?php echo date_format($date,"H:i:s");?></span>
-                                        <?php } else {?>
-                                            --:--
-                                        <?php }?>
-                                    </label><br>
-                                    <label for="salida_turno">Entrada descanso:
-                                        <?php if (isset($marca_descanso[$cant_descan_actual-1]['Marca_Salida'])){ 
-                                            $date= date_create($marca_descanso[$cant_descan_actual-1]['Marca_Salida']); ?>
-                                            <span id="tiempo_descanso"><?php echo date_format($date,"H:i:s");?></span>
-                                        <?php } else {?>
-                                            --:--
-                                        <?php }?>
-                                    </label><br>
-                                    <label for="salida_turno">Total ultimo descanso  
-                                        <span id="horas_descanso">00</span>
-                                        <span id="minutos_decanso">:00</span>
-                                        <span id="segundos_decanso">:00</span>
-                                    </label><br><br>
-                                    <a onclick="marca_turno('Inicio_Descanso');" class="btn btn-default" role="button">SALIDA</a>
-                                    <a onclick="marca_turno('Fin_Descanso');" class="btn btn-default" role="button">ENTRADA</a>
-                                </section>
+                                <?php if($_SESSION['modulos']['Módulo-Asistencia encargado empresa']==0|| $_SESSION['modulos']['Módulo-Asistencia encargado Banco']==0) {?>
+                                    <h3>Registro Descanso</h3>
+                                    <br><br>
+                                    <h4>Total de descansos por turno: 
+                                        <?php if(isset($info_descansos[0]['ID_Ajuste_Descanso'])){echo count($info_descansos);} ?>
+                                    </h4><br>
+                                    <section id='marca_descanso'>
+                                        <input hidden id="ID_Marca_Descanso" value="0">
+                                        <label for="entrada_turno">Salida descanso:
+                                            <?php $cant_descan_actual = count($marca_descanso); 
+                                                if (isset($marca_descanso[$cant_descan_actual-1]['Marca_Entrada'])){
+                                                $date= date_create($marca_descanso[$cant_descan_actual-1]['Marca_Entrada']); ?>
+                                                <span id="tiempo_descanso"><?php echo date_format($date,"H:i:s");?></span>
+                                            <?php } else {?>
+                                                --:--
+                                            <?php }?>
+                                        </label><br>
+                                        <label for="salida_turno">Entrada descanso:
+                                            <?php if (isset($marca_descanso[$cant_descan_actual-1]['Marca_Salida'])){ 
+                                                $date= date_create($marca_descanso[$cant_descan_actual-1]['Marca_Salida']); ?>
+                                                <span id="tiempo_descanso"><?php echo date_format($date,"H:i:s");?></span>
+                                            <?php } else {?>
+                                                --:--
+                                            <?php }?>
+                                        </label><br>
+                                        <label for="salida_turno">Total ultimo descanso  
+                                            <span id="horas_descanso">00</span>
+                                            <span id="minutos_decanso">:00</span>
+                                            <span id="segundos_decanso">:00</span>
+                                        </label><br><br>
+                                        <a onclick="marca_turno('Inicio_Descanso');" class="btn btn-default" role="button">SALIDA</a>
+                                        <a onclick="marca_turno('Fin_Descanso');" class="btn btn-default" role="button">ENTRADA</a>
+                                    </section>
+                                <?php } else {?>
+                                    <h3>Información de marcas del turno</h3>
+                                    <br><br><br>
+                                    <h2>***PROXIMAMENTE***</h2>
+                                <?php } ?>
                             </div>
                         </div>
                         
                         <div class="col-sm-6">
                             <div class="well ancho">
-                                <h3>Otros indicadores</h3>
-                                <br><br><br>
-                                <h1><a href="index.php?ctl=asistencia_configuracion_usuarios">CONFIGURACIÓN</a></h1>
+                                <?php if($_SESSION['modulos']['Módulo-Asistencia encargado empresa']==1|| $_SESSION['modulos']['Módulo-Asistencia encargado Banco']==1) {?>
+                                    <h3>Otros indicadores</h3>
+                                    <br><br><br>
+                                    <p>En la configuración se puede asigar descansos a los usuarios, horario de trabajo, horario de vacaciones u horarior de incapacidad</p>
+                                    <h1><a href="index.php?ctl=asistencia_configuracion_usuarios">CONFIGURACIÓN</a></h1>
+                                <?php } else { ?>
+                                    <h3>Evaluación de desempeño</h3>
+                                    <br><br><br>
+                                    <h2>***PROXIMAMENTE***</h2>
+                                <?php } ?>
                             </div>
                         </div>
                     </div>
