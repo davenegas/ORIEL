@@ -288,7 +288,7 @@ class cls_horario_usuario{
         $this->arreglo= $this->obj_data_provider->inserta_datos("T_HorarioUsuario", "ID_Usuario, Fecha_Inicio, Fecha_Final, Hora_Entrada_Domingo, Hora_Salida_Domingo, Hora_Entrada_Lunes, Hora_Salida_Lunes, Hora_Entrada_Martes, Hora_Salida_Martes,Hora_Entrada_Miercoles, Hora_Salida_Miercoles, "
                 . "Hora_Entrada_Jueves, Hora_Salida_Jueves, Hora_Entrada_Viernes, Hora_Salida_Viernes, Hora_Entrada_Sabado, Hora_Salida_Sabado, Tipo_Horario, Observaciones, Estado",
                         "'".$this->id."','".$this->fecha_inicio."','".$this->fecha_final."','".$this->hora_entrada_domingo."','".$this->hora_salida_domingo."','".$this->hora_entrada_lunes."','".$this->hora_salida_lunes."','".$this->hora_entrada_martes."','".$this->hora_salida_martes."','".$this->hora_entrada_miercoles."','".$this->hora_salida_miercoles."','"
-                .$this->hora_salida_jueves."','".$this->hora_salida_jueves."','".$this->hora_entrada_viernes."','".$this->hora_salida_viernes."','".$this->hora_entrada_sabado."','".$this->hora_salida_sabado."','".$this->tipo_horario."','".$this->observaciones."','".$this->estado."'");
+                .$this->hora_entrada_jueves."','".$this->hora_salida_jueves."','".$this->hora_entrada_viernes."','".$this->hora_salida_viernes."','".$this->hora_entrada_sabado."','".$this->hora_salida_sabado."','".$this->tipo_horario."','".$this->observaciones."','".$this->estado."'");
         $this->obj_data_provider->desconectar();
         $this->resultado_operacion=true;
     }

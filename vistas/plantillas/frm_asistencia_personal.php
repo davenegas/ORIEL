@@ -45,7 +45,7 @@
                     segundos_decanso.innerHTML = ":"+segundos;
                     if (minutos < 10) { minutos = "0"+minutos }        
                     minutos_decanso.innerHTML = ":"+minutos;
-                    console.log(segundos+' '+minutos+' '+horas);
+                    //console.log(segundos+' '+minutos+' '+horas);
                     if (horas < 10) { horas = "0"+horas }
                     horas_descanso.innerHTML = horas;
                     <?php if($marca_descanso[$cant_descan_actual-1]['Marca_Salida']=="" || $marca_descanso[$cant_descan_actual-1]['Marca_Salida']==null){ ?>
@@ -53,6 +53,7 @@
                     <?php } ?>
 
                 <?php } ?>  
+                    
             });
 
 
@@ -99,41 +100,42 @@
                     document.getElementById('horas_descanso').style.color="red";
                 <?php } ?>
             }
-
+      
             function marca_turno(tipo){
-                console.log(tipo);
+                //console.log(tipo);
                 //Registra marca de ingreso a turno
                 if(tipo=='Entrada_Turno'){
                     <?php if(isset($marca_turno[0]['Marca_Entrada'])){?>
                         alert('Su marca de entrada a turno ya ha sido registrada!');
                     <?php } else { ?>
+                        $("#btn_turno").html('<center><img align="center" src="vistas/Imagenes/Espere.gif"/></center>');
                         id_marca = document.getElementById('ID_Marca_Turno').value;
                         //console.log(id_marca);
                         $.post("index.php?ctl=marca_guardar", { id_marca: id_marca, tipo: tipo}, function(data){
-                            console.log("id marca: "+data);
+                            //console.log("id marca: "+data);
                             //location.reload();
                             document.getElementById('ID_Marca_Turno').value=parseInt(data);
                             id_marca= parseInt(data);
                             
                             <?php if($horario_turno[0]['Tipo_Horario']=="NA"){ ?>
                                 tipo_inconsistencia = 3;                    
-                                $.post("index.php?ctl=asistencia_generar_inconsistencia", { id_marca: id_marca, tipo_inconsistencia: tipo_inconsistencia}, function(data){console.log(data);}); 
+                                $.post("index.php?ctl=asistencia_generar_inconsistencia", { id_marca: id_marca, tipo_inconsistencia: tipo_inconsistencia}, function(data){//console.log(data);}); 
                                 alert('<?php echo $_SESSION['name']." ".$_SESSION['apellido'];?>'+", su marca de entrada a sido ingresada correctamente, ésta es inconsistente debido a que hoy no tiene un horario de trabajo establecido");
                                 setTimeout(function(){window.location.reload();},5000);
                             <?php } if($horario_turno[0]['Tipo_Horario']=="Vacaciones") { ?>
                                 tipo_inconsistencia = 3;                    
-                                $.post("index.php?ctl=asistencia_generar_inconsistencia", { id_marca: id_marca, tipo_inconsistencia: tipo_inconsistencia}, function(data){console.log(data);}); 
+                                $.post("index.php?ctl=asistencia_generar_inconsistencia", { id_marca: id_marca, tipo_inconsistencia: tipo_inconsistencia}, function(data){//console.log(data);}); 
                                 alert('<?php echo $_SESSION['name']." ".$_SESSION['apellido'];?>'+", su marca de entrada a sido ingresada correctamente, ésta es inconsistente debido a que hoy tiene un horario establecido de vacaciones");
                                 setTimeout(function(){window.location.reload();},5000);
                             <?php } if($horario_turno[0]['Tipo_Horario']=="Incapacidad") { ?>
                                 tipo_inconsistencia = 3;                    
-                                $.post("index.php?ctl=asistencia_generar_inconsistencia", { id_marca: id_marca, tipo_inconsistencia: tipo_inconsistencia}, function(data){console.log(data);}); 
+                                $.post("index.php?ctl=asistencia_generar_inconsistencia", { id_marca: id_marca, tipo_inconsistencia: tipo_inconsistencia}, function(data){//console.log(data);}); 
                                 alert('<?php echo $_SESSION['name']." ".$_SESSION['apellido'];?>'+", su marca de entrada a sido ingresada correctamente, ésta es inconsistente debido a que hoy tiene un horario establecido de Incapacidad");
                                 setTimeout(function(){window.location.reload();},5000);
                             <?php } if($horario_turno[0]['Tipo_Horario']=="Normal") { ?>
                                 <?php if($horario_turno[0]['Hora_Entrada']=="") { ?>
                                     //tipo_inconsistencia = 3;                    
-                                    //$.post("index.php?ctl=asistencia_generar_inconsistencia", { id_marca: id_marca, tipo_inconsistencia: tipo_inconsistencia}, function(data){console.log(data);}); 
+                                    //$.post("index.php?ctl=asistencia_generar_inconsistencia", { id_marca: id_marca, tipo_inconsistencia: tipo_inconsistencia}, function(data){//console.log(data);}); 
                                     alert('<?php echo $_SESSION['name']." ".$_SESSION['apellido'];?>'+", su marca de entrada a sido ingresada correctamente, ésta es inconsistente debido a que hoy se encuentra en su día libre");
                                     setTimeout(function(){window.location.reload();},5000);
                                 <?php } else {?>
@@ -142,14 +144,15 @@
                                     var fecha2= new Date("2017/01/01 "+'<?php echo $horario_turno[0]['Hora_Entrada']?>');
                                     var diff= ((fecha1-fecha2)/60000);
                                     //console.log("fecha1: "+fecha1+", Difencia"+diff);
-                                    if(diff>0){
+                                    if(diff>=1){
                                         tipo_inconsistencia = 1;                    
-                                        $.post("index.php?ctl=asistencia_generar_inconsistencia", { id_marca: id_marca, tipo_inconsistencia: tipo_inconsistencia}, function(data){console.log(data);}); 
+                                        $.post("index.php?ctl=asistencia_generar_inconsistencia", { id_marca: id_marca, tipo_inconsistencia: tipo_inconsistencia}, function(data){//console.log(data);}); 
                                         alert('<?php echo $_SESSION['name']." ".$_SESSION['apellido'];?>'+", su marca de entrada a sido ingresada correctamente, se ha generado una inconsistencia ya que marcó "+parseInt(diff)+" minutos tarde");
                                         setTimeout(function(){window.location.reload();},5000);
                                     } else {
                                         alert('<?php echo $_SESSION['name']." ".$_SESSION['apellido'];?>'+", su marca de entrada a sido ingresada correctamente.");                          
-                                        setTimeout(function(){window.location.reload();},4000);
+                                        //setTimeout(function(){window.location.reload();},4000);
+                                        location.reload();
                                     }
                                 <?php } ?>
                             <?php } ?>
@@ -159,47 +162,54 @@
                 //Guarda la salida a turno, edita una pendiente
                 if(tipo=='Salida_Turno'){
                     id_marca = document.getElementById('ID_Marca_Turno').value;
-                    console.log(id_marca);
-                    $.post("index.php?ctl=marca_guardar", { id_marca: id_marca, tipo: tipo}, function(data){
-                        console.log(data);
-                        //location.reload();
-                    }); 
-                    <?php if($horario_turno[0]['Tipo_Horario']=="NA"){ ?>
-                        alert("Su marca de salida a sido ingresada correctamente, se ha generado inconsistente debido a que hoy no tiene un horario de trabajo establecido");
-                        tipo_inconsistencia = 3;                    
-                        $.post("index.php?ctl=asistencia_generar_inconsistencia", { id_marca: id_marca, tipo_inconsistencia: tipo_inconsistencia}, function(data){console.log(data);}); 
-                        setTimeout(function(){window.location.reload();},5000);
-                    <?php } if($horario_turno[0]['Tipo_Horario']=="Vacaciones") { ?>
-                        alert("Su marca de salida a sido ingresada correctamente, se ha generado inconsistente debido a que hoy tiene un horario establecido de vacaciones");
-                        tipo_inconsistencia = 3;                    
-                        $.post("index.php?ctl=asistencia_generar_inconsistencia", { id_marca: id_marca, tipo_inconsistencia: tipo_inconsistencia}, function(data){console.log(data);}); 
-                        setTimeout(function(){window.location.reload();},5000);
-                    <?php } if($horario_turno[0]['Tipo_Horario']=="Incapacidad") { ?>
-                        alert("Su marca de salida a sido ingresada correctamente, se ha generado inconsistente debido a que hoy tiene un horario establecido de Incapacidad");
-                        tipo_inconsistencia = 3;                    
-                        $.post("index.php?ctl=asistencia_generar_inconsistencia", { id_marca: id_marca, tipo_inconsistencia: tipo_inconsistencia}, function(data){console.log(data);}); 
-                        setTimeout(function(){window.location.reload();},5000);
-                    <?php } if($horario_turno[0]['Tipo_Horario']=="Normal") { ?>
-                        <?php if($horario_turno[0]['Hora_Entrada']=="") { ?>
+                    if(id_marca<=0){
+                        alert("No ha registrado marca de entrada!!");
+                    } else {
+                        //console.log(id_marca);
+                        $("#btn_turno").html('<center><img align="center" src="vistas/Imagenes/Espere.gif"/></center>');
+                        $.post("index.php?ctl=marca_guardar", { id_marca: id_marca, tipo: tipo}, function(data){
+                            //console.log(data);
+                            //location.reload();
+                            $.post("index.php?ctl=cerrar_sesion",{},function(){});
+                        }); 
+                        <?php if($horario_turno[0]['Tipo_Horario']=="NA"){ ?>
+                            alert("Su marca de salida a sido ingresada correctamente, se ha generado inconsistente debido a que hoy no tiene un horario de trabajo establecido");
                             tipo_inconsistencia = 3;                    
-                            $.post("index.php?ctl=asistencia_generar_inconsistencia", { id_marca: id_marca, tipo_inconsistencia: tipo_inconsistencia}, function(data){console.log(data);}); 
-                            alert('<?php echo $_SESSION['name']." ".$_SESSION['apellido'];?>'+", su marca de entrada a sido ingresada correctamente, ésta es inconsistente debido a que hoy se encuentra en su día libre");
+                            $.post("index.php?ctl=asistencia_generar_inconsistencia", { id_marca: id_marca, tipo_inconsistencia: tipo_inconsistencia}, function(data){//console.log(data);}); 
                             setTimeout(function(){window.location.reload();},5000);
-                        <?php } else {?>
-                            var fechaactual = new Date();
-                            var fecha1= new Date("2017/01/01 "+(fechaactual.getHours()+':'+fechaactual.getMinutes()+':'+fechaactual.getSeconds()));
-                            var fecha2= new Date("2017/01/01 "+'<?php echo $horario_turno[0]['Hora_Salida']?>');
-                            var diff= ((fecha2-fecha1)/60000);
-                            console.log("fecha1: "+fecha1+", Difencia"+diff);
-                            if(diff>0){
-                                alert("Su marca de salida a sido ingresada correctamente, marcó "+parseInt(diff)+" minutos antes de su hora de salida: "+'<?php echo $horario_turno[0]['Hora_Salida']?>'+". Puede volver a realizar su marca de salida cuando sea correcta de lo contrario se generará una inconsistencia");
+                        <?php } if($horario_turno[0]['Tipo_Horario']=="Vacaciones") { ?>
+                            alert("Su marca de salida a sido ingresada correctamente, se ha generado inconsistente debido a que hoy tiene un horario establecido de vacaciones");
+                            tipo_inconsistencia = 3;                    
+                            $.post("index.php?ctl=asistencia_generar_inconsistencia", { id_marca: id_marca, tipo_inconsistencia: tipo_inconsistencia}, function(data){//console.log(data);}); 
+                            setTimeout(function(){window.location.reload();},5000);
+                        <?php } if($horario_turno[0]['Tipo_Horario']=="Incapacidad") { ?>
+                            alert("Su marca de salida a sido ingresada correctamente, se ha generado inconsistente debido a que hoy tiene un horario establecido de Incapacidad");
+                            tipo_inconsistencia = 3;                    
+                            $.post("index.php?ctl=asistencia_generar_inconsistencia", { id_marca: id_marca, tipo_inconsistencia: tipo_inconsistencia}, function(data){//console.log(data);}); 
+                            setTimeout(function(){window.location.reload();},5000);
+                        <?php } if($horario_turno[0]['Tipo_Horario']=="Normal") { ?>
+                            <?php if($horario_turno[0]['Hora_Entrada']=="") { ?>
+                                tipo_inconsistencia = 3;                    
+                                $.post("index.php?ctl=asistencia_generar_inconsistencia", { id_marca: id_marca, tipo_inconsistencia: tipo_inconsistencia}, function(data){//console.log(data);}); 
+                                alert('<?php echo $_SESSION['name']." ".$_SESSION['apellido'];?>'+", su marca de entrada a sido ingresada correctamente, ésta es inconsistente debido a que hoy se encuentra en su día libre");
                                 setTimeout(function(){window.location.reload();},5000);
-                            } else {
-                                alert("Su marca de salida a sido ingresada correctamente.");
-                                setTimeout(function(){window.location.reload();},4000);
-                            }  
+                            <?php } else {?>
+                                var fechaactual = new Date();
+                                var fecha1= new Date("2017/01/01 "+(fechaactual.getHours()+':'+fechaactual.getMinutes()+':'+fechaactual.getSeconds()));
+                                var fecha2= new Date("2017/01/01 "+'<?php echo $horario_turno[0]['Hora_Salida']?>');
+                                var diff= ((fecha2-fecha1)/60000);
+                                //console.log("fecha1: "+fecha1+", Difencia"+diff);
+                                if(diff>0){
+                                    alert("Su marca de salida a sido ingresada correctamente, marcó "+parseInt(diff)+" minutos antes de su hora de salida: "+'<?php echo $horario_turno[0]['Hora_Salida']?>'+". Puede volver a realizar su marca de salida cuando sea correcta de lo contrario se generará una inconsistencia");
+                                    setTimeout(function(){window.location.reload();},5000);
+                                } else {
+                                    alert("Su marca de salida a sido ingresada correctamente.");
+                                    document.write("index.php?ctl=cerrar_sesion");
+                                    setTimeout(function(){window.location.reload();},4000);
+                                }  
+                            <?php } ?>
                         <?php } ?>
-                    <?php } ?>
+                    }
                 }
                 //Registra marca de inicio de descanso
                 if(tipo=='Inicio_Descanso'){
@@ -208,37 +218,50 @@
                         alert('En este momento se encuentra en un tiempo de descanso!');
                     <?php } else { ?>
                         id_marca = 0;
-                        console.log(id_marca);
+                        //console.log(id_marca);
+                        $("#btn_descanso").html('<center><img align="center" src="vistas/Imagenes/Espere.gif"/></center>');
                         $.post("index.php?ctl=marca_guardar", { id_marca: id_marca, tipo: tipo}, function(data){
-                            console.log(data);
+                            //console.log(data);
                             document.getElementById('ID_Marca_Descanso').value=parseInt(data);
-                            location.reload();
+                            alert("Su marca de inicio de descanso ha sido ingresado correctamente, el sistema cerrará sesión automaticamente");
+                            $.post("index.php?ctl=cerrar_sesion",{},function(){});
+                            setTimeout(function(){window.location.reload();},5000);
                         });
                     <?php } ?>
                 }
                 //Edita registro de descanso con marca de entrada
                 if(tipo=='Fin_Descanso'){
-                    id_marca = document.getElementById('ID_Marca_Descanso').value;
-                    console.log(id_marca);
-                    $.post("index.php?ctl=marca_guardar", { id_marca: id_marca, tipo: tipo}, function(data){
-                        console.log(data);
-                        //location.reload();
-                    });
-                    <?php $cant_descan_actual=  count($marca_descanso);
-                    if(isset($info_descansos[$cant_descan_actual-1]['Tiempo'])){ ?>
-                        if(minutos > <?php echo $info_descansos[$cant_descan_actual-1]['Tiempo'];?>){
-                            tipo_inconsistencia = 4;                    
-                            $.post("index.php?ctl=asistencia_generar_inconsistencia", { id_marca: id_marca, tipo_inconsistencia: tipo_inconsistencia}, function(data){console.log(data);}); 
-                            alert("El tiempo de descanso ha excedido lo establecido por su supervisor inmediato ("+'<?php echo $info_descansos[$cant_descan_actual-1]['Tiempo']?>'+" minutos), se ha generado una inconsistencia");
-                            setTimeout(function(){window.location.reload();},5000);
-                        }else {
-                            location.reload();
-                        }
-                    <?php } else { ?>
-                        tipo_inconsistencia = 9;                    
-                        $.post("index.php?ctl=asistencia_generar_inconsistencia", { id_marca: id_marca, tipo_inconsistencia: tipo_inconsistencia}, function(data){console.log(data);}); 
-                        alert("No cuenta con descansos asignados o ha agotado los disponibles por turno, se ha generado una inconsistencia");
-                        setTimeout(function(){window.location.reload();},5000);
+                    <?php $cant_descan_actual = count($marca_descanso); ?>
+                    <?php if(isset($marca_descanso[$cant_descan_actual-1]['Marca_Entrada'])){?>
+                        <?php if($marca_descanso[$cant_descan_actual-1]['Marca_Entrada']!="" && $marca_descanso[$cant_descan_actual-1]['Marca_Salida']!=""){?>
+                            alert('No ha inciado un tiempo de descanso!');
+                            //console.log("No puede finalizar un descanso sin iniciar uno");
+                        <?php } else { ?>
+                            $("#btn_descanso").html('<center><img align="center" src="vistas/Imagenes/Espere.gif"/></center>');
+                            id_marca = document.getElementById('ID_Marca_Descanso').value;
+                            //console.log(id_marca);
+                            $.post("index.php?ctl=marca_guardar", { id_marca: id_marca, tipo: tipo}, function(data){
+                                //console.log(data);
+                                //location.reload();
+                            });
+                            <?php if(isset($info_descansos[$cant_descan_actual-1]['Tiempo'])){ ?>
+                                if(minutos > <?php echo $info_descansos[$cant_descan_actual-1]['Tiempo'];?>){
+                                    tipo_inconsistencia = 4;                    
+                                    $.post("index.php?ctl=asistencia_generar_inconsistencia", { id_marca: id_marca, tipo_inconsistencia: tipo_inconsistencia}, function(data){//console.log(data);}); 
+                                    alert("El tiempo de descanso ha excedido lo establecido por su supervisor inmediato ("+'<?php echo $info_descansos[$cant_descan_actual-1]['Tiempo']?>'+" minutos), se ha generado una inconsistencia");
+                                    setTimeout(function(){window.location.reload();},5000);
+                                }else {
+                                    location.reload();
+                                }
+                            <?php } else { ?>
+                                tipo_inconsistencia = 9;                    
+                                $.post("index.php?ctl=asistencia_generar_inconsistencia", { id_marca: id_marca, tipo_inconsistencia: tipo_inconsistencia}, function(data){//console.log(data);}); 
+                                alert("No cuenta con descansos asignados o ha agotado los disponibles por turno, se ha generado una inconsistencia");
+                                setTimeout(function(){window.location.reload();},5000);
+                            <?php } ?>
+                        <?php } ?>
+                    <?php } else { ?>  
+                        alert('No ha inciado un tiempo de descanso!');
                     <?php } ?>
                 }
             }
@@ -293,8 +316,10 @@
                                             Pendiente <span class="glyphicon glyphicon-remove"></span> 
                                         <?php }?>
                                     </label><br><br>
-                                    <a onclick="marca_turno('Entrada_Turno');" class="btn btn-default" role="button">ENTRADA</a>
-                                    <a onclick="marca_turno('Salida_Turno');" class="btn btn-default" role="button">SALIDA</a>
+                                    <div id="btn_turno">
+                                        <a onclick="marca_turno('Entrada_Turno');" class="btn btn-default" role="button">ENTRADA</a>
+                                        <a onclick="marca_turno('Salida_Turno');" class="btn btn-default" role="button">SALIDA</a>
+                                    </div>
                                 </section>
                             </div>
                         </div>
@@ -342,8 +367,10 @@
                                             <span id="minutos_decanso">:00</span>
                                             <span id="segundos_decanso">:00</span>
                                         </label><br><br>
-                                        <a onclick="marca_turno('Inicio_Descanso');" class="btn btn-default" role="button">SALIDA</a>
-                                        <a onclick="marca_turno('Fin_Descanso');" class="btn btn-default" role="button">ENTRADA</a>
+                                        <div id="btn_descanso">     
+                                            <a onclick="marca_turno('Inicio_Descanso');" class="btn btn-default" role="button">SALIDA</a>
+                                            <a onclick="marca_turno('Fin_Descanso');" class="btn btn-default" role="button">ENTRADA</a>
+                                        </div>
                                     </section>
                                 <?php } else {?>
                                     <h3>Información de marcas del turno</h3>

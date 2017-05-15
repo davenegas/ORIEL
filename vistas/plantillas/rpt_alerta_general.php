@@ -173,7 +173,7 @@
                 <div id="cierres" style="min-width: 300px; height: 350px; max-width: 500px; margin: 0 auto"></div>
             <?php } ?>
             <?php if($datos['contador_pruebas']==0 && $datos['cont_pruebas_pendientes']==0 && $datos['contador_aperturas']==0 && 
-                $datos['cont_aperturas_pendientes']==0 && $datos['contador_cierres']==0 && $datos['cierres_pendientes']==0){?>
+                $datos['cont_aperturas_pendientes']==0 && $datos['contador_cierres']==0){?>
                 <div class="well" align="center">No hay pendientes con el sistema de alarma</div>
              <?php } ?>    
         </div>

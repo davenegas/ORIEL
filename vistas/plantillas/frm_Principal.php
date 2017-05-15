@@ -26,11 +26,13 @@
 
             </div>
             <div class="col-sm-2 sidenav">
-                <?php if($cant_inconsistencias>0){?>
-                    <br><br><br><br>
-                    <h4>Cantidad de inconsistencias de marcas sin justificar</h4>
-                    <h1><a href="index.php?ctl=asistencia_lista_marcas"><?php echo $cant_inconsistencias?></a></h1>
-                <?php }?>
+                <?php if(isset($cant_inconsistencias)){
+                    if($cant_inconsistencias>0){?>
+                        <br><br><br><br>
+                        <h4>Cantidad de inconsistencias de marcas sin justificar</h4>
+                        <h1><a href="index.php?ctl=asistencia_lista_marcas"><?php echo $cant_inconsistencias?></a></h1>
+                    <?php } 
+                }?>
             </div>
         </div>
      <?php require 'vistas/plantillas/pie_de_pagina.php' ?>

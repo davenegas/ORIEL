@@ -35,8 +35,8 @@
                             <tr>
                                 <th style="text-align:center">ID_Marca</th>
                                 <th style="text-align:center">Usuario</th>
-                                <th style="text-align:center">Marca entrada</th>
-                                <th style="text-align:center">Marca salida</th>
+                                <th style="text-align:center">Inicio</th>
+                                <th style="text-align:center">Fin</th>
                                 <th style="text-align:center">Tipo marca</th>
                             </tr>
                         </thead>

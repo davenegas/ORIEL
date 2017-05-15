@@ -109,14 +109,20 @@
         //Obtiene las inconsistencias pendientes- dependiendo del rol
         if($_SESSION['modulos']['Módulo-Asistencia de Personal']==1){
             $obj_marca->setCondicion("T_InconsistenciaMarca.ID_Usuario=".$_SESSION['id']." AND T_InconsistenciaMarca.ID_Estado_Inconsistencia=1");
+            $obj_marca->obtener_inconsistencias_marcas();
+            $inconsistencias = $obj_marca->getArreglo();
+            $cant_inconsistencias = count($inconsistencias);
         } if($_SESSION['modulos']['Módulo-Asistencia encargado empresa']==1){
             $obj_marca->setCondicion("T_InconsistenciaMarca.ID_Estado_Inconsistencia=3 OR T_InconsistenciaMarca.ID_Usuario=".$_SESSION['id']);
+            $obj_marca->obtener_inconsistencias_marcas();
+            $inconsistencias = $obj_marca->getArreglo();
+            $cant_inconsistencias = count($inconsistencias);
         } if($_SESSION['modulos']['Módulo-Asistencia encargado Banco']==1){
             $obj_marca->setCondicion("T_InconsistenciaMarca.ID_Estado_Inconsistencia=4");
+            $obj_marca->obtener_inconsistencias_marcas();
+            $inconsistencias = $obj_marca->getArreglo();
+            $cant_inconsistencias = count($inconsistencias);
         }
-        $obj_marca->obtener_inconsistencias_marcas();
-        $inconsistencias = $obj_marca->getArreglo();
-        $cant_inconsistencias = count($inconsistencias);
         
         //Llamada al formulario correspondiente de la vista
         require __DIR__ . '/../vistas/plantillas/frm_principal.php';
@@ -5454,10 +5460,9 @@
                 }
                 break;
             case "Asistencia":
-                //Esta revision (06:00 am), se encarga de revisar marcas de entrada de las 08:00 a las 16:00 del día anterior
                 //Marcas de salida anticipadas, en día libre, vacaciones o incapacidad o si marca de salida de las 16:00 a las 00:00 del día anterior    
-                if(date("H:i:s", $time)>='05:50:00' && date("H:i:s", $time)<='06:10:00'){
-                    $ruta=  $raiz."Cuenta_Visitas_Oriel/Ejecucion_Procesos/".date("Ymd", $time)." Asistencia_mañana.txt";
+                if(date("H:i:s", $time)>='01:30:00' && date("H:i:s", $time)<='02:20:00'){
+                    $ruta=  $raiz."Cuenta_Visitas_Oriel/Ejecucion_Procesos/".date("Ymd", $time)." Asistencia_madrugada.txt";
                     if(!file_exists($ruta)){
                         //Abre el archivo , lo crea si no lo encuentra
                         $fp = fopen($ruta,"a+");
@@ -5465,80 +5470,397 @@
                         fclose($fp);
                         
                         $obj_marca = new cls_marca_usuario();
+                        $obj_usuario = new cls_usuarios();
+                        $obj_horario_usuario = new cls_horario_usuario();
                         
-                        //Obtiene todos los horarios disponibles del día anterior
-                        $fecha = date('Y-m-j H:i:s');
-                        $fecha_actual = strtotime('-1 day',strtotime($fecha));
-                        $fecha_actual = date('Y-m-j', $fecha_actual);
+                        //Obtiene todos los usuarios del sistema
+                        $obj_usuario->setCondicion("(T_Usuario.ID_Rol=2 OR T_Usuario.ID_Rol=3 OR T_Usuario.ID_Rol=5 OR T_Usuario.ID_Rol=6 OR T_Usuario.ID_Rol=14) AND T_Usuario.Estado=1");
+                        $obj_usuario->obtiene_todos_los_usuarios();
+                        $usuarios = $obj_usuario->getArreglo();
                         
-                        $obj_horario->setCondicion("(T_HorarioUsuario.Fecha_Inicio<='".$fecha_actual."' AND T_HorarioUsuario.Fecha_Final>='".$fecha_actual."') AND T_HorarioUsuario.Estado=1");
-                        $obj_horario->obtener_horarios();
-                        $horarios = $obj_horario->getArreglo();
-                        
-                        $tam=count($horarios);
+                        $cadena_inconsistencia = "";                     
+                        //Cuenta los usuarios e inicia un ciclo
+                        $tam=count($usuarios);
                         for($i=0;$i<$tam;$i++){
-                            if($horario_usuario[$i]['Tipo_Horario']=='Vacaciones'){
-                                $id_horario= $i;
-                                break;
-                            } if ($horario_usuario[$i]['Tipo_Horario']=='Incapacidad'){
-                                $id_horario= $i;
-                                break;
-                            }if($horario_usuario[$i]['Tipo_Horario']=='Normal'){
-                                $id_horario= $i;
+                            $marcas_usuario="";
+                            $tipo_horario="";
+                            $horario_usuario="";
+                            $horario_turno="";
+//                            echo $usuarios[$i]['Nombre']." ".$usuarios[$i]['Apellido'];
+                            
+                            //Fija la fecha de busqueda
+                            $fecha = date('Y-m-j H:i:s');
+                            $fecha_actual = strtotime('-1 day',strtotime($fecha));
+                            $fecha_actual = date('Y-m-j', $fecha_actual);
+                            
+                            //Obtiene los horarios asignados al usuario del día anterior
+                            $obj_horario_usuario->setCondicion("(T_HorarioUsuario.Fecha_Inicio<='".$fecha_actual."' AND T_HorarioUsuario.Fecha_Final>='".$fecha_actual."') AND T_HorarioUsuario.Estado=1 AND T_HorarioUsuario.ID_Usuario=".$usuarios[$i]['ID_Usuario']);
+                            $obj_horario_usuario->obtener_horarios();
+                            $horario_usuario= $obj_horario_usuario->getArreglo();
+
+                            //Cuenta la cantidad de horarios de usuario
+                            $cant_horario= count($horario_usuario);
+                            for($h=0;$h<$cant_horario;$h++){
+                                if($horario_usuario[$h]['Tipo_Horario']=='Vacaciones'){
+                                    $tipo_horario=1;
+                                    $id_horario= $h;
+                                    break;
+                                } if ($horario_usuario[$h]['Tipo_Horario']=='Incapacidad'){
+                                    $tipo_horario=2;
+                                    $id_horario= $h;
+                                    break;
+                                }if($horario_usuario[$h]['Tipo_Horario']=='Normal'){
+                                    $tipo_horario=3;
+                                    $id_horario= $h;
+                                }
                             }
-                        }
-                        $fecha_actual= getdate();
-                        $horario_turno[0]= "";
-                        if(isset($id_horario)){
-                            switch ($fecha_actual['weekday']) {
-                                case 'Monday':
-                                    $horario_turno[0] = array_merge((['Hora_Entrada' =>($horario_usuario[$id_horario]['Hora_Entrada_Lunes'])]));
-                                    $horario_turno[0] = array_merge((['Hora_Salida' =>($horario_usuario[$id_horario]['Hora_Salida_Lunes'])]),$horario_turno[0]);
-                                    $horario_turno[0] = array_merge((['Tipo_Horario' =>($horario_usuario[$id_horario]['Tipo_Horario'])]),$horario_turno[0]);
-                                    break;
-                                case 'Tuesday':
-                                    $horario_turno[0] = array_merge((['Hora_Entrada' =>($horario_usuario[$id_horario]['Hora_Entrada_Martes'])]));
-                                    $horario_turno[0] = array_merge((['Hora_Salida' =>($horario_usuario[$id_horario]['Hora_Salida_Martes'])]),$horario_turno[0]);
-                                    $horario_turno[0] = array_merge((['Tipo_Horario' =>($horario_usuario[$id_horario]['Tipo_Horario'])]),$horario_turno[0]);
-                                    break;
-                                case 'Wednesday':
-                                    $horario_turno[0] = array_merge((['Hora_Entrada' =>($horario_usuario[$id_horario]['Hora_Entrada_Miercoles'])]));
-                                    $horario_turno[0] = array_merge((['Hora_Salida' =>($horario_usuario[$id_horario]['Hora_Salida_Miercoles'])]),$horario_turno[0]);
-                                    $horario_turno[0] = array_merge((['Tipo_Horario' =>($horario_usuario[$id_horario]['Tipo_Horario'])]),$horario_turno[0]);
-                                    break;
-                                case 'Thursday':
-                                    $horario_turno[0] = array_merge((['Hora_Entrada' =>($horario_usuario[$id_horario]['Hora_Entrada_Jueves'])]));
-                                    $horario_turno[0] = array_merge((['Hora_Salida' =>($horario_usuario[$id_horario]['Hora_Salida_Jueves'])]),$horario_turno[0]);
-                                    $horario_turno[0] = array_merge((['Tipo_Horario' =>($horario_usuario[$id_horario]['Tipo_Horario'])]),$horario_turno[0]);
-                                    break;
-                                case 'Friday':
-                                    $horario_turno[0] = array_merge((['Hora_Entrada' =>($horario_usuario[$id_horario]['Hora_Entrada_Viernes'])]));
-                                    $horario_turno[0] = array_merge((['Hora_Salida' =>($horario_usuario[$id_horario]['Hora_Salida_Viernes'])]),$horario_turno[0]);
-                                    $horario_turno[0] = array_merge((['Tipo_Horario' =>($horario_usuario[$id_horario]['Tipo_Horario'])]),$horario_turno[0]);
-                                    break;
-                                case 'Saturday':
-                                    $horario_turno[0] = array_merge((['Hora_Entrada' =>($horario_usuario[$id_horario]['Hora_Entrada_Sabado'])]));
-                                    $horario_turno[0] = array_merge((['Hora_Salida' =>($horario_usuario[$id_horario]['Hora_Salida_Sabado'])]),$horario_turno[0]);
-                                    $horario_turno[0] = array_merge((['Tipo_Horario' =>($horario_usuario[$id_horario]['Tipo_Horario'])]),$horario_turno[0]);
-                                    break;
-                                case 'Sunday':
-                                    $horario_turno[0] = array_merge((['Hora_Entrada' =>($horario_usuario[$id_horario]['Hora_Entrada_Domingo'])]));
-                                    $horario_turno[0] = array_merge((['Hora_Salida' =>($horario_usuario[$id_horario]['Hora_Salida_Domingo'])]),$horario_turno[0]);
-                                    $horario_turno[0] = array_merge((['Tipo_Horario' =>($horario_usuario[$id_horario]['Tipo_Horario'])]),$horario_turno[0]);
-                                    break;
+                            //Define la hora de entrada, salida y tipo de horario del día de ayer.
+                            $horario_turno[0]= "";
+                            if($tipo_horario!=""){
+                                $fecha_actual= getdate();
+                                switch ($fecha_actual['weekday']) {
+                                    case 'Tuesday':
+                                        $horario_turno[0] = array_merge((['Hora_Entrada' =>($horario_usuario[$id_horario]['Hora_Entrada_Lunes'])]));
+                                        $horario_turno[0] = array_merge((['Hora_Salida' =>($horario_usuario[$id_horario]['Hora_Salida_Lunes'])]),$horario_turno[0]);
+                                        $horario_turno[0] = array_merge((['Tipo_Horario' =>($horario_usuario[$id_horario]['Tipo_Horario'])]),$horario_turno[0]);
+                                        break;
+                                    case 'Wednesday':
+                                        $horario_turno[0] = array_merge((['Hora_Entrada' =>($horario_usuario[$id_horario]['Hora_Entrada_Martes'])]));
+                                        $horario_turno[0] = array_merge((['Hora_Salida' =>($horario_usuario[$id_horario]['Hora_Salida_Martes'])]),$horario_turno[0]);
+                                        $horario_turno[0] = array_merge((['Tipo_Horario' =>($horario_usuario[$id_horario]['Tipo_Horario'])]),$horario_turno[0]);
+                                        break;
+                                    case 'Thursday':
+                                        $horario_turno[0] = array_merge((['Hora_Entrada' =>($horario_usuario[$id_horario]['Hora_Entrada_Miercoles'])]));
+                                        $horario_turno[0] = array_merge((['Hora_Salida' =>($horario_usuario[$id_horario]['Hora_Salida_Miercoles'])]),$horario_turno[0]);
+                                        $horario_turno[0] = array_merge((['Tipo_Horario' =>($horario_usuario[$id_horario]['Tipo_Horario'])]),$horario_turno[0]);
+                                        break;
+                                    case 'Friday':
+                                        $horario_turno[0] = array_merge((['Hora_Entrada' =>($horario_usuario[$id_horario]['Hora_Entrada_Jueves'])]));
+                                        $horario_turno[0] = array_merge((['Hora_Salida' =>($horario_usuario[$id_horario]['Hora_Salida_Jueves'])]),$horario_turno[0]);
+                                        $horario_turno[0] = array_merge((['Tipo_Horario' =>($horario_usuario[$id_horario]['Tipo_Horario'])]),$horario_turno[0]);
+                                        break;
+                                    case 'Saturday':
+                                        $horario_turno[0] = array_merge((['Hora_Entrada' =>($horario_usuario[$id_horario]['Hora_Entrada_Viernes'])]));
+                                        $horario_turno[0] = array_merge((['Hora_Salida' =>($horario_usuario[$id_horario]['Hora_Salida_Viernes'])]),$horario_turno[0]);
+                                        $horario_turno[0] = array_merge((['Tipo_Horario' =>($horario_usuario[$id_horario]['Tipo_Horario'])]),$horario_turno[0]);
+                                        break;
+                                    case 'Sunday':
+                                        $horario_turno[0] = array_merge((['Hora_Entrada' =>($horario_usuario[$id_horario]['Hora_Entrada_Sabado'])]));
+                                        $horario_turno[0] = array_merge((['Hora_Salida' =>($horario_usuario[$id_horario]['Hora_Salida_Sabado'])]),$horario_turno[0]);
+                                        $horario_turno[0] = array_merge((['Tipo_Horario' =>($horario_usuario[$id_horario]['Tipo_Horario'])]),$horario_turno[0]);
+                                        break;
+                                    case 'Monday':
+                                        $horario_turno[0] = array_merge((['Hora_Entrada' =>($horario_usuario[$id_horario]['Hora_Entrada_Domingo'])]));
+                                        $horario_turno[0] = array_merge((['Hora_Salida' =>($horario_usuario[$id_horario]['Hora_Salida_Domingo'])]),$horario_turno[0]);
+                                        $horario_turno[0] = array_merge((['Tipo_Horario' =>($horario_usuario[$id_horario]['Tipo_Horario'])]),$horario_turno[0]);
+                                        break;
+                                }
+                            } else {
+                                $horario_turno[0] = array_merge((['Hora_Entrada' =>("NA")]));
+                                $horario_turno[0] = array_merge((['Hora_Salida' =>("NA")]),$horario_turno[0]);
+                                $horario_turno[0] = array_merge((['Tipo_Horario' =>("NA")]),$horario_turno[0]);
                             }
-                        } else {
-                            $horario_turno[0] = array_merge((['Hora_Entrada' =>("NA")]));
-                            $horario_turno[0] = array_merge((['Hora_Salida' =>("NA")]),$horario_turno[0]);
-                            $horario_turno[0] = array_merge((['Tipo_Horario' =>("NA")]),$horario_turno[0]);
-                        }
-                    }
+                            
+                            //$cadena_inconsistencia.="Horario de ".$usuarios[$i]['Nombre']." ".$usuarios[$i]['Apellido'];
+                            //$cadena_inconsistencia.= " Entrada: ".$horario_turno[0]['Hora_Entrada'].", Salida: ".$horario_turno[0]['Hora_Salida'].", Tipo: ".$horario_turno[0]['Tipo_Horario']."\r\n";
+                            //Fija la fecha de busqueda
+                            $fecha = date('Y-m-j H:i:s');
+                            $fecha_actual = strtotime('-1 day',strtotime($fecha));
+                            $fecha_actual = date('Y-m-j', $fecha_actual);
+                            //Obtiene información de las marcas realizadas por el usuario
+                            $obj_marca->setCondicion("T_Marca.ID_Usuario=".$usuarios[$i]['ID_Usuario']." AND T_Marca.Tipo_Marca='Turno' AND (T_Marca.Marca_Entrada>='".$fecha_actual." 00:00:00' AND T_Marca.Marca_Entrada<='".$fecha_actual." 11:59:59')");
+                            $obj_marca->obtener_marcas();
+                            $marcas_usuario = $obj_marca->getArreglo();
+                            
+                            if(isset($marcas_usuario[0]['Marca_Entrada'])&& $horario_turno[0]['Hora_Entrada']!=""){
+                                if($tipo_horario==3){
+                                    if($marcas_usuario[0]['Marca_Entrada']==""){
+                                        $this->asistencia_generar_inconsistencia_automatica($usuarios[$i]['ID_Usuario'], $marcas_usuario[0]['ID_Marca'], $fecha_actual, "5");
+                                        $cadena_inconsistencia.= "sin marca de entrada--> inconsistencia: Omisión de marca de entrada ".$usuarios[$i]['Nombre']." ".$usuarios[$i]['Apellido']."\r\n";
+                                    }
+                                    if($marcas_usuario[0]['Marca_Salida']==""){
+                                        $this->asistencia_generar_inconsistencia_automatica($usuarios[$i]['ID_Usuario'], $marcas_usuario[0]['ID_Marca'], $fecha_actual, "6");
+                                        $cadena_inconsistencia.= "sin marca de salida--> inconsistencia: Omisión de marca de salida ".$usuarios[$i]['Nombre']." ".$usuarios[$i]['Apellido']."\r\n";
+                                    }else{
+                                        $fecha1 = new DateTime($fecha_actual.' '.$horario_turno[0]['Hora_Salida']);
+                                        $fecha2 = new DateTime($marcas_usuario[0]['Marca_Salida']);
+                                        $diff = $fecha1->diff($fecha2); 
+                                        $difencia_tiempo=(intval($diff->h)*60)+(intval($diff->i)*1);
+//                                        $cadena_inconsistencia.= "diferencia1: ".$difencia_tiempo."\r\n";
+                                        if($difencia_tiempo>0){
+                                            $this->asistencia_generar_inconsistencia_automatica($usuarios[$i]['ID_Usuario'], $marcas_usuario[0]['ID_Marca'], $fecha_actual, "2");
+                                            $cadena_inconsistencia.= "Menos tiempo de laborar --> inconsistencia: Salida anticipada ".$usuarios[$i]['Nombre']." ".$usuarios[$i]['Apellido']."\r\n";
+                                        }
+                                        $fecha1 = new DateTime($marcas_usuario[0]['Marca_Entrada']);
+                                        $fecha2 = new DateTime($marcas_usuario[0]['Marca_Salida']);
+                                        $diff = $fecha1->diff($fecha2); 
+                                        $difencia_tiempo=(intval($diff->h)*60)+(intval($diff->i)*1);
+//                                        $cadena_inconsistencia.= "diferencia2: ".$difencia_tiempo."\r\n";
+                                        if($difencia_tiempo>750){
+                                            $this->asistencia_generar_inconsistencia_automatica($usuarios[$i]['ID_Usuario'], $marcas_usuario[0]['ID_Marca'], $fecha_actual, "3");
+                                            $cadena_inconsistencia.= "Más de 12 hrs de laborar --> inconsistencia: Exceso en turno ".$usuarios[$i]['Nombre']." ".$usuarios[$i]['Apellido']."\r\n";
+                                        }
+                                    }
+                                }else{
+                                    if($marcas_usuario[0]['Marca_Salida']!=""){
+                                        $this->asistencia_generar_inconsistencia_automatica($usuarios[$i]['ID_Usuario'], $marcas_usuario[0]['ID_Marca'], $fecha_actual, "3");
+                                        $cadena_inconsistencia.= "Marca en incapacidad, vacaciones o sin horario--> inconsistencia: Marca fuera de horario ".$usuarios[$i]['Nombre']." ".$usuarios[$i]['Apellido']."\r\n";
+                                    }
+                                }
+                            } else{
+//                                $obj_marca->setCondicion("T_Marca.ID_Usuario=".$usuarios[$i]['ID_Usuario']);
+//                                $obj_marca->obtener_marcas();
+//                                $marcas_usuario = $obj_marca->getArreglo();
+                                
+                                if($horario_turno[0]['Tipo_Horario']=="Normal" && $horario_turno[0]['Hora_Entrada']!="" && $horario_turno[0]['Hora_Entrada']<="11:59"){
+                                    $this->asistencia_generar_inconsistencia_automatica($usuarios[$i]['ID_Usuario'], $marcas_usuario[0]['ID_Marca'], $fecha_actual, "5");
+                                    $this->asistencia_generar_inconsistencia_automatica($usuarios[$i]['ID_Usuario'], $marcas_usuario[0]['ID_Marca'], $fecha_actual, "6");
+                                    $cadena_inconsistencia.= "No tiene marca en horario normal -->inconsistencia: Omisión de marca de entrada ".$usuarios[$i]['Nombre']." ".$usuarios[$i]['Apellido']."\r\n";
+                                    $cadena_inconsistencia.= "No tiene marca en horario normal -->inconsistencia: Omisión de marca de Salida ".$usuarios[$i]['Nombre']." ".$usuarios[$i]['Apellido']."\r\n";
+                                } if(isset($marcas_usuario[0]['Marca_Salida'])&& $horario_turno[0]['Hora_Salida']==""){
+                                    $this->asistencia_generar_inconsistencia_automatica($usuarios[$i]['ID_Usuario'], $marcas_usuario[0]['ID_Marca'], $fecha_actual, "3");
+                                    $cadena_inconsistencia.= "Tiene marca en horario normal y día libre-->inconsistencia: Marca fuera de horario ".$usuarios[$i]['Nombre']." ".$usuarios[$i]['Apellido']."\r\n";
+                                }
+                            }
+                           //$cadena_inconsistencia.=" \r\n"; 
+                        }// Fin de for principal de usuario
+                        //Abre el archivo para escribirle 
+                        $fp = fopen($ruta,"w+"); //no olvidar crear al archivo visitantes.txt y poner el path correcto
+                        //Escribe en el archivo
+                        fwrite($fp, $cadena_inconsistencia);
+                        //Cierra el archivo
+                        fclose($fp);
+                    }//Fin de if con apertura de archivo
                 }
-                break;       
-         }
+                
+                //Marcas de salida anticipadas, en día libre, vacaciones o incapacidad o si marca de salida de las 16:00 a las 00:00 del día anterior    
+                if(date("H:i:s", $time)>='13:30:00' && date("H:i:s", $time)<='14:20:00'){
+                    $ruta=  $raiz."Cuenta_Visitas_Oriel/Ejecucion_Procesos/".date("Ymd", $time)." Asistencia_tarde.txt";
+                    if(!file_exists($ruta)){
+                        //Abre el archivo , lo crea si no lo encuentra
+                        $fp = fopen($ruta,"a+");
+                        //Cierra el archivo
+                        fclose($fp);
+                        
+                        $obj_marca = new cls_marca_usuario();
+                        $obj_usuario = new cls_usuarios();
+                        $obj_horario_usuario = new cls_horario_usuario();
+                        
+                        //Obtiene todos los usuarios del sistema
+                        $obj_usuario->setCondicion("(T_Usuario.ID_Rol=2 OR T_Usuario.ID_Rol=3 OR T_Usuario.ID_Rol=5 OR T_Usuario.ID_Rol=6 OR T_Usuario.ID_Rol=14) AND T_Usuario.Estado=1");
+                        $obj_usuario->obtiene_todos_los_usuarios();
+                        $usuarios = $obj_usuario->getArreglo();
+                        
+                        $cadena_inconsistencia = "";                     
+                        //Cuenta los usuarios e inicia un ciclo
+                        $tam=count($usuarios);
+                        for($i=0;$i<$tam;$i++){
+                            $marcas_usuario="";
+                            $tipo_horario="";
+                            $horario_usuario="";
+                            $horario_turno="";
+//                            echo $usuarios[$i]['Nombre']." ".$usuarios[$i]['Apellido'];
+                            
+                            //Fija la fecha de busqueda
+                            $fecha = date('Y-m-j H:i:s');
+                            $fecha_actual = strtotime('-1 day',strtotime($fecha));
+                            $fecha_actual = date('Y-m-j', $fecha_actual);
+                            
+                            //Obtiene los horarios asignados al usuario del día anterior
+                            $obj_horario_usuario->setCondicion("(T_HorarioUsuario.Fecha_Inicio<='".$fecha_actual."' AND T_HorarioUsuario.Fecha_Final>='".$fecha_actual."') AND T_HorarioUsuario.Estado=1 AND T_HorarioUsuario.ID_Usuario=".$usuarios[$i]['ID_Usuario']);
+                            $obj_horario_usuario->obtener_horarios();
+                            $horario_usuario= $obj_horario_usuario->getArreglo();
+
+                            //Cuenta la cantidad de horarios de usuario
+                            $cant_horario= count($horario_usuario);
+                            for($h=0;$h<$cant_horario;$h++){
+                                if($horario_usuario[$h]['Tipo_Horario']=='Vacaciones'){
+                                    $tipo_horario=1;
+                                    $id_horario= $h;
+                                    break;
+                                } if ($horario_usuario[$h]['Tipo_Horario']=='Incapacidad'){
+                                    $tipo_horario=2;
+                                    $id_horario= $h;
+                                    break;
+                                }if($horario_usuario[$h]['Tipo_Horario']=='Normal'){
+                                    $tipo_horario=3;
+                                    $id_horario= $h;
+                                }
+                            }
+                            //Define la hora de entrada, salida y tipo de horario del día de ayer.
+                            $horario_turno[0]= "";
+                            if($tipo_horario!=""){
+                                $fecha_actual= getdate();
+                                switch ($fecha_actual['weekday']) {
+                                    case 'Tuesday':
+                                        $horario_turno[0] = array_merge((['Hora_Entrada' =>($horario_usuario[$id_horario]['Hora_Entrada_Lunes'])]));
+                                        $horario_turno[0] = array_merge((['Hora_Salida' =>($horario_usuario[$id_horario]['Hora_Salida_Lunes'])]),$horario_turno[0]);
+                                        $horario_turno[0] = array_merge((['Tipo_Horario' =>($horario_usuario[$id_horario]['Tipo_Horario'])]),$horario_turno[0]);
+                                        break;
+                                    case 'Wednesday':
+                                        $horario_turno[0] = array_merge((['Hora_Entrada' =>($horario_usuario[$id_horario]['Hora_Entrada_Martes'])]));
+                                        $horario_turno[0] = array_merge((['Hora_Salida' =>($horario_usuario[$id_horario]['Hora_Salida_Martes'])]),$horario_turno[0]);
+                                        $horario_turno[0] = array_merge((['Tipo_Horario' =>($horario_usuario[$id_horario]['Tipo_Horario'])]),$horario_turno[0]);
+                                        break;
+                                    case 'Thursday':
+                                        $horario_turno[0] = array_merge((['Hora_Entrada' =>($horario_usuario[$id_horario]['Hora_Entrada_Miercoles'])]));
+                                        $horario_turno[0] = array_merge((['Hora_Salida' =>($horario_usuario[$id_horario]['Hora_Salida_Miercoles'])]),$horario_turno[0]);
+                                        $horario_turno[0] = array_merge((['Tipo_Horario' =>($horario_usuario[$id_horario]['Tipo_Horario'])]),$horario_turno[0]);
+                                        break;
+                                    case 'Friday':
+                                        $horario_turno[0] = array_merge((['Hora_Entrada' =>($horario_usuario[$id_horario]['Hora_Entrada_Jueves'])]));
+                                        $horario_turno[0] = array_merge((['Hora_Salida' =>($horario_usuario[$id_horario]['Hora_Salida_Jueves'])]),$horario_turno[0]);
+                                        $horario_turno[0] = array_merge((['Tipo_Horario' =>($horario_usuario[$id_horario]['Tipo_Horario'])]),$horario_turno[0]);
+                                        break;
+                                    case 'Saturday':
+                                        $horario_turno[0] = array_merge((['Hora_Entrada' =>($horario_usuario[$id_horario]['Hora_Entrada_Viernes'])]));
+                                        $horario_turno[0] = array_merge((['Hora_Salida' =>($horario_usuario[$id_horario]['Hora_Salida_Viernes'])]),$horario_turno[0]);
+                                        $horario_turno[0] = array_merge((['Tipo_Horario' =>($horario_usuario[$id_horario]['Tipo_Horario'])]),$horario_turno[0]);
+                                        break;
+                                    case 'Sunday':
+                                        $horario_turno[0] = array_merge((['Hora_Entrada' =>($horario_usuario[$id_horario]['Hora_Entrada_Sabado'])]));
+                                        $horario_turno[0] = array_merge((['Hora_Salida' =>($horario_usuario[$id_horario]['Hora_Salida_Sabado'])]),$horario_turno[0]);
+                                        $horario_turno[0] = array_merge((['Tipo_Horario' =>($horario_usuario[$id_horario]['Tipo_Horario'])]),$horario_turno[0]);
+                                        break;
+                                    case 'Monday':
+                                        $horario_turno[0] = array_merge((['Hora_Entrada' =>($horario_usuario[$id_horario]['Hora_Entrada_Domingo'])]));
+                                        $horario_turno[0] = array_merge((['Hora_Salida' =>($horario_usuario[$id_horario]['Hora_Salida_Domingo'])]),$horario_turno[0]);
+                                        $horario_turno[0] = array_merge((['Tipo_Horario' =>($horario_usuario[$id_horario]['Tipo_Horario'])]),$horario_turno[0]);
+                                        break;
+                                }
+                            } else {
+                                $horario_turno[0] = array_merge((['Hora_Entrada' =>("NA")]));
+                                $horario_turno[0] = array_merge((['Hora_Salida' =>("NA")]),$horario_turno[0]);
+                                $horario_turno[0] = array_merge((['Tipo_Horario' =>("NA")]),$horario_turno[0]);
+                            }
+                            
+                            //$cadena_inconsistencia.="Horario de ".$usuarios[$i]['Nombre']." ".$usuarios[$i]['Apellido'];
+                            //$cadena_inconsistencia.= " Entrada: ".$horario_turno[0]['Hora_Entrada'].", Salida: ".$horario_turno[0]['Hora_Salida'].", Tipo: ".$horario_turno[0]['Tipo_Horario']."\r\n";
+                            //Fija la fecha de busqueda
+                            $fecha = date('Y-m-j H:i:s');
+                            $fecha_actual = strtotime('-1 day',strtotime($fecha));
+                            $fecha_actual = date('Y-m-j', $fecha_actual);
+                            //Obtiene información de las marcas realizadas por el usuario
+                            $obj_marca->setCondicion("T_Marca.ID_Usuario=".$usuarios[$i]['ID_Usuario']." AND T_Marca.Tipo_Marca='Turno' AND (T_Marca.Marca_Entrada>='".$fecha_actual." 12:00:00' AND T_Marca.Marca_Entrada<='".$fecha_actual." 23:59:59')");
+                            $obj_marca->obtener_marcas();
+                            $marcas_usuario = $obj_marca->getArreglo();
+                            
+                            if(isset($marcas_usuario[0]['Marca_Entrada'])&& $horario_turno[0]['Hora_Entrada']!=""){
+                                if($tipo_horario==3){
+                                    if($marcas_usuario[0]['Marca_Entrada']==""){
+                                        $this->asistencia_generar_inconsistencia_automatica($usuarios[$i]['ID_Usuario'], $marcas_usuario[0]['ID_Marca'], $fecha_actual, "5");
+                                        $cadena_inconsistencia.= "sin marca de entrada--> inconsistencia: Omisión de marca de entrada ".$usuarios[$i]['Nombre']." ".$usuarios[$i]['Apellido']."\r\n";
+                                    }
+                                    if($marcas_usuario[0]['Marca_Salida']==""){
+                                        $this->asistencia_generar_inconsistencia_automatica($usuarios[$i]['ID_Usuario'], $marcas_usuario[0]['ID_Marca'], $fecha_actual, "6");
+                                        $cadena_inconsistencia.= "sin marca de salida--> inconsistencia: Omisión de marca de salida ".$usuarios[$i]['Nombre']." ".$usuarios[$i]['Apellido']."\r\n";
+                                    }else{
+                                        $fecha1 = new DateTime($fecha_actual.' '.$horario_turno[0]['Hora_Salida']);
+                                        $fecha2 = new DateTime($marcas_usuario[0]['Marca_Salida']);
+                                        $diff = $fecha1->diff($fecha2); 
+                                        $difencia_tiempo=(intval($diff->h)*60)+(intval($diff->i)*1);
+//                                        $cadena_inconsistencia.= "diferencia1: ".$difencia_tiempo."\r\n";
+                                        if($difencia_tiempo<0){
+                                            $this->asistencia_generar_inconsistencia_automatica($usuarios[$i]['ID_Usuario'], $marcas_usuario[0]['ID_Marca'], $fecha_actual, "2");
+                                            $cadena_inconsistencia.= "Menos tiempo de laborar --> inconsistencia: Salida anticipada ".$usuarios[$i]['Nombre']." ".$usuarios[$i]['Apellido']."\r\n";
+                                        }
+                                        $fecha1 = new DateTime($marcas_usuario[0]['Marca_Entrada']);
+                                        $fecha2 = new DateTime($marcas_usuario[0]['Marca_Salida']);
+                                        $diff = $fecha1->diff($fecha2); 
+                                        $difencia_tiempo=(intval($diff->h)*60)+(intval($diff->i)*1);
+//                                        $cadena_inconsistencia.= "diferencia2: ".$difencia_tiempo."\r\n";
+                                        if($difencia_tiempo>750){
+                                            $this->asistencia_generar_inconsistencia_automatica($usuarios[$i]['ID_Usuario'], $marcas_usuario[0]['ID_Marca'], $fecha_actual, "3");
+                                            $cadena_inconsistencia.= "Más de 12 hrs de laborar --> inconsistencia: Exceso en turno ".$usuarios[$i]['Nombre']." ".$usuarios[$i]['Apellido']."\r\n";
+                                        }
+                                    }
+                                }else{
+                                    if($marcas_usuario[0]['Marca_Salida']!=""){
+                                        $this->asistencia_generar_inconsistencia_automatica($usuarios[$i]['ID_Usuario'], $marcas_usuario[0]['ID_Marca'], $fecha_actual, "3");
+                                        $cadena_inconsistencia.= "Marca en incapacidad, vacaciones o sin horario--> inconsistencia: Marca fuera de horario ".$usuarios[$i]['Nombre']." ".$usuarios[$i]['Apellido']."\r\n";
+                                    }
+                                }
+                            } else{
+//                                $obj_marca->setCondicion("T_Marca.ID_Usuario=".$usuarios[$i]['ID_Usuario']);
+//                                $obj_marca->obtener_marcas();
+//                                $marcas_usuario = $obj_marca->getArreglo();
+                                
+                                if($horario_turno[0]['Tipo_Horario']=="Normal" && $horario_turno[0]['Hora_Entrada']!="" && $horario_turno[0]['Hora_Entrada']>="12:00"){
+                                    $this->asistencia_generar_inconsistencia_automatica($usuarios[$i]['ID_Usuario'], $marcas_usuario[0]['ID_Marca'], $fecha_actual, "5");
+                                    $this->asistencia_generar_inconsistencia_automatica($usuarios[$i]['ID_Usuario'], $marcas_usuario[0]['ID_Marca'], $fecha_actual, "6");
+                                    $cadena_inconsistencia.= "No tiene marca en horario normal -->inconsistencia: Omisión de marca de entrada ".$usuarios[$i]['Nombre']." ".$usuarios[$i]['Apellido']."\r\n";
+                                    $cadena_inconsistencia.= "No tiene marca en horario normal -->inconsistencia: Omisión de marca de Salida ".$usuarios[$i]['Nombre']." ".$usuarios[$i]['Apellido']."\r\n";
+                                } if(isset($marcas_usuario[0]['Marca_Salida'])&& $horario_turno[0]['Hora_Salida']==""){
+                                    $this->asistencia_generar_inconsistencia_automatica($usuarios[$i]['ID_Usuario'], $marcas_usuario[0]['ID_Marca'], $fecha_actual, "3");
+                                    $cadena_inconsistencia.= "Tiene marca en horario normal y día libre-->inconsistencia: Marca fuera de horario ".$usuarios[$i]['Nombre']." ".$usuarios[$i]['Apellido']."\r\n";
+                                }
+                            }
+                            //$cadena_inconsistencia.=" \r\n";
+                        }// Fin de for principal de usuario
+                        //Abre el archivo para escribirle 
+                        $fp = fopen($ruta,"w+"); //no olvidar crear al archivo visitantes.txt y poner el path correcto
+                        //Escribe en el archivo
+                        fwrite($fp, $cadena_inconsistencia);
+                        //Cierra el archivo
+                        fclose($fp);
+                    }//Fin de if con apertura de archivo
+                }
+                
+                //verificar inconsistencias para asignarlas a supervisor empresa o supervisor banco según su fecha
+                $ruta=  $raiz."Cuenta_Visitas_Oriel/Ejecucion_Procesos/".date("Ymd", $time)." Inconsistencias_vencidas.txt";
+                if(!file_exists($ruta)){
+                    //Abre el archivo , lo crea si no lo encuentra
+                    $fp = fopen($ruta,"a+");
+                    //Cierra el archivo
+                    fclose($fp);
+                    $cadena_inconsistencia="";
+                    $obj_marca = new cls_marca_usuario();
+
+                    //Obtiene las inconsistencias pendientes con mas de 5 dias
+                    $fecha = date('Y-m-j H:i:s');
+                    $fecha_actual = strtotime('-5 day',strtotime($fecha));
+                    $fecha_actual = date('Y-m-j', $fecha_actual);
+                    $obj_marca->setCondicion("T_InconsistenciaMarca.Fecha_Inconsistencia<'".$fecha_actual."' AND T_InconsistenciaMarca.ID_Estado_Inconsistencia=1");
+                    $obj_marca->obtener_inconsistencias_marcas();
+                    $inconsistencias = $obj_marca->getArreglo();
+                    //Las inconsitencias obtenidas son cambiadas de estado y asignadas supervisor de la empresa
+                    $tam = count($inconsistencias);
+                    for($i=0;$i<$tam;$i++){
+                        $obj_marca->setCondicion("T_InconsistenciaMarca.ID_Inconsistencia_Marca=".$inconsistencias[$i]['ID_Inconsistencia_Marca']);
+                        $obj_marca->setJustificacion("El tiempo para jusficar expiró, la inconsistencia es asignada al supervisor de la empresa");
+                        $obj_marca->setEstado("3");
+                        $obj_marca->guardar_justificacion_usuario();
+                        $cadena_inconsistencia.="Inconsistencia desde ".$inconsistencias[$i]['Fecha_Inconsistencia']." del usuario ".$inconsistencias[$i]['ID_Usuario']." fue enviada al supervisor de la empresa \r\n";
+                    }
+                    //Obtiene las inconsistencias Pendiente supervisor empresa con mas 8 dias y se asignan al banco
+                    $fecha = date('Y-m-j H:i:s');
+                    $fecha_actual = strtotime('-8 day',strtotime($fecha));
+                    $fecha_actual = date('Y-m-j', $fecha_actual);
+                    $obj_marca->setCondicion("T_InconsistenciaMarca.Fecha_Inconsistencia<'".$fecha_actual."' AND (T_InconsistenciaMarca.ID_Estado_Inconsistencia=3 OR T_InconsistenciaMarca.ID_Estado_Inconsistencia=1)");
+                    $obj_marca->obtener_inconsistencias_marcas();
+                    $inconsistencias = $obj_marca->getArreglo();
+                    //Las inconsitencias obtenidas son cambiadas de estado y asignadas supervisor del Banco
+                    $tam = count($inconsistencias);
+                    for($i=0;$i<$tam;$i++){
+                        $obj_marca->setCondicion("T_InconsistenciaMarca.ID_Inconsistencia_Marca=".$inconsistencias[$i]['ID_Inconsistencia_Marca']);
+                        $obj_marca->setSeguimiento("El tiempo de la empresa para jusficar expiró, la inconsistencia es asignada al supervisor del Banco");
+                        $obj_marca->setId_empresa("82");
+                        $obj_marca->setEstado("4");
+                        $obj_marca->guardar_justificacion_empresa();
+                        $cadena_inconsistencia.="Inconsistencia desde  ".$inconsistencias[$i]['Fecha_Inconsistencia']." del usuario ".$inconsistencias[$i]['ID_Usuario']." fue enviada al supervisor del Banco \r\n";
+                    }
+                    //Abre el archivo para escribirle 
+                    $fp = fopen($ruta,"w+"); //no olvidar crear al archivo visitantes.txt y poner el path correcto
+                    //Escribe en el archivo
+                    fwrite($fp, $cadena_inconsistencia);
+                    //Cierra el archivo
+                    fclose($fp);
+                }//Fin de if con apertura de archivo
+
+                break;
+                              
+        }
         //Establece la ruta del archivo txt que lleva el control de visitas  a la pagina
-       
-        
     }
     
     /////////////////////////////////////////////////////////////////////////////
@@ -11089,6 +11411,7 @@
                 $pendiente_puestoZ2[$i]['Mensaje']=$params[$i]['Nombre'].": ".$params[$i]['Evento'];
                 $pendiente_puestoZ2[0]['Contador']=$i+1;
             }
+            
             require __DIR__ . '/../vistas/plantillas/rpt_alerta_general.php';
         }
         else {
@@ -11686,7 +12009,7 @@
         }
     }
     
-        /*
+    /*
     //Función para verificar horarios de oficina, validar ingresos, cierres y pruebas
     //Recibe los siguientes parametros: 
     //  -Hora apertura (según el día de la semana)
@@ -11757,6 +12080,7 @@
     ////////////////////////////////////////////////////////////////////////////
     public function asistencia_personal(){
         if(isset($_SESSION['nombre'])){
+            $this->ejecucion_automatico_proceso("Asistencia");
             $obj_marca = new cls_marca_usuario();
             $obj_horario = new cls_horario_usuario();
             
@@ -11887,15 +12211,30 @@
             //Convierta la fecha a formto aaaa/mm/dd hh:mm
             $fecha_actual= $fecha_actual['year']."-".$fecha_actual['mon']."-".$fecha_actual['mday'].' '.$fecha_actual['hours'].':'.$fecha_actual['minutes'].':'.$fecha_actual['seconds'];
             
+            
+            
             switch ($_POST['tipo']) {
                 case 'Entrada_Turno':
-                    $obj_marca->setUsuario($_SESSION['id']);
-                    $obj_marca->setEntrada($fecha_actual);
-                    $obj_marca->setTipo("Turno");
-                    $obj_marca->setEstado("0");
-                    $obj_marca->guardar_marca_entrada();
-                    $id_marca = $obj_marca->getArreglo();
-                    echo $id_marca[0]['ID_Marca'];
+                    //Obtiene información de marca de turno que se encuentren 15 horas atras
+                    $fecha = date('Y-m-j H:i:s');
+                    $nuevafecha = strtotime('-14 hour',strtotime($fecha));
+                    $nuevafecha = date('Y-m-j H:i:s', $nuevafecha);
+                    $obj_marca->setCondicion("T_Marca.ID_Usuario=".$_SESSION['id']." AND T_Marca.Tipo_Marca='Turno' AND T_Marca.Marca_Entrada>'".$nuevafecha."'");
+                    $obj_marca->obtener_marcas();
+                    $marca_turno = $obj_marca->getArreglo();
+                    
+                    if(isset($marca_turno[0]['Entrada'])){
+                        echo $marca_turno[0]['ID_Marca'];
+                    } else {
+                        $obj_marca->setUsuario($_SESSION['id']);
+                        $obj_marca->setEntrada($fecha_actual);
+                        $obj_marca->setTipo("Turno");
+                        $obj_marca->setEstado("0");
+                        $obj_marca->guardar_marca_entrada();
+                        $id_marca = $obj_marca->getArreglo();
+                        echo $id_marca[0]['ID_Marca']; 
+                    }
+                    
                     break;
                 case 'Salida_Turno':
                     $obj_marca->setId($_POST['id_marca']);
@@ -12219,10 +12558,12 @@
             } else{
                 $fecha_inicio = date("Y-m-d");
                 $fecha_fin= date("Y-m-d");
-                if($_SESSION['modulos']['Módulo-Asistencia encargado empresa']==1 || $_SESSION['modulos']['Módulo-Asistencia encargado Banco']==1){
-                    $obj_marcas->setCondicion("(T_InconsistenciaMarca.Fecha_Inconsistencia between '".$fecha_inicio." 00:00:00' AND '".$fecha_fin." 23:59:59')");
+                if($_SESSION['modulos']['Módulo-Asistencia encargado empresa']==1){
+                    $obj_marcas->setCondicion("T_InconsistenciaMarca.ID_Estado_Inconsistencia=3");
+                } if($_SESSION['modulos']['Módulo-Asistencia encargado Banco']==1){
+                    $obj_marcas->setCondicion("T_InconsistenciaMarca.ID_Estado_Inconsistencia=4");
                 } else{
-                    $obj_marcas->setCondicion("(T_InconsistenciaMarca.Fecha_Inconsistencia between '".$fecha_inicio." 00:00:00' AND '".$fecha_fin." 23:59:59') AND T_InconsistenciaMarca.ID_Usuario='".$_SESSION['id']."'");
+                    $obj_marcas->setCondicion("(T_InconsistenciaMarca.ID_Estado_Inconsistencia=1) AND T_InconsistenciaMarca.ID_Usuario='".$_SESSION['id']."'");
                 }
             }
             
@@ -12264,6 +12605,25 @@
             $obj_marca->setId($_POST['id_marca']);
             $obj_marca->setEntrada($fecha_actual);
             $obj_marca->setTipo($_POST['tipo_inconsistencia']);
+            $obj_marca->setEstado("1");
+            $obj_marca->guardar_inconsistencia();
+            
+        }else {
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }
+    }
+    
+    public function asistencia_generar_inconsistencia_automatica($id_usuario, $id_marca,$fecha,$tipo){
+        if(isset($_SESSION['nombre'])){
+            $obj_marca = new cls_marca_usuario();
+            $obj_usuario = new cls_usuarios();
+            
+            $obj_marca->setUsuario($id_usuario);
+            $obj_marca->setId($id_marca);
+            $obj_marca->setEntrada($fecha);
+            $obj_marca->setTipo($tipo);
             $obj_marca->setEstado("1");
             $obj_marca->guardar_inconsistencia();
             
@@ -12323,8 +12683,6 @@
     public function asistencia_guardar_justificacion_inconsistencia(){
         if(isset($_SESSION['nombre'])){
             $obj_marca = new cls_marca_usuario();
-            
-            
             switch ($_POST['tipo']) {
                 case 'Justificacion_Usuario':
                     $obj_marca->setCondicion("T_InconsistenciaMarca.ID_Inconsistencia_Marca=".$_POST['id_inconsistencia']);
@@ -12366,4 +12724,5 @@
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }  
     }
+    
 }
