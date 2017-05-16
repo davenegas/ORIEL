@@ -10,7 +10,7 @@
             .ancho{
                 display: table;
                 table-layout: fixed;
-                height: 350px;
+                height: 370px;
                 width: 100%;
             }
         </style>
@@ -276,6 +276,7 @@
                     <div class="col-sm-12">
                         <div> <p></p></div>
                     </div>
+                    
                     <div class="row">
                         <div class="col-sm-6">
                             <div class="well ancho" >
@@ -325,10 +326,42 @@
                         </div>
                         <div class="col-sm-6">
                             <div class="well ancho">
-                                <h3>Inconsistencias</h3>
-                                <br><br>
-                                <h4>Cantidad de inconsistencias personales sin justificar</h4>
-                                <h1><a href="index.php?ctl=asistencia_lista_marcas"><?php echo $cant_inconsistencias?></a></h1>
+                                <div id="myCarousel" class="carousel slide" data-ride="carousel">
+                                        <!-- Indicators -->
+                                        <ol class="carousel-indicators">
+                                            <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+                                            <li data-target="#myCarousel" data-slide-to="1"></li>
+                                            <!--<li data-target="#myCarousel" data-slide-to="2"></li>-->
+                                        </ol>
+
+                                        <!-- Wrapper for slides -->
+                                        <div class="carousel-inner">
+                                            <div class="item active">
+                                                <h3>Inconsistencias</h3>
+                                                <br>
+                                                <br>
+                                                <h4>Cantidad de inconsistencias personales sin justificar</h4>
+                                                <h1><a href="index.php?ctl=asistencia_lista_marcas"><?php echo $cant_inconsistencias?></a></h1>
+                                                <br>
+                                                <p>Para ver las inconsistencias dar click al número de arriba</p>
+                                                <p>Las inconsistencias se vencen en 5 días, luego de vencidas son enviadas directamente al supervisor</p>
+                                                <br><br>
+                                                <div class="carousel-caption"></div>
+                                            </div>
+                                            <div class="item">
+                                                <h3>Horario de trabajo para el día de hoy</h3>
+                                                <br>
+                                                <br>
+                                                <h4>Hora de entrada: <?php echo $horario_turno[0]['Hora_Entrada'];?></h4><br>
+                                                <h4>Hora de salida: <?php echo $horario_turno[0]['Hora_Salida'];?></h4>
+                                                <br>
+                                                <p>Su horario vence el <?php echo $horario_turno[0]['Fecha_Vencimiento'];?></p>
+                                                <br><br><br><br>
+                                                <div class="carousel-caption"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                
                                 <!--<h4>Se horario está próximo a vencer, por favor comuníquese con su supervisor inmediato para la actualización del mismo</h4>-->
                             </div>
                         </div>
@@ -374,7 +407,7 @@
                                     </section>
                                 <?php } else {?>
                                     <h3>Información de marcas del turno</h3>
-                                    <br><br><br>
+                                    
                                     <!--<h2>***PROXIMAMENTE***</h2>-->
                                 <?php } ?>
                             </div>

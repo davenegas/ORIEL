@@ -11638,6 +11638,7 @@
         if(isset($_SESSION['nombre'])){
             $obj_punto = new cls_puntosBCR();
             $obj_horario = new cls_horario();
+            $obj_eventos = new cls_eventos();
             //Buscar la información de un PuntoBCR basado en el código del cajero
             $obj_punto->setCondicion("T_PuntoBCR.Codigo='".strtoupper($_POST['id'])."' AND T_PuntoBCR.Estado=1");
             $obj_punto->obtiene_todos_los_puntos_bcr();
@@ -11692,6 +11693,15 @@
                     $puntobcr[0] = array_merge((['Hora_Apertura_Agencia' =>($horariopunto[0]['Hora_Apertura_Domingo'])]),$puntobcr[0]);
                     $puntobcr[0] = array_merge((['Hora_Cierre_Agencia' =>($horariopunto[0]['Hora_Cierre_Domingo'])]),$puntobcr[0]);
                     break;
+            }
+            
+            $obj_eventos->setCondicion("T_Evento.ID_PuntoBCR=".$puntobcr[0]['ID_PuntoBCR']." AND T_Evento.ID_Tipo_Evento=22 AND T_Evento.ID_EstadoEvento='1' AND T_Evento.Fecha='".date('Y-m-j')."'");
+            $obj_eventos->obtiene_todos_los_eventos();
+            $evento_pendiente= $obj_eventos->getArreglo();
+            if(isset($evento_pendiente[0]['ID_Evento'])){
+                $puntobcr[0] = array_merge((['Evento_Pendiente' =>("1")]),$puntobcr[0]);
+            } else {
+                $puntobcr[0] = array_merge((['Evento_Pendiente' =>("0")]),$puntobcr[0]);
             }
             //Convierte la información en un json para enviarlo a JavaScript
             echo json_encode($puntobcr[0], JSON_FORCE_OBJECT);
@@ -12169,42 +12179,50 @@
                         $horario_turno[0] = array_merge((['Hora_Entrada' =>($horario_usuario[$id_horario]['Hora_Entrada_Lunes'])]));
                         $horario_turno[0] = array_merge((['Hora_Salida' =>($horario_usuario[$id_horario]['Hora_Salida_Lunes'])]),$horario_turno[0]);
                         $horario_turno[0] = array_merge((['Tipo_Horario' =>($horario_usuario[$id_horario]['Tipo_Horario'])]),$horario_turno[0]);
+                        $horario_turno[0] = array_merge((['Fecha_Vencimiento' =>($horario_usuario[$id_horario]['Fecha_Final'])]),$horario_turno[0]);
                         break;
                     case 'Tuesday':
                         $horario_turno[0] = array_merge((['Hora_Entrada' =>($horario_usuario[$id_horario]['Hora_Entrada_Martes'])]));
                         $horario_turno[0] = array_merge((['Hora_Salida' =>($horario_usuario[$id_horario]['Hora_Salida_Martes'])]),$horario_turno[0]);
                         $horario_turno[0] = array_merge((['Tipo_Horario' =>($horario_usuario[$id_horario]['Tipo_Horario'])]),$horario_turno[0]);
+                        $horario_turno[0] = array_merge((['Fecha_Vencimiento' =>($horario_usuario[$id_horario]['Fecha_Final'])]),$horario_turno[0]);
                         break;
                     case 'Wednesday':
                         $horario_turno[0] = array_merge((['Hora_Entrada' =>($horario_usuario[$id_horario]['Hora_Entrada_Miercoles'])]));
                         $horario_turno[0] = array_merge((['Hora_Salida' =>($horario_usuario[$id_horario]['Hora_Salida_Miercoles'])]),$horario_turno[0]);
                         $horario_turno[0] = array_merge((['Tipo_Horario' =>($horario_usuario[$id_horario]['Tipo_Horario'])]),$horario_turno[0]);
+                        $horario_turno[0] = array_merge((['Fecha_Vencimiento' =>($horario_usuario[$id_horario]['Fecha_Final'])]),$horario_turno[0]);
                         break;
                     case 'Thursday':
                         $horario_turno[0] = array_merge((['Hora_Entrada' =>($horario_usuario[$id_horario]['Hora_Entrada_Jueves'])]));
                         $horario_turno[0] = array_merge((['Hora_Salida' =>($horario_usuario[$id_horario]['Hora_Salida_Jueves'])]),$horario_turno[0]);
                         $horario_turno[0] = array_merge((['Tipo_Horario' =>($horario_usuario[$id_horario]['Tipo_Horario'])]),$horario_turno[0]);
+                        $horario_turno[0] = array_merge((['Fecha_Vencimiento' =>($horario_usuario[$id_horario]['Fecha_Final'])]),$horario_turno[0]);
                         break;
                     case 'Friday':
                         $horario_turno[0] = array_merge((['Hora_Entrada' =>($horario_usuario[$id_horario]['Hora_Entrada_Viernes'])]));
                         $horario_turno[0] = array_merge((['Hora_Salida' =>($horario_usuario[$id_horario]['Hora_Salida_Viernes'])]),$horario_turno[0]);
                         $horario_turno[0] = array_merge((['Tipo_Horario' =>($horario_usuario[$id_horario]['Tipo_Horario'])]),$horario_turno[0]);
+                        $horario_turno[0] = array_merge((['Fecha_Vencimiento' =>($horario_usuario[$id_horario]['Fecha_Final'])]),$horario_turno[0]);
                         break;
                     case 'Saturday':
                         $horario_turno[0] = array_merge((['Hora_Entrada' =>($horario_usuario[$id_horario]['Hora_Entrada_Sabado'])]));
                         $horario_turno[0] = array_merge((['Hora_Salida' =>($horario_usuario[$id_horario]['Hora_Salida_Sabado'])]),$horario_turno[0]);
                         $horario_turno[0] = array_merge((['Tipo_Horario' =>($horario_usuario[$id_horario]['Tipo_Horario'])]),$horario_turno[0]);
+                        $horario_turno[0] = array_merge((['Fecha_Vencimiento' =>($horario_usuario[$id_horario]['Fecha_Final'])]),$horario_turno[0]);
                         break;
                     case 'Sunday':
                         $horario_turno[0] = array_merge((['Hora_Entrada' =>($horario_usuario[$id_horario]['Hora_Entrada_Domingo'])]));
                         $horario_turno[0] = array_merge((['Hora_Salida' =>($horario_usuario[$id_horario]['Hora_Salida_Domingo'])]),$horario_turno[0]);
                         $horario_turno[0] = array_merge((['Tipo_Horario' =>($horario_usuario[$id_horario]['Tipo_Horario'])]),$horario_turno[0]);
+                        $horario_turno[0] = array_merge((['Fecha_Vencimiento' =>($horario_usuario[$id_horario]['Fecha_Final'])]),$horario_turno[0]);
                         break;
                 }
             } else {
                 $horario_turno[0] = array_merge((['Hora_Entrada' =>("NA")]));
                 $horario_turno[0] = array_merge((['Hora_Salida' =>("NA")]),$horario_turno[0]);
                 $horario_turno[0] = array_merge((['Tipo_Horario' =>("NA")]),$horario_turno[0]);
+                $horario_turno[0] = array_merge((['Fecha_Vencimiento' =>("NA")]),$horario_turno[0]);
             }
             
             //Obtiene las inconsistencias pendientes- dependiendo del rol

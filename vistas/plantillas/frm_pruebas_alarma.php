@@ -83,6 +83,9 @@
                         <h5>Pruebas anteriores:</h5>
                         <p id="pruebas_anteriores"></p>
                     </div>
+                    <div class="well">
+                        <p id="evento_pendiente"></p>
+                    </div>
                 </div>
                 <!--DIV central contiene la tabla con el personal externo-->    
                 <div class="col-sm-8 container">

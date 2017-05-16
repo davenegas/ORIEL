@@ -7,7 +7,7 @@ function evento_buscar_puntobcr(){
     var datos = new Array;
     var id_puntobcr=0;
     $.post("index.php?ctl=buscar_punto_prueba_alarma", { id: id}, function(data){
-        //console.log(data);
+        console.log(data);
         var res = data.substring(data.indexOf("{"), data.length);
         datos =JSON.parse(res);
         document.getElementById('nombre_punto').value=datos['Nombre'];
@@ -26,6 +26,16 @@ function evento_buscar_puntobcr(){
             //animated bounceInUp
             //$('#codigo_agencia').html("Código de agencia- hoy no abre");
         }
+        if(datos['Evento_Pendiente']==1){
+            document.getElementById("codigo_agencia").innerHTML="Código de agencia- Apertura temprana";
+            document.getElementById("numero_punto").style.border="2px solid red";
+            $("#evento_pendiente").html("Evento apertura temprana");
+            function blink(){
+                $("#evento_pendiente").fadeTo(200, 0.1).fadeTo(600, 1.0);
+            }
+            setInterval(blink, 1000);
+        }
+        
         id_tipo = datos['ID_Tipo_Punto'];
         id_puntobcr=document.getElementById('ID_PuntoBCR').value;
         
@@ -55,6 +65,7 @@ function borrar_datos(){
     document.getElementById("hora_cierre").removeAttribute("style"); 
     buscar_pruebas_alarma(0);
     $("#pruebas_anteriores").html("");
+    $("#evento_pendiente").html("");
 }
 
 function listas_desplegables(){
