@@ -194,6 +194,15 @@ class cls_marca_usuario {
         $this->obj_data_provider->desconectar();
     }
     
+    public function guardar_marca_entrada_salida(){
+        $this->obj_data_provider->conectar();
+        $this->obj_data_provider->inserta_datos("T_Marca", "ID_Usuario, Marca_Entrada, Marca_Salida, Tipo_Marca, Estado_Marca", 
+            "'".$this->usuario."','".$this->entrada."','".$this->salida."','".$this->tipo."','".$this->estado."'");
+        $this->arreglo=$this->obj_data_provider->trae_datos("T_Marca","max(ID_Marca) ID_Marca","");
+        $this->arreglo=$this->obj_data_provider->getArreglo();
+        $this->obj_data_provider->desconectar();   
+    }
+    
     public function obtener_marcas(){
         $this->obj_data_provider->conectar();
         if($this->condicion==""){
