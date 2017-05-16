@@ -2771,6 +2771,7 @@
         //Validación para verificar si el usuario está logeado en el sistema
         if(isset($_SESSION['nombre'])){
             $this->ejecucion_automatico_proceso("Pruebas");
+            $this->ejecucion_automatico_proceso("Asistencia");
             //Creacion de objeto de clase eventos
             $obj_eventos = new cls_eventos();
             
@@ -5613,10 +5614,27 @@
 //                                $marcas_usuario = $obj_marca->getArreglo();
                                 
                                 if($horario_turno[0]['Tipo_Horario']=="Normal" && $horario_turno[0]['Hora_Entrada']!="" && $horario_turno[0]['Hora_Entrada']<="11:59"){
-                                    $this->asistencia_generar_inconsistencia_automatica($usuarios[$i]['ID_Usuario'], $marcas_usuario[0]['ID_Marca'], $fecha_actual, "5");
-                                    $this->asistencia_generar_inconsistencia_automatica($usuarios[$i]['ID_Usuario'], $marcas_usuario[0]['ID_Marca'], $fecha_actual, "6");
-                                    $cadena_inconsistencia.= "No tiene marca en horario normal -->inconsistencia: Omisión de marca de entrada ".$usuarios[$i]['Nombre']." ".$usuarios[$i]['Apellido']."\r\n";
-                                    $cadena_inconsistencia.= "No tiene marca en horario normal -->inconsistencia: Omisión de marca de Salida ".$usuarios[$i]['Nombre']." ".$usuarios[$i]['Apellido']."\r\n";
+                                    //Obtiene información de las marcas realizadas por el usuario durante todo el día
+                                    $obj_marca->setCondicion("T_Marca.ID_Usuario=".$usuarios[$i]['ID_Usuario']." AND T_Marca.Tipo_Marca='Turno' AND (T_Marca.Marca_Entrada>='".$fecha_actual." 00:00:00' AND T_Marca.Marca_Entrada<='".$fecha_actual." 23:59:59')");
+                                    $obj_marca->obtener_marcas();
+                                    $marcas_usuario = $obj_marca->getArreglo();
+                                    if(isset($marcas_usuario[0]['Marca_Entrada'])){
+                                        $cadena_inconsistencia.= "No tiene marca en horario normal -->inconsistencia: Omisión de marca de entrada ".$usuarios[$i]['Nombre']." ".$usuarios[$i]['Apellido']." pero si en el turno de la tarde \r\n";
+                                    } else {
+                                        //Se crea una marca de entrada en 00:00 ya que no existe para agregarle una inconsistencia
+                                        $obj_marca->setUsuario($usuarios[$i]['ID_Usuario']);
+                                        $obj_marca->setEntrada($fecha_actual." 00:00:00");
+                                        $obj_marca->setSalida($fecha_actual." 00:00:00");
+                                        $obj_marca->setTipo("Turno");
+                                        $obj_marca->setEstado("0");
+                                        $obj_marca->guardar_marca_entrada_salida();
+                                        $id_marca = $obj_marca->getArreglo();
+                                            
+                                        $this->asistencia_generar_inconsistencia_automatica($usuarios[$i]['ID_Usuario'], $id_marca[0]['ID_Marca'], $fecha_actual, "5");
+                                        $this->asistencia_generar_inconsistencia_automatica($usuarios[$i]['ID_Usuario'], $id_marca[0]['ID_Marca'], $fecha_actual, "6");
+                                        $cadena_inconsistencia.= "No tiene marca en horario normal -->inconsistencia: Omisión de marca de entrada ".$usuarios[$i]['Nombre']." ".$usuarios[$i]['Apellido']."\r\n";
+                                        $cadena_inconsistencia.= "No tiene marca en horario normal -->inconsistencia: Omisión de marca de Salida ".$usuarios[$i]['Nombre']." ".$usuarios[$i]['Apellido']."\r\n";
+                                    }
                                 } if(isset($marcas_usuario[0]['Marca_Salida'])&& $horario_turno[0]['Hora_Salida']==""){
                                     $this->asistencia_generar_inconsistencia_automatica($usuarios[$i]['ID_Usuario'], $marcas_usuario[0]['ID_Marca'], $fecha_actual, "3");
                                     $cadena_inconsistencia.= "Tiene marca en horario normal y día libre-->inconsistencia: Marca fuera de horario ".$usuarios[$i]['Nombre']." ".$usuarios[$i]['Apellido']."\r\n";
@@ -5786,10 +5804,26 @@
 //                                $marcas_usuario = $obj_marca->getArreglo();
                                 
                                 if($horario_turno[0]['Tipo_Horario']=="Normal" && $horario_turno[0]['Hora_Entrada']!="" && $horario_turno[0]['Hora_Entrada']>="12:00"){
-                                    $this->asistencia_generar_inconsistencia_automatica($usuarios[$i]['ID_Usuario'], $marcas_usuario[0]['ID_Marca'], $fecha_actual, "5");
-                                    $this->asistencia_generar_inconsistencia_automatica($usuarios[$i]['ID_Usuario'], $marcas_usuario[0]['ID_Marca'], $fecha_actual, "6");
-                                    $cadena_inconsistencia.= "No tiene marca en horario normal -->inconsistencia: Omisión de marca de entrada ".$usuarios[$i]['Nombre']." ".$usuarios[$i]['Apellido']."\r\n";
-                                    $cadena_inconsistencia.= "No tiene marca en horario normal -->inconsistencia: Omisión de marca de Salida ".$usuarios[$i]['Nombre']." ".$usuarios[$i]['Apellido']."\r\n";
+                                    //Obtiene información de las marcas realizadas por el usuario durante todo el día
+                                    $obj_marca->setCondicion("T_Marca.ID_Usuario=".$usuarios[$i]['ID_Usuario']." AND T_Marca.Tipo_Marca='Turno' AND (T_Marca.Marca_Entrada>='".$fecha_actual." 00:00:00' AND T_Marca.Marca_Entrada<='".$fecha_actual." 23:59:59')");
+                                    $obj_marca->obtener_marcas();
+                                    $marcas_usuario = $obj_marca->getArreglo();
+                                    if(isset($marcas_usuario[0]['Marca_Entrada'])){
+                                        $cadena_inconsistencia.= "No tiene marca en horario normal -->inconsistencia: Omisión de marca de entrada ".$usuarios[$i]['Nombre']." ".$usuarios[$i]['Apellido']." pero si en el turno de la tarde \r\n";
+                                    } else {
+                                        //Se crea una marca en 00:00 ya que no existe para agregarle una inconsistencia
+                                        $obj_marca->setUsuario($usuarios[$i]['ID_Usuario']);
+                                        $obj_marca->setEntrada($fecha_actual." 00:00:00");
+                                        $obj_marca->setTipo("Turno");
+                                        $obj_marca->setEstado("0");
+                                        $obj_marca->guardar_marca_entrada();
+                                        $id_marca = $obj_marca->getArreglo();
+                                        
+                                        $this->asistencia_generar_inconsistencia_automatica($usuarios[$i]['ID_Usuario'], $marcas_usuario[0]['ID_Marca'], $fecha_actual, "5");
+                                        $this->asistencia_generar_inconsistencia_automatica($usuarios[$i]['ID_Usuario'], $marcas_usuario[0]['ID_Marca'], $fecha_actual, "6");
+                                        $cadena_inconsistencia.= "No tiene marca en horario normal -->inconsistencia: Omisión de marca de entrada ".$usuarios[$i]['Nombre']." ".$usuarios[$i]['Apellido']."\r\n";
+                                        $cadena_inconsistencia.= "No tiene marca en horario normal -->inconsistencia: Omisión de marca de Salida ".$usuarios[$i]['Nombre']." ".$usuarios[$i]['Apellido']."\r\n";
+                                    }
                                 } if(isset($marcas_usuario[0]['Marca_Salida'])&& $horario_turno[0]['Hora_Salida']==""){
                                     $this->asistencia_generar_inconsistencia_automatica($usuarios[$i]['ID_Usuario'], $marcas_usuario[0]['ID_Marca'], $fecha_actual, "3");
                                     $cadena_inconsistencia.= "Tiene marca en horario normal y día libre-->inconsistencia: Marca fuera de horario ".$usuarios[$i]['Nombre']." ".$usuarios[$i]['Apellido']."\r\n";
@@ -12211,8 +12245,6 @@
             //Convierta la fecha a formto aaaa/mm/dd hh:mm
             $fecha_actual= $fecha_actual['year']."-".$fecha_actual['mon']."-".$fecha_actual['mday'].' '.$fecha_actual['hours'].':'.$fecha_actual['minutes'].':'.$fecha_actual['seconds'];
             
-            
-            
             switch ($_POST['tipo']) {
                 case 'Entrada_Turno':
                     //Obtiene información de marca de turno que se encuentren 15 horas atras
@@ -12558,13 +12590,13 @@
             } else{
                 $fecha_inicio = date("Y-m-d");
                 $fecha_fin= date("Y-m-d");
-                if($_SESSION['modulos']['Módulo-Asistencia encargado empresa']==1){
+                if($_SESSION['modulos']['Módulo-Asistencia de Personal']==1){
+                    $obj_marcas->setCondicion("(T_InconsistenciaMarca.ID_Estado_Inconsistencia=1) AND T_InconsistenciaMarca.ID_Usuario='".$_SESSION['id']."'");
+                } if($_SESSION['modulos']['Módulo-Asistencia encargado empresa']==1){
                     $obj_marcas->setCondicion("T_InconsistenciaMarca.ID_Estado_Inconsistencia=3");
                 } if($_SESSION['modulos']['Módulo-Asistencia encargado Banco']==1){
                     $obj_marcas->setCondicion("T_InconsistenciaMarca.ID_Estado_Inconsistencia=4");
-                } else{
-                    $obj_marcas->setCondicion("(T_InconsistenciaMarca.ID_Estado_Inconsistencia=1) AND T_InconsistenciaMarca.ID_Usuario='".$_SESSION['id']."'");
-                }
+                } 
             }
             
             $obj_marcas->obtener_inconsistencias_marcas();

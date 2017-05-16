@@ -26,18 +26,20 @@
                             <input type="date" required=”required” class="form-control" id="fecha_final" name="fecha_final" value="<?php echo $fecha_fin;?>">
                         </div> 
                         <button type="submit" class="btn btn-default" style="margin-top: 25px; "value="Generar Reporte">Generar Reporte</button>
+                        <a class="btn btn-default" style="margin-top: 25px;" href="index.php?ctl=asistencia_personal">Volver <span class="glyphicon glyphicon-share-alt" ></span></a>
                     </form>
+                    
                 </div>
                 <div class="row espacio-arriba well">
                     <h4>Lista de marcas realizadas</h4>
                     <table id="tabla2" class="display" cellspacing="0" width="100%">
                         <thead>
                             <tr>
-                                <th style="text-align:center">ID_Marca</th>
+                                <th hidden style="text-align:center">ID_Marca</th>
                                 <th style="text-align:center">Usuario</th>
+                                <th style="text-align:center">Tipo marca</th>
                                 <th style="text-align:center">Inicio</th>
                                 <th style="text-align:center">Fin</th>
-                                <th style="text-align:center">Tipo marca</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -45,11 +47,11 @@
                                 $tam=count($marcas);
                                 for ($i = 0; $i <$tam; $i++) { ?>
                                 <tr>
-                                    <td style="text-align:center"><?php echo $marcas[$i]['ID_Marca'];?></td>
+                                    <td hidden style="text-align:center"><?php echo $marcas[$i]['ID_Marca'];?></td>
                                     <td style="text-align:center"><?php echo $marcas[$i]['Nombre']." ".$marcas[$i]['Apellido'];?></td>
+                                    <td style="text-align:center"><?php echo $marcas[$i]['Tipo_Marca'];?></td>
                                     <td style="text-align:center"><?php echo $marcas[$i]['Marca_Entrada'];?></td>
                                     <td style="text-align:center"><?php echo $marcas[$i]['Marca_Salida'];?></td>
-                                    <td style="text-align:center"><?php echo $marcas[$i]['Tipo_Marca'];?></td>
                                 </tr>
                             <?php }} ?>
                         </tbody>
@@ -60,7 +62,7 @@
                     <table id="tabla" class="display" cellspacing="0" width="100%">
                         <thead>
                             <tr>
-                                <th style="text-align:center">ID Inconsistencia Marca</th>
+                                <th hidden style="text-align:center">ID Inconsistencia Marca</th>
                                 <th style="text-align:center">Usuario</th>
                                 <th style="text-align:center">Marca entrada</th>
                                 <th style="text-align:center">Marca salida</th>
@@ -76,7 +78,7 @@
                                 $tam=count($inconsistencias);
                                 for ($i = 0; $i <$tam; $i++) { ?>
                                 <tr>
-                                    <td style="text-align:center"><?php echo $inconsistencias[$i]['ID_Inconsistencia_Marca'];?></td>
+                                    <td hidden style="text-align:center"><?php echo $inconsistencias[$i]['ID_Inconsistencia_Marca'];?></td>
                                     <td style="text-align:center"><?php echo $inconsistencias[$i]['Nombre']. " ".$inconsistencias[$i]['Apellido'];?></td>
                                     <td style="text-align:center"><?php echo $inconsistencias[$i]['Marca_Entrada'];?></td>
                                     <td style="text-align:center"><?php echo $inconsistencias[$i]['Marca_Salida'];?></td>
@@ -95,6 +97,7 @@
                         </tbody>
                     </table>
                 </div>
+                <a class="buttons" href="index.php?ctl=asistencia_lista_marcas">Volver <span class="glyphicon glyphicon-share-alt" ></span></a>
             </div>
             
             <div class="col-sm-1 sidenav">

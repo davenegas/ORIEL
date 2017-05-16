@@ -44,6 +44,8 @@
                     },
                     cancel: function(){}
                     });
+                } else {
+                    alert("La justificación debe contener mínimo 10 caracteres!!!");
                 }
             }
             function guardar_seguimiento(tipo){
@@ -62,6 +64,8 @@
                     },
                     cancel: function(){}
                     });
+                } else {
+                    alert("El seguimiento debe contener mínimo 10 caracteres!!!");
                 }
             }
             function guardar_observaciones(tipo){
@@ -179,7 +183,7 @@
                     </div>
 <!--                    <button><a id="submit">Guardar</a></button>
                 </form>-->
-                <a class="buttons" href="index.php?ctl=asistencia_lista_marcas">Volver <span class="glyphicon glyphicon-share-alt" ></span></a>
+                
             </div>
             
             <div class="col-sm-1 sidenav"></div>
