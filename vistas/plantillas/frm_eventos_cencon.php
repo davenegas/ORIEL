@@ -38,7 +38,7 @@
                                 <input type="text" class="form-control" disabled id="tipo_atm" name="tipo_atm" placeholder="">
                             </div>
                             <div class="col-sm-4 espacio-abajo-5">
-                                <label for="cedula">Número de Cedula</label>
+                                <label for="cedula">Número de Cédula</label>
                                 <input type="text" class="form-control" id="cedula" name="cedula" onclick="limpiar_info_persona();" onblur="evento_buscar_persona();" placeholder="Digite el número de cedula">
                             </div>
                             <div>

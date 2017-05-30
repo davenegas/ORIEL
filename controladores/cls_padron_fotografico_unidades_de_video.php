@@ -92,7 +92,6 @@ class cls_padron_fotografico_unidades_de_video{
         $this->condicion = $condicion;
     }
 
-    
     public function __construct() {
         $this->id_padron_fotografico="";
         $this->id_unidad_video="";
@@ -163,7 +162,7 @@ class cls_padron_fotografico_unidades_de_video{
         }
     }
     
-   public function eliminar_imagen_unidad_de_video() {
+    public function eliminar_imagen_unidad_de_video() {
         $this->obj_data_provider->conectar();
         $this->arreglo=$this->obj_data_provider->eliminar_datos("T_PadronFotograficoUnidadVideo", $this->condicion);
         $this->obj_data_provider->desconectar();

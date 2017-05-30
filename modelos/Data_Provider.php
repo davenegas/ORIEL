@@ -288,12 +288,12 @@ class Data_Provider{
         if (count($this->getArreglo())>0){
             //Mediante la función implode, convierte a string el valor del registro traido por la consulta
             // Implode tambien muesta la estructura del vector, con los nombres de los campos
-            $valores_iniciales= $valores_iniciales ." ". implode(" - ",$this->getArreglo()[0]);
+            $valores_iniciales= $valores_iniciales ." ". implode(" - ",$this->arreglo[0]);
         }
         // Agrega también los valores del vector sin los nombres de los campos
         $valores_iniciales=$valores_iniciales . "\nA continuacion valores anteriores de la tabla formato arreglo:\n ";
         // la función serialize trae los valores del vector
-        $valores_iniciales=$valores_iniciales . serialize($this->getArreglo()[0]);
+        $valores_iniciales=$valores_iniciales . serialize($this->arreglo[0]);
         
         // Ejecuta la edición de datos en la tabla correspondiente.
         $consulta=$this->conexion->query("update ".$table." set ".$campos_valores." where ".$condicion.";");
@@ -330,12 +330,12 @@ class Data_Provider{
         //Verifica que haya sido encontrado el registro a eliminar
         if (count($this->getArreglo())>0){
             // Agrega a la varaible valores iniciales la estructura completa del vector convertida a string
-            $valores_iniciales= $valores_iniciales ." ". implode(" - ",$this->getArreglo()[0]);
+            $valores_iniciales= $valores_iniciales ." ". implode(" - ",$this->arreglo[0]);
         }
         // Agrega parte de la presentación para el campo correspondiente de la traza
         $valores_iniciales=$valores_iniciales . "\nA continuacion valores anteriores de la tabla formato arreglo:\n ";
         //Agrega a la variable los valores de cada uno de los campos del registro en cuestión
-        $valores_iniciales=$valores_iniciales . serialize($this->getArreglo()[0]);
+        $valores_iniciales=$valores_iniciales . serialize($this->arreglo[0]);
        
         //Verifica si existe alguna condición de búsqueda
        if ($condicion==""){

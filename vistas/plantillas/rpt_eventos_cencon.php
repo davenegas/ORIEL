@@ -24,7 +24,7 @@
                                 data.push(['<?php echo $reporte_aperturas[$i]['Horas'];?>']);
                             <?php } ?>
                             return data;
-                            })()
+                        })()
                     },
                     yAxis: {
                         title: {
@@ -42,11 +42,11 @@
                     series: [{
                         name: 'Total',
                         data: (function() { var data = [];
-                                <?php   for($i = 6 ;$i<20;$i++){     ?>
-                                data.push([<?php echo $reporte_aperturas[$i]['TOTAL'];?>]);
-                                <?php } ?>
-                                return data;
-                                })()
+                            <?php   for($i = 6 ;$i<20;$i++){     ?>
+                            data.push([<?php echo $reporte_aperturas[$i]['TOTAL'];?>]);
+                            <?php } ?>
+                            return data;
+                            })()
                     }]
                 });
             });

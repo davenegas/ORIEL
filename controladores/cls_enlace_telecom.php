@@ -128,7 +128,6 @@ class cls_enlace_telecom{
         $this->condicion = $condicion;
     }
 
-        
     public function __construct() {
         $this->id="";
         $this->id2="";

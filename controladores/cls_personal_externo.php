@@ -27,7 +27,6 @@ class cls_personal_externo{
     public $observaciones;
     public $ocupacion;
     
-    
     function getObj_data_provider() {
         return $this->obj_data_provider;
     }
@@ -235,10 +234,7 @@ class cls_personal_externo{
     function setOcupacion($ocupacion) {
         $this->ocupacion = $ocupacion;
     }
-
-        
-    
-        
+   
     public function __construct() {
         $this->obj_data_provider=new Data_Provider();
         $this->arreglo="";

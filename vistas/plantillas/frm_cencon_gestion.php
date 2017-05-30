@@ -12,7 +12,7 @@
         <?php require_once 'encabezado.php';?>
         
         <section class="container espacio-arriba-15">
-            <h2>Gestion Módulo de Cencon</h2>
+            <h2>Gestión Módulo de Cencon</h2>
             <p>A continuación se detallan los diferentes proveedor que están registrados en el sistema:</p>
             <div class="col-sm-4 quitar-float">
                 <label for="tipo_funcionario">Tipo de Funcionario</label>
@@ -37,7 +37,7 @@
                 </div>
                 
                 <div class="col-sm-4">
-                    <label for="cedula_persona">Número de Cedula formato Cencon</label>
+                    <label for="cedula_persona">Número de Cédula formato Cencon</label>
                     <input class="form-control" readonly id="cedula_persona" name="cedula_persona" type="text">
                 </div>
                 
@@ -80,7 +80,7 @@
                     <table id="tabla" class="display" cellspacing="0" width="100%">
                         <thead>
                             <tr>
-                                <th style="text-align:center">Cedula</th>
+                                <th style="text-align:center">Cédula</th>
                                 <th style="text-align:center">Apellidos Nombre</th>
                                 <th style="text-align:center">Departamento</th>
                                 <th style="text-align:center">Opciones</th>

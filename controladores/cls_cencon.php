@@ -84,6 +84,7 @@ class cls_cencon {
     function setCondicion($condicion) {
         $this->condicion = $condicion;
     }
+    
     function getFecha() {
         return $this->fecha;
     }
@@ -237,6 +238,7 @@ class cls_cencon {
         $this->obj_data_provider->desconectar();
         $this->resultado_operacion=true;
     }
+    
     public function editar_seguimiento_evento(){
         $this->obj_data_provider->conectar();
         $this->obj_data_provider->edita_datos("T_EventoCencon", "Seguimiento='".$this->seguimiento."'", $this->condicion);
@@ -250,6 +252,7 @@ class cls_cencon {
         $this->obj_data_provider->desconectar();
         $this->resultado_operacion=true;
     }
+    
     public function reasignar_evento_cencon(){
         $this->obj_data_provider->conectar();
         $this->obj_data_provider->edita_datos("T_EventoCencon", "ID_Persona='".$this->id."', ID_Empresa='".$this->empresa."', ID_Usuario='".$this->usuario."'", $this->condicion);

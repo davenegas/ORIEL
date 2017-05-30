@@ -56,7 +56,6 @@ class cls_nivel_academico {
         $this->condicion = $condicion;
     }
 
-        
     public function __construct() {
         $this->id="";
         $this->nivel_academico="";

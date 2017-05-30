@@ -36,64 +36,63 @@
                         }
                     },
                     series: [{
-                                    name: 'Activación de Duress',
-                                    data: (function() { var data = [];
-                                            <?php   for($j = 1 ;$j<8;$j++){
-                                                $dato=0;
-                                                for($i = 0 ;$i<count($params);$i++){
-                                                    if($params[$i]['ID_Provincia']==$j && $params[$i]['ID_Tipo_Evento']==4){    
-                                                        $dato = $params[$i]['Total_evento'];    ?>
-                                                    <?php }
-                                                }?>
-                                                data.push([<?php echo $dato;?>]);
-                                            <?php } ?>
-                                            return data;
-                                            })()
-                                },{
-                                    name: 'Activación de Fuego',
-                                    data: (function() { var data = [];
-                                            <?php   for($j = 1 ;$j<8;$j++){
-                                                $dato=0;
-                                                for($i = 0 ;$i<count($params);$i++){
-                                                    if($params[$i]['ID_Provincia']==$j && $params[$i]['ID_Tipo_Evento']==5){    
-                                                        $dato = $params[$i]['Total_evento'];    ?>
-                                                    <?php }
-                                                }?>
-                                                data.push([<?php echo $dato;?>]);
-                                            <?php } ?>
-                                            return data;
-                                            })()
-                                },{
-                                    name: 'Activación de Intrusión',
-                                    data: (function() { var data = [];
-                                            <?php   for($j = 1 ;$j<8;$j++){
-                                                $dato=0;
-                                                for($i = 0 ;$i<count($params);$i++){
-                                                    if($params[$i]['ID_Provincia']==$j && $params[$i]['ID_Tipo_Evento']==6){    
-                                                        $dato = $params[$i]['Total_evento'];    ?>
-                                                    <?php }
-                                                }?>
-                                                data.push([<?php echo $dato;?>]);
-                                            <?php } ?>
-                                            return data;
-                                            })()
-                                },{
-                                    name: 'Activación de Panico',
-                                    data: (function() { var data = [];
-                                            <?php   for($j = 1 ;$j<8;$j++){
-                                                $dato=0;
-                                                for($i = 0 ;$i<count($params);$i++){
-                                                    if($params[$i]['ID_Provincia']==$j && $params[$i]['ID_Tipo_Evento']==7){    
-                                                        $dato = $params[$i]['Total_evento'];    ?>
-                                                    <?php }
-                                                }?>
-                                                data.push([<?php echo $dato;?>]);
-                                            <?php } ?>
-                                            return data;
-                                            })()
-                                }
-                                ]
-                });
+                        name: 'Activación de Duress',
+                        data: (function() { var data = [];
+                            <?php   for($j = 1 ;$j<8;$j++){
+                                $dato=0;
+                                for($i = 0 ;$i<count($params);$i++){
+                                    if($params[$i]['ID_Provincia']==$j && $params[$i]['ID_Tipo_Evento']==4){    
+                                        $dato = $params[$i]['Total_evento'];    ?>
+                                    <?php }
+                                }?>
+                                data.push([<?php echo $dato;?>]);
+                            <?php } ?>
+                            return data;
+                            })()
+                    },{
+                        name: 'Activación de Fuego',
+                        data: (function() { var data = [];
+                            <?php   for($j = 1 ;$j<8;$j++){
+                                $dato=0;
+                                for($i = 0 ;$i<count($params);$i++){
+                                    if($params[$i]['ID_Provincia']==$j && $params[$i]['ID_Tipo_Evento']==5){    
+                                        $dato = $params[$i]['Total_evento'];    ?>
+                                    <?php }
+                                }?>
+                                data.push([<?php echo $dato;?>]);
+                                <?php } ?>
+                                return data;
+                            })()
+                        },{
+                            name: 'Activación de Intrusión',
+                            data: (function() { var data = [];
+                                <?php   for($j = 1 ;$j<8;$j++){
+                                    $dato=0;
+                                    for($i = 0 ;$i<count($params);$i++){
+                                        if($params[$i]['ID_Provincia']==$j && $params[$i]['ID_Tipo_Evento']==6){    
+                                            $dato = $params[$i]['Total_evento'];    ?>
+                                        <?php }
+                                    }?>
+                                    data.push([<?php echo $dato;?>]);
+                                <?php } ?>
+                                return data;
+                            })()
+                        },{
+                            name: 'Activación de Panico',
+                            data: (function() { var data = [];
+                                <?php   for($j = 1 ;$j<8;$j++){
+                                    $dato=0;
+                                    for($i = 0 ;$i<count($params);$i++){
+                                        if($params[$i]['ID_Provincia']==$j && $params[$i]['ID_Tipo_Evento']==7){    
+                                            $dato = $params[$i]['Total_evento'];    ?>
+                                        <?php }
+                                    }?>
+                                    data.push([<?php echo $dato;?>]);
+                                <?php } ?>
+                                return data;
+                            })()
+                        }]
+                    });
 
                 function showValues() {
                     $('#alpha-value').html(chart.options.chart.options3d.alpha);

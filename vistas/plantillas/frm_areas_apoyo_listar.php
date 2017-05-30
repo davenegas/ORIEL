@@ -2,7 +2,7 @@
 <html lang="es">
     <head>
         <meta charset="utf-8"/>
-        <title>Lista de Areas de Apoyo</title>
+        <title>Lista de Áreas de Apoyo</title>
         <?php require_once 'frm_librerias_head.html';?>
         <script>
             $(document).ready(function () {
@@ -20,17 +20,17 @@
         <?php require_once 'encabezado.php';?>
         
         <div class="container">
-            <h2>Listado General de Areas de Apoyo</h2>
+            <h2>Listado General de Áreas de Apoyo</h2>
 
-            <p>A continuación se detallan los diferentes tipos de areas de apoyo que están registrados en el sistema:</p>            
+            <p>A continuación se detallan los diferentes tipos de áreas de apoyo que están registrados en el sistema:</p>            
             <table id="tabla" class="display" cellspacing="0" width="100%">
                 <thead>
                     <tr>
                         <!--<th style="text-align:center">ID Area</th>-->
-                        <th style="text-align:center">Tipo de Area</th>
-                        <th style="text-align:center">Nombre Area</th>
+                        <th style="text-align:center">Tipo de Área</th>
+                        <th style="text-align:center">Nombre Área</th>
                         <th style="text-align:center">Observaciones</th>
-                        <th style="text-align:center">Direccion</th>
+                        <th style="text-align:center">Dirección</th>
                         <th style="text-align:center">Número</th>
                         <?php if($_SESSION['modulos']['Editar- Áreas Apoyo']==1){ ?>
                             <th style="text-align:center">Estado</th>

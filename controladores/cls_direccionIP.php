@@ -1,8 +1,7 @@
 <?php
 
 class cls_direccionIP{
-        
-  // Definicion de atributos de la clase
+    // Definicion de atributos de la clase
     private $id;
     private $id2;
     private $direccionIP;
@@ -23,7 +22,7 @@ class cls_direccionIP{
         $this->id2 = $id2;
     }
 
-        function getId() {
+    function getId() {
         return $this->id;
     }
 

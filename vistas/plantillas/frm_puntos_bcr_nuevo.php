@@ -16,7 +16,7 @@
                 <form class="form-horizontal" role="form" method="POST" action="index.php?ctl=punto_bcr_guardar&id=<?php echo trim($ide);?>">
                     <div>    
                         <div class="col-md-6">
-                          <label for="Codigo">Codigo</label>
+                          <label for="Codigo">Código</label>
                           <input type="text" required="required" placeholder="Codigo ó número de mil del Punto BCR" class="form-control" id="Codigo" name="Codigo" value="<?php echo $params[0]['Codigo'];?>">
                         </div>
                         <div class="col-md-6">

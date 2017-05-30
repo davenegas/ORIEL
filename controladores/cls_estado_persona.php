@@ -56,7 +56,6 @@ class cls_estado_persona {
         $this->condicion = $condicion;
     }
 
-        
     public function __construct() {
         $this->id="";
         $this->estado_persona="";

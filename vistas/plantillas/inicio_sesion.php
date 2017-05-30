@@ -45,8 +45,8 @@
           </form>
        </div>
         <br>
-         <div class="<?php echo $tipo_de_alerta;?>" align="center">
-         <strong>Información!</strong>  <?php echo $validacion;?>
+        <div class="<?php echo $tipo_de_alerta;?>" align="center">
+            <strong>Información!</strong>  <?php echo $validacion;?>
         </div>
         
         <div>

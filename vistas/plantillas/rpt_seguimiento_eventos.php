@@ -2,7 +2,7 @@
 <html lang="es">
     <head>
         <meta http-equiv="Content-Type" content="text/html; utf-8"/>
-        <title>Historico de Seguimientos</title>
+        <title>Histórico de Seguimientos</title>
         <?php require_once 'frm_librerias_head.html'; ?>
         <script src="vistas/js/highstock.js"></script>
         <script src="vistas/js/exporting.js"></script>
@@ -21,11 +21,11 @@
                     },
                     xAxis: {
                         categories: (function() { var data = [];
-                                        <?php   for($i = 0 ;$i<count($params);$i++){ ?>
-                                            data.push(['<?php echo $params[$i]['Nombre'].' '.$params[$i]['Apellido'];?>']);
-                                        <?php } ?>
-                                    return data;
-                                    })()
+                            <?php   for($i = 0 ;$i<count($params);$i++){ ?>
+                                data.push(['<?php echo $params[$i]['Nombre'].' '.$params[$i]['Apellido'];?>']);
+                            <?php } ?>
+                        return data;
+                        })()
                     },
                     yAxis: {
                         min: 0,
@@ -50,11 +50,11 @@
                     series: [{
                         name: 'Seguimientos',
 			data: (function() { var data = [];
-                                <?php   for($i = 0 ;$i<count($params);$i++){     ?>
-                                data.push([<?php echo $params[$i]['TOTAL'];?>]);
-                                <?php } ?>
-                                return data;
-                                })()
+                            <?php   for($i = 0 ;$i<count($params);$i++){     ?>
+                            data.push([<?php echo $params[$i]['TOTAL'];?>]);
+                            <?php } ?>
+                            return data;
+                        })()
                     }]
                 });
             });

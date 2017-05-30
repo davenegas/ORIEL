@@ -12,12 +12,7 @@
         <?php require_once 'encabezado.php';?>
         <section class="container bordegris">
             <!--Opcion para buscar siguiente persona-->
-            <h2>Detalle de Personas 
-                <?php if($_SESSION['modulos']['Editar- Personal Externo']==1){ ?>
-                    <a href="index.php?ctl=personal_gestion&id=<?php echo $params[0]['ID_Persona']-1?>;"><img src='vistas/Imagenes/boton-antes.png' width="25"></a>
-                    <a href="index.php?ctl=personal_gestion&id=<?php echo $params[0]['ID_Persona']+1?>;"><img src='vistas/Imagenes/boton-siguiente.png' width="25"></a>
-                <?php }?>
-            </h2>
+            <h2>Detalle de Personas</h2>
             <!--Informacion de la persona-->
             <div>
                 <!--Opcion para editar informacion de la persona por módulo-->
@@ -153,7 +148,7 @@
                 </div>
                 <!--Dirección de la persona-->
                 <div class="col-md-12 espacio-abajo">
-                    <label for="Direccion">Direccion</label>
+                    <label for="Direccion">Dirección</label>
                     <input type="text" required="required" readonly class="form-control" id="Direccion" name="Direccion" value="<?php echo $params[0]['Direccion'];?>">
                 </div>
                 <!--Select Estado civil de la persona-->
@@ -177,7 +172,7 @@
                 </div>
                 <!--Select del nivel academico-->
                 <div class="col-md-4 espacio-abajo">
-                    <label for="nivel_academico">Nivel Academico</label>
+                    <label for="nivel_academico">Nivel Académico</label>
                     <select class="form-control" disabled id="nivel_academico" name="nivel_academico"> 
                         <?php
                         $tam = count($nivel_academico);
@@ -267,7 +262,7 @@
                 <thead>
                     <tr>
                         <th style="text-align:center">Tipo de Teléfono</th>
-                        <th style="text-align:center">Número teléfono</th>
+                        <th style="text-align:center">Número Teléfono</th>
                         <th style="text-align:center">Observaciones</th>
                         <?php if($_SESSION['modulos']['Editar- Personal Externo']==1){ ?>
                             <th style="text-align:center" colspan="2">Opciones número</th>
@@ -352,7 +347,7 @@
                     <input hidden id="ID_Telefono" name="ID_Telefono" type="text">
                     <input hidden id="ID_Persona_Telefono" name="ID_Persona_Telefono" type="text" value="<?php echo $params[0]['ID_Persona_Externa']; ?>">
                     
-                    <label for="Tipo_Telefono">Tipo de Telefono</label>
+                    <label for="Tipo_Telefono">Tipo de Teléfono</label>
                     <select class="form-control espacio-abajo" id="Tipo_Telefono" name="Tipo_Telefono"> 
                         <?php
                         $tam = count($tipo_telefono);

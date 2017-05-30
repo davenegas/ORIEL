@@ -16,7 +16,7 @@
                     <tr>  
                         <th style="text-align:center">Nombre</th>
                         <th style="text-align:center">Apellido</th>
-                        <th style="text-align:center">Cedula</th>
+                        <th style="text-align:center">Cédula</th>
                         <th style="text-align:center">Correo</th>
                         <th style="text-align:center">Rol</th>
                         <th style="text-align:center">Observaciones</th>

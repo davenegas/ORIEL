@@ -19,110 +19,478 @@
                 });
             });
         </script>
+        <style>
+            .espacio-abajo-10{
+                margin-bottom: 10px;
+            }
+        </style>
     </head>
     <body>
         <?php require_once 'encabezado.php';?>
         <div class="container">
-            <!--Botones para navegación entre un punto y otro-->
-            <header class="bordegris espacio-abajo">
-                <h2>Gestión de Puntos BCR del Sistema
-                    <?php if($_SESSION['modulos']['Editar- Puntos BCR']==1){ ?>
-                        <a href="index.php?ctl=gestion_punto_bcr&id=<?php echo $params[0]['ID_PuntoBCR']-1?>;"><img src='vistas/Imagenes/boton-antes.png' width="25"></a>
-                        <a href="index.php?ctl=gestion_punto_bcr&id=<?php echo $params[0]['ID_PuntoBCR']+1?>;"><img src='vistas/Imagenes/boton-siguiente.png' width="25"></a>
-                    <?php }?>
-                </h2>
-            </header>
-            
-            <!--Información General del Punto BCR, Telecom, UE-->
-            <div class="bordegris">
-                <!--controles de sitio-->
-                <h3>Información General del Punto BCR
-                    <?php if($_SESSION['modulos']['Editar- Puntos BCR']==1){ ?>
-                        <input class="quitar-float" type="checkbox" id="chk_informacion_general" name="chk_ubicacion">
-                    <?php }?>
-                    <a href="index.php?ctl=frm_puntos_bcr_padron_fotografico&id=<?php echo $params[0]['ID_PuntoBCR']?>" align="right"><img src="vistas/Imagenes/gallery.gif" width="40" height="40"></a>
-                    <?php if($_SESSION['modulos']['Módulo-Bitácora Digital']==1){ ?> 
-                        <a href="index.php?ctl=frm_eventos_agregar&id=<?php echo $params[0]['ID_PuntoBCR']?>"><font size="3">Ingresar Evento</font></a>
-                    <?php } ?>
-                </h3>
-                
-                <div class="col-md-4">
-                    <label for="ID_PuntoBCR">ID Punto</label>
-                    <input type="text" required="ID_PuntoBCR" readonly class="form-control" id="ID_PuntoBCR" name="ID_PuntoBCR" value="<?php echo $params[0]['ID_PuntoBCR'];?>">
-                </div>
-                <div class="col-md-4">
-                    <label for="Codigo">Codigo</label>
-                    <input type="text" required="required" readonly class="form-control" id="Codigo" name="Codigo" value="<?php echo $params[0]['Codigo'];?>">
-                </div>
-                <div class="col-md-4">
-                    <label for="Cuenta_SIS">Cuenta SIS</label>
-                    <input type="text" required="required" readonly class="form-control" id="Cuenta_SIS" name="Cuenta_SIS" value="<?php echo $params[0]['Cuenta_SIS'];?>">
-                </div>
-                <div class="col-md-6 espacio-abajo">
-                    <label for="Nombre">Nombre</label>
-                    <input type="text" required="required" readonly class="form-control" id="Nombre" name="Nombre" value="<?php echo $params[0]['Nombre'];?>">
-                </div>
-                <div class="col-md-6 espacio-abajo">
-                    <label for="Tipo_Punto">Tipo de Punto</label>
-                    <select class="form-control" id="Tipo_Punto" disabled name="Tipo_Punto" > 
-                        <?php
-                        $tam = count($tipo_puntos);
-                        for($i=0; $i<$tam;$i++){
-                            if($tipo_puntos[$i]['ID_Tipo_Punto']==$params[0]['ID_Tipo_Punto']){ ?> 
-                            <option value="<?php echo $tipo_puntos[$i]['ID_Tipo_Punto']?>" selected="selected"><?php echo $tipo_puntos[$i]['Tipo_Punto']?></option><?php
-                            }  else {   ?>
-                                <option value="<?php echo $tipo_puntos[$i]['ID_Tipo_Punto']?>" ><?php echo $tipo_puntos[$i]['Tipo_Punto']?></option>   
-                            <?php }
-                        } ?>
-                    </select>
-                </div>
-                <!--Información de Teléfono del Punto BCR-->
-                <div class="bordegris"  >
-                    <?php if($_SESSION['modulos']['Editar- Teléfono Puntos BCR']==1){ ?>
-                        <h3 class="quitar-float">Información de teléfonos del Punto BCR <a id="popup" onclick="mostrar_agregar_telefono()" class="btn azul" role="button">Agregar número</a></h3> 
-                    <?php } else {?>
-                        <h3 class="quitar-float">Información de teléfonos del Punto BCR</h3>
-                    <?php } ?>
-                    <table class="display col-md-12 table-striped quitar-float espacio-abajo" id="telefonos">
-                        <thead>
-                            <tr>
-                                <th style="text-align:center">Tipo de Teléfono</th>
-                                <th style="text-align:center">Número teléfono</th>
-                                <th style="text-align:center">Observaciones</th>
+            <div class="row">
+                <!--Titulo gestión de puntos BCR-->
+                <div class="row">
+                    <div class="col-md-12">
+                        <header>
+                            <h2>Gestión de Puntos BCR del Sistema
                                 <?php if($_SESSION['modulos']['Editar- Puntos BCR']==1){ ?>
-                                <th style="text-align:center" colspan="2">Funciones de número</th>
-                                <?php } ?>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php 
-                            $tam=count($telefonos);
-                            for ($i = 0; $i <$tam; $i++) { ?>
-                                <tr>
-                                    <td style="text-align:center"><?php echo $telefonos[$i]['Tipo_Telefono'];?></td>
-                                    <td style="text-align:center"><?php echo $telefonos[$i]['Numero'];?></td>
-                                    <td style="text-align:center"><?php echo $telefonos[$i]['Observaciones'];?></td>
-                                    <?php if($_SESSION['modulos']['Editar- Puntos BCR']==1){ ?>
-                                    <td style="text-align:center"><a class="btn azul" role="button" onclick="editar_telefono(<?php echo $telefonos[$i]['ID_Telefono'];?>,<?php echo $telefonos[$i]['ID_Tipo_Telefono'];?>,
-                                                '<?php echo $telefonos[$i]['Numero'];?>','<?php echo $telefonos[$i]['Observaciones'];?>');">
-                                        Editar</a></td>
-                                    <td style="text-align:center"><a class="btn rojo" role="button" onclick="eliminar_telefono(<?php echo $telefonos[$i]['ID_Telefono'];?>);">
-                                        Eliminar</a></td>    
-                                <?php } ?>
-                                </tr>
-                            <?php } ?>
-                        </tbody> 
-                    </table>
+                                    <a href="index.php?ctl=gestion_punto_bcr&id=<?php echo $params[0]['ID_PuntoBCR']-1?>;"><img src='vistas/Imagenes/boton-antes.png' width="25"></a>
+                                    <a href="index.php?ctl=gestion_punto_bcr&id=<?php echo $params[0]['ID_PuntoBCR']+1?>;"><img src='vistas/Imagenes/boton-siguiente.png' width="25"></a>
+                                <?php }?>
+                            </h2>
+                        </header>
+                    </div>
                 </div>
-                <!--Información de telecomunicaciones--> 
-                <?php if($_SESSION['modulos']['Vista info Telecomunicaciones- PuntosBCR']==1){ ?>     
-                    <div class="bordegris" >
-                        <?php if($_SESSION['modulos']['Editar Telecomunicaciones- Puntos BCR']==1){ ?>   
-                            <h3 class="quitar-float">Información de Telecom <a id="popup" onclick="mostrar_enlace_telecom()" class="btn azul" role="button">Agregar Enlace</a></h3> 
+                <!--Información general del punto-->
+                <div class="row well" id="Información_General">
+                    <div class="row" id="Titulo">
+                        <div class="col-md-12">
+                            <h3>Información General del Punto BCR
+                                <?php if($_SESSION['modulos']['Editar- Puntos BCR']==1){ ?>
+                                    <input class="quitar-float" type="checkbox" id="chk_informacion_general" name="chk_ubicacion">
+                                <?php }?>
+                                <a href="index.php?ctl=frm_puntos_bcr_padron_fotografico&id=<?php echo $params[0]['ID_PuntoBCR']?>" align="right"><img src="vistas/Imagenes/gallery.gif" width="40" height="40"></a>
+                                <?php if($_SESSION['modulos']['Módulo-Bitácora Digital']==1){ ?> 
+                                    <a href="index.php?ctl=frm_eventos_agregar&id=<?php echo $params[0]['ID_PuntoBCR']?>"><font size="3">Ingresar Evento</font></a>
+                                <?php } ?>
+                            </h3>
+                        </div>
+                    </div>
+                    <div class="row espacio-abajo-10">
+                        <div class="col-md-4">
+                            <label for="ID_PuntoBCR">ID Punto</label>
+                            <input type="text" required="ID_PuntoBCR" readonly class="form-control" id="ID_PuntoBCR" name="ID_PuntoBCR" value="<?php echo $params[0]['ID_PuntoBCR'];?>">
+                        </div>
+                        <div class="col-md-4">
+                            <label for="Codigo">Codigo</label>
+                            <input type="text" required="required" readonly class="form-control" id="Codigo" name="Codigo" value="<?php echo $params[0]['Codigo'];?>">
+                        </div>
+                        <div class="col-md-4">
+                            <label for="Cuenta_SIS">Cuenta SIS</label>
+                            <input type="text" required="required" readonly class="form-control" id="Cuenta_SIS" name="Cuenta_SIS" value="<?php echo $params[0]['Cuenta_SIS'];?>">
+                        </div>
+                    </div>
+                    <div class="row espacio-abajo-10">
+                        <div class="col-md-6">
+                            <label for="Nombre">Nombre</label>
+                            <input type="text" required="required" readonly class="form-control" id="Nombre" name="Nombre" value="<?php echo $params[0]['Nombre'];?>">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="Tipo_Punto">Tipo de Punto</label>
+                            <select class="form-control" id="Tipo_Punto" disabled name="Tipo_Punto" > 
+                                <?php
+                                $tam = count($tipo_puntos);
+                                for($i=0; $i<$tam;$i++){
+                                    if($tipo_puntos[$i]['ID_Tipo_Punto']==$params[0]['ID_Tipo_Punto']){ ?> 
+                                    <option value="<?php echo $tipo_puntos[$i]['ID_Tipo_Punto']?>" selected="selected"><?php echo $tipo_puntos[$i]['Tipo_Punto']?></option><?php
+                                    }  else {   ?>
+                                        <option value="<?php echo $tipo_puntos[$i]['ID_Tipo_Punto']?>" ><?php echo $tipo_puntos[$i]['Tipo_Punto']?></option>   
+                                    <?php }
+                                } ?>
+                            </select>
+                        </div>
+                    </div>
+                    
+                </div>
+                <!--información de teléfonos del punto-->
+                <div class="row well" id="Informacion_Teléfonos_Punto">
+                    <div class="col-md-12">
+                        <?php if($_SESSION['modulos']['Editar- Teléfono Puntos BCR']==1){ ?>
+                            <h3 class="quitar-float">Información de teléfonos del Punto BCR <a id="popup" onclick="mostrar_agregar_telefono()" class="btn azul" role="button">Agregar número</a></h3> 
                         <?php } else {?>
-                            <h3 class="quitar-float">Información de Telecom</h3>
+                            <h3 class="quitar-float">Información de teléfonos del Punto BCR</h3>
                         <?php } ?>
-                        <div>
+                        <table class="display col-md-12 table-striped quitar-float espacio-abajo" id="telefonos">
+                            <thead>
+                                <tr>
+                                    <th style="text-align:center">Tipo de Teléfono</th>
+                                    <th style="text-align:center">Número teléfono</th>
+                                    <th style="text-align:center">Observaciones</th>
+                                    <?php if($_SESSION['modulos']['Editar- Puntos BCR']==1){ ?>
+                                    <th style="text-align:center" colspan="2">Funciones de número</th>
+                                    <?php } ?>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php 
+                                $tam=count($telefonos);
+                                for ($i = 0; $i <$tam; $i++) { ?>
+                                    <tr>
+                                        <td style="text-align:center"><?php echo $telefonos[$i]['Tipo_Telefono'];?></td>
+                                        <td style="text-align:center"><?php echo $telefonos[$i]['Numero'];?></td>
+                                        <td style="text-align:center"><?php echo $telefonos[$i]['Observaciones'];?></td>
+                                        <?php if($_SESSION['modulos']['Editar- Puntos BCR']==1){ ?>
+                                        <td style="text-align:center"><a class="btn azul" role="button" onclick="editar_telefono(<?php echo $telefonos[$i]['ID_Telefono'];?>,<?php echo $telefonos[$i]['ID_Tipo_Telefono'];?>,
+                                                    '<?php echo $telefonos[$i]['Numero'];?>','<?php echo $telefonos[$i]['Observaciones'];?>');">
+                                            Editar</a></td>
+                                        <td style="text-align:center"><a class="btn rojo" role="button" onclick="eliminar_telefono(<?php echo $telefonos[$i]['ID_Telefono'];?>);">
+                                            Eliminar</a></td>    
+                                    <?php } ?>
+                                    </tr>
+                                <?php } ?>
+                            </tbody> 
+                        </table>
+                    </div>
+                </div>
+                <!--Areas de apoyo-->
+                <div class="row well" id="Información_Area_Apoyo">
+                    <div class="col-md-12">
+                        <?php if($_SESSION['modulos']['Vista Areas Apoyo- PuntosBCR']==1){ ?>
+                            <?php if($_SESSION['modulos']['Editar- Puntos BCR']==1){ ?> 
+                                <h3>Información de Áreas Apoyo<a id="popup" onclick="mostrar_area_apoyo()" class="btn azul" role="button">Agregar Area Apoyo</a></h3>    
+                            <?php } else {?>
+                                <h3>Información de Áreas Apoyo</h3>
+                            <?php } ?>
+                            <table class="display col-md-12 table-striped quitar-float espacio-abajo" id="areas_apoyo">
+                                <thead>
+                                    <tr>
+                                        <th style="text-align:center">Área de Apoyo</th>
+                                        <th style="text-align:center">Nombre de Área</th>
+                                        <th style="text-align:center">Número teléfono</th>
+                                        <th style="text-align:center">Dirección</th>
+                                        <?php if($_SESSION['modulos']['Editar- Puntos BCR']==1){ ?> 
+                                            <th style="text-align:center">Quitar área de apoyo</th>
+                                        <?php } ?>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php 
+                                    $tam=count($areas_apoyo);
+                                    for ($i = 0; $i <$tam; $i++) {  ?>
+                                        <tr>
+                                            <td style="text-align:center"><?php echo $areas_apoyo[$i]['Nombre_Tipo_Area'];?></td>
+                                            <td style="text-align:center"><?php echo $areas_apoyo[$i]['Nombre_Area'];?></td>
+                                            <td style="text-align:center"><?php echo $areas_apoyo[$i]['Numero'];?></td>
+                                            <td style="text-align:center"><?php echo $areas_apoyo[$i]['Direccion'];?></td>
+                                            <?php if($_SESSION['modulos']['Editar- Puntos BCR']==1){ ?> 
+                                                <td style="text-align:center"><a class="btn rojo" role="button" id="eliminar_area" name="eliminar_area" onclick="eliminar_area(<?php echo $areas_apoyo[$i]['ID_Area_Apoyo'];?>);">
+                                                Eliminar</a></td>
+                                            <?php } ?>
+                                        </tr>
+                                    <?php } ?>
+                                </tbody> 
+                            </table>
+                        <?php } ?>
+                    </div>
+                </div>
+                <!--Información adicional (Gerente- Supervisor-remesa)-->
+                <div class="row well" id="Información_Adicional_BCR">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h3>Información adicional
+                                <?php if($_SESSION['modulos']['Editar- Puntos BCR']==1){ ?>
+                                    <input class="quitar-float" type="checkbox" id="chk_info_adicional" name="chk_info_adicional">
+                                <?php } ?>
+                            </h3>
+                        </div>
+                    </div>
+                    <div class="row espacio-abajo-10">
+                        <div class="col-md-4">
+                            <label for="Empresa">Remesa</label>
+                            <select class="form-control" id="Empresa" disabled name="Empresa"> 
+                                <?php
+                                $tam = count($empresas);
+                                for($i=0; $i<$tam;$i++){
+                                    if($empresas[$i]['ID_Empresa']==$params[0]['ID_Empresa']){?> 
+                                        <option value="<?php echo $empresas[$i]['ID_Empresa']?>" selected="selected"><?php echo $empresas[$i]['Empresa']?></option><?php
+                                    }   else { ?>
+                                        <option value="<?php echo $empresas[$i]['ID_Empresa']?>" ><?php echo $empresas[$i]['Empresa']?></option>   
+                                <?php } }  ?>
+                            </select>
+                        </div>
+                        <div class="col-md-8">
+                          <label for="Observaciones_generales">Observaciones</label>
+                          <input type="text" readonly class="form-control" id="Observaciones_generales" name="Observaciones_generales" value="<?php echo $params[0]['Observaciones_Punto'];?>">
+                        </div>
+                    </div>
+                    <div class="row espacio-abajo-10">
+                        <div class="col-md-4">
+                            <label for="zonas_gerente">Gerente de Zona BCR</label>
+                            <select class="form-control" id="zonas_gerente" disabled name="zonas_gerente"> 
+                                <?php
+                                $tam = count($gerente_zona_bcr);
+                                $ubicacionpersona="";
+                                for($i=0; $i<$tam;$i++){
+                                    if($gerente_zona_bcr[$i]['ID_Gerente_Zona']==$params[0]['ID_Gerente_Zona']){
+                                        $ubicacionpersona=$i; ?> 
+                                        <option value="<?php echo $gerente_zona_bcr[$i]['ID_Gerente_Zona']?>" selected="selected" ><?php echo $gerente_zona_bcr[$i]['Zona_Gerencia_BCR'];?></option><?php
+                                  } else{   ?>
+                                        <option value="<?php echo $gerente_zona_bcr[$i]['ID_Gerente_Zona']?>"><?php echo $gerente_zona_bcr[$i]['Zona_Gerencia_BCR']?></option>   
+                              <?php }} ?>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="nombre_gerente">Nombre Gerente de Zona</label>
+                            <input type="text" readonly class="form-control" id="nombre_gerente" name="nombre_gerente" value="<?php echo $gerente_zona_bcr[$ubicacionpersona]['Apellido_Nombre'];?>">
+                        </div>
+                        <div class="col-md-4">
+                            <label for="tel_gerente">Teléfono</label>
+                            <input type="text" readonly class="form-control" id="tel_gerente" name="tel_gerente" value="<?php echo $gerente_zona_bcr[$ubicacionpersona]['Numero'];?>">
+                        </div>
+                    </div>
+                    <div class="row espacio-abajo-10">
+                        <div class="col-md-4">
+                            <label for="zonas_supervisores">Supervisor de Zona</label>
+                            <select class="form-control" id="zonas_supervisores" disabled name="zonas_supervisores" > 
+                                <?php
+                                $tam = count($supervisor_zona_externo);
+
+                                for($i=0; $i<$tam;$i++){
+                                    if($supervisor_zona_externo[$i]['ID_Supervisor_Zona']==$params[0]['ID_Supervisor_Zona']){
+                                        $ubicacionpersona=$i;?> 
+                                        <option value="<?php echo $supervisor_zona_externo[$i]['ID_Supervisor_Zona']?>" selected="selected"><?php echo $supervisor_zona_externo[$i]['Zona_Supervisor'];?></option><?php
+                                    } else {    ?>
+                                        <option value="<?php echo $supervisor_zona_externo[$i]['ID_Supervisor_Zona']?>" ><?php echo $supervisor_zona_externo[$i]['Zona_Supervisor']?></option>   
+                                <?php }}  ?>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="nombre_supervisor">Nombre del Supervisor</label>
+                            <input type="text" readonly class="form-control" id="nombre_supervisor" name="nombre_supervisor" value="<?php echo $supervisor_zona_externo[$ubicacionpersona]['Apellido'].' '.$supervisor_zona_externo[$ubicacionpersona]['Nombre'];?>">
+                        </div>
+                        <div class="col-md-4">
+                            <label for="tel_supervisor">Teléfono</label>
+                            <input type="text" readonly class="form-control" id="tel_supervisor" name="tel_supervisor" value="<?php echo $supervisor_zona_externo[$ubicacionpersona]['Numero'];?>">
+                        </div>
+                    </div>
+                </div>
+                <!--Horarios asociados (entrada y público)-->
+                <div class="row well" id="Horarios apertura y público">
+                    <div class="col-md-12">
+                        <?php if($_SESSION['modulos']['Editar- Puntos BCR']==1){ ?> 
+                            <h3>Horario Punto BCR
+                                <a id="popup" onclick="mostrar_horario()" class="btn azul" role="button">Cambiar Horario</a> - 
+                                <a onclick="eliminar_horario('Público')" class="btn rojo" role="button">Eliminar Horario público</a>
+                                <a onclick="eliminar_horario('Oficina')" class="btn rojo" role="button">Eliminar Horario oficina</a>  
+                            </h3>    
+                        <?php } else { ?>
+                            <h3>Horario Punto BCR</h3>
+
+                        <?php }
+                        if ($horariopunto[0]['Tipo_Horario']=="Público"){
+                            $oficina=1; $publico=0;
+                        } else {
+                            $oficina=0; $publico=1;
+                        } ?> 
+                        <table class="display col-md-12  table-striped quitar-float espacio-abajo" id="direccionIP">
+                            <thead> 
+                                <tr>
+                                    <th style="text-align:center">Horario</th>
+                                    <th style="text-align:center">Domingo</th>
+                                    <th style="text-align:center">Lunes</th>
+                                    <th style="text-align:center">Martes</th>
+                                    <th style="text-align:center">Miércoles</th>
+                                    <th style="text-align:center">jueves</th>
+                                    <th style="text-align:center">Viernes</th>
+                                    <th style="text-align:center">Sábado</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                    <tr>
+                                        <td style="text-align:center">Horario apertura oficina</td>
+                                        <?php if(isset($horariopunto[$oficina]['Tipo_Horario'])){ ?>
+                                            <td style="text-align:center"><?php echo $horariopunto[$oficina]['Hora_Apertura_Domingo'];?></td>
+                                            <td style="text-align:center"><?php echo $horariopunto[$oficina]['Hora_Apertura_Lunes'];?></td>
+                                            <td style="text-align:center"><?php echo $horariopunto[$oficina]['Hora_Apertura_Martes'];?></td>
+                                            <td style="text-align:center"><?php echo $horariopunto[$oficina]['Hora_Apertura_Miercoles'];?></td>
+                                            <td style="text-align:center"><?php echo $horariopunto[$oficina]['Hora_Apertura_Jueves'];?></td>
+                                            <td style="text-align:center"><?php echo $horariopunto[$oficina]['Hora_Apertura_Viernes'];?></td>
+                                            <td style="text-align:center"><?php echo $horariopunto[$oficina]['Hora_Apertura_Sabado'];?></td>
+                                        <?php } else {?>
+                                            <td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+                                        <?php } ?>
+                                    </tr>
+                                    <tr>
+                                        <td style="text-align:center">Horario apertura público</td>
+                                        <?php if(isset($horariopunto[$publico]['Tipo_Horario'])){ ?>
+                                            <td style="text-align:center"><?php echo $horariopunto[$publico]['Hora_Apertura_Domingo'];?></td>
+                                            <td style="text-align:center"><?php echo $horariopunto[$publico]['Hora_Apertura_Lunes'];?></td>
+                                            <td style="text-align:center"><?php echo $horariopunto[$publico]['Hora_Apertura_Martes'];?></td>
+                                            <td style="text-align:center"><?php echo $horariopunto[$publico]['Hora_Apertura_Miercoles'];?></td>
+                                            <td style="text-align:center"><?php echo $horariopunto[$publico]['Hora_Apertura_Jueves'];?></td>
+                                            <td style="text-align:center"><?php echo $horariopunto[$publico]['Hora_Apertura_Viernes'];?></td>
+                                            <td style="text-align:center"><?php echo $horariopunto[$publico]['Hora_Apertura_Sabado'];?></td>
+                                        <?php } else {?>
+                                            <td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+                                        <?php } ?>
+                                    </tr>
+                                    <tr>
+                                        <td style="text-align:center">Horario cierre público</td>
+                                        <?php if(isset($horariopunto[$publico]['Tipo_Horario'])){ ?>
+                                            <td style="text-align:center"><?php echo $horariopunto[$publico]['Hora_Cierre_Domingo'];?></td>
+                                            <td style="text-align:center"><?php echo $horariopunto[$publico]['Hora_Cierre_Lunes'];?></td>
+                                            <td style="text-align:center"><?php echo $horariopunto[$publico]['Hora_Cierre_Martes'];?></td>
+                                            <td style="text-align:center"><?php echo $horariopunto[$publico]['Hora_Cierre_Miercoles'];?></td>
+                                            <td style="text-align:center"><?php echo $horariopunto[$publico]['Hora_Cierre_Jueves'];?></td>
+                                            <td style="text-align:center"><?php echo $horariopunto[$publico]['Hora_Cierre_Viernes'];?></td>
+                                            <td style="text-align:center"><?php echo $horariopunto[$publico]['Hora_Cierre_Sabado'];?></td>
+                                        <?php } else {?>
+                                            <td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+                                        <?php } ?>
+                                    </tr>
+                                    <tr>
+                                        <td style="text-align:center">Horario cierre oficina</td>
+                                        <?php if(isset($horariopunto[$oficina]['Tipo_Horario'])){ ?>
+                                            <td style="text-align:center"><?php echo $horariopunto[$oficina]['Hora_Cierre_Domingo'];?></td>
+                                            <td style="text-align:center"><?php echo $horariopunto[$oficina]['Hora_Cierre_Lunes'];?></td>
+                                            <td style="text-align:center"><?php echo $horariopunto[$oficina]['Hora_Cierre_Martes'];?></td>
+                                            <td style="text-align:center"><?php echo $horariopunto[$oficina]['Hora_Cierre_Miercoles'];?></td>
+                                            <td style="text-align:center"><?php echo $horariopunto[$oficina]['Hora_Cierre_Jueves'];?></td>
+                                            <td style="text-align:center"><?php echo $horariopunto[$oficina]['Hora_Cierre_Viernes'];?></td>
+                                            <td style="text-align:center"><?php echo $horariopunto[$oficina]['Hora_Cierre_Sabado'];?></td>
+                                        <?php } else {?>
+                                            <td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+                                        <?php } ?>
+                                    </tr>
+                            </tbody> 
+                        </table>
+                    </div>
+                </div>
+                <!--Ubicación del Punto (dirección- map)-->
+                <div class="row well" id="Ubicacion_Punto_BCR">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <header>
+                                <h3 class="espacio-arriba quitar-float">Ubicación
+                                    <?php if($_SESSION['modulos']['Editar- Puntos BCR']==1){ ?> 
+                                    <input class="quitar-float" type="checkbox" id="chk_ubicacion" name="chk_ubicacion">
+                                <?php } ?>
+                                </h3>
+                            </header>
+                        </div>
+                    </div>
+                    <div class="row espacio-abajo-10">
+                        <div class="col-md-4">
+                            <label for="Provincia">Provincia</label>
+                            <select class="form-control" disabled id="Provincia" name="Provincia" > 
+                                <?php
+                                $tam = count($provincias);
+                                for($i=0; $i<$tam;$i++) {
+                                    if($provincias[$i]['ID_Provincia']==$cantones[$distritos[$params[0]['ID_Distrito']]['ID_Canton']]['ID_Provincia']){
+                                        ?><option value="<?php echo $provincias[$i]['ID_Provincia']?>" selected="selected"><?php echo $provincias[$i]['Nombre_Provincia']?></option><?php
+                                    }
+                                    else {?>
+                                        <option value="<?php echo $provincias[$i]['ID_Provincia']?>" ><?php echo $provincias[$i]['Nombre_Provincia']?></option>   
+                                <?php } } ?>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="Canton">Cantón</label>
+                            <select class="form-control" disabled id="Canton" name="Canton" > 
+                                <?php
+                                $tam = count($cantones);
+                                for($i=0; $i<$tam;$i++){
+                                    if($cantones[$i]['ID_Canton']==$distritos[$params[0]['ID_Distrito']]['ID_Canton']){?> 
+                                        <option value="<?php echo $cantones[$i]['ID_Canton']?>" selected="selected"><?php echo $cantones[$i]['Nombre_Canton']?></option><?php
+                                    }   else {?>
+                                        <option value="<?php echo $cantones[$i]['ID_Canton']?>" ><?php echo $cantones[$i]['Nombre_Canton']?></option>   
+                                <?php } } ?>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="Distrito">Distrito</label>
+                            <select class="form-control" disabled id="Distrito" name="Distrito" > 
+                                <?php
+                                $tam = count($distritos);
+                                for($i=0; $i<$tam;$i++){
+                                    if($distritos[$i]['ID_Distrito']==$params[0]['ID_Distrito']){?> 
+                                        <option value="<?php echo $distritos[$i]['ID_Distrito']?>" selected="selected"><?php echo $distritos[$i]['Nombre_Distrito']?></option><?php
+                                    }   else {  ?>
+                                        <option value="<?php echo $distritos[$i]['ID_Distrito']?>" ><?php echo $distritos[$i]['Nombre_Distrito']?></option>   
+                                <?php } } ?>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row espacio-abajo-10">
+                        <div class="col-md-12 espacio-abajo">
+                            <label for="Direccion">Dirección</label>
+                            <input type="text" required="required" readonly class="form-control" id="Direccion" name="Direccion" value="<?php echo $params[0]['Direccion'];?>">
+                        </div>
+                    </div>
+<!--                    <div class="row">
+                        <button id="hide">Ocultar ubicación</button>
+                        <button id="show">Mostrar ubicación</button>
+                        <div class="col-md-12 espacio-abajo text-center">
+                            <iframe id="localizacion"src="<?php echo $params[0]['Geolocalizacion'];?>" width="800" height= "600" frameborder="0" style="border:0" allowfullscreen></iframe>
+                        </div>
+                    </div>-->
+                </div>
+                <!--Unidades Ejecutoras ligadas al sitio-->
+                <div class="row well" id="Unidad_Ejecutora_Asociada">
+                    <div class="col-md-12">
+                        <?php if($_SESSION['modulos']['Editar- Puntos BCR']==1){ ?>   
+                            <h3 class="quitar-float">Unidades Ejecutoras asociadas al PuntoBCR <a id="popup" onclick="mostrar_lista_ue()" class="btn azul" role="button">Agregar UE</a></h3> 
+                        <?php } else {?>
+                            <h3 class="quitar-float">Unidades Ejecutoras asociadas al PuntoBCR</h3>
+                        <?php } ?>
+                        <!--Información Unidades Ejecutoras-->
+                        <table class="display col-md-12  table-striped quitar-float espacio-abajo" id="unidad_ejecutora">
+                            <thead>
+                                <tr>
+                                    <th style="text-align:center">Número UE</th>
+                                    <th style="text-align:center">Departamento</th>
+                                    <?php if($_SESSION['modulos']['Editar- Puntos BCR']==1){ ?> 
+                                        <th style="text-align:center">Eliminar UE</th>
+                                     <?php } ?>   
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php 
+                                $tam=count($unidad_ejecutora);
+                                for ($i = 0; $i <$tam; $i++) {  ?>
+                                    <tr>
+                                        <td style="text-align:center"><?php echo $unidad_ejecutora[$i]['Numero_UE'];?></td>
+                                        <td style="text-align:center"><?php echo $unidad_ejecutora[$i]['Departamento'];?></td>
+                                        <?php if($_SESSION['modulos']['Editar- Puntos BCR']==1){ ?> 
+                                            <td style="text-align:center"><a class="btn rojo" role="button" id="prueba" name="prueba" onclick="eliminar_ue(<?php echo $unidad_ejecutora[$i]['ID_Unidad_Ejecutora'];?>);">
+                                            Eliminar</a></td>
+                                     <?php } ?>
+                                    </tr>
+                                <?php } ?>
+                            </tbody> 
+                        </table>
+                    </div>
+                </div>
+                <!--Información del personal asociado-->
+                <div class="row well" id="Información_Personal_BCR_Asociado">
+                    <div class="col-md-12 espacio-abajo-10">
+                        <h3>Información de Personal del PuntoBCR</h3>
+                        <table id="tabla" class="display" cellspacing="0" width="100%">
+                            <thead>
+                                <tr>
+                                    <th style="text-align:center">Apellido y Nombre</th>
+                                    <th style="text-align:center">Cédula</th>
+                                    <th style="text-align:center">Número teléfono</th>
+                                    <th style="text-align:center">Puesto</th>
+                                    <th style="text-align:center">Departamento</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php 
+                                $tam=count($personal);
+                                for ($i = 0; $i <$tam; $i++) {  ?>
+                                    <tr>
+                                        <td style="text-align:center"><?php echo $personal[$i]['Apellido_Nombre'];?></td>
+                                        <td style="text-align:center"><?php echo $personal[$i]['Cedula'];?></td>
+                                        <td style="text-align:center"><?php echo $personal[$i]['Numero'];?></td>
+                                        <td style="text-align:center"><?php echo $personal[$i]['Puesto'];?></td>
+                                        <td style="text-align:center"><?php echo $personal[$i]['Departamento'];?></td>
+                                    </tr>
+                                <?php }?>
+                            </tbody> 
+                        </table>
+                    </div>
+                </div>
+                <!--Información enlaces telecom-->
+                <div class="row well" id="Información Telecom">
+                    <div class="col-md-12">
+                        <?php if($_SESSION['modulos']['Vista info Telecomunicaciones- PuntosBCR']==1){ ?>
+                            <?php if($_SESSION['modulos']['Editar Telecomunicaciones- Puntos BCR']==1){ ?>   
+                                <h3 class="quitar-float">Información de Telecom <a id="popup" onclick="mostrar_enlace_telecom()" class="btn azul" role="button">Agregar Enlace</a></h3> 
+                            <?php } else {?>
+                                <h3 class="quitar-float">Información de Telecom</h3>
+                            <?php } ?>
                             <table class="display col-md-12  table-striped quitar-float espacio-abajo" id="telecom">
                                 <thead> 
                                     <th style="text-align:center">Enlace</th>
@@ -162,393 +530,53 @@
                                     <?php } ?>
                                 </tbody> 
                             </table>
-                        </div>
+                        <?php } ?>
                     </div>
-                <?php } ?>
-                <?php if($_SESSION['modulos']['Editar- Puntos BCR']==1){ ?>   
-                    <h3 class="quitar-float">Unidades Ejecutoras asociadas al PuntoBCR <a id="popup" onclick="mostrar_lista_ue()" class="btn azul" role="button">Agregar UE</a></h3> 
-                <?php } else {?>
-                    <h3 class="quitar-float">Unidades Ejecutoras asociadas al PuntoBCR</h3>
-                <?php } ?>
-                <!--Información Unidades Ejecutoras-->
-                <div>
-                    <table class="display col-md-12  table-striped quitar-float espacio-abajo" id="unidad_ejecutora">
-                        <thead>
-                            <tr>
-                                <th style="text-align:center">Numero UE</th>
-                                <th style="text-align:center">Departamento</th>
-                                <?php if($_SESSION['modulos']['Editar- Puntos BCR']==1){ ?> 
-                                    <th style="text-align:center">Eliminar UE</th>
-                                 <?php } ?>   
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php 
-                            $tam=count($unidad_ejecutora);
-                            for ($i = 0; $i <$tam; $i++) {  ?>
-                                <tr>
-                                    <td style="text-align:center"><?php echo $unidad_ejecutora[$i]['Numero_UE'];?></td>
-                                    <td style="text-align:center"><?php echo $unidad_ejecutora[$i]['Departamento'];?></td>
-                                    <?php if($_SESSION['modulos']['Editar- Puntos BCR']==1){ ?> 
-                                        <td style="text-align:center"><a class="btn rojo" role="button" id="prueba" name="prueba" onclick="eliminar_ue(<?php echo $unidad_ejecutora[$i]['ID_Unidad_Ejecutora'];?>);">
-                                        Eliminar</a></td>
-                                 <?php } ?>
-                                </tr>
-                            <?php } ?>
-                        </tbody> 
-                    </table>
-                </div> 
-            </div>
-            
-            <!--Ubicación del Punto BCR: Provincia, Cantón, Distrito, Dirección-->
-            <div> 
-                <header>
-                    <h3 class="espacio-arriba quitar-float">Ubicación
-                        <?php if($_SESSION['modulos']['Editar- Puntos BCR']==1){ ?> 
-                        <input class="quitar-float" type="checkbox" id="chk_ubicacion" name="chk_ubicacion">
-                    <?php } ?>
-                    </h3>
-                </header>
-                <div class="col-md-4">
-                    <label for="Provincia">Provincia</label>
-                    <select class="form-control" disabled id="Provincia" name="Provincia" > 
-                        <?php
-                        $tam = count($provincias);
-                        for($i=0; $i<$tam;$i++) {
-                            if($provincias[$i]['ID_Provincia']==$cantones[$distritos[$params[0]['ID_Distrito']]['ID_Canton']]['ID_Provincia']){
-
-                                ?><option value="<?php echo $provincias[$i]['ID_Provincia']?>" selected="selected"><?php echo $provincias[$i]['Nombre_Provincia']?></option><?php
-                            }
-                            else {?>
-                                <option value="<?php echo $provincias[$i]['ID_Provincia']?>" ><?php echo $provincias[$i]['Nombre_Provincia']?></option>   
-                        <?php }}  ?>
-                    </select>
                 </div>
-
-                <div class="col-md-4">
-                    <label for="Canton">Cantón</label>
-                    <select class="form-control" disabled id="Canton" name="Canton" > 
-                        <?php
-                        $tam = count($cantones);
-
-                        for($i=0; $i<$tam;$i++){
-                            if($cantones[$i]['ID_Canton']==$distritos[$params[0]['ID_Distrito']]['ID_Canton']){?> 
-                                <option value="<?php echo $cantones[$i]['ID_Canton']?>" selected="selected"><?php echo $cantones[$i]['Nombre_Canton']?></option><?php
-                            }   else {?>
-                                <option value="<?php echo $cantones[$i]['ID_Canton']?>" ><?php echo $cantones[$i]['Nombre_Canton']?></option>   
-                        <?php }}  ?>
-                    </select>
-                </div>
-
-                <div class="col-md-4">
-                    <label for="Distrito">Distrito</label>
-                    <select class="form-control" disabled id="Distrito" name="Distrito" > 
-                        <?php
-                        $tam = count($distritos);
-                        for($i=0; $i<$tam;$i++){
-                            if($distritos[$i]['ID_Distrito']==$params[0]['ID_Distrito']){?> 
-                                <option value="<?php echo $distritos[$i]['ID_Distrito']?>" selected="selected"><?php echo $distritos[$i]['Nombre_Distrito']?></option><?php
-                            }   else {  ?>
-                                <option value="<?php echo $distritos[$i]['ID_Distrito']?>" ><?php echo $distritos[$i]['Nombre_Distrito']?></option>   
-                        <?php }}  ?>
-                    </select>
-                </div>
-
-                <div class="col-md-12 espacio-abajo">
-                    <label for="Direccion">Direccion</label>
-                    <input type="text" required="required" readonly class="form-control" id="Direccion" name="Direccion" value="<?php echo $params[0]['Direccion'];?>">
-                </div>
-                <button id="hide">Ocultar ubicación</button>
-                <button id="show">Mostrar ubicación</button>
-                <div class="col-md-12 espacio-abajo text-center">
-                    <iframe id="localizacion"src="<?php echo $params[0]['Geolocalizacion'];?>" width="800" height="600" frameborder="0" style="border:0" allowfullscreen></iframe>
-                </div>
-            </div>
-            
-            <!--Información de áreas de apoyo-->
-            <div>
-                <?php if($_SESSION['modulos']['Vista Areas Apoyo- PuntosBCR']==1){ ?>
-                    <?php if($_SESSION['modulos']['Editar- Puntos BCR']==1){ ?> 
-                        <h3>Información de Areas Apoyo<a id="popup" onclick="mostrar_area_apoyo()" class="btn azul" role="button">Agregar Area Apoyo</a></h3>    
-                    <?php } else {?>
-                        <h3>Información de Areas Apoyo</h3>
-                    <?php } ?>
-                    <div class="bordegris">
-                        <table class="display col-md-12 table-striped quitar-float espacio-abajo" id="areas_apoyo">
-                            <thead>
-                                <tr>
-                                    <th style="text-align:center">Area de Apoyo</th>
-                                    <th style="text-align:center">Nombre de Area</th>
-                                    <th style="text-align:center">Numero telefono</th>
-                                    <th style="text-align:center">Direccion</th>
-                                    <?php if($_SESSION['modulos']['Editar- Puntos BCR']==1){ ?> 
-                                        <th style="text-align:center">Quitar area de apoyo</th>
-                                    <?php } ?>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php 
-                                $tam=count($areas_apoyo);
-                                for ($i = 0; $i <$tam; $i++) {  ?>
+                <!--Direccionamiento (IP's)-->
+                <div class="row well" id="Direccionamiento">
+                    <div class="col-md-12">
+                        <!--Direcciones IP del Punto BCR-->
+                        <?php if($_SESSION['modulos']['Vista info Telecomunicaciones- PuntosBCR']==1){ ?>
+                            <?php if($_SESSION['modulos']['Editar Telecomunicaciones- Puntos BCR']==1){ ?> 
+                                <h3>Información de Direcciones IP<a id="popup" onclick="mostrar_direccion_IP()" class="btn azul" role="button">Agregar Dirección IP</a></h3>    
+                            <?php } else {?>
+                                <h3>Información de Direcciones IP</h3>
+                            <?php } ?> 
+                            <table class="display col-md-12  table-striped quitar-float espacio-abajo" id="direccionIP">
+                                <thead>
                                     <tr>
-                                        <td style="text-align:center"><?php echo $areas_apoyo[$i]['Nombre_Tipo_Area'];?></td>
-                                        <td style="text-align:center"><?php echo $areas_apoyo[$i]['Nombre_Area'];?></td>
-                                        <td style="text-align:center"><?php echo $areas_apoyo[$i]['Numero'];?></td>
-                                        <td style="text-align:center"><?php echo $areas_apoyo[$i]['Direccion'];?></td>
-                                        <?php if($_SESSION['modulos']['Editar- Puntos BCR']==1){ ?> 
-                                            <td style="text-align:center"><a class="btn rojo" role="button" id="eliminar_area" name="eliminar_area" onclick="eliminar_area(<?php echo $areas_apoyo[$i]['ID_Area_Apoyo'];?>);">
-                                            Eliminar</a></td>
+                                        <th style="text-align:center">Tipo Dirección</th>
+                                        <th style="text-align:center">Dirección IP</th>
+                                        <th style="text-align:center">Observaciones</th>
+                                        <?php if($_SESSION['modulos']['Editar Telecomunicaciones- Puntos BCR']==1){ ?> 
+                                            <th style="text-align:center" colspan="2">Funciones</th>
                                         <?php } ?>
                                     </tr>
-                                <?php } ?>
-                            </tbody> 
-                        </table>
-                    </div>
-                <?php } ?>
-                    <h3>Información de Personal del PuntoBCR</h3>
-                <div>
-                    <table id="tabla" class="display" cellspacing="0" width="100%">
-                        <thead>
-                            <tr>
-                                <th style="text-align:center">Apellido y Nombre</th>
-                                <th style="text-align:center">Cedula</th>
-                                <th style="text-align:center">Numero telefono</th>
-                                <th style="text-align:center">Puesto</th>
-                                <th style="text-align:center">Departamento</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php 
-                            $tam=count($personal);
-                            for ($i = 0; $i <$tam; $i++) {  ?>
-                                <tr>
-                                    <td style="text-align:center"><?php echo $personal[$i]['Apellido_Nombre'];?></td>
-                                    <td style="text-align:center"><?php echo $personal[$i]['Cedula'];?></td>
-                                    <td style="text-align:center"><?php echo $personal[$i]['Numero'];?></td>
-                                    <td style="text-align:center"><?php echo $personal[$i]['Puesto'];?></td>
-                                    <td style="text-align:center"><?php echo $personal[$i]['Departamento'];?></td>
-                                </tr>
-                            <?php }?>
-                        </tbody> 
-                    </table>
-                </div>
-            </div>
-            <div class="bordegris espacio-arriba"></div>
-            
-            <!--Direcciones IP del Punto BCR-->
-            <?php if($_SESSION['modulos']['Vista info Telecomunicaciones- PuntosBCR']==1){ ?>   
-                <div class="bordegris espacio-abajo-5">
-                    <div>
-                    <?php if($_SESSION['modulos']['Editar Telecomunicaciones- Puntos BCR']==1){ ?> 
-                        <h3>Información de Direcciones IP<a id="popup" onclick="mostrar_direccion_IP()" class="btn azul" role="button">Agregar Dirección IP</a></h3>    
-                    <?php } else {?>
-                        <h3>Información de Direcciones IP</h3>
-                    <?php } ?> 
-                    <table class="display col-md-12  table-striped quitar-float espacio-abajo" id="direccionIP">
-                        <thead>
-                            <tr>
-                                <th style="text-align:center">Tipo Direccion</th>
-                                <th style="text-align:center">Direccion IP</th>
-                                <th style="text-align:center">Observaciones</th>
-                                <?php if($_SESSION['modulos']['Editar Telecomunicaciones- Puntos BCR']==1){ ?> 
-                                    <th style="text-align:center" colspan="2">Funciones</th>
-                                <?php } ?>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php 
-                            $tam=count($direccionIP);
-                            for ($i = 0; $i <$tam; $i++) {  ?>
-                                <tr>
-                                    <td style="text-align:center"><?php echo $direccionIP[$i]['Tipo_IP'];?></td>
-                                    <td style="text-align:center"><?php echo $direccionIP[$i]['Direccion_IP'];?></td>
-                                    <td style="text-align:center"><?php echo $direccionIP[$i]['Observaciones'];?></td>
-                                    <?php if($_SESSION['modulos']['Editar Telecomunicaciones- Puntos BCR']==1){ ?> 
-                                    <td style="text-align:center"><a role="button"  onclick="editar_ip(<?php echo $direccionIP[$i]['ID_Direccion_IP'];?>,'<?php echo $direccionIP[$i]['ID_Tipo_IP'];?>', '<?php echo $direccionIP[$i]['Direccion_IP'];?>','<?php echo $direccionIP[$i]['Observaciones'];?>');">
-                                            Editar</a></td>
-                                    <td style="text-align:center"><a class="btn rojo" role="button" id="eliminar_ip" name="eliminar_ip" onclick="eliminar_ip(<?php echo $direccionIP[$i]['ID_Direccion_IP'];?>);">
-                                            Eliminar</a></td>
-                                     <?php } ?>
-                                </tr>
-                            <?php } ?>
-                        </tbody> 
-                    </table>
+                                </thead>
+                                <tbody>
+                                    <?php 
+                                    $tam=count($direccionIP);
+                                    for ($i = 0; $i <$tam; $i++) {  ?>
+                                        <tr>
+                                            <td style="text-align:center"><?php echo $direccionIP[$i]['Tipo_IP'];?></td>
+                                            <td style="text-align:center"><?php echo $direccionIP[$i]['Direccion_IP'];?></td>
+                                            <td style="text-align:center"><?php echo $direccionIP[$i]['Observaciones'];?></td>
+                                            <?php if($_SESSION['modulos']['Editar Telecomunicaciones- Puntos BCR']==1){ ?> 
+                                            <td style="text-align:center"><a role="button"  onclick="editar_ip(<?php echo $direccionIP[$i]['ID_Direccion_IP'];?>,'<?php echo $direccionIP[$i]['ID_Tipo_IP'];?>', '<?php echo $direccionIP[$i]['Direccion_IP'];?>','<?php echo $direccionIP[$i]['Observaciones'];?>');">
+                                                    Editar</a></td>
+                                            <td style="text-align:center"><a class="btn rojo" role="button" id="eliminar_ip" name="eliminar_ip" onclick="eliminar_ip(<?php echo $direccionIP[$i]['ID_Direccion_IP'];?>);">
+                                                    Eliminar</a></td>
+                                            <?php } ?>
+                                        </tr>
+                                    <?php } ?>
+                                </tbody> 
+                            </table>
+                        <?php } ?>
                     </div>
                 </div>
-            <?php } ?>
-            
-            <!--Información adicional-->
-            <div>
-                <h3>Información adicional
-                    <?php if($_SESSION['modulos']['Editar- Puntos BCR']==1){ ?>
-                        <input class="quitar-float" type="checkbox" id="chk_info_adicional" name="chk_info_adicional">
-                    <?php } ?>
-                </h3>
-
-                <div class="col-md-4 espacio-abajo">
-                    <label for="Empresa">Remesa</label>
-                    <select class="form-control" id="Empresa" disabled name="Empresa"> 
-                        <?php
-                        $tam = count($empresas);
-                        for($i=0; $i<$tam;$i++){
-                            if($empresas[$i]['ID_Empresa']==$params[0]['ID_Empresa']){?> 
-                                <option value="<?php echo $empresas[$i]['ID_Empresa']?>" selected="selected"><?php echo $empresas[$i]['Empresa']?></option><?php
-                            }   else { ?>
-                                <option value="<?php echo $empresas[$i]['ID_Empresa']?>" ><?php echo $empresas[$i]['Empresa']?></option>   
-                        <?php } }  ?>
-                    </select>
-                </div>
-
-                <div class="col-md-8 espacio-abajo">
-                  <label for="Observaciones_generales">Observaciones</label>
-                  <input type="text" readonly class="form-control" id="Observaciones_generales" name="Observaciones_generales" value="<?php echo $params[0]['Observaciones_Punto'];?>">
-                </div>
-
-                <!--Información del Gerente de Zona del BCR-->
-                <div class="col-md-4 espacio-abajo">
-                    <label for="zonas_gerente">Gerente de Zona BCR</label>
-                    <select class="form-control" id="zonas_gerente" disabled name="zonas_gerente"> 
-                        <?php
-                        $tam = count($gerente_zona_bcr);
-                        $ubicacionpersona="";
-                        for($i=0; $i<$tam;$i++){
-                            if($gerente_zona_bcr[$i]['ID_Gerente_Zona']==$params[0]['ID_Gerente_Zona']){
-                                $ubicacionpersona=$i; ?> 
-                                <option value="<?php echo $gerente_zona_bcr[$i]['ID_Gerente_Zona']?>" selected="selected" ><?php echo $gerente_zona_bcr[$i]['Zona_Gerencia_BCR'];?></option><?php
-                          } else{   ?>
-                                <option value="<?php echo $gerente_zona_bcr[$i]['ID_Gerente_Zona']?>"><?php echo $gerente_zona_bcr[$i]['Zona_Gerencia_BCR']?></option>   
-                      <?php }} ?>
-                    </select>
-                </div>
-                <div class="col-md-4 espacio-abajo">
-                    <label for="nombre_gerente">Nombre Gerente de Zona</label>
-                    <input type="text" readonly class="form-control" id="nombre_gerente" name="nombre_gerente" value="<?php echo $gerente_zona_bcr[$ubicacionpersona]['Apellido_Nombre'];?>">
-                </div>
-                <div class="col-md-4 espacio-abajo">
-                    <label for="tel_gerente">Teléfono</label>
-                    <input type="text" readonly class="form-control" id="tel_gerente" name="tel_gerente" value="<?php echo $gerente_zona_bcr[$ubicacionpersona]['Numero'];?>">
-                </div>
-
-                <!--Información del Supervisor de Zona privado-->
-                <div class="col-md-4 espacio-abajo">
-                    <label for="zonas_supervisores">Supervisor de Zona</label>
-                    <select class="form-control" id="zonas_supervisores" disabled name="zonas_supervisores" > 
-                        <?php
-                        $tam = count($supervisor_zona_externo);
-
-                        for($i=0; $i<$tam;$i++){
-                            if($supervisor_zona_externo[$i]['ID_Supervisor_Zona']==$params[0]['ID_Supervisor_Zona']){
-                                $ubicacionpersona=$i;?> 
-                                <option value="<?php echo $supervisor_zona_externo[$i]['ID_Supervisor_Zona']?>" selected="selected"><?php echo $supervisor_zona_externo[$i]['Zona_Supervisor'];?></option><?php
-                            } else {    ?>
-                                <option value="<?php echo $supervisor_zona_externo[$i]['ID_Supervisor_Zona']?>" ><?php echo $supervisor_zona_externo[$i]['Zona_Supervisor']?></option>   
-                        <?php }}  ?>
-                    </select>
-                </div>
-                <div class="col-md-4 espacio-abajo">
-                    <label for="nombre_supervisor">Nombre del Supervisor</label>
-                    <input type="text" readonly class="form-control" id="nombre_supervisor" name="nombre_supervisor" value="<?php echo $supervisor_zona_externo[$ubicacionpersona]['Apellido'].' '.$supervisor_zona_externo[$ubicacionpersona]['Nombre'];?>">
-                </div>
-                <div class="col-md-4 espacio-abajo">
-                    <label for="tel_supervisor">Teléfono</label>
-                    <input type="text" readonly class="form-control" id="tel_supervisor" name="tel_supervisor" value="<?php echo $supervisor_zona_externo[$ubicacionpersona]['Numero'];?>">
-                </div>
-            </div>  
-        
-            <!--Horario del Punto BCR-->
-            <div class="bordegris espacio-abajo-5">
-                <div>
-                    <?php if($_SESSION['modulos']['Editar- Puntos BCR']==1){ ?> 
-                        <h3>Horario Punto BCR
-                            <a id="popup" onclick="mostrar_horario()" class="btn azul" role="button">Cambiar Horario</a> - 
-                            <a onclick="eliminar_horario('Público')" class="btn rojo" role="button">Eliminar Horario público</a>
-                            <a onclick="eliminar_horario('Oficina')" class="btn rojo" role="button">Eliminar Horario oficina</a>  
-                        </h3>    
-                    <?php } else {?>
-                        <h3>Horario Punto BCR</h3>
-                        
-                    <?php } if ($horariopunto[0]['Tipo_Horario']=="Público"){
-                            $oficina=1; $publico=0;
-                        } else {
-                            $oficina=0; $publico=1;
-                        } ?> 
-                        
-                    <table class="display col-md-12  table-striped quitar-float espacio-abajo" id="direccionIP">
-                        <thead> 
-                            <tr>
-                                <th style="text-align:center">Horario</th>
-                                <th style="text-align:center">Domingo</th>
-                                <th style="text-align:center">Lunes</th>
-                                <th style="text-align:center">Martes</th>
-                                <th style="text-align:center">Miercoles</th>
-                                <th style="text-align:center">jueves</th>
-                                <th style="text-align:center">Viernes</th>
-                                <th style="text-align:center">Sábado</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                                <tr>
-                                    <td style="text-align:center">Horario apertura oficina</td>
-                                    <?php if(isset($horariopunto[$oficina]['Tipo_Horario'])){ ?>
-                                        <td style="text-align:center"><?php echo $horariopunto[$oficina]['Hora_Apertura_Domingo'];?></td>
-                                        <td style="text-align:center"><?php echo $horariopunto[$oficina]['Hora_Apertura_Lunes'];?></td>
-                                        <td style="text-align:center"><?php echo $horariopunto[$oficina]['Hora_Apertura_Martes'];?></td>
-                                        <td style="text-align:center"><?php echo $horariopunto[$oficina]['Hora_Apertura_Miercoles'];?></td>
-                                        <td style="text-align:center"><?php echo $horariopunto[$oficina]['Hora_Apertura_Jueves'];?></td>
-                                        <td style="text-align:center"><?php echo $horariopunto[$oficina]['Hora_Apertura_Viernes'];?></td>
-                                        <td style="text-align:center"><?php echo $horariopunto[$oficina]['Hora_Apertura_Sabado'];?></td>
-                                    <?php } else {?>
-                                        <td></td><td></td><td></td><td></td><td></td><td></td><td></td>
-                                    <?php } ?>
-                                </tr>
-                                <tr>
-                                    <td style="text-align:center">Horario apertura público</td>
-                                    <?php if(isset($horariopunto[$publico]['Tipo_Horario'])){ ?>
-                                        <td style="text-align:center"><?php echo $horariopunto[$publico]['Hora_Apertura_Domingo'];?></td>
-                                        <td style="text-align:center"><?php echo $horariopunto[$publico]['Hora_Apertura_Lunes'];?></td>
-                                        <td style="text-align:center"><?php echo $horariopunto[$publico]['Hora_Apertura_Martes'];?></td>
-                                        <td style="text-align:center"><?php echo $horariopunto[$publico]['Hora_Apertura_Miercoles'];?></td>
-                                        <td style="text-align:center"><?php echo $horariopunto[$publico]['Hora_Apertura_Jueves'];?></td>
-                                        <td style="text-align:center"><?php echo $horariopunto[$publico]['Hora_Apertura_Viernes'];?></td>
-                                        <td style="text-align:center"><?php echo $horariopunto[$publico]['Hora_Apertura_Sabado'];?></td>
-                                    <?php } else {?>
-                                        <td></td><td></td><td></td><td></td><td></td><td></td><td></td>
-                                    <?php } ?>
-                                </tr>
-                                <tr>
-                                    <td style="text-align:center">Horario cierre público</td>
-                                    <?php if(isset($horariopunto[$publico]['Tipo_Horario'])){ ?>
-                                        <td style="text-align:center"><?php echo $horariopunto[$publico]['Hora_Cierre_Domingo'];?></td>
-                                        <td style="text-align:center"><?php echo $horariopunto[$publico]['Hora_Cierre_Lunes'];?></td>
-                                        <td style="text-align:center"><?php echo $horariopunto[$publico]['Hora_Cierre_Martes'];?></td>
-                                        <td style="text-align:center"><?php echo $horariopunto[$publico]['Hora_Cierre_Miercoles'];?></td>
-                                        <td style="text-align:center"><?php echo $horariopunto[$publico]['Hora_Cierre_Jueves'];?></td>
-                                        <td style="text-align:center"><?php echo $horariopunto[$publico]['Hora_Cierre_Viernes'];?></td>
-                                        <td style="text-align:center"><?php echo $horariopunto[$publico]['Hora_Cierre_Sabado'];?></td>
-                                    <?php } else {?>
-                                        <td></td><td></td><td></td><td></td><td></td><td></td><td></td>
-                                    <?php } ?>
-                                </tr>
-                                <tr>
-                                    <td style="text-align:center">Horario cierre oficina</td>
-                                    <?php if(isset($horariopunto[$oficina]['Tipo_Horario'])){ ?>
-                                        <td style="text-align:center"><?php echo $horariopunto[$oficina]['Hora_Cierre_Domingo'];?></td>
-                                        <td style="text-align:center"><?php echo $horariopunto[$oficina]['Hora_Cierre_Lunes'];?></td>
-                                        <td style="text-align:center"><?php echo $horariopunto[$oficina]['Hora_Cierre_Martes'];?></td>
-                                        <td style="text-align:center"><?php echo $horariopunto[$oficina]['Hora_Cierre_Miercoles'];?></td>
-                                        <td style="text-align:center"><?php echo $horariopunto[$oficina]['Hora_Cierre_Jueves'];?></td>
-                                        <td style="text-align:center"><?php echo $horariopunto[$oficina]['Hora_Cierre_Viernes'];?></td>
-                                        <td style="text-align:center"><?php echo $horariopunto[$oficina]['Hora_Cierre_Sabado'];?></td>
-                                    <?php } else {?>
-                                        <td></td><td></td><td></td><td></td><td></td><td></td><td></td>
-                                    <?php } ?>
-                                </tr>
-                        </tbody> 
-                    </table>
-                </div>
+                <a href="index.php?ctl=puntos_bcr_listar" class="btn btn-default espacio-arriba" role="button">Volver</a>
             </div>
-        
-            <a href="index.php?ctl=puntos_bcr_listar" class="btn btn-default espacio-arriba" role="button">Volver</a>
         </div>
         <?php require_once 'pie_de_pagina.php' ?>
         
@@ -562,7 +590,7 @@
                     <hr>
                     <input hidden id="ID_Telefono" name="ID_Telefono" type="text" value="0">
                     <input hidden id="ID_PuntoBCR" name="ID_PuntoBCR" type="text" value="<?php echo $params[0]['ID_PuntoBCR']; ?>">
-                    <label for="Tipo_Telefono">Tipo de Telefono</label>
+                    <label for="Tipo_Telefono">Tipo de Teléfono</label>
                     <select class="form-control espacio-abajo" id="Tipo_Telefono" name="Tipo_Telefono"> 
                         <?php
                         $tam = count($tipo_telefono);
@@ -622,17 +650,17 @@
             <div id="popupventana2">
                 <div id="ventana2">
                     <img id="close" src='vistas/Imagenes/cerrar.png' width="25" onclick ="ocultar_elemento()">
-                    <h2>Areas de Apoyo</h2>
-                    <h4>Agregar nueva area de apoyo</h4>
+                    <h2>Áreas de Apoyo</h2>
+                    <h4>Agregar nueva área de apoyo</h4>
                     <!--Formulario para ingresar areas de apoyo-->
                     <form class="bordegris" id="nueva_area_apoyo" method="post" name="form" action="index.php?ctl=Area_apoyo_agregar">
                         <input hidden id="ID_PuntoBCR" name="ID_PuntoBCR" type="text" value="<?php echo $params[0]['ID_PuntoBCR']; ?>">
                         <div class="col-md-4 espacio-abajo-5">
-                            <label for="nombre">Nombre de Area Apoyo</label>
+                            <label for="nombre">Nombre de Área Apoyo</label>
                             <input type="text" required="nombre" class="form-control" id="nombre" name="nombre" placeholder="Nombre del area de apoyo">
                         </div>
                         <div class="col-md-4 espacio-abajo-5">
-                            <label for="Tipo_Area_Apoyo">Tipo de Area</label>
+                            <label for="Tipo_Area_Apoyo">Tipo de Área</label>
                             <select class="form-control" id="Tipo_Area_Apoyo" name="Tipo_Area_Apoyo"> 
                                 <?php
                                 $tam = count($tipos_areas_apoyo);
@@ -691,7 +719,7 @@
                             <input type="text" class="form-control" id="direccion" name="direccion" placeholder="Dirreción del area de apoyo exacta">
                         </div>
                         <div class="col-md-6 espacio-abajo-5">
-                        <label for="Tipo_Telefono">Tipo de Telefono</label>
+                        <label for="Tipo_Telefono">Tipo de Teléfono</label>
                             <select class="form-control" id="Tipo_Telefono" name="Tipo_Telefono"> 
                                 <?php
                                 $tam = count($tipo_telefono);
@@ -712,14 +740,14 @@
                     </form>
                     
                     <!--lista de areas de apoyo registradas-->
-                    <h4>Areas de apoyo registradas en el sistema</h4>
+                    <h4>Áreas de apoyo registradas en el sistema</h4>
                     <table id="tabla3" class="display" cellspacing="0" width="100%">
                         <thead>
                             <tr>
-                                <th style="text-align:center">Area de Apoyo</th>
-                                <th style="text-align:center">Nombre de Area</th>
-                                <th style="text-align:center">Numero telefono</th>
-                                <th style="text-align:center">Direccion</th>
+                                <th style="text-align:center">Área de Apoyo</th>
+                                <th style="text-align:center">Nombre de área</th>
+                                <th style="text-align:center">Número teléfono</th>
+                                <th style="text-align:center">Dirección</th>
                                 <th style="text-align:center">Opciones</th>
                             </tr>
                         </thead>
@@ -748,7 +776,7 @@
                 <div id="ventana2">
                     <img id="close" src='vistas/Imagenes/cerrar.png' width="25" onclick ="ocultar_elemento()">
                     <h2>Direcciones IP del PuntoBCR</h2>
-                    <h4>Agregar nueva direccion IP</h4>
+                    <h4>Agregar nueva dirección IP</h4>
                     <!--Formulario para ingresar direcciones IP-->
                     <form class="bordegris" id="nueva_direccion_ip" method="post" name="form" action="index.php?ctl=direccionIP_agregar">
                         <input hidden id="ID_PuntoBCR" name="ID_PuntoBCR" type="text" value="<?php echo $params[0]['ID_PuntoBCR']; ?>">
@@ -823,7 +851,7 @@
                                 <th style="text-align:center">Domingo</th>
                                 <th style="text-align:center">Lunes</th>
                                 <th style="text-align:center">Martes</th>
-                                <th style="text-align:center">Miercoles</th>
+                                <th style="text-align:center">Miércoles</th>
                                 <th style="text-align:center">jueves</th>
                                 <th style="text-align:center">Viernes</th>
                                 <th style="text-align:center">Sábado</th>

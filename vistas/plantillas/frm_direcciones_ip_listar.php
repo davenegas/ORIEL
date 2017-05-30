@@ -50,10 +50,10 @@
             <table id="tabla" class="display" cellspacing="0">
                 <thead>
                     <tr>
-                        <th style="text-align:center" >Tipo de Direccion IP</th>
-                        <th style="text-align:center" >Direccion IP</th>
+                        <th style="text-align:center" >Tipo de Dirección IP</th>
+                        <th style="text-align:center" >Dirección IP</th>
                         <th style="text-align:center" >Observaciones</th>
-                        <th style="text-align:center" >Editar Direccion IP</th>
+                        <th style="text-align:center" >Editar Dirección IP</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -97,7 +97,7 @@
                              <?php }  ?>
                         </select>
 
-                        <label for="numero">Direccion IP</label>
+                        <label for="numero">Dirección IP</label>
                         <input class="form-control espacio-abajo" required id="numero" name="numero" placeholder="Direccion IP del Equipo" type="text">
 
                         <label for="observaciones">Observaciones</label>

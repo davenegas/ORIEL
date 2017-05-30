@@ -23,7 +23,7 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="Cedula">Cedula</label>
+                        <label for="Cedula">Cédula</label>
                         <input type="text" data-mask="0-0000-0000" data-mask-clearifnotmatch="true"  required="required" maxlength="10" pattern="\d*" class="form-control" id="Cedula" name="Cedula" value="<?php echo $params[0]['Cedula'];?>">
                     </div>
 

@@ -98,7 +98,7 @@
                         <thead> 
                             <tr>
                                 <th style="text-align:center">Nombre</th>
-                                <th style="text-align:center">Codigo</th>
+                                <th style="text-align:center">Código</th>
                                 <th style="text-align:center">Gateway</th>
                                 <th style="text-align:center">Loopback</th>
                                 <th style="text-align:center">Enlace</th>
@@ -169,7 +169,7 @@
                         <thead> 
                             <tr bgcolor="#58ACFA">
                                 <th style="text-align:center">Nombre</th>
-                                <th style="text-align:center">Codigo</th>
+                                <th style="text-align:center">Código</th>
                                 <th style="text-align:center">Gateway</th>
                                 <th style="text-align:center">Loopback</th>
                                 <th style="text-align:center">Enlace</th>

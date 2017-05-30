@@ -9,7 +9,7 @@
         <?php require_once 'encabezado.php';?>
         <div class="container">
             <h2>Gestión de Tipo de Eventos</h2>
-            <p>Mediante esta pantalla, podrá agregar o editar lod tipos de evento:</p>
+            <p>Mediante esta pantalla, podrá agregar o editar los tipos de evento:</p>
             <div class="container">
                 <form class="form-horizontal" role="form" method="POST" action="index.php?ctl=tipo_eventos_guardar&id=<?php echo trim($ide);?>">
                     <div class="form-group">

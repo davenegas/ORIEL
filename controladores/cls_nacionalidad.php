@@ -46,7 +46,6 @@ class cls_nacionalidad {
     function setCondicion($condicion) {
         $this->condicion = $condicion;
     }
-
         
     public function __construct() {
         $this->id="";

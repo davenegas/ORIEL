@@ -111,44 +111,44 @@
             $(function () {
                     $('#pendientes_puesto').highcharts({
                             chart: {
-                                    type: 'bar'
+                                type: 'bar'
                             },
                             title: {
-                                    text: 'Eventos pendientes por puesto'
+                                text: 'Eventos pendientes por puesto'
                             },
                             xAxis: {
-                                    categories: ['Puesto 1', 'Puesto 2', 'Puesto 3', 'Puesto 4', 'Puesto Z2'],
-                                    title: {
-                                            text: null
-                                    }
+                                categories: ['Puesto 1', 'Puesto 2', 'Puesto 3', 'Puesto 4', 'Puesto Z2'],
+                                title: {
+                                    text: null
+                                }
                             },
                             yAxis: {
-                                    min: 0,
-                                    title: {
-                                            text: 'Eventos pendientes',
-                                            align: 'high'
-                                    },
-                                    labels: {
-                                            overflow: 'justify'
-                                    }
+                                min: 0,
+                                title: {
+                                    text: 'Eventos pendientes',
+                                    align: 'high'
+                                },
+                                labels: {
+                                    overflow: 'justify'
+                                }
                             },
                             plotOptions: {
-                                    bar: {
-                                            dataLabels: {
-                                                    enabled: true
-                                            }
+                                bar: {
+                                    dataLabels: {
+                                        enabled: true
                                     }
+                                }
                             },
                             credits: {
-                                    enabled: false
+                                enabled: false
                             },
                             series: [{
-                                    name: 'Eventos pendientes',
-                                    data: [<?php echo $pendiente_puesto1[0]['Contador']?>, 
-                                        <?php echo $pendiente_puesto2[0]['Contador']?>, 
-                                        <?php echo $pendiente_puesto3[0]['Contador']?>, 
-                                        <?php echo $pendiente_puesto4[0]['Contador']?>, 
-                                        <?php echo $pendiente_puestoZ2[0]['Contador']?>]
+                                name: 'Eventos pendientes',
+                                data: [<?php echo $pendiente_puesto1[0]['Contador']?>, 
+                                    <?php echo $pendiente_puesto2[0]['Contador']?>, 
+                                    <?php echo $pendiente_puesto3[0]['Contador']?>, 
+                                    <?php echo $pendiente_puesto4[0]['Contador']?>, 
+                                    <?php echo $pendiente_puestoZ2[0]['Contador']?>]
                             }]
                     });
 		});

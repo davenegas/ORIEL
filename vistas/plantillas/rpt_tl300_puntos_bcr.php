@@ -30,11 +30,11 @@
             <table id="tabla" class="display" cellspacing="0">
                 <thead>
                     <tr>
-                        <th style="text-align:center" >Nombre</th>
-                        <th style="text-align:center" >Dirección</th>
-                        <th style="text-align:center" >Cuenta SIS</th>
-                        <th style="text-align:center" >Código</th>
-                        <th style="text-align:center" >Direccion IP TL300</th>
+                        <th style="text-align:center">Nombre</th>
+                        <th style="text-align:center">Dirección</th>
+                        <th style="text-align:center">Cuenta SIS</th>
+                        <th style="text-align:center">Código</th>
+                        <th style="text-align:center">Direccion IP TL300</th>
                     </tr>
                 </thead>
                 <tbody>

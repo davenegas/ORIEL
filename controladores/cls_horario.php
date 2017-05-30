@@ -243,7 +243,6 @@ class cls_horario{
         $this->tipo_horario = $tipo_horario;
     }
 
-        
     public function __construct() {
        $this->id="";
        $this->id2="";
@@ -335,6 +334,7 @@ class cls_horario{
         }
         $this->obj_data_provider->desconectar();
     }
+    
     public function guardar_horario() {
        if($this->id_horario=="0"){
        $this->obj_data_provider->conectar();

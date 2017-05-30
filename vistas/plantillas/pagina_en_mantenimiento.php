@@ -2,7 +2,7 @@
 <html>
     <head>
         <meta charset="UTF-8">
-        <title>Pagina en Mantenimiento</title>
+        <title>Página en Mantenimiento</title>
         
     </head>
     <body>

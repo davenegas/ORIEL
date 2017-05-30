@@ -2,7 +2,7 @@
 <html lang="es">
     <head>
         <meta charset="utf-8"/>
-        <title>Gestión de Areas de Apoyo</title>
+        <title>Gestión de Áreas de Apoyo</title>
         <script language="javascript" src="vistas/js/jquery.js"></script>
         <script language="javascript" src="vistas/js/listas_dependientes_areas_apoyo.js"></script>
         <link rel="stylesheet" href="vistas/css/ventanaoculta.css">
@@ -11,17 +11,17 @@
     <body>
         <?php require_once 'encabezado.php'; ?>
         <div class="container">
-            <h2>Gestión de Areas de Apoyo del Sistema</h2>
-            <p>Mediante esta pantalla, podrá agregar o editar Areas de Apoyo del sistema:</p>
+            <h2>Gestión de Áreas de Apoyo del Sistema</h2>
+            <p>Mediante esta pantalla, podrá agregar o editar Áreas de Apoyo del sistema:</p>
             <div class="container">
-                <form class="form-horizontal" role="form" method="POST" action="index.php?ctl=Area_apoyo_nueva&id=<?php echo trim($ide);?>">
+                <form class="form-horizontal" role="form" method="POST" action="index.php?ctl=Area_apoyo_nueva&id=<?php echo $params[0]['ID_Area_Apoyo'];?>">
                     <div class="col-md-6 espacio-abajo">
-                        <label for="Nombre">Nombre Area</label>
+                        <label for="Nombre">Nombre Área</label>
                         <input type="text" required="required" class="form-control" id="Nombre" name="Nombre" value="<?php echo $params[0]['Nombre_Area'];?>">
                     </div>
 
                     <div class="col-md-6 espacio-abajo">
-                        <label for="tipo_area">Tipo de Area</label>
+                        <label for="tipo_area">Tipo de Área</label>
                         <select class="form-control" id="tipo_area" name="tipo_area" > 
                             <?php
                             $tam = count($tipo_area);
@@ -98,7 +98,7 @@
                             <?php if ($params[0]['Estado']==1){ ?>
                                 <option value="1" selected="selected">Activo</option>
                                 <option value="0">Inactivo</option>  
-                            <?php}  else { ?>
+                            <?php } else { ?>
                                <option value="1">Activo</option>
                                <option value="0" selected="selected">Inactivo</option>   
                             <?php } ?>  
@@ -146,7 +146,7 @@
                     <!--Solicita teléfono en caso de ser una nueva area de apoyo-->
                     <?php } ELSE { ?>
                             <div class="col-md-6 espacio-abajo-5">
-                                <label for="Tipo_Telefono">Tipo de Telefono</label>
+                                <label for="Tipo_Telefono">Tipo de Teléfono</label>
                                     <select class="form-control" id="Tipo_Telefono" name="Tipo_Telefono"> 
                                     <?php
                                     $tam = count($tipo_telefono);
@@ -186,7 +186,7 @@
                     <input hidden id="ID_Telefono" name="ID_Telefono" type="text">
                     <input hidden id="ID_Area_Apoyo" name="ID_Area_Apoyo" type="text" value="<?php echo $params[0]['ID_Area_Apoyo']; ?>">
                     
-                    <label for="Tipo_Telefono">Tipo de Telefono</label>
+                    <label for="Tipo_Telefono">Tipo de Teléfono</label>
                     <select class="form-control espacio-abajo" id="Tipo_Telefono" name="Tipo_Telefono"> 
                         <?php
                         $tam = count($tipo_telefono);

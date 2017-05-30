@@ -1,5 +1,5 @@
 <?php
- class cls_general{
+class cls_general{
      
     private $id;
     private $nota;

@@ -17,7 +17,7 @@
                         <th>Descripcion</th>
                         <th>Estado</th>
                         <th>Gestión Estado</th>
-                        <th>Mantenmiento</th>
+                        <th>Mantenimiento</th>
                     </tr>
                 </thead>
                 <tbody>

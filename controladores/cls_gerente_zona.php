@@ -40,6 +40,7 @@ class cls_gerente_zona{
     function setId($id) {
         $this->id = $id;
     }
+    
     function setObservaciones($observaciones) {
         $this->observaciones = $observaciones;
     }
@@ -59,6 +60,7 @@ class cls_gerente_zona{
     function setCondicion($condicion) {
         $this->condicion = $condicion;
     }
+    
     function setNombre($nombre) {
         $this->nombre = $nombre;
     }
@@ -82,7 +84,8 @@ class cls_gerente_zona{
         $this->numero="";
        
     }
-     public function obtiene_gerente_zona(){
+    
+    public function obtiene_gerente_zona(){
         $this->obj_data_provider->conectar();
         if($this->condicion==""){
             $this->arreglo=$this->obj_data_provider->trae_datos("T_GerenteZonaBCR LEFT OUTER JOIN T_Personal ON T_GerenteZonaBCR.ID_Persona = T_Personal.ID_Persona", 

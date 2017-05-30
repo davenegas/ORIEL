@@ -23,7 +23,6 @@ class cls_personal{
     public $id_empresa;
     public $id_ultima_persona_ingresada;
     
-    
     function getArreglo3() {
         return $this->arreglo3;
     }
@@ -199,8 +198,7 @@ class cls_personal{
     function setEstado($estado) {
         $this->estado = $estado;
     }
-
-        
+ 
     public function __construct() {
        
         $this->obj_data_provider=new Data_Provider();
@@ -443,7 +441,7 @@ class cls_personal{
       }   
   }
   
-  //Obtener el último id de evento para saber que se debe ingresar
+    //Obtener el último id de evento para saber que se debe ingresar
     function obtiene_id_de_persona_para_prontuario(){
       //Establece la conexión con la bd
       $this->obj_data_provider->conectar();
@@ -463,7 +461,7 @@ class cls_personal{
       }   
   }
   
-   //Este metodo realiza la modificación del estado del modulo, de activo a inactivo o viceversa en la bd
+    //Este metodo realiza la modificación del estado del modulo, de activo a inactivo o viceversa en la bd
     function edita_id_persona_en_tabla_telefonos(){
         $this->obj_data_provider->conectar();
         
@@ -539,7 +537,7 @@ class cls_personal{
   
     }
     
-     //Obtener el último id de evento para saber que se debe ingresar
+    //Obtener el último id de evento para saber que se debe ingresar
     function verifica_si_la_persona_es_gerente_zona_bcr(){
       //Establece la conexión con la bd
       $this->obj_data_provider->conectar();

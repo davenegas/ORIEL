@@ -2,7 +2,7 @@
 <html lang="es">
     <head>
         <meta charset="utf-8"/>
-        <title>Lista de Módulos</title>
+        <title>Lista de Roles</title>
         <?php require_once 'frm_librerias_head.html';?>
     </head>
     <body>
@@ -14,10 +14,10 @@
             <table id="tabla" class="display" cellspacing="0" width="100%">
                 <thead>
                     <tr>
-                        <th>Descripcion</th>
+                        <th>Descripción</th>
                         <th>Estado</th>
                         <th>Gestión Estado</th>
-                        <th>Mantenmiento</th>
+                        <th>Mantenimiento</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -36,7 +36,7 @@
                                    Activar/Desactivar</a></td>
                             <td><a href="index.php?ctl=gestion_roles&id=
                                 <?php echo $params[$i]['ID_Rol']?>&estado=<?php echo $params[$i]['Estado']?>&descripcion=<?php echo $params[$i]['Descripcion']?>">
-                                    Editar Modulo</a></td>
+                                    Editar Rol</a></td>
                         </tr>     
                     <?php } ?>
                 </tbody>

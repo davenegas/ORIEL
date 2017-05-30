@@ -19,7 +19,7 @@
                     <th style="text-align:center">Prioridad</th>
                     <th style="text-align:center">Gestión Estado</th>
                     <th style="text-align:center">Cambiar Estado</th>
-                    <th style="text-align:center">Mantenmiento</th>
+                    <th style="text-align:center">Mantenimiento</th>
                 </tr>
             </thead>
             <tbody>

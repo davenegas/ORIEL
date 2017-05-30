@@ -314,6 +314,9 @@
                                 <li><a href="index.php?ctl=manual_ayuda_privado&manual=Prueba_Alarma">Manual Pruebas Alarma</a></li>
                             <?php }; ?>
                                  
+                            <?php if ($_SESSION['modulos']['Módulo-Asistencia de Personal']==1||$_SESSION['modulos']['Módulo-Asistencia encargado empresa']==1||$_SESSION['modulos']['Módulo-Asistencia encargado empresa']==1){?>
+                                <li><a href="index.php?ctl=manual_ayuda_privado&manual=Asistencia">Manual Pruebas Alarma</a></li>
+                            <?php }; ?>
                         </ul>
                     </li>
                 <?php }; ?>       

@@ -123,6 +123,7 @@ class cls_areasapoyo{
         $this->detalle="";
         $this->distrito="";
     }
+    
     public function obtiene_todos_las_areas_apoyo(){
         $this->obj_data_provider->conectar();
         if($this->condicion==""){
