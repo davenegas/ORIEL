@@ -444,7 +444,7 @@ class cls_eventos{
                 }
             $valores_iniciales=$valores_iniciales . "\nA continuacion valores anteriores de la tabla formato arreglo:\n ";
             $temp=$this->obj_data_provider->getArreglo();
-            $valores_iniciales=$valores_iniciales . serialize($temp(0));
+            $valores_iniciales=$valores_iniciales . serialize($temp[0]);
 
              //Registro de la trazabilidad del sistema
             $cadena_sql=str_replace(","," - ","call sp_set_detalleEvento(Modifica datos en T_detalleEvento ID_Seguimiento='".$this->id2."',ID_Evento='".$this->id."',Fecha='".$this->fecha."',Hora='".$this->hora."',Detalle='".$this->detalle."',Usuario='".$this->id_usuario."',Adjunto='".$this->adjunto."')");
@@ -535,7 +535,7 @@ class cls_eventos{
                 }
                 $valores_iniciales=$valores_iniciales . "\nA continuacion valores anteriores de la tabla formato arreglo:\n ";
                 $temp=$this->obj_data_provider->getArreglo();
-                $valores_iniciales=$valores_iniciales . serialize($temp(0));
+                $valores_iniciales=$valores_iniciales . serialize($temp[0]);
 
                  //Registro de la trazabilidad del sistema
                 $cadena_sql=str_replace(","," - ","call sp_set_tipoEvento(Modifica datos en T_tipoevento Id_tipo_evento='".$this->id."',Evento='".$this->tipo_evento."',Prioridad='".$this->prioridad."',Observaciones='".$this->observaciones."',Estado='".$this->estado."')");

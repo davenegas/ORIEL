@@ -23,6 +23,21 @@
             .espacio-abajo-10{
                 margin-bottom: 10px;
             }
+            .retraso-1{
+                -webkit-animation-delay:0.5s;
+                -moz-animation-delay:0.5s;
+                animation-delay: 0.5s;
+            }
+            .retraso-2{
+                -webkit-animation-delay:1s;
+                -moz-animation-delay:1s;
+                animation-delay: 1s;
+            }
+            .retraso-3{
+                -webkit-animation-delay:1.5s;
+                -moz-animation-delay:1.5s;
+                animation-delay: 1.5s;
+            }
         </style>
     </head>
     <body>
@@ -43,7 +58,7 @@
                     </div>
                 </div>
                 <!--Información general del punto-->
-                <div class="row well" id="Información_General">
+                <div class="row well animated bounceInUp" style="animation-delay:0.2s;" id="Información_General">
                     <div class="row" id="Titulo">
                         <div class="col-md-12">
                             <h3>Información General del Punto BCR
@@ -63,7 +78,7 @@
                             <input type="text" required="ID_PuntoBCR" readonly class="form-control" id="ID_PuntoBCR" name="ID_PuntoBCR" value="<?php echo $params[0]['ID_PuntoBCR'];?>">
                         </div>
                         <div class="col-md-4">
-                            <label for="Codigo">Codigo</label>
+                            <label for="Codigo">Código</label>
                             <input type="text" required="required" readonly class="form-control" id="Codigo" name="Codigo" value="<?php echo $params[0]['Codigo'];?>">
                         </div>
                         <div class="col-md-4">
@@ -94,7 +109,7 @@
                     
                 </div>
                 <!--información de teléfonos del punto-->
-                <div class="row well" id="Informacion_Teléfonos_Punto">
+                <div class="row well animated bounceInUp" style="animation-delay:0.4s;" id="Informacion_Teléfonos_Punto">
                     <div class="col-md-12">
                         <?php if($_SESSION['modulos']['Editar- Teléfono Puntos BCR']==1){ ?>
                             <h3 class="quitar-float">Información de teléfonos del Punto BCR <a id="popup" onclick="mostrar_agregar_telefono()" class="btn azul" role="button">Agregar número</a></h3> 
@@ -134,19 +149,19 @@
                     </div>
                 </div>
                 <!--Areas de apoyo-->
-                <div class="row well" id="Información_Area_Apoyo">
+                <div class="row well animated bounceInUp" style="animation-delay:0.6s;" id="Información_Area_Apoyo">
                     <div class="col-md-12">
                         <?php if($_SESSION['modulos']['Vista Areas Apoyo- PuntosBCR']==1){ ?>
                             <?php if($_SESSION['modulos']['Editar- Puntos BCR']==1){ ?> 
-                                <h3>Información de Áreas Apoyo<a id="popup" onclick="mostrar_area_apoyo()" class="btn azul" role="button">Agregar Area Apoyo</a></h3>    
+                                <h3>Información de Áreas Apoyo<a id="popup" onclick="mostrar_area_apoyo()" class="btn azul" role="button">Agregar Área Apoyo</a></h3>    
                             <?php } else {?>
                                 <h3>Información de Áreas Apoyo</h3>
                             <?php } ?>
                             <table class="display col-md-12 table-striped quitar-float espacio-abajo" id="areas_apoyo">
                                 <thead>
                                     <tr>
-                                        <th style="text-align:center">Área de Apoyo</th>
-                                        <th style="text-align:center">Nombre de Área</th>
+                                        <th style="text-align:center">Área de apoyo</th>
+                                        <th style="text-align:center">Nombre de área</th>
                                         <th style="text-align:center">Número teléfono</th>
                                         <th style="text-align:center">Dirección</th>
                                         <?php if($_SESSION['modulos']['Editar- Puntos BCR']==1){ ?> 
@@ -175,7 +190,7 @@
                     </div>
                 </div>
                 <!--Información adicional (Gerente- Supervisor-remesa)-->
-                <div class="row well" id="Información_Adicional_BCR">
+                <div class="row well animated bounceInUp" style="animation-delay:0.8s;" id="Información_Adicional_BCR">
                     <div class="row">
                         <div class="col-md-12">
                             <h3>Información adicional
@@ -256,7 +271,7 @@
                     </div>
                 </div>
                 <!--Horarios asociados (entrada y público)-->
-                <div class="row well" id="Horarios apertura y público">
+                <div class="row well  animated bounceInUp" style="animation-delay:1s;" id="Horarios apertura y público">
                     <div class="col-md-12">
                         <?php if($_SESSION['modulos']['Editar- Puntos BCR']==1){ ?> 
                             <h3>Horario Punto BCR
@@ -348,7 +363,7 @@
                     </div>
                 </div>
                 <!--Ubicación del Punto (dirección- map)-->
-                <div class="row well" id="Ubicacion_Punto_BCR">
+                <div class="row well animated bounceInUp" style="animation-delay:1.2s;" id="Ubicacion_Punto_BCR">
                     <div class="row">
                         <div class="col-md-12">
                             <header>
@@ -417,7 +432,7 @@
                     </div>-->
                 </div>
                 <!--Unidades Ejecutoras ligadas al sitio-->
-                <div class="row well" id="Unidad_Ejecutora_Asociada">
+                <div class="row well animated bounceInUp" style="animation-delay:1.4s;" id="Unidad_Ejecutora_Asociada">
                     <div class="col-md-12">
                         <?php if($_SESSION['modulos']['Editar- Puntos BCR']==1){ ?>   
                             <h3 class="quitar-float">Unidades Ejecutoras asociadas al PuntoBCR <a id="popup" onclick="mostrar_lista_ue()" class="btn azul" role="button">Agregar UE</a></h3> 
@@ -453,7 +468,7 @@
                     </div>
                 </div>
                 <!--Información del personal asociado-->
-                <div class="row well" id="Información_Personal_BCR_Asociado">
+                <div class="row well  animated bounceInUp" style="animation-delay:1.6s;" id="Información_Personal_BCR_Asociado">
                     <div class="col-md-12 espacio-abajo-10">
                         <h3>Información de Personal del PuntoBCR</h3>
                         <table id="tabla" class="display" cellspacing="0" width="100%">
@@ -483,7 +498,7 @@
                     </div>
                 </div>
                 <!--Información enlaces telecom-->
-                <div class="row well" id="Información Telecom">
+                <div class="row well  animated bounceInUp" style="animation-delay:1.8s;" id="Información Telecom">
                     <div class="col-md-12">
                         <?php if($_SESSION['modulos']['Vista info Telecomunicaciones- PuntosBCR']==1){ ?>
                             <?php if($_SESSION['modulos']['Editar Telecomunicaciones- Puntos BCR']==1){ ?>   
@@ -534,7 +549,7 @@
                     </div>
                 </div>
                 <!--Direccionamiento (IP's)-->
-                <div class="row well" id="Direccionamiento">
+                <div class="row well animated bounceInUp" style="animation-delay:2s;" id="Direccionamiento">
                     <div class="col-md-12">
                         <!--Direcciones IP del Punto BCR-->
                         <?php if($_SESSION['modulos']['Vista info Telecomunicaciones- PuntosBCR']==1){ ?>

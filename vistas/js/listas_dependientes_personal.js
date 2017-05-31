@@ -24,7 +24,7 @@ $(document).ready(function(){
             cedula=document.getElementById('cedula').value;
             observaciones=document.getElementById('observaciones').value;
             nombre=document.getElementById('nombre').value;
-            empresa= document.getElementById('Empresa').value;
+            empresa= 1;
             numero_gafete =document.getElementById('numero_gafete').value;
             correo=document.getElementById('correo').value;
             direccion = document.getElementById('direccion').value;
@@ -32,7 +32,7 @@ $(document).ready(function(){
             $.post("index.php?ctl=persona_guardar_informacion_general", { id_persona:id_persona, cedula: cedula, 
                 observaciones:observaciones, nombre:nombre,empresa:empresa, numero_gafete:numero_gafete, 
                 correo:correo, direccion:direccion}, function(data){
-                    //alert (data);
+                    alert (data);
             });   
         }
     });

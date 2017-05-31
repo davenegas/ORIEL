@@ -4,7 +4,7 @@
         <meta charset="utf-8"/>
         <title>Lista de Eventos Cerrados</title>
         <script language="javascript" src="vistas/js/jquery.js"></script>
-        <script language="javascript" src="vistas/js/listas_dependientes_eventos_cerrados.js"></script>
+        <script language="javascript" src="vistas/js/listas_dependientes_eventos_cerrados.js?1.1.0"></script>
         <?php require_once 'frm_librerias_head.html'; ?>    
         <script>
             function recuperar_evento(id_e,id_pbcr,id_tevento){
@@ -24,7 +24,6 @@
                                 $.alert({
                                     title: 'Información!',
                                     content: 'Ya existe este evento abierto para este punto BCR. Proceda a cerrarlo o agregue un seguimiento!!!',
-
                                 });
                             }else{
                                 $.alert({

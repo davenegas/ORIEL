@@ -87,7 +87,7 @@
                             <?php  }; ?> 
 
                             <?php  if ($_SESSION['modulos']['Catálogos-Tipo Teléfono']==1){?>
-                                <li><a href="index.php?ctl=tipo_telefono_listar">Tipo Telefono</a></li>
+                                <li><a href="index.php?ctl=tipo_telefono_listar">Tipo Teléfono</a></li>
                             <?php  }; ?> 
 
                             <?php  if ($_SESSION['modulos']['Catálogos-Tipo Punto']==1){?>
@@ -181,7 +181,7 @@
                             <?php }; ?>
                             
                             <?php if ($_SESSION['modulos']['Reportes-Historico seguimientos']==1){ ?>
-                                <li><a href="index.php?ctl=reporte_seguimiento_eventos">Historico Seguimiento Usuarios</a></li> 
+                                <li><a href="index.php?ctl=reporte_seguimiento_eventos">Histórico Seguimiento Usuarios</a></li> 
                             <?php }; ?>
 
                             <?php if ($_SESSION['modulos']['Reportes-Activaciones provincia']==1){ ?>

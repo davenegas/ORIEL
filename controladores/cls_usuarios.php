@@ -257,7 +257,7 @@ class cls_usuarios{
             $valores_iniciales="Edicion - Valores anteriores de la tabla formato SELECT:\n ";
             if (count($this->obj_data_provider->getArreglo())>0){
                 $temp=$this->obj_data_provider->getArreglo();
-                $valores_iniciales= $valores_iniciales ." ". implode(" - ",$temp(0));
+                $valores_iniciales= $valores_iniciales ." ". implode(" - ",$temp[0]);
             }
             $valores_iniciales=$valores_iniciales . "\nA continuacion valores anteriores de la tabla formato arreglo:\n ";
             $valores_iniciales=$valores_iniciales . serialize($this->obj_data_provider->getArreglo());

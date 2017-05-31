@@ -6,8 +6,9 @@ function evento_buscar_puntobcr(){
     id= document.getElementById('numero_punto').value;
     var datos = new Array;
     var id_puntobcr=0;
+    //console.log("HELLO!");
     $.post("index.php?ctl=buscar_punto_prueba_alarma", { id: id}, function(data){
-        console.log(data);
+        //console.log(data);
         var res = data.substring(data.indexOf("{"), data.length);
         datos =JSON.parse(res);
         document.getElementById('nombre_punto').value=datos['Nombre'];
@@ -40,7 +41,7 @@ function evento_buscar_puntobcr(){
         id_puntobcr=document.getElementById('ID_PuntoBCR').value;
         
         $.post("index.php?ctl=numero_zona_prueba_realizadas", { id_puntobcr: id_puntobcr, id_tipo: id_tipo}, function(data){
-            console.log(data);
+            //console.log(data);
             $("#pruebas_anteriores").html(data);
         });
     });
@@ -368,8 +369,8 @@ function guardar_cierre(){
             var fecha2= new Date("2017/01/01 "+document.getElementById('Hora_Cierre_Publico').value);
             var diff2= ((fecha1-fecha2)/60000);
             
-            console.log("diff agencia: "+diff);
-            console.log("diff2 público: "+diff2);
+            //console.log("diff agencia: "+diff);
+            //console.log("diff2 público: "+diff2);
             if(diff2<0){
                 $.confirm({title: 'Confirmación!', content: 'El cierre indicado es antes del cierre a público, si continua deberá ingresar un evento para justificar el cierre temprano', 
                 confirm: function(){

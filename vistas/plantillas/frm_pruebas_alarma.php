@@ -4,7 +4,7 @@
         <meta charset="UTF-8">
         <title>Pruebas Alarma</title>
         <script language="javascript" src="vistas/js/jquery.js"></script>
-        <script language="javascript" src="vistas/js/listas_dependientes_pruebas.js"></script>
+        <script language="javascript" src="vistas/js/listas_dependientes_pruebas.js?1.2"></script>
         <link rel="stylesheet" href="vistas/css/ventanaoculta.css"> 
         <?php require_once 'frm_librerias_head.html'; ?>
         <script>

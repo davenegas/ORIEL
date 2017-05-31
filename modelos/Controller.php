@@ -86,7 +86,7 @@ class Controller{
             $obj_roles->obtiene_todos_los_roles();
             //Inicializa un vector con el total de registros de la base de datos
             $params = $obj_roles->getArreglo();
-            require __DIR__.'/../vistas/plantillas/lista_de_roles.php';
+            require __DIR__.'/../vistas/plantillas/frm_roles_listar.php';
         }else{
               /*
              * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
@@ -1758,7 +1758,7 @@ class Controller{
                     // asigna el resultado de la consulta sql, al vector de parametros.
                     $params= $obj_roles->getArreglo();
                     //Llamada al formulario correspondiente de la vista
-                    require __DIR__ . '/../vistas/plantillas/lista_de_roles.php';
+                    require __DIR__ . '/../vistas/plantillas/frm_roles_listar.php';
                 }
              }
                
@@ -1933,7 +1933,7 @@ class Controller{
                 $params = $obj_roles->getArreglo();
         }
         //Llamada al formulario correspondiente de la vista
-        require __DIR__ . '/../vistas/plantillas/lista_de_roles.php';
+        require __DIR__ . '/../vistas/plantillas/frm_roles_listar.php';
                
         }else{
               /*
@@ -1985,7 +1985,7 @@ class Controller{
             // Asigna el resultado a un vector
             $params= $obj_modulos->getArreglo();
             //Llamada al formulario correspondiente de la vista
-            require __DIR__ . '/../vistas/plantillas/gestion_roles.php';
+            require __DIR__ . '/../vistas/plantillas/frm_roles_gestion.php';
                
         }   else    {
               /*
@@ -2012,7 +2012,7 @@ class Controller{
             //Inicializa el vector correspondiente 
             $params= $obj_modulos->getArreglo();
             //Llamada al formulario correspondiente de la vista
-            require __DIR__ . '/../vistas/plantillas/lista_de_modulos.php';
+            require __DIR__ . '/../vistas/plantillas/frm_modulos_listar.php';
         }else{
               /*
              * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
@@ -2085,7 +2085,7 @@ class Controller{
                 $params= $obj_modulos->getArreglo();
             }
             //Llamada al formulario correspondiente de la vista
-            require __DIR__ . '/../vistas/plantillas/lista_de_modulos.php';
+            require __DIR__ . '/../vistas/plantillas/frm_modulos_listar.php';
         }   else    {
               /*
              * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
@@ -2125,7 +2125,7 @@ class Controller{
                     // Procede a eliminar los modulos asignados a un rol en especifico
                     $obj_modulos->eliminar_modulos_roles($_GET['id']);
                     //Llamada al formulario correspondiente de la vista
-                require __DIR__ . '/../vistas/plantillas/lista_de_modulos.php';
+                require __DIR__ . '/../vistas/plantillas/frm_modulos_listar.php';
                 }
             }
         }else{
@@ -2164,7 +2164,7 @@ class Controller{
                 $esta=$_GET['estado'];
             }
             //Llamada al formulario correspondiente de la vista
-            require __DIR__ . '/../vistas/plantillas/gestion_modulos.php';
+            require __DIR__ . '/../vistas/plantillas/frm_modulos_gestion.php';
         }   else    {
               /*
              * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
@@ -2190,7 +2190,7 @@ class Controller{
             //Inicializa una variable con el vector total de registros de la bd
             $params= $obj_usuarios->getArreglo();
             //Llamada al formulario correspondiente de la vista
-            require __DIR__.'/../vistas/plantillas/lista_de_usuarios.php';
+            require __DIR__.'/../vistas/plantillas/frm_usuarios_listar.php';
         }
         else {
               /*
@@ -2263,7 +2263,7 @@ class Controller{
                 $params= $obj_usuario->getArreglo();
             }
             //Llamada al formulario correspondiente de la vista
-            require __DIR__ . '/../vistas/plantillas/gestion_usuarios.php';
+            require __DIR__ . '/../vistas/plantillas/frm_usuarios_gestion.php';
         }   else   {
               /*
              * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
@@ -2412,7 +2412,7 @@ class Controller{
                         $params= $obj_usuario->getArreglo();
                     }
                     //Llamada al formulario correspondiente de la vista
-                require __DIR__ . '/../vistas/plantillas/lista_de_usuarios.php';
+                require __DIR__ . '/../vistas/plantillas/frm_usuarios_listar.php';
                 }
             }    
         }else   {
@@ -2450,7 +2450,7 @@ class Controller{
                 //Asigna el resultado de la consulta a una variable de tipo arreglo
                 $params= $obj_usuario->getArreglo();
                 //Llamada al formulario correspondiente de la vista
-                require __DIR__ . '/../vistas/plantillas/lista_de_usuarios.php';
+                require __DIR__ . '/../vistas/plantillas/frm_usuarios_listar.php';
             }
         }
         else{
