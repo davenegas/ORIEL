@@ -317,9 +317,9 @@ class cls_personal_externo{
             //Llama al metodo para editar los datos correspondientes
             $sql_datos= "Identificacion='".$this->identificacion."',Apellido='".$this->apellido."',Nombre='".$this->nombre."',Fecha_Nacimiento='".$this->fecha_nacimiento."'";
             if($this->fecha_residencia==''){$sql_datos.=",Fecha_Vencimiento_Residencia=null";}else{$sql_datos.=",Fecha_Vencimiento_Residencia='".$this->fecha_residencia."'";}
-            if($this->fecha_portacion==''){$sql_datos.=",Fecha_Vencimiento_Residencia=null";}else{$sql_datos.=",Fecha_Vencimiento_Residencia='".$this->fecha_portacion."'";}
-            if($this->fecha_ingreso==''){$sql_datos.=",Fecha_Vencimiento_Residencia=null";}else{$sql_datos.=",Fecha_Vencimiento_Residencia='".$this->fecha_ingreso."'";}
-            if($this->fecha_salida==''){$sql_datos.=",Fecha_Vencimiento_Residencia=null";}else{$sql_datos.=",Fecha_Vencimiento_Residencia='".$this->fecha_salida."'";}
+            if($this->fecha_portacion==''){$sql_datos.=",Fecha_Vencimiento_Portacion=null";}else{$sql_datos.=",Fecha_Vencimiento_Portacion='".$this->fecha_portacion."'";}
+            if($this->fecha_ingreso==''){$sql_datos.=",Fecha_Ingreso=null";}else{$sql_datos.=",Fecha_Ingreso='".$this->fecha_ingreso."'";}
+            if($this->fecha_salida==''){$sql_datos.=",Fecha_Salida=null";}else{$sql_datos.=",Fecha_Salida='".$this->fecha_salida."'";}
             $sql_datos.=",Correo='".$this->correo."', Genero='".$this->genero."', Direccion='".$this->direccion."', ID_Distrito='".$this->distrito."', ID_Estado_Civil='".$this->estado_civil."', ID_Nacionalidad='".$this->nacionalidad."', ID_Nivel_Academico='".$this->nivel_academico."', ID_Empresa='".$this->empresa."', ID_Estado_Persona='".$this->estado_persona."', Observaciones='".$this->observaciones."', Ocupacion='".$this->ocupacion."'";
             $this->obj_data_provider->edita_datos("T_PersonalExterno",$sql_datos,$this->condicion);
             //Metodo de la clase data provider que desconecta la sesión con la base de datos
