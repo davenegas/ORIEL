@@ -301,16 +301,27 @@ class cls_personal_externo{
         //Si no, creará una persona nueva
         if($this->condicion==""){
             $this->obj_data_provider->conectar();
+            $sql_datos= "null,'".$this->identificacion."','".$this->apellido."','".$this->nombre."','".$this->fecha_nacimiento."'";
+            if($this->fecha_residencia==''){$sql_datos.=",null";}else{$sql_datos.=",'".$this->fecha_residencia."'";}
+            if($this->fecha_portacion==''){$sql_datos.=",null";}else{$sql_datos.=",'".$this->fecha_portacion."'";}
+            if($this->fecha_ingreso==''){$sql_datos.=",null";}else{$sql_datos.=",'".$this->fecha_ingreso."'";}
+            if($this->fecha_salida==''){$sql_datos.=",null";}else{$sql_datos.=",'".$this->fecha_salida."'";}
+            $sql_datos.= ",'".$this->correo."','".$this->genero."','".$this->direccion."','".$this->distrito."','".$this->estado_civil."','".$this->nacionalidad."','".$this->nivel_academico."','".$this->empresa."','".$this->estado_persona."','".$this->observaciones."','".$this->ocupacion."'";
             $this->obj_data_provider->inserta_datos("T_PersonalExterno", "`ID_Persona_Externa`, `Identificacion`, `Apellido`, `Nombre`, `Fecha_Nacimiento`, `Fecha_Vencimiento_Residencia`, `Fecha_Vencimiento_Portacion`, `Fecha_Ingreso`, `Fecha_Salida`, `Correo`, `Genero`, `Direccion`, `ID_Distrito`, `ID_Estado_Civil`, `ID_Nacionalidad`, `ID_Nivel_Academico`, `ID_Empresa`, `ID_Estado_Persona`, `Observaciones`, `Ocupacion`", 
-                                                "null,'".$this->identificacion."','".$this->apellido."','".$this->nombre."','".$this->fecha_nacimiento."','".$this->fecha_residencia."','".$this->fecha_portacion."','".$this->fecha_ingreso."','".$this->fecha_salida."','".$this->correo."','".$this->genero."','".$this->direccion."','".$this->distrito."','".$this->estado_civil."','".$this->nacionalidad."','".$this->nivel_academico."','".$this->empresa."','".$this->estado_persona."','".$this->observaciones."','".$this->ocupacion."'");
+                                                $sql_datos);
             $this->obj_data_provider->trae_datos("T_PersonalExterno","max(ID_Persona_Externa) ID_Persona_Externa","");
             $this->arreglo=$this->obj_data_provider->getArreglo();
             $this->obj_data_provider->desconectar();
         }   else {
             $this->obj_data_provider->conectar();
             //Llama al metodo para editar los datos correspondientes
-            $this->obj_data_provider->edita_datos("T_PersonalExterno","Identificacion='".$this->identificacion."',Apellido='".$this->apellido."',Nombre='".$this->nombre."',Fecha_Nacimiento='".$this->fecha_nacimiento."',Fecha_Vencimiento_Residencia='".$this->fecha_residencia."',Fecha_Vencimiento_Portacion='".$this->fecha_portacion."',Fecha_Ingreso='".$this->fecha_ingreso."',Fecha_Salida='".$this->fecha_salida."',Correo='".$this->correo."', Genero='".$this->genero.
-                    "', Direccion='".$this->direccion."', ID_Distrito='".$this->distrito."', ID_Estado_Civil='".$this->estado_civil."', ID_Nacionalidad='".$this->nacionalidad."', ID_Nivel_Academico='".$this->nivel_academico."', ID_Empresa='".$this->empresa."', ID_Estado_Persona='".$this->estado_persona."', Observaciones='".$this->observaciones."', Ocupacion='".$this->ocupacion."'",$this->condicion);
+            $sql_datos= "Identificacion='".$this->identificacion."',Apellido='".$this->apellido."',Nombre='".$this->nombre."',Fecha_Nacimiento='".$this->fecha_nacimiento."'";
+            if($this->fecha_residencia==''){$sql_datos.=",Fecha_Vencimiento_Residencia=null";}else{$sql_datos.=",Fecha_Vencimiento_Residencia='".$this->fecha_residencia."'";}
+            if($this->fecha_portacion==''){$sql_datos.=",Fecha_Vencimiento_Residencia=null";}else{$sql_datos.=",Fecha_Vencimiento_Residencia='".$this->fecha_portacion."'";}
+            if($this->fecha_ingreso==''){$sql_datos.=",Fecha_Vencimiento_Residencia=null";}else{$sql_datos.=",Fecha_Vencimiento_Residencia='".$this->fecha_ingreso."'";}
+            if($this->fecha_salida==''){$sql_datos.=",Fecha_Vencimiento_Residencia=null";}else{$sql_datos.=",Fecha_Vencimiento_Residencia='".$this->fecha_salida."'";}
+            $sql_datos.=",Correo='".$this->correo."', Genero='".$this->genero."', Direccion='".$this->direccion."', ID_Distrito='".$this->distrito."', ID_Estado_Civil='".$this->estado_civil."', ID_Nacionalidad='".$this->nacionalidad."', ID_Nivel_Academico='".$this->nivel_academico."', ID_Empresa='".$this->empresa."', ID_Estado_Persona='".$this->estado_persona."', Observaciones='".$this->observaciones."', Ocupacion='".$this->ocupacion."'";
+            $this->obj_data_provider->edita_datos("T_PersonalExterno",$sql_datos,$this->condicion);
             //Metodo de la clase data provider que desconecta la sesión con la base de datos
             $this->obj_data_provider->desconectar();
         }

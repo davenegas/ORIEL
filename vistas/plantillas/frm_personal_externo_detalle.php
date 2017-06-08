@@ -4,7 +4,7 @@
         <meta charset="utf-8"/>
         <title>Gestión de Personal Externo</title>
         <script language="javascript" src="vistas/js/jquery.js"></script>
-        <script language="javascript" src="vistas/js/listas_dependientes_personal_externo.js"></script>
+        <script language="javascript" src="vistas/js/listas_dependientes_personal_externo.js?1.0.1"></script>
         <link rel="stylesheet" href="vistas/css/ventanaoculta.css">
         <?php require_once 'frm_librerias_head.html'; ?>  
     </head>

@@ -5333,20 +5333,20 @@ class Controller{
                     $fp = fopen($ruta,"a+");
                     //Cierra el archivo
                     fclose($fp);
-
+                    $cadena_oficiales="";
                     $obj_personal=new cls_personal_externo();
                     $fecha_actual= getdate();
                     $fecha_actual= $fecha_actual['year']."-".$fecha_actual['mon']."-".$fecha_actual['mday'];
 
-                    $obj_personal->setCondicion("(Fecha_Vencimiento_Portacion<'".$fecha_actual."' AND Fecha_Vencimiento_Portacion<> '0000-00-00' AND Validado=1 ) "
-                            . "OR (Fecha_Vencimiento_Residencia<'".$fecha_actual."' AND Fecha_Vencimiento_Residencia<>'0000-00-00' AND Validado=1) "
-                            . "OR (Fecha_Salida<'".$fecha_actual."' AND Fecha_Salida<>'0000-00-00' AND Validado=1)");
+                    $obj_personal->setCondicion("(Fecha_Vencimiento_Portacion<'".$fecha_actual."' AND Fecha_Vencimiento_Portacion<> '0000-00-00' AND Fecha_Vencimiento_Portacion<> '' AND Validado=1 ) "
+                            . "OR (Fecha_Vencimiento_Residencia<'".$fecha_actual."' AND Fecha_Vencimiento_Residencia<>'0000-00-00' AND Fecha_Vencimiento_Residencia<>'' AND Validado=1) "
+                            . "OR (Fecha_Salida<'".$fecha_actual."' AND Fecha_Salida<>'0000-00-00' AND Fecha_Salida<>'' AND Validado=1)");
                     $obj_personal->obtiene_todo_el_personal_externo();
                     $params= $obj_personal->getArreglo();
 
                     $obj_personal->invalidar_personas_automatico();
 
-                    $cadena_oficiales="";
+                    
                     // Recorre la información del vector 
                     for ($i = 0; $i < count($params); $i++) {
                         //Toma la información de cada visita en una variable cadena

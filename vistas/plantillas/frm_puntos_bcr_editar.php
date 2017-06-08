@@ -5,7 +5,7 @@
         <title>Gestión de Puntos BCR</title>
         <!--librerias para el funcionamiento de la ventana-->
         <script language="javascript" src="vistas/js/jquery.js"></script>
-        <script language="javascript" src="vistas/js/listas_dependientes_puntobcr.js"></script>
+        <script language="javascript" src="vistas/js/listas_dependientes_puntobcr.js?1.0"></script>
         <link rel="stylesheet" href="vistas/css/ventanaoculta.css">
         <?php require_once 'frm_librerias_head.html'; ?>
         <script>
@@ -149,9 +149,9 @@
                     </div>
                 </div>
                 <!--Areas de apoyo-->
-                <div class="row well animated bounceInUp" style="animation-delay:0.6s;" id="Información_Area_Apoyo">
-                    <div class="col-md-12">
-                        <?php if($_SESSION['modulos']['Vista Areas Apoyo- PuntosBCR']==1){ ?>
+                <?php if($_SESSION['modulos']['Vista Areas Apoyo- PuntosBCR']==1){ ?>
+                    <div class="row well animated bounceInUp" style="animation-delay:0.6s;" id="Información_Area_Apoyo">
+                        <div class="col-md-12">
                             <?php if($_SESSION['modulos']['Editar- Puntos BCR']==1){ ?> 
                                 <h3>Información de Áreas Apoyo<a id="popup" onclick="mostrar_area_apoyo()" class="btn azul" role="button">Agregar Área Apoyo</a></h3>    
                             <?php } else {?>
@@ -186,9 +186,9 @@
                                     <?php } ?>
                                 </tbody> 
                             </table>
-                        <?php } ?>
-                    </div>
-                </div>
+                        </div>
+                    </div> 
+                <?php } ?>
                 <!--Información adicional (Gerente- Supervisor-remesa)-->
                 <div class="row well animated bounceInUp" style="animation-delay:0.8s;" id="Información_Adicional_BCR">
                     <div class="row">
@@ -498,9 +498,9 @@
                     </div>
                 </div>
                 <!--Información enlaces telecom-->
-                <div class="row well  animated bounceInUp" style="animation-delay:1.8s;" id="Información Telecom">
-                    <div class="col-md-12">
-                        <?php if($_SESSION['modulos']['Vista info Telecomunicaciones- PuntosBCR']==1){ ?>
+                <?php if($_SESSION['modulos']['Vista info Telecomunicaciones- PuntosBCR']==1){ ?>
+                    <div class="row well animated bounceInUp" style="animation-delay:1.8s;" id="Información Telecom">
+                        <div class="col-md-12">
                             <?php if($_SESSION['modulos']['Editar Telecomunicaciones- Puntos BCR']==1){ ?>   
                                 <h3 class="quitar-float">Información de Telecom <a id="popup" onclick="mostrar_enlace_telecom()" class="btn azul" role="button">Agregar Enlace</a></h3> 
                             <?php } else {?>
@@ -545,14 +545,14 @@
                                     <?php } ?>
                                 </tbody> 
                             </table>
-                        <?php } ?>
-                    </div>
-                </div>
+                        </div>
+                    </div> 
+                <?php } ?>
                 <!--Direccionamiento (IP's)-->
-                <div class="row well animated bounceInUp" style="animation-delay:2s;" id="Direccionamiento">
-                    <div class="col-md-12">
-                        <!--Direcciones IP del Punto BCR-->
-                        <?php if($_SESSION['modulos']['Vista info Telecomunicaciones- PuntosBCR']==1){ ?>
+                <?php if($_SESSION['modulos']['Vista info Telecomunicaciones- PuntosBCR']==1){ ?>
+                    <div class="row well animated bounceInUp" style="animation-delay:2s;" id="Direccionamiento">
+                        <div class="col-md-12">
+                            <!--Direcciones IP del Punto BCR-->
                             <?php if($_SESSION['modulos']['Editar Telecomunicaciones- Puntos BCR']==1){ ?> 
                                 <h3>Información de Direcciones IP<a id="popup" onclick="mostrar_direccion_IP()" class="btn azul" role="button">Agregar Dirección IP</a></h3>    
                             <?php } else {?>
@@ -587,9 +587,9 @@
                                     <?php } ?>
                                 </tbody> 
                             </table>
-                        <?php } ?>
+                        </div>
                     </div>
-                </div>
+                <?php } ?>
                 <a href="index.php?ctl=puntos_bcr_listar" class="btn btn-default espacio-arriba" role="button">Volver</a>
             </div>
         </div>

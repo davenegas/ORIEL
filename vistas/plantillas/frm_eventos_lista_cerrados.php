@@ -107,13 +107,9 @@
             <div class="col-xs-2">
                 <label for="tipo_evento">Tipo Evento</label>
                 <select class="form-control" required=”required” id="tipo_evento" name="tipo_evento" >
-                    <option value="0">Todos</option>
-                    <?php  if($params[0]['ID_PuntoBCR']!=0){ ?>
-                        <option value="<?php echo $params[0]['ID_PuntoBCR']?>"><?php echo $params[0]['Nombre']?></option>
-                    <?php } ?>
-                        
+                    <option value="0">Todos</option>                        
                     <?php 
-                    if($ide==0){
+                    if(isset($tipo_evento)){
                         $tam=count($tipo_evento);
                         for($i=0; $i<$tam;$i++){ ?>
                             <option value="<?php echo $tipo_evento[$i]['ID_Tipo_Evento']?>"><?php echo $tipo_evento[$i]['Evento']?></option>                           

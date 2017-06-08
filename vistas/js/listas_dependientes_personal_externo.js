@@ -92,14 +92,14 @@ $(document).ready(function(){
                     observaciones:observaciones, estado_persona:estado_persona, genero:genero, ocupacion:ocupacion}, 
                 function(data){
                     //alert (data);
+                    console.log(data);
                     var srt = data;
                     var n= srt.search("Repetido");
                     if(n!=-1){
                         alert("Esta persona ya se encuentra registrada en el sistema");
-                    } else{
-                        document.getElementById('ID_Persona').value=parseInt(data);
+                    } else {
+                        document.getElementById('ID_Persona').value= parseInt(data);
                     }
-
                 });
             }
         }
@@ -107,16 +107,16 @@ $(document).ready(function(){
     
     //Funcionalidad de carruzel de imagenes
     $(document).ready(function() {
-            $(".fancybox-button").fancybox({
-                    prevEffect		: 'none',
-                    nextEffect		: 'none',
-                    closeBtn		: false,
-                    helpers		: {
-                            title	: { type : 'inside' },
-                            buttons	: {}
-                    }
-            });
+        $(".fancybox-button").fancybox({
+            prevEffect		: 'none',
+            nextEffect		: 'none',
+            closeBtn		: false,
+            helpers		: {
+                    title	: { type : 'inside' },
+                    buttons	: {}
+            }
         });
+    });
         
     //Buscar Distritos al seleccionar cantón
     $("#Provincia").change(function () {
@@ -174,10 +174,10 @@ function eliminar_telefono(ide){
             $.post("index.php?ctl=personal_externo_eliminar_telefono", { id_telefono: id_telefono}, function(data){
                 location.reload();
                 //alert (data);
-              });
+            });
         },
         cancel: function(){
-                //$.alert('Canceled!')
+            //$.alert('Canceled!')
         }
     });
 };
@@ -194,7 +194,7 @@ function Editar_telefono(id_tel, tipo_tel, num, obser){
 ////////Funciones para agregar fotos de personal externo///////////
 function mostrar_agregar_foto(){
     if (document.getElementById('ID_Persona').value > 0) {
-    document.getElementById('ventana_oculta_2').style.display = "block";
+        document.getElementById('ventana_oculta_2').style.display = "block";
     } 
 }
 function valida_foto(){
@@ -217,19 +217,16 @@ function eliminar_imagen(id_imagen){
             $.post("index.php?ctl=eliminar_imagen_personal_externo", {id_imagen:id_imagen});//,function(data){
                 $.alert({
                     title: 'Información!',
-                    content: 'Imágen eliminada con exito con éxito!!!',
-                            
+                    content: 'Imágen eliminada con exito con éxito!!!',      
                 });       
             location.reload();  
             },
         cancel: function(){
-             
         }
     });
             
 }  
 function validar_persona_externa(){
-    
     id_persona = document.getElementById('ID_Persona').value;
     validar = document.getElementById('validado').value;
     Fecha_Salida = document.getElementById('fecha_salida').value;

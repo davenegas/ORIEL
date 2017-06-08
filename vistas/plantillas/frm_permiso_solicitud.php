@@ -57,7 +57,11 @@
                             <div class="col-md-12"> 
                                 <h2>Solicitud de Permiso</h2>
                             </div>
+                            <div class="col-md-12">
+                                <p>Solicitud de permisos para ingreso a la oficina fuera de horario normal.</p>
+                            </div>
                         </div>
+                        <!--Fecha y hora de solicitud-->
                         <div class="row espacio-abajo">
                             <div class="col-sm-4"></div>
                             <div class="col-md-4">
@@ -65,12 +69,13 @@
                                 <input type="datetime" readonly class="form-control text-center" id="ID_Persona" name="ID_Persona" value="<?php echo date("Y-m-d H:i:s");;?>">   
                             </div>
                         </div>
+                        <!--Provincia y Punto BCR-->
                         <div class="row espacio-abajo">
                             <div class="col-sm-2"></div>
                             <div class="col-md-4">
                                 <label for="nombre_provincia">Provincia</label>
                                 <select class="form-control text-center" required=”required” id="nombre_provincia" name="nombre_provincia" >
-                                    <option value="0">Todas</option>
+                                    <option value="0">Sán José</option>
                                     <?php $tam_provincias = count($lista_provincias);
                                     for($i=0; $i<$tam_provincias;$i++) {
                                         if($lista_provincias[$i]['ID_Provincia']==$cantones[$distritos[$params[0]['ID_Distrito']]['ID_Canton']]['ID_Provincia']){ ?> 
@@ -82,9 +87,9 @@
                                 </select>
                             </div>
                             <div class="col-md-4">
-                                <label for="punto_bcr">Punto BCR</label>
+                                <label for="punto_bcr">Unidad Ejecutora</label>
                                 <select class="form-control text-center" required=”required” id="punto_bcr" name="punto_bcr" >
-                                    <option value="0">Todos</option>
+                                    <option value="0">UE</option>
                                     <?php
                                     $tam_puntos_bcr=count($lista_puntos_bcr_oficinas_sj);
                                     for($i=0; $i<$tam_puntos_bcr;$i++){?>
@@ -93,6 +98,7 @@
                                 </select>
                             </div>
                         </div>
+                        <!--Funcionario que solicita-->
                         <div class="row espacio-abajo">
                             <div class="col-sm-2"></div>
                             <div class="col-md-8">
@@ -100,6 +106,7 @@
                                 <input type="text" readonly class="form-control text-center" id="ID_Persona" name="ID_Persona" value="">   
                             </div>
                         </div>
+                        <!--Número de contacto-->
                         <div class="row espacio-abajo">
                             <div class="col-md-3"></div>
                             <div class="col-md-6">
@@ -107,6 +114,7 @@
                                 <input type="text" class="form-control text-center" id="ID_Persona" name="ID_Persona" value="" placeholder="Número de celular, extensión en caso de consulta sobre el permiso">   
                             </div>
                         </div>
+                        <!--Funcionario que autoriza-->
                         <div class="row espacio-abajo">
                             <div class="col-sm-2"></div>
                             <div class="col-md-8">
@@ -114,6 +122,7 @@
                                 <input type="text" readonly class="form-control text-center" id="ID_Persona" name="ID_Persona" value="">   
                             </div>
                         </div>
+                        <!--Fecha de incio y finalización-->
                         <div class="row espacio-abajo">
                             <div class="col-sm-2"></div>
                             <div class="col-md-4">
@@ -125,6 +134,7 @@
                                 <input type="date" class="form-control text-center" id="ID_Persona" name="ID_Persona" value="<?php echo date("Y-m-d");;?>">   
                             </div>
                         </div>
+                        <!--Hora de incio y finalización-->
                         <div class="row espacio-abajo">
                             <div class="col-sm-2"></div>
                             <div class="col-md-4">
@@ -136,9 +146,28 @@
                                 <input type="time" class="form-control text-center" id="ID_Persona" name="ID_Persona" value="<?php echo date("Y-m-d H:i:s");;?>">   
                             </div>
                         </div>
+                        <!--Estado solicitud y usuario-->
                         <div class="row espacio-abajo">
+                            <div class="col-md-2"></div>
                             <div class="col-md-4">
-                                
+                                <label for="nombre_provincia">Estado de solicitud</label>
+                                <select class="form-control text-center" required=”required” id="nombre_provincia" name="nombre_provincia" >
+                                    <option value="1">Pendiente</option>
+                                    <option value="2">Rechazado</option>
+                                    <option value="3">Aprobado</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="ID_Persona">Funcionario que valida la solicitud</label>
+                                <input type="text" readonly class="form-control text-center" id="ID_Persona" name="ID_Persona" value="">   
+                            </div>
+                        </div>
+                        <!--Observaciones del estado de la solicitud-->
+                        <div class="row espacio-abajo">
+                            <div class="col-md-2"></div>
+                            <div class="col-md-8">
+                                <label for="ID_Persona">Observaciones</label>
+                                <input type="text" class="form-control text-center" id="ID_Persona" name="ID_Persona" placeholder="Observaciones del estado de la solicitud" value="">   
                             </div>
                         </div>
                     </div>

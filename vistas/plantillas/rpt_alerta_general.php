@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html lang="es">
     <head>
-        <meta http-equiv="refresh" content="150"/>
+        <meta http-equiv="refresh" content="text/html; charset=utf-8"/>
         <title>Alertas Generales</title>
         <?php require_once 'frm_librerias_head.html'; ?>
         <script src="vistas/js/highcharts.js"></script>
