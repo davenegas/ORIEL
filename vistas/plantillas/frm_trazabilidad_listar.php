@@ -59,7 +59,7 @@
                             <th>ID_Traza</th>
                             <th>Fecha</th>
                             <th>Hora</th>
-                            <th>Antiguedad Dias</th>
+                            <th>Antiguedad Días</th>
                             <th>Usuario</th>
                             <th>Tabla Afectada</th>
                             <th>Dato Actualizado</th>

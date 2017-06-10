@@ -4,7 +4,7 @@
         <meta charset="UTF-8">
         <title>Pruebas Alarma</title>
         <script language="javascript" src="vistas/js/jquery.js"></script>
-        <script language="javascript" src="vistas/js/listas_dependientes_pruebas.js"></script>
+        <script language="javascript" src="vistas/js/listas_dependientes_pruebas.js?1.2"></script>
         <link rel="stylesheet" href="vistas/css/ventanaoculta.css"> 
         <?php require_once 'frm_librerias_head.html'; ?>
         <script>
@@ -82,6 +82,9 @@
                     <div class="well">
                         <h5>Pruebas anteriores:</h5>
                         <p id="pruebas_anteriores"></p>
+                    </div>
+                    <div class="well">
+                        <p id="evento_pendiente"></p>
                     </div>
                 </div>
                 <!--DIV central contiene la tabla con el personal externo-->    
@@ -243,7 +246,7 @@
                 <div id="ventana2">
                     <img id="close" src='vistas/Imagenes/cerrar.png' width="25" onclick ="ocultar_elemento()"> 
                     <!--Tabla con la lista de Unidades Ejecutoras-->
-                    <h4>Ultimas personas que han llamado para reportar apertura o cierre:</h4>
+                    <h4>Últimas personas que han llamado para reportar apertura o cierre:</h4>
                     <div class="well">
                         <table id="personas_anteriores" class="display espacio-abajo borde-gris" cellspacing="0" width="100%">
                         </table>

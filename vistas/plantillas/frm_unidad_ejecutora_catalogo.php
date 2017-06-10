@@ -49,11 +49,11 @@
           <thead>
             <tr>
               <th style="text-align:center">ID Unidad Ejecutora</th>
-              <th style="text-align:center">Numero de UE</th>
+              <th style="text-align:center">Número de UE</th>
               <th style="text-align:center">Nombre UE</th>
               <th style="text-align:center">Observaciones</th>
               <th style="text-align:center">Estado</th>
-              <th style="text-align:center">Mantenmiento</th>
+              <th style="text-align:center">Mantenimiento</th>
             </tr>
           </thead>
           <tbody>

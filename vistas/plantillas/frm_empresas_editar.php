@@ -129,7 +129,7 @@
                     <table id="tabla2" class="display" cellspacing="0" width="100%">
                         <thead>
                             <tr>
-                                <th style="text-align:center">Cedula</th>
+                                <th style="text-align:center">Cédula</th>
                                 <th style="text-align:center">Apellidos Nombre</th>
                                 <th style="text-align:center">Departamento</th>
                                 <th style="text-align:center">Opciones</th>

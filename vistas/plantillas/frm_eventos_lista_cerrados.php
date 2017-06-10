@@ -4,7 +4,7 @@
         <meta charset="utf-8"/>
         <title>Lista de Eventos Cerrados</title>
         <script language="javascript" src="vistas/js/jquery.js"></script>
-        <script language="javascript" src="vistas/js/listas_dependientes_eventos_cerrados.js"></script>
+        <script language="javascript" src="vistas/js/listas_dependientes_eventos_cerrados.js?1.1.0"></script>
         <?php require_once 'frm_librerias_head.html'; ?>    
         <script>
             function recuperar_evento(id_e,id_pbcr,id_tevento){
@@ -24,7 +24,6 @@
                                 $.alert({
                                     title: 'Información!',
                                     content: 'Ya existe este evento abierto para este punto BCR. Proceda a cerrarlo o agregue un seguimiento!!!',
-
                                 });
                             }else{
                                 $.alert({
@@ -62,7 +61,8 @@
             </div> 
             <div class="col-xs-2">
                 <label for="nombre_provincia">Provincia</label>
-                <select class="form-control" required=”required” id="nombre_provincia" name="nombre_provincia" > 
+                <select class="form-control" required=”required” id="nombre_provincia" name="nombre_provincia" >
+                    <option value="0">Todas</option>
                     <?php
                     $tam_provincias = count($lista_provincias);
                     for($i=0; $i<$tam_provincias;$i++) {
@@ -76,7 +76,8 @@
             </div>
             <div class="col-xs-2">
                 <label for="tipo_punto">Tipo Punto</label>
-                <select class="form-control" required=”required” id="tipo_punto" name="tipo_punto" > 
+                <select class="form-control" required=”required” id="tipo_punto" name="tipo_punto" >
+                    <option value="0">Todos</option>
                     <?php
                     $tam_tipo_punto_bcr = count($lista_tipos_de_puntos_bcr);
                     for($i=0; $i<$tam_tipo_punto_bcr;$i++){
@@ -88,28 +89,34 @@
                     } ?>  
                 </select>
             </div>
-
-            <div class="col-xs-4">
+            <div class="col-xs-2">
                 <label for="punto_bcr">Punto BCR</label>
                 <select class="form-control" required=”required” id="punto_bcr" name="punto_bcr" >
+                    <option value="0">Todos</option>
                     <?php  if($params[0]['ID_PuntoBCR']!=0){ ?>
                         <option value="<?php echo $params[0]['ID_PuntoBCR']?>"><?php echo $params[0]['Nombre']?></option>
                     <?php } ?>
                         
-                    <?php 
-                    if($ide==0){
-                        $tam_puntos_bcr=count($lista_puntos_bcr_oficinas_sj);
-                        for($i=0; $i<$tam_puntos_bcr;$i++){
-                            if ($i==0){ ?>
-                                <option value="<?php echo $lista_puntos_bcr_oficinas_sj[$i]['ID_PuntoBCR']?>" selected="selected"><?php echo $lista_puntos_bcr_oficinas_sj[$i]['Nombre']?></option>                           
-                            <?php } else{ ?>
-                                <option value="<?php echo $lista_puntos_bcr_oficinas_sj[$i]['ID_PuntoBCR']?>"><?php echo $lista_puntos_bcr_oficinas_sj[$i]['Nombre']?></option>                           
-                            <?php }
-                        } ?>  
-                    <?php } ?>
+                    <?php
+                    $tam_puntos_bcr=count($lista_puntos_bcr_oficinas_sj);
+                    for($i=0; $i<$tam_puntos_bcr;$i++){?>
+                        <option value="<?php echo $lista_puntos_bcr_oficinas_sj[$i]['ID_PuntoBCR']?>"><?php echo $lista_puntos_bcr_oficinas_sj[$i]['Nombre']?></option>                           
+                    <?php  } ?> 
                 </select>
             </div>
-
+            <div class="col-xs-2">
+                <label for="tipo_evento">Tipo Evento</label>
+                <select class="form-control" required=”required” id="tipo_evento" name="tipo_evento" >
+                    <option value="0">Todos</option>                        
+                    <?php 
+                    if(isset($tipo_evento)){
+                        $tam=count($tipo_evento);
+                        for($i=0; $i<$tam;$i++){ ?>
+                            <option value="<?php echo $tipo_evento[$i]['ID_Tipo_Evento']?>"><?php echo $tipo_evento[$i]['Evento']?></option>                           
+                        <?php }  
+                    } ?>
+                </select>
+            </div>
             <!--<button value="esto es un boton" onclick="mi_funcion()"/>-->
             <a class="btn btn-default espacio-arriba" role="button" id="prueba" name="prueba" onclick="hacer_click()">Generar Reporte</a>
             <a href="index.php?ctl=frm_eventos_listar" class="btn btn-default espacio-arriba" role="button">Cancelar</a>
@@ -125,7 +132,7 @@
                             <th>Provincia</th>
                             <th>Tipo Punto</th>
                             <th>Punto BCR</th>
-                            <th>Codigo</th>
+                            <th>Código</th>
                             <th>Tipo de Evento</th>
                             <th>Estado del Evento</th>
                             <th>Cerrado Por</th>

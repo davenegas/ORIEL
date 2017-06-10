@@ -92,8 +92,30 @@ class Mail_Provider{
        }
    }
 }
+            //Objeto de la clase
+            $this->mail = new PHPMailer();
+            
+            //indico a la clase que use SMTP
+            $this->mail->isSMTP();
+            
+            //Debo de hacer autenticación SMTP
+            $this->mail->SMTPAuth = true;
+            
+            //$this->mail->SMTPSecure = "ssl";
+            $this->mail->SMTPSecure = "tls";
+            
+            //indico el servidor 
+            $this->mail->Host = "smtp.office365.com";
+           
+            //indico el puerto que usa 
+            $this->mail->Port = 587;
 
-
+            //Nombre de usuario
+            $this->mail->Username = "111690771@bancobcr.com";
+            
+            //Password
+            $this->mail->Password = "******";
+         
 
 /*
  * 

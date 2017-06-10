@@ -44,7 +44,10 @@
                     <embed src="vistas/Manuales/ORIEL_MANUAL_USUARIO_CONTROL_VIDEO.pdf" width="1000" height="600"> 
                     <?php
                     break;
-                
+                case "Asistencia":?>
+                    <embed src="vistas/Manuales/ORIEL_MANUAL_USUARIO_ASISTENCIA.pdf" width="1000" height="600"> 
+                    <?php
+                    break;
             }?>
         </section>
         <?php require_once 'pie_de_pagina.php' ?>

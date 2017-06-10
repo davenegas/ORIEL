@@ -24,7 +24,7 @@ $(document).ready(function(){
             cedula=document.getElementById('cedula').value;
             observaciones=document.getElementById('observaciones').value;
             nombre=document.getElementById('nombre').value;
-            empresa= document.getElementById('Empresa').value;
+            empresa= 1;
             numero_gafete =document.getElementById('numero_gafete').value;
             correo=document.getElementById('correo').value;
             direccion = document.getElementById('direccion').value;

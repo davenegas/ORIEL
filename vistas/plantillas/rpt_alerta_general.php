@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html lang="es">
     <head>
-        <meta http-equiv="refresh" content="150"/>
+        <meta http-equiv="refresh" content="text/html; charset=utf-8"/>
         <title>Alertas Generales</title>
         <?php require_once 'frm_librerias_head.html'; ?>
         <script src="vistas/js/highcharts.js"></script>
@@ -111,44 +111,44 @@
             $(function () {
                     $('#pendientes_puesto').highcharts({
                             chart: {
-                                    type: 'bar'
+                                type: 'bar'
                             },
                             title: {
-                                    text: 'Eventos pendientes por puesto'
+                                text: 'Eventos pendientes por puesto'
                             },
                             xAxis: {
-                                    categories: ['Puesto 1', 'Puesto 2', 'Puesto 3', 'Puesto 4', 'Puesto Z2'],
-                                    title: {
-                                            text: null
-                                    }
+                                categories: ['Puesto 1', 'Puesto 2', 'Puesto 3', 'Puesto 4', 'Puesto Z2'],
+                                title: {
+                                    text: null
+                                }
                             },
                             yAxis: {
-                                    min: 0,
-                                    title: {
-                                            text: 'Eventos pendientes',
-                                            align: 'high'
-                                    },
-                                    labels: {
-                                            overflow: 'justify'
-                                    }
+                                min: 0,
+                                title: {
+                                    text: 'Eventos pendientes',
+                                    align: 'high'
+                                },
+                                labels: {
+                                    overflow: 'justify'
+                                }
                             },
                             plotOptions: {
-                                    bar: {
-                                            dataLabels: {
-                                                    enabled: true
-                                            }
+                                bar: {
+                                    dataLabels: {
+                                        enabled: true
                                     }
+                                }
                             },
                             credits: {
-                                    enabled: false
+                                enabled: false
                             },
                             series: [{
-                                    name: 'Eventos pendientes',
-                                    data: [<?php echo $pendiente_puesto1[0]['Contador']?>, 
-                                        <?php echo $pendiente_puesto2[0]['Contador']?>, 
-                                        <?php echo $pendiente_puesto3[0]['Contador']?>, 
-                                        <?php echo $pendiente_puesto4[0]['Contador']?>, 
-                                        <?php echo $pendiente_puestoZ2[0]['Contador']?>]
+                                name: 'Eventos pendientes',
+                                data: [<?php echo $pendiente_puesto1[0]['Contador']?>, 
+                                    <?php echo $pendiente_puesto2[0]['Contador']?>, 
+                                    <?php echo $pendiente_puesto3[0]['Contador']?>, 
+                                    <?php echo $pendiente_puesto4[0]['Contador']?>, 
+                                    <?php echo $pendiente_puestoZ2[0]['Contador']?>]
                             }]
                     });
 		});
@@ -173,7 +173,7 @@
                 <div id="cierres" style="min-width: 300px; height: 350px; max-width: 500px; margin: 0 auto"></div>
             <?php } ?>
             <?php if($datos['contador_pruebas']==0 && $datos['cont_pruebas_pendientes']==0 && $datos['contador_aperturas']==0 && 
-                $datos['cont_aperturas_pendientes']==0 && $datos['contador_cierres']==0 && $datos['cierres_pendientes']==0){?>
+                $datos['cont_aperturas_pendientes']==0 && $datos['contador_cierres']==0){?>
                 <div class="well" align="center">No hay pendientes con el sistema de alarma</div>
              <?php } ?>    
         </div>

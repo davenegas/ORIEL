@@ -17,7 +17,7 @@
                         <th style="text-align:center">Domingo</th>
                         <th style="text-align:center">Lunes</th>
                         <th style="text-align:center">Martes</th>
-                        <th style="text-align:center">Miercoles</th>
+                        <th style="text-align:center">Miércoles</th>
                         <th style="text-align:center">jueves</th>
                         <th style="text-align:center">Viernes</th>
                         <th style="text-align:center">Sábado</th>

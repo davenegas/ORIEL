@@ -16,7 +16,7 @@
                     <tr>
                         <th style="text-align:center">ATM</th>
                         <th style="text-align:center">Funcionario</th>
-                        <th style="text-align:center">Cedula</th>
+                        <th style="text-align:center">Cédula</th>
                         <th style="text-align:center">Observaciones</th>
                     </tr>
                 </thead>

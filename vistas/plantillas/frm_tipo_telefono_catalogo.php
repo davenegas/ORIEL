@@ -1,7 +1,7 @@
 <html lang="es">
     <head>
         <meta charset="utf-8"/>
-        <title>Lista de Tipo Telefonos</title>
+        <title>Lista de Tipo Teléfonos</title>
         <?php require_once 'frm_librerias_head.html';?>
         <link rel="stylesheet" href="vistas/css/ventanaoculta.css">
         <script>
@@ -42,17 +42,17 @@
     <body>
         <?php require_once 'encabezado.php';?>
         <div class="container">
-        <h2>Listado General de Tipos Telefonos del BCR</h2>
-        <p>A continuación se detallan los diferentes Tipos de Telefonos que están registrados en el sistema:</p>            
+        <h2>Listado General de Tipos Teléfonos del BCR</h2>
+        <p>A continuación se detallan los diferentes Tipos de Teléfonos que están registrados en el sistema:</p>            
         <table id="tabla" class="display" cellspacing="0">
             <thead>
                 <tr>
-                    <th style="text-align:center">ID_Telefono</th>
-                    <th style="text-align:center">Tipo de Telefono</th>
+                    <th style="text-align:center">ID Teléfono</th>
+                    <th style="text-align:center">Tipo de Teléfono</th>
                     <th style="text-align:center">Observaciones</th>
                     <th style="text-align:center">Estado</th>
                     <th style="text-align:center">Cambiar Estado</th>
-                    <th style="text-align:center">Mantenmiento</th>
+                    <th style="text-align:center">Mantenimiento</th>
                 </tr>
             </thead>
             <tbody>
@@ -87,11 +87,11 @@
                 <!--Formulario para tipos de teléfonos-->
                 <form id="ventana" method="POST" name="form" action="index.php?ctl=tipo_telefono_guardar">
                     <img id="close" src='vistas/Imagenes/cerrar.png' width="25" onclick ="ocultar_elemento()">
-                    <h2>Tipo Telefono</h2>
+                    <h2>Tipo Teléfono</h2>
                     <hr>
                     <input hidden id="ID_Tipo_Telefono" name="ID_Tipo_Telefono" type="text">
                     
-                    <label for="nombre">Tipo Telefono</label>
+                    <label for="nombre">Tipo Teléfono</label>
                     <input class="form-control espacio-abajo" required id="nombre" name="nombre" placeholder="Tipo Telefono" type="text">
                     
                     <label for="observaciones">Observaciones</label>

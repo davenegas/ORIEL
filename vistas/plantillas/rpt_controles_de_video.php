@@ -31,11 +31,11 @@
                     },
                     xAxis: {
                         categories: (function() { var data = [];
-                                        <?php   for($i = 0 ;$i<count($params);$i++){ ?>
-                                            data.push(['<?php echo $params[$i]['Nombre'].' '.$params[$i]['Apellido'];?>']);
-                                        <?php } ?>
-                                    return data;
-                                    })()
+                        <?php   for($i = 0 ;$i<count($params);$i++){ ?>
+                            data.push(['<?php echo $params[$i]['Nombre'].' '.$params[$i]['Apellido'];?>']);
+                        <?php } ?>
+                        return data;
+                        })()
                     },
                     yAxis: {
                         min: 0,
@@ -60,11 +60,11 @@
                     series: [{
                         name: 'Cantidad Revisiones de Video:'+'<?php echo $suma_revisiones;?>',
 			data: (function() { var data = [];
-                                <?php   for($i = 0 ;$i<count($params);$i++){     ?>
-                                data.push([<?php echo $params[$i]['TOTAL'];?>]);
-                                <?php } ?>
-                                return data;
-                                })()
+                            <?php   for($i = 0 ;$i<count($params);$i++){     ?>
+                            data.push([<?php echo $params[$i]['TOTAL'];?>]);
+                            <?php } ?>
+                            return data;
+                            })()
                     }]
                 });
             });
@@ -80,26 +80,24 @@
                             depth: 70
                         }
                     },
-                  title: {
-                                   text: (function() { var data = [];  data.push(['<?php echo $titulo2?>']); return data; })()
-                               },
-                  subtitle: {
-                                   text: (function() { var data = [];  data.push(['<?php echo $subtitulo?>']); return data; })()
-                   },
+                    title: {
+                        text: (function() { var data = [];  data.push(['<?php echo $titulo2?>']); return data; })()
+                    },
+                    subtitle: {
+                        text: (function() { var data = [];  data.push(['<?php echo $subtitulo?>']); return data; })()
+                    },
                     plotOptions: {
                         column: {
                             depth: 25
                         }
                     },
                     xAxis: {
-                               categories: (function() { var data = [];
-
-                                                   data.push(['<?php echo 'Justificaciones Automáticas';?>']);
-                                                   data.push(['<?php echo 'Justificaciones de Operadores';?>']);
-                                                   data.push(['<?php echo 'Injusticadas';?>']);
-
-                                           return data;
-                                           })()
+                        categories: (function() { var data = [];
+                            data.push(['<?php echo 'Justificaciones Automáticas';?>']);
+                            data.push(['<?php echo 'Justificaciones de Operadores';?>']);
+                            data.push(['<?php echo 'Injusticadas';?>']);
+                            return data;
+                            })()
                            //}
                     //xAxis: {
                         //categories: Highcharts.getOptions().lang.shortMonths
@@ -112,222 +110,217 @@
                     series: [{
                         name: 'Cantidad de Retrasos'+'<?php echo $suma_inconsistencias;?>',
                         data: (function() { var data = [];
-                                       <?php   for($i = 0 ;$i<count($params2);$i++){     ?>
-                                       data.push([<?php echo $params2[$i]['Total'];?>]);
-                                       <?php } ?>
-                                       return data;
-                                       })(),
-                    dataLabels: {
-                    enabled: true,
-                    rotation: -90,
-                    color: '#FFFFFF',
-                    align: 'right',
-                    format: '{point.y:.f}', // one decimal
-                    y: 10, // 10 pixels down from the top
-                    style: {
-                        fontSize: '13px',
-                        fontFamily: 'Verdana, sans-serif'
-                    }
-                }
+                            <?php   for($i = 0 ;$i<count($params2);$i++){     ?>
+                            data.push([<?php echo $params2[$i]['Total'];?>]);
+                            <?php } ?>
+                            return data;
+                            })(),
+                        dataLabels: {
+                            enabled: true,
+                            rotation: -90,
+                            color: '#FFFFFF',
+                            align: 'right',
+                            format: '{point.y:.f}', // one decimal
+                            y: 10, // 10 pixels down from the top
+                            style: {
+                                fontSize: '13px',
+                                fontFamily: 'Verdana, sans-serif'
+                            }
+                        }
                     }]
                 });
             });
-                 <?php } ?>  
+            <?php } ?>  
             
             <?php if ($tipo_grafico==2){ ?>  
             $(function () {
-        $('#container').highcharts({
-            chart: {
-                type: 'column'
-            },
-           title: {
-                            text: (function() { var data = [];  data.push(['<?php echo $titulo?>']); return data; })()
-                        },
-           subtitle: {
-                            text: (function() { var data = [];  data.push(['<?php echo $subtitulo?>']); return data; })()
-            },
-            xAxis: {
-                type: 'category',
-                labels: {
-                    rotation: -45,
-                    style: {
-                        fontSize: '13px',
-                        fontFamily: 'Verdana, sans-serif'
-                    }
-                }
-            },
-            yAxis: {
-                min: 0,
-                title: {
-                    text: 'Cantidad Revisiones de Video: '+'<?php echo $suma_revisiones;?>'
-                }
-            },
-            legend: {
-                enabled: false
-            },
-            tooltip: {
-                pointFormat: 'Laborado: <b>{point.y:.f} Revisiones de Video</b>'
-            },
+                $('#container').highcharts({
+                    chart: {
+                        type: 'column'
+                    },
+                    title: {
+                        text: (function() { var data = [];  data.push(['<?php echo $titulo?>']); return data; })()
+                    },
+                    subtitle: {
+                        text: (function() { var data = [];  data.push(['<?php echo $subtitulo?>']); return data; })()
+                    },
+                    xAxis: {
+                        type: 'category',
+                        labels: {
+                            rotation: -45,
+                            style: {
+                                fontSize: '13px',
+                                fontFamily: 'Verdana, sans-serif'
+                            }
+                        }
+                    },
+                    yAxis: {
+                        min: 0,
+                        title: {
+                            text: 'Cantidad Revisiones de Video: '+'<?php echo $suma_revisiones;?>'
+                        }
+                    },
+                    legend: {
+                        enabled: false
+                    },
+                    tooltip: {
+                        pointFormat: 'Laborado: <b>{point.y:.f} Revisiones de Video</b>'
+                    },
              
-            series: [{
-                name: 'Cantidad Revisiones de Video:'+'<?php echo $suma_revisiones;?>',
-                data:(function() { var data = [];
-                                <?php   for($i = 0 ;$i<count($params);$i++){     ?>
-                                data.push(['<?php echo $params[$i]['mes'];?>',<?php echo $params[$i]['numFilas'];?>]);
-                                <?php } ?>
-                                return data;
-                                })() ,
-                dataLabels: {
-                    enabled: true,
-                    rotation: -90,
-                    color: '#FFFFFF',
-                    align: 'right',
-                    format: '{point.y:.f}', // one decimal
-                    y: 10, // 10 pixels down from the top
-                    style: {
-                        fontSize: '13px',
-                        fontFamily: 'Verdana, sans-serif'
-                    }
-                }
-            }]
-        });
-        });
+                    series: [{
+                        name: 'Cantidad Revisiones de Video:'+'<?php echo $suma_revisiones;?>',
+                        data:(function() { var data = [];
+                            <?php   for($i = 0 ;$i<count($params);$i++){     ?>
+                            data.push(['<?php echo $params[$i]['mes'];?>',<?php echo $params[$i]['numFilas'];?>]);
+                            <?php } ?>
+                            return data;
+                            })() ,
+                        dataLabels: {
+                            enabled: true,
+                            rotation: -90,
+                            color: '#FFFFFF',
+                            align: 'right',
+                            format: '{point.y:.f}', // one decimal
+                            y: 10, // 10 pixels down from the top
+                            style: {
+                                fontSize: '13px',
+                                fontFamily: 'Verdana, sans-serif'
+                            }
+                        }
+                    }]
+                });
+            });
         
             $(function () {
-         $('#container2').highcharts({
-             chart: {
-                 type: 'column',
-                 options3d: {
-                     enabled: true,
-                     alpha: 10,
-                     beta: 25,
-                     depth: 70
-                 }
-             },
-           title: {
-                            text: (function() { var data = [];  data.push(['<?php echo $titulo2?>']); return data; })()
-                        },
-           subtitle: {
-                            text: (function() { var data = [];  data.push(['<?php echo $subtitulo?>']); return data; })()
-            },
-             plotOptions: {
-                 column: {
-                     depth: 25
-                 }
-             },
-             xAxis: {
+                $('#container2').highcharts({
+                    chart: {
+                        type: 'column',
+                        options3d: {
+                            enabled: true,
+                            alpha: 10,
+                            beta: 25,
+                            depth: 70
+                        }
+                    },
+                    title: {
+                        text: (function() { var data = [];  data.push(['<?php echo $titulo2?>']); return data; })()
+                    },
+                    subtitle: {
+                        text: (function() { var data = [];  data.push(['<?php echo $subtitulo?>']); return data; })()
+                    },
+                    plotOptions: {
+                        column: {
+                            depth: 25
+                        }
+                    },
+                    xAxis: {
                         categories: (function() { var data = [];
-                                        
-                                            data.push(['<?php echo 'Justificaciones Automáticas';?>']);
-                                            data.push(['<?php echo 'Justificaciones de Operador';?>']);
-                                            data.push(['<?php echo 'Injusticadas';?>']);
-                                        
-                                    return data;
-                                    })()
-                    //}
-             //xAxis: {
-                 //categories: Highcharts.getOptions().lang.shortMonths
-             },
-             yAxis: {
-                 title: {
-                     text: null
-                 }
-             },
-             series: [{
-                 name: 'Cantidad de Retrasos: '+'<?php echo $suma_inconsistencias;?>',
-                 data: (function() { var data = [];
-                                <?php   for($i = 0 ;$i<count($params2);$i++){     ?>
-                                data.push([<?php echo $params2[$i]['Total'];?>]);
-                                <?php } ?>
-                                return data;
-                                })(),
-                 dataLabels: {
-                    enabled: true,
-                    rotation: -90,
-                    color: '#FFFFFF',
-                    align: 'right',
-                    format: '{point.y:.f}', // one decimal
-                    y: 10, // 10 pixels down from the top
-                    style: {
-                        fontSize: '13px',
-                        fontFamily: 'Verdana, sans-serif'
-                    }
-                }
-             }]
-         });
-     });
+                            data.push(['<?php echo 'Justificaciones Automáticas';?>']);
+                            data.push(['<?php echo 'Justificaciones de Operador';?>']);
+                            data.push(['<?php echo 'Injusticadas';?>']);
+                            return data;
+                            })()
+                        //}
+                        //xAxis: {
+                        //categories: Highcharts.getOptions().lang.shortMonths
+                    },
+                    yAxis: {
+                        title: {
+                            text: null
+                        }
+                    },
+                    series: [{
+                        name: 'Cantidad de Retrasos: '+'<?php echo $suma_inconsistencias;?>',
+                        data: (function() { var data = [];
+                            <?php   for($i = 0 ;$i<count($params2);$i++){     ?>
+                            data.push([<?php echo $params2[$i]['Total'];?>]);
+                            <?php } ?>
+                            return data;
+                            })(),
+                        dataLabels: {
+                           enabled: true,
+                           rotation: -90,
+                           color: '#FFFFFF',
+                           align: 'right',
+                           format: '{point.y:.f}', // one decimal
+                           y: 10, // 10 pixels down from the top
+                           style: {
+                               fontSize: '13px',
+                               fontFamily: 'Verdana, sans-serif'
+                           }
+                       }
+                    }]
+                });
+            });
             <?php } ?>  
             
-            
-                       <?php if ($tipo_grafico==3){ ?>  
+            <?php if ($tipo_grafico==3){ ?>  
+                $(document).ready(function () {
+                    <?php if ($tipo_grafico==3){ ?>  
+                        var divisor= document.getElementById('container3');
+                        divisor.hidden=false;
+                    <?php } ?>  
+                });
           
-          
-          $(document).ready(function () {
-             <?php if ($tipo_grafico==3){ ?>  
-                  var divisor= document.getElementById('container3');
-                  divisor.hidden=false;
-             <?php } ?>  
-          });
-          
-            $(function () {
-        $('#container').highcharts({
-            chart: {
-                type: 'column'
-            },
-           title: {
+                $(function () {
+                    $('#container').highcharts({
+                        chart: {
+                            type: 'column'
+                        },
+                        title: {
                             text: (function() { var data = [];  data.push(['<?php echo $titulo?>']); return data; })()
                         },
-           subtitle: {
+                        subtitle: {
                             text: (function() { var data = [];  data.push(['<?php echo $subtitulo?>']); return data; })()
-            },
-            xAxis: {
-                type: 'category',
-                labels: {
-                    rotation: -45,
-                    style: {
-                        fontSize: '13px',
-                        fontFamily: 'Verdana, sans-serif'
-                    }
-                }
-            },
-            yAxis: {
-                min: 0,
-                title: {
-                    text: 'Cantidad Revisiones de Video: '+'<?php echo $suma_revisiones;?>'
-                }
-            },
-            legend: {
-                enabled: false
-            },
-            tooltip: {
-                pointFormat: 'Laborado: <b>{point.y:.f} Revisiones de Video</b>'
-            },
+                        },
+                        xAxis: {
+                            type: 'category',
+                            labels: {
+                                rotation: -45,
+                                style: {
+                                    fontSize: '13px',
+                                    fontFamily: 'Verdana, sans-serif'
+                                }
+                            }
+                        },
+                        yAxis: {
+                            min: 0,
+                            title: {
+                                text: 'Cantidad Revisiones de Video: '+'<?php echo $suma_revisiones;?>'
+                            }
+                        },
+                        legend: {
+                            enabled: false
+                        },
+                        tooltip: {
+                            pointFormat: 'Laborado: <b>{point.y:.f} Revisiones de Video</b>'
+                        },
              
-            series: [{
-                name: 'Cantidad Revisiones de Video:'+'<?php echo $suma_revisiones;?>',
-                data:(function() { var data = [];
+                        series: [{
+                            name: 'Cantidad Revisiones de Video:'+'<?php echo $suma_revisiones;?>',
+                            data:(function() { var data = [];
                                 <?php   for($i = 0 ;$i<count($params);$i++){     ?>
                                 data.push(['<?php echo $params[$i]['mes'];?>',<?php echo $params[$i]['numFilas'];?>]);
                                 <?php } ?>
                                 return data;
                                 })() ,
-                dataLabels: {
-                    enabled: true,
-                    rotation: -90,
-                    color: '#FFFFFF',
-                    align: 'right',
-                    format: '{point.y:.f}', // one decimal
-                    y: 10, // 10 pixels down from the top
-                    style: {
-                        fontSize: '13px',
-                        fontFamily: 'Verdana, sans-serif'
-                    }
-                }
-            }]
-        });
-        });
+                            dataLabels: {
+                                enabled: true,
+                                rotation: -90,
+                                color: '#FFFFFF',
+                                align: 'right',
+                                format: '{point.y:.f}', // one decimal
+                                y: 10, // 10 pixels down from the top
+                                style: {
+                                    fontSize: '13px',
+                                    fontFamily: 'Verdana, sans-serif'
+                                }
+                            }
+                        }]
+                    });
+                });
         
-         $(function () {
+                $(function () {
 		$('#container3').highcharts({
                     chart: {
                         type: 'bar'
@@ -340,12 +333,11 @@
                     },
                     xAxis: {
                         categories: (function() { var data = [];
-                                         
-                                        <?php   for($i = 0 ;$i<count($params3);$i++){ ?>
-                                            data.push(['<?php echo $params3[$i]['Nombre'].' '.$params3[$i]['Apellido'];?>']);
-                                        <?php } ?>
-                                    return data;
-                                    })()
+                            <?php   for($i = 0 ;$i<count($params3);$i++){ ?>
+                                data.push(['<?php echo $params3[$i]['Nombre'].' '.$params3[$i]['Apellido'];?>']);
+                            <?php } ?>
+                            return data;
+                            })()
                     },
                     yAxis: {
                         min: 0,
@@ -370,81 +362,79 @@
                     series: [{
                         name: 'Cantidad Revisiones de Video:'+'<?php echo $suma_revisiones2;?>',
 			data: (function() { var data = [];
-                                
-                                <?php   for($i = 0 ;$i<count($params3);$i++){     ?>
-                                data.push([<?php echo $params3[$i]['TOTAL'];?>]);
-                                <?php } ?>
-                                return data;
-                                })()
+                            <?php   for($i = 0 ;$i<count($params3);$i++){     ?>
+                            data.push([<?php echo $params3[$i]['TOTAL'];?>]);
+                            <?php } ?>
+                            return data;
+                            })()
                     }]
                 });
             });
             
         
             $(function () {
-         $('#container2').highcharts({
-             chart: {
-                 type: 'column',
-                 options3d: {
-                     enabled: true,
-                     alpha: 10,
-                     beta: 25,
-                     depth: 70
-                 }
-             },
-           title: {
-                            text: (function() { var data = [];  data.push(['<?php echo $titulo2?>']); return data; })()
-                        },
-           subtitle: {
-                            text: (function() { var data = [];  data.push(['<?php echo $subtitulo?>']); return data; })()
-            },
-             plotOptions: {
-                 column: {
-                     depth: 25
-                 }
-             },
-             xAxis: {
-                        categories: (function() { var data = [];
-                                        
-                                            data.push(['<?php echo 'Justificaciones Automáticas';?>']);
-                                            data.push(['<?php echo 'Justificaciones de Operador';?>']);
-                                            data.push(['<?php echo 'Injusticadas';?>']);
-                                        
-                                    return data;
-                                    })()
+            $('#container2').highcharts({
+                chart: {
+                    type: 'column',
+                    options3d: {
+                        enabled: true,
+                        alpha: 10,
+                        beta: 25,
+                        depth: 70
+                    }
+                },
+                title: {
+                    text: (function() { var data = [];  data.push(['<?php echo $titulo2?>']); return data; })()
+                },
+                subtitle: {
+                    text: (function() { var data = [];  data.push(['<?php echo $subtitulo?>']); return data; })()
+                },
+                plotOptions: {
+                    column: {
+                        depth: 25
+                    }
+                },
+                xAxis: {
+                    categories: (function() { var data = [];
+                        data.push(['<?php echo 'Justificaciones Automáticas';?>']);
+                        data.push(['<?php echo 'Justificaciones de Operador';?>']);
+                        data.push(['<?php echo 'Injusticadas';?>']);
+
+                        return data;
+                    })()
                     //}
              //xAxis: {
                  //categories: Highcharts.getOptions().lang.shortMonths
-             },
-             yAxis: {
-                 title: {
-                     text: null
-                 }
-             },
-             series: [{
-                 name: 'Cantidad de Retrasos: '+'<?php echo $suma_inconsistencias;?>',
-                 data: (function() { var data = [];
-                                <?php   for($i = 0 ;$i<count($params2);$i++){     ?>
-                                data.push([<?php echo $params2[$i]['Total'];?>]);
-                                <?php } ?>
-                                return data;
-                                })(),
-                 dataLabels: {
-                    enabled: true,
-                    rotation: -90,
-                    color: '#FFFFFF',
-                    align: 'right',
-                    format: '{point.y:.f}', // one decimal
-                    y: 10, // 10 pixels down from the top
-                    style: {
-                        fontSize: '13px',
-                        fontFamily: 'Verdana, sans-serif'
+                },
+                yAxis: {
+                    title: {
+                        text: null
                     }
-                }
-             }]
-         });
-     });
-            <?php } ?>  
+                },
+                series: [{
+                    name: 'Cantidad de Retrasos: '+'<?php echo $suma_inconsistencias;?>',
+                    data: (function() { var data = [];
+                        <?php   for($i = 0 ;$i<count($params2);$i++){     ?>
+                        data.push([<?php echo $params2[$i]['Total'];?>]);
+                        <?php } ?>
+                        return data;
+                        })(),
+                    dataLabels: {
+                        enabled: true,
+                        rotation: -90,
+                        color: '#FFFFFF',
+                        align: 'right',
+                        format: '{point.y:.f}', // one decimal
+                        y: 10, // 10 pixels down from the top
+                        style: {
+                            fontSize: '13px',
+                            fontFamily: 'Verdana, sans-serif'
+                        }
+                    }
+                }]
+            });
+        });
+        <?php } ?>  
 	</script>
         
    

@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <title>Personal Externo</title>
-        <?php require_once 'frm_librerias_head.html';?>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Personal Externo</title>
+        <?php require_once 'frm_librerias_head.html';?>
         <script>
             $(document).ready(function () {
                 // Una vez se cargue al completo la página desaparecerá el div "cargando"

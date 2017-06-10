@@ -70,10 +70,10 @@
                     <table id="tabla" class="display" cellspacing="0" width="100%">
                         <thead>
                             <tr>
-                                <th style="text-align:center">Cedula</th>
+                                <th style="text-align:center">Cédula</th>
                                 <th style="text-align:center">Apellido y Nombre</th>
                                 <th style="text-align:center">Departamento</th>
-                                <th style="text-align:center">Telefonos</th>
+                                <th style="text-align:center">Teléfonos</th>
                                 <th style="text-align:center">Correo</th>
                                 <th hidden>Observaciones</th>
                                 <th hidden>Observaciones UE</th>

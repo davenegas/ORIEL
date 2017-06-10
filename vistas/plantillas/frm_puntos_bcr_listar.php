@@ -35,9 +35,9 @@
                     <th hidden style="text-align:center">ID Punto</th>
                     <th style="text-align:center">Nombre</th>
                     <th style="text-align:center">Unidad Ejecutora</th>
-                    <th style="text-align:center">Codigo</th>
-                    <th hidden>Número de Linea</th>
-                    <th hidden>Direccion IP</th>
+                    <th style="text-align:center">Código</th>
+                    <th hidden>Número de Línea</th>
+                    <th hidden>Dirección IP</th>
                     <th style="text-align:center">Cuenta SIS</th>
                     <th style="text-align:center">Tipo de Punto</th>
                     <th style="text-align:center">Horario</th>

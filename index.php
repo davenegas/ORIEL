@@ -88,10 +88,6 @@ require_once __DIR__ . '/controladores/cls_cencon.php';
 require_once __DIR__ . '/controladores/cls_prueba_alarma.php';
 //Libreria de clases --> Control para sistemad de reportes
 require_once __DIR__ . '/controladores/cls_reporteria.php';
-//Libreria de clases --> Control para marcas de usuario
-require_once __DIR__ . '/controladores/cls_marca_usuario.php';
-//Libreria de clases --> Control para marcas de horario de usuario
-require_once __DIR__ . '/controladores/cls_horario_usuario.php';
 
 /*
  * El elemento controller, constituye la base y esencia de toda la lógica del negocio, en este
@@ -389,21 +385,10 @@ $map = array(
     'frm_importar_prontuario_paso_9'=>array('controller'=>'Controller','action'=> 'frm_importar_prontuario_paso_9'),
     'frm_importar_prontuario_paso_10'=>array('controller'=>'Controller','action'=> 'frm_importar_prontuario_paso_10'),
     'frm_importar_prontuario_paso_11'=>array('controller'=>'Controller','action'=> 'frm_importar_prontuario_paso_11'),
- 
-    //Asistencia de Personal
-    'asistencia_personal'=>array('controller'=>'Controller','action'=> 'asistencia_personal'),
-    'marca_guardar'=>array('controller'=>'Controller','action'=> 'marca_guardar'),
-    'asistencia_configuracion_usuarios'=>array('controller'=>'Controller','action'=> 'asistencia_configuracion_usuarios'),
-    'asistencia_buscar_descanso'=>array('controller'=>'Controller','action'=> 'asistencia_buscar_descanso'),
-    'asistencia_buscar_horarios'=>array('controller'=>'Controller','action'=> 'asistencia_buscar_horarios'),
-    'asistencia_ajutes_descanso_usuario'=>array('controller'=>'Controller','action'=> 'asistencia_ajutes_descanso_usuario'),
-    'asistencia_eliminar_descanso'=>array('controller'=>'Controller','action'=> 'asistencia_eliminar_descanso'),
-    'asistencia_guardar_horario_usuario'=>array('controller'=>'Controller','action'=> 'asistencia_guardar_horario_usuario'),
-    'asistencia_lista_marcas'=>array('controller'=>'Controller','action'=> 'asistencia_lista_marcas'),
-    'asistencia_generar_inconsistencia'=>array('controller'=>'Controller','action'=> 'asistencia_generar_inconsistencia'),
-    'asistencia_inconsistencia_justificar'=>array('controller'=>'Controller','action'=> 'asistencia_inconsistencia_justificar'),
-    'asistencia_guardar_justificacion_inconsistencia'=>array('controller'=>'Controller','action'=> 'asistencia_guardar_justificacion_inconsistencia'),
     
+    //Solicitud de Permisos
+    'solicitud_permiso'=>array('controller'=>'Controller','action'=> 'solicitud_permiso'),
+ 
     //Controlador de Usuarios 
     'listar_usuarios'=> array('controller'=>'Controller','action'=>'listar_usuarios'),
     'gestion_usuarios' => array('controller'=> 'Controller','action'=>'gestion_usuarios'),

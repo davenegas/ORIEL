@@ -16,7 +16,7 @@
                     <tr>
                         <th style="text-align:center">ID Empresa</th>
                         <th style="text-align:center">Empresa</th>
-                        <th style="text-align:center">Cedula Juridica</th>
+                        <th style="text-align:center">Cédula Jurídica</th>
                         <th style="text-align:center">Teléfono Empresa</th>
                         <!--<th style="text-align:center">Dirección</th>-->
                         <th style="text-align:center">Tipo Empresa</th>

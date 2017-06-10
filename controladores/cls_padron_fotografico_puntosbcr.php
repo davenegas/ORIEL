@@ -92,7 +92,6 @@ class cls_padron_fotografico_puntosbcr{
         $this->condicion = $condicion;
     }
 
-    
     public function __construct() {
         $this->id_padron_fotografico="";
         $this->id_puntobcr="";
@@ -141,12 +140,13 @@ class cls_padron_fotografico_puntosbcr{
         }
     }
     
-   public function eliminar_imagen_puntobcr() {
+    public function eliminar_imagen_puntobcr() {
         $this->obj_data_provider->conectar();
         $this->arreglo=$this->obj_data_provider->eliminar_datos("T_PadronFotograficoPuntoBCR", $this->condicion);
         $this->obj_data_provider->desconectar();
        
     }
+    
     ////////////////////////Fotos Personal Externo///////////////////////
     //Función para guardar las images del personal externo
     public function guardar_imagen_personal_externo(){
@@ -165,6 +165,7 @@ class cls_padron_fotografico_puntosbcr{
            
         }
     }
+    
     //Función para obtener las imagenes del personal externo
     public function obtener_imagenes_personal_externo(){
         if($this->condicion==""){
@@ -182,6 +183,7 @@ class cls_padron_fotografico_puntosbcr{
             $this->obj_data_provider->desconectar();
         }
     }
+    
     public function eliminar_imagen_personal_externo() {
         $this->obj_data_provider->conectar();
         $this->arreglo=$this->obj_data_provider->eliminar_datos("T_PadronFotograficoPersonalExterno", $this->condicion);

@@ -33,7 +33,6 @@ class cls_eventos{
         $this->referencia_mezcla = $referencia_mezcla;
     }
 
-        
     function getObservaciones_supervision() {
         return $this->observaciones_supervision;
     }
@@ -50,7 +49,6 @@ class cls_eventos{
         $this->fecha_notas_supervision = $fecha_notas_supervision;
     }
 
-    
     function getAdjunto() {
         return $this->adjunto;
     }
@@ -83,7 +81,6 @@ class cls_eventos{
         $this->id_usuario = $id_usuario;
     }
 
-        
     function getId_ultimo_evento_ingresado() {
         return $this->id_ultimo_evento_ingresado;
     }
@@ -92,7 +89,6 @@ class cls_eventos{
         $this->id_ultimo_evento_ingresado = $id_ultimo_evento_ingresado;
     }
 
-        
     function getEstado_evento() {
         return $this->estado_evento;
     }
@@ -109,7 +105,6 @@ class cls_eventos{
         $this->seguimiento = $seguimiento;
     }
 
-        
     function getId2() {
         return $this->id2;
     }
@@ -273,7 +268,6 @@ class cls_eventos{
       }    
   }
   
-  
     //Valida que no se ingrese el mismo tipo de evento en un sitio, si ya hay uno pendiente
     function existe_abierto_este_tipo_de_evento_en_este_sitio(){
       //Establece la conexión con la bd
@@ -299,7 +293,6 @@ class cls_eventos{
       $this->obj_data_provider->desconectar();
      
   }
-  
   
     //Valida que no se ingrese la misma mezcla de eventos en el sistema
     function existe_esta_mezcla_de_eventos_en_el_sistema(){
@@ -422,7 +415,7 @@ class cls_eventos{
             $this->arreglo=$this->obj_data_provider->trae_datos(
                 "t_puntobcr INNER JOIN t_Distrito ON t_PuntoBCR.ID_Distrito=t_Distrito.ID_Distrito INNER JOIN t_Canton ON t_Distrito.ID_Canton=t_Canton.ID_Canton INNER JOIN t_Provincia ON t_Canton.ID_Provincia=t_Provincia.ID_Provincia", 
                 "t_PuntoBCR.ID_PuntoBCR, t_PuntoBCR.Nombre",
-                "ID_Tipo_Punto=".$this->tipo_punto." AND t_Provincia.ID_Provincia=".$this->provincia." ORDER BY t_PuntoBCR.Nombre ASC");
+                $this->condicion." ORDER BY t_PuntoBCR.Nombre ASC");
             $this->arreglo=$this->obj_data_provider->getArreglo();
             $this->obj_data_provider->desconectar();
         $this->resultado_operacion=true;
@@ -447,10 +440,11 @@ class cls_eventos{
                 $this->obj_data_provider->trae_datos("T_detalleEvento", "*", "ID_Detalle_Evento=".$this->id2);
                 $valores_iniciales="Edicion - Valores anteriores de la tabla formato SELECT:\n ";
                 if (count($this->obj_data_provider->getArreglo())>0){
-                    $valores_iniciales= $valores_iniciales ." ". implode(" - ",$this->obj_data_provider->getArreglo()[0]);
+                    $valores_iniciales= $valores_iniciales ." ". implode(" - ",$this->obj_data_provider->getArreglo());
                 }
             $valores_iniciales=$valores_iniciales . "\nA continuacion valores anteriores de la tabla formato arreglo:\n ";
-            $valores_iniciales=$valores_iniciales . serialize($this->obj_data_provider->getArreglo());
+            $temp=$this->obj_data_provider->getArreglo();
+            $valores_iniciales=$valores_iniciales . serialize($temp[0]);
 
              //Registro de la trazabilidad del sistema
             $cadena_sql=str_replace(","," - ","call sp_set_detalleEvento(Modifica datos en T_detalleEvento ID_Seguimiento='".$this->id2."',ID_Evento='".$this->id."',Fecha='".$this->fecha."',Hora='".$this->hora."',Detalle='".$this->detalle."',Usuario='".$this->id_usuario."',Adjunto='".$this->adjunto."')");
@@ -507,6 +501,7 @@ class cls_eventos{
             echo $exc->getTraceAsString();
         }
     }
+    
     //Tipos de eventos
     public function obtener_todos_los_tipos_eventos(){
         try{
@@ -536,10 +531,11 @@ class cls_eventos{
                 $this->obj_data_provider->trae_datos("T_tipoevento", "*", "ID_Tipo_Evento=".$this->id);
                 $valores_iniciales="Edicion - Valores anteriores de la tabla formato SELECT:\n ";
                 if (count($this->obj_data_provider->getArreglo())>0){
-                    $valores_iniciales= $valores_iniciales ." ". implode(" - ",$this->obj_data_provider->getArreglo()[0]);
+                    $valores_iniciales= $valores_iniciales ." ". implode(" - ",$this->obj_data_provider->getArreglo());
                 }
                 $valores_iniciales=$valores_iniciales . "\nA continuacion valores anteriores de la tabla formato arreglo:\n ";
-                $valores_iniciales=$valores_iniciales . serialize($this->obj_data_provider->getArreglo());
+                $temp=$this->obj_data_provider->getArreglo();
+                $valores_iniciales=$valores_iniciales . serialize($temp[0]);
 
                  //Registro de la trazabilidad del sistema
                 $cadena_sql=str_replace(","," - ","call sp_set_tipoEvento(Modifica datos en T_tipoevento Id_tipo_evento='".$this->id."',Evento='".$this->tipo_evento."',Prioridad='".$this->prioridad."',Observaciones='".$this->observaciones."',Estado='".$this->estado."')");
@@ -623,6 +619,7 @@ class cls_eventos{
             echo $exc->getTraceAsString();
         }
     }
+    
     public function guardar_registro_en_mezcla_de_eventos(){
          
         $this->obj_data_provider->conectar();

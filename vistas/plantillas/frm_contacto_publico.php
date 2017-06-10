@@ -58,6 +58,7 @@
                 <div class="col-sm-12 text-center">
                     <div>
                         <center><img src="vistas/Imagenes/contacto.jpg" width="600" /></center>
+                        <a href="index.php?ctl=solicitud_permiso">Solicitud de permisos</a>
                     </div>
                 </div>
                 

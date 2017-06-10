@@ -219,7 +219,7 @@
                         <th style="text-align:center">Provincia</th>
                         <th style="text-align:center">Tipo Punto</th>
                         <th style="text-align:center">Punto BCR</th>
-                        <th style="text-align:center">Codigo</th>
+                        <th style="text-align:center">Código</th>
                         <th style="text-align:center">Tipo de Evento</th>
                         <th style="text-align:center">Estado del Evento</th>
                         <th style="text-align:center">Último Seguimiento</th>

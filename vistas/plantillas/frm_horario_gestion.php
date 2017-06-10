@@ -50,7 +50,7 @@
                         <input type="time" class="form-control" id="salida_martes" name="salida_martes" value="<?php echo $params[0]['Hora_Cierre_Martes'];?>">
                     </div>
                     <div class="col-md-4">
-                        <label>Miercoles</label>
+                        <label>Miércoles</label>
                     </div>
                     <div class="col-md-4">
                         <input type="time" class="form-control" id="entrada_miercoles" name="entrada_miercoles" value="<?php echo $params[0]['Hora_Apertura_Miercoles'];?>">

@@ -35,20 +35,20 @@
                     <tr>
                         <!--<th>ID Persona</th>-->
                         <th style="text-align:center">Apellido y Nombre</th>
-                        <th style="text-align:center">Cedula</th>
+                        <th style="text-align:center">Cédula</th>
                         <!--<th>Direccion</th>-->
                         <th style="text-align:center">Departamento</th>
                         <th style="text-align:center">Puesto</th>
                         <!--<th style="text-align:center">Empresa</th>-->
                         <!--<th>Tipo Telefono</th>-->
-                        <th style="text-align:center">Telefonos</th>
+                        <th style="text-align:center">Teléfonos</th>
                         <th style="text-align:center">Observaciones</th>
                         <!--<th>Observaciones</th>-->
                         <?php if($_SESSION['modulos']['Editar- Personal']==1){ ?>
                           <th style="text-align:center">Estado</th>              
                           <th style="text-align:center">Cambiar Estado</th>
                         <?php }?>
-                        <th style="text-align:center">Mantenmiento</th>
+                        <th style="text-align:center">Mantenimiento</th>
                     </tr>
                 </thead>
                 <tbody>
