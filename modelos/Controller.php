@@ -1,7 +1,7 @@
  <?php
 
 //Definición de la clase Controller. Componente principal de la lógica del negocio. 
- class Controller{
+class Controller{
      
     //Declaración de métodos que envuelven toda la funcionalidad del sistema
     // A través del componente index se llaman cada uno de los eventos de la clase 
@@ -71,8 +71,7 @@
         $tipo_de_alerta="alert alert-info";
         $validacion="Verificación de Identidad";
         //Llamada al formulario correspondiente de la vista   
-        $this->ejecucion_automatico_proceso("Oficiales");     
-        //$this->ejecucion_automatico_proceso("Procesos_Rapid_Eye"); 
+        $this->ejecucion_automatico_proceso("Oficiales");        
         require __DIR__ . '/../vistas/plantillas/inicio_sesion.php'; 
     }
     
@@ -87,7 +86,7 @@
             $obj_roles->obtiene_todos_los_roles();
             //Inicializa un vector con el total de registros de la base de datos
             $params = $obj_roles->getArreglo();
-            require __DIR__.'/../vistas/plantillas/lista_de_roles.php';
+            require __DIR__.'/../vistas/plantillas/frm_roles_listar.php';
         }else{
               /*
              * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
@@ -105,20 +104,7 @@
     public function principal(){
         //Validación para verificar si el usuario está logeado en el sistema
         if(isset($_SESSION['nombre'])){
-            
-        $obj_marca = new cls_marca_usuario(); 
-        //Obtiene las inconsistencias pendientes- dependiendo del rol
-        if($_SESSION['modulos']['Módulo-Asistencia de Personal']==1){
-            $obj_marca->setCondicion("T_InconsistenciaMarca.ID_Usuario=".$_SESSION['id']." AND T_InconsistenciaMarca.ID_Estado_Inconsistencia=1");
-        } if($_SESSION['modulos']['Módulo-Asistencia encargado empresa']==1){
-            $obj_marca->setCondicion("T_InconsistenciaMarca.ID_Estado_Inconsistencia=3 OR T_InconsistenciaMarca.ID_Usuario=".$_SESSION['id']);
-        } if($_SESSION['modulos']['Módulo-Asistencia encargado Banco']==1){
-            $obj_marca->setCondicion("T_InconsistenciaMarca.ID_Estado_Inconsistencia=4");
-        }
-        $obj_marca->obtener_inconsistencias_marcas();
-        $inconsistencias = $obj_marca->getArreglo();
-        $cant_inconsistencias = count($inconsistencias);
-        
+
         //Llamada al formulario correspondiente de la vista
         require __DIR__ . '/../vistas/plantillas/frm_principal.php';
            
@@ -322,11 +308,12 @@
                      * corresponden.
                      */
                     for ($x = 0; $x < count($obj_unidades_ejecutoras->getArreglo()); $x++) {
-                        $obj_unidades_ejecutoras->setCondicion("ID_Unidad_Ejecutora=".$obj_unidades_ejecutoras->getArreglo()[$x]['ID_Unidad_Ejecutora']);
+                        $temp=$obj_unidades_ejecutoras->getArreglo();
+                        $obj_unidades_ejecutoras->setCondicion("ID_Unidad_Ejecutora=".$temp[$x]['ID_Unidad_Ejecutora']);
                         $obj_unidades_ejecutoras->edita_ue_de_personas_para_prontuario();
                         $obj_unidades_ejecutoras->edita_ue_de_sitios_bcr_para_prontuario();
                         $obj_unidades_ejecutoras->eliminar_ue_sobrantes_para_prontuario();
-                        $unidades_ejecutoras_duplicadas=$obj_unidades_ejecutoras->getArreglo()[$x].",";
+                        $unidades_ejecutoras_duplicadas=$temp[$x].",";
                         $temporal_inconsistencias.=Encrypter::quitar_tildes($unidades_ejecutoras_duplicadas);
                     }
                     //Variable que cuenta cuantas unidades ejecutoras son editadas.
@@ -339,7 +326,8 @@
                 }
                 //En caso de que el resultado de la consulta arroje solo un registro, se procede a editar la información de la unidad en la base de datos
                 if (count($obj_unidades_ejecutoras->getArreglo())==1){
-                    if (!($obj_unidades_ejecutoras->getArreglo()[0]['Departamento']==$unidades_ejecutoras[$i])){
+                    $temp=$obj_unidades_ejecutoras->getArreglo();
+                    if (!($temp[0]['Departamento']==$unidades_ejecutoras[$i])){
                         /*
                          * Agrega la información respectiva a la unidad ejecutora en el objeto correspondiente
                          */
@@ -347,10 +335,11 @@
                         $obj_unidades_ejecutoras->setDepartamento($unidades_ejecutoras[$i]);
                         $obj_unidades_ejecutoras->setObservaciones("");
                         $obj_unidades_ejecutoras->setEstado("1");
-                        $obj_unidades_ejecutoras->setCondicion("ID_Unidad_Ejecutora=".$obj_unidades_ejecutoras->getArreglo()[0]['ID_Unidad_Ejecutora']);
+                        $temp=$obj_unidades_ejecutoras->getArreglo();
+                        $obj_unidades_ejecutoras->setCondicion("ID_Unidad_Ejecutora=".$temp[0]['ID_Unidad_Ejecutora']);
                         $obj_unidades_ejecutoras->edita_ue_para_prontuario();
                         $unidad_prontuario=$unidades_ejecutoras[$i];
-                        $unidad_base_datos=$obj_unidades_ejecutoras->getArreglo()[0]['Departamento'];
+                        $unidad_base_datos=$temp[0]['Departamento'];
                         /*
                          * Agrega el registro al arreglo que exportará en el archivo de excel la información correspondiente.
                          */
@@ -371,7 +360,8 @@
                     $obj_unidades_ejecutoras->setEstado("1");
                     $obj_unidades_ejecutoras->agregar_nueva_ue_para_prontuario();
                     $unidad_prontuario=$unidades_ejecutoras[$i];
-                    $unidad_base_datos=$obj_unidades_ejecutoras->getArreglo()[0]['Departamento'];
+                    $temp=$obj_unidades_ejecutoras->getArreglo();
+                    $unidad_base_datos=$temp[0]['Departamento'];
                     //Detalla la información de la inserción en el vector que exporta excel.
                     $vector_inconsistencias[]=array ("INSERCION, se identifica nueva unidad ejecutora: ".Encrypter::quitar_tildes($unidad_prontuario),"Se ingresa a la Base de Datos de Oriel");
                     //Nueva linea en el vector que exporta a excel
@@ -485,8 +475,9 @@
                     
                     //Recorre cada uno de los puestos duplicados para editar las personas asignadas al nuevo puesto ingresado
                     for ($x = 0; $x < count($obj_puestos->getArreglo()); $x++) {
+                        $temp=$obj_puestos->getArreglo();
                         //Realiza la busqueda del puesto respectivo
-                        $obj_puestos->setCondicion("ID_Puesto=".$obj_puestos->getArreglo()[$x]['ID_Puesto']);
+                        $obj_puestos->setCondicion("ID_Puesto=".$temp[$x]['ID_Puesto']);
                         // Edita las personas asignadas al puesto a eliminar
                         $obj_puestos->edita_puesto_de_personas_para_prontuario();
                         //Elimina los puestos duplicados
@@ -497,11 +488,12 @@
                 }
                 //Si el resultado de la consulta inicial = 1, procede a editar los datos del puesto
                 if (count($obj_puestos->getArreglo())==1){
+                    $temp=$obj_puestos->getArreglo();
                     //Si el nombre del puesto varia en el nombre, procede a editarlo
-                    if (!($obj_puestos->getArreglo()[0]['Puesto']==$arreglo_puestos[$i])){
+                    if (!($temp[0]['Puesto']==$arreglo_puestos[$i])){
                         
                         //Establece la condicion y edita el nombre con el que tiene el documento actual
-                        $obj_puestos->setCondicion("ID_Puesto=".$obj_puestos->getArreglo()[0]['ID_Puesto']);
+                        $obj_puestos->setCondicion("ID_Puesto=".$temp[0]['ID_Puesto']);
                         
                         //Procede a editarlo
                         $obj_puestos->edita_puesto_para_prontuario();
@@ -648,14 +640,15 @@
                 if (count($obj_personal->getArreglo())==1){  
                     
                     //Compara si tiene el mismo puesto asignado
-
-                   if (!(strcmp($obj_puesto->getId(), $obj_personal->getArreglo()[0]['ID_Puesto']))==0){
+                   $temp=$obj_personal->getArreglo();
+                   if (!(strcmp($obj_puesto->getId(), $temp[0]['ID_Puesto']))==0){
                        //En caso de que la comparación se de con puestos diferentes procede a buscar la información del puesto a actualizar
-                        $obj_puesto->setCondicion("ID_Puesto=".$obj_personal->getArreglo()[0]['ID_Puesto']);
+                        $obj_puesto->setCondicion("ID_Puesto=".$temp[0]['ID_Puesto']);
                         //Obtiene los puestos por medio de la consulta sql
                         $obj_puesto->obtener_puestos();
+                        $temp2=$obj_puesto->getArreglo();
                         //Registra en el vector correspondiente, el cambio para respaldarlo posteriormente por medio de excel
-                        $vector_cambios_de_puesto[]=array ($arreglo_personal[$i][0],$arreglo_personal[$i][1],$obj_puesto->getArreglo()[0]['Puesto'],$arreglo_personal[$i][2],$arreglo_personal[$i][4]);
+                        $vector_cambios_de_puesto[]=array ($arreglo_personal[$i][0],$arreglo_personal[$i][1],$temp2[0]['Puesto'],$arreglo_personal[$i][2],$arreglo_personal[$i][4]);
                         //Agrega un espacio en blanco en el vector
                         $vector_cambios_de_puesto[]=array ("","","","","");
                         //Incrementa la variable de control
@@ -677,15 +670,16 @@
                 
                 //Verifica si la consulta arrojó algun registro
                 if (count($obj_personal->getArreglo())==1){  
-
+                    $temp=$obj_personal->getArreglo();
                     //Compara las unidades ejecutoras (tanto la del documento de trabajo, como la que se encuentra en la bd)
-                   if (!(strcmp($obj_ue->getId(), $obj_personal->getArreglo()[0]['ID_Unidad_Ejecutora']))==0){
+                   if (!(strcmp($obj_ue->getId(), $temp[0]['ID_Unidad_Ejecutora']))==0){
                         //define una condicion de busqueda en caso de que la ue del empleado sea diferente a la que trae el documento
-                        $obj_ue->setCondicion("ID_Unidad_Ejecutora=".$obj_personal->getArreglo()[0]['ID_Unidad_Ejecutora']);
+                        $obj_ue->setCondicion("ID_Unidad_Ejecutora=".$temp[0]['ID_Unidad_Ejecutora']);
                         //Ejecuta la consulta SQL
                          $obj_ue->obtener_unidades_ejecutoras();
+                         $temp2=$obj_ue->getArreglo();
                          //Registra el cambio en el vector correspondiente para exportación a excel
-                        $vector_cambios_de_ue[]=array ($arreglo_personal[$i][0],$arreglo_personal[$i][1],$obj_ue->getArreglo()[0]['Departamento'],$arreglo_personal[$i][4],"");
+                        $vector_cambios_de_ue[]=array ($arreglo_personal[$i][0],$arreglo_personal[$i][1],$temp2[0]['Departamento'],$arreglo_personal[$i][4],"");
                         //Agrega un espacio en blanco en el vector
                         $vector_cambios_de_ue[]=array ("","","","","");
                         //Incrementa la variable de control 
@@ -724,11 +718,12 @@
                     //Este ciclo procede a cambiar los telefonos asociados a las personas repetidas, con el nuevo y unico id de la persona ingresada
                     for ($x = 0; $x < count($obj_personal->getArreglo()); $x++) {
                         //Busca telefonos de cada persona repetida
-                        $obj_personal->setCondicion("(ID=".$obj_personal->getArreglo()[$x]['ID_Persona'].") AND (ID_Tipo_Telefono=2 or ID_Tipo_Telefono=3 or ID_Tipo_Telefono=4 or ID_Tipo_Telefono=27)");
+                        $temp=$obj_personal->getArreglo();
+                        $obj_personal->setCondicion("(ID=".$temp[$x]['ID_Persona'].") AND (ID_Tipo_Telefono=2 or ID_Tipo_Telefono=3 or ID_Tipo_Telefono=4 or ID_Tipo_Telefono=27)");
                         //Edita el id de estos telefonos
                         $obj_personal->edita_id_persona_en_tabla_telefonos_para_prontuario();
                         // Edita ID en la tabla de gerentes de zona
-                        $obj_personal->setCondicion("ID_Persona=".$obj_personal->getArreglo()[$x]['ID_Persona']);
+                        $obj_personal->setCondicion("ID_Persona=".$temp[$x]['ID_Persona']);
                         //Procede editar la información
                         $obj_personal->edita_id_persona_en_tabla_gerente_zona_bcr_para_prontuario();
                         //Elimina las personas repetidas
@@ -799,12 +794,12 @@
             //Crea objeto de tipo personal para administración de la tabla
             $obj_personal = new cls_personal();
             
-             /*
-             * Los siguientes vectores permiten definir un formato específico para la fecha que llevara en el nombre
-             * del archivo generado (xls) una vez se procese la información de inconsistencias en personal. El reporte se
-             * descarga de manera automática en formato excel, una vez se complete el proceso.
-             * Se definen dos vectores, uno para los días de la semana y otro para los meses del año
-             */
+            /*
+            * Los siguientes vectores permiten definir un formato específico para la fecha que llevara en el nombre
+            * del archivo generado (xls) una vez se procese la información de inconsistencias en personal. El reporte se
+            * descarga de manera automática en formato excel, una vez se complete el proceso.
+            * Se definen dos vectores, uno para los días de la semana y otro para los meses del año
+            */
             $dias = array("Domingo","Lunes","Martes","Miercoles","Jueves","Viernes","Sábado");
             $meses = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
  
@@ -824,9 +819,7 @@
             
             // Lee las personas que se encuentran en el prontuario y los pasa a un vector separado en modo distinct
             for ($i = 0; $i < count($_SESSION['prontuario']); $i++) {
-                
-                    $arreglo_personal[]=array($_SESSION['prontuario'][$i][0],$_SESSION['prontuario'][$i][1],$_SESSION['prontuario'][$i][3],$_SESSION['prontuario'][$i][7],$_SESSION['prontuario'][$i][8]);
-               
+                $arreglo_personal[]=array($_SESSION['prontuario'][$i][0],$_SESSION['prontuario'][$i][1],$_SESSION['prontuario'][$i][3],$_SESSION['prontuario'][$i][7],$_SESSION['prontuario'][$i][8]);
             }
             
             //Variables de control del proceso
@@ -848,7 +841,6 @@
                 
                 //Si encuentra la persona y coincide en ambos vectores, asigna 1 a la variable bandera de control
                 for ($x = 0; $x < count($arreglo_personal); $x++) {
-                    
                     //Busca por numero de cedula
                     if ($params[$i]['Cedula']==$arreglo_personal[$x][1]){
                        $bandera=1;
@@ -906,7 +898,6 @@
 
     //Paso de importación del prontuario que permite actualizar la tabla de celulares en el sistema
     public function frm_importar_prontuario_paso_7(){
-        
         if(isset($_SESSION['nombre'])){
             
             //Crea objeto de tipo puestos para administración de la tabla
@@ -939,102 +930,101 @@
             
             // Lee el registro total de personas que se encuentran en el prontuario
             for ($i = 0; $i < count($_SESSION['prontuario']); $i++) {
-                
-                    $arreglo_telefonos_celulares[]=array($_SESSION['prontuario'][$i][1],str_replace (" ","",str_replace ("-","",$_SESSION['prontuario'][$i][10])));
-                                       
-                    $obj_personal->setCondicion("Cedula='".$arreglo_telefonos_celulares[$i][0]."'");
-                    $obj_personal->obtiene_id_de_persona_para_prontuario();
-                    /*$obj_telefono->setCondicion("(ID=".$obj_personal->getId().") AND (ID_Tipo_Telefono=3) AND (Numero='0')");
-                    $obj_telefono->eliminar_telefonos_para_prontuario();*/
-                    $obj_telefono->setCondicion("(ID=".$obj_personal->getId().") AND (ID_Tipo_Telefono=2 or ID_Tipo_Telefono=3 or ID_Tipo_Telefono=4 or ID_Tipo_Telefono=27 or ID_Tipo_Telefono=28) AND (Numero='0')");
-                    $obj_telefono->eliminar_telefonos_para_prontuario();
-                    
-                    ///////////////////////////Generar inconsistencias del sistema
-                    
-                    //Esta validación permite comprobar que el numero de telefono a analizar cumpla los estandares minimos para celulares
-                    //Por ejemplo 8 digitos, que sean numeros, etc.
-                   
-                    if ((strlen($arreglo_telefonos_celulares[$i][1])==8)&&(is_numeric($arreglo_telefonos_celulares[$i][1]))){
-                                
-                        //Verifica si tiene numeros de telefono diferentes en bd al celular que viene en prontuario
-                        $obj_telefono->setCondicion("(ID=".$obj_personal->getId().") AND (ID_Tipo_Telefono=3 or ID_Tipo_Telefono=27) AND (Numero<>'".$arreglo_telefonos_celulares[$i][1]."')");
-                        
-                        //Ejecuta la consulta SQL
-                        $obj_telefono->obtiene_telefonos_por_criterio_para_prontuario();
-                        
-                        //Esta validación permite verificar si el funcionario tiene un numero de celular distinto al que viene en el prontuario y lo registra para el reporte de excel.
-                        if (count($obj_telefono->getArreglo())>0){
-                            $valor_prontuario="El funcionario (a) con cedula: ".$arreglo_telefonos_celulares[$i][0]." tiene el el numero de celular: ".$arreglo_telefonos_celulares[$i][1]." a nivel de prontuario.";
-                            //Variable que va armando la cadena de telefonos registrados en base de datos para crear el comparativo
-                            $valor_base_datos="Numeros de telefono celular registrados en la base de datos de Oriel: ";
-                             for ($x = 0; $x < count($obj_telefono->getArreglo()); $x++) {
-                                 
-                                 //Acumula cada registro en la variable correspondiente para armar una sola sentencia
-                                $valor_base_datos.=$obj_telefono->getArreglo()[$x]['Numero'].", ";
-                                
-                             }
-                             //Agrega el registro de inconsistencias generado para este funcionario al vector general para el reporte de excel
-                             $vector_inconsistencias[]=array ($valor_prontuario,$valor_base_datos);
-                             //Agrega espacio en blanco en el vector
-                             $vector_inconsistencias[]=array ("","");
-                        }  
-                    }
-                                     
-                    ///////////////////////////////////////////////////////////////
-                    
-                    /*
-                     * Consulta y criterio que permite traer los numeros de telefonos asignados a un funcionario BCR
-                     */
-                    $obj_telefono->setCondicion("(ID=".$obj_personal->getId().") AND (ID_Tipo_Telefono=2 or ID_Tipo_Telefono=3 or ID_Tipo_Telefono=4 or ID_Tipo_Telefono=27 or ID_Tipo_Telefono=28) ");
-                    //ejecuta la sentencia SQL correspondiente según el criterio establecido en la linea anterior
+                $arreglo_telefonos_celulares[]=array($_SESSION['prontuario'][$i][1],str_replace (" ","",str_replace ("-","",$_SESSION['prontuario'][$i][10])));
+                $obj_personal->setCondicion("Cedula='".$arreglo_telefonos_celulares[$i][0]."'");
+                $obj_personal->obtiene_id_de_persona_para_prontuario();
+                /*$obj_telefono->setCondicion("(ID=".$obj_personal->getId().") AND (ID_Tipo_Telefono=3) AND (Numero='0')");
+                $obj_telefono->eliminar_telefonos_para_prontuario();*/
+                $obj_telefono->setCondicion("(ID=".$obj_personal->getId().") AND (ID_Tipo_Telefono=2 or ID_Tipo_Telefono=3 or ID_Tipo_Telefono=4 or ID_Tipo_Telefono=27 or ID_Tipo_Telefono=28) AND (Numero='0')");
+                $obj_telefono->eliminar_telefonos_para_prontuario();
+
+                ///////////////////////////Generar inconsistencias del sistema
+
+                //Esta validación permite comprobar que el numero de telefono a analizar cumpla los estandares minimos para celulares
+                //Por ejemplo 8 digitos, que sean numeros, etc.
+
+                if ((strlen($arreglo_telefonos_celulares[$i][1])==8)&&(is_numeric($arreglo_telefonos_celulares[$i][1]))){
+
+                    //Verifica si tiene numeros de telefono diferentes en bd al celular que viene en prontuario
+                    $obj_telefono->setCondicion("(ID=".$obj_personal->getId().") AND (ID_Tipo_Telefono=3 or ID_Tipo_Telefono=27) AND (Numero<>'".$arreglo_telefonos_celulares[$i][1]."')");
+
+                    //Ejecuta la consulta SQL
                     $obj_telefono->obtiene_telefonos_por_criterio_para_prontuario();
-                    
-                    //Establece los atributos del objeto de tipo telefono, id2 se refiere al id de la persona en cuestión
-                    $obj_telefono->setid2($obj_personal->getId());
-                    //Asigna tipo de telefono 3 = celular 
-                    $obj_telefono->setTipo_telefono("3");
-                    //Observaciones del campo en vacío
-                    $obj_telefono->setObservaciones("");
-                    //Establece el estado como activo
-                    $obj_telefono->setEstado("1");
-                                     
-                    //Verifica si la persona tiene numeros de telefono asociados
+
+                    //Esta validación permite verificar si el funcionario tiene un numero de celular distinto al que viene en el prontuario y lo registra para el reporte de excel.
                     if (count($obj_telefono->getArreglo())>0){
-                        //Valida si tiene el mismo numero de telefono registrado en el prontuario
-                        $obj_telefono->setCondicion("(ID=".$obj_personal->getId().") AND (ID_Tipo_Telefono=2 or ID_Tipo_Telefono=3 or ID_Tipo_Telefono=4 or ID_Tipo_Telefono=27 or ID_Tipo_Telefono=28) AND Numero='".$arreglo_telefonos_celulares[$i][1]."'");
-                        //Ejecuta la consulta SQL segun el criterio establecido 
-                        $obj_telefono->obtiene_telefonos_por_criterio_para_prontuario();
-                        // En caso de que el resultado de la consulta sea cero, procede a ingresarlo inmediatamente
-                        if (count($obj_telefono->getArreglo())==0){
-                            //Valida que el telefono celular a ingresar sea valido 
-                            if ((strlen($arreglo_telefonos_celulares[$i][1])==8)&&(is_numeric($arreglo_telefonos_celulares[$i][1]))){
-                                //Establece el numero en el atributo del objeto correspondiente
-                                $obj_telefono->setNumero($arreglo_telefonos_celulares[$i][1]);
-                                //Guarda el numero
-                                $obj_telefono->guardar_telefono_para_prontuario();
-                                //Incrementa la variable de control de nuevos numeros ingresados
-                                $numeros_actualizados++;
-                            }
+                        $valor_prontuario="El funcionario (a) con cedula: ".$arreglo_telefonos_celulares[$i][0]." tiene el el numero de celular: ".$arreglo_telefonos_celulares[$i][1]." a nivel de prontuario.";
+                        //Variable que va armando la cadena de telefonos registrados en base de datos para crear el comparativo
+                        $valor_base_datos="Numeros de telefono celular registrados en la base de datos de Oriel: ";
+                         for ($x = 0; $x < count($obj_telefono->getArreglo()); $x++) {
+
+                             //Acumula cada registro en la variable correspondiente para armar una sola sentencia
+                            $temp=$obj_telefono->getArreglo();
+                            $valor_base_datos.=$temp[$x]['Numero'].", ";
+
+                         }
+                         //Agrega el registro de inconsistencias generado para este funcionario al vector general para el reporte de excel
+                         $vector_inconsistencias[]=array ($valor_prontuario,$valor_base_datos);
+                         //Agrega espacio en blanco en el vector
+                         $vector_inconsistencias[]=array ("","");
+                    }  
+                }
+
+                ///////////////////////////////////////////////////////////////
+
+                /*
+                * Consulta y criterio que permite traer los numeros de telefonos asignados a un funcionario BCR
+                */
+                $obj_telefono->setCondicion("(ID=".$obj_personal->getId().") AND (ID_Tipo_Telefono=2 or ID_Tipo_Telefono=3 or ID_Tipo_Telefono=4 or ID_Tipo_Telefono=27 or ID_Tipo_Telefono=28) ");
+                //ejecuta la sentencia SQL correspondiente según el criterio establecido en la linea anterior
+                $obj_telefono->obtiene_telefonos_por_criterio_para_prontuario();
+
+                //Establece los atributos del objeto de tipo telefono, id2 se refiere al id de la persona en cuestión
+                $obj_telefono->setid2($obj_personal->getId());
+                //Asigna tipo de telefono 3 = celular 
+                $obj_telefono->setTipo_telefono("3");
+                //Observaciones del campo en vacío
+                $obj_telefono->setObservaciones("");
+                //Establece el estado como activo
+                $obj_telefono->setEstado("1");
+
+                //Verifica si la persona tiene numeros de telefono asociados
+                if (count($obj_telefono->getArreglo())>0){
+                    //Valida si tiene el mismo numero de telefono registrado en el prontuario
+                    $obj_telefono->setCondicion("(ID=".$obj_personal->getId().") AND (ID_Tipo_Telefono=2 or ID_Tipo_Telefono=3 or ID_Tipo_Telefono=4 or ID_Tipo_Telefono=27 or ID_Tipo_Telefono=28) AND Numero='".$arreglo_telefonos_celulares[$i][1]."'");
+                    //Ejecuta la consulta SQL segun el criterio establecido 
+                    $obj_telefono->obtiene_telefonos_por_criterio_para_prontuario();
+                    // En caso de que el resultado de la consulta sea cero, procede a ingresarlo inmediatamente
+                    if (count($obj_telefono->getArreglo())==0){
+                        //Valida que el telefono celular a ingresar sea valido 
+                        if ((strlen($arreglo_telefonos_celulares[$i][1])==8)&&(is_numeric($arreglo_telefonos_celulares[$i][1]))){
+                            //Establece el numero en el atributo del objeto correspondiente
+                            $obj_telefono->setNumero($arreglo_telefonos_celulares[$i][1]);
+                            //Guarda el numero
+                            $obj_telefono->guardar_telefono_para_prontuario();
+                            //Incrementa la variable de control de nuevos numeros ingresados
+                            $numeros_actualizados++;
                         }
-                    }else{
-                        //En caso de que la consulta general no haya devuelto numeros de telefonos asociados al funcionario, procede a guardarlo verificando los estandares minimos
-                       if ((strlen($arreglo_telefonos_celulares[$i][1])==8)&&(is_numeric($arreglo_telefonos_celulares[$i][1]))){
-                           //Establece el valor de numero al atributo correspondiente
-                           $obj_telefono->setNumero($arreglo_telefonos_celulares[$i][1]);
-                           //Guardar el registro en la bd
-                           $obj_telefono->guardar_telefono_para_prontuario();
-                           //Incrementa la variable de control
-                           $numeros_actualizados++;
-                       }else{
-                           //En caso de que el numero no cumpla con los estandares de tamaño y tipo de dato, se procede a guardar un numero cero, para que permita relacionar al menos un registro al funcionario
-                           $obj_telefono->setNumero("0");
-                           //Tipo de telefono asignado es 3 = celular
-                           $obj_telefono->setTipo_telefono("3");
-                           //Guarda el telefono en base de datos
-                           $obj_telefono->guardar_telefono_para_prontuario();
-                           //$numeros_actualizados++;
-                       }
                     }
+                }else{
+                    //En caso de que la consulta general no haya devuelto numeros de telefonos asociados al funcionario, procede a guardarlo verificando los estandares minimos
+                   if ((strlen($arreglo_telefonos_celulares[$i][1])==8)&&(is_numeric($arreglo_telefonos_celulares[$i][1]))){
+                       //Establece el valor de numero al atributo correspondiente
+                       $obj_telefono->setNumero($arreglo_telefonos_celulares[$i][1]);
+                       //Guardar el registro en la bd
+                       $obj_telefono->guardar_telefono_para_prontuario();
+                       //Incrementa la variable de control
+                       $numeros_actualizados++;
+                   }else{
+                       //En caso de que el numero no cumpla con los estandares de tamaño y tipo de dato, se procede a guardar un numero cero, para que permita relacionar al menos un registro al funcionario
+                       $obj_telefono->setNumero("0");
+                       //Tipo de telefono asignado es 3 = celular
+                       $obj_telefono->setTipo_telefono("3");
+                       //Guarda el telefono en base de datos
+                       $obj_telefono->guardar_telefono_para_prontuario();
+                       //$numeros_actualizados++;
+                   }
+                }
             }
             
             //Define las variables de resultados para mostrar el summary en pantalla
@@ -1046,7 +1036,7 @@
             $vector_inconsistencias[]=array (Encrypter::quitar_tildes($resultados),"");  
             
             //Llamada al formulario correspondiente de la vista
-           require __DIR__ . '/../vistas/plantillas/frm_importar_prontuario_paso_7.php';
+            require __DIR__ . '/../vistas/plantillas/frm_importar_prontuario_paso_7.php';
      
         }else {
               /*
@@ -1182,8 +1172,9 @@
                              $valor_base_datos="Numeros de extension registrados en la base de datos de Oriel: ";
                              for ($x = 0; $x < count($obj_telefono->getArreglo()); $x++) {
 
+                                 $temp=$obj_telefono->getArreglo();
                                  //variable temporal que va almacenando cada uno de los registros de la bd
-                                    $valor_base_datos.=$obj_telefono->getArreglo()[$x]['Numero'].", ";
+                                    $valor_base_datos.=$temp[$x]['Numero'].", ";
 
                              }
                              //Agrega un nuevo registro en el vector de inconsistencias, para que sea exportado a excel.
@@ -1414,8 +1405,9 @@
                             $valor_base_datos="Numeros de telefono casa de habitacion registrados en la base de datos de Oriel: ";
                             //Mediante este ciclo recorre todos los telefonos registrados en bd como casa de habitación de este funcionario. 
                             for ($x = 0; $x < count($obj_telefono->getArreglo()); $x++) {
+                                $temp=$obj_telefono->getArreglo();
                                  //Variable cadena que se va incrementando paso a paso al recorrer cada registro que devolvió la consulta SQL.
-                                $valor_base_datos.=$obj_telefono->getArreglo()[$x]['Numero'].", ";
+                                $valor_base_datos.=$temp[$x]['Numero'].", ";
                                 
                              }
                              //Agrega la linea completa al vector de inconsistencias.
@@ -1652,7 +1644,7 @@
                                                 }
                                             }
                                             //Va agregando al vector de modulos en la sesión de usuario, las funcionalidades que tiene asignadas de acuerdo al rol correspondiente.
-                                            $_SESSION['modulos']= array_merge($_SESSION['modulos'],[($modulos[$i]['Descripcion'])=>($estado)]);
+                                            $_SESSION['modulos']= array_merge($_SESSION['modulos'],array($modulos[$i]['Descripcion']=>$estado));
                                             //Inicializa la variable en cero.
                                             $estado= 0;
                                         }
@@ -1760,7 +1752,7 @@
                     // asigna el resultado de la consulta sql, al vector de parametros.
                     $params= $obj_roles->getArreglo();
                     //Llamada al formulario correspondiente de la vista
-                    require __DIR__ . '/../vistas/plantillas/lista_de_roles.php';
+                    require __DIR__ . '/../vistas/plantillas/frm_roles_listar.php';
                 }
              }
                
@@ -1935,7 +1927,7 @@
                 $params = $obj_roles->getArreglo();
         }
         //Llamada al formulario correspondiente de la vista
-        require __DIR__ . '/../vistas/plantillas/lista_de_roles.php';
+        require __DIR__ . '/../vistas/plantillas/frm_roles_listar.php';
                
         }else{
               /*
@@ -1987,7 +1979,7 @@
             // Asigna el resultado a un vector
             $params= $obj_modulos->getArreglo();
             //Llamada al formulario correspondiente de la vista
-            require __DIR__ . '/../vistas/plantillas/gestion_roles.php';
+            require __DIR__ . '/../vistas/plantillas/frm_roles_gestion.php';
                
         }   else    {
               /*
@@ -2014,7 +2006,7 @@
             //Inicializa el vector correspondiente 
             $params= $obj_modulos->getArreglo();
             //Llamada al formulario correspondiente de la vista
-            require __DIR__ . '/../vistas/plantillas/lista_de_modulos.php';
+            require __DIR__ . '/../vistas/plantillas/frm_modulos_listar.php';
         }else{
               /*
              * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
@@ -2087,7 +2079,7 @@
                 $params= $obj_modulos->getArreglo();
             }
             //Llamada al formulario correspondiente de la vista
-            require __DIR__ . '/../vistas/plantillas/lista_de_modulos.php';
+            require __DIR__ . '/../vistas/plantillas/frm_modulos_listar.php';
         }   else    {
               /*
              * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
@@ -2127,7 +2119,7 @@
                     // Procede a eliminar los modulos asignados a un rol en especifico
                     $obj_modulos->eliminar_modulos_roles($_GET['id']);
                     //Llamada al formulario correspondiente de la vista
-                require __DIR__ . '/../vistas/plantillas/lista_de_modulos.php';
+                require __DIR__ . '/../vistas/plantillas/frm_modulos_listar.php';
                 }
             }
         }else{
@@ -2166,7 +2158,7 @@
                 $esta=$_GET['estado'];
             }
             //Llamada al formulario correspondiente de la vista
-            require __DIR__ . '/../vistas/plantillas/gestion_modulos.php';
+            require __DIR__ . '/../vistas/plantillas/frm_modulos_gestion.php';
         }   else    {
               /*
              * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
@@ -2192,7 +2184,7 @@
             //Inicializa una variable con el vector total de registros de la bd
             $params= $obj_usuarios->getArreglo();
             //Llamada al formulario correspondiente de la vista
-            require __DIR__.'/../vistas/plantillas/lista_de_usuarios.php';
+            require __DIR__.'/../vistas/plantillas/frm_usuarios_listar.php';
         }
         else {
               /*
@@ -2265,7 +2257,7 @@
                 $params= $obj_usuario->getArreglo();
             }
             //Llamada al formulario correspondiente de la vista
-            require __DIR__ . '/../vistas/plantillas/gestion_usuarios.php';
+            require __DIR__ . '/../vistas/plantillas/frm_usuarios_gestion.php';
         }   else   {
               /*
              * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
@@ -2414,7 +2406,7 @@
                         $params= $obj_usuario->getArreglo();
                     }
                     //Llamada al formulario correspondiente de la vista
-                require __DIR__ . '/../vistas/plantillas/lista_de_usuarios.php';
+                require __DIR__ . '/../vistas/plantillas/frm_usuarios_listar.php';
                 }
             }    
         }else   {
@@ -2452,7 +2444,7 @@
                 //Asigna el resultado de la consulta a una variable de tipo arreglo
                 $params= $obj_usuario->getArreglo();
                 //Llamada al formulario correspondiente de la vista
-                require __DIR__ . '/../vistas/plantillas/lista_de_usuarios.php';
+                require __DIR__ . '/../vistas/plantillas/frm_usuarios_listar.php';
             }
         }
         else{
@@ -2592,7 +2584,7 @@
                                     }
                                 }
                                 //Al vector instanciado como variable de sesión, le empieza aagregar cada uno de los modulos de seguridad con el estado correspondiente para validar si el usuario tiene privilegios.
-                                $_SESSION['modulos']= array_merge($_SESSION['modulos'],[($modulos[$i]['Descripcion'])=>($estado)]);
+                                $_SESSION['modulos']= array_merge($_SESSION['modulos'],array($modulos[$i]['Descripcion']=>$estado));
                                 //Inicializa la variable bandera para continuar con el recorrido del vector de modulos de seguridad.
                                 $estado= 0;
                             }
@@ -2709,7 +2701,7 @@
                                 }
                             }
                             //Construye el vector de sesion que almacena el total de modulos de seguridad que se encuentran en bd
-                            $_SESSION['modulos']= array_merge($_SESSION['modulos'],[($modulos[$i]['Descripcion'])=>($estado)]);
+                            $_SESSION['modulos']= array_merge($_SESSION['modulos'],array($modulos[$i]['Descripcion']=>$estado));
                             //Inicializa el estado de la variable bandera
                             $estado= 0;
                         }    
@@ -2823,19 +2815,19 @@
                     //Arma el vector de seguimientos asociados a un evento en específico
                     if ($i==0){
                         //Arma el vector con el detalle y el ultimo usuario que registro un seguimiento en el evento de bitacora
-                        $detalle_y_ultimo_usuario= array(['Detalle'=>"Último seguimiento ingresado-->Fecha: ".date_format(date_create($ultimo_seguimiento_asociado[0]['Fecha']), 'd/m/Y').".Hora: ".$ultimo_seguimiento_asociado[0]['Hora'].". ".$ultimo_seguimiento_asociado[0]['Detalle']]+['Usuario'=>$ultimo_seguimiento_asociado[0]['Nombre_Usuario']." ".$ultimo_seguimiento_asociado[0]['Apellido']]);
+                        $detalle_y_ultimo_usuario= array(array('Detalle'=>"Último seguimiento ingresado-->Fecha: ".date_format(date_create($ultimo_seguimiento_asociado[0]['Fecha']), 'd/m/Y').".Hora: ".$ultimo_seguimiento_asociado[0]['Hora'].". ".$ultimo_seguimiento_asociado[0]['Detalle'],'Usuario'=>$ultimo_seguimiento_asociado[0]['Nombre_Usuario']." ".$ultimo_seguimiento_asociado[0]['Apellido']));
                     }else{
                         //Concatena al vector la nueva linea de información del seguimiento.
-                        $detalle_y_ultimo_usuario = array_merge($detalle_y_ultimo_usuario,array(['Detalle'=>"Último seguimiento ingresado-->Fecha: ".date_format(date_create($ultimo_seguimiento_asociado[0]['Fecha']), 'd/m/Y').".Hora: ".$ultimo_seguimiento_asociado[0]['Hora'].". ".$ultimo_seguimiento_asociado[0]['Detalle']]+['Usuario'=>$ultimo_seguimiento_asociado[0]['Nombre_Usuario']." ".$ultimo_seguimiento_asociado[0]['Apellido']]));  
+                        $detalle_y_ultimo_usuario = array_merge($detalle_y_ultimo_usuario,array(array('Detalle'=>"Último seguimiento ingresado-->Fecha: ".date_format(date_create($ultimo_seguimiento_asociado[0]['Fecha']), 'd/m/Y').".Hora: ".$ultimo_seguimiento_asociado[0]['Hora'].". ".$ultimo_seguimiento_asociado[0]['Detalle'],'Usuario'=>$ultimo_seguimiento_asociado[0]['Nombre_Usuario']." ".$ultimo_seguimiento_asociado[0]['Apellido'])));  
                     }
                 }else{
                     //En caso de que no hayan seguimientos asociados, procede a registrar las validación correspondiente.
                     if ($i==0){
                         //Con el primer elemento del vector, utiliza esta linea de codigo
-                        $detalle_y_ultimo_usuario= array(['Detalle'=>"No hay seguimientos asociados a este evento. Para agregar uno oprima el link:'Gestionar Seguimiento de la fila respectiva.'"]+['Usuario'=>$params[$i]['Nombre_Usuario']." ".$params[$i]['Apellido']]);
+                        $detalle_y_ultimo_usuario= array(array('Detalle'=>"No hay seguimientos asociados a este evento. Para agregar uno oprima el link:'Gestionar Seguimiento de la fila respectiva.'",'Usuario'=>$params[$i]['Nombre_Usuario']." ".$params[$i]['Apellido']));
                     }else{
                         //Con el resto de lineas del vector, usa esta otra programación.
-                        $detalle_y_ultimo_usuario = array_merge($detalle_y_ultimo_usuario,array(['Detalle'=>"No hay seguimientos asociados a este evento. Para agregar uno oprima el link:'Gestionar Seguimiento de la fila respectiva.'"]+['Usuario'=>$params[$i]['Nombre_Usuario']." ".$params[$i]['Apellido']]));
+                        $detalle_y_ultimo_usuario = array_merge($detalle_y_ultimo_usuario,array(array('Detalle'=>"No hay seguimientos asociados a este evento. Para agregar uno oprima el link:'Gestionar Seguimiento de la fila respectiva.'",'Usuario'=>$params[$i]['Nombre_Usuario']." ".$params[$i]['Apellido'])));
                     }
                 }
             }
@@ -2964,19 +2956,19 @@
                     //Arma el vector de seguimientos asociados a un evento en específico
                     if ($i==0){
                         //Arma el vector con el detalle y el ultimo usuario que registro un seguimiento en el evento de bitacora
-                        $detalle_y_ultimo_usuario= array(['Detalle'=>"Fecha: ".date_format(date_create($ultimo_seguimiento_asociado[0]['Fecha']), 'd/m/Y').".Hora: ".$ultimo_seguimiento_asociado[0]['Hora'].". ".$ultimo_seguimiento_asociado[0]['Detalle']]+['Usuario'=>$ultimo_seguimiento_asociado[0]['Nombre_Usuario']." ".$ultimo_seguimiento_asociado[0]['Apellido']]);
+                        $detalle_y_ultimo_usuario= array(array('Detalle'=>"Fecha: ".date_format(date_create($ultimo_seguimiento_asociado[0]['Fecha']), 'd/m/Y').".Hora: ".$ultimo_seguimiento_asociado[0]['Hora'].". ".$ultimo_seguimiento_asociado[0]['Detalle'],'Usuario'=>$ultimo_seguimiento_asociado[0]['Nombre_Usuario']." ".$ultimo_seguimiento_asociado[0]['Apellido']));
                     }else{
                         //Concatena al vector la nueva linea de información del seguimiento.
-                        $detalle_y_ultimo_usuario = array_merge($detalle_y_ultimo_usuario,array(['Detalle'=>"Fecha: ".date_format(date_create($ultimo_seguimiento_asociado[0]['Fecha']), 'd/m/Y').".Hora: ".$ultimo_seguimiento_asociado[0]['Hora'].". ".$ultimo_seguimiento_asociado[0]['Detalle']]+['Usuario'=>$ultimo_seguimiento_asociado[0]['Nombre_Usuario']." ".$ultimo_seguimiento_asociado[0]['Apellido']]));  
+                        $detalle_y_ultimo_usuario = array_merge($detalle_y_ultimo_usuario,array(array('Detalle'=>"Fecha: ".date_format(date_create($ultimo_seguimiento_asociado[0]['Fecha']), 'd/m/Y').".Hora: ".$ultimo_seguimiento_asociado[0]['Hora'].". ".$ultimo_seguimiento_asociado[0]['Detalle'],'Usuario'=>$ultimo_seguimiento_asociado[0]['Nombre_Usuario']." ".$ultimo_seguimiento_asociado[0]['Apellido'])));  
                     }
                 }else{
                     //En caso de que no hayan seguimientos asociados, procede a registrar las validación correspondiente.
                     if ($i==0){
                         //Con el primer elemento del vector, utiliza esta linea de codigo
-                        $detalle_y_ultimo_usuario= array(['Detalle'=>"No hay seguimientos asociados a este evento. Para agregar uno oprima el link:'Gestionar Seguimiento de la fila respectiva.'"]+['Usuario'=>$params[$i]['Nombre_Usuario']." ".$params[$i]['Apellido']]);
+                        $detalle_y_ultimo_usuario= array(array('Detalle'=>"No hay seguimientos asociados a este evento. Para agregar uno oprima el link:'Gestionar Seguimiento de la fila respectiva.'",'Usuario'=>$params[$i]['Nombre_Usuario']." ".$params[$i]['Apellido']));
                     }else{
                         //Con el resto de lineas del vector, usa esta otra programación.
-                        $detalle_y_ultimo_usuario = array_merge($detalle_y_ultimo_usuario,array(['Detalle'=>"No hay seguimientos asociados a este evento. Para agregar uno oprima el link:'Gestionar Seguimiento de la fila respectiva.'"]+['Usuario'=>$params[$i]['Nombre_Usuario']." ".$params[$i]['Apellido']]));
+                        $detalle_y_ultimo_usuario = array_merge($detalle_y_ultimo_usuario,array(array('Detalle'=>"No hay seguimientos asociados a este evento. Para agregar uno oprima el link:'Gestionar Seguimiento de la fila respectiva.'",'Usuario'=>$params[$i]['Nombre_Usuario']." ".$params[$i]['Apellido'])));
                     }
                 }
             }
@@ -3027,6 +3019,7 @@
             $obj_eventos->setTipo_punto("1");
             $obj_eventos->setProvincia("1");
             
+            $obj_eventos->setCondicion("ID_Tipo_Punto=1 AND t_Provincia.ID_Provincia= 1");
             //Metodo que filtra los puntos BCR para uso de la bitacora digital
             $obj_eventos->filtra_sitios_bcr_bitacora();
             //Obtiene el resultado de la consulta en una variable vector.
@@ -3068,24 +3061,30 @@
                 if(count($ultimo_seguimiento_asociado)>0){
                     //Arma el vector de seguimientos asociados
                     if ($x==0){
-                        $detalle_y_ultimo_usuario= array(['Detalle'=>"Fecha: ".date_format(date_create($ultimo_seguimiento_asociado[0]['Fecha']), 'd/m/Y').".Hora: ".$ultimo_seguimiento_asociado[0]['Hora'].". ".$ultimo_seguimiento_asociado[0]['Detalle']]+['Usuario'=>$ultimo_seguimiento_asociado[0]['Nombre_Usuario']." ".$ultimo_seguimiento_asociado[0]['Apellido']]);
+                        $detalle_y_ultimo_usuario= array(array('Detalle'=>"Fecha: ".date_format(date_create($ultimo_seguimiento_asociado[0]['Fecha']), 'd/m/Y').".Hora: ".$ultimo_seguimiento_asociado[0]['Hora'].". ".$ultimo_seguimiento_asociado[0]['Detalle'],'Usuario'=>$ultimo_seguimiento_asociado[0]['Nombre_Usuario']." ".$ultimo_seguimiento_asociado[0]['Apellido']));
 //                     
                     }else{
                         //Arma el vector de seguimientos asociados
-                        $detalle_y_ultimo_usuario = array_merge($detalle_y_ultimo_usuario,array(['Detalle'=>"Fecha: ".date_format(date_create($ultimo_seguimiento_asociado[0]['Fecha']), 'd/m/Y').".Hora: ".$ultimo_seguimiento_asociado[0]['Hora'].". ".$ultimo_seguimiento_asociado[0]['Detalle']]+['Usuario'=>$ultimo_seguimiento_asociado[0]['Nombre_Usuario']." ".$ultimo_seguimiento_asociado[0]['Apellido']]));
+                        $detalle_y_ultimo_usuario = array_merge($detalle_y_ultimo_usuario,array(array('Detalle'=>"Fecha: ".date_format(date_create($ultimo_seguimiento_asociado[0]['Fecha']), 'd/m/Y').".Hora: ".$ultimo_seguimiento_asociado[0]['Hora'].". ".$ultimo_seguimiento_asociado[0]['Detalle'],'Usuario'=>$ultimo_seguimiento_asociado[0]['Nombre_Usuario']." ".$ultimo_seguimiento_asociado[0]['Apellido'])));
 //                      
                     }
                 }else{
                     if ($x==0){
                         //Valida el vector en caso de que no hayan seguimientos asociados al evento en cuestion
-                        $detalle_y_ultimo_usuario= array(['Detalle'=>"No hay seguimientos asociados a este evento. Para agregar uno oprima el link:'Gestionar Seguimiento de la fila respectiva.'"]+['Usuario'=>$params[$x]['Nombre_Usuario']." ".$params[$x]['Apellido']]);
+                        $detalle_y_ultimo_usuario= array(array('Detalle'=>"No hay seguimientos asociados a este evento. Para agregar uno oprima el link:'Gestionar Seguimiento de la fila respectiva.'",'Usuario'=>$params[$x]['Nombre_Usuario']." ".$params[$x]['Apellido']));
                     }else{
                         //Valida el vector en caso de que no hayan seguimientos asociados al evento en cuestion
-                        $detalle_y_ultimo_usuario = array_merge($detalle_y_ultimo_usuario,array(['Detalle'=>"No hay seguimientos asociados a este evento. Para agregar uno oprima el link:'Gestionar Seguimiento de la fila respectiva.'"]+['Usuario'=>$params[$x]['Nombre_Usuario']." ".$params[$x]['Apellido']]));
+                        $detalle_y_ultimo_usuario = array_merge($detalle_y_ultimo_usuario,array(array('Detalle'=>"No hay seguimientos asociados a este evento. Para agregar uno oprima el link:'Gestionar Seguimiento de la fila respectiva.'",'Usuario'=>$params[$x]['Nombre_Usuario']." ".$params[$x]['Apellido'])));
                     }
                 }
                 }
             }
+            
+            //Obtiene todos los tipos de eventos
+            $obj_eventos->setCondicion("");
+            $obj_eventos->obtener_todos_los_tipos_eventos();   
+            $tipo_evento = $obj_eventos->getArreglo();
+            
             //Llamada al formulario correspondiente de la vista
             require __DIR__.'/../vistas/plantillas/frm_eventos_lista_cerrados.php';
         }
@@ -3155,7 +3154,7 @@
                     
                     $obj_eventos->setTipo_punto("1");
                     $obj_eventos->setProvincia("1");
-
+                    $obj_eventos->setCondicion("ID_Tipo_Punto=1 AND t_Provincia.ID_Provincia=1");
                     //Filtra los sitios que se utilizan dentro del modulo de bitacora
                     $obj_eventos->filtra_sitios_bcr_bitacora();
                     //Obtiene la lista de sitios en una variable tipo vector
@@ -3190,15 +3189,15 @@
                         //Distritos
                     $obj_Puntobcr->setCondicion("");
                     $obj_Puntobcr->obtiene_distritos();
-                    $distritos = array_merge(array(['ID_Distrito'=>0]+['Nombre_Distrito'=>""]),$obj_Puntobcr->getArreglo());
+                    $distritos = array_merge(array(array('ID_Distrito'=>0,'Nombre_Distrito'=>"")),$obj_Puntobcr->getArreglo());
                         //Cantones
                     $obj_Puntobcr->setCondicion("");
                     $obj_Puntobcr->obtiene_cantones();
-                    $cantones   = array_merge(array(['ID_Canton'=>0]+['Nombre_Canton'=>""]),$obj_Puntobcr->getArreglo());
+                    $cantones   = array_merge(array(array('ID_Canton'=>0,'Nombre_Canton'=>"")),$obj_Puntobcr->getArreglo());
                         //Provincias
                     $obj_Puntobcr->setCondicion("");
                     $obj_Puntobcr->obtiene_provincias();
-                    $lista_provincias = array_merge(array(['ID_Provincia'=>0]+['Nombre_Provincia'=>""]),$obj_Puntobcr->getArreglo());
+                    $lista_provincias = array_merge(array(array('ID_Provincia'=>0,'Nombre_Provincia'=>"")),$obj_Puntobcr->getArreglo());
                     
                     //Obtener tipos de puntos BCR: oficinas, ATMs, etc
                     $obj_eventos->setCondicion("");
@@ -3614,9 +3613,23 @@
                 $fecha_final=$_POST['fecha_final'];
                 //Obtiene el id del punto bcr a consultar
                 $id_punto_bcr=$_POST['id_punto_bcr'];
-                               
+                //Obtiene el tipo de punto a consultar
+                $id_tipo_evento=$_POST['tipo_evento'];
+                //Obtiene el tipo de punto a consultar
+                $id_tipo_punto=$_POST['tipo_punto'];
+                //Obtiene el tipo de punto a consultar
+                $id_provincia=$_POST['provincia'];
                 //Establece la condición SQL para definir el rango de fechas del reporte
-                $condicion="(T_Evento.Fecha between '".$fecha_inicial."' AND '".$fecha_final."') AND (T_Evento.ID_EstadoEvento=3 OR T_Evento.ID_EstadoEvento=5) AND T_Evento.ID_PuntoBCR=".$id_punto_bcr;
+                $condicion="(T_Evento.Fecha between '".$fecha_inicial."' AND '".$fecha_final."') AND (T_Evento.ID_EstadoEvento=3 OR T_Evento.ID_EstadoEvento=5)";
+                if($id_punto_bcr!=0){
+                    $condicion.=" AND T_Evento.ID_PuntoBCR=".$id_punto_bcr;
+                } if($id_tipo_evento!=0){
+                    $condicion.=" AND T_Evento.ID_Tipo_Evento=".$id_tipo_evento;
+                } if($id_tipo_punto!=0){
+                    $condicion.=" AND T_Evento.ID_Tipo_Punto=".$id_tipo_punto;
+                } if($id_provincia!=0){
+                    $condicion.=" AND T_Evento.ID_Provincia=".$id_provincia;
+                }
                             
                 //Establece la condicion de la consulta
                 $obj_eventos->setCondicion($condicion);
@@ -3664,20 +3677,18 @@
                         if(count($ultimo_seguimiento_asociado)>0){
                             if ($x==0){
                                 //Agrega el resultado de la consulta a una variable específica
-                                $detalle_y_ultimo_usuario= array(['Detalle'=>"Fecha: ".date_format(date_create($ultimo_seguimiento_asociado[0]['Fecha']), 'd/m/Y').".Hora: ".$ultimo_seguimiento_asociado[0]['Hora'].". ".$ultimo_seguimiento_asociado[0]['Detalle']]+['Usuario'=>$ultimo_seguimiento_asociado[0]['Nombre_Usuario']." ".$ultimo_seguimiento_asociado[0]['Apellido']]);
-        //                     
+                                $detalle_y_ultimo_usuario= array(array('Detalle'=>"Fecha: ".date_format(date_create($ultimo_seguimiento_asociado[0]['Fecha']), 'd/m/Y').".Hora: ".$ultimo_seguimiento_asociado[0]['Hora'].". ".$ultimo_seguimiento_asociado[0]['Detalle'],'Usuario'=>$ultimo_seguimiento_asociado[0]['Nombre_Usuario']." ".$ultimo_seguimiento_asociado[0]['Apellido']));
                             }else{
                                 //En caso de que la variable ya contenga datos, procede a concatenar el resultado obtenido
-                                $detalle_y_ultimo_usuario = array_merge($detalle_y_ultimo_usuario,array(['Detalle'=>"Fecha: ".date_format(date_create($ultimo_seguimiento_asociado[0]['Fecha']), 'd/m/Y').".Hora: ".$ultimo_seguimiento_asociado[0]['Hora'].". ".$ultimo_seguimiento_asociado[0]['Detalle']]+['Usuario'=>$ultimo_seguimiento_asociado[0]['Nombre_Usuario']." ".$ultimo_seguimiento_asociado[0]['Apellido']]));
-        //                      
+                                $detalle_y_ultimo_usuario = array_merge($detalle_y_ultimo_usuario,array(array('Detalle'=>"Fecha: ".date_format(date_create($ultimo_seguimiento_asociado[0]['Fecha']), 'd/m/Y').".Hora: ".$ultimo_seguimiento_asociado[0]['Hora'].". ".$ultimo_seguimiento_asociado[0]['Detalle'], 'Usuario'=>$ultimo_seguimiento_asociado[0]['Nombre_Usuario']." ".$ultimo_seguimiento_asociado[0]['Apellido'])));   
                             }
                         }else{
                             //En caso de que no existan registros, agrega la validación correspondiente y un mensaje informativo al respecto para el usuario
                             if ($x==0){
-                                $detalle_y_ultimo_usuario= array(['Detalle'=>"No hay seguimientos asociados a este evento. Para agregar uno oprima el link:'Gestionar Seguimiento de la fila respectiva.'"]+['Usuario'=>$params[$x]['Nombre_Usuario']." ".$params[$x]['Apellido']]);
+                                $detalle_y_ultimo_usuario= array(array('Detalle'=>"No hay seguimientos asociados a este evento. Para agregar uno oprima el link:'Gestionar Seguimiento de la fila respectiva.'",'Usuario'=>$params[$x]['Nombre_Usuario']." ".$params[$x]['Apellido']));
                             }else{
                              //En caso de que la variable ya contenga información, procede a concatenar el vector de resultados
-                                $detalle_y_ultimo_usuario = array_merge($detalle_y_ultimo_usuario,array(['Detalle'=>"No hay seguimientos asociados a este evento. Para agregar uno oprima el link:'Gestionar Seguimiento de la fila respectiva.'"]+['Usuario'=>$params[$x]['Nombre_Usuario']." ".$params[$x]['Apellido']]));
+                                $detalle_y_ultimo_usuario = array_merge($detalle_y_ultimo_usuario,array(array('Detalle'=>"No hay seguimientos asociados a este evento. Para agregar uno oprima el link:'Gestionar Seguimiento de la fila respectiva.'",'Usuario'=>$params[$x]['Nombre_Usuario']." ".$params[$x]['Apellido'])));
                             }
                         }   
                         
@@ -5316,20 +5327,20 @@
                     $fp = fopen($ruta,"a+");
                     //Cierra el archivo
                     fclose($fp);
-
+                    $cadena_oficiales="";
                     $obj_personal=new cls_personal_externo();
                     $fecha_actual= getdate();
                     $fecha_actual= $fecha_actual['year']."-".$fecha_actual['mon']."-".$fecha_actual['mday'];
 
-                    $obj_personal->setCondicion("(Fecha_Vencimiento_Portacion<'".$fecha_actual."' AND Fecha_Vencimiento_Portacion<> '0000-00-00' AND Validado=1 ) "
-                            . "OR (Fecha_Vencimiento_Residencia<'".$fecha_actual."' AND Fecha_Vencimiento_Residencia<>'0000-00-00' AND Validado=1) "
-                            . "OR (Fecha_Salida<'".$fecha_actual."' AND Fecha_Salida<>'0000-00-00' AND Validado=1)");
+                    $obj_personal->setCondicion("(Fecha_Vencimiento_Portacion<'".$fecha_actual."' AND Fecha_Vencimiento_Portacion<> '0000-00-00' AND Fecha_Vencimiento_Portacion<> '' AND Validado=1 ) "
+                            . "OR (Fecha_Vencimiento_Residencia<'".$fecha_actual."' AND Fecha_Vencimiento_Residencia<>'0000-00-00' AND Fecha_Vencimiento_Residencia<>'' AND Validado=1) "
+                            . "OR (Fecha_Salida<'".$fecha_actual."' AND Fecha_Salida<>'0000-00-00' AND Fecha_Salida<>'' AND Validado=1)");
                     $obj_personal->obtiene_todo_el_personal_externo();
                     $params= $obj_personal->getArreglo();
 
                     $obj_personal->invalidar_personas_automatico();
 
-                    $cadena_oficiales="";
+                    
                     // Recorre la información del vector 
                     for ($i = 0; $i < count($params); $i++) {
                         //Toma la información de cada visita en una variable cadena
@@ -5453,106 +5464,9 @@
                         }
                     }
                 }
-                break;
-            case "Asistencia":
-                //Esta revision (06:00 am), se encarga de revisar marcas de entrada de las 08:00 a las 16:00 del día anterior
-                //Marcas de salida anticipadas, en día libre, vacaciones o incapacidad o si marca de salida de las 16:00 a las 00:00 del día anterior    
-                if(date("H:i:s", $time)>='05:50:00' && date("H:i:s", $time)<='06:10:00'){
-                    $ruta=  $raiz."Cuenta_Visitas_Oriel/Ejecucion_Procesos/".date("Ymd", $time)." Asistencia_mañana.txt";
-                    if(!file_exists($ruta)){
-                        //Abre el archivo , lo crea si no lo encuentra
-                        $fp = fopen($ruta,"a+");
-                        //Cierra el archivo
-                        fclose($fp);
-                        
-                        $obj_marca = new cls_marca_usuario();
-                        
-                        //Obtiene todos los horarios disponibles del día anterior
-                        $fecha = date('Y-m-j H:i:s');
-                        $fecha_actual = strtotime('-1 day',strtotime($fecha));
-                        $fecha_actual = date('Y-m-j', $fecha_actual);
-                        
-                        $obj_horario->setCondicion("(T_HorarioUsuario.Fecha_Inicio<='".$fecha_actual."' AND T_HorarioUsuario.Fecha_Final>='".$fecha_actual."') AND T_HorarioUsuario.Estado=1");
-                        $obj_horario->obtener_horarios();
-                        $horarios = $obj_horario->getArreglo();
-                        
-                        $tam=count($horarios);
-                        for($i=0;$i<$tam;$i++){
-                            if($horario_usuario[$i]['Tipo_Horario']=='Vacaciones'){
-                                $id_horario= $i;
-                                break;
-                            } if ($horario_usuario[$i]['Tipo_Horario']=='Incapacidad'){
-                                $id_horario= $i;
-                                break;
-                            }if($horario_usuario[$i]['Tipo_Horario']=='Normal'){
-                                $id_horario= $i;
-                            }
-                        }
-                        $fecha_actual= getdate();
-                        $horario_turno[0]= "";
-                        if(isset($id_horario)){
-                            switch ($fecha_actual['weekday']) {
-                                case 'Monday':
-                                    $horario_turno[0] = array_merge((['Hora_Entrada' =>($horario_usuario[$id_horario]['Hora_Entrada_Lunes'])]));
-                                    $horario_turno[0] = array_merge((['Hora_Salida' =>($horario_usuario[$id_horario]['Hora_Salida_Lunes'])]),$horario_turno[0]);
-                                    $horario_turno[0] = array_merge((['Tipo_Horario' =>($horario_usuario[$id_horario]['Tipo_Horario'])]),$horario_turno[0]);
-                                    break;
-                                case 'Tuesday':
-                                    $horario_turno[0] = array_merge((['Hora_Entrada' =>($horario_usuario[$id_horario]['Hora_Entrada_Martes'])]));
-                                    $horario_turno[0] = array_merge((['Hora_Salida' =>($horario_usuario[$id_horario]['Hora_Salida_Martes'])]),$horario_turno[0]);
-                                    $horario_turno[0] = array_merge((['Tipo_Horario' =>($horario_usuario[$id_horario]['Tipo_Horario'])]),$horario_turno[0]);
-                                    break;
-                                case 'Wednesday':
-                                    $horario_turno[0] = array_merge((['Hora_Entrada' =>($horario_usuario[$id_horario]['Hora_Entrada_Miercoles'])]));
-                                    $horario_turno[0] = array_merge((['Hora_Salida' =>($horario_usuario[$id_horario]['Hora_Salida_Miercoles'])]),$horario_turno[0]);
-                                    $horario_turno[0] = array_merge((['Tipo_Horario' =>($horario_usuario[$id_horario]['Tipo_Horario'])]),$horario_turno[0]);
-                                    break;
-                                case 'Thursday':
-                                    $horario_turno[0] = array_merge((['Hora_Entrada' =>($horario_usuario[$id_horario]['Hora_Entrada_Jueves'])]));
-                                    $horario_turno[0] = array_merge((['Hora_Salida' =>($horario_usuario[$id_horario]['Hora_Salida_Jueves'])]),$horario_turno[0]);
-                                    $horario_turno[0] = array_merge((['Tipo_Horario' =>($horario_usuario[$id_horario]['Tipo_Horario'])]),$horario_turno[0]);
-                                    break;
-                                case 'Friday':
-                                    $horario_turno[0] = array_merge((['Hora_Entrada' =>($horario_usuario[$id_horario]['Hora_Entrada_Viernes'])]));
-                                    $horario_turno[0] = array_merge((['Hora_Salida' =>($horario_usuario[$id_horario]['Hora_Salida_Viernes'])]),$horario_turno[0]);
-                                    $horario_turno[0] = array_merge((['Tipo_Horario' =>($horario_usuario[$id_horario]['Tipo_Horario'])]),$horario_turno[0]);
-                                    break;
-                                case 'Saturday':
-                                    $horario_turno[0] = array_merge((['Hora_Entrada' =>($horario_usuario[$id_horario]['Hora_Entrada_Sabado'])]));
-                                    $horario_turno[0] = array_merge((['Hora_Salida' =>($horario_usuario[$id_horario]['Hora_Salida_Sabado'])]),$horario_turno[0]);
-                                    $horario_turno[0] = array_merge((['Tipo_Horario' =>($horario_usuario[$id_horario]['Tipo_Horario'])]),$horario_turno[0]);
-                                    break;
-                                case 'Sunday':
-                                    $horario_turno[0] = array_merge((['Hora_Entrada' =>($horario_usuario[$id_horario]['Hora_Entrada_Domingo'])]));
-                                    $horario_turno[0] = array_merge((['Hora_Salida' =>($horario_usuario[$id_horario]['Hora_Salida_Domingo'])]),$horario_turno[0]);
-                                    $horario_turno[0] = array_merge((['Tipo_Horario' =>($horario_usuario[$id_horario]['Tipo_Horario'])]),$horario_turno[0]);
-                                    break;
-                            }
-                        } else {
-                            $horario_turno[0] = array_merge((['Hora_Entrada' =>("NA")]));
-                            $horario_turno[0] = array_merge((['Hora_Salida' =>("NA")]),$horario_turno[0]);
-                            $horario_turno[0] = array_merge((['Tipo_Horario' =>("NA")]),$horario_turno[0]);
-                        }
-                    }
-                }
-                
-                case "Procesos_Rapid_Eye":
-                                              
-                    $obj_rapid_eye=new cls_rapid_eye_db();
-                    $obj_rapid_eye->setCondicion("iType=0");
-                    $obj_rapid_eye->obtiene_todos_los_sitios_de_rapid_eye();
-                             
-                    $params=$obj_rapid_eye->getArreglo();
-                    echo '<pre>';
-                    print_r($params);
-                    echo '</pre>';
-                    
-                
-                break;       
-         }
+                break;                              
+        }
         //Establece la ruta del archivo txt que lleva el control de visitas  a la pagina
-       
-        
     }
     
     /////////////////////////////////////////////////////////////////////////////
@@ -5993,16 +5907,16 @@
                     //Distritos
                 $obj_Puntobcr->setCondicion("");
                 $obj_Puntobcr->obtiene_distritos();
-                $distritos = array_merge(array(['ID_Distrito'=>0]+['Nombre_Distrito'=>""]),$obj_Puntobcr->getArreglo());
+                $distritos = array_merge(array(array('ID_Distrito'=>0,'Nombre_Distrito'=>"")),$obj_Puntobcr->getArreglo());
                     //Cantones
                 $obj_Puntobcr->setCondicion("");
                 $obj_Puntobcr->obtiene_cantones();
-                $cantones   = array_merge(array(['ID_Canton'=>0]+['Nombre_Canton'=>""]),$obj_Puntobcr->getArreglo());
+                $cantones   = array_merge(array(array('ID_Canton'=>0,'Nombre_Canton'=>"")),$obj_Puntobcr->getArreglo());
                     //Provincias
                 $obj_Puntobcr->setCondicion("");
                 $obj_Puntobcr->obtiene_provincias();
-                $provincias = array_merge(array(['ID_Provincia'=>"0"]+['Nombre_Provincia'=>""]),$obj_Puntobcr->getArreglo());
-                
+                $provincias = array_merge(array(array("ID_Provincia"=>"0","Nombre_Provincia"=>"")),$obj_Puntobcr->getArreglo());
+
                 //obtiene las areas de apoyo del sitio
                 $obj_areasapoyo->setCondicion("T_PuntoBCRAreaApoyo.ID_PuntoBCR='".$_GET['id']."'");
                 $obj_areasapoyo->obtiene_todos_las_areas_apoyo();
@@ -6185,9 +6099,18 @@
             $id_tipo_punto_bcr= $_POST['id_tipo_punto_bcr'];
             $id_provincia= $_POST['id_provincia'];
             
-            $obj_ev->setTipo_punto($id_tipo_punto_bcr);
-            $obj_ev->setProvincia($id_provincia);
+            //$obj_ev->setTipo_punto($id_tipo_punto_bcr);
+            //$obj_ev->setProvincia($id_provincia);
             
+            $obj_ev->setCondicion("ID_Tipo_Punto=".$id_tipo_punto_bcr." AND t_Provincia.ID_Provincia=".$id_provincia);
+            if($id_tipo_punto_bcr==0){
+                $obj_ev->setCondicion("t_Provincia.ID_Provincia=".$id_provincia);
+                $html='<option value="0">Todos</option>';
+            }
+            if($id_provincia==0){
+                $obj_ev->setCondicion("ID_Tipo_Punto=".$id_tipo_punto_bcr);
+                $html='<option value="0">Todos</option>';
+            }
             $obj_ev->filtra_sitios_bcr_bitacora();
             $sitios=$obj_ev->getArreglo(); 
             $tam = count($sitios);
@@ -6781,11 +6704,6 @@
             $obj_personal->setCondicion("T_Personal.ID_Persona='".$_GET['id']."'");
             $obj_personal->obtiene_todo_el_personal_modulo_personas();
             $params= $obj_personal->getArreglo();
-            
-            //Obtiene empresa remesera
-            $obj_empresa->setCondicion("");
-            $obj_empresa->obtiene_todas_las_empresas();
-            $empresas= $obj_empresa->getArreglo();
 				
             //Obtiene Unidades Ejecutoras
             $obj_unidad_ejecutora->setCondicion("");
@@ -7046,15 +6964,15 @@
             //Distritos
             $obj_Puntobcr->setCondicion("");
             $obj_Puntobcr->obtiene_distritos();
-            $distritos = array_merge(array(['ID_Distrito'=>0]+['Nombre_Distrito'=>""]),$obj_Puntobcr->getArreglo());
+            $distritos = array_merge(array(array('ID_Distrito'=>0,'Nombre_Distrito'=>"")),$obj_Puntobcr->getArreglo());
             //Cantones
             $obj_Puntobcr->setCondicion("");
             $obj_Puntobcr->obtiene_cantones();
-            $cantones   = array_merge(array(['ID_Canton'=>0]+['Nombre_Canton'=>""]),$obj_Puntobcr->getArreglo());
+            $cantones   = array_merge(array(array('ID_Canton'=>0,'Nombre_Canton'=>"")),$obj_Puntobcr->getArreglo());
             //Provincias
             $obj_Puntobcr->setCondicion("");
             $obj_Puntobcr->obtiene_provincias();
-            $provincias = array_merge(array(['ID_Provincia'=>0]+['Nombre_Provincia'=>""]),$obj_Puntobcr->getArreglo());
+            $provincias = array_merge(array(array('ID_Provincia'=>0,'Nombre_Provincia'=>"")),$obj_Puntobcr->getArreglo());
             
             if($_GET['id']==0){
                 $params[0]['ID_Area_Apoyo']=0;
@@ -8072,12 +7990,12 @@
                     $obj_personal->setCondicion("ID_Persona='".$params[$i]['ID_Persona']."'");
                     $obj_personal->obtener_personas_prontuario();
                     $persona = $obj_personal->getArreglo();
-                    $params[$i] = array_merge((['Nombre_Persona' =>($persona[0]['Apellido_Nombre'])]),(['Correo' =>($persona[0]['Correo'])]),$params[$i]);
+                    $params[$i] = array_merge(array('Nombre_Persona' =>($persona[0]['Apellido_Nombre'])),(array('Correo' =>($persona[0]['Correo']))),$params[$i]);
                 } else{
                     $obj_externo->setCondicion("T_PersonalExterno.ID_Persona_Externa='".$params[$i]['ID_Persona']."'");
                     $obj_externo->obtiene_todo_el_personal_externo();
                     $persona = $obj_externo->getArreglo();
-                    $params[$i] = array_merge((['Nombre_Persona' =>($persona[0]['Apellido']." ".$persona[0]['Nombre'])]),(['Correo' =>($persona[0]['Correo'])]),$params[$i]);
+                    $params[$i] = array_merge((array('Nombre_Persona' =>($persona[0]['Apellido']." ".$persona[0]['Nombre']))),(array('Correo' =>($persona[0]['Correo']))),$params[$i]);
                 }
             }
             //Obtiene la fecha del servidor en un arreglo
@@ -8670,19 +8588,19 @@
             //Ejecuta la consulta SQL
             $obj_Puntobcr->obtiene_distritos();
             //Asigna el resultado a una variable tipo vector
-            $distritos = array_merge(array(['ID_Distrito'=>0]+['Nombre_Distrito'=>""]),$obj_Puntobcr->getArreglo());
+            $distritos = array_merge(array(array('ID_Distrito'=>"0",'Nombre_Distrito'=>"")),$obj_Puntobcr->getArreglo());
             //Cantones
             $obj_Puntobcr->setCondicion("");
             //Ejecuta la consulta SQL
             $obj_Puntobcr->obtiene_cantones();
             //Obtiene el resultado en una variable tipo vector
-            $cantones   = array_merge(array(['ID_Canton'=>0]+['Nombre_Canton'=>""]),$obj_Puntobcr->getArreglo());
+            $cantones   = array_merge(array(array('ID_Canton'=>"0",'Nombre_Canton'=>"")),$obj_Puntobcr->getArreglo());
             //Provincias
             $obj_Puntobcr->setCondicion("");
             //Ejecuta la consulta
             $obj_Puntobcr->obtiene_provincias();
             //Asigna el resultado a una variable tipo vector
-            $provincias = array_merge(array(['ID_Provincia'=>"0"]+['Nombre_Provincia'=>""]),$obj_Puntobcr->getArreglo());
+            $provincias = array_merge(array(array('ID_Provincia'=>"0",'Nombre_Provincia'=>"")),$obj_Puntobcr->getArreglo());
                 
                 
             //Obtiene Estado Civil
@@ -10274,6 +10192,7 @@
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }  
     } 
+    
     public function reporte_controles_de_video_listar(){
         if(isset($_SESSION['nombre'])){
             $obj_pm = new cls_puestos_de_monitoreo();
@@ -10498,8 +10417,8 @@
                          $turno_Monitoreo=" and ((t_bitacorarevisionesvideo.Hora_Inicia_Revision BETWEEN '21:54:00' and '23:59:00') or (t_bitacorarevisionesvideo.Hora_Inicia_Revision BETWEEN '00:00:00' and '05:56:00')) ";                                                   
                          $nombre_turno="noche";
                          $esperado_grupal=array("mes"=>"Esperado Grupal Mensual","numFilas"=>"60760");
-                         //$esperado_individual=array();
-                         $esperado_individual=array("Nombre"=>"Esperado Individual","TOTAL"=>"9800","Apellido"=>" Mensual");
+                         $$esperado_individual=array();
+                         $esperado_individual[]=array("Nombre"=>"Esperado Individual","TOTAL"=>"9800","Apellido"=>" Mensual");
                      }
                      $obj_reporte->setCondicion("(t_bitacorarevisionesvideo.Fecha_Inicia_Revision BETWEEN '".$fecha_inicio."' AND '".$fecha_fin."')". $turno_Monitoreo);
                      $titulo = "Cantidad de Revisiones por Equipo de Trabajo en Modulo de Control de Video (un turno específico(".$nombre_turno.")".", ordenado por mes).";
@@ -10750,12 +10669,12 @@
                     $obj_personal->setCondicion("ID_Persona='".$params[$i]['ID_Persona']."'");
                     $obj_personal->obtener_personas_prontuario();
                     $persona = $obj_personal->getArreglo();
-                    $params[$i] = array_merge((['Nombre_Persona' =>($persona[0]['Apellido_Nombre'])]),$params[$i]);
+                    $params[$i] = array_merge((array('Nombre_Persona' =>($persona[0]['Apellido_Nombre']))),$params[$i]);
                 } else{
                     $obj_externo->setCondicion("T_PersonalExterno.ID_Persona_Externa='".$params[$i]['ID_Persona']."'");
                     $obj_externo->obtiene_todo_el_personal_externo();
                     $persona = $obj_externo->getArreglo();
-                    $params[$i] = array_merge((['Nombre_Persona' =>($persona[0]['Apellido']." ".$persona[0]['Nombre'])]),$params[$i]);
+                    $params[$i] = array_merge((array('Nombre_Persona' =>($persona[0]['Apellido']." ".$persona[0]['Nombre']))),$params[$i]);
                 }
             }
             
@@ -10766,7 +10685,7 @@
                 $obj_cencon->setCondicion("(Hora_Apertura>'".$hora_inicio."' AND Hora_Apertura<'".$hora_final."') AND Fecha_Apertura between '".$fecha_inicio."' AND '".$fecha_fin."'");
                 $obj_cencon->informacion_reporte();
                 $total= $obj_cencon->getArreglo();
-                $reporte_aperturas[$i] = array_merge((['Horas' =>($hora_inicio.'-'.$hora_final)]),$total[0]);
+                $reporte_aperturas[$i] = array_merge((array('Horas' =>($hora_inicio.'-'.$hora_final))),$total[0]);
             }
 //            echo "<pre>";
 //            print_r($reporte_aperturas);
@@ -10787,6 +10706,7 @@
             $obj_personal = new cls_personal();
             $obj_externo = new cls_personal_externo();
             $obj_usuario = new cls_usuarios();
+            $obj_Puntosbcr = new cls_puntosBCR();
             
             if(isset($_POST['fecha_inicial'])){
                 $fecha_inicio = $_POST['fecha_inicial'];
@@ -10797,7 +10717,16 @@
                 $fecha_fin= date("Y-m-d");
                 //$titulo = "Eventos de Cencon de hoy: ".$fecha_inicio;
             }
-            $obj_prueba->setCondicion("(T_PruebaAlarma.Fecha between '".$fecha_inicio."' AND '".$fecha_fin."')");
+            
+            $condicion="(T_PruebaAlarma.Fecha between '".$fecha_inicio."' AND '".$fecha_fin."')";
+            if(isset($_POST['punto_bcr'])|| isset($_POST['tipo_seguimiento'])){
+                if($_POST['punto_bcr']!="0"){
+                    $condicion.= " AND T_PruebaAlarma.ID_PuntoBCR=".$_POST['punto_bcr'];
+                } if($_POST['tipo_seguimiento']!="0"){
+                    $condicion.= " AND T_PruebaAlarma.Seguimiento='".$_POST['tipo_seguimiento']."'";
+                }
+            }
+            $obj_prueba->setCondicion($condicion);
             $obj_prueba->obtener_prueba_alarma();
             $prueba= $obj_prueba->getArreglo();
             
@@ -10807,58 +10736,63 @@
                     $obj_personal->setCondicion("ID_Persona='".$prueba[$i]['ID_Persona_Reporta_Apertura']."'");
                     $obj_personal->obtener_personas_prontuario();
                     $persona = $obj_personal->getArreglo();
-                    $prueba[$i] = array_merge((['Nombre_Persona_Apertura' =>($persona[0]['Apellido_Nombre'])]),$prueba[$i]);
+                    $prueba[$i] = array_merge((array('Nombre_Persona_Apertura' =>($persona[0]['Apellido_Nombre']))),$prueba[$i]);
                 } else{
                     $obj_externo->setCondicion("T_PersonalExterno.ID_Persona_Externa='".$prueba[$i]['ID_Persona_Reporta_Apertura']."'");
                     $obj_externo->obtiene_todo_el_personal_externo();
                     $persona = $obj_externo->getArreglo();
-                    $prueba[$i] = array_merge((['Nombre_Persona_Apertura' =>($persona[0]['Apellido']." ".$persona[0]['Nombre'])]),$prueba[$i]);
+                    $prueba[$i] = array_merge((array('Nombre_Persona_Apertura' =>($persona[0]['Apellido']." ".$persona[0]['Nombre']))),$prueba[$i]);
                 }
                 if($prueba[$i]['ID_Empresa_Persona_Cierra']==1){
                     $obj_personal->setCondicion("ID_Persona='".$prueba[$i]['ID_Persona_Reporta_Cierre']."'");
                     $obj_personal->obtener_personas_prontuario();
                     $persona = $obj_personal->getArreglo();
-                    $prueba[$i] = array_merge((['Nombre_Persona_Cierre' =>($persona[0]['Apellido_Nombre'])]),$prueba[$i]);
+                    $prueba[$i] = array_merge((array('Nombre_Persona_Cierre' =>($persona[0]['Apellido_Nombre']))),$prueba[$i]);
                 } else{
                     $obj_externo->setCondicion("T_PersonalExterno.ID_Persona_Externa='".$prueba[$i]['ID_Persona_Reporta_Cierre']."'");
                     $obj_externo->obtiene_todo_el_personal_externo();
                     $persona = $obj_externo->getArreglo();
-                    $prueba[$i] = array_merge((['Nombre_Persona_Cierre' =>($persona[0]['Apellido']." ".$persona[0]['Nombre'])]),$prueba[$i]);
+                    $prueba[$i] = array_merge((array('Nombre_Persona_Cierre' =>($persona[0]['Apellido']." ".$persona[0]['Nombre']))),$prueba[$i]);
                 }
                 //Obtiene la información de los Usuarios que ingresan la información a la tabla
                 if($prueba[$i]['ID_Usuario_reporte']!=null){
                     $obj_usuario->setCondicion("ID_Usuario=".$prueba[$i]['ID_Usuario_reporte']);
                     $obj_usuario->obtiene_todos_los_usuarios();
                     $persona = $obj_usuario->getArreglo();
-                    $prueba[$i] = array_merge((['Nombre_Usuario_Reporte' =>($persona[0]['Apellido']." ".$persona[0]['Nombre'])]),$prueba[$i]);
+                    $prueba[$i] = array_merge((array('Nombre_Usuario_Reporte' =>($persona[0]['Apellido']." ".$persona[0]['Nombre']))),$prueba[$i]);
                 } else{
-                    $prueba[$i] = array_merge((['Nombre_Usuario_Reporte' =>""]),$prueba[$i]);
+                    $prueba[$i] = array_merge((array('Nombre_Usuario_Reporte' =>"")),$prueba[$i]);
                 }
                 if($prueba[$i]['ID_Usuario_Prueba']!=null){
                     $obj_usuario->setCondicion("ID_Usuario=".$prueba[$i]['ID_Usuario_Prueba']);
                     $obj_usuario->obtiene_todos_los_usuarios();
                     $persona = $obj_usuario->getArreglo();
-                    $prueba[$i] = array_merge((['Nombre_Usuario_Prueba' =>($persona[0]['Apellido']." ".$persona[0]['Nombre'])]),$prueba[$i]);
+                    $prueba[$i] = array_merge((array('Nombre_Usuario_Prueba' =>($persona[0]['Apellido']." ".$persona[0]['Nombre']))),$prueba[$i]);
                 } else{
-                    $prueba[$i] = array_merge((['Nombre_Usuario_Prueba' =>""]),$prueba[$i]);
+                    $prueba[$i] = array_merge((array('Nombre_Usuario_Prueba' =>"")),$prueba[$i]);
                 }
                 if($prueba[$i]['ID_Usuario_Reporte_Cierre']!=null){
                     $obj_usuario->setCondicion("ID_Usuario=".$prueba[$i]['ID_Usuario_Reporte_Cierre']);
                     $obj_usuario->obtiene_todos_los_usuarios();
                     $persona = $obj_usuario->getArreglo();
-                    $prueba[$i] = array_merge((['Nombre_Usuario_Reporte_Cierre' =>($persona[0]['Apellido']." ".$persona[0]['Nombre'])]),$prueba[$i]);
+                    $prueba[$i] = array_merge((array('Nombre_Usuario_Reporte_Cierre' =>($persona[0]['Apellido']." ".$persona[0]['Nombre']))),$prueba[$i]);
                 } else {
-                    $prueba[$i] = array_merge((['Nombre_Usuario_Reporte_Cierre' =>""]),$prueba[$i]);
+                    $prueba[$i] = array_merge((array('Nombre_Usuario_Reporte_Cierre' =>"")),$prueba[$i]);
                 }
                 if($prueba[$i]['ID_Usuario_Cierra']!=null){
                     $obj_usuario->setCondicion("ID_Usuario=".$prueba[$i]['ID_Usuario_Cierra']);
                     $obj_usuario->obtiene_todos_los_usuarios();
                     $persona = $obj_usuario->getArreglo();
-                    $prueba[$i] = array_merge((['Nombre_Usuario_Cierra' =>($persona[0]['Apellido']." ".$persona[0]['Nombre'])]),$prueba[$i ]);
+                    $prueba[$i] = array_merge((array('Nombre_Usuario_Cierra' =>($persona[0]['Apellido']." ".$persona[0]['Nombre']))),$prueba[$i ]);
                 }else{
-                    $prueba[$i] = array_merge((['Nombre_Usuario_Cierra' =>""]),$prueba[$i]);
+                    $prueba[$i] = array_merge((array('Nombre_Usuario_Cierra' =>"")),$prueba[$i]);
                 }
             }
+            //Obtiene los puntosbcr
+            $obj_Puntosbcr->setCondicion("(T_PuntoBCR.ID_Tipo_Punto=1 OR T_PuntoBCR.ID_Tipo_Punto=5 OR T_PuntoBCR.ID_Tipo_Punto=9 OR
+                T_PuntoBCR.ID_Tipo_Punto=10 OR T_PuntoBCR.ID_Tipo_Punto=11) AND T_PuntoBCR.Estado=1 ORDER BY T_PuntoBCR.Nombre");
+            $obj_Puntosbcr->obtiene_solo_los_puntos_bcr();
+            $Oficinas = $obj_Puntosbcr->getArreglo();
             require __DIR__.'/../vistas/plantillas/rpt_prueba_alarma.php';
         }
         else {
@@ -11103,6 +11037,7 @@
                 $pendiente_puestoZ2[$i]['Mensaje']=$params[$i]['Nombre'].": ".$params[$i]['Evento'];
                 $pendiente_puestoZ2[0]['Contador']=$i+1;
             }
+            
             require __DIR__ . '/../vistas/plantillas/rpt_alerta_general.php';
         }
         else {
@@ -11142,9 +11077,9 @@
                 $direcciones = $obj_ip->getArreglo();
                 //print_r($direcciones);
                 if(isset($direcciones[1]['Tipo_IP'])){
-                    $params[$i]= array_merge($telecom[$i],[($direcciones[0]['Tipo_IP'])=>($direcciones[0]['Direccion_IP'])],[($direcciones[1]['Tipo_IP'])=>($direcciones[1]['Direccion_IP'])]);
+                    $params[$i]= array_merge($telecom[$i],array(($direcciones[0]['Tipo_IP'])=>($direcciones[0]['Direccion_IP']),($direcciones[1]['Tipo_IP'])=>($direcciones[1]['Direccion_IP'])));
                 } else {
-                    $params[$i]= array_merge($telecom[$i],[($direcciones[0]['Tipo_IP'])=>($direcciones[0]['Direccion_IP'])]);
+                    $params[$i]= array_merge($telecom[$i],array(($direcciones[0]['Tipo_IP'])=>($direcciones[0]['Direccion_IP'])));
                 }
             }
 //            echo("<pre>");
@@ -11295,6 +11230,7 @@
         if(isset($_SESSION['nombre'])){
             $obj_punto = new cls_puntosBCR();
             $obj_horario = new cls_horario();
+            $obj_eventos = new cls_eventos();
             //Buscar la información de un PuntoBCR basado en el código del cajero
             $obj_punto->setCondicion("T_PuntoBCR.Codigo='".strtoupper($_POST['id'])."' AND T_PuntoBCR.Estado=1");
             $obj_punto->obtiene_todos_los_puntos_bcr();
@@ -11308,47 +11244,56 @@
             $fecha_actual= getdate();
             switch ($fecha_actual['weekday']) {
                 case 'Monday':
-                    $puntobcr[0] = array_merge((['Hora_Apertura_Publico' =>($puntobcr[0]['Hora_Apertura_Lunes'])]),$puntobcr[0]);
-                    $puntobcr[0] = array_merge((['Hora_Cierre_Publico' =>($puntobcr[0]['Hora_Cierre_Lunes'])]),$puntobcr[0]);
-                    $puntobcr[0] = array_merge((['Hora_Apertura_Agencia' =>($horariopunto[0]['Hora_Apertura_Lunes'])]),$puntobcr[0]);
-                    $puntobcr[0] = array_merge((['Hora_Cierre_Agencia' =>($horariopunto[0]['Hora_Cierre_Lunes'])]),$puntobcr[0]);
+                    $puntobcr[0] = array_merge((array('Hora_Apertura_Publico' =>($puntobcr[0]['Hora_Apertura_Lunes']))),$puntobcr[0]);
+                    $puntobcr[0] = array_merge((array('Hora_Cierre_Publico' =>($puntobcr[0]['Hora_Cierre_Lunes']))),$puntobcr[0]);
+                    $puntobcr[0] = array_merge((array('Hora_Apertura_Agencia' =>($horariopunto[0]['Hora_Apertura_Lunes']))),$puntobcr[0]);
+                    $puntobcr[0] = array_merge((array('Hora_Cierre_Agencia' =>($horariopunto[0]['Hora_Cierre_Lunes']))),$puntobcr[0]);
                     break;
                 case 'Tuesday':
-                    $puntobcr[0] = array_merge((['Hora_Apertura_Publico' =>($puntobcr[0]['Hora_Apertura_Martes'])]),$puntobcr[0]);
-                    $puntobcr[0] = array_merge((['Hora_Cierre_Publico' =>($puntobcr[0]['Hora_Cierre_Martes'])]),$puntobcr[0]);
-                    $puntobcr[0] = array_merge((['Hora_Apertura_Agencia' =>($horariopunto[0]['Hora_Apertura_Martes'])]),$puntobcr[0]);
-                    $puntobcr[0] = array_merge((['Hora_Cierre_Agencia' =>($horariopunto[0]['Hora_Cierre_Martes'])]),$puntobcr[0]);
+                    $puntobcr[0] = array_merge((array('Hora_Apertura_Publico' =>($puntobcr[0]['Hora_Apertura_Martes']))),$puntobcr[0]);
+                    $puntobcr[0] = array_merge((array('Hora_Cierre_Publico' =>($puntobcr[0]['Hora_Cierre_Martes']))),$puntobcr[0]);
+                    $puntobcr[0] = array_merge((array('Hora_Apertura_Agencia' =>($horariopunto[0]['Hora_Apertura_Martes']))),$puntobcr[0]);
+                    $puntobcr[0] = array_merge((array('Hora_Cierre_Agencia' =>($horariopunto[0]['Hora_Cierre_Martes']))),$puntobcr[0]);
                     break;
                 case 'Wednesday':
-                    $puntobcr[0] = array_merge((['Hora_Apertura_Publico' =>($puntobcr[0]['Hora_Apertura_Miercoles'])]),$puntobcr[0]);
-                    $puntobcr[0] = array_merge((['Hora_Cierre_Publico' =>($puntobcr[0]['Hora_Cierre_Miercoles'])]),$puntobcr[0]);
-                    $puntobcr[0] = array_merge((['Hora_Apertura_Agencia' =>($horariopunto[0]['Hora_Apertura_Miercoles'])]),$puntobcr[0]);
-                    $puntobcr[0] = array_merge((['Hora_Cierre_Agencia' =>($horariopunto[0]['Hora_Cierre_Miercoles'])]),$puntobcr[0]);
+                    $puntobcr[0] = array_merge((array('Hora_Apertura_Publico' =>($puntobcr[0]['Hora_Apertura_Miercoles']))),$puntobcr[0]);
+                    $puntobcr[0] = array_merge((array('Hora_Cierre_Publico' =>($puntobcr[0]['Hora_Cierre_Miercoles']))),$puntobcr[0]);
+                    $puntobcr[0] = array_merge((array('Hora_Apertura_Agencia' =>($horariopunto[0]['Hora_Apertura_Miercoles']))),$puntobcr[0]);
+                    $puntobcr[0] = array_merge((array('Hora_Cierre_Agencia' =>($horariopunto[0]['Hora_Cierre_Miercoles']))),$puntobcr[0]);
                     break;
                 case 'Thursday':
-                    $puntobcr[0] = array_merge((['Hora_Apertura_Publico' =>($puntobcr[0]['Hora_Apertura_Jueves'])]),$puntobcr[0]);
-                    $puntobcr[0] = array_merge((['Hora_Cierre_Publico' =>($puntobcr[0]['Hora_Cierre_Jueves'])]),$puntobcr[0]);
-                    $puntobcr[0] = array_merge((['Hora_Apertura_Agencia' =>($horariopunto[0]['Hora_Apertura_Jueves'])]),$puntobcr[0]);
-                    $puntobcr[0] = array_merge((['Hora_Cierre_Agencia' =>($horariopunto[0]['Hora_Cierre_Jueves'])]),$puntobcr[0]);
+                    $puntobcr[0] = array_merge((array('Hora_Apertura_Publico' =>($puntobcr[0]['Hora_Apertura_Jueves']))),$puntobcr[0]);
+                    $puntobcr[0] = array_merge((array('Hora_Cierre_Publico' =>($puntobcr[0]['Hora_Cierre_Jueves']))),$puntobcr[0]);
+                    $puntobcr[0] = array_merge((array('Hora_Apertura_Agencia' =>($horariopunto[0]['Hora_Apertura_Jueves']))),$puntobcr[0]);
+                    $puntobcr[0] = array_merge((array('Hora_Cierre_Agencia' =>($horariopunto[0]['Hora_Cierre_Jueves']))),$puntobcr[0]);
                     break;
                 case 'Friday':
-                    $puntobcr[0] = array_merge((['Hora_Apertura_Publico' =>($puntobcr[0]['Hora_Apertura_Viernes'])]),$puntobcr[0]);
-                    $puntobcr[0] = array_merge((['Hora_Cierre_Publico' =>($puntobcr[0]['Hora_Cierre_Viernes'])]),$puntobcr[0]);
-                    $puntobcr[0] = array_merge((['Hora_Apertura_Agencia' =>($horariopunto[0]['Hora_Apertura_Viernes'])]),$puntobcr[0]);
-                    $puntobcr[0] = array_merge((['Hora_Cierre_Agencia' =>($horariopunto[0]['Hora_Cierre_Viernes'])]),$puntobcr[0]);
+                    $puntobcr[0] = array_merge((array('Hora_Apertura_Publico' =>($puntobcr[0]['Hora_Apertura_Viernes']))),$puntobcr[0]);
+                    $puntobcr[0] = array_merge((array('Hora_Cierre_Publico' =>($puntobcr[0]['Hora_Cierre_Viernes']))),$puntobcr[0]);
+                    $puntobcr[0] = array_merge((array('Hora_Apertura_Agencia' =>($horariopunto[0]['Hora_Apertura_Viernes']))),$puntobcr[0]);
+                    $puntobcr[0] = array_merge((array('Hora_Cierre_Agencia' =>($horariopunto[0]['Hora_Cierre_Viernes']))),$puntobcr[0]);
                     break;
                 case 'Saturday':
-                    $puntobcr[0] = array_merge((['Hora_Apertura_Publico' =>($puntobcr[0]['Hora_Apertura_Sabado'])]),$puntobcr[0]);
-                    $puntobcr[0] = array_merge((['Hora_Cierre_Publico' =>($puntobcr[0]['Hora_Cierre_Sabado'])]),$puntobcr[0]);
-                    $puntobcr[0] = array_merge((['Hora_Apertura_Agencia' =>($horariopunto[0]['Hora_Apertura_Sabado'])]),$puntobcr[0]);
-                    $puntobcr[0] = array_merge((['Hora_Cierre_Agencia' =>($horariopunto[0]['Hora_Cierre_Sabado'])]),$puntobcr[0]);
+                    $puntobcr[0] = array_merge((array('Hora_Apertura_Publico' =>($puntobcr[0]['Hora_Apertura_Sabado']))),$puntobcr[0]);
+                    $puntobcr[0] = array_merge((array('Hora_Cierre_Publico' =>($puntobcr[0]['Hora_Cierre_Sabado']))),$puntobcr[0]);
+                    $puntobcr[0] = array_merge((array('Hora_Apertura_Agencia' =>($horariopunto[0]['Hora_Apertura_Sabado']))),$puntobcr[0]);
+                    $puntobcr[0] = array_merge((array('Hora_Cierre_Agencia' =>($horariopunto[0]['Hora_Cierre_Sabado']))),$puntobcr[0]);
                     break;
                 case 'Sunday':
-                    $puntobcr[0] = array_merge((['Hora_Apertura_Publico' =>($puntobcr[0]['Hora_Apertura_Domingo'])]),$puntobcr[0]);
-                    $puntobcr[0] = array_merge((['Hora_Cierre_Publico' =>($puntobcr[0]['Hora_Cierre_Domingo'])]),$puntobcr[0]);
-                    $puntobcr[0] = array_merge((['Hora_Apertura_Agencia' =>($horariopunto[0]['Hora_Apertura_Domingo'])]),$puntobcr[0]);
-                    $puntobcr[0] = array_merge((['Hora_Cierre_Agencia' =>($horariopunto[0]['Hora_Cierre_Domingo'])]),$puntobcr[0]);
+                    $puntobcr[0] = array_merge((array('Hora_Apertura_Publico' =>($puntobcr[0]['Hora_Apertura_Domingo']))),$puntobcr[0]);
+                    $puntobcr[0] = array_merge((array('Hora_Cierre_Publico' =>($puntobcr[0]['Hora_Cierre_Domingo']))),$puntobcr[0]);
+                    $puntobcr[0] = array_merge((array('Hora_Apertura_Agencia' =>($horariopunto[0]['Hora_Apertura_Domingo']))),$puntobcr[0]);
+                    $puntobcr[0] = array_merge((array('Hora_Cierre_Agencia' =>($horariopunto[0]['Hora_Cierre_Domingo']))),$puntobcr[0]);
                     break;
+            }
+            
+            $obj_eventos->setCondicion("T_Evento.ID_PuntoBCR=".$puntobcr[0]['ID_PuntoBCR']." AND T_Evento.ID_Tipo_Evento=22 AND T_Evento.ID_EstadoEvento='1' AND T_Evento.Fecha='".date('Y-m-j')."'");
+            $obj_eventos->obtiene_todos_los_eventos();
+            $evento_pendiente= $obj_eventos->getArreglo();
+            if(isset($evento_pendiente[0]['ID_Evento'])){
+                $puntobcr[0] = array_merge(array('Evento_Pendiente' =>("1")),$puntobcr[0]);
+            } else {
+                $puntobcr[0] = array_merge(array('Evento_Pendiente' =>("0")),$puntobcr[0]);
             }
             //Convierte la información en un json para enviarlo a JavaScript
             echo json_encode($puntobcr[0], JSON_FORCE_OBJECT);
@@ -11376,48 +11321,48 @@
                     $obj_personal->setCondicion("ID_Persona='".$prueba[0]['ID_Persona_Reporta_Apertura']."'");
                     $obj_personal->obtener_personas_prontuario();
                     $persona = $obj_personal->getArreglo();
-                    $prueba[0] = array_merge((['Nombre_Persona_Apertura' =>($persona[0]['Apellido_Nombre'])]),$prueba[0]);
+                    $prueba[0] = array_merge(array('Nombre_Persona_Apertura' =>($persona[0]['Apellido_Nombre'])),$prueba[0]);
                 } else{
                     $obj_externo->setCondicion("T_PersonalExterno.ID_Persona_Externa='".$prueba[0]['ID_Persona_Reporta_Apertura']."'");
                     $obj_externo->obtiene_todo_el_personal_externo();
                     $persona = $obj_externo->getArreglo();
-                    $prueba[0] = array_merge((['Nombre_Persona_Apertura' =>($persona[0]['Apellido']." ".$persona[0]['Nombre'])]),$prueba[0]);
+                    $prueba[0] = array_merge(array('Nombre_Persona_Apertura' =>($persona[0]['Apellido']." ".$persona[0]['Nombre'])),$prueba[0]);
                 }
                 if($prueba[0]['ID_Empresa_Persona_Cierra']==1){
                     $obj_personal->setCondicion("ID_Persona='".$prueba[0]['ID_Persona_Reporta_Cierre']."'");
                     $obj_personal->obtener_personas_prontuario();
                     $persona = $obj_personal->getArreglo();
-                    $prueba[0] = array_merge((['Nombre_Persona_Cierre' =>($persona[0]['Apellido_Nombre'])]),$prueba[0]);
+                    $prueba[0] = array_merge(array('Nombre_Persona_Cierre' =>($persona[0]['Apellido_Nombre'])),$prueba[0]);
                 } else{
                     $obj_externo->setCondicion("T_PersonalExterno.ID_Persona_Externa='".$prueba[0]['ID_Persona_Reporta_Cierre']."'");
                     $obj_externo->obtiene_todo_el_personal_externo();
                     $persona = $obj_externo->getArreglo();
-                    $prueba[0] = array_merge((['Nombre_Persona_Cierre' =>($persona[0]['Apellido']." ".$persona[0]['Nombre'])]),$prueba[0]);
+                    $prueba[0] = array_merge(array('Nombre_Persona_Cierre' =>($persona[0]['Apellido']." ".$persona[0]['Nombre'])),$prueba[0]);
                 }
                 //Obtiene la información de los Usuarios que ingresan la información a la tabla
                 if($prueba[0]['ID_Usuario_reporte']!=null){
                     $obj_usuario->setCondicion("ID_Usuario=".$prueba[0]['ID_Usuario_reporte']);
                     $obj_usuario->obtiene_todos_los_usuarios();
                     $persona = $obj_usuario->getArreglo();
-                    $prueba[0] = array_merge((['Nombre_Usuario_Reporte' =>($persona[0]['Apellido']." ".$persona[0]['Nombre'])]),$prueba[0]);
+                    $prueba[0] = array_merge(array('Nombre_Usuario_Reporte' =>($persona[0]['Apellido']." ".$persona[0]['Nombre'])),$prueba[0]);
                 }
                 if($prueba[0]['ID_Usuario_Prueba']!=null){
                     $obj_usuario->setCondicion("ID_Usuario=".$prueba[0]['ID_Usuario_Prueba']);
                     $obj_usuario->obtiene_todos_los_usuarios();
                     $persona = $obj_usuario->getArreglo();
-                    $prueba[0] = array_merge((['Nombre_Usuario_Prueba' =>($persona[0]['Apellido']." ".$persona[0]['Nombre'])]),$prueba[0]);
+                    $prueba[0] = array_merge(array('Nombre_Usuario_Prueba' =>($persona[0]['Apellido']." ".$persona[0]['Nombre'])),$prueba[0]);
                 }
                 if($prueba[0]['ID_Usuario_Reporte_Cierre']!=null){
                     $obj_usuario->setCondicion("ID_Usuario=".$prueba[0]['ID_Usuario_Reporte_Cierre']);
                     $obj_usuario->obtiene_todos_los_usuarios();
                     $persona = $obj_usuario->getArreglo();
-                    $prueba[0] = array_merge((['Nombre_Usuario_Reporte_Cierre' =>($persona[0]['Apellido']." ".$persona[0]['Nombre'])]),$prueba[0]);
+                    $prueba[0] = array_merge(array('Nombre_Usuario_Reporte_Cierre' =>($persona[0]['Apellido']." ".$persona[0]['Nombre'])),$prueba[0]);
                 }
                 if($prueba[0]['ID_Usuario_Cierra']!=null){
                     $obj_usuario->setCondicion("ID_Usuario=".$prueba[0]['ID_Usuario_Cierra']);
                     $obj_usuario->obtiene_todos_los_usuarios();
                     $persona = $obj_usuario->getArreglo();
-                    $prueba[0] = array_merge((['Nombre_Usuario_Cierra' =>($persona[0]['Apellido']." ".$persona[0]['Nombre'])]),$prueba[0]);
+                    $prueba[0] = array_merge(array('Nombre_Usuario_Cierra' =>($persona[0]['Apellido']." ".$persona[0]['Nombre'])),$prueba[0]);
                 }
                 
             } else{
@@ -11455,25 +11400,25 @@
                         $obj_personal->setCondicion("T_Personal.ID_Persona='".$pruebas_anteriores[$i]['ID_Persona_Reporta_Apertura']."'");
                         $obj_personal->obtiene_todo_el_personal();
                         $persona = $obj_personal->getArreglo();
-                        $pruebas_anteriores[$i] = array_merge((['Nombre_Persona_Apertura' =>($persona[0]['Apellido_Nombre'])]),(['Cedula'=> ($persona[0]['Cedula'])]),(['Empresa'=> ($persona[0]['Empresa'])]),$pruebas_anteriores[$i]);
+                        $pruebas_anteriores[$i] = array_merge(array('Nombre_Persona_Apertura' =>($persona[0]['Apellido_Nombre'])),array('Cedula'=> ($persona[0]['Cedula'])),array('Empresa'=> ($persona[0]['Empresa'])),$pruebas_anteriores[$i]);
                     } 
                     if($pruebas_anteriores[$i]['ID_Empresa_Persona_Apertura']!=1){
                         $obj_externo->setCondicion("T_PersonalExterno.ID_Persona_Externa='".$pruebas_anteriores[$i]['ID_Persona_Reporta_Apertura']."'");
                         $obj_externo->obtiene_todo_el_personal_externo();
                         $persona = $obj_externo->getArreglo();
-                        $pruebas_anteriores[$i] = array_merge((['Nombre_Persona_Apertura' =>($persona[0]['Apellido']." ".$persona[0]['Nombre'])]),(['Cedula'=> ($persona[0]['Identificacion'])]),(['Empresa'=> ($persona[0]['Empresa'])]), $pruebas_anteriores[$i]);
+                        $pruebas_anteriores[$i] = array_merge(array('Nombre_Persona_Apertura' =>($persona[0]['Apellido']." ".$persona[0]['Nombre'])),array('Cedula'=> ($persona[0]['Identificacion'])),array('Empresa'=> ($persona[0]['Empresa'])), $pruebas_anteriores[$i]);
                     }
                     if($pruebas_anteriores[$i]['ID_Empresa_Persona_Cierra']==1){
                         $obj_personal->setCondicion("T_Personal.ID_Persona='".$pruebas_anteriores[$i]['ID_Persona_Reporta_Apertura']."'");
                         $obj_personal->obtiene_todo_el_personal();
                         $persona = $obj_personal->getArreglo();
-                        $pruebas_anteriores[$i] = array_merge((['Nombre_Persona_Cierre' =>($persona[0]['Apellido_Nombre'])]),(['Cedula_Cierre'=> ($persona[0]['Cedula'])]),(['Empresa_Cierre'=> ($persona[0]['Empresa'])]),$pruebas_anteriores[$i]);
+                        $pruebas_anteriores[$i] = array_merge(array('Nombre_Persona_Cierre' =>($persona[0]['Apellido_Nombre'])),array('Cedula_Cierre'=> ($persona[0]['Cedula'])),array('Empresa_Cierre'=> ($persona[0]['Empresa'])),$pruebas_anteriores[$i]);
                     } 
                     if($pruebas_anteriores[$i]['ID_Empresa_Persona_Cierra']!=1){
                         $obj_externo->setCondicion("T_PersonalExterno.ID_Persona_Externa='".$pruebas_anteriores[$i]['ID_Persona_Reporta_Apertura']."'");
                         $obj_externo->obtiene_todo_el_personal_externo();
                         $persona = $obj_externo->getArreglo();
-                        $pruebas_anteriores[$i] = array_merge((['Nombre_Persona_Cierre' =>($persona[0]['Apellido']." ".$persona[0]['Nombre'])]),(['Cedula_Cierre'=> ($persona[0]['Identificacion'])]),(['Empresa_Cierre'=> ($persona[0]['Empresa'])]), $pruebas_anteriores[$i]);
+                        $pruebas_anteriores[$i] = array_merge(array('Nombre_Persona_Cierre' =>($persona[0]['Apellido']." ".$persona[0]['Nombre'])),array('Cedula_Cierre'=> ($persona[0]['Identificacion'])),array('Empresa_Cierre'=> ($persona[0]['Empresa'])), $pruebas_anteriores[$i]);
                     }
                 }
                 
@@ -11700,7 +11645,7 @@
         }
     }
     
-        /*
+    /*
     //Función para verificar horarios de oficina, validar ingresos, cierres y pruebas
     //Recibe los siguientes parametros: 
     //  -Hora apertura (según el día de la semana)
@@ -11765,619 +11710,7 @@
         return $datos;
     }
     
-    
-    ////////////////////////////////////////////////////////////////////////////
-    //////////////////////Funciones para módulo asistencia//////////////////////  
-    ////////////////////////////////////////////////////////////////////////////
-    public function asistencia_personal(){
-        if(isset($_SESSION['nombre'])){
-            $obj_marca = new cls_marca_usuario();
-            $obj_horario = new cls_horario_usuario();
-            
-            //Obtiene información de marca de turno que se encuentren 15 horas atras
-            $fecha = date('Y-m-j H:i:s');
-            $nuevafecha = strtotime('-14 hour',strtotime($fecha));
-            $nuevafecha = date('Y-m-j H:i:s', $nuevafecha);
-            
-            $obj_marca->setCondicion("T_Marca.ID_Usuario=".$_SESSION['id']." AND T_Marca.Tipo_Marca='Turno' AND T_Marca.Marca_Entrada>'".$nuevafecha."'");
-            $obj_marca->obtener_marcas();
-            $marca_turno = $obj_marca->getArreglo();
-            
-            //Obtine información de marcas de descansos del dia (8 horas)
-            $fecha = date('Y-m-j H:i:s');
-            $nuevafecha = strtotime('-8 hour',strtotime($fecha));
-            $nuevafecha = date('Y-m-j H:i:s', $nuevafecha);
-            
-            $obj_marca->setCondicion("T_Marca.ID_Usuario=".$_SESSION['id']." AND T_Marca.Tipo_Marca='Descanso' AND T_Marca.Marca_Entrada>'".$nuevafecha."'");
-            $obj_marca->obtener_marcas();
-            $marca_descanso = $obj_marca->getArreglo();
-             
-            $fecha_actual= getdate();
-            
-            //Obtiene la información de los descansos del operador.
-            $obj_marca->setCondicion("T_AjusteDescanso.ID_Usuario=".$_SESSION['id']);
-            $obj_marca->obtener_descansos();
-            $info_descansos = $obj_marca->getArreglo();
-            
-            //Obtiene el o los horarios asignador al usuario
-            $fecha_actual= date("Y-m-d");
-            $obj_horario->setCondicion("T_HorarioUsuario.ID_Usuario=".$_SESSION['id']." AND (T_HorarioUsuario.Fecha_Inicio<='".$fecha_actual."' AND T_HorarioUsuario.Fecha_Final>='".$fecha_actual."') AND T_HorarioUsuario.Estado=1");
-            $obj_horario->obtener_horarios();
-            $horario_usuario = $obj_horario->getArreglo();
-            
-            $tam=count($horario_usuario);
-            for($i=0;$i<$tam;$i++){
-                if($horario_usuario[$i]['Tipo_Horario']=='Vacaciones'){
-                    $id_horario= $i;
-                    break;
-                } if ($horario_usuario[$i]['Tipo_Horario']=='Incapacidad'){
-                    $id_horario= $i;
-                    break;
-                }if($horario_usuario[$i]['Tipo_Horario']=='Normal'){
-                    $id_horario= $i;
-                }
-            }
-            $fecha_actual= getdate();
-            $horario_turno[0]= "";
-            if(isset($id_horario)){
-                switch ($fecha_actual['weekday']) {
-                    case 'Monday':
-                        $horario_turno[0] = array_merge((['Hora_Entrada' =>($horario_usuario[$id_horario]['Hora_Entrada_Lunes'])]));
-                        $horario_turno[0] = array_merge((['Hora_Salida' =>($horario_usuario[$id_horario]['Hora_Salida_Lunes'])]),$horario_turno[0]);
-                        $horario_turno[0] = array_merge((['Tipo_Horario' =>($horario_usuario[$id_horario]['Tipo_Horario'])]),$horario_turno[0]);
-                        break;
-                    case 'Tuesday':
-                        $horario_turno[0] = array_merge((['Hora_Entrada' =>($horario_usuario[$id_horario]['Hora_Entrada_Martes'])]));
-                        $horario_turno[0] = array_merge((['Hora_Salida' =>($horario_usuario[$id_horario]['Hora_Salida_Martes'])]),$horario_turno[0]);
-                        $horario_turno[0] = array_merge((['Tipo_Horario' =>($horario_usuario[$id_horario]['Tipo_Horario'])]),$horario_turno[0]);
-                        break;
-                    case 'Wednesday':
-                        $horario_turno[0] = array_merge((['Hora_Entrada' =>($horario_usuario[$id_horario]['Hora_Entrada_Miercoles'])]));
-                        $horario_turno[0] = array_merge((['Hora_Salida' =>($horario_usuario[$id_horario]['Hora_Salida_Miercoles'])]),$horario_turno[0]);
-                        $horario_turno[0] = array_merge((['Tipo_Horario' =>($horario_usuario[$id_horario]['Tipo_Horario'])]),$horario_turno[0]);
-                        break;
-                    case 'Thursday':
-                        $horario_turno[0] = array_merge((['Hora_Entrada' =>($horario_usuario[$id_horario]['Hora_Entrada_Jueves'])]));
-                        $horario_turno[0] = array_merge((['Hora_Salida' =>($horario_usuario[$id_horario]['Hora_Salida_Jueves'])]),$horario_turno[0]);
-                        $horario_turno[0] = array_merge((['Tipo_Horario' =>($horario_usuario[$id_horario]['Tipo_Horario'])]),$horario_turno[0]);
-                        break;
-                    case 'Friday':
-                        $horario_turno[0] = array_merge((['Hora_Entrada' =>($horario_usuario[$id_horario]['Hora_Entrada_Viernes'])]));
-                        $horario_turno[0] = array_merge((['Hora_Salida' =>($horario_usuario[$id_horario]['Hora_Salida_Viernes'])]),$horario_turno[0]);
-                        $horario_turno[0] = array_merge((['Tipo_Horario' =>($horario_usuario[$id_horario]['Tipo_Horario'])]),$horario_turno[0]);
-                        break;
-                    case 'Saturday':
-                        $horario_turno[0] = array_merge((['Hora_Entrada' =>($horario_usuario[$id_horario]['Hora_Entrada_Sabado'])]));
-                        $horario_turno[0] = array_merge((['Hora_Salida' =>($horario_usuario[$id_horario]['Hora_Salida_Sabado'])]),$horario_turno[0]);
-                        $horario_turno[0] = array_merge((['Tipo_Horario' =>($horario_usuario[$id_horario]['Tipo_Horario'])]),$horario_turno[0]);
-                        break;
-                    case 'Sunday':
-                        $horario_turno[0] = array_merge((['Hora_Entrada' =>($horario_usuario[$id_horario]['Hora_Entrada_Domingo'])]));
-                        $horario_turno[0] = array_merge((['Hora_Salida' =>($horario_usuario[$id_horario]['Hora_Salida_Domingo'])]),$horario_turno[0]);
-                        $horario_turno[0] = array_merge((['Tipo_Horario' =>($horario_usuario[$id_horario]['Tipo_Horario'])]),$horario_turno[0]);
-                        break;
-                }
-            } else {
-                $horario_turno[0] = array_merge((['Hora_Entrada' =>("NA")]));
-                $horario_turno[0] = array_merge((['Hora_Salida' =>("NA")]),$horario_turno[0]);
-                $horario_turno[0] = array_merge((['Tipo_Horario' =>("NA")]),$horario_turno[0]);
-            }
-            
-            //Obtiene las inconsistencias pendientes- dependiendo del rol
-            if($_SESSION['modulos']['Módulo-Asistencia de Personal']==1){
-                $obj_marca->setCondicion("T_InconsistenciaMarca.ID_Usuario=".$_SESSION['id']." AND T_InconsistenciaMarca.ID_Estado_Inconsistencia=1");
-            } if($_SESSION['modulos']['Módulo-Asistencia encargado empresa']==1){
-                $obj_marca->setCondicion("T_InconsistenciaMarca.ID_Estado_Inconsistencia=3 OR T_InconsistenciaMarca.ID_Usuario=".$_SESSION['id']);
-            } if($_SESSION['modulos']['Módulo-Asistencia encargado Banco']==1){
-                $obj_marca->setCondicion("T_InconsistenciaMarca.ID_Estado_Inconsistencia=4");
-            }
-            $obj_marca->obtener_inconsistencias_marcas();
-            $inconsistencias = $obj_marca->getArreglo();
-            $cant_inconsistencias = count($inconsistencias);
-            
-//            echo "<pre>";
-//            echo "Marcas del turno: \n";
-//            print_r($marca_turno);
-//            echo "Marcas de descanso: \n";
-//            print_r($marca_descanso);
-//            echo "Cantidad de descansos: \n";
-//            print_r($info_descansos);
-//            echo "Horario de usuario: \n";
-//            print_r($horario_turno);
-//            echo "</pre>";
-            require __DIR__ . '/../vistas/plantillas/frm_asistencia_personal.php';
-        }else {
-            $tipo_de_alerta="alert alert-warning";
-            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
-            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
-        }
-    }
-    
-    public function marca_guardar(){
-        if(isset($_SESSION['nombre'])){
-            $obj_marca = new cls_marca_usuario();
-            
-            $fecha_actual= getdate();
-            //Convierta la fecha a formto aaaa/mm/dd hh:mm
-            $fecha_actual= $fecha_actual['year']."-".$fecha_actual['mon']."-".$fecha_actual['mday'].' '.$fecha_actual['hours'].':'.$fecha_actual['minutes'].':'.$fecha_actual['seconds'];
-            
-            switch ($_POST['tipo']) {
-                case 'Entrada_Turno':
-                    $obj_marca->setUsuario($_SESSION['id']);
-                    $obj_marca->setEntrada($fecha_actual);
-                    $obj_marca->setTipo("Turno");
-                    $obj_marca->setEstado("0");
-                    $obj_marca->guardar_marca_entrada();
-                    $id_marca = $obj_marca->getArreglo();
-                    echo $id_marca[0]['ID_Marca'];
-                    break;
-                case 'Salida_Turno':
-                    $obj_marca->setId($_POST['id_marca']);
-                    $obj_marca->setSalida($fecha_actual);
-                    $obj_marca->setTipo("Turno");
-                    $obj_marca->setEstado("1");
-                    $obj_marca->guardar_marca_salida();
-                    break;
-                case 'Inicio_Descanso':
-                    $obj_marca->setUsuario($_SESSION['id']);
-                    $obj_marca->setEntrada($fecha_actual);
-                    $obj_marca->setTipo("Descanso");
-                    $obj_marca->setEstado("0");
-                    $obj_marca->guardar_marca_entrada();
-                    $id_marca = $obj_marca->getArreglo();
-                    echo $id_marca[0]['ID_Marca'];
-                    break;
-                case 'Fin_Descanso':
-                    $obj_marca->setId($_POST['id_marca']);
-                    $obj_marca->setSalida($fecha_actual);
-                    $obj_marca->setTipo("Descanso");
-                    $obj_marca->setEstado("1");
-                    $obj_marca->guardar_marca_salida();
-                    break;
-            }
-            
-        }else {
-            $tipo_de_alerta="alert alert-warning";
-            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
-            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
-        }
-    }
-    
-    public function asistencia_configuracion_usuarios(){
-        if(isset($_SESSION['nombre'])){
-            $obj_marca = new cls_marca_usuario();
-            $obj_usuario = new cls_usuarios();
-            
-            $obj_usuario->setCondicion("(T_Usuario.ID_Rol= 2 OR T_Usuario.ID_Rol= 3 OR T_Usuario.ID_Rol= 6 OR T_Usuario.ID_Rol= 5 OR T_Usuario.ID_Rol= 14) AND T_Usuario.Estado=1");
-            $obj_usuario->obtiene_todos_los_usuarios();
-            $usuarios= $obj_usuario->getArreglo();
-            
-//            echo "<pre>";
-////            print_r($usuarios);
-//            echo "</pre>";
-            require __DIR__ . '/../vistas/plantillas/frm_asistencia_configuracion_usuarios.php';
-            
-        }else {
-            $tipo_de_alerta="alert alert-warning";
-            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
-            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
-        }
-    }
-    
-    public function asistencia_buscar_descanso(){
-        if(isset($_SESSION['nombre'])){
-            $obj_marca = new cls_marca_usuario();
-            $obj_usuario = new cls_usuarios();
-            
-            $obj_marca->setCondicion("T_AjusteDescanso.ID_Usuario=".$_POST['id']);
-            $obj_marca->obtener_descansos();
-            $descansos= $obj_marca->getArreglo();
-            
-            $tam = count($descansos);
-            $html="";
-            $html.='<thead> <tr>
-                            <th style="text-align:center">Tiempo</th>
-                            <th style="text-align:center">Detalle</th>
-                            <th style="text-align:center" colspan="2">Opciones</th>
-                       <tr> </thead>
-                        <tbody>';
-            for($i=0; $i<$tam;$i++){
-                $html .='<tr>'; 
-                $html .='<td style="text-align:center">'.$descansos[$i]['Tiempo'].'</td>';
-                $html .='<td style="text-align:center">'.$descansos[$i]['Detalle'].'</td>';
-                $html .='<td style="text-align:center"><a onclick="editar_descanso('.$descansos[$i]['ID_Ajuste_Descanso'].',&#39;'.$descansos[$i]['Tiempo'].'&#39;,&#39;'.$descansos[$i]['Detalle'].'&#39;);">Editar</a></td></td>';
-                $html .='<td style="text-align:center"><a onclick="eliminar_descanso('.$descansos[$i]['ID_Ajuste_Descanso'].');">Eliminar</a></td></td>';
-                $html .='</tr>'; 
-            }  
-            $html.='</tbody> 
-                    </table>';
-            echo $html;
-        }else {
-            $tipo_de_alerta="alert alert-warning";
-            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
-            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
-        }
-    }
-    
-    public function asistencia_buscar_horarios(){
-        if(isset($_SESSION['nombre'])){
-            $obj_horario = new cls_horario_usuario();
-            $obj_usuario = new cls_usuarios();
-            
-            $obj_horario->setCondicion("T_HorarioUsuario.ID_Usuario=".$_POST['id']);
-            $obj_horario->obtener_horarios();
-            $horarios= $obj_horario->getArreglo();
-            
-            $tam = count($horarios);
-            $html="";
-            $html.='<thead> 
-                        <tr>
-                            <th style="text-align:center">Fecha Inicio</th>
-                            <th style="text-align:center">Fecha Fin</th>
-                            <th style="text-align:center">Domingo</th>
-                            <th style="text-align:center">Lunes</th>
-                            <th style="text-align:center">Martes</th>
-                            <th style="text-align:center">Miércoles</th>
-                            <th style="text-align:center">Jueves</th>
-                            <th style="text-align:center">Viernes</th>
-                            <th style="text-align:center">Sábado</th>
-                            <th style="text-align:center">Tipo</th>
-                            <th style="text-align:center">Observaciones</th>
-                       <tr> </thead>
-                        <tbody>';
-            for($i=0; $i<$tam;$i++){
-                $html .='<tr>'; 
-                $html .='<td style="text-align:center">'.$horarios[$i]['Fecha_Inicio'].'</td>';
-                $html .='<td style="text-align:center">'.$horarios[$i]['Fecha_Final'].'</td>';
-                $html .='<td style="text-align:center">'.$horarios[$i]['Hora_Entrada_Domingo'].' - '.$horarios[$i]['Hora_Salida_Domingo'].'</td>';
-                $html .='<td style="text-align:center">'.$horarios[$i]['Hora_Entrada_Lunes'].' - '.$horarios[$i]['Hora_Salida_Lunes'].'</td>';
-                $html .='<td style="text-align:center">'.$horarios[$i]['Hora_Entrada_Martes'].' - '.$horarios[$i]['Hora_Salida_Martes'].'</td>';
-                $html .='<td style="text-align:center">'.$horarios[$i]['Hora_Entrada_Miercoles'].' - '.$horarios[$i]['Hora_Salida_Miercoles'].'</td>';
-                $html .='<td style="text-align:center">'.$horarios[$i]['Hora_Entrada_Jueves'].' - '.$horarios[$i]['Hora_Salida_Jueves'].'</td>';
-                $html .='<td style="text-align:center">'.$horarios[$i]['Hora_Entrada_Viernes'].' - '.$horarios[$i]['Hora_Salida_Viernes'].'</td>';
-                $html .='<td style="text-align:center">'.$horarios[$i]['Hora_Entrada_Sabado'].' - '.$horarios[$i]['Hora_Salida_Sabado'].'</td>';
-                $html .='<td style="text-align:center">'.$horarios[$i]['Tipo_Horario'].'</td>';
-                $html .='<td style="text-align:center">'.$horarios[$i]['Observaciones'].'</td>';
-                $html .='</tr>'; 
-            }  
-            $html.='</tbody> 
-                    </table>';
-            echo $html;
-        }else {
-            $tipo_de_alerta="alert alert-warning";
-            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
-            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
-        }
-    }
-    
-    public function asistencia_ajutes_descanso_usuario(){
-        if(isset($_SESSION['nombre'])){
-            $obj_marca = new cls_marca_usuario();
-            
-            $obj_marca->setUsuario($_POST['ID_Usuario_Descanso']);
-            $obj_marca->setTiempo($_POST['tiempo_descanso']);
-            $obj_marca->setDetalle($_POST['detalle_descanso']);
-            $obj_marca->setEstado("1");
-            
-            
-            if($_POST['ID_Ajuste_Descanso']=="0"){
-                $obj_marca->setCondicion("");
-               $obj_marca->guardar_ajuste_descanso_usuario();
-            } else {
-                $obj_marca->setCondicion("ID_Ajuste_Descanso=".$_POST['ID_Ajuste_Descanso']);
-                $obj_marca->guardar_ajuste_descanso_usuario();
-            }
-        }else {
-            $tipo_de_alerta="alert alert-warning";
-            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
-            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
-        }
-    }
-    
-    public function asistencia_eliminar_descanso(){
-        if(isset($_SESSION['nombre'])){
-            $obj_marca = new cls_marca_usuario();
-            
-            $obj_marca->setCondicion("ID_Ajuste_Descanso='".$_POST['ID_Ajuste_Descanso']."' AND ID_Usuario='".$_POST['id']."'");
-            $obj_marca->eliminar_descanso_usuario();
-            
-        }else {
-            $tipo_de_alerta="alert alert-warning";
-            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
-            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
-        }
-    }
-    
-    public function asistencia_guardar_horario_usuario(){
-         if(isset($_SESSION['nombre'])){
-            $obj_horario = new cls_horario_usuario();
-            
-            $obj_horario->setId($_POST['ID_Usuario']); 
-            //Valida informacion enviada por el formulario
-            //cuando la hora es 00:00 se agregará null
-            
-            //Valida Hora de entrada domingo
-            if($_POST['entrada_domingo']=="00:00:00" || $_POST['entrada_domingo']=="00:00"){
-                $obj_horario->setHora_entrada_domingo(null);
-            }else {
-                $obj_horario->setHora_entrada_domingo($_POST['entrada_domingo']);
-            }
-            //valida hora de cierre domingo
-            if($_POST['salida_domingo']=="00:00:00"|| $_POST['salida_domingo']=="00:00"){
-                $obj_horario->setHora_salida_domingo(null);
-            }else {
-                $obj_horario->setHora_salida_domingo($_POST['salida_domingo']);
-            }
-            //valida hora de entrada lunes
-            if($_POST['entrada_lunes']=="00:00:00"|| $_POST['entrada_lunes']=="00:00"){
-                $obj_horario->setHora_entrada_lunes(null);
-            }else {
-                $obj_horario->setHora_entrada_lunes($_POST['entrada_lunes']);
-            }
-            //valida hora de cierre lunes
-            if($_POST['salida_lunes']=="00:00:00"|| $_POST['salida_lunes']=="00:00"){
-                $obj_horario->setHora_salida_lunes(null);
-            }else {
-                $obj_horario->setHora_salida_lunes($_POST['salida_lunes']);
-            }
-            //valida hora de entrada de martes
-            if($_POST['entrada_martes']=="00:00:00"|| $_POST['entrada_martes']=="00:00"){
-                $obj_horario->setHora_entrada_martes(null);
-            }else {
-                $obj_horario->setHora_entrada_martes($_POST['entrada_martes']);
-            }
-            //Valida hora de cierre de martes
-            if($_POST['salida_martes']=="00:00:00"|| $_POST['salida_martes']=="00:00"){
-                $obj_horario->setHora_salida_martes(null);
-            }else {
-                $obj_horario->setHora_salida_martes($_POST['salida_martes']);
-            }
-            //valida hora de entrada de miercoles
-            if($_POST['entrada_miercoles']=="00:00:00"|| $_POST['entrada_miercoles']=="00:00"){
-                $obj_horario->setHora_entrada_miercoles(null);
-            }else {
-                $obj_horario->setHora_entrada_miercoles($_POST['entrada_miercoles']);
-            }
-            //Valida hora de cierre de miercoles
-            if($_POST['salida_miercoles']=="00:00:00"|| $_POST['salida_miercoles']=="00:00"){
-                $obj_horario->setHora_salida_miercoles(null);
-            }else {
-                $obj_horario->setHora_salida_miercoles($_POST['salida_miercoles']);
-            }
-            //Valida hora de entrada de jueves
-            if($_POST['entrada_jueves']=="00:00:00"|| $_POST['entrada_jueves']=="00:00"){
-                $obj_horario->setHora_entrada_jueves(null);
-            }else {
-                $obj_horario->setHora_entrada_jueves($_POST['entrada_jueves']);
-            }
-            //Valida hora de cierre de jueves
-            if($_POST['salida_jueves']=="00:00:00"|| $_POST['salida_jueves']=="00:00"){
-                $obj_horario->setHora_salida_jueves(null);
-            }else {
-                $obj_horario->setHora_salida_jueves($_POST['salida_jueves']);
-            }
-            //Valida hora de entrada de viernes
-            if($_POST['entrada_viernes']=="00:00:00"|| $_POST['entrada_viernes']=="00:00"){
-                $obj_horario->setHora_entrada_viernes(null);
-            }else {
-                $obj_horario->setHora_entrada_viernes($_POST['entrada_viernes']);
-            }
-            //Valida hora cierre de viernes
-            if($_POST['salida_viernes']=="00:00:00"|| $_POST['salida_viernes']=="00:00"){
-                $obj_horario->setHora_salida_viernes(null);
-            }else {
-                $obj_horario->setHora_salida_viernes($_POST['salida_viernes']);
-            }
-            //Valida hora de entrada de sabado
-            if($_POST['entrada_sabado']=="00:00:00"|| $_POST['entrada_sabado']=="00:00"){
-                $obj_horario->setHora_entrada_sabado(null);
-            }else {
-                $obj_horario->setHora_entrada_sabado($_POST['entrada_sabado']);
-            }
-            //valida de cierre de sabado
-            if($_POST['salida_sabado']=="00:00:00"|| $_POST['salida_sabado']=="00:00"){
-                $obj_horario->setHora_salida_sabado(null);
-            }else {
-                $obj_horario->setHora_salida_sabado($_POST['salida_sabado']);
-            }
-            
-            $obj_horario->setFecha_inicio($_POST['fecha_inicio_horario']);
-            $obj_horario->setFecha_final($_POST['fecha_fin_horario']);
-            $obj_horario->setTipo_horario($_POST['tipo_horario']);
-            $obj_horario->setEstado("1");
-            $obj_horario->agregar_horario();
-            
-            header ("location:/ORIEL/index.php?ctl=asistencia_configuracion_usuarios");
-        }else {
-            $tipo_de_alerta="alert alert-warning";
-            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
-            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
-        }
-    }
-    
-    public function asistencia_lista_marcas(){
-        if(isset($_SESSION['nombre'])){
-            $obj_marcas = new cls_marca_usuario();
-            
-            //Según la fecha enviada o por defecto, define la condición de busqueda de marcas
-            if(isset($_POST['fecha_inicial'])){
-                $fecha_inicio = $_POST['fecha_inicial']." 00:00:00";
-                $fecha_fin= $_POST['fecha_final']." 23:59:59";
-                if($_SESSION['modulos']['Módulo-Asistencia encargado empresa']==1 || $_SESSION['modulos']['Módulo-Asistencia encargado Banco']==1){
-                    $obj_marcas->setCondicion("(T_Marca.Marca_Entrada between '".$fecha_inicio."' AND '".$fecha_fin."')");
-                } else{
-                    $obj_marcas->setCondicion("(T_Marca.Marca_Entrada between '".$fecha_inicio."' AND '".$fecha_fin."') AND T_Marca.ID_Usuario='".$_SESSION['id']."'");
-                }
-            } else{
-                $fecha_inicio = date("Y-m-d 00:00:00");
-                $fecha_fin= date("Y-m-d 23:59:59");
-                if($_SESSION['modulos']['Módulo-Asistencia encargado empresa']==1 || $_SESSION['modulos']['Módulo-Asistencia encargado Banco']==1){
-                    $obj_marcas->setCondicion("(T_Marca.Marca_Entrada between '".$fecha_inicio."' AND '".$fecha_fin."')");
-                } else{
-                    $obj_marcas->setCondicion("(T_Marca.Marca_Entrada between '".$fecha_inicio."' AND '".$fecha_fin."') AND T_Marca.ID_Usuario='".$_SESSION['id']."'");
-                }
-            }
-            
-            $obj_marcas->obtener_marcas();
-            $marcas = $obj_marcas->getArreglo();
-            
-            //Según la fecha enviada o por defecto, define la condición de busqueda de incosistencias
-            if(isset($_POST['fecha_inicial'])){
-                $fecha_inicio = $_POST['fecha_inicial'];
-                $fecha_fin= $_POST['fecha_final'];
-                if($_SESSION['modulos']['Módulo-Asistencia encargado empresa']==1 || $_SESSION['modulos']['Módulo-Asistencia encargado Banco']==1){
-                    $obj_marcas->setCondicion("(T_InconsistenciaMarca.Fecha_Inconsistencia between '".$fecha_inicio." 00:00:00' AND '".$fecha_fin." 23:59:59')");
-                } else{
-                    $obj_marcas->setCondicion("(T_InconsistenciaMarca.Fecha_Inconsistencia between '".$fecha_inicio." 00:00:00' AND '".$fecha_fin." 23:59:59') AND T_InconsistenciaMarca.ID_Usuario='".$_SESSION['id']."'");
-                }
-            } else{
-                $fecha_inicio = date("Y-m-d");
-                $fecha_fin= date("Y-m-d");
-                if($_SESSION['modulos']['Módulo-Asistencia encargado empresa']==1 || $_SESSION['modulos']['Módulo-Asistencia encargado Banco']==1){
-                    $obj_marcas->setCondicion("(T_InconsistenciaMarca.Fecha_Inconsistencia between '".$fecha_inicio." 00:00:00' AND '".$fecha_fin." 23:59:59')");
-                } else{
-                    $obj_marcas->setCondicion("(T_InconsistenciaMarca.Fecha_Inconsistencia between '".$fecha_inicio." 00:00:00' AND '".$fecha_fin." 23:59:59') AND T_InconsistenciaMarca.ID_Usuario='".$_SESSION['id']."'");
-                }
-            }
-            
-            $obj_marcas->obtener_inconsistencias_marcas();
-            $inconsistencias = $obj_marcas->getArreglo();
-            
-            $tam=count($inconsistencias);
-            for($i=0;$i<$tam;$i++){
-                $obj_marcas->setCondicion("T_Marca.ID_Marca=".$inconsistencias[$i]['ID_Marca']);
-                $obj_marcas->obtener_marcas();
-                $marca_temporal = $obj_marcas->getArreglo();
-                $inconsistencias[$i] = array_merge(
-                        (['Marca_Entrada' =>($marca_temporal[0]['Marca_Entrada'])]),
-                        (['Marca_Salida' =>($marca_temporal[0]['Marca_Salida'])]),
-                        (['Tipo_Marca' =>($marca_temporal[0]['Tipo_Marca'])]),
-                        $inconsistencias[$i]);
-            }
-//            echo "<pre>";
-//            print_r($inconsistencias);
-//            echo "</pre>";
-            require __DIR__ . '/../vistas/plantillas/frm_asistencia_lista_marcas.php';
-        }else {
-            $tipo_de_alerta="alert alert-warning";
-            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
-            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
-        }
-    }
-    
-    public function asistencia_generar_inconsistencia(){
-        if(isset($_SESSION['nombre'])){
-            $obj_marca = new cls_marca_usuario();
-            $obj_usuario = new cls_usuarios();
-            
-            $fecha_actual= getdate();
-            //Convierta la fecha a formto aaaa/mm/dd hh:mm
-            $fecha_actual= $fecha_actual['year']."-".$fecha_actual['mon']."-".$fecha_actual['mday'].' '.$fecha_actual['hours'].':'.$fecha_actual['minutes'].':'.$fecha_actual['seconds'];
-            
-            $obj_marca->setUsuario($_SESSION['id']);
-            $obj_marca->setId($_POST['id_marca']);
-            $obj_marca->setEntrada($fecha_actual);
-            $obj_marca->setTipo($_POST['tipo_inconsistencia']);
-            $obj_marca->setEstado("1");
-            $obj_marca->guardar_inconsistencia();
-            
-        }else {
-            $tipo_de_alerta="alert alert-warning";
-            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
-            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
-        }
-    }
-    
-    public function asistencia_inconsistencia_justificar(){
-        if(isset($_SESSION['nombre'])){
-            $obj_marcas = new cls_marca_usuario();
-            $obj_usuario = new cls_usuarios();
-            //Obtiene información de la inconsistencia
-            $obj_marcas->setCondicion("ID_Inconsistencia_Marca=".$_GET['id']);
-            $obj_marcas->obtener_inconsistencias_marcas();
-            $inconsistencia= $obj_marcas->getArreglo();
-            
-            //Agrega a la inconsistencia información de la marca
-            $obj_marcas->setCondicion("T_Marca.ID_Marca=".$inconsistencia[0]['ID_Marca']);
-            $obj_marcas->obtener_marcas();
-            $marca_temporal = $obj_marcas->getArreglo();
-            $inconsistencia[0] = array_merge(
-                (['Marca_Entrada' =>($marca_temporal[0]['Marca_Entrada'])]),
-                (['Marca_Salida' =>($marca_temporal[0]['Marca_Salida'])]),
-                (['Tipo_Marca' =>($marca_temporal[0]['Tipo_Marca'])]),
-                $inconsistencia[0]);
-            if($inconsistencia[0]['ID_Supervisor_Empresa']>0){
-                $obj_usuario->setCondicion("T_Usuario.ID_Usuario=".$inconsistencia[0]['ID_Supervisor_Empresa']);
-                $obj_usuario->obtiene_todos_los_usuarios();
-                $usuario_temp = $obj_usuario->getArreglo();
-                $inconsistencia[0] = array_merge((['Usuario_Empresa' =>($usuario_temp[0]['Nombre']." ".$usuario_temp[0]['Apellido'])]), $inconsistencia[0]);
-            } else{
-                $inconsistencia[0] = array_merge((['Usuario_Empresa' =>("")]), $inconsistencia[0]);
-            }
-            if($inconsistencia[0]['ID_Supervisor_Banco']>0){
-                $obj_usuario->setCondicion("T_Usuario.ID_Usuario=".$inconsistencia[0]['ID_Supervisor_Banco']);
-                $obj_usuario->obtiene_todos_los_usuarios();
-                $usuario_temp = $obj_usuario->getArreglo();
-                $inconsistencia[0] = array_merge((['Usuario_Banco' =>($usuario_temp[0]['Nombre']." ".$usuario_temp[0]['Apellido'])]), $inconsistencia[0]);
-            } else{
-                $inconsistencia[0] = array_merge((['Usuario_Banco' =>("")]), $inconsistencia[0]);
-            }
-            
-//            echo "<pre>";
-//            print_r($inconsistencia);
-//            echo "</pre>";
-            require __DIR__ . '/../vistas/plantillas/frm_asistencia_inconsistencia.php';
-        }else {
-            $tipo_de_alerta="alert alert-warning";
-            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
-            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
-        }
-    }
-    
-    public function asistencia_guardar_justificacion_inconsistencia(){
-        if(isset($_SESSION['nombre'])){
-            $obj_marca = new cls_marca_usuario();
-            
-            
-            switch ($_POST['tipo']) {
-                case 'Justificacion_Usuario':
-                    $obj_marca->setCondicion("T_InconsistenciaMarca.ID_Inconsistencia_Marca=".$_POST['id_inconsistencia']);
-                    $obj_marca->setJustificacion($_POST['justificacion']);
-                    $obj_marca->setEstado("3");
-                    $obj_marca->guardar_justificacion_usuario();
-                    break;
-                case 'Seguimiento_Empresa':
-                    $obj_marca->setCondicion("T_InconsistenciaMarca.ID_Inconsistencia_Marca=".$_POST['id_inconsistencia']);
-                    $obj_marca->setSeguimiento($_POST['seguimiento']);
-                    $obj_marca->setId_empresa($_SESSION['id']);
-                    $obj_marca->setEstado("4");
-                    $obj_marca->guardar_justificacion_empresa();
-                    break;
-                case 'Observaciones_Banco':
-                    $obj_marca->setCondicion("T_InconsistenciaMarca.ID_Inconsistencia_Marca=".$_POST['id_inconsistencia']);
-                    $obj_marca->setObservaciones($_POST['observaciones']);
-                    $obj_marca->setId_banco($_SESSION['id']);
-                    $obj_marca->guardar_observaciones_banco();
-                    break;
-                case 'Cambiar_Estado':
-                    $obj_marca->setCondicion("T_InconsistenciaMarca.ID_Inconsistencia_Marca=".$_POST['id_inconsistencia']);
-                    $obj_marca->setEstado($_POST['estado_inconsistencia']);
-                    $obj_marca->setId_banco($_SESSION['id']);
-                    $obj_marca->guardar_estado_inconsistencia_banco();
-                    break;
-                case 'Cambiar_Tipo':
-                    $obj_marca->setCondicion("T_InconsistenciaMarca.ID_Inconsistencia_Marca=".$_POST['id_inconsistencia']);
-                    $obj_marca->setTipo($_POST['tipo_inconsistencia']);
-                    $obj_marca->setId_banco($_SESSION['id']);
-                    $obj_marca->guardar_tipo_inconsistencia_banco();
-                    break;
-            }
-            
-            //header ("location:/ORIEL/index.php?ctl=asistencia_lista_marcas");
-        }else {
-            $tipo_de_alerta="alert alert-warning";
-            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
-            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
-        }  
+    public function solicitud_permiso(){
+        require __DIR__ . '/../vistas/plantillas/frm_permiso_solicitud.php';
     }
 }
