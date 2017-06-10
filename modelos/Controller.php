@@ -71,7 +71,8 @@
         $tipo_de_alerta="alert alert-info";
         $validacion="Verificación de Identidad";
         //Llamada al formulario correspondiente de la vista   
-        $this->ejecucion_automatico_proceso("Oficiales");        
+        $this->ejecucion_automatico_proceso("Oficiales");     
+        //$this->ejecucion_automatico_proceso("Procesos_Rapid_Eye"); 
         require __DIR__ . '/../vistas/plantillas/inicio_sesion.php'; 
     }
     
@@ -5534,6 +5535,19 @@
                         }
                     }
                 }
+                
+                case "Procesos_Rapid_Eye":
+                                              
+                    $obj_rapid_eye=new cls_rapid_eye_db();
+                    $obj_rapid_eye->setCondicion("iType=0");
+                    $obj_rapid_eye->obtiene_todos_los_sitios_de_rapid_eye();
+                             
+                    $params=$obj_rapid_eye->getArreglo();
+                    echo '<pre>';
+                    print_r($params);
+                    echo '</pre>';
+                    
+                
                 break;       
          }
         //Establece la ruta del archivo txt que lleva el control de visitas  a la pagina
@@ -10484,8 +10498,8 @@
                          $turno_Monitoreo=" and ((t_bitacorarevisionesvideo.Hora_Inicia_Revision BETWEEN '21:54:00' and '23:59:00') or (t_bitacorarevisionesvideo.Hora_Inicia_Revision BETWEEN '00:00:00' and '05:56:00')) ";                                                   
                          $nombre_turno="noche";
                          $esperado_grupal=array("mes"=>"Esperado Grupal Mensual","numFilas"=>"60760");
-                         $$esperado_individual=array();
-                         $esperado_individual[]=array("Nombre"=>"Esperado Individual","TOTAL"=>"9800","Apellido"=>" Mensual");
+                         //$esperado_individual=array();
+                         $esperado_individual=array("Nombre"=>"Esperado Individual","TOTAL"=>"9800","Apellido"=>" Mensual");
                      }
                      $obj_reporte->setCondicion("(t_bitacorarevisionesvideo.Fecha_Inicia_Revision BETWEEN '".$fecha_inicio."' AND '".$fecha_fin."')". $turno_Monitoreo);
                      $titulo = "Cantidad de Revisiones por Equipo de Trabajo en Modulo de Control de Video (un turno específico(".$nombre_turno.")".", ordenado por mes).";

@@ -14,7 +14,6 @@ class Mail_Provider{
    
        //Controlador de excepciones
        try{
-           
             $this->mail = new PHPMailer();
             //indico a la clase que use SMTP
             $this->mail->isSMTP();
@@ -26,17 +25,23 @@ class Mail_Provider{
             //$this->mail->SMTPSecure = "ssl";
             $this->mail->SMTPSecure = "tls";
             //indico el servidor de Gmail para SMTP
-            $this->mail->Host = "smtp.gmail.com";
+            //$this->mail->Host = "smtp.gmail.com";
+            $this->mail->Host = "smtp.office365.com";
             //indico el puerto que usa Gmail
             //$this->mail->Port = 465;
             //$this->mail->Port = 25;
             $this->mail->Port = 587;
 
             //indico un usuario / clave de un usuario de gmail
-            $this->mail->Username = "orielinforma@gmail.com";
-            $this->mail->Password = "holaholabcr";
-            $this->mail->SetFrom('orielinforma@gmail.com', 'Oriel Jefatura de Seguridad');
-            $this->mail->addReplyTo('orielinforma@gmail.com', 'Oriel Jefatura de Seguridad');
+            //$this->mail->Username = "orielinforma@gmail.com";
+            $this->mail->Username = "113100038@bancobcr.com";
+            //$this->mail->Password = "holaholabcr";
+            $this->mail->Password = "Entoas76.";
+            //$this->mail->SetFrom('orielinforma@gmail.com', 'Oriel Jefatura de Seguridad');
+            //$this->mail->addReplyTo('orielinforma@gmail.com', 'Oriel Jefatura de Seguridad');
+            
+            $this->mail->SetFrom('113100038@bancobcr.com', 'Prueba');
+            $this->mail->addReplyTo('113100038@bancobcr.com', 'Prueba');
           
             
             //Acapara los errores que se puedan presentar y muestra en pantalla lo correspondiente

@@ -18,7 +18,7 @@
             var tabla_html = tabla_div.outerHTML.replace(/ /g, '%20');
             tmpElemento.href = data_type + ', ' + tabla_html;
             //Asignamos el nombre a nuestro EXCEL
-            var f = new Date( )
+            var f = new Date(); 
 
             tmpElemento.download = 'Inconsistencias-Numeros de Celular '+f.getDate() + "/" + (f.getMonth() +1) + "/" + f.getFullYear()+'.xls';
             // Simulamos el click al elemento creado para descargarlo

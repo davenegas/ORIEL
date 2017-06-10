@@ -15,6 +15,9 @@ session_start();
  * para su futura utilización.
  */
 require_once __DIR__ . '/modelos/Data_Provider.php';
+require_once __DIR__ . '/modelos/Access_Provider.php';
+//Libreria de clases --> Control de BD RapidEye
+require_once __DIR__ . '/controladores/cls_rapid_eye_db.php';
 //Libreria de clases --> Control de usuarios
 require_once __DIR__ . '/controladores/cls_usuarios.php';
 //Libreria de clases --> Control de roles de usuarios
