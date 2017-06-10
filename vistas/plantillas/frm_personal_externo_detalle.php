@@ -66,7 +66,7 @@
                 <!--Fecha de nacimiento de la persona-->
                 <div class="col-md-4 espacio-abajo">
                     <label for="fecha_nacimiento">Fecha de Nacimiento</label>
-                    <input type="date" class="form-control" readonly  ALIGN="right" id="fecha_nacimiento" name="fecha_nacimiento" value="<?php echo $params[0]['Fecha_Nacimiento'];?>">
+                    <input type="date" required class="form-control" readonly  ALIGN="right" id="fecha_nacimiento" name="fecha_nacimiento" value="<?php echo $params[0]['Fecha_Nacimiento'];?>">
                 </div>
                 <!--Fecha de ingreso a la empresa externa-->
                 <div class="col-md-4 espacio-abajo">
