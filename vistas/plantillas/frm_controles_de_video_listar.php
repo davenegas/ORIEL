@@ -73,11 +73,10 @@
                 }
             }
             
-             //Valida informacion completa de formulario de proveedor
+            //Valida informacion completa de formulario de proveedor
             function no_justificar() {
                 document.getElementById('ventana_oculta_1').style.display = "none";                        
                 document.location.href="index.php?ctl=controles_de_video_listar";
-                      
             }
             
             //Funcion para agregar un nuevo tipo de telefono- formulario en blanco
@@ -368,7 +367,7 @@
                     <tr style="text-align:center" align="center">
                         <td><h4><b>Punto BCR Asociado: </b><?php echo $vector_punto_bcr[0]['Nombre'];?></h4></td>
                         <td><h4><b>Tipo Punto:</b><?php echo $vector_punto_bcr[0]['Tipo_Punto'];?></h4></td>  
-                        <td><h4><b>Cantidad de Cámaras:</b><?php echo $vector_informacion_unidad_video[0]['Camaras_Habilitadas'];?></h4></td> 
+                        <td><h4><b>Cantidad de Cámaras: </b><?php echo $vector_informacion_unidad_video[0]['Camaras_Habilitadas'];?></h4></td> 
                         <td><h4><a target="_blank" href="index.php?ctl=gestion_punto_bcr&id=
                             <?php echo $vector_punto_bcr[0]['ID_PuntoBCR']?>">Ir al Sitio</a></h4>
                         </td>

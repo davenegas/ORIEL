@@ -95,6 +95,7 @@
               <th style="text-align:center">Estado</th>
               <th style="text-align:center">Unidad Video</th>
               <th style="text-align:center">Detectado por</th>
+              <th style="text-align:center">Hora detectado</th>
               <th style="text-align:center">Detalle</th>
               <th style="text-align:center">Puesto de Monitoreo</th>
               <th style="text-align:center">Validado por</th>
@@ -126,6 +127,7 @@
                 <td style="text-align:center"><?php echo $params[$i]['Estado_Traducido'];?></td>
                 <td style="text-align:center"><?php echo $params[$i]['Descripcion'];?></td>
                 <td style="text-align:center"><?php echo $params[$i]['Detectado_Por'];?></td>
+                <td style="text-align:center"><?php echo $params[$i]['Fecha_Inicia_Revision']." / ".$params[$i]['Hora_Inicia_Revision'];?></td>
                 <td style="text-align:center"><?php echo $params[$i]['Reporta_Situacion'];?></td>
                 <td style="text-align:center"><?php echo $params[$i]['Nombre_Puesto'];?></td>
                 <td style="text-align:center" onclick="edita_validado_por('<?php echo $params[$i]['ID_Inconsistencia_Video'];?>','<?php echo $params[$i]['ID_Bitacora_Revision_Video'];?>','<?php echo $params[$i]['Estado'];?>','<?php echo $params[$i]['Tipo_Inconsistencia'];?>','<?php echo $params[$i]['Observaciones_Validacion'];?>')"><?php echo $params[$i]['Validado_Por'];?></td>

@@ -1,4 +1,4 @@
- <?php
+<?php
 
 //Definición de la clase Controller. Componente principal de la lógica del negocio. 
 class Controller{
@@ -5338,13 +5338,15 @@ class Controller{
                     $obj_personal->obtiene_todo_el_personal_externo();
                     $params= $obj_personal->getArreglo();
 
-                    $obj_personal->invalidar_personas_automatico();
+                    //$obj_personal->invalidar_personas_automatico();
 
                     
                     // Recorre la información del vector 
                     for ($i = 0; $i < count($params); $i++) {
                         //Toma la información de cada visita en una variable cadena
-                        $cadena_oficiales.='Identificacion: '.$params[$i]['Identificacion'].",";
+                        //$cadena_oficiales.='Identificacion: '.$params[$i]['Identificacion'].";\r\n";
+                        $sql = http_build_query($params[$i],null,', ');
+                        $cadena_oficiales.= $sql.";\r\n\r\n";
                     }
                     //Abre el archivo para escribirle 
                     $fp = fopen($ruta,"w+"); //no olvidar crear al archivo visitantes.txt y poner el path correcto
@@ -6148,7 +6150,7 @@ class Controller{
                 $obj_Puntobcr->setTipo_punto($_POST['Tipo_Punto']);
                 $obj_Puntobcr->setDistrito($_POST['Distrito']);
                 $obj_Puntobcr->setEmpresa($_POST['Empresa']);
-                $obj_Puntobcr->sethoraslaborales("");
+                $obj_Puntobcr->sethoraslaborales("1");
 
                 $obj_Puntobcr->guardar_punto_bcr();
 
@@ -8467,7 +8469,7 @@ class Controller{
             $tam=count($params);
             $cantidad=0;
             for ($i = 0; $i <$tam; $i++) {
-                if($params[$i]['Fecha_Vencimiento_Portacion']<>"0000-00-00" && $params[$i]['ID_Estado_Persona']<>2){
+                if($params[$i]['Fecha_Vencimiento_Portacion']<>null && $params[$i]['ID_Estado_Persona']<>2){
                     $dias = (strtotime($params[$i]['Fecha_Vencimiento_Portacion'])-strtotime($fecha_actual))/86400;
                     //echo ("Faltan ".$dias." para vencer portación de ".$params[$i]['Identificacion'])."<br>";
                     if($dias<60){
@@ -8478,7 +8480,6 @@ class Controller{
                         }else{
                             $vencidos[$cantidad]['dias']=intval($dias);
                             $vencidos[$cantidad]['mensaje']= ($params[$i]['Nombre']." ".$params[$i]['Apellido']." portación vence en <b>".intval($dias)."</b> días.");
-                            
                         }
                         $cantidad++;
                     }
@@ -9857,6 +9858,8 @@ class Controller{
     public function inconsistencias_de_video_listar() {
        if(isset($_SESSION['nombre'])){
            $obj_puesto_monitoreo = new cls_puestos_de_monitoreo();
+           
+           $obj_puesto_monitoreo->setCondicion("t_inconsistenciavideo.Estado<>1");
            $obj_puesto_monitoreo->obtiene_inconsistencias_de_video();
            $params =$obj_puesto_monitoreo->getArreglo();
            
@@ -10175,7 +10178,6 @@ class Controller{
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }
     }
-    
     
     public function reporte_tl300_en_puntos_bcr_listar() {
        if(isset($_SESSION['nombre'])){
@@ -10900,6 +10902,52 @@ class Controller{
                 }
             }
             
+            ////////////////////////////////////////////////////////////////////
+            //OBTIENE INFORMACIÓN DE LOS CONTROLES DE VIDEO
+            $obj_control_video = new cls_puestos_de_monitoreo();
+            
+            $obj_control_video->setCondicion("");
+            $obj_control_video->obtiene_todos_puestos_de_monitoreo();
+            $puestos_monitoreo = $obj_control_video->getArreglo();
+            $estado_controles ="";
+            
+            //if(date("H:i:s", $time)>='21:00:00' && date("H:i:s", $time)<='22:00:00')
+            $time = time();        
+            for ($i = 0; $i <count($puestos_monitoreo); $i++){
+                $estado_controles[$i]['Nombre']=$puestos_monitoreo[$i]['Nombre'];
+                $estado_controles[$i]['Usuario']=$puestos_monitoreo[$i]['Nombre_Completo'];
+                $estado_controles[$i]['Color']="color: black";
+                if($puestos_monitoreo[$i]['ID_Puesto_Monitoreo']>=1 &&$puestos_monitoreo[$i]['ID_Puesto_Monitoreo']<=5){
+                    if($puestos_monitoreo[$i]['ID_Usuario']==0){
+                        $estado_controles[$i]['Color']="color: red";
+                    }
+                }
+                if($puestos_monitoreo[$i]['ID_Puesto_Monitoreo']==6){
+                    if(date("H:i:s", $time)>='06:30:00' && date("H:i:s", $time)<='19:30:00' && $puestos_monitoreo[$i]['ID_Usuario']==0){
+                        $estado_controles[$i]['Color']="color: red";
+                    }
+                }
+                if($puestos_monitoreo[$i]['ID_Puesto_Monitoreo']==7){
+                    if(date("H:i:s", $time)>='08:00:00' && date("H:i:s", $time)<='16:00:00' && $puestos_monitoreo[$i]['ID_Usuario']==0){
+                        $estado_controles[$i]['Color']="color: red";
+                    }
+                }
+                if($puestos_monitoreo[$i]['ID_Puesto_Monitoreo']==8){
+                    if(date("H:i:s", $time)>='10:00:00' && date("H:i:s", $time)<='18:00:00' && $puestos_monitoreo[$i]['ID_Usuario']==0){
+                        $estado_controles[$i]['Color']="color: red";
+                    }
+                }
+                if($puestos_monitoreo[$i]['ID_Puesto_Monitoreo']==9){
+                    if(date("H:i:s", $time)<='07:00:00' || date("H:i:s", $time)>='12:00:00' && $puestos_monitoreo[$i]['ID_Usuario']==0){
+                        $estado_controles[$i]['Color']="color: red";
+                    }
+                }
+                if($puestos_monitoreo[$i]['ID_Puesto_Monitoreo']==10){
+                    if(date("H:i:s", $time)>='12:00:00' && date("H:i:s", $time)<='22:00:00' && $puestos_monitoreo[$i]['ID_Usuario']==0){
+                        $estado_controles[$i]['Color']="color: red";
+                    }
+                }
+            }
             
             ////////////////////////////////////////////////////////////////////
             //OBTIENE INFORMACIÓN DE APERTURA DE CERRADURAS DE CENCON
@@ -10915,6 +10963,17 @@ class Controller{
             $fecha1 = new DateTime($fecha_actual);
             $diff="";
             $tam=count($params);
+            //Define la cantidad de aperturas por tipo de color
+            //azul-violeta --> Se le informó al coordinador
+            $cajero_violeta=0;
+            //Rojo -> tiempo agotado, se debe dar seguimiento
+            $cajero_rojo=0;
+            //Naranaja -> tiempo agotado pero ya se le dio seguimiento
+            $cajero_naranja=0;
+            //Negro -> se encuetra sobre tiempo, todo normal
+            $cajero_negro =0;
+            //azul subrayado -> cajero en mantenimiento, arqueo, permiso especial, llave azul
+            $cajero_especial=0;
             for ($i = 0; $i <$tam; $i++) {
                 //asigna da date2 la fecha que trae en el arreglo
                 $fecha2 = new DateTime($params[$i]['Fecha_Apertura'].' '.$params[$i]['Hora_Apertura']);
@@ -10940,41 +10999,51 @@ class Controller{
                                             if($vencidos[$i]['tiempo']>'100'){
                                                 if($params[$i]['Seguimiento']=="Se le informó al coordinador"){
                                                     $vencidos[$i]['color']="color: blueviolet";
+                                                    $cajero_violeta++;
                                                     //echo "blueviolet +100 informó".$params[$i]['Codigo']."\n||||";
                                                 }else{
                                                     $vencidos[$i]['color']="color: red";
+                                                    $cajero_rojo++;
                                                     //echo "rojo +100 sin informar".$params[$i]['Codigo']."\n||||";
                                                 } 
                                             }else{
                                                 $vencidos[$i]['color']="color: orange";
+                                                $cajero_naranja++;
                                                 //echo "naranja -110".$params[$i]['Codigo']."\n|||||";
                                             }
                                         }else{
                                             $vencidos[$i]['color']="color: red";
+                                            $cajero_rojo++;
                                             //echo "rojo -correo encargado".$params[$i]['Codigo']."\n|||||";
                                         }
                                     }else{
                                         $vencidos[$i]['color']="color: orange";
+                                        $cajero_naranja++;
                                         //echo "naranja -70 y correo".$params[$i]['Codigo']."\n|||||";
                                     }
                                 }else{
                                     $vencidos[$i]['color']="color: red";
+                                    $cajero_rojo++;
                                     //echo "rojo +40 sin correo".$params[$i]['Codigo']."\n||||";
                                 }
                             } else{
                                 $vencidos[$i]['color']="color: black";
+                                $cajero_negro++;
                                 //echo "nada".$params[$i]['Codigo']."\n||||";
                             }
                         } else{
                             $vencidos[$i]['color']="color:mediumblue; text-decoration: underline;";
+                            $cajero_especial++;
                             //echo "nada".$params[$i]['Codigo']."\n||||";
                         }    
                     }else{
                         $vencidos[$i]['color']="color: red";
+                        $cajero_rojo++;
                         //echo "rojo +40 sin correo".$params[$i]['Codigo']."\n||||";
                     }
                 }else{
                     $vencidos[$i]['color']="color: red";
+                    $cajero_rojo++;
                     //echo "rojo +40 sin correo".$params[$i]['Codigo']."\n||||";
                 }    
             }
@@ -11099,6 +11168,69 @@ class Controller{
         }   
     }
 
+    public function reporte_revisiones_video(){
+        if(isset($_SESSION['nombre'])){
+            $obj_unidad_video = new cls_unidad_video();
+            $obj_puesto_monitoreo = new cls_puestos_de_monitoreo();
+            $obj_reporteria = new cls_reporteria();
+            $obj_usuario = new cls_usuarios();
+            
+            //Valida si se seleccionó una fecha especifica para generar el reporte
+            if(isset($_POST['fecha_inicial'])){
+                $fecha_inicio = $_POST['fecha_inicial'];
+                $fecha_fin= $_POST['fecha_final'];
+                
+                $condicion="(t_bitacorarevisionesvideo.Fecha_Inicia_Revision between '".$fecha_inicio."' AND '".$fecha_fin."')";
+                if(isset($_POST['unidad_video']) || isset($_POST['puesto_monitoreo'])|| isset($_POST['usuario_revision'])){
+                    if($_POST['unidad_video']!="0"){
+                        $condicion.= " AND t_bitacorarevisionesvideo.ID_Unidad_Video=".$_POST['unidad_video'];
+                    } if($_POST['puesto_monitoreo']!="0"){
+                        $condicion.= " AND t_bitacorarevisionesvideo.ID_Puesto_Monitoreo='".$_POST['puesto_monitoreo']."'";
+                    }if($_POST['usuario_revision']!="0"){
+                        $condicion.= " AND t_bitacorarevisionesvideo.ID_Usuario='".$_POST['usuario_revision']."'";
+                    }if(isset($_POST['retrasos'])){
+                        if($_POST['retrasos']!="0"){
+                            $condicion.= " AND t_bitacorarevisionesvideo.Retraso_Segundos>0";
+                        }
+                    }
+                }
+                //Obtiene la información de las revisiones según los parametros
+                $obj_reporteria->setCondicion($condicion);
+                $obj_reporteria->obtiene_bitacora_puestos_de_monitoreo_completo();
+                $bitacora_revision_video = $obj_reporteria->getArreglo();
+                
+            } else{
+                $fecha_inicio = date("Y-m-d");
+                $fecha_fin= date("Y-m-d");
+            }
+            //Obtiene la lista de operadores que han revisado video
+            $obj_puesto_monitoreo->setCondicion("");
+            $obj_puesto_monitoreo->obtiene_lista_operadores_que_han_realizado_controles();
+            $lista_de_operadores=$obj_puesto_monitoreo->getArreglo();
+            
+            //Obtiene todas las unidades de video creadas
+            $obj_unidad_video->setCondicion("t_unidadvideo.Estado=0 ORDER BY t_unidadvideo.Descripcion");
+            $obj_unidad_video->obtiene_todas_las_unidades_de_video();
+            $unidades_video = $obj_unidad_video->getArreglo();
+            
+            //Obtiene los Puestos de monitoreo
+            $obj_puesto_monitoreo->setCondicion("");
+            $obj_puesto_monitoreo->obtiene_todos_puestos_de_monitoreo();
+            $puestos_monitoreo= $obj_puesto_monitoreo->getArreglo();
+            
+//            echo "<pre>";
+//            print_r($bitacora_revision_video);
+//            echo "</pre>";
+            
+            require __DIR__.'/../vistas/plantillas/rpt_revision_video.php';
+        }
+        else {
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }  
+    }
+    
     ////////////////////////////////////////////////////////////////////////////
     //////////////////////Funciones para Pruebas de alarma//////////////////////  
     ////////////////////////////////////////////////////////////////////////////

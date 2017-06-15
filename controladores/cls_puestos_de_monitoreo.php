@@ -435,20 +435,20 @@ class cls_puestos_de_monitoreo{
    //Valida que no se ingrese el mismo tipo de evento en un sitio, si ya hay uno pendiente
     
     function existe_este_dato_en_la_tabla_unidades_video(){
-      //Establece la conexión con la bd
-      $this->obj_data_provider->conectar();
-      $this->obj_data_provider->trae_datos("T_UnidadVideo","*",$this->condicion);
-      $this->arreglo=$this->obj_data_provider->getArreglo();
-      $this->obj_data_provider->desconectar();
-      $this->resultado_operacion=true;
-      
-      if (count($this->arreglo)>0){
-        return true;
-      }else
-      {
-        return false;
-      }    
-  }
+        //Establece la conexión con la bd
+        $this->obj_data_provider->conectar();
+        $this->obj_data_provider->trae_datos("T_UnidadVideo","*",$this->condicion);
+        $this->arreglo=$this->obj_data_provider->getArreglo();
+        $this->obj_data_provider->desconectar();
+        $this->resultado_operacion=true;
+
+        if (count($this->arreglo)>0){
+          return true;
+        }else
+        {
+          return false;
+        }    
+    }
     
   public function obtiene_todos_puestos_de_monitoreo(){
         $this->obj_data_provider->conectar();
@@ -647,7 +647,7 @@ class cls_puestos_de_monitoreo{
                     left join t_usuario tur on t_inconsistenciavideo.ID_Usuario_Reporta_SE=tur.ID_Usuario
                     left join t_usuario tus on t_inconsistenciavideo.ID_Usuario_Reporta_Solucionada=tus.ID_Usuario
                     order by ID_Inconsistencia_Video",
-                    "t_inconsistenciavideo . * ,T_BitacoraRevisionesVideo.ID_Unidad_Video ,T_BitacoraRevisionesVideo.Reporta_Situacion, CONCAT( CONCAT( t_usuario.Nombre,  ' ' ) , t_usuario.Apellido ) AS Detectado_Por,CONCAT( CONCAT( tuv.Nombre,  ' ' ) , tuv.Apellido ) AS Validado_Por,CONCAT( CONCAT( tur.Nombre,  ' ' ) , tur.Apellido ) AS Reportado_Por,CONCAT( CONCAT( tus.Nombre,  ' ' ) , tus.Apellido ) AS Solucionado_Por,case t_inconsistenciavideo.Estado  when 0 then 'Pendiente'  when 1 then 'Atendida'  when 2 then 'Validada SE' when 3 then 'Validada ATMs' when 4 then 'Validada Mant.' when 5 then 'Reportada SE' when 6 then 'Reportada ATMs' when 7 then 'Reportada Mant.' when 8 then 'Reparada SE' when 9 then 'Reparada ATMs' when 10 then 'Reparada Mant.' end as Estado_Traducido,t_unidadvideo.Descripcion,T_PuestoMonitoreo.Nombre as Nombre_Puesto","");
+                    "t_inconsistenciavideo . * ,T_BitacoraRevisionesVideo.Fecha_Inicia_Revision, T_BitacoraRevisionesVideo.Hora_Inicia_Revision,T_BitacoraRevisionesVideo.ID_Unidad_Video ,T_BitacoraRevisionesVideo.Reporta_Situacion, CONCAT( CONCAT( t_usuario.Nombre,  ' ' ) , t_usuario.Apellido ) AS Detectado_Por,CONCAT( CONCAT( tuv.Nombre,  ' ' ) , tuv.Apellido ) AS Validado_Por,CONCAT( CONCAT( tur.Nombre,  ' ' ) , tur.Apellido ) AS Reportado_Por,CONCAT( CONCAT( tus.Nombre,  ' ' ) , tus.Apellido ) AS Solucionado_Por,case t_inconsistenciavideo.Estado  when 0 then 'Pendiente'  when 1 then 'Atendida'  when 2 then 'Validada SE' when 3 then 'Validada ATMs' when 4 then 'Validada Mant.' when 5 then 'Reportada SE' when 6 then 'Reportada ATMs' when 7 then 'Reportada Mant.' when 8 then 'Reparada SE' when 9 then 'Reparada ATMs' when 10 then 'Reparada Mant.' end as Estado_Traducido,t_unidadvideo.Descripcion,T_PuestoMonitoreo.Nombre as Nombre_Puesto","");
             $this->arreglo=$this->obj_data_provider->getArreglo();
             $this->obj_data_provider->desconectar();
         }
@@ -659,7 +659,7 @@ class cls_puestos_de_monitoreo{
                     left join t_usuario tuv on t_inconsistenciavideo.ID_Usuario_Valida=tuv.ID_Usuario
                     left join t_usuario tur on t_inconsistenciavideo.ID_Usuario_Reporta_SE=tur.ID_Usuario
                     left join t_usuario tus on t_inconsistenciavideo.ID_Usuario_Reporta_Solucionada=tus.ID_Usuario",
-                    "t_inconsistenciavideo . * ,T_BitacoraRevisionesVideo.ID_Unidad_Video ,T_BitacoraRevisionesVideo.Reporta_Situacion, CONCAT( CONCAT( t_usuario.Nombre,  ' ' ) , t_usuario.Apellido ) AS Detectado_Por,CONCAT( CONCAT( tuv.Nombre,  ' ' ) , tuv.Apellido ) AS Validado_Por,CONCAT( CONCAT( tur.Nombre,  ' ' ) , tur.Apellido ) AS Reportado_Por,CONCAT( CONCAT( tus.Nombre,  ' ' ) , tus.Apellido ) AS Solucionado_Por,case t_inconsistenciavideo.Estado  when 0 then 'Pendiente'  when 1 then 'Atendida'  when 2 then 'Validada' when 3 then 'Reportada' when 4 then 'Reparada' end as Estado_Traducido,t_unidadvideo.Descripcion,T_PuestoMonitoreo.Nombre as Nombre_Puesto",
+                    "t_inconsistenciavideo . * ,T_BitacoraRevisionesVideo.Fecha_Inicia_Revision, T_BitacoraRevisionesVideo.Hora_Inicia_Revision,T_BitacoraRevisionesVideo.ID_Unidad_Video ,T_BitacoraRevisionesVideo.Reporta_Situacion, CONCAT( CONCAT( t_usuario.Nombre,  ' ' ) , t_usuario.Apellido ) AS Detectado_Por,CONCAT( CONCAT( tuv.Nombre,  ' ' ) , tuv.Apellido ) AS Validado_Por,CONCAT( CONCAT( tur.Nombre,  ' ' ) , tur.Apellido ) AS Reportado_Por,CONCAT( CONCAT( tus.Nombre,  ' ' ) , tus.Apellido ) AS Solucionado_Por,case t_inconsistenciavideo.Estado  when 0 then 'Pendiente'  when 1 then 'Atendida'  when 2 then 'Validada' when 3 then 'Reportada' when 4 then 'Reparada' end as Estado_Traducido,t_unidadvideo.Descripcion,T_PuestoMonitoreo.Nombre as Nombre_Puesto",
                     $this->condicion." order by ID_Inconsistencia_Video");
             $this->arreglo=$this->obj_data_provider->getArreglo();
             $this->obj_data_provider->desconectar();

@@ -10,7 +10,7 @@
                     table = $('#tabla').DataTable();
                 }
                 table.destroy();
-                table = $('#tabla').DataTable( {
+                table = $('#tabla').DataTable({
                     stateSave: true,
                     "lengthMenu": [[10, 25, 50,100,-1], [10, 25, 50,100,"All"]]
                 });     
@@ -125,7 +125,7 @@
                         bandera=1;
                     }
                     //
-                 <?php }?>
+                <?php }?>
 
                 if (bandera==1){
                     $.confirm({
@@ -149,7 +149,6 @@
                             });  
                         },
                         cancel: function(){
-
                         }
                     });
                 }else{

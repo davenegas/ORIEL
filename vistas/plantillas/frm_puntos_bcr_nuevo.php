@@ -25,7 +25,7 @@
                         </div>
                         <div class="col-md-6 espacio-arriba">
                           <label for="Nombre">Nombre</label>
-                          <input type="text" style="text-transform: uppercase" required="required" class="form-control" placeholder="Nombre del Sitio, inicia con AG, ATM, CA" id="Nombre" name="Nombre" value="<?php echo $params[0]['Nombre'];?>">
+                          <input type="text" required="required" class="form-control" placeholder="Nombre del Sitio, inicia con AG, ATM, CA" id="Nombre" name="Nombre" value="<?php echo $params[0]['Nombre'];?>">
                         </div>
                         <div class="col-md-6 espacio-arriba ">
                             <label for="Tipo_Punto">Tipo de Punto</label>
@@ -100,7 +100,7 @@
                                 <?php if ($params[0]['Estado']==1){  ?>
                                     <option value="1" selected="selected">Activo</option>
                                     <option value="0">Inactivo</option>  
-                                <?php}  else {  ?>
+                                <?php }  else {  ?>
                                    <option value="1">Activo</option>
                                    <option value="0" selected="selected">Inactivo</option>   
                                 <?php }  ?>  

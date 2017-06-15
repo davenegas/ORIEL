@@ -1,7 +1,8 @@
 <!DOCTYPE HTML>
 <html lang="es">
     <head>
-        <meta http-equiv="refresh" content="text/html; charset=utf-8"/>
+        <meta charset="utf-8"/>
+        <meta http-equiv="refresh" content="180"/>
         <title>Alertas Generales</title>
         <?php require_once 'frm_librerias_head.html'; ?>
         <script src="vistas/js/highcharts.js"></script>
@@ -179,14 +180,23 @@
         </div>
         
         <div class="col-sm-4 sidenav espacio-abajo">
+            <div class="well" align="center" >CONTROL DE VIDEO</div>
+            <div style="text-align: justify;" class="espacio-abajo">
+                <?php 
+                $tam = count($estado_controles);
+                for($i=0; $i<$tam;$i++){ ?>
+                    <p style="<?php echo $estado_controles[$i]['Color']?>"><?php echo $estado_controles[$i]['Nombre']." = ".$estado_controles[$i]['Usuario'];?> <br></p>
+                <?php }
+                ?>
+            </div>
             <div class="well" align="center" >CERRADURAS CENCON</div>
             <?php if(isset($vencidos)){ ?>
                 <div style="text-align: justify;" >
-                    <?php 
-                    $tam=$tam=count($vencidos);
-                    for ($i = 0; $i <$tam; $i++) {?>
-                        <p style="<?php echo $vencidos[$i]['color']?>"><?php echo "> ".$vencidos[$i]['mensaje'];?> <br></p>
-                    <?php }?>   
+                    <h5 style="color: blueviolet">Cajero(s) informado al coordinador BCR= <?php echo $cajero_violeta;?></h5> 
+                    <h5 style="color: red">Cajero(s) tiempo agotado= <?php echo $cajero_rojo;?></h5>
+                    <h5 style="color: orange">Cajero(s) con seguimiento= <?php echo $cajero_naranja;?></h5>
+                    <h5 style="color: black">Cajero(s) abierto normales= <?php echo $cajero_negro;?></h5>
+                    <h5 style="color: mediumblue;text-decoration: underline;">Cajero(s) con apertura especial= <?php echo $cajero_especial;?></h5>
                 </div>
             <?php } ?>
         </div>

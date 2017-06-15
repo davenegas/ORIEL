@@ -423,13 +423,13 @@
                             <input type="text" required="required" readonly class="form-control" id="Direccion" name="Direccion" value="<?php echo $params[0]['Direccion'];?>">
                         </div>
                     </div>
-<!--                    <div class="row">
+                    <div class="row">
                         <button id="hide">Ocultar ubicación</button>
                         <button id="show">Mostrar ubicación</button>
                         <div class="col-md-12 espacio-abajo text-center">
                             <iframe id="localizacion"src="<?php echo $params[0]['Geolocalizacion'];?>" width="800" height= "600" frameborder="0" style="border:0" allowfullscreen></iframe>
                         </div>
-                    </div>-->
+                    </div>
                 </div>
                 <!--Unidades Ejecutoras ligadas al sitio-->
                 <div class="row well animated bounceInUp" style="animation-delay:1.4s;" id="Unidad_Ejecutora_Asociada">
