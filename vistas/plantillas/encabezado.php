@@ -263,7 +263,7 @@
                             <?php }; ?>   -->
                             
                             <?php if ($_SESSION['modulos']['Módulo-Puestos de Monitoreo']==1){?>
-                                <li><a href="index.php?ctl=controles_de_video_listar">Controles de Video Nuevo</a></li>
+                                <li><a href="index.php?ctl=controles_de_video_listar">Control de Video</a></li>
                             <?php }; ?>   
 
                             <?php if ($_SESSION['modulos']['Módulo-Pruebas alarma']==1){?>
@@ -271,7 +271,7 @@
                             <?php }; ?>
                                 
                             <?php if ($_SESSION['modulos']['Módulo-Control de Video']==1){?>
-                                <li><a href="http://10.170.5.80/Operaciones_de_Seguridad/ctrlvideo/consulta.html">Controles de Video</a></li>
+                                <!--<li><a href="http://10.170.5.80/Operaciones_de_Seguridad/ctrlvideo/consulta.html">Controles de Video</a></li>-->
                             <?php }; ?>
 
                         </ul>

@@ -652,15 +652,37 @@ class cls_puestos_de_monitoreo{
             $this->obj_data_provider->desconectar();
         }
         else{
-        $this->arreglo=$this->obj_data_provider->trae_datos(" t_inconsistenciavideo INNER JOIN t_bitacorarevisionesvideo ON t_bitacorarevisionesvideo.ID_Bitacora_Revision_Video = t_inconsistenciavideo.ID_Bitacora_Revision_Video
+       $this->arreglo=$this->obj_data_provider->trae_datos(" t_inconsistenciavideo INNER JOIN t_bitacorarevisionesvideo ON t_bitacorarevisionesvideo.ID_Bitacora_Revision_Video = t_inconsistenciavideo.ID_Bitacora_Revision_Video
                     INNER JOIN t_usuario ON t_usuario.ID_Usuario = T_BitacoraRevisionesVideo.ID_Usuario
                     Inner join t_unidadvideo on t_unidadvideo.ID_Unidad_Video=t_bitacorarevisionesvideo.ID_Unidad_Video
                     inner join T_PuestoMonitoreo on T_PuestoMonitoreo.ID_Puesto_Monitoreo=t_bitacorarevisionesvideo.ID_Puesto_Monitoreo
                     left join t_usuario tuv on t_inconsistenciavideo.ID_Usuario_Valida=tuv.ID_Usuario
                     left join t_usuario tur on t_inconsistenciavideo.ID_Usuario_Reporta_SE=tur.ID_Usuario
                     left join t_usuario tus on t_inconsistenciavideo.ID_Usuario_Reporta_Solucionada=tus.ID_Usuario",
-                    "t_inconsistenciavideo . * ,T_BitacoraRevisionesVideo.Fecha_Inicia_Revision, T_BitacoraRevisionesVideo.Hora_Inicia_Revision,T_BitacoraRevisionesVideo.ID_Unidad_Video ,T_BitacoraRevisionesVideo.Reporta_Situacion, CONCAT( CONCAT( t_usuario.Nombre,  ' ' ) , t_usuario.Apellido ) AS Detectado_Por,CONCAT( CONCAT( tuv.Nombre,  ' ' ) , tuv.Apellido ) AS Validado_Por,CONCAT( CONCAT( tur.Nombre,  ' ' ) , tur.Apellido ) AS Reportado_Por,CONCAT( CONCAT( tus.Nombre,  ' ' ) , tus.Apellido ) AS Solucionado_Por,case t_inconsistenciavideo.Estado  when 0 then 'Pendiente'  when 1 then 'Atendida'  when 2 then 'Validada' when 3 then 'Reportada' when 4 then 'Reparada' end as Estado_Traducido,t_unidadvideo.Descripcion,T_PuestoMonitoreo.Nombre as Nombre_Puesto",
+                    "t_inconsistenciavideo . * ,T_BitacoraRevisionesVideo.Fecha_Inicia_Revision, T_BitacoraRevisionesVideo.Hora_Inicia_Revision,T_BitacoraRevisionesVideo.ID_Unidad_Video ,T_BitacoraRevisionesVideo.Reporta_Situacion, CONCAT( CONCAT( t_usuario.Nombre,  ' ' ) , t_usuario.Apellido ) AS Detectado_Por,CONCAT( CONCAT( tuv.Nombre,  ' ' ) , tuv.Apellido ) AS Validado_Por,CONCAT( CONCAT( tur.Nombre,  ' ' ) , tur.Apellido ) AS Reportado_Por,CONCAT( CONCAT( tus.Nombre,  ' ' ) , tus.Apellido ) AS Solucionado_Por,case t_inconsistenciavideo.Estado  when 0 then 'Pendiente'  when 1 then 'Atendida'  when 2 then 'Validada SE' when 3 then 'Validada ATMs' when 4 then 'Validada Mant.' when 5 then 'Reportada SE' when 6 then 'Reportada ATMs' when 7 then 'Reportada Mant.' when 8 then 'Reparada SE' when 9 then 'Reparada ATMs' when 10 then 'Reparada Mant.' end as Estado_Traducido,t_unidadvideo.Descripcion,T_PuestoMonitoreo.Nombre as Nombre_Puesto",
                     $this->condicion." order by ID_Inconsistencia_Video");
+            $this->arreglo=$this->obj_data_provider->getArreglo();
+            $this->obj_data_provider->desconectar();
+        } 
+    }
+    
+    
+    
+    public function obtiene_inconsistencias_para_control_de_video(){
+        $this->obj_data_provider->conectar();
+        if($this->condicion==""){
+            $this->arreglo=$this->obj_data_provider->trae_datos("t_bitacorarevisionesvideo b
+            inner join t_inconsistenciavideo i on i.ID_Bitacora_Revision_Video=b.ID_Bitacora_Revision_Video
+            inner join t_usuario u on u.ID_Usuario=b.ID_Usuario order by b.Fecha_Termina_Revision,b.Hora_Termina_Revision desc",
+                    "b.Reporta_Situacion,concat(concat(u.Nombre,' '),u.Apellido) Nombre_Completo,b.ID_Unidad_Video,concat(concat(b.Fecha_Termina_Revision,' '),b.Hora_Termina_Revision) Tiempo_Reporte","");
+            $this->arreglo=$this->obj_data_provider->getArreglo();
+            $this->obj_data_provider->desconectar();
+        }
+        else{
+       $this->arreglo=$this->obj_data_provider->trae_datos("t_bitacorarevisionesvideo b
+            inner join t_inconsistenciavideo i on i.ID_Bitacora_Revision_Video=b.ID_Bitacora_Revision_Video
+            inner join t_usuario u on u.ID_Usuario=b.ID_Usuario","b.Reporta_Situacion,concat(concat(u.Nombre,' '),u.Apellido) Nombre_Completo,b.ID_Unidad_Video,concat(concat(b.Fecha_Termina_Revision,' '),b.Hora_Termina_Revision) Tiempo_Reporte",
+                    $this->condicion." order by b.Fecha_Termina_Revision,b.Hora_Termina_Revision desc");
             $this->arreglo=$this->obj_data_provider->getArreglo();
             $this->obj_data_provider->desconectar();
         } 

@@ -9859,7 +9859,7 @@ class Controller{
        if(isset($_SESSION['nombre'])){
            $obj_puesto_monitoreo = new cls_puestos_de_monitoreo();
            
-           $obj_puesto_monitoreo->setCondicion("t_inconsistenciavideo.Estado<>1");
+           $obj_puesto_monitoreo->setCondicion("t_inconsistenciavideo.Estado not in (1,8,9,10)");
            $obj_puesto_monitoreo->obtiene_inconsistencias_de_video();
            $params =$obj_puesto_monitoreo->getArreglo();
            
@@ -9996,8 +9996,13 @@ class Controller{
                      $obj_puntos_bcr->setCondicion("T_PuntoBCR.ID_PuntoBCR=".$vector_informacion_unidad_video_siguiente[0]['ID_PuntoBCR']);
                      $obj_puntos_bcr->obtiene_todos_los_puntos_bcr();
                      $vector_punto_bcr_siguiente=$obj_puntos_bcr->getArreglo(); 
+                     
+                            
+                    $obj_puesto_monitoreo->setCondicion("i.Estado not in (1,8,9,10) and b.ID_Unidad_Video=".$vector_informacion_unidad_video[0]['ID_Unidad_Video']);
+                    $obj_puesto_monitoreo->obtiene_inconsistencias_para_control_de_video();
+                    $inconsistencias_reportadas =$obj_puesto_monitoreo->getArreglo();
                                        
-                      require __DIR__.'/../vistas/plantillas/frm_controles_de_video_listar.php';
+                    require __DIR__.'/../vistas/plantillas/frm_controles_de_video_listar.php';
                    
                 }
              
@@ -10131,6 +10136,7 @@ class Controller{
 
         $obj_puestos_de_monitoreo= new cls_puestos_de_monitoreo();
         $elementos = $_POST['data'];
+       
         
         $tam= count($elementos[0]);
         $obj_puestos_de_monitoreo->setCondicion("ID_Puesto_Monitoreo=".$elementos[0][0]);
@@ -10146,6 +10152,8 @@ class Controller{
                 
             }
         }
+        
+     //print_r($elementos[0]);
     }
 
     

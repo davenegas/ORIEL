@@ -104,7 +104,11 @@
                     });
                 });
                 $.post("index.php?ctl=actualiza_puesto_de_monitoreo", {data: data});
-
+                //$.post("index.php?ctl=actualiza_puesto_de_monitoreo", {data: data},function(prueba){
+                    
+                   // alert(prueba);
+                  //  }); 
+                
                 document.location.href="index.php?ctl=puestos_de_monitoreo_listar";
             }
         
