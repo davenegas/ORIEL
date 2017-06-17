@@ -181,13 +181,20 @@
         
         <div class="col-sm-4 sidenav espacio-abajo">
             <div class="well" align="center" >CONTROL DE VIDEO</div>
-            <div style="text-align: justify;" class="espacio-abajo">
+            <div style="text-align: justify;" class="espacio-abajo borde-gris">
                 <?php 
                 $tam = count($estado_controles);
                 for($i=0; $i<$tam;$i++){ ?>
                     <p style="<?php echo $estado_controles[$i]['Color']?>"><?php echo $estado_controles[$i]['Nombre']." = ".$estado_controles[$i]['Usuario'];?> <br></p>
                 <?php }
                 ?>
+            </div>
+            <div class="espacio-abajo well">
+                <h5 style="color: red;">Unidades de video, ultima revisión más de 4 horas: <?php echo $revision_241_mas;?></h5>
+                <h5 style="color: orange;">Unidades de video, ultima revisión entre 3 y 4 horas: <?php echo $revision_181_240;?></h5>
+                <h5>Unidades de video, ultima revisión entre 2 y 3 horas: <?php echo $revision_121_180;?></h5>
+                <h5>Unidades de video, ultima revisión entre 1 y 2 horas: <?php echo $revision_61_120;?></h5>
+                <h5>Unidades de video, ultima revisión en menos de una hora: <?php echo $revision_0_60;?></h5>
             </div>
             <div class="well" align="center" >CERRADURAS CENCON</div>
             <?php if(isset($vencidos)){ ?>

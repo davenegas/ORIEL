@@ -113,22 +113,25 @@
                 <div id="ventana2">
                     <img id="close" src='vistas/Imagenes/cerrar.png' width="25" onclick ="ocultar_elemento()"> 
                     <!--Tabla con la lista de Unidades Ejecutoras-->
-                    <table id="tabla" class="display" cellspacing="0" width="100%">
+                    <table id="tabla" class="display table asc" cellspacing="0" width="100%">
                         <thead>
                             <tr>
+                                <th hidden style="text-align:center">ID</th>
                                 <th style="text-align:center">Tiempo transcurrido</th>
-                                <th style="text-align:center">Unidad de Video</th>
                                 <th style="text-align:center">Fecha última revisión</th>
+                                <th style="text-align:center">Unidad de Video</th>
                             </tr>
                         </thead>
                         <tbody>
                             <?php 
                             $tam=count($ultima_revision);
+                            $sum =count($ultima_revision);
                             for ($i = 0; $i <$tam; $i++) { ?>  
                                 <tr>
+                                    <td hidden style="text-align:center"><?php echo $sum; $sum--;?></td>
                                     <td style="text-align:center"><?php echo $ultima_revision[$i]['Total_Tiempo'];?></td>
-                                    <td style="text-align:center"><?php echo $ultima_revision[$i]['Descripcion'];?></td>
                                     <td style="text-align:center"><?php echo $ultima_revision[$i]['Fecha_Hora'];?></td>
+                                    <td style="text-align:center"><?php echo $ultima_revision[$i]['Descripcion'];?></td>
                                 </tr>
                             <?php } ?>
                         </tbody>

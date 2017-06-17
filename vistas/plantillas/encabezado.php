@@ -11,6 +11,16 @@
         <link rel="stylesheet" href="vistas/css/main.css">
         <script src="vistas/js/jquery-1-4-2-min.js"></script>
         <script language="javascript" src="vistas/js/listas_dependientes_encabezado.js"></script>
+        <style>
+            .dropdown-submenu {
+                position: relative;
+            }
+            .dropdown-submenu .dropdown-menu {
+                top: 0;
+                left: 100%;
+                margin-top: -1px;
+            }
+    </style>
     </head>
     <center><img src="vistas/Imagenes/Banner_Centro_de_Control.jpg" alt=""/></center>
     <nav class="navbar navbar-default" >
@@ -150,7 +160,7 @@
                     <li class="dropdown">
                         <a class="dropdown-toggle" data-toggle="dropdown" href="#">Reportes
                         <span class="caret"></span></a>
-                        <ul class="dropdown-menu">
+                        <ul class="dropdown-menu multi-level" role="menu">
 
                             <!-- <?php if ($_SESSION['modulos']['Reportes-Eventos']==1){ ?>
                                 <li><a href="index.php?ctl=principal">Eventos</a></li>
@@ -200,16 +210,27 @@
                                 <li><a href="index.php?ctl=alertas_generales">Alertas Generales</a></li> 
                             <?php }; ?>   
                                 
-                            <?php if ($_SESSION['modulos']['Reportes-Controles de Video']==1){ ?>
+                            <!--<?php if ($_SESSION['modulos']['Reportes-Controles de Video']==1){ ?>
                                 <li><a href="index.php?ctl=reporte_controles_de_video_listar">Estadisticas Controles de Video</a></li> 
                             <?php }; ?>   
                                
                             <?php if ($_SESSION['modulos']['Reportes-Controles de Video']==1){ ?>
                                 <li><a href="index.php?ctl=reporte_revisiones_video">Revisiones de Video</a></li> 
-                            <?php }; ?>   
+                            <?php }; ?>-->
                                 
                             <?php if ($_SESSION['modulos']['Reportes-TL300 Puntos BCR']==1){ ?>
                                 <li><a href="index.php?ctl=reporte_tl300_en_puntos_bcr_listar">TL300 en Puntos BCR</a></li> 
+                            <?php }; ?> 
+                                
+                            <?php if ($_SESSION['modulos']['Reportes-Controles de Video']==1){ ?>
+                                <li class="dropdown-submenu">
+                                    <a class="multilevel" tabindex="-1" href="#">Control de Video<span class="caret"></span></a>
+                                    <ul class="dropdown-menu">
+                                      <li><a tabindex="-1" href="index.php?ctl=reporte_revisiones_video">Historial de revisiones</a></li>
+                                      <li><a tabindex="-1" href="index.php?ctl=reporte_controles_de_video_listar">Estadisticas</a></li>
+                                      <li><a tabindex="-1" href="">Últimas revisiones</a></li>
+                                    </ul>
+                                </li>
                             <?php }; ?> 
                         </ul>
                     </li>
@@ -257,22 +278,18 @@
                             <?php if ($_SESSION['modulos']['Módulo-Cencon']==1){?>
                                 <li><a href="index.php?ctl=eventos_cencon">Cencon</a></li> 
                             <?php }; ?>
-
-<!--                             <?php if ($_SESSION['modulos']['Módulo-Puestos de Monitoreo']==1){?>
-                                <li><a href="index.php?ctl=puestos_de_monitoreo_listar">Puestos de Monitoreo</a></li>
-                            <?php }; ?>   -->
                             
                             <?php if ($_SESSION['modulos']['Módulo-Puestos de Monitoreo']==1){?>
-                                <li><a href="index.php?ctl=controles_de_video_listar">Controles de Video Nuevo</a></li>
+                                <li><a href="index.php?ctl=controles_de_video_listar">Control de Video</a></li>
                             <?php }; ?>   
 
                             <?php if ($_SESSION['modulos']['Módulo-Pruebas alarma']==1){?>
                                 <li><a href="index.php?ctl=pruebas_alarma">Pruebas alarma</a></li> 
                             <?php }; ?>
                                 
-                            <?php if ($_SESSION['modulos']['Módulo-Control de Video']==1){?>
+                            <!--<?php if ($_SESSION['modulos']['Módulo-Control de Video']==1){?>
                                 <li><a href="http://10.170.5.80/Operaciones_de_Seguridad/ctrlvideo/consulta.html">Controles de Video</a></li>
-                            <?php }; ?>
+                            <?php }; ?>-->
 
                         </ul>
                     </li>
@@ -330,4 +347,16 @@
             </ul>
       </div>
     </nav>
+    
+    <script>
+        $(document).ready(function(){
+            $('.dropdown-submenu a.multilevel').on("click", function(e){
+                $(this).next('ul').toggle();
+                e.stopPropagation();
+                e.preventDefault();
+            });
+        });
+    </script>
+
+    
 </html>

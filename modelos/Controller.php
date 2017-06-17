@@ -10812,7 +10812,7 @@ class Controller{
             $obj_Puntosbcr = new cls_puntosBCR();
             $obj_prueba = new cls_prueba_alarma();
             $obj_eventos = new cls_eventos();
-            
+            $obj_reporteria = new cls_reporteria();
             
             ////////////////////////////////////////////////////////////////////
             //OBTIENE INFORMACIÓN DE PRUEBAS, APERTURAS Y CIERRES DE ALARMA
@@ -10945,6 +10945,55 @@ class Controller{
                 if($puestos_monitoreo[$i]['ID_Puesto_Monitoreo']==10){
                     if(date("H:i:s", $time)>='12:00:00' && date("H:i:s", $time)<='22:00:00' && $puestos_monitoreo[$i]['ID_Usuario']==0){
                         $estado_controles[$i]['Color']="color: red";
+                    }
+                }
+            }
+            
+            ////////////////////////////////////////////////////////////////////
+            //OBTIENE INFORMACIÓN DE ULTIMAS REVISIONES
+            //Obtiene la información de la ultima revisión de cada unidad de video
+            $obj_reporteria->setCondicion("");
+            $obj_reporteria->ultima_revision_por_unidad_video();
+            $ultima_revision = $obj_reporteria->getArreglo();
+            
+            //Obtiene la fecha del servidor en un arreglo
+            $fecha_actual= getdate();
+            //Convierta la fecha a formto aaaa/mm/dd hh:mm
+            $fecha_actual= $fecha_actual['year']."-".$fecha_actual['mon']."-".$fecha_actual['mday'].' '.$fecha_actual['hours'].':'.$fecha_actual['minutes'];
+            //asigna la fecha actual a un arreglo formato DateTime
+            $fecha1 = new DateTime($fecha_actual);
+            $diff="";
+            //Contadores sobre ultimas revisiones
+            $revision_0_60=0;
+            $revision_61_120=0;
+            $revision_121_180=0;
+            $revision_181_240=0;
+            $revision_241_mas=0;
+            $tam=  count($ultima_revision);
+            for ($i = 0; $i <$tam; $i++) {
+                //asigna da date2 la fecha que trae en el arreglo
+                $fecha2 = new DateTime($ultima_revision[$i]['Fecha_Hora']);
+                $diff = $fecha1->diff($fecha2);
+                $tiempo_transcurrido= ($diff->d."d: ". $diff->h."h: ". $diff->i."m.");
+                $suma_tiempos=(intval($diff->d)*1440)+(intval($diff->h)*60)+(intval($diff->i)*1);
+                //$ultima_revision[$i]= array_merge($ultima_revision[$i],array('Total_Tiempo'=>$tiempo_transcurrido));
+                if($suma_tiempos>=0){
+                    if($suma_tiempos>60){
+                        if($suma_tiempos>120){
+                            if($suma_tiempos>180){
+                                if($suma_tiempos>240){
+                                    $revision_241_mas++;
+                                }else{
+                                    $revision_181_240++;
+                                }
+                            }else{
+                               $revision_121_180++; 
+                            }
+                        }else{
+                            $revision_61_120++;
+                        }
+                    }else{
+                        $revision_0_60++;
                     }
                 }
             }
@@ -11151,9 +11200,7 @@ class Controller{
                     $params[$i]= array_merge($telecom[$i],array(($direcciones[0]['Tipo_IP'])=>($direcciones[0]['Direccion_IP'])));
                 }
             }
-//            echo("<pre>");
-//            print_r($params);
-//            echo("</pre>");
+
            require __DIR__ . '/../vistas/plantillas/rpt_enlace_telecom.php';
         }else{
               /*
@@ -11238,10 +11285,6 @@ class Controller{
                 $tiempo_transcurrido= ($diff->d."d: ". $diff->h."h: ". $diff->i."m.");
                 $ultima_revision[$i]= array_merge($ultima_revision[$i],array('Total_Tiempo'=>$tiempo_transcurrido));
             }
-            
-//            echo "<pre>";
-//            print_r($ultima_revision);
-//            echo "</pre>";
             
             require __DIR__.'/../vistas/plantillas/rpt_revision_video.php';
         }
