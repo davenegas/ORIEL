@@ -6,6 +6,7 @@
         <script language="javascript" src="vistas/js/valida_un_solo_click_en_formulario.js"></script>
         <link rel="stylesheet" href="vistas/css/ventanaoculta.css">
         <script>
+            var muestra_reportes=0;
             var centesimas = 0;
             var segundos = <?php echo $diferenciasegundos; ?>;
             var limite_segundos = <?php echo $vector_puesto_monitoreo_unidad_video[0]['Tiempo_Personalizado_Revision'];?>;
@@ -54,6 +55,7 @@
             //Funcion para ocultar ventana de mantenimiento de proveedor
             function ocultar_elemento(){
                 document.getElementById('ventana_oculta_1').style.display = "none";
+                document.getElementById('ventana_oculta_4').style.display = "none";
             }
             
              //Valida informacion completa de formulario de proveedor
@@ -113,22 +115,7 @@
                 }else{
                     document.getElementById("Segundos").style.color="black";
                 }
-                //if (segundos == 59) {
-                //	segundos = -1;
-                //}
-                //	if ( (centesimas == 0)&&(segundos == 0) ) {
-                //		minutos++;
-                //		if (minutos < 10) { minutos = "0"+minutos }
-                //		Minutos.innerHTML = ":"+minutos;
-                //	}
-                //	if (minutos == 59) {
-                //		minutos = -1;
-                //	}
-                //	if ( (centesimas == 0)&&(segundos == 0)&&(minutos == 0) ) {
-                //		horas ++;
-                //		if (horas < 10) { horas = "0"+horas }
-                //		Horas.innerHTML = horas;
-                //	}
+              
             }
         </script>
         <script>
@@ -298,6 +285,18 @@
                 });
             }
             
+            function prueba(){
+                
+              <?php if (count($inconsistencias_reportadas)>0){?>
+                if (muestra_reportes==0){
+                  
+                     document.getElementById('ventana_oculta_4').style.display = "block";
+              
+                    muestra_reportes=1;
+                }
+              <?php }?>
+            }
+            
         </script>
         <style>
             *{
@@ -391,7 +390,7 @@
                             <h4><b>Reportar Situación a Z2:</b></h4>
                         </td>
                         <td>
-                           <input type="text" name="txt_situacion" id="txt_situacion" class="form-control">
+                            <input type="text" name="txt_situacion" onfocus="prueba()" id="txt_situacion" class="form-control">
                       </td>
                     </tr>
                 </tbody> 
@@ -458,38 +457,41 @@
             </div>
             <!--Cierre agregar teléfono a Punto BCR-->
         </div>
-            
-        <div id="ventana_oculta_6">
+        
+        <div id="ventana_oculta_4">
             <div id="popupventana2">
                 <div id="ventana2">
-                <img id="close" src='vistas/Imagenes/cerrar.png' width="25" onclick ="ocultar_elemento()"> 
-                    <!--Tabla con la lista de Unidades Ejecutoras-->
-                    <table id="tabla4" class="display" cellspacing="0" width="100%">
-                    <thead>
-                        <tr>
-                            <th style="text-align:center"></th>
-                            <th style="text-align:center">Nombre</th>
-                            <th style="text-align:center">Tipo</th>
-                            <th style="text-align:center">Provincia</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php 
-                        $tama=count($unidades_video_sin_puesto_monitoreo);
-                        for ($i = 0; $i <$tama; $i++) { ?>  
+                    <img id="close" src='vistas/Imagenes/cerrar.png' width="25" onclick ="ocultar_elemento()"> 
+                    <h3 align="center">Antes de reportar a Z2 alguna situación con esta unidad de video, verifique los reportes existentes:</h3>   
+                    <table id="tabla3" class="display" cellspacing="0" width="100%">
+                        <thead>
                             <tr>
-                                <td style="text-align:center"><?php echo $unidades_video_sin_puesto_monitoreo[$i]['Nombre'];?></td>
-                                <td style="text-align:center"><?php echo $unidades_video_sin_puesto_monitoreo[$i]['Nombre_Provincia'];?></td>
-                                <td style="text-align:center"><?php echo $unidades_video_sin_puesto_monitoreo[$i]['Descripcion'];?></td>
-                                <td style="text-align:center"><?php echo $unidades_video_sin_puesto_monitoreo[$i]['Camaras_Habilitadas'];?></td>
+                                <th style="text-align:center">Situación</th>
+                                <th style="text-align:center">Reportado por</th>
+                                <th style="text-align:center">Fecha Reporte</th>
+                              
                             </tr>
-                        <?php } ?>
-                     </tbody>
-                  </table>
+                        </thead>
+                        <tbody>
+                            <?php 
+                            $tam=count($inconsistencias_reportadas);
+                            for ($i = 0; $i <$tam; $i++) { ?>  
+                                <tr>
+                                    <td style="text-align:center"><?php echo $inconsistencias_reportadas[$i]['Reporta_Situacion'];?></td>
+                                    <td style="text-align:center"><?php echo $inconsistencias_reportadas[$i]['Nombre_Completo'];?></td>
+                                    <td style="text-align:center"><?php echo $inconsistencias_reportadas[$i]['Tiempo_Reporte'];?></td>
+                                   
+                                </tr>
+                            <?php } ?>
+                        </tbody>
+                    </table>
                 </div>
             </div>
             <!--Cierre Asignar UE a Punto BRC-->
         </div> 
+        
+        
+    
        
     </body>
 </html>
