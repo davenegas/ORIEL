@@ -153,4 +153,17 @@ class cls_reporteria{
             $this->obj_data_provider->desconectar();
         } 
     }
+    
+    public function ultima_revision_por_unidad_video(){
+        $this->obj_data_provider->conectar();
+        $this->arreglo=$this->obj_data_provider->trae_datos("t_bitacorarevisionesvideo
+            LEFT OUTER JOIN t_unidadvideo on t_unidadvideo.ID_Unidad_Video = t_bitacorarevisionesvideo.ID_Unidad_Video",
+            "t_bitacorarevisionesvideo.`ID_Unidad_Video`, MAX(concat(`Fecha_Termina_Revision`,' ',`Hora_Termina_Revision`)) Fecha_Hora ,
+            t_unidadvideo.Descripcion",
+            "t_unidadvideo.Estado=0
+            GROUP by t_bitacorarevisionesvideo.`ID_Unidad_Video` ORDER BY Fecha_Hora ASC");
+        $this->arreglo=$this->obj_data_provider->getArreglo();
+        $this->obj_data_provider->desconectar();
+    }
+    
 }?>

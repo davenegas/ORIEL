@@ -11218,8 +11218,29 @@ class Controller{
             $obj_puesto_monitoreo->obtiene_todos_puestos_de_monitoreo();
             $puestos_monitoreo= $obj_puesto_monitoreo->getArreglo();
             
+            //Obtiene la información de la ultima revisión de cada unidad de video
+            $obj_reporteria->setCondicion("");
+            $obj_reporteria->ultima_revision_por_unidad_video();
+            $ultima_revision = $obj_reporteria->getArreglo();
+            
+            //Obtiene la fecha del servidor en un arreglo
+            $fecha_actual= getdate();
+            //Convierta la fecha a formto aaaa/mm/dd hh:mm
+            $fecha_actual= $fecha_actual['year']."-".$fecha_actual['mon']."-".$fecha_actual['mday'].' '.$fecha_actual['hours'].':'.$fecha_actual['minutes'];
+            //asigna la fecha actual a un arreglo formato DateTime
+            $fecha1 = new DateTime($fecha_actual);
+            $diff="";
+            $tam=  count($ultima_revision);
+            for ($i = 0; $i <$tam; $i++) {
+                //asigna da date2 la fecha que trae en el arreglo
+                $fecha2 = new DateTime($ultima_revision[$i]['Fecha_Hora']);
+                $diff = $fecha1->diff($fecha2);
+                $tiempo_transcurrido= ($diff->d."d: ". $diff->h."h: ". $diff->i."m.");
+                $ultima_revision[$i]= array_merge($ultima_revision[$i],array('Total_Tiempo'=>$tiempo_transcurrido));
+            }
+            
 //            echo "<pre>";
-//            print_r($bitacora_revision_video);
+//            print_r($ultima_revision);
 //            echo "</pre>";
             
             require __DIR__.'/../vistas/plantillas/rpt_revision_video.php';

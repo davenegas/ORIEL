@@ -2,38 +2,23 @@
 <html lang="es">
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-        <title>Reporte de pruebas de alarma</title>
+        <title>Reporte de revisión de video</title>
         <script language="javascript" src="vistas/js/jquery.js"></script>
+        <link rel="stylesheet" href="vistas/css/ventanaoculta.css">
         <?php require_once 'frm_librerias_head.html'; ?> 
         <script>
-        $(document).ready(function(){
-           $("#tipo_punto").change(function () {
-                   $("#tipo_punto option:selected").each(function () {
-                    id_tipo_punto_bcr = $(this).val();
-                    id_provincia=document.getElementById('nombre_provincia').value;
-                    $.post("index.php?ctl=actualiza_en_vivo_punto_bcr", { id_tipo_punto_bcr: id_tipo_punto_bcr,id_provincia:id_provincia }, function(data){
-                        $("#punto_bcr").html(data);
-                        
-                    });            
-                });
-           });
-           $("#nombre_provincia").change(function () {
-                   $("#nombre_provincia option:selected").each(function () {
-                    id_provincia = $(this).val();
-                    id_tipo_punto_bcr=document.getElementById('tipo_punto').value;
-                    $.post("index.php?ctl=actualiza_en_vivo_punto_bcr", { id_tipo_punto_bcr: id_tipo_punto_bcr,id_provincia:id_provincia }, function(data){
-                        $("#punto_bcr").html(data); 
-                        
-                    });            
-                });
-           });
-        });
+            function ocultar_elemento(){
+                document.getElementById('ventana_oculta_2').style.display = "none";
+            }
+            function mostrar_ultimas_revisiones() {
+                document.getElementById('ventana_oculta_2').style.display = "block";
+            }
         </script>
     </head>
     <body>
         <?php require_once 'encabezado.php';?>
         <div class="container animated fadeIn quitar-float">
-            <h3>Generar Reporte de pruebas de alarma</h3> 
+            <h3>Generar Reporte de revisiones de video</h3> 
             <div class="espacio-abajo">
                 <form class="form-horizontal" role="form" method="POST" action="index.php?ctl=reporte_revisiones_video">
                     <h4 class="espacio-arriba">Seleccionar parámetros del filtro:</h4>
@@ -82,6 +67,7 @@
                         <input type="checkbox" id="retrasos" name="retrasos">Solo mostrar tiempos excedidos
                     </div> 
                     <button type="submit" class="btn btn-default" style="margin-top: 25px;" value="Generar Reporte">Generar Reporte</button>
+                    <a class="btn btn-default" style="margin-top: 25px;" onclick="mostrar_ultimas_revisiones();">Ultimas revisiones</a> 
                 </form>
             </div>
             <div class="container animated fadeIn">
@@ -120,5 +106,36 @@
             </div>
         </div>
         <?php require 'vistas/plantillas/pie_de_pagina.php' ?>
+        
+        <!--Asignar UE a Punto BCR-->
+        <div id="ventana_oculta_2">
+            <div id="popupventana2">
+                <div id="ventana2">
+                    <img id="close" src='vistas/Imagenes/cerrar.png' width="25" onclick ="ocultar_elemento()"> 
+                    <!--Tabla con la lista de Unidades Ejecutoras-->
+                    <table id="tabla" class="display" cellspacing="0" width="100%">
+                        <thead>
+                            <tr>
+                                <th style="text-align:center">Tiempo transcurrido</th>
+                                <th style="text-align:center">Unidad de Video</th>
+                                <th style="text-align:center">Fecha última revisión</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php 
+                            $tam=count($ultima_revision);
+                            for ($i = 0; $i <$tam; $i++) { ?>  
+                                <tr>
+                                    <td style="text-align:center"><?php echo $ultima_revision[$i]['Total_Tiempo'];?></td>
+                                    <td style="text-align:center"><?php echo $ultima_revision[$i]['Descripcion'];?></td>
+                                    <td style="text-align:center"><?php echo $ultima_revision[$i]['Fecha_Hora'];?></td>
+                                </tr>
+                            <?php } ?>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <!--Cierre Asignar UE a Punto BRC-->
+        </div> 
     </body>
 </html>
