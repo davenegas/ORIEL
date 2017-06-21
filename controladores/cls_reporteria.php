@@ -166,4 +166,14 @@ class cls_reporteria{
         $this->obj_data_provider->desconectar();
     }
     
+    public function revision_por_unidad_video(){
+        $this->obj_data_provider->conectar();
+        $this->arreglo=$this->obj_data_provider->trae_datos("t_bitacorarevisionesvideo ",
+            "t_bitacorarevisionesvideo.`ID_Unidad_Video`, concat(`Fecha_Termina_Revision`,' ',`Hora_Termina_Revision`) Fecha_Hora_Termina ,
+            concat(`Fecha_Inicia_Revision`,' ',`Hora_Inicia_Revision`) Fecha_Hora_Inicia",
+            $this->condicion);
+        $this->arreglo=$this->obj_data_provider->getArreglo();
+        $this->obj_data_provider->desconectar();
+    }
+    
 }?>

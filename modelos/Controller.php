@@ -11273,6 +11273,21 @@ class Controller{
             $obj_puesto_monitoreo->obtiene_todos_puestos_de_monitoreo();
             $puestos_monitoreo= $obj_puesto_monitoreo->getArreglo();
             
+            
+            
+            require __DIR__.'/../vistas/plantillas/rpt_revision_video.php';
+        }
+        else {
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }  
+    }
+    
+    public function reporte_ultimas_revisiones_video(){
+        if(isset($_SESSION['nombre'])){
+            $obj_reporteria = new cls_reporteria();
+            $obj_usuario = new cls_usuarios();
             //Obtiene la información de la ultima revisión de cada unidad de video
             $obj_reporteria->setCondicion("");
             $obj_reporteria->ultima_revision_por_unidad_video();
@@ -11285,6 +11300,10 @@ class Controller{
             //asigna la fecha actual a un arreglo formato DateTime
             $fecha1 = new DateTime($fecha_actual);
             $diff="";
+            // Variables de fecha para obtener promedio de revisión
+            $fecha_hoy = date('Y-m-j');
+            $fecha_hace_mes = strtotime ( '-5 day' , strtotime ( $fecha_hoy ) ) ;
+            $fecha_hace_mes = date ('Y-m-j', $fecha_hace_mes);
             $tam=  count($ultima_revision);
             for ($i = 0; $i <$tam; $i++) {
                 //asigna da date2 la fecha que trae en el arreglo
@@ -11292,9 +11311,46 @@ class Controller{
                 $diff = $fecha1->diff($fecha2);
                 $tiempo_transcurrido= ($diff->d."d: ". $diff->h."h: ". $diff->i."m.");
                 $ultima_revision[$i]= array_merge($ultima_revision[$i],array('Total_Tiempo'=>$tiempo_transcurrido));
+                
+                //Obtiene las revisiones de video de la unidad de hace 15 días
+                $obj_reporteria->setCondicion("ID_Unidad_Video=".$ultima_revision[$i]['ID_Unidad_Video']." and (Fecha_Inicia_Revision between '".$fecha_hace_mes."' AND '".$fecha_hoy."')");
+                $obj_reporteria->revision_por_unidad_video();
+                $todas_revisiones = $obj_reporteria->getArreglo();
+                //Cuenta las revisiones realizadas
+                $cantidad_revisiones = count($todas_revisiones);
+                $total_tiempo_revisiones =0;
+                for ($j = 0; $j <$cantidad_revisiones-1; $j++) {
+                    
+                    $fecha_revision_anterios= new DateTime($todas_revisiones[$j]['Fecha_Hora_Termina']);
+                    $fecha_revision_siguiente= new DateTime($todas_revisiones[$j+1]['Fecha_Hora_Inicia']);
+                    $diferencia_entre_revisiones= $fecha_revision_siguiente->diff($fecha_revision_anterios);
+                    $total_tiempo_revisiones+=(intval($diferencia_entre_revisiones->d)*86400)+(intval($diferencia_entre_revisiones->h)*3600)+(intval($diferencia_entre_revisiones->i)*60)+(intval($diferencia_entre_revisiones->s)*1);
+                }
+                $total_tiempo_revisiones= ($total_tiempo_revisiones/($cantidad_revisiones-1));
+                $hora_texto = "";
+                if($total_tiempo_revisiones>86400){
+                    $hora_texto .= 1 . "d ";
+                    $total_tiempo_revisiones=$total_tiempo_revisiones-86400;
+                }
+                $horas = floor($total_tiempo_revisiones / 3600);
+                $minutos = floor(($total_tiempo_revisiones - ($horas * 3600)) / 60);
+                $segundos = $total_tiempo_revisiones - ($horas * 3600) - ($minutos * 60);
+                if ($horas > 0 ) {
+                    $hora_texto .= $horas . "h ";
+                }
+                if ($minutos > 0 ) {
+                    $hora_texto .= $minutos . "m ";
+                }
+                if ($segundos > 0 ) {
+                    $hora_texto .= round($segundos) . "s";
+                }
+                $ultima_revision[$i]= array_merge($ultima_revision[$i],array('Tiempo_Promedio'=>($hora_texto)));
             }
             
-            require __DIR__.'/../vistas/plantillas/rpt_revision_video.php';
+//            echo "<pre>";
+//            print_r($ultima_revision);
+//            echo "</pre>";
+            require __DIR__.'/../vistas/plantillas/rpt_ultimas_revisiones_control_video.php';
         }
         else {
             $tipo_de_alerta="alert alert-warning";

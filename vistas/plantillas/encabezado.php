@@ -228,7 +228,7 @@
                                     <ul class="dropdown-menu">
                                       <li><a tabindex="-1" href="index.php?ctl=reporte_revisiones_video">Historial de revisiones</a></li>
                                       <li><a tabindex="-1" href="index.php?ctl=reporte_controles_de_video_listar">Estadisticas</a></li>
-                                      <li><a tabindex="-1" href="">Últimas revisiones</a></li>
+                                      <li><a tabindex="-1" href="index.php?ctl=reporte_ultimas_revisiones_video">Últimas revisiones</a></li>
                                     </ul>
                                 </li>
                             <?php }; ?> 

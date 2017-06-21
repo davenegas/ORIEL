@@ -6,14 +6,6 @@
         <script language="javascript" src="vistas/js/jquery.js"></script>
         <link rel="stylesheet" href="vistas/css/ventanaoculta.css">
         <?php require_once 'frm_librerias_head.html'; ?> 
-        <script>
-            function ocultar_elemento(){
-                document.getElementById('ventana_oculta_2').style.display = "none";
-            }
-            function mostrar_ultimas_revisiones() {
-                document.getElementById('ventana_oculta_2').style.display = "block";
-            }
-        </script>
     </head>
     <body>
         <?php require_once 'encabezado.php';?>
@@ -67,7 +59,6 @@
                         <input type="checkbox" id="retrasos" name="retrasos">Solo mostrar tiempos excedidos
                     </div> 
                     <button type="submit" class="btn btn-default" style="margin-top: 25px;" value="Generar Reporte">Generar Reporte</button>
-                    <a class="btn btn-default" style="margin-top: 25px;" onclick="mostrar_ultimas_revisiones();">Ultimas revisiones</a> 
                 </form>
             </div>
             <div class="container animated fadeIn">
@@ -106,39 +97,5 @@
             </div>
         </div>
         <?php require 'vistas/plantillas/pie_de_pagina.php' ?>
-        
-        <!--Asignar UE a Punto BCR-->
-        <div id="ventana_oculta_2">
-            <div id="popupventana2">
-                <div id="ventana2">
-                    <img id="close" src='vistas/Imagenes/cerrar.png' width="25" onclick ="ocultar_elemento()"> 
-                    <!--Tabla con la lista de Unidades Ejecutoras-->
-                    <table id="tabla" class="display table asc" cellspacing="0" width="100%">
-                        <thead>
-                            <tr>
-                                <th hidden style="text-align:center">ID</th>
-                                <th style="text-align:center">Tiempo transcurrido</th>
-                                <th style="text-align:center">Fecha última revisión</th>
-                                <th style="text-align:center">Unidad de Video</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php 
-                            $tam=count($ultima_revision);
-                            $sum =count($ultima_revision);
-                            for ($i = 0; $i <$tam; $i++) { ?>  
-                                <tr>
-                                    <td hidden style="text-align:center"><?php echo $sum; $sum--;?></td>
-                                    <td style="text-align:center"><?php echo $ultima_revision[$i]['Total_Tiempo'];?></td>
-                                    <td style="text-align:center"><?php echo $ultima_revision[$i]['Fecha_Hora'];?></td>
-                                    <td style="text-align:center"><?php echo $ultima_revision[$i]['Descripcion'];?></td>
-                                </tr>
-                            <?php } ?>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-            <!--Cierre Asignar UE a Punto BRC-->
-        </div> 
     </body>
 </html>
