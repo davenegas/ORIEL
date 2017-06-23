@@ -2727,6 +2727,7 @@ class Controller{
     public function frm_eventos_listar(){
         //Validación para verificar si el usuario está logeado en el sistema
         if(isset($_SESSION['nombre'])){
+            
             $this->ejecucion_automatico_proceso("Pruebas");
             //Creacion de objeto de clase eventos
             $obj_eventos = new cls_eventos();
@@ -3550,7 +3551,8 @@ class Controller{
     }
     
     //Muestra en pantalla un reportes de eventos cerrados, de acuerdo a parametros de busqueda específicos, como fecha, sitio, etc.
-    public function actualiza_en_vivo_reporte_cerrados(){
+    public function actualiza_en_vivo_reporte_cerrados()
+            {
         //Espera 2 segundos antes de iniciar la ejecución del método, para mostrar un gift de espera en pantalla
         sleep(2);       
         //Validación para verificar si el usuario está logeado en el sistema
@@ -5359,9 +5361,116 @@ class Controller{
                         }
                     }
                 }
-                break;                              
+                break;    
+            case "Control_Video":
+                if(date("H:i:s", $time)>='05:50:00' && date("H:i:s", $time)<='06:10:00'){
+                    $ruta=  $raiz."Cuenta_Visitas_Oriel/Ejecucion_Procesos/".date("Ymd", $time)." Control01.txt";
+                    if(!file_exists($ruta)){
+                        //Abre el archivo , lo crea si no lo encuentra
+                        $fp = fopen($ruta,"a+");
+                        //Cierra el archivo
+                        fclose($fp);
+                        
+                        $cadena_incosistencias=$this->asignar_sitios_control_video();
+                        
+                        //no olvidar crear al archivo visitantes.txt y poner el path correcto
+                        $fp = fopen($ruta,"w+"); 
+                        //Escribe en el archivo
+                        fwrite($fp, $cadena_incosistencias);
+                        //Cierra el archivo
+                        fclose($fp);
+                    }
+                }
+                if(date("H:i:s", $time)>='13:50:00' && date("H:i:s", $time)<='14:10:00'){
+                    $ruta=  $raiz."Cuenta_Visitas_Oriel/Ejecucion_Procesos/".date("Ymd", $time)." Control02.txt";
+                    if(!file_exists($ruta)){
+                        //Abre el archivo , lo crea si no lo encuentra
+                        $fp = fopen($ruta,"a+");
+                        //Cierra el archivo
+                        fclose($fp);
+                        
+                        $cadena_incosistencias=$this->asignar_sitios_control_video();
+                        //no olvidar crear al archivo visitantes.txt y poner el path correcto
+                        $fp = fopen($ruta,"w+"); 
+                        //Escribe en el archivo
+                        fwrite($fp, $cadena_incosistencias);
+                        //Cierra el archivo
+                        fclose($fp);
+                    }
+                }
+                if(date("H:i:s", $time)>='21:50:00' && date("H:i:s", $time)<='22:10:00'){
+                    $ruta=  $raiz."Cuenta_Visitas_Oriel/Ejecucion_Procesos/".date("Ymd", $time)." Control03.txt";
+                    if(!file_exists($ruta)){
+                        //Abre el archivo , lo crea si no lo encuentra
+                        $fp = fopen($ruta,"a+");
+                        //Cierra el archivo
+                        fclose($fp);
+                        
+                        $cadena_incosistencias=$this->asignar_sitios_control_video();
+                        
+                        //no olvidar crear al archivo visitantes.txt y poner el path correcto
+                        $fp = fopen($ruta,"w+"); 
+                        //Escribe en el archivo
+                        fwrite($fp, $cadena_incosistencias);
+                        //Cierra el archivo
+                        fclose($fp);
+                    }
+                }
+                break;
         }
         //Establece la ruta del archivo txt que lleva el control de visitas  a la pagina
+    }
+    
+    public function asignar_sitios_control_video(){
+        try{
+            $obj_reporteria = new cls_reporteria();
+            $obj_puestos_de_monitoreo = new cls_puestos_de_monitoreo();
+
+            $datos="";
+            //Obtiene la información de la ultima revisión de cada unidad de video
+            $obj_reporteria->setCondicion("");
+            $obj_reporteria->ultima_revision_por_unidad_video();
+            $ultima_revision = $obj_reporteria->getArreglo();
+
+            // Variables de fecha para obtener promedio de revisión
+            $fecha_hoy = date('Y-m-j');
+            $fecha_hace_mes = strtotime ( '-1 day' , strtotime ( $fecha_hoy ) ) ;
+            $fecha_hace_mes = date ('Y-m-j', $fecha_hace_mes);
+            $tam=  count($ultima_revision);
+            for ($i = 0; $i <$tam; $i++) {
+                //Obtiene las revisiones de video de la unidad de hace 5 días
+                $obj_reporteria->setCondicion("ID_Unidad_Video=".$ultima_revision[$i]['ID_Unidad_Video']." and (Fecha_Inicia_Revision between '".$fecha_hace_mes."' AND '".$fecha_hoy."')");
+                $obj_reporteria->revision_por_unidad_video();
+                $todas_revisiones = $obj_reporteria->getArreglo();
+                //Cuenta las revisiones realizadas
+                $cantidad_revisiones = count($todas_revisiones);
+                $total_tiempo_revisiones =0;
+                for ($j = 0; $j <$cantidad_revisiones-1; $j++) {
+                    $fecha_revision_anterios= new DateTime($todas_revisiones[$j]['Fecha_Hora_Termina']);
+                    $fecha_revision_siguiente= new DateTime($todas_revisiones[$j+1]['Fecha_Hora_Inicia']);
+                    $diferencia_entre_revisiones= $fecha_revision_siguiente->diff($fecha_revision_anterios);
+                    $total_tiempo_revisiones+=(intval($diferencia_entre_revisiones->d)*86400)+(intval($diferencia_entre_revisiones->h)*3600)+(intval($diferencia_entre_revisiones->i)*60)+(intval($diferencia_entre_revisiones->s)*1);
+                }
+                $total_tiempo_revisiones= ($total_tiempo_revisiones/($cantidad_revisiones-1));
+                $ultima_revision[$i]= array_merge(array('Tiempo_Promedio_Segundos'=>(round($total_tiempo_revisiones))),$ultima_revision[$i]);
+            }
+            rsort($ultima_revision);
+
+            $obj_puestos_de_monitoreo->setCondicion("ID_Puesto_Monitoreo=5");
+            $obj_puestos_de_monitoreo->eliminar_registros_puesto_de_monitoreo(); 
+            for ($i = 0; $i < 30; $i++) {
+                $obj_puestos_de_monitoreo->setId_puesto_monitoreo('5');
+                $obj_puestos_de_monitoreo->setId_unidad_video($ultima_revision[$i]['ID_Unidad_Video']);
+                $obj_puestos_de_monitoreo->setPosicion($i+1);
+                $obj_puestos_de_monitoreo->setTiempo_personalizado_revision('300');
+                $obj_puestos_de_monitoreo->agregar_nueva_unidad_de_video_a_puesto_de_monitoreo();
+                $datos.="agregado sitio= ".$ultima_revision[$i]['Descripcion']."\r\n";
+            }
+            
+            return $datos;
+        } catch (Exception $e){
+            
+        }
     }
     
     /////////////////////////////////////////////////////////////////////////////
@@ -10541,6 +10650,9 @@ class Controller{
     
     public function alertas_generales(){
         if(isset($_SESSION['nombre'])){
+            //Ejecuta un proceso automatico de actualizar el control de video
+            $this->ejecucion_automatico_proceso("Control_Video");
+            //Clases que se necesitan para la ventana de alertas
             $obj_cencon = new cls_cencon();
             $obj_personal = new cls_personal();
             $obj_externo = new cls_personal_externo();
@@ -11028,7 +11140,7 @@ class Controller{
             $diff="";
             // Variables de fecha para obtener promedio de revisión
             $fecha_hoy = date('Y-m-j');
-            $fecha_hace_mes = strtotime ( '-10 day' , strtotime ( $fecha_hoy ) ) ;
+            $fecha_hace_mes = strtotime ( '-5 day' , strtotime ( $fecha_hoy ) ) ;
             $fecha_hace_mes = date ('Y-m-j', $fecha_hace_mes);
             $tam=  count($ultima_revision);
             for ($i = 0; $i <$tam; $i++) {
@@ -11038,7 +11150,7 @@ class Controller{
                 $tiempo_transcurrido= ($diff->d."d: ". $diff->h."h: ". $diff->i."m.");
                 $ultima_revision[$i]= array_merge($ultima_revision[$i],array('Total_Tiempo'=>$tiempo_transcurrido));
                 
-                //Obtiene las revisiones de video de la unidad de hace 15 días
+                //Obtiene las revisiones de video de la unidad de hace 5 días
                 $obj_reporteria->setCondicion("ID_Unidad_Video=".$ultima_revision[$i]['ID_Unidad_Video']." and (Fecha_Inicia_Revision between '".$fecha_hace_mes."' AND '".$fecha_hoy."')");
                 $obj_reporteria->revision_por_unidad_video();
                 $todas_revisiones = $obj_reporteria->getArreglo();
