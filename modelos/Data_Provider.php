@@ -246,7 +246,7 @@ class Data_Provider{
 
         //echo "insert into ".$table."(".$campos.") values(".$valores.");";
         $consulta=$this->conexion->query("insert into ".$table."(".$campos.") values(".$valores.");");
-        echo ("insert into ".$table."(".$campos.") values(".$valores.");");
+        //echo ("insert into ".$table."(".$campos.") values(".$valores.");");
         //Establece a true el resultado de operación
         $this->resultado_operacion=$consulta;
         

@@ -190,6 +190,7 @@ $map = array(
     'reporte_controles_de_video_listar'=>array('controller'=>'Controller', 'action'=>'reporte_controles_de_video_listar'),
     'reporte_revisiones_video'=>array('controller'=>'Controller', 'action'=>'reporte_revisiones_video'),
     'reporte_ultimas_revisiones_video'=>array('controller'=>'Controller', 'action'=>'reporte_ultimas_revisiones_video'),
+    'reporte_ultimas_revisiones_video_completo'=>array('controller'=>'Controller', 'action'=>'reporte_ultimas_revisiones_video_completo'),
     
     //Información Proveedor enlaces
     'proveedor_listar'=>array('controller'=>'Controller', 'action'=>'proveedor_listar'),
