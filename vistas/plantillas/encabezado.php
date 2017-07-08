@@ -20,7 +20,30 @@
                 left: 100%;
                 margin-top: -1px;
             }
-    </style>
+        </style>
+        <script>
+            $(document).ready(function () {
+                <?php if( $_SESSION['rol']==1 || $_SESSION['rol']==11){?>
+
+                    myToast = $().toastmessage('showSuccessToast', "Revisiones de Control activadas");
+                    $().toastmessage('removeToast', myToast);
+                    revision_controles();
+                    setInterval(revision_controles,60000);
+                <?php } ?>
+            });
+
+            function revision_controles(){
+                $.post("index.php?ctl=revision_controles_desatendidos", {}, function(data){
+                    $().toastmessage('removeToast', myToast);
+                    $().toastmessage({sticky : true});
+                    var srt = data;
+                        var n= srt.search("<br>");
+                        if(n!=-1){
+                            myToast = $().toastmessage('showWarningToast', data); 
+                        }
+                });
+            }
+        </script>
     </head>
     <center><img src="vistas/Imagenes/Banner_Centro_de_Control.jpg" alt=""/></center>
     <nav class="navbar navbar-default" >
@@ -331,10 +354,6 @@
                                 
                             <?php if ($_SESSION['modulos']['Módulo-Pruebas alarma']==1){ ?>
                                 <li><a href="index.php?ctl=manual_ayuda_privado&manual=Prueba_Alarma">Manual Pruebas Alarma</a></li>
-                            <?php }; ?>
-                                 
-                            <?php if ($_SESSION['modulos']['Módulo-Asistencia de Personal']==1||$_SESSION['modulos']['Módulo-Asistencia encargado empresa']==1||$_SESSION['modulos']['Módulo-Asistencia encargado empresa']==1){?>
-                                <li><a href="index.php?ctl=manual_ayuda_privado&manual=Asistencia">Manual Pruebas Alarma</a></li>
                             <?php }; ?>
                         </ul>
                     </li>
