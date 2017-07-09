@@ -7,7 +7,6 @@
         <?php require_once 'frm_librerias_head.html'; ?>
         <script src="vistas/js/highcharts.js"></script>
         <script src="vistas/js/exporting.js"></script>
-        
         <script type="text/javascript">
             $(function () {
                 $(document).ready(function () {
@@ -154,6 +153,18 @@
                     });
 		});
             
+            $(document).ready(function () {
+                val=0;
+                cctv();
+                setInterval(cctv,10000);
+            });
+            
+            function cctv(){
+                $.post("index.php?ctl=reporte_tiempo_revision_actual", {}, function(data){
+                    var n= data.search("No se encontró");
+                    datos_control.innerHTML = data;
+                });
+            }
 	</script>
     </head>
     <body>
@@ -181,14 +192,9 @@
         
         <div class="col-sm-4 sidenav espacio-abajo">
             <div class="well" align="center" >CONTROL DE VIDEO</div>
-            <div style="text-align: justify;" class="espacio-abajo borde-gris">
-                <?php 
-                $tam = count($estado_controles);
-                for($i=0; $i<$tam;$i++){ ?>
-                    <p style="<?php echo $estado_controles[$i]['Color']?>"><?php echo $estado_controles[$i]['Nombre']." = ".$estado_controles[$i]['Usuario'];?> <br></p>
-                <?php }
-                ?>
-            </div>
+            
+            <div id="datos_control" style="text-align: justify;" class="espacio-abajo borde-gris"></div>
+            
             <div class="espacio-abajo well">
                 <h5 style="color: red;">Unidades de video, ultima revisión más de 4 horas: <?php echo $revision_241_mas;?></h5>
                 <h5 style="color: orange;">Unidades de video, ultima revisión entre 3 y 4 horas: <?php echo $revision_181_240;?></h5>

@@ -189,6 +189,10 @@ $map = array(
     'reporte_controles_de_video'=>array('controller'=>'Controller', 'action'=>'reporte_controles_de_video'),  
     'reporte_controles_de_video_listar'=>array('controller'=>'Controller', 'action'=>'reporte_controles_de_video_listar'),
     'reporte_revisiones_video'=>array('controller'=>'Controller', 'action'=>'reporte_revisiones_video'),
+    'reporte_ultimas_revisiones_video'=>array('controller'=>'Controller', 'action'=>'reporte_ultimas_revisiones_video'),
+    'reporte_ultimas_revisiones_video_completo'=>array('controller'=>'Controller', 'action'=>'reporte_ultimas_revisiones_video_completo'),
+    'reporte_tiempo_revision_actual'=>array('controller'=>'Controller', 'action'=>'reporte_tiempo_revision_actual'),
+    'revision_controles_desatendidos'=>array('controller'=>'Controller', 'action'=>'revision_controles_desatendidos'),
     
     //Información Proveedor enlaces
     'proveedor_listar'=>array('controller'=>'Controller', 'action'=>'proveedor_listar'),
