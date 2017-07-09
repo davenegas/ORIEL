@@ -136,8 +136,8 @@ class cls_trazabilidad{
         $this->obj_data_provider->conectar();
         if($this->condicion==""){
             $this->arreglo=$this->obj_data_provider->trae_datos(
-                    "t_traza left outer join t_usuario on t_traza.ID_Usuario=t_usuario.ID_usuario", 
-                    "t_traza.*,t_usuario.Nombre,t_usuario.Apellido",
+                    "bd_Registro_Trazabilidad.t_traza left outer join bd_gerencia_seguridad.t_usuario on bd_Registro_Trazabilidad.t_traza.ID_Usuario=bd_gerencia_seguridad.t_usuario.ID_usuario", 
+                    "bd_Registro_Trazabilidad.t_traza.*,bd_gerencia_seguridad.t_usuario.Nombre,bd_gerencia_seguridad.t_usuario.Apellido",
                     "");
             $this->arreglo=$this->obj_data_provider->getArreglo();
             $this->obj_data_provider->desconectar();
@@ -145,8 +145,8 @@ class cls_trazabilidad{
         }
         else{
             $this->arreglo=$this->obj_data_provider->trae_datos(
-                    "t_traza left outer join t_usuario on t_traza.ID_Usuario=t_usuario.ID_usuario", 
-                    "t_traza.*,t_usuario.Nombre,t_usuario.Apellido",
+                    "bd_Registro_Trazabilidad.t_traza left outer join bd_gerencia_seguridad.t_usuario on bd_Registro_Trazabilidad.t_traza.ID_Usuario=bd_gerencia_seguridad.t_usuario.ID_usuario", 
+                    "bd_Registro_Trazabilidad.t_traza.*,bd_gerencia_seguridad.t_usuario.Nombre,bd_gerencia_seguridad.t_usuario.Apellido",
                     $this->condicion);
             $this->arreglo=$this->obj_data_provider->getArreglo();
             $this->obj_data_provider->desconectar();
@@ -158,8 +158,8 @@ class cls_trazabilidad{
         $this->obj_data_provider->conectar();
         if($this->condicion==""){
             $this->arreglo=$this->obj_data_provider->trae_datos(
-                    "t_traza left outer join t_usuario on t_traza.ID_Usuario=t_usuario.ID_usuario order by Nombre_Completo", 
-                    "distinct(t_traza.ID_Usuario),concat(t_usuario.Nombre,' ',t_usuario.Apellido) as Nombre_Completo",
+                    "bd_Registro_Trazabilidad.t_traza left outer join bd_gerencia_seguridad.t_usuario on bd_Registro_Trazabilidad.t_traza.ID_Usuario=bd_gerencia_seguridad.t_usuario.ID_usuario order by Nombre_Completo", 
+                    "distinct(bd_Registro_Trazabilidad.t_traza.ID_Usuario),concat(bd_gerencia_seguridad.t_usuario.Nombre,' ',bd_gerencia_seguridad.t_usuario.Apellido) as Nombre_Completo",
                     "");
             $this->arreglo=$this->obj_data_provider->getArreglo();
             $this->obj_data_provider->desconectar();
@@ -167,9 +167,9 @@ class cls_trazabilidad{
         }
         else{
             $this->arreglo=$this->obj_data_provider->trae_datos(
-                    "t_traza left outer join t_usuario on t_traza.ID_Usuario=t_usuario.ID_usuario", 
+                    "bd_Registro_Trazabilidad.t_traza left outer join bd_gerencia_seguridad.t_usuario on bd_Registro_Trazabilidad.t_traza.ID_Usuario=bd_gerencia_seguridad.t_usuario.ID_usuario", 
                     "distinct(t_traza.ID_Usuario),concat(t_usuario.Nombre,' ',t_usuario.Apellido) as Nombre_Completo",
-                    $this->condicion);
+                    $this->condicion." order by Nombre_Completo");
             $this->arreglo=$this->obj_data_provider->getArreglo();
             $this->obj_data_provider->desconectar();
             $this->resultado_operacion=true;
@@ -180,8 +180,8 @@ class cls_trazabilidad{
         $this->obj_data_provider->conectar();
         if($this->condicion==""){
             $this->arreglo=$this->obj_data_provider->trae_datos(
-                    "t_traza order by t_traza.Tabla_Afectada", 
-                    "distinct(t_traza.Tabla_Afectada)",
+                    "bd_Registro_Trazabilidad.t_traza order by bd_Registro_Trazabilidad.t_traza.Tabla_Afectada", 
+                    "distinct(bd_Registro_Trazabilidad.t_traza.Tabla_Afectada)",
                     "");
             $this->arreglo=$this->obj_data_provider->getArreglo();
             $this->obj_data_provider->desconectar();
@@ -189,9 +189,9 @@ class cls_trazabilidad{
         }
         else{
             $this->arreglo=$this->obj_data_provider->trae_datos(
-                    "t_traza", 
-                    "distinct(t_traza.Tabla_Afectada)",
-                    $this->condicion);
+                    "bd_Registro_Trazabilidad.t_traza", 
+                    "distinct(bd_Registro_Trazabilidad.t_traza.Tabla_Afectada",
+                    $this->condicion." order by bd_Registro_Trazabilidad.t_traza.Tabla_Afectada");
             $this->arreglo=$this->obj_data_provider->getArreglo();
             $this->obj_data_provider->desconectar();
             $this->resultado_operacion=true;

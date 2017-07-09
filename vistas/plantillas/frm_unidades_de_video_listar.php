@@ -133,10 +133,13 @@
                         $.post("index.php?ctl=editar_campo_unidades_de_video", { id_unidad_video:document.getElementById('ID_Unidad_Video_Estado').value ,campo_a_editar:document.getElementById('campo_a_editar_estado').value,valor:document.getElementById('Estado_Unidad_Video').value}, function(data){
                            var str = data;
                            var n = str.search("SI");
-                           if (n!=-1){}
+                           if (n!=-1){
+                               alert('Recuerde que si esta unidad de video acaba de sacarse de producción, automáticamente fue eliminada de los puestos de control de video donde participaba.');
+                           }
                         }); 
                         
-                        document.getElementById('ventana_oculta_3').style.display = "none";    
+                        document.getElementById('ventana_oculta_3').style.display = "none";   
+                        
                     }
                  }
             }

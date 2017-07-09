@@ -490,6 +490,26 @@ class cls_puestos_de_monitoreo{
         } 
     }
     
+    public function obtiene_puestos_de_monitoreo_presentes_en_unidad_de_video(){
+        $this->obj_data_provider->conectar();
+        if($this->condicion==""){
+            $this->arreglo=$this->obj_data_provider->trae_datos(
+                    "t_puestomonitoreounidadvideo", 
+                    "*",
+                    "");
+            $this->arreglo=$this->obj_data_provider->getArreglo();
+            $this->obj_data_provider->desconectar();
+        }
+        else{
+            $this->arreglo=$this->obj_data_provider->trae_datos(
+                    "t_puestomonitoreounidadvideo", 
+                    "*",
+                    $this->condicion);
+            $this->arreglo=$this->obj_data_provider->getArreglo();
+            $this->obj_data_provider->desconectar();
+        } 
+    }
+
     public function obtiene_estadistica_general_puestos_de_monitoreo(){
         $this->obj_data_provider->conectar();
         if($this->condicion==""){
@@ -511,6 +531,9 @@ class cls_puestos_de_monitoreo{
             $this->obj_data_provider->desconectar();
         } 
     }
+    
+    
+    
     
     public function obtiene_todas_las_unidades_asociadas_a_un_puesto_de_monitoreo(){
         $this->obj_data_provider->conectar();
@@ -738,6 +761,16 @@ class cls_puestos_de_monitoreo{
         $this->obj_data_provider->conectar();
         //Llama al metodo para editar los datos correspondientes
         $this->obj_data_provider->edita_datos("t_PuestoMonitoreounidadvideo","Tiempo_Personalizado_Revision=".$this->tiempo_estandar_revision,$this->condicion);
+        //Metodo de la clase data provider que desconecta la sesión con la base de datos
+        $this->obj_data_provider->desconectar();
+       
+    }
+    
+     //Este metodo realiza la modificación del estado del modulo, de activo a inactivo o viceversa en la bd
+    function edita_posicion_en_unidades_de_video_de_un_puesto(){
+        $this->obj_data_provider->conectar();
+        //Llama al metodo para editar los datos correspondientes
+        $this->obj_data_provider->edita_datos("t_PuestoMonitoreounidadvideo","Posicion=".$this->posicion,$this->condicion);
         //Metodo de la clase data provider que desconecta la sesión con la base de datos
         $this->obj_data_provider->desconectar();
        
