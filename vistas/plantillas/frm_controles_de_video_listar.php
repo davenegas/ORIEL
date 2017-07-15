@@ -3,11 +3,10 @@
         <meta charset="utf-8"/>
         <title>Control de Video</title>
         <?php require_once 'frm_librerias_head.html';?>
-        <!--<script language="javascript" src="vistas/js/valida_un_solo_click_en_formulario.js"></script>-->
+        <script language="javascript" src="vistas/js/valida_un_solo_click_en_formulario.js"></script>
         <link rel="stylesheet" href="vistas/css/ventanaoculta.css">
         <script>
             var muestra_reportes=0;
-            var cuenta=0;
             var centesimas = 0;
             var segundos = <?php echo $diferenciasegundos; ?>;
             var limite_segundos = <?php echo $vector_puesto_monitoreo_unidad_video[0]['Tiempo_Personalizado_Revision'];?>;
@@ -146,9 +145,7 @@
                         title: 'Confirmación!',
                         content: 'Recuerde tomarse el tiempo necesario para revisar el video actual. Desea registrar esta revisión con este tiempo?',
                         confirm: function(){
-                           // if (enviado()==true){
-                             if (cuenta == 0){
-                                
+                            if (enviado()==true){
                                 var req_mantenimiento;
                                 var res_conexion;
                                 var rep_situacion="";
@@ -198,8 +195,7 @@
                                         }
                                     }
                                 });
-                              cuenta=1;
-                            }
+                            } 
 
                         },
                         cancel: function(){
@@ -208,9 +204,7 @@
                     });
                     
                 }else{
-//                    if (enviado()==true){
-                      if (cuenta == 0){
-                        
+                    if (enviado()==true){
                         var req_mantenimiento;
                         var res_conexion;
                         var rep_situacion="";
@@ -260,10 +254,7 @@
                                 }
                             }
                         });
-                        cuenta=1;
-                    } else{
-                        document.location.href="index.php?ctl=controles_de_video_listar";
-                    }
+                    } 
                 }
             }
             
@@ -294,7 +285,7 @@
                 });
             }
             
-            function muestra_inconsistencias_reportadas(){
+            function prueba(){
                 
               <?php if (count($inconsistencias_reportadas)>0){?>
                 if (muestra_reportes==0){
@@ -399,7 +390,7 @@
                             <h4><b>Reportar Situación a Z2:</b></h4>
                         </td>
                         <td>
-                            <input type="text" name="txt_situacion" onfocus="muestra_inconsistencias_reportadas()" id="txt_situacion" class="form-control">
+                            <input type="text" name="txt_situacion" onfocus="prueba()" id="txt_situacion" class="form-control">
                       </td>
                     </tr>
                 </tbody> 
@@ -413,7 +404,7 @@
                 <img align="center" src="../../../Padron_Fotografico_Unidades_Video/<?php echo $vector_padron_fotografico[0]['Nombre_Ruta'];?>" alt="" width="1000px" class="img-responsive" alt="Cinque Terre"> 
             </div>
             <br> 
-            
+            <!--<h4 style="float:right;"><b><?php echo $vector_informacion_unidad_video_siguiente[0]['Descripcion'];?> (<?php echo $vector_punto_bcr_siguiente[0]['Codigo'];?>)>></b></h4>-->
             <br><br><br>
             <table id="tabla" class="display" cellspacing="0" width="100%">
                 <thead>
@@ -497,6 +488,11 @@
                     </table>
                 </div>
             </div>
+            <!--Cierre Asignar UE a Punto BRC-->
         </div> 
+        
+        
+    
+       
     </body>
 </html>

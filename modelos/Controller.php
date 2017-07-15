@@ -9405,21 +9405,24 @@ class Controller{
     }
     
     public function guarda_revision_de_video_actual() {
-    
-        if(isset($_SESSION['nombre'])){
+
+        if(isset($_SESSION['nombre'])){	
             $obj_puesto_monitoreo = new cls_puestos_de_monitoreo(); 
             $obj_traza = new cls_trazabilidad();
-        
+            $resultado="sin nada";
+		
+            
             //Valida que el puesto de monitoreo se encuentre tomado por el usuario actual antes de salvar la revisión de video
             $obj_puesto_monitoreo->setCondicion("t_puestomonitoreo.Estado=1 AND t_puestomonitoreo.ID_Usuario=".$_SESSION['id']." AND t_puestomonitoreo.ID_Puesto_Monitoreo=".$_POST['id_puesto']);
             $obj_puesto_monitoreo->obtiene_todos_puestos_de_monitoreo();
 
             if (count($obj_puesto_monitoreo->getArreglo())>0){
-                                
-                $obj_puesto_monitoreo->setCondicion("ID_Usuario=".$_SESSION['id']." AND Estado=0 AND ID_Bitacora_Revision_Video=".$_POST['id_revis']);
-                
+//                $cadena.="Primer if, correcto.";fwrite($fp, "Revision Numero: ".$_POST['id_revis'].". Linea 9436. Hora Actual: ".date("H:i:s", time())."\r\n");
+                //Cambio de línea de código, Diego Venegas 20170627-1510
+                $obj_puesto_monitoreo->setCondicion("ID_Usuario=".$_SESSION['id']." AND Estado=0 AND ID_Bitacora_Revision_Video=".$_POST['id_revis']. " limit 1");
+                //$obj_puesto_monitoreo->setCondicion("ID_Usuario=".$_SESSION['id']." AND ID_Bitacora_Revision_Video=".$_POST['id_revis']);
                 if ($obj_puesto_monitoreo->existe_revision_de_video_pendiente_en_bitacora()){
-                    
+//                    $cadena.="Segundo if, correcto.";fwrite($fp, "Revision Numero: ".$_POST['id_revis'].". Linea 9441. Hora Actual: ".date("H:i:s", time())."\r\n");
                     $obj_puesto_monitoreo->setCondicion("ID_Bitacora_Revision_Video=".$_POST['id_revis']);
                     $obj_puesto_monitoreo->setEstado("1");
                     $obj_puesto_monitoreo->setFecha_termina_revision(date("Y-m-d"));
@@ -9430,115 +9433,119 @@ class Controller{
                     $obj_puesto_monitoreo->setReporta_situacion($_POST['rep_situacion']);
 
                     if (strlen(trim($_POST['rep_situacion']))>5){
-						
+//			fwrite($fp, "Revision Numero: ".$_POST['id_revis'].". Linea 9452. Hora Actual: ".date("H:i:s", time())."\r\n");
                         $obj_puesto_monitoreo->setId_bitacora_revision_video($_POST['id_revis']);
                         $obj_puesto_monitoreo->setEstado_inconsistencia("0");
                         $obj_puesto_monitoreo->setTipo_inconsistencia("0");
                         $obj_puesto_monitoreo->agregar_nuevo_registro_inconsistencias_de_video();
-                      
+//                        $cadena.="viene con inconsistencia video.";
                     }
                     $fechaInicialRevision = $_POST['fecha_ini']." ".$_POST['hora_ini'];     
                     $fechaActual =date("Y-m-d")." ".date("H:i:s", time());
                     $diferenciasegundos = intval(strtotime($fechaActual) - strtotime($fechaInicialRevision));
-					
+//					fwrite($fp, "Revision Numero: ".$_POST['id_revis'].". Linea 9462. Hora Actual: ".date("H:i:s", time())."\r\n");
                     $obj_puesto_monitoreo->setDuracion_revision($diferenciasegundos);
                     $tiempo_maximo_revision=intval($_POST['tiem']);
                     
                     if ($diferenciasegundos<=$tiempo_maximo_revision){
-                        $obj_puesto_monitoreo->setRetraso_segundos("0");
+                        $obj_puesto_monitoreo->setRetraso_segundos("0");//fwrite($fp, "Revision Numero: ".$_POST['id_revis'].". Linea 9467. Hora Actual: ".date("H:i:s", time())."\r\n");
                         $obj_puesto_monitoreo->setJustificacion_retraso("");
                         $obj_puesto_monitoreo->guarda_y_concluye_una_revision_de_video();
                         $resultado= 'on_time';
-                    
+//                        $cadena.="on_time.";
                     }else{
-                        $diferenciasegundos=$diferenciasegundos-$tiempo_maximo_revision;
+                        $diferenciasegundos=$diferenciasegundos-$tiempo_maximo_revision;//fwrite($fp, "Revision Numero: ".$_POST['id_revis'].". Linea 9473. Hora Actual: ".date("H:i:s", time())."\r\n");
                         $obj_puesto_monitoreo->setRetraso_segundos($diferenciasegundos);
                         $obj_traza->setCondicion("(bd_Registro_Trazabilidad.t_traza.ID_Usuario=".$_SESSION['id'].") AND (bd_Registro_Trazabilidad.t_traza.Tabla_Afectada='T_Evento' OR bd_Registro_Trazabilidad.t_traza.Tabla_Afectada='T_detalleEvento' OR bd_Registro_Trazabilidad.t_traza.Tabla_Afectada='T_EventoCencon' OR bd_Registro_Trazabilidad.t_traza.Tabla_Afectada='T_PruebaAlarma') AND (bd_Registro_Trazabilidad.t_traza.Fecha between '".$_POST['fecha_ini']."' AND '".date("Y-m-d")."') AND (bd_Registro_Trazabilidad.t_traza.Hora between '".$_POST['hora_ini']."' AND '".date("H:i:s", time())."')");
                         $obj_traza->obtiene_trazabilidad();
                         if (count($obj_traza->getArreglo())>0){
                             $obj_puesto_monitoreo->setJustificacion_retraso("JUSTIFICADO. Usuario: ".$_SESSION['name']." ".$_SESSION['apellido']." Cédula: ".$_SESSION['nombre']." Id:".$_SESSION['id']." con retraso justificado de ".$diferenciasegundos." segundos, en la revisión de video actual. Atendiendo procesos del centro de control (bitácora, cencon y pruebas de alarma).");
-			     $resultado= 'justificado'; 
+//                            fwrite($fp, "Revision Numero: ".$_POST['id_revis'].". Linea 9479. Hora Actual: ".date("H:i:s", time())."\r\n");
+                            $resultado= 'justificado'; 
+//                            $cadena.="justificado.";
                         }else{
                             $obj_puesto_monitoreo->setJustificacion_retraso("INJUSTIFICADO. Usuario: ".$_SESSION['name']." ".$_SESSION['apellido']." Cédula: ".$_SESSION['nombre']." Id:".$_SESSION['id']." no justificó el retraso de ".$diferenciasegundos." segundos, en la revisión de video actual. La ventana de justificación fue omitida o cerrada por el usuario.");
-                            $resultado= 'retraso';
+                            $resultado= 'retraso';//fwrite($fp, "Revision Numero: ".$_POST['id_revis'].". Linea 9484. Hora Actual: ".date("H:i:s", time())."\r\n"); 
+//                            $cadena.="retraso.";
                         }
                         $obj_puesto_monitoreo->guarda_y_concluye_una_revision_de_video();
-                    }		
+                    }
+//                    fwrite($fp, "Revision Numero: ".$_POST['id_revis'].". Linea 9489. Hora Actual: ".date("H:i:s", time())."\r\n");
                     $obj_puesto_monitoreo->setCondicion("T_PuestoMonitoreoUnidadVideo.ID_Puesto_Monitoreo=".$_POST['id_puesto']);
                     $obj_puesto_monitoreo->obtiene_todas_las_unidades_asociadas_a_un_puesto_de_monitoreo();
 
                     if (count($obj_puesto_monitoreo->getArreglo())>0){
-                        
+//                        $cadena.="if 3 correcto.";fwrite($fp, "Revision Numero: ".$_POST['id_revis'].". Linea 9494. Hora Actual: ".date("H:i:s", time())."\r\n");
                         $obj_puesto_monitoreo->setCondicion("t_puestomonitoreo.Estado=1 AND t_puestomonitoreo.ID_Usuario=".$_SESSION['id']." AND t_puestomonitoreo.ID_Puesto_Monitoreo=".$_POST['id_puesto']);
                         $obj_puesto_monitoreo->obtiene_todos_puestos_de_monitoreo();
                         $vector_puesto_de_monitoreo_actual=$obj_puesto_monitoreo->getArreglo();
 
                         if (count($obj_puesto_monitoreo->getArreglo())>0){
-                            
+//                            $cadena.="if 4 correcto.";fwrite($fp, "Revision Numero: ".$_POST['id_revis'].". Linea 9500. Hora Actual: ".date("H:i:s", time())."\r\n");
                             //ingresa en base de datos la siguiente revisión
-                            $obj_puesto_monitoreo->setId_puesto_monitoreo($_POST['id_puesto']);fwrite($fp, "Revision Numero: ".$_POST['id_revis'].". Linea 9502. Hora Actual: ".date("H:i:s", time())."\r\n");
-                            $obj_puesto_monitoreo->setCondicion("ID_Puesto_Monitoreo=".$_POST['id_puesto']. " AND Estado=1 order by ID_Bitacora_Revision_Video desc");fwrite($fp, "Revision Numero: ".$_POST['id_revis'].". Linea 9503. Hora Actual: ".date("H:i:s", time())."\r\n");
-                            $obj_puesto_monitoreo->obtiene_ultima_posicion_concluida_en_puesto_de_monitoreo();fwrite($fp, "Revision Numero: ".$_POST['id_revis'].". Linea 9504. Hora Actual: ".date("H:i:s", time())."\r\n");
-                            $temp_posicion=intval($obj_puesto_monitoreo->getUltima_posicion_concluida());fwrite($fp, "Revision Numero: ".$_POST['id_revis'].". Linea 9505. Hora Actual: ".date("H:i:s", time())."\r\n");
+                            $obj_puesto_monitoreo->setId_puesto_monitoreo($_POST['id_puesto']);//fwrite($fp, "Revision Numero: ".$_POST['id_revis'].". Linea 9502. Hora Actual: ".date("H:i:s", time())."\r\n");
+                            $obj_puesto_monitoreo->setCondicion("ID_Puesto_Monitoreo=".$_POST['id_puesto']. " AND Estado=1 order by ID_Bitacora_Revision_Video desc limit 1");//fwrite($fp, "Revision Numero: ".$_POST['id_revis'].". Linea 9503. Hora Actual: ".date("H:i:s", time())."\r\n");
+                            $obj_puesto_monitoreo->obtiene_ultima_posicion_concluida_en_puesto_de_monitoreo();//fwrite($fp, "Revision Numero: ".$_POST['id_revis'].". Linea 9504. Hora Actual: ".date("H:i:s", time())."\r\n");
+                            $temp_posicion=intval($obj_puesto_monitoreo->getUltima_posicion_concluida());//fwrite($fp, "Revision Numero: ".$_POST['id_revis'].". Linea 9505. Hora Actual: ".date("H:i:s", time())."\r\n");
                             $temp_posicion=$temp_posicion+1;
                             //$obj_puesto_monitoreo->setCondicion("ID_Puesto_Monitoreo=".$_POST['id_puesto']. " AND Posicion=".$obj_puesto_monitoreo->getUltima_posicion_concluida()+1);
-                            $obj_puesto_monitoreo->setCondicion("ID_Puesto_Monitoreo=".$_POST['id_puesto']. " AND Posicion=".$temp_posicion);fwrite($fp, "Revision Numero: ".$_POST['id_revis'].". Linea 9508. Hora Actual: ".date("H:i:s", time())."\r\n");
+                            $obj_puesto_monitoreo->setCondicion("ID_Puesto_Monitoreo=".$_POST['id_puesto']. " AND Posicion=".$temp_posicion);//fwrite($fp, "Revision Numero: ".$_POST['id_revis'].". Linea 9508. Hora Actual: ".date("H:i:s", time())."\r\n");
                             if ($obj_puesto_monitoreo->existe_esta_posicion_en_este_puesto_de_monitoreo()){
                                 //$obj_puesto_monitoreo->setPosicion($obj_puesto_monitoreo->getUltima_posicion_concluida()+1);
-								
+//				fwrite($fp, "Revision Numero: ".$_POST['id_revis'].". Linea 9511. Hora Actual: ".date("H:i:s", time())."\r\n");
                                 $obj_puesto_monitoreo->setPosicion($temp_posicion);
-                                
+//                                $cadena.="siguiente posición ok.";
                             }else{
-								
+//				fwrite($fp, "Revision Numero: ".$_POST['id_revis'].". Linea 9515. Hora Actual: ".date("H:i:s", time())."\r\n");
                                 $obj_puesto_monitoreo->setCondicion("ID_Puesto_Monitoreo=".$_POST['id_puesto']. " AND Posicion=1");
                                 if ($obj_puesto_monitoreo->existe_esta_posicion_en_este_puesto_de_monitoreo()){
                                     $obj_puesto_monitoreo->setPosicion(1);
-                                
+//                                    $cadena.="Inicia el control a 1.";
                                 }
                             } 
                             
                             //Validación que permite enviar un sitio 10 posiciones adelante
-                            $verifica_si_hay_para_revisar=-1;
-                            $verifica_si_hay_para_reacomodar=-1;
+                            $verifica_si_hay_para_revisar=-1;//fwrite($fp, "Revision Numero: ".$_POST['id_revis'].". Linea 9524. Hora Actual: ".date("H:i:s", time())."\r\n");
+                            $verifica_si_hay_para_reacomodar=-1;//fwrite($fp, "Revision Numero: ".$_POST['id_revis'].". Linea 9525. Hora Actual: ".date("H:i:s", time())."\r\n");
                             if (($_POST['req_mantenimiento']=="1")&&($_POST['res_conexion']=="2")){
-                                
+                                $cadena.="req mantenimiento y res conexion ok +10 sitios.";//fwrite($fp, "Revision Numero: ".$_POST['id_revis'].". Linea 9527. Hora Actual: ".date("H:i:s", time())."\r\n");
                                 if (!isset($_SESSION['vector_temp_revision_video'])){
-                                    $vector_temp_revision_video=array();
+                                    $vector_temp_revision_video=array();//fwrite($fp, "Revision Numero: ".$_POST['id_revis'].". Linea 9529. Hora Actual: ".date("H:i:s", time())."\r\n");
                                     $vector_temp_revision_video[]=array("ID_Puesto_Monitoreo"=>$_POST['id_puesto'],"Posicion"=>$_POST['pos'],"ID_Usuario"=>$_SESSION['id'],"Contador"=>0,"Posicion_Real"=>$obj_puesto_monitoreo->getPosicion());
-                                    $_SESSION['vector_temp_revision_video']=$vector_temp_revision_video;
+                                    $_SESSION['vector_temp_revision_video']=$vector_temp_revision_video;//fwrite($fp, "Revision Numero: ".$_POST['id_revis'].". Linea 9531. Hora Actual: ".date("H:i:s", time())."\r\n");
                                 }else{
-                                    $tam=count($_SESSION['vector_temp_revision_video']);
-                                    $ya_existe_esta_posicion=0;
+                                    $tam=count($_SESSION['vector_temp_revision_video']);//fwrite($fp, "Revision Numero: ".$_POST['id_revis'].". Linea 9533. Hora Actual: ".date("H:i:s", time())."\r\n");
+                                    $ya_existe_esta_posicion=0;//fwrite($fp, "Revision Numero: ".$_POST['id_revis'].". Linea 9534. Hora Actual: ".date("H:i:s", time())."\r\n");
                                     for ($i = 0; $i < $tam; $i++) {
                                         if (($_SESSION['vector_temp_revision_video'][$i]['ID_Usuario']==$_SESSION['id'])&&($_SESSION['vector_temp_revision_video'][$i]['ID_Puesto_Monitoreo']==$_POST['id_puesto'])){
                                             if ($_SESSION['vector_temp_revision_video'][$i]['Posicion']==$obj_puesto_monitoreo->getPosicion()){
-                                                $ya_existe_esta_posicion=1; 
+                                                $ya_existe_esta_posicion=1;    //fwrite($fp, "Revision Numero: ".$_POST['id_revis'].". Linea 9538. Hora Actual: ".date("H:i:s", time())."\r\n");
                                             }
                                             $temp=intval($_SESSION['vector_temp_revision_video'][$i]['Contador']);
-                                            $temp=$temp+1;
+                                            $temp=$temp+1;//fwrite($fp, "Revision Numero: ".$_POST['id_revis'].". Linea 9541. Hora Actual: ".date("H:i:s", time())."\r\n");
                                             $_SESSION['vector_temp_revision_video'][$i]['Contador']=$temp;
                                             
                                             if ($_SESSION['vector_temp_revision_video'][$i]['Contador']<11){
-                                                $_SESSION['vector_temp_revision_video'][$i]['Posicion_Real']=$obj_puesto_monitoreo->getPosicion();fwrite($fp, "Revision Numero: ".$_POST['id_revis'].". Linea 9545. Hora Actual: ".date("H:i:s", time())."\r\n");
+                                                $_SESSION['vector_temp_revision_video'][$i]['Posicion_Real']=$obj_puesto_monitoreo->getPosicion();//fwrite($fp, "Revision Numero: ".$_POST['id_revis'].". Linea 9545. Hora Actual: ".date("H:i:s", time())."\r\n");
                                             }
                                             if ($_SESSION['vector_temp_revision_video'][$i]['Contador']==10){
-                                                $verifica_si_hay_para_revisar=$i;
+                                                $verifica_si_hay_para_revisar=$i;//fwrite($fp, "Revision Numero: ".$_POST['id_revis'].". Linea 9548. Hora Actual: ".date("H:i:s", time())."\r\n");
                                             }
                                             if ($_SESSION['vector_temp_revision_video'][$i]['Contador']==11){
-                                                $verifica_si_hay_para_reacomodar=$i;
+                                                $verifica_si_hay_para_reacomodar=$i;//fwrite($fp, "Revision Numero: ".$_POST['id_revis'].". Linea 9551. Hora Actual: ".date("H:i:s", time())."\r\n");
                                             }
                                         }
                                     }
                                     if ($ya_existe_esta_posicion==0){
-							
+//					fwrite($fp, "Revision Numero: ".$_POST['id_revis'].". Linea 9556. Hora Actual: ".date("H:i:s", time())."\r\n");
                                         $vector_temp_revision_video[]=array("ID_Puesto_Monitoreo"=>$_POST['id_puesto'],"Posicion"=>$_POST['pos'],"ID_Usuario"=>$_SESSION['id'],"Contador"=>0,"Posicion_Real"=>$obj_puesto_monitoreo->getPosicion());
                                         $_SESSION['vector_temp_revision_video']=  array_merge($_SESSION['vector_temp_revision_video'],$vector_temp_revision_video);
                                     }
                                 }    
                             }else{
-                               
+//                                $cadena.="else de req mantenimiento y res conexion.";
                                 if (isset($_SESSION['vector_temp_revision_video'])){
-                                    $tam=count($_SESSION['vector_temp_revision_video']);
+                                    $tam=count($_SESSION['vector_temp_revision_video']);//fwrite($fp, "Revision Numero: ".$_POST['id_revis'].". Linea 9564. Hora Actual: ".date("H:i:s", time())."\r\n");
                                     for ($i = 0; $i < $tam; $i++) {
                                         if (($_SESSION['vector_temp_revision_video'][$i]['ID_Usuario']==$_SESSION['id'])&&($_SESSION['vector_temp_revision_video'][$i]['ID_Puesto_Monitoreo']==$_POST['id_puesto'])){
                                             $temp=intval($_SESSION['vector_temp_revision_video'][$i]['Contador']);
@@ -9559,45 +9566,45 @@ class Controller{
                                 }
                             }
                             if ($verifica_si_hay_para_revisar>-1){
-                                
+//                                $cadena.="verifica_si_hay_para_revisar ok.";fwrite($fp, "Revision Numero: ".$_POST['id_revis'].". Linea 9585. Hora Actual: ".date("H:i:s", time())."\r\n");
                                 $obj_puesto_monitoreo->setCondicion("ID_Puesto_Monitoreo=".$_SESSION['vector_temp_revision_video'][$verifica_si_hay_para_revisar]['ID_Puesto_Monitoreo']. " AND Posicion=".$_SESSION['vector_temp_revision_video'][$verifica_si_hay_para_revisar]['Posicion']);
                                 if ($obj_puesto_monitoreo->existe_esta_posicion_en_este_puesto_de_monitoreo()){
-							
+//                                    fwrite($fp, "Revision Numero: ".$_POST['id_revis'].". Linea 9588. Hora Actual: ".date("H:i:s", time())."\r\n");
                                     $obj_puesto_monitoreo->setPosicion($_SESSION['vector_temp_revision_video'][$verifica_si_hay_para_revisar]['Posicion']);
                                 }
-                                $verifica_si_hay_para_revisar=-1;
+                                $verifica_si_hay_para_revisar=-1;//fwrite($fp, "Revision Numero: ".$_POST['id_revis'].". Linea 9591. Hora Actual: ".date("H:i:s", time())."\r\n");
                             }  
                             if ($verifica_si_hay_para_reacomodar>-1){
-                                
+//                                $cadena.="verifica_si_hay_para_reacomodar ok.";fwrite($fp, "Revision Numero: ".$_POST['id_revis'].". Linea 9594. Hora Actual: ".date("H:i:s", time())."\r\n");
                                 $obj_puesto_monitoreo->setCondicion("ID_Puesto_Monitoreo=".$_SESSION['vector_temp_revision_video'][$verifica_si_hay_para_reacomodar]['ID_Puesto_Monitoreo']. " AND Posicion=".$_SESSION['vector_temp_revision_video'][$verifica_si_hay_para_reacomodar]['Posicion_Real']);
                                 if ($obj_puesto_monitoreo->existe_esta_posicion_en_este_puesto_de_monitoreo()){
-									
+//                                    fwrite($fp, "Revision Numero: ".$_POST['id_revis'].". Linea 9597. Hora Actual: ".date("H:i:s", time())."\r\n");
                                     $obj_puesto_monitoreo->setPosicion($_SESSION['vector_temp_revision_video'][$verifica_si_hay_para_reacomodar]['Posicion_Real']);
                                 }
-                                unset($_SESSION['vector_temp_revision_video'][$verifica_si_hay_para_reacomodar]);
+                                unset($_SESSION['vector_temp_revision_video'][$verifica_si_hay_para_reacomodar]);//fwrite($fp, "Revision Numero: ".$_POST['id_revis'].". Linea 9600. Hora Actual: ".date("H:i:s", time())."\r\n");
                                 if(count($_SESSION['vector_temp_revision_video'])==0){
-                                    unset($_SESSION['vector_temp_revision_video']);
+                                    unset($_SESSION['vector_temp_revision_video']);//fwrite($fp, "Revision Numero: ".$_POST['id_revis'].". Linea 9602. Hora Actual: ".date("H:i:s", time())."\r\n");
                                 }else{
-                                    $_SESSION['vector_temp_revision_video'] = array_values($_SESSION['vector_temp_revision_video']);
-                                     if (isset($_SESSION['vector_temp_revision_video'])){
-                                        $tam=count($_SESSION['vector_temp_revision_video']);
+                                    $_SESSION['vector_temp_revision_video'] = array_values($_SESSION['vector_temp_revision_video']);//fwrite($fp, "Revision Numero: ".$_POST['id_revis'].". Linea 9604. Hora Actual: ".date("H:i:s", time())."\r\n");
+                                    if (isset($_SESSION['vector_temp_revision_video'])){
+                                        $tam=count($_SESSION['vector_temp_revision_video']);//fwrite($fp, "Revision Numero: ".$_POST['id_revis'].". Linea 9606. Hora Actual: ".date("H:i:s", time())."\r\n");
                                         for ($i = 0; $i < $tam; $i++) {
                                             if (($_SESSION['vector_temp_revision_video'][$i]['ID_Usuario']==$_SESSION['id'])&&($_SESSION['vector_temp_revision_video'][$i]['ID_Puesto_Monitoreo']==$_POST['id_puesto'])){
                                                 if ($_SESSION['vector_temp_revision_video'][$i]['Contador']==10){
-                                                    $_SESSION['vector_temp_revision_video'][$i]['Contador']=9;
+                                                    $_SESSION['vector_temp_revision_video'][$i]['Contador']=9;//fwrite($fp, "Revision Numero: ".$_POST['id_revis'].". Linea 9610. Hora Actual: ".date("H:i:s", time())."\r\n");
                                                 }
                                                 $obj_puesto_monitoreo->setCondicion("ID_Puesto_Monitoreo=".$_SESSION['vector_temp_revision_video'][$i]['ID_Puesto_Monitoreo']);   
                                                 $temp_ultima_posicion=$obj_puesto_monitoreo->obtiene_ultima_posicion_de_un_puesto_de_monitoreo();
-												
+						//fwrite($fp, "Revision Numero: ".$_POST['id_revis'].". Linea 9614. Hora Actual: ".date("H:i:s", time())."\r\n");
                                                 if ($temp_ultima_posicion>0){
-                                                    $temp_pos_mas_diez=11 + intval($_SESSION['vector_temp_revision_video'][$i]['Posicion']);
+                                                    $temp_pos_mas_diez=11 + intval($_SESSION['vector_temp_revision_video'][$i]['Posicion']);//fwrite($fp, "Revision Numero: ".$_POST['id_revis'].". Linea 9616. Hora Actual: ".date("H:i:s", time())."\r\n");
                                                     if ($temp_pos_mas_diez<$temp_ultima_posicion){
-                                                        $_SESSION['vector_temp_revision_video'][$i]['Posicion_Real']=$temp_pos_mas_diez;
+                                                        $_SESSION['vector_temp_revision_video'][$i]['Posicion_Real']=$temp_pos_mas_diez;//fwrite($fp, "Revision Numero: ".$_POST['id_revis'].". Linea 9618. Hora Actual: ".date("H:i:s", time())."\r\n");
                                                     }else{
                                                         if (($temp_pos_mas_diez-$temp_ultima_posicion)==0){
-                                                            $_SESSION['vector_temp_revision_video'][$i]['Posicion_Real']=1;
+                                                            $_SESSION['vector_temp_revision_video'][$i]['Posicion_Real']=1;//fwrite($fp, "Revision Numero: ".$_POST['id_revis'].". Linea 9621. Hora Actual: ".date("H:i:s", time())."\r\n");
                                                         }else{
-                                                            $_SESSION['vector_temp_revision_video'][$i]['Posicion_Real']=$temp_pos_mas_diez-$temp_ultima_posicion;
+                                                            $_SESSION['vector_temp_revision_video'][$i]['Posicion_Real']=$temp_pos_mas_diez-$temp_ultima_posicion;//fwrite($fp, "Revision Numero: ".$_POST['id_revis'].". Linea 9623. Hora Actual: ".date("H:i:s", time())."\r\n");
                                                         }
                                                     }
                                                 }
@@ -9605,44 +9612,52 @@ class Controller{
                                         }
                                     }
                                 }
-                                $verifica_si_hay_para_reacomodar=-1;
+                                $verifica_si_hay_para_reacomodar=-1;//fwrite($fp, "Revision Numero: ".$_POST['id_revis'].". Linea 9631. Hora Actual: ".date("H:i:s", time())."\r\n");
                             }
 							
-                            $cadena.="agrega siguiente revision."; 
+//                            $cadena.="agrega siguiente revision.";        //fwrite($fp, "Revision Numero: ".$_POST['id_revis'].". Linea 9632. Hora Actual: ".date("H:i:s", time())."\r\n");                    
                             //Ingresa próxima revision de video en bitacora de revisiones de video.
                             $obj_puesto_monitoreo->setId_ultimo_toma_puesto_ingresada($_POST['id_control_puesto']);
                             $obj_puesto_monitoreo->setFecha_inicia_revision(date("Y-m-d"));
-                            $obj_puesto_monitoreo->setHora_inicia_revision(date("H:i:s", time()));
+                            $obj_puesto_monitoreo->setHora_inicia_revision(date("H:i:s", time()));//fwrite($fp, "Revision Numero: ".$_POST['id_revis'].". Linea 9637. Hora Actual: ".date("H:i:s", time())."\r\n");
                             $obj_puesto_monitoreo->setId_usuario($_SESSION['id']);
                             $obj_puesto_monitoreo->setObservaciones("");
                             $obj_puesto_monitoreo->setEstado(0);
 
 							//*****Prueba Alex******
-                            $obj_puesto_monitoreo->setCondicion("ID_Puesto_Monitoreo=".$_POST['id_puesto']. " AND Estado=0");
+                            $obj_puesto_monitoreo->setCondicion("ID_Puesto_Monitoreo=".$_POST['id_puesto']. " AND Estado=0 limit 1");
                             $obj_puesto_monitoreo->obtiene_revisiones_de_video();
-							if ((count($obj_puesto_monitoreo->getArreglo())>0)){
-							//Se comenta esta linea, prueba Alex
+                            if ((count($obj_puesto_monitoreo->getArreglo())>0)){
+                            //Se comenta esta linea, prueba Alex
                             //if ((count($obj_puesto_monitoreo->getArreglo())>0) && (!isset($_SESSION['vector_temp_revision_video']))){
-                                $obj_puesto_monitoreo->edita_usuario_y_tiempo_de_inicio_en_revision_de_video();fwrite($fp, "Revision Numero: ".$_POST['id_revis'].". Linea 9645. Hora Actual: ".date("H:i:s", time())."\r\n");
+                                $obj_puesto_monitoreo->edita_usuario_y_tiempo_de_inicio_en_revision_de_video();//fwrite($fp, "Revision Numero: ".$_POST['id_revis'].". Linea 9645. Hora Actual: ".date("H:i:s", time())."\r\n");
                                 $cadena.="edita_usuario_y_tiempo_de_inicio_en_revision_de_video.";
                             }else{                                                     
                                 $obj_puesto_monitoreo->agregar_nuevo_registro_bitacora_revisiones_de_video();
-                                $cadena.="agregar_nuevo_registro_bitacora_revisiones_de_video.";fwrite($fp, "Revision Numero: ".$_POST['id_revis'].". Linea 9649. Hora Actual: ".date("H:i:s", time())."\r\n");
+//                                $cadena.="agregar_nuevo_registro_bitacora_revisiones_de_video.";fwrite($fp, "Revision Numero: ".$_POST['id_revis'].". Linea 9649. Hora Actual: ".date("H:i:s", time())."\r\n");
                             }  
-                        } 
-                    } 
-                    echo $resultado;
-                } else {
-					
-					///**************************************Codigo de Prueba**************************////
-					$obj_puesto_monitoreo->setCondicion("ID_Puesto_Monitoreo=".$_POST['id_puesto']. " AND Estado=0");
+                        } else{
+//                            fwrite($fp, "Revision Numero: ".$_POST['id_revis'].". Linea 9652. Hora Actual: ".date("H:i:s", time())."\r\n");
+//                            $cadena.="\r\n ELSE VACIO";
+//                            $cadena.="Esta condicion= t_puestomonitoreo.Estado=1 AND t_puestomonitoreo.ID_Usuario=".$_SESSION['id']." AND t_puestomonitoreo.ID_Puesto_Monitoreo=".$_POST['id_puesto'];
+//                            $cadena.="\r\n Obteniendo -obtiene_todos_puestos_de_monitoreo- NO trae información:\r\n ";
+                        }
+                    } else{
+//                        $cadena.="\r\n ELSE VACIO";fwrite($fp, "Revision Numero: ".$_POST['id_revis'].". Linea 9658. Hora Actual: ".date("H:i:s", time())."\r\n");
+//                        $cadena.="Esta condicion= T_PuestoMonitoreoUnidadVideo.ID_Puesto_Monitoreo=".$_POST['id_puesto'];
+//                        $cadena.="\r\n Obteniendo -obtiene_todos_puestos_de_monitoreo- NO trae información:\r\n ";
+                    }
+                    echo $resultado;//fwrite($fp, "Revision Numero: ".$_POST['id_revis'].". Linea 9662. Hora Actual: ".date("H:i:s", time())."\r\n");
+                } else {		
+                    ///**************************************Codigo de Prueba**************************////
+                    $obj_puesto_monitoreo->setCondicion("ID_Puesto_Monitoreo=".$_POST['id_puesto']. " AND Estado=0 limit 1");
                     $obj_puesto_monitoreo->obtiene_revisiones_de_video();
 					if (!(count($obj_puesto_monitoreo->getArreglo())>0)){
-						$obj_puesto_monitoreo->setCondicion("ID_Puesto_Monitoreo=".$_POST['id_puesto']. " AND Estado=1 order by ID_Bitacora_Revision_Video desc");
+						$obj_puesto_monitoreo->setCondicion("ID_Puesto_Monitoreo=".$_POST['id_puesto']. " AND Estado=1 order by ID_Bitacora_Revision_Video desc limit 1");
 						$obj_puesto_monitoreo->obtiene_ultima_posicion_concluida_en_puesto_de_monitoreo();
 						$temp_posicion=intval($obj_puesto_monitoreo->getUltima_posicion_concluida());
-						$temp_posicion=$temp_posicion+1;fwrite($fp, "Revision Numero: ".$_POST['id_revis'].". Linea 9682. Hora Actual: ".date("H:i:s", time())."\r\n");
-						
+						$temp_posicion=$temp_posicion+1;//fwrite($fp, "Revision Numero: ".$_POST['id_revis'].". Linea 9682. Hora Actual: ".date("H:i:s", time())."\r\n");
+						//$obj_puesto_monitoreo->setCondicion("ID_Puesto_Monitoreo=".$_POST['id_puesto']. " AND Posicion=".$obj_puesto_monitoreo->getUltima_posicion_concluida()+1);
 						$obj_puesto_monitoreo->setCondicion("ID_Puesto_Monitoreo=".$_POST['id_puesto']. " AND Posicion=".$temp_posicion);
 						if ($obj_puesto_monitoreo->existe_esta_posicion_en_este_puesto_de_monitoreo()){
 							//$obj_puesto_monitoreo->setPosicion($obj_puesto_monitoreo->getUltima_posicion_concluida()+1);
@@ -9668,24 +9683,44 @@ class Controller{
 						///**************************************Codigo de Prueba**************************////
 					}
 					
-                    
+                    $cadena.="else de revision cerrada.";//fwrite($fp, "Revision Numero: ".$_POST['id_revis'].". Linea 9709. Hora Actual: ".date("H:i:s", time())."\r\n");
                     $resultado="revision_cerrada";
-					
+//					fwrite($fp, "Revision Numero: ".$_POST['id_revis'].". Linea 9679 Resultado: ". $resultado . ". Hora Actual: ".date("H:i:s", time()).".\r\n");
                     echo $resultado;
                 }
             }else{
-             
+//                $cadena.="else de no_asignado.";
                 $resultado="no_asignado";
-				
+//				fwrite($fp, "Revision Numero: ".$_POST['id_revis'].". Linea 9679 Resultado: ". $resultado . ". Hora Actual: ".date("H:i:s", time()).".\r\n");
                 echo $resultado;
             }
-          
+            /********************CÓDIGO PARA LOG DE REGISTRAR REVISION*********/
+            //$raiz=$_SERVER['DOCUMENT_ROOT'];
+            //Formatea la ruta del directorio raiz del proyecto ORIEL
+            //if (substr($raiz,-1)!="/"){
+            //    $raiz.="/";
+           // }
+            //Abre el archivo y agrega la traza del control
+            //$fecha_actual= getdate();
+            //Convierta la fecha a formto aaaa/mm/dd
+            //$fecha_actual= $fecha_actual['year'].$fecha_actual['mon'].$fecha_actual['mday'];
+            //$ruta=  $raiz."Cuenta_Visitas_Oriel/Log_Control/".$fecha_actual."_Control_Video.txt";
+            //Abre el archivo , lo crea si no lo encuentra
+            //$fp = fopen($ruta,"a+");
+            //Escribe en el archivo
+//            $cadena.="FIN \r\n\r\n";
+//			fwrite($fp, "Revision Numero: ".$_POST['id_revis'].". Linea 9679 Resultado: ". $resultado . ". Hora Actual: ".date("H:i:s", time()).".\r\n\r\n");fclose($fp);
+            //fwrite($fp, $cadena);
+            //Cierra el archivo
+            //fclose($fp);
+            /*******************FIN DEL LOG **********************************/
         } else {
-            
+            //$tipo_de_alerta="alert alert-warning";fwrite($fp, "Revision Numero: ".$_POST['id_revis'].". Linea 9696. Hora Actual: ".date("H:i:s", time())."\r\n");
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }  
     }
+
     
     public function guarda_justificacion_retraso_control_de_video() {
         if(isset($_SESSION['nombre'])){
@@ -9905,17 +9940,17 @@ class Controller{
 				//***********************************Codigo en Prueba*****************************
 				
                 //Vector revision de video actual en bitacora 2
-                $obj_puesto_monitoreo->setCondicion("Estado=0 AND ID_Usuario=".$_SESSION['id']." AND ID_Puesto_Monitoreo=".$vector_puesto_de_monitoreo_actual[0]['ID_Puesto_Monitoreo']);
+                $obj_puesto_monitoreo->setCondicion("Estado=0 AND ID_Usuario=".$_SESSION['id']." AND ID_Puesto_Monitoreo=".$vector_puesto_de_monitoreo_actual[0]['ID_Puesto_Monitoreo']." limit 1");
                 $obj_puesto_monitoreo->obtiene_revisiones_de_video();
                 $vector_revision_de_video_actual=$obj_puesto_monitoreo->getArreglo();
                 //termina la consulta 
 				
 				if (!(count($vector_revision_de_video_actual)>0)){
                     ///**************************************Codigo de Prueba**************************////
-                    $obj_puesto_monitoreo->setCondicion("ID_Puesto_Monitoreo=".$vector_puesto_de_monitoreo_actual[0]['ID_Puesto_Monitoreo']. " AND Estado=0");
+                    $obj_puesto_monitoreo->setCondicion("ID_Puesto_Monitoreo=".$vector_puesto_de_monitoreo_actual[0]['ID_Puesto_Monitoreo']. " AND Estado=0"." limit 1");
                     $obj_puesto_monitoreo->obtiene_revisiones_de_video();
                     if (!(count($obj_puesto_monitoreo->getArreglo())>0)){
-                            $obj_puesto_monitoreo->setCondicion("ID_Puesto_Monitoreo=".$vector_puesto_de_monitoreo_actual[0]['ID_Puesto_Monitoreo']. " AND Estado=1 order by ID_Bitacora_Revision_Video desc");
+                            $obj_puesto_monitoreo->setCondicion("ID_Puesto_Monitoreo=".$vector_puesto_de_monitoreo_actual[0]['ID_Puesto_Monitoreo']. " AND Estado=1 order by ID_Bitacora_Revision_Video desc limit 1");
                             $obj_puesto_monitoreo->obtiene_ultima_posicion_concluida_en_puesto_de_monitoreo();
                             $temp_posicion=intval($obj_puesto_monitoreo->getUltima_posicion_concluida());
                             $temp_posicion=$temp_posicion+1;//fwrite($fp, "Revision Numero: ".$_POST['id_revis'].". Linea 9682. Hora Actual: ".date("H:i:s", time())."\r\n");
@@ -9952,7 +9987,7 @@ class Controller{
 				
 				
 				//Vector revision de video actual en bitacora 2
-                $obj_puesto_monitoreo->setCondicion("Estado=0 AND ID_Usuario=".$_SESSION['id']." AND ID_Puesto_Monitoreo=".$vector_puesto_de_monitoreo_actual[0]['ID_Puesto_Monitoreo']);
+                $obj_puesto_monitoreo->setCondicion("Estado=0 AND ID_Usuario=".$_SESSION['id']." AND ID_Puesto_Monitoreo=".$vector_puesto_de_monitoreo_actual[0]['ID_Puesto_Monitoreo']. " limit 1");
                 $obj_puesto_monitoreo->obtiene_revisiones_de_video();
                 $vector_revision_de_video_actual=$obj_puesto_monitoreo->getArreglo();			
                 
