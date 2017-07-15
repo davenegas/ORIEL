@@ -10409,6 +10409,7 @@ class Controller{
                 }
                   
                 if (($operador!="0")&&($turno!="0")){
+                    $resta_esperado_individual=7840;
                     if ($turno=="1"){
                         $turno_Monitoreo=" and (t_bitacorarevisionesvideo.Hora_Inicia_Revision BETWEEN '05:54:00' and '13:56:00') "; 
                         $nombre_turno="mañana";
@@ -10423,6 +10424,7 @@ class Controller{
                         $turno_Monitoreo=" and ((t_bitacorarevisionesvideo.Hora_Inicia_Revision BETWEEN '21:54:00' and '23:59:00') or (t_bitacorarevisionesvideo.Hora_Inicia_Revision BETWEEN '00:00:00' and '05:56:00')) ";                                                   
                         $nombre_turno="noche";
                         $esperado_individual=array("mes"=>"Esperado Individual Mensual","numFilas"=>"9800");
+                        $resta_esperado_individual=9800;
                     }
                     $obj_reporte->setCondicion("(t_bitacorarevisionesvideo.Fecha_Inicia_Revision BETWEEN '".$fecha_inicio."' AND '".$fecha_fin."')". $turno_Monitoreo ."and t_bitacorarevisionesvideo.ID_Usuario =".$operador);
                     $titulo = "Cantidad de Revisiones de un Operador en Modulo de Control de Video (un turno específico(".$nombre_turno.")".", ordenado por mes).";
@@ -10486,7 +10488,8 @@ class Controller{
                     for ($i = 0; $i < count($params); $i++) {
                         $suma_revisiones=$suma_revisiones+$params[$i]['numFilas'];
                     }
-
+                    $suma_revisiones=$suma_revisiones-$resta_esperado_individual;
+                    
                     $suma_inconsistencias=0;
                     for ($i = 0; $i < count($params2); $i++) {
                         $suma_inconsistencias=$suma_inconsistencias+$params2[$i]['Total'];
@@ -10494,11 +10497,14 @@ class Controller{
                 }
                 
                  if (($operador=="0")&&($turno!="0")){
+                     $resta_esperado_individual=7840;
+                     $resta_esperado_grupal=48608;
                      if ($turno=="1"){
                          $turno_Monitoreo=" and (t_bitacorarevisionesvideo.Hora_Inicia_Revision BETWEEN '05:54:00' and '13:56:00') "; 
                          $nombre_turno="mañana";
                          $esperado_grupal=array("mes"=>"Esperado Grupal Mensual","numFilas"=>"48608");
                          $esperado_individual=array("Nombre"=>"Esperado Individual","TOTAL"=>"7840","Apellido"=>" Mensual");
+                         
                      }
                      if ($turno=="2"){
                          $turno_Monitoreo=" and (t_bitacorarevisionesvideo.Hora_Inicia_Revision BETWEEN '13:54:00' and '21:56:00') ";                          
@@ -10512,6 +10518,8 @@ class Controller{
                          $esperado_grupal=array("mes"=>"Esperado Grupal Mensual","numFilas"=>"60760");
                          //$$esperado_individual=array();
                          $esperado_individual=array("Nombre"=>"Esperado Individual","TOTAL"=>"9800","Apellido"=>" Mensual");
+                         $resta_esperado_individual=9800;
+                         $resta_esperado_grupal=60760;
                      }
                      $obj_reporte->setCondicion("(t_bitacorarevisionesvideo.Fecha_Inicia_Revision BETWEEN '".$fecha_inicio."' AND '".$fecha_fin."')". $turno_Monitoreo);
                      $titulo = "Cantidad de Revisiones por Equipo de Trabajo en Modulo de Control de Video (un turno específico(".$nombre_turno.")".", ordenado por mes).";
@@ -10540,6 +10548,7 @@ class Controller{
                     for ($i = 0; $i < count($params3); $i++) {
                         $suma_revisiones2=$suma_revisiones2+$params3[$i]['TOTAL'];
                     }
+                    $suma_revisiones2=$suma_revisiones2-$resta_esperado_individual;
 
                     $params2=array();
                     if ($turno=="1"){
@@ -10586,6 +10595,8 @@ class Controller{
                         $suma_revisiones=$suma_revisiones+$params[$i]['numFilas'];
                     }
 
+                    $suma_revisiones=$suma_revisiones-$resta_esperado_grupal;
+                    
                     $suma_inconsistencias=0;
                     for ($i = 0; $i < count($params2); $i++) {
                         $suma_inconsistencias=$suma_inconsistencias+$params2[$i]['Total'];
