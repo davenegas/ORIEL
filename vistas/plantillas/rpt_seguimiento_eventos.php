@@ -1,6 +1,7 @@
 <!DOCTYPE HTML>
 <html lang="es">
     <head>
+        <meta charset="utf-8"/>
         <meta http-equiv="Content-Type" content="text/html; utf-8"/>
         <title>Histórico de Seguimientos</title>
         <?php require_once 'frm_librerias_head.html'; ?>

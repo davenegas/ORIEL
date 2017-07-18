@@ -13,7 +13,7 @@ class Data_Provider{
     //Nombre de la base de datos a usar
     private $mvc_bd_nombre="";
     //Nombre de usuario del motor de base de datos
-     private $mvc_bd_nombre_trazabilidad="";
+    private $mvc_bd_nombre_trazabilidad="";
     //Nombre de usuario del motor de base de datos
     private $mvc_bd_usuario;
     //Clave del usuario
@@ -45,7 +45,7 @@ class Data_Provider{
 
     function setConexion_trazabilidad($conexion_trazabilidad) {
         $this->conexion_trazabilidad = $conexion_trazabilidad;
-    }   
+    }
     
     //Método que retorna el valor del último ID ingresado
     function getUltimo_id_ingresado() {
@@ -164,7 +164,7 @@ class Data_Provider{
             $this->mvc_bd_hostname = "localhost";
             //Inicializa el nombre de la base de datos
             $this->mvc_bd_nombre   = "bd_Gerencia_Seguridad";
-             //Inicializa el nombre de la base de datos
+            //Inicializa el nombre de la base de datos
             $this->mvc_bd_nombre_trazabilidad   = "bd_Registro_Trazabilidad";
             //Inicializa el nombre del usuario que puede acceder la base de datos
             $this->mvc_bd_usuario  = "root";
@@ -268,7 +268,6 @@ class Data_Provider{
     
     // Método ABC SQL que permite ingresar información en las tablas de la bd
     public function inserta_datos($table,$campos,$valores){
-            
         // Gestión de insercion del metodo de la clase
         //Arma el insert SQL, de acuerdo a los parámetros recibidos por usuario
 
@@ -336,10 +335,10 @@ class Data_Provider{
     //Método que permite eliminar registros de la BD
     public function eliminar_datos($table,$condicion){
 
-       //echo "delete from ".$table." where ".$condicion.";";
-       // Trae los datos de la bd que se van a eliminar, mediante la condición, nombre de la tabla, y todos los registros
-       $this->trae_datos($table, "*", $condicion);
-       //Establece una variable cadena para armar los datos iniciales que se encuentran en la base de datos
+        //echo "delete from ".$table." where ".$condicion.";";
+        // Trae los datos de la bd que se van a eliminar, mediante la condición, nombre de la tabla, y todos los registros
+        $this->trae_datos($table, "*", $condicion);
+        //Establece una variable cadena para armar los datos iniciales que se encuentran en la base de datos
         $valores_iniciales="Eliminacion - Valores anteriores de la tabla formato SELECT:\n ";
         //Verifica que haya sido encontrado el registro a eliminar
         if (count($this->getArreglo())>0){
@@ -412,7 +411,7 @@ class Data_Provider{
         //echo ($detalle_sql);
         //estable la variable de control a true
         $this->resultado_operacion=true;       
-   }    
+    }    
    
    //Método utilizado para ejecutar procedimiento almacenado que inserta datos en la BD
    public function insertar_datos_con_phpmyadmin($sql){

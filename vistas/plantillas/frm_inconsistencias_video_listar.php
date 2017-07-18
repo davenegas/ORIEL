@@ -3,7 +3,7 @@
         <meta charset="utf-8"/>
         <title>Inconsistencias de Video</title>
         <META HTTP-EQUIV="REFRESH" CONTENT="300">
-        <?php require_once 'frm_librerias_head.html';?>
+        <?php require_once 'frm_librerias_head.html';?> 
         <link rel="stylesheet" href="vistas/css/ventanaoculta.css">
         <script>
             $(document).ready(function () {
@@ -24,8 +24,7 @@
                 document.getElementById('ventana_oculta_3').style.display = "none";
             }
             
-            
-             //Valida informacion completa de formulario de proveedor
+            //Valida informacion completa de formulario de proveedor
             function check_empty_va() {
                 
                 document.getElementById('ventana').submit();
@@ -33,20 +32,16 @@
                    
             }
             
-             //Valida informacion completa de formulario de proveedor
+            //Valida informacion completa de formulario de proveedor
             function check_empty_re() {
-                
                 document.getElementById('ingresar_reporte_inconsistencia').submit();
                 document.getElementById('ventana_oculta_2').style.display = "none";
-                   
             }
             
-             //Valida informacion completa de formulario de proveedor
+            //Valida informacion completa de formulario de proveedor
             function check_empty_so() {
-                
                 document.getElementById('ingresar_solucion_inconsistencia').submit();
                 document.getElementById('ventana_oculta_3').style.display = "none";
-                   
             }
             
             //Funcion para editar informacion de tipo telefono
@@ -77,11 +72,9 @@
                 document.getElementById('observaciones_solucion').value=obs;
                 document.getElementById('ventana_oculta_3').style.display = "block";
             }
-            
         </script>
-        
-         </head>
-         <body>
+        </head>
+        <body>
    <?php require_once 'encabezado.php';?>
         
         <div class="container animated fadeIn col-xs-10 quitar-float">
