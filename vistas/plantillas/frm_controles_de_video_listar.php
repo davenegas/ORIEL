@@ -398,12 +398,13 @@
             <div >
                 <a  href="#" class="btn btn-default" role="button" onclick="guarda_revision_de_video_actual('<?php echo $vector_revision_de_video_actual[0]['ID_Bitacora_Revision_Video'];?>','<?php echo $vector_revision_de_video_actual[0]['Fecha_Inicia_Revision'];?>','<?php echo $vector_revision_de_video_actual[0]['Hora_Inicia_Revision'];?>','<?php echo $vector_puesto_monitoreo_unidad_video[0]['Tiempo_Personalizado_Revision'];?>','<?php echo $vector_revision_de_video_actual[0]['ID_Bitacora_Control_Puesto_Monitoreo'];?>','<?php echo $vector_revision_de_video_actual[0]['ID_Puesto_Monitoreo'];?>','<?php echo $vector_revision_de_video_actual[0]['Posicion'];?>');">Registrar Revisión</a>
             </div>
+            <h4 style="float:right;"><b>Próximo Sitio ► </b> <?php echo $vector_informacion_unidad_video_siguiente[0]['Descripcion'];?> (<?php echo $vector_punto_bcr_siguiente[0]['Codigo'];?>)</h4>
             <br> <br> <br>
             <div align="center">
                 <img align="center" src="../../../Padron_Fotografico_Unidades_Video/<?php echo $vector_padron_fotografico[0]['Nombre_Ruta'];?>" alt="" width="1000px" class="img-responsive" alt="Cinque Terre"> 
             </div>
             <br> 
-            <h4 style="float:right;"><b><?php echo $vector_informacion_unidad_video_siguiente[0]['Descripcion'];?> (<?php echo $vector_punto_bcr_siguiente[0]['Codigo'];?>)>></b></h4>
+            <!--<h4 style="float:right;"><b><?php echo $vector_informacion_unidad_video_siguiente[0]['Descripcion'];?> (<?php echo $vector_punto_bcr_siguiente[0]['Codigo'];?>)>></b></h4>-->
             <br><br><br>
             <table id="tabla" class="display" cellspacing="0" width="100%">
                 <thead>
