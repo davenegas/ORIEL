@@ -188,16 +188,16 @@ class Controller{
                 $i++;
             }
             
-           //Define una variable de sesión, que contiene el vector completo con la información completa del personal
+            //Define una variable de sesión, que contiene el vector completo con la información completa del personal
             //Esto permitirá usar el vector leido en cada una de las pantallas del asistente de importación para tenerlo disponible
-           $_SESSION['prontuario']=$prontuario;    
+            $_SESSION['prontuario']=$prontuario;    
            
-           //Mediante el contador definido en el ciclo anterior, se envia una variable a la capa de presentación
-           // Que notifica cuantas personas fueron recibidas mediante el prontuario
-           $mensaje="Fue recibida la información correspondiente a ".$i." personas."; 
-            
-           //Llamada al formulario correspondiente de la vista
-           require __DIR__ . '/../vistas/plantillas/frm_importar_prontuario_paso_2.php';
+            //Mediante el contador definido en el ciclo anterior, se envia una variable a la capa de presentación
+            // Que notifica cuantas personas fueron recibidas mediante el prontuario
+            $mensaje="Fue recibida la información correspondiente a ".$i." personas."; 
+
+            //Llamada al formulario correspondiente de la vista
+            require __DIR__ . '/../vistas/plantillas/frm_importar_prontuario_paso_2.php';
                           
         }else {
             /*
@@ -2729,6 +2729,7 @@ class Controller{
         if(isset($_SESSION['nombre'])){
             
             $this->ejecucion_automatico_proceso("Pruebas");
+            $this->ejecucion_automatico_proceso("Respaldo_Bitacora_Revisiones");
             //Creacion de objeto de clase eventos
             $obj_eventos = new cls_eventos();
             
@@ -5442,6 +5443,33 @@ class Controller{
                         //Cierra el archivo
                         fclose($fp);
                     }
+                }
+                break;
+            case "Respaldo_Bitacora_Revisiones":
+                $ruta=  $raiz."Cuenta_Visitas_Oriel/Ejecucion_Procesos/".date("Ymd", $time)." Respaldo_Bitacora_Revisiones.txt";
+                if(!file_exists($ruta)){
+                    //Abre el archivo , lo crea si no lo encuentra
+                    $fp = fopen($ruta,"a+");
+                    //Cierra el archivo
+                    fclose($fp);
+                    $cadena="Inicio de respaldo bitacora revisiones";
+                    $obj_puesto_monitoreo = new cls_puestos_de_monitoreo(); 
+                    
+                    $fecha_hoy = date('Y-m-j');
+                    $fecha_actual = strtotime ( '-3 day' , strtotime ( $fecha_hoy ) ) ;
+                    $fecha_actual = date ('Y-m-j', $fecha_actual);
+
+                    $obj_puesto_monitoreo->setFecha_solucion($fecha_actual);
+                    $obj_puesto_monitoreo->respaldo_informacion_bitacora_revisiones();
+                    
+                    $cadena.="\r\nFin del proceso";
+                    //Abre el archivo para escribirle 
+                    $fp = fopen($ruta,"w+"); //no olvidar crear al archivo visitantes.txt y poner el path correcto
+                    //Escribe en el archivo
+                    fwrite($fp, $cadena);
+                    //Cierra el archivo
+                    fclose($fp);
+                    //echo ($cadena_oficiales);
                 }
                 break;
         }
@@ -9317,7 +9345,7 @@ class Controller{
     }
     
     
-   ////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////
     /////////////////////////Manuales de Ayuda//////////////////////////////////  
     ////////////////////////////////////////////////////////////////////////////    
     public function manual_personal_externo_publico() {
@@ -10750,7 +10778,7 @@ class Controller{
                     $obj_personal->obtener_personas_prontuario();
                     $persona = $obj_personal->getArreglo();
                     $params[$i] = array_merge((array('Nombre_Persona' =>($persona[0]['Apellido_Nombre']))),$params[$i]);
-                } else{
+                } else {
                     $obj_externo->setCondicion("T_PersonalExterno.ID_Persona_Externa='".$params[$i]['ID_Persona']."'");
                     $obj_externo->obtiene_todo_el_personal_externo();
                     $persona = $obj_externo->getArreglo();
@@ -12174,5 +12202,47 @@ class Controller{
     
     public function solicitud_permiso(){
         require __DIR__ . '/../vistas/plantillas/frm_permiso_solicitud.php';
+    }
+    
+    ////////////////////////////////////////////////////////////////////////////
+    //////////////////////Funciones para Pruebas de alarma//////////////////////  
+    ////////////////////////////////////////////////////////////////////////////
+    public function actualizar_controladores_archivo(){
+        if(isset($_SESSION['nombre'])){
+            //En la variable recepcion de archivo, recibe el estado en el que fue recibido el archivo desde el formulario anterior
+            $recepcion_archivo=$_FILES['seleccionar_archivo']['error'];
+
+            //Valida que el tipo de archivo suministrado por el usuario sea del tipo CSV, delimitado por comas
+            if (!($_FILES['seleccionar_archivo']['type']==="application/vnd.ms-excel")){
+                //En caso de que sea diferente, muestra una advertencia en pantalla para el usario y se sale del paso
+                echo "<script type=\"text/javascript\">alert('Debe Importar un archivo tipo CSV!!!!');history.go(-1);</script>";;
+                exit();
+            }
+            
+            //Asigna a la variable el archivo abierto en modo lectura para recorrer la información contenida en el.
+            $handle= fopen ($_FILES['seleccionar_archivo']['tmp_name'],"r");
+            
+            //Contiene en las variables params y record, el total de regsitros del archivo mediante la funcion fgetcsv
+            $params=$record = fgetcsv($handle);
+            
+            //Declara un vector, el cual contendrá de manera oficial toda la información del documento.
+            $prontuario =array();
+            //Variable contador del ciclo
+            $i=0;
+            
+            //Almacena en la variable record, cada registro mientras handle tenga lineas disponibles que recorrer
+            while ($record = fgetcsv($handle,0,";")){
+                // a prontuario le va asignando cada uno de los registros del documento
+                $prontuario[]=$record;
+                // Va incrementado el contador
+                $i++;
+            }
+            
+        }else {
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            //Llamada al formulario correspondiente de la vista
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }
     }
 }

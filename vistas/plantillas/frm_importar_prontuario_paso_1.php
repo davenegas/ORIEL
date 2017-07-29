@@ -13,7 +13,7 @@
             <h1>Asistente para Importación de Prontuario al Sistema</h1>
             
             <h3>Seleccionar Archivo (Paso 1/10):</h3>
-                <form class="form-horizontal" role="form" enctype="multipart/form-data" onSubmit="return enviado()" method="POST" action="index.php?ctl=frm_importar_prontuario_paso_2">
+            <form class="form-horizontal" role="form" enctype="multipart/form-data" onSubmit="return enviado()" method="POST" action="index.php?ctl=frm_importar_prontuario_paso_2">
                 <div class="col-xs-12 quitar-float espacio-abajo">
                     <!--<label for="archivo_adjunto">Adjuntar Archivo: </label>-->
                     <input type="hidden" name="MAX_FILE_SIZE" value="5000000">
@@ -22,8 +22,9 @@
                
                 <button type="submit" class="btn btn-default">Enviar Información</button>
                 <td><a href="index.php?ctl=principal" class="btn btn-default" role="button">Salir del Asistente</a></td> 
-                </form>
+            </form>
         </div>
-            <?php require 'vistas/plantillas/pie_de_pagina.php'?>
+        
+        <?php require 'vistas/plantillas/pie_de_pagina.php'?>
     </body>
 </html>

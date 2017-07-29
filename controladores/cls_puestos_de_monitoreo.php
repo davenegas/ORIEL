@@ -1022,4 +1022,10 @@ class cls_puestos_de_monitoreo{
         
     }
     
+    public function respaldo_informacion_bitacora_revisiones(){
+        $this->obj_data_provider->conectar();
+        $sql=("call sp_respaldo_bitacora_revisiones('".$this->fecha_solucion."')");
+        $this->obj_data_provider->insertar_datos_con_phpmyadmin($sql);
+        $this->obj_data_provider->desconectar();
+    }
 }?>
