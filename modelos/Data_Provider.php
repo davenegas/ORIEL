@@ -158,8 +158,7 @@ class Data_Provider{
     //Constructor que inicializa las variables 
     public function __construct(){
         //Controlador de excepciones
-       try{
-           
+        try{
             //Inicializa el nombre del servidor contenedor de la base de datos
             $this->mvc_bd_hostname = "localhost";
             //Inicializa el nombre de la base de datos
@@ -174,16 +173,15 @@ class Data_Provider{
             //Es capaz de representar cualquier carácter Unicode a nivel de base de datos
             $this->consulta="SET NAMES 'utf8'";
 
-            
             //Acapara los errores que se puedan presentar y muestra en pantalla lo correspondiente
-       }catch (Exception $e){
+        }catch (Exception $e){
            //Muestra en pantalla un mensaje de error
            echo 'Hubo un problema al inicializar las variables de conexión';
            //Asigna a falso el valor de la variable resultado de la operación.
            $this->resultado_operacion=false;
-       }
-       
+        }
     }
+    
     //Metodo de conexión a la base de datos, 
     public function conectar(){
         try{
@@ -207,11 +205,11 @@ class Data_Provider{
     
     // Método que permite destruir la conexión establecida con la base de datos
     public function desconectar(){
-       //Cierra la conexión
-       mysqli_close($this->conexion);
-       mysqli_close($this->conexion_trazabilidad);
-       // Asigna verdadero al resultado de la operación
-       $this->resultado_operacion=true;
+        //Cierra la conexión
+        mysqli_close($this->conexion);
+        mysqli_close($this->conexion_trazabilidad);
+        // Asigna verdadero al resultado de la operación
+        $this->resultado_operacion=true;
     }
 
     //Método que permite traer información de la base de datos mediante consultas SQL
@@ -315,7 +313,6 @@ class Data_Provider{
         //Estable a true la variable de control
         $this->resultado_operacion=true;
         
-        
         //Registro de la trazabilidad del sistema
         //Define una variable cadena que almacenará la consulta SQL, Quita mediante la función replace las comas (coloca guiones en su lugar), para no tener conflictos en el momeno de insertar la variable al campo de la tabla traza
         $cadena_sql=str_replace(","," - ","update ".$table." set ".$campos_valores." where ".$condicion.";");
@@ -330,11 +327,10 @@ class Data_Provider{
             //Inserta el registro de trazabilidad del sistema con el id de usuario, fecha, hora, valores nuevos y antiguos, etc.
             $consulta=$this->conexion_trazabilidad->query("insert into t_traza (ID_Traza,Fecha,Hora,ID_Usuario,Tabla_Afectada,Dato_Anterior,Dato_Actualizado) values(null,'".date("Y-m-d")."','".date("H:i:s", time())."',".$_SESSION['id'].",'".$table."','".$valores_iniciales. "','".$cadena_sql."');");       
         }
-   }
+    }
     
     //Método que permite eliminar registros de la BD
     public function eliminar_datos($table,$condicion){
-
         //echo "delete from ".$table." where ".$condicion.";";
         // Trae los datos de la bd que se van a eliminar, mediante la condición, nombre de la tabla, y todos los registros
         $this->trae_datos($table, "*", $condicion);
@@ -357,13 +353,13 @@ class Data_Provider{
             //Reemplaza en la consulta SQL las comillas con guiones para efecto de insertar la consulta en la tabla traza
             $cadena_sql=str_replace(","," - ","delete from ".$table.";");
             //echo("delete from ".$table.";");
-       }else{
-           //Caso contrario asigna la condiciónd de búsqueda al SQL y procede a eliminar en la tabla
+        }else{
+            //Caso contrario asigna la condiciónd de búsqueda al SQL y procede a eliminar en la tabla
             $consulta=$this->conexion->query("delete from ".$table." where ".$condicion.";");
             //Reemplaza en la consulta SQL, las comillas con guiones para efecto de insertar la consulta en la tabla traza
             $cadena_sql=str_replace(","," - ","delete from ".$table." where ".$condicion.";");
             //echo("delete from ".$table." where ".$condicion.";");
-       }    
+        }    
         //echo $consulta;
         //Registro de la trazabilidad del sistema
         
@@ -376,14 +372,12 @@ class Data_Provider{
         
         //Inserta el registro en la tabla traza con los datos requeridos, usuario, fecha, hora, datos anteriores, etc.
         $consulta=$this->conexion_trazabilidad->query("insert into t_traza (ID_Traza,Fecha,Hora,ID_Usuario,Tabla_Afectada,Dato_Anterior,Dato_Actualizado) values(null,'".date("Y-m-d")."','".date("H:i:s", time())."',".$_SESSION['id'].",'".$table."','".$valores_iniciales. "','".$cadena_sql."');");       
-   }
+    }
       
     // Método ABC SQL que permite ingresar información en las tablas de la bd
     public function inserta_datos_para_prontuario($table,$campos,$valores){
-            
         // Gestión de insercion del metodo de la clase
         //Arma el insert SQL, de acuerdo a los parámetros recibidos por usuario
-       
         $consulta=$this->conexion->query("insert into ".$table."(".$campos.") values(".$valores.");");
         //echo ("insert into ".$table."(".$campos.") values(".$valores.");");
         //Establece a true el resultado de operación
@@ -392,20 +386,16 @@ class Data_Provider{
     
     // Método ABC SQL que permite ingresar información en las tablas de la bd
     public function inserta_datos_para_prontuario_especial($table,$campos,$valores){
-       
         // Gestión de insercion del metodo de la clase
-       //Arma el insert SQL, de acuerdo a los parámetros recibidos por usuario
-       
+        //Arma el insert SQL, de acuerdo a los parámetros recibidos por usuario
         $consulta=$this->conexion->query("insert into ".$table."(".$campos.") ".$valores.";");
         //echo ("insert into ".$table."(".$campos.") values(".$valores.");");
         //Establece a true el resultado de operación
         $this->resultado_operacion=true;
-  
     }    
    
     //Método utilizado para insertar datos en la tabla traza, para consultas ABC mediante procedimientos almacenados
     public function inserta_datos_para_uso_de_trazabilidad($detalle_sql){
-            
         // Gestión de insercion del metodo de la clase, recibe el string SQL completo a ejecutar
         $consulta=$this->conexion_trazabilidad->query($detalle_sql);
         //echo ($detalle_sql);
@@ -413,47 +403,42 @@ class Data_Provider{
         $this->resultado_operacion=true;       
     }    
    
-   //Método utilizado para ejecutar procedimiento almacenado que inserta datos en la BD
-   public function insertar_datos_con_phpmyadmin($sql){
-       //Ejecuta la sentencia SQL
-       $consulta=$this->conexion->query($sql);
-       //estable la variable de control a true
-       $this->resultado_operacion=true;
-       //echo($sql);
-   }
+    //Método utilizado para ejecutar procedimiento almacenado que inserta datos en la BD
+    public function insertar_datos_con_phpmyadmin($sql){
+        //Ejecuta la sentencia SQL
+        $consulta=$this->conexion->query($sql);
+        //estable la variable de control a true
+        $this->resultado_operacion=true;
+        //echo($sql);
+    }
 
     //Metodo de la clase que permite editar datos en la bd, administrado también por trazabilidad
-   // Recibe información de la tabla, los campos y la condición para encontrar el registro
-   public function edita_datos_para_prontuario($table,$campos_valores,$condicion){
-       
+    // Recibe información de la tabla, los campos y la condición para encontrar el registro
+    public function edita_datos_para_prontuario($table,$campos_valores,$condicion){
         // Ejecuta la edición de datos en la tabla correspondiente.
         $consulta=$this->conexion->query("update ".$table." set ".$campos_valores." where ".$condicion.";");
         //echo("update ".$table." set ".$campos_valores." where ".$condicion.";");
         //Estable a true la variable de control
         $this->resultado_operacion=true;
-
-   }
+    }
    
    //Método que permite eliminar registros de la BD
-   public function eliminar_datos_para_prontuario($table,$condicion){
-
-       // Trae los datos de la bd que se van a eliminar, mediante la condición, nombre de la tabla, y todos los registros
-       $this->trae_datos($table, "*", $condicion);
+    public function eliminar_datos_para_prontuario($table,$condicion){
+        // Trae los datos de la bd que se van a eliminar, mediante la condición, nombre de la tabla, y todos los registros
+        $this->trae_datos($table, "*", $condicion);
               
         //Verifica si existe alguna condición de búsqueda
-       if ($condicion==""){
-           //En caso de no haber condición realiza el borrado completo de la tabla
+        if ($condicion==""){
+            //En caso de no haber condición realiza el borrado completo de la tabla
             $consulta=$this->conexion->query("delete from ".$table.";");
             //Reemplaza en la consulta SQL las comillas con guiones para efecto de insertar la consulta en la tabla traza
            
-       }else{
-           //Caso contrario asigna la condiciónd de búsqueda al SQL y procede a eliminar en la tabla
+        }else{
+            //Caso contrario asigna la condiciónd de búsqueda al SQL y procede a eliminar en la tabla
             $consulta=$this->conexion->query("delete from ".$table." where ".$condicion.";");
             //Reemplaza en la consulta SQL, las comillas con guiones para efecto de insertar la consulta en la tabla traza
-           
-       }    
-      
-   }
+        }    
+    }
 }
 
 

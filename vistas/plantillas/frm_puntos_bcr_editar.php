@@ -5,7 +5,7 @@
         <title>Gestión de Puntos BCR</title>
         <!--librerias para el funcionamiento de la ventana-->
         <script language="javascript" src="vistas/js/jquery.js"></script>
-        <script language="javascript" src="vistas/js/listas_dependientes_puntobcr.js?1.0"></script>
+        <script language="javascript" src="vistas/js/listas_dependientes_puntobcr.js?1.1.0"></script>
         <link rel="stylesheet" href="vistas/css/ventanaoculta.css">
         <?php require_once 'frm_librerias_head.html'; ?>
         <script>
@@ -372,6 +372,7 @@
                                     <input class="quitar-float" type="checkbox" id="chk_ubicacion" name="chk_ubicacion">
                                 <?php } ?>
                                 </h3>
+                                
                             </header>
                         </div>
                     </div>
@@ -426,6 +427,7 @@
                     <div class="row">
                         <button id="hide">Ocultar ubicación</button>
                         <button id="show">Mostrar ubicación</button>
+                        <input type="text" hidden id="Geolocalizacion" name="Geolocalizacion" value="<?php echo $params[0]['Geolocalizacion'];?>">
                         <div class="col-md-12 espacio-abajo text-center">
                             <iframe id="localizacion"src="<?php echo $params[0]['Geolocalizacion'];?>" width="800" height= "600" frameborder="0" style="border:0" allowfullscreen></iframe>
                         </div>

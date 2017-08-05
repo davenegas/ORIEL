@@ -275,9 +275,7 @@ class Controller{
             $nuevas=0;
             $editadas=0;
             
-            /*
-             * Este proceso permite unificar las unidades ejecutoras, ya que en ocasiones se encuentran duplicadas, omisas o con un nombre erroneo
-             */
+            //Este proceso permite unificar las unidades ejecutoras, ya que en ocasiones se encuentran duplicadas, omisas o con un nombre erroneo
             
             for ($i = 0; $i < count($unidades_ejecutoras); $i++){
                 //Realiza una busqueda a nivel de base de datos, lo que permite traer registros de ue con nombre parecido al del vector de trabajo
@@ -287,7 +285,6 @@ class Controller{
             
                 //Verifica si la consulta ha traido resultados
                 if (count($obj_unidades_ejecutoras->getArreglo())>1){
-                    
                     //Variable temporal que va almacenando información de unidades duplicadas
                     $temporal_inconsistencias="UNIDADES DUPLICADAS:";
                     //Establece el numero de la unidad ejecutora al objeto correspondiente
@@ -304,9 +301,9 @@ class Controller{
                     $obj_unidades_ejecutoras->obtiene_id_ultima_ue_ingresada();
                     
                     /*
-                     * El siguiente ciclo edita la unidad ejecutora de las personas y sitios que 
-                     * corresponden.
-                     */
+                    * El siguiente ciclo edita la unidad ejecutora de las personas y sitios que 
+                    * corresponden.
+                    */
                     for ($x = 0; $x < count($obj_unidades_ejecutoras->getArreglo()); $x++) {
                         $temp=$obj_unidades_ejecutoras->getArreglo();
                         $obj_unidades_ejecutoras->setCondicion("ID_Unidad_Ejecutora=".$temp[$x]['ID_Unidad_Ejecutora']);
@@ -382,9 +379,7 @@ class Controller{
             }
            
             // Variables para pintar resultados en pantalla al usuarios
-            /*
-             * Resumen de total de UE, nuevas UE, unidades inactivas y editadas.
-             */
+            //Resumen de total de UE, nuevas UE, unidades inactivas y editadas.
             $total_unidades_ejecutoras="Se identificaron un total de ".count($unidades_ejecutoras)." unidades ejecutoras en el prontuario adjunto.";
             $nuevas_unidades_ejecutoras="Se agregaron un total de ".$nuevas." unidades ejecutoras nuevas al sistema.";
             $unidades_inactivas="Se identificaron un total de ".$cuenta_ue_inactivas." unidades ejecutoras no ligadas a ninguna persona ni punto BCR (probablemente estan en desuso o inactivas).";
@@ -607,7 +602,6 @@ class Controller{
                 $arreglo_personal[]=array($_SESSION['prontuario'][$i][0],$_SESSION['prontuario'][$i][1],$_SESSION['prontuario'][$i][3],$_SESSION['prontuario'][$i][4],$_SESSION['prontuario'][$i][7],$_SESSION['prontuario'][$i][8]);   
             }
             
-           
             // Variables de control para mostrar en pantalla un informe final de los resultados posterior al proceso en ejecución
             $nuevos=0;
             $editados=0;
@@ -615,11 +609,9 @@ class Controller{
             $cambios_de_puesto=0;
             $cambios_de_ue=0;
             
-            
             // Mediante este ciclo se edita la tabla personal, se revisa contra el documento de trabajo, si la persona existe 
             //no existe o si hubiera que editarla
             for ($i = 0; $i < count($arreglo_personal); $i++){
-
                 //Establece el criterio de busqueda por numero de cedula del empleado BCR
                 $obj_personal->setCondicion("Cedula='".$arreglo_personal[$i][1]."' and ID_Empresa=1");
                 //Ejecuta la consulta
@@ -636,8 +628,7 @@ class Controller{
                 $obj_personal->setId_puesto($obj_puesto->getId());
                 
                 //Verifica si la consulta devolvió resultados, en este caso si es iguala uno, quiere decir que la persona si existe en la bd
-                if (count($obj_personal->getArreglo())==1){  
-                    
+                if (count($obj_personal->getArreglo())==1){
                     //Compara si tiene el mismo puesto asignado
                     $temp=$obj_personal->getArreglo();
                     if (!(strcmp($obj_puesto->getId(), $temp[0]['ID_Puesto']))==0){
@@ -702,11 +693,10 @@ class Controller{
                 $obj_personal->setEstado("1");
                 
                 /*
-                 * En caso de que el arreglo arroje más de un resultado, lo cual es atípico, procede a eliminar los registros correspondientes
-                 * y a agregar nuevamente a la persona con la información que viene del documento.
-                 */
+                * En caso de que el arreglo arroje más de un resultado, lo cual es atípico, procede a eliminar los registros correspondientes
+                * y a agregar nuevamente a la persona con la información que viene del documento.
+                */
                 if (count($obj_personal->getArreglo())>1){
-                   
                     //Agrega la persona con la información que ha venido incluyendo dentro de todo este metodo
                     $obj_personal->agregar_nueva_persona_para_prontuario();
                     //Obtiene el id de la ultima persona ingresada
@@ -862,8 +852,7 @@ class Controller{
                         //Llama al procedimiento que elimina la persona
                         //$obj_personal->eliminar_telefonos_personas_bcr_fuera_de_prontuario_para_prontuario();
                         $obj_personal->setCondicion("ID_Persona=".$params[$i]['ID_Persona']);
-                        //Cambio en prontuario de eliminar personas a inactivarlas...
-                        //Diego Venegas Monge, 2017-06-21 15:45
+                        //Diego Venegas Monge, 2017-06-21 15:45 //Cambio en prontuario de eliminar personas a inactivarlas...
                         //$obj_personal->eliminar_personas_bcr_fuera_de_prontuario_para_prontuario();
                         $obj_personal->setEstado(0);
                         $obj_personal->actualizar_estado_persona();
@@ -931,40 +920,34 @@ class Controller{
                 $arreglo_telefonos_celulares[]=array($_SESSION['prontuario'][$i][1],str_replace (" ","",str_replace ("-","",$_SESSION['prontuario'][$i][10])));
                 $obj_personal->setCondicion("Cedula='".$arreglo_telefonos_celulares[$i][0]."'");
                 $obj_personal->obtiene_id_de_persona_para_prontuario();
-                /*$obj_telefono->setCondicion("(ID=".$obj_personal->getId().") AND (ID_Tipo_Telefono=3) AND (Numero='0')");
-                $obj_telefono->eliminar_telefonos_para_prontuario();*/
+                //$obj_telefono->setCondicion("(ID=".$obj_personal->getId().") AND (ID_Tipo_Telefono=3) AND (Numero='0')");
+                //$obj_telefono->eliminar_telefonos_para_prontuario();
                 $obj_telefono->setCondicion("(ID=".$obj_personal->getId().") AND (ID_Tipo_Telefono=2 or ID_Tipo_Telefono=3 or ID_Tipo_Telefono=4 or ID_Tipo_Telefono=27 or ID_Tipo_Telefono=28) AND (Numero='0')");
                 $obj_telefono->eliminar_telefonos_para_prontuario();
 
                 ///////////////////////////Generar inconsistencias del sistema
-
                 //Esta validación permite comprobar que el numero de telefono a analizar cumpla los estandares minimos para celulares
                 //Por ejemplo 8 digitos, que sean numeros, etc.
 
                 if ((strlen($arreglo_telefonos_celulares[$i][1])==8)&&(is_numeric($arreglo_telefonos_celulares[$i][1]))){
-
                     //Verifica si tiene numeros de telefono diferentes en bd al celular que viene en prontuario
                     $obj_telefono->setCondicion("(ID=".$obj_personal->getId().") AND (ID_Tipo_Telefono=3 or ID_Tipo_Telefono=27) AND (Numero<>'".$arreglo_telefonos_celulares[$i][1]."')");
-
                     //Ejecuta la consulta SQL
                     $obj_telefono->obtiene_telefonos_por_criterio_para_prontuario();
-
                     //Esta validación permite verificar si el funcionario tiene un numero de celular distinto al que viene en el prontuario y lo registra para el reporte de excel.
                     if (count($obj_telefono->getArreglo())>0){
                         $valor_prontuario="El funcionario (a) con cedula: ".$arreglo_telefonos_celulares[$i][0]." tiene el el numero de celular: ".$arreglo_telefonos_celulares[$i][1]." a nivel de prontuario.";
                         //Variable que va armando la cadena de telefonos registrados en base de datos para crear el comparativo
                         $valor_base_datos="Numeros de telefono celular registrados en la base de datos de Oriel: ";
-                         for ($x = 0; $x < count($obj_telefono->getArreglo()); $x++) {
-
-                             //Acumula cada registro en la variable correspondiente para armar una sola sentencia
+                        for ($x = 0; $x < count($obj_telefono->getArreglo()); $x++) {
+                            //Acumula cada registro en la variable correspondiente para armar una sola sentencia
                             $temp=$obj_telefono->getArreglo();
                             $valor_base_datos.=$temp[$x]['Numero'].", ";
-
-                         }
-                         //Agrega el registro de inconsistencias generado para este funcionario al vector general para el reporte de excel
-                         $vector_inconsistencias[]=array ($valor_prontuario,$valor_base_datos);
-                         //Agrega espacio en blanco en el vector
-                         $vector_inconsistencias[]=array ("","");
+                        }
+                        //Agrega el registro de inconsistencias generado para este funcionario al vector general para el reporte de excel
+                        $vector_inconsistencias[]=array ($valor_prontuario,$valor_base_datos);
+                        //Agrega espacio en blanco en el vector
+                        $vector_inconsistencias[]=array ("","");
                     }  
                 }
 
@@ -6340,6 +6323,7 @@ class Controller{
             $obj_puntobcr->setCondicion("ID_PuntoBCR='".$_POST['id_puntobcr']."'");
             $obj_puntobcr->setId($_POST['id_distrito']);
             $obj_puntobcr->setDireccion($_POST['direccion']);
+            $obj_puntobcr->setObservaciones($_POST['Geolocalizacion']);
             $obj_puntobcr->actualizar_ubicacion_puntobcr();
             //echo 'Se actualizó la informacion general del PuntoBCR';
         }else{
@@ -8476,6 +8460,18 @@ class Controller{
         }
     }
     
+    public function cencon_sin_coordinar($params,$tiempo){
+        $obj_cencon = new cls_cencon();
+        $obj_cencon->setCondicion('ID_Evento_Cencon='.$params['ID_Evento_Cencon']);
+        $obj_cencon->informacion_cencon_sin_coordinar();
+        if (count($obj_cencon->getArreglo())<1){
+            $obj_cencon->setId($params['ID_Evento_Cencon']);
+            $obj_cencon->setId2($tiempo);
+            $obj_cencon->setFecha($params['Fecha_Apertura']);
+            $obj_cencon->setHora($params['Hora_Apertura']);
+            $obj_cencon->agregar__cencon_sin_coordinar();
+        }
+    }
     
     ////////////////////MANTENIMIENTO DE PERSONAL EXTERNO///////////////////////
     ////////////////////////////////////////////////////////////////////////////
@@ -11152,6 +11148,9 @@ class Controller{
                                                     $cajero_violeta++;
                                                     //echo "blueviolet +100 informó".$params[$i]['Codigo']."\n||||";
                                                 }else{
+                                                    if($vencidos[$i]['tiempo']>'115'){
+                                                        $this->cencon_sin_coordinar($params[$i], $vencidos[$i]['tiempo']);
+                                                    }
                                                     $vencidos[$i]['color']="color: red";
                                                     $cajero_rojo++;
                                                     //echo "rojo +100 sin informar".$params[$i]['Codigo']."\n||||";
@@ -11162,6 +11161,9 @@ class Controller{
                                                 //echo "naranja -110".$params[$i]['Codigo']."\n|||||";
                                             }
                                         }else{
+                                            if($vencidos[$i]['tiempo']>'85'){
+                                                $this->cencon_sin_coordinar($params[$i], $vencidos[$i]['tiempo']);
+                                            }
                                             $vencidos[$i]['color']="color: red";
                                             $cajero_rojo++;
                                             //echo "rojo -correo encargado".$params[$i]['Codigo']."\n|||||";
@@ -11172,6 +11174,9 @@ class Controller{
                                         //echo "naranja -70 y correo".$params[$i]['Codigo']."\n|||||";
                                     }
                                 }else{
+                                    if($vencidos[$i]['tiempo']>'55'){
+                                        $this->cencon_sin_coordinar($params[$i], $vencidos[$i]['tiempo']);
+                                    }
                                     $vencidos[$i]['color']="color: red";
                                     $cajero_rojo++;
                                     //echo "rojo +40 sin correo".$params[$i]['Codigo']."\n||||";
@@ -11189,12 +11194,12 @@ class Controller{
                     }else{
                         $vencidos[$i]['color']="color: red";
                         $cajero_rojo++;
-                        //echo "rojo +40 sin correo".$params[$i]['Codigo']."\n||||";
+                        //echo "rojo +300 minutos ".$params[$i]['Codigo']."\n||||";
                     }
                 }else{
                     $vencidos[$i]['color']="color: red";
                     $cajero_rojo++;
-                    //echo "rojo +40 sin correo".$params[$i]['Codigo']."\n||||";
+                    //echo "Hora vencida 19".$params[$i]['Codigo']."\n||||";
                 }    
             }
             

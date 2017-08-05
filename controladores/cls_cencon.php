@@ -269,4 +269,19 @@ class cls_cencon {
         $this->obj_data_provider->desconectar();
         $this->resultado_operacion=true;
     }
+    
+    public function informacion_cencon_sin_coordinar(){
+        $this->obj_data_provider->conectar();
+        $this->arreglo=$this->obj_data_provider->trae_datos("t_cencon_sin_coordinar", "*", $this->condicion);
+        $this->arreglo=$this->obj_data_provider->getArreglo();
+        $this->obj_data_provider->desconectar();
+        $this->resultado_operacion=true;
+    }
+    
+    public function agregar__cencon_sin_coordinar(){
+        $this->obj_data_provider->conectar();
+        $this->obj_data_provider->inserta_datos("t_cencon_sin_coordinar", "ID_Evento_Cencon, Tiempo, Fecha, Hora","'".$this->id."','".$this->id2."','".$this->fecha."','".$this->hora."'");
+        $this->obj_data_provider->desconectar();
+        $this->resultado_operacion=true;
+    }
 }?>

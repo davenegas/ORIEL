@@ -333,7 +333,7 @@ class cls_puntosBCR{
     
     public function actualizar_ubicacion_puntobcr(){
         $this->obj_data_provider->conectar();
-        $this->arreglo=$this->obj_data_provider->edita_datos("T_PuntoBCR", "ID_Distrito='".$this->id."', ". "Direccion='".$this->direccion."'",$this->condicion);
+        $this->arreglo=$this->obj_data_provider->edita_datos("T_PuntoBCR", "ID_Distrito='".$this->id."', ". "Direccion='".$this->direccion."', Geolocalizacion='".$this->observaciones."'",$this->condicion);
         $this->arreglo=$this->obj_data_provider->getArreglo();
         $this->obj_data_provider->desconectar();
         $this->resultado_operacion=true;
