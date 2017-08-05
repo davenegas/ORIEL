@@ -5458,10 +5458,46 @@ class Controller{
                     $fecha_hoy = date('Y-m-j');
                     $fecha_actual = strtotime ( '-3 day' , strtotime ( $fecha_hoy ) ) ;
                     $fecha_actual = date ('Y-m-j', $fecha_actual);
-
-                    $obj_puesto_monitoreo->setFecha_solucion($fecha_actual);
-                    $obj_puesto_monitoreo->respaldo_informacion_bitacora_revisiones();
                     
+                    //$obj_puesto_monitoreo->setCondicion("Estado=1 and (Fecha_Termina_Revision<'".$fecha_actual."' or Fecha_Termina_Revision is null)");
+                    $obj_puesto_monitoreo->setCondicion("((Estado=1) and (Fecha_Termina_Revision<date_add(NOW(), INTERVAL -3 DAY) or Fecha_Termina_Revision is null))");
+                    
+                    $obj_puesto_monitoreo->obtiene_revisiones_de_video();
+                    $params =$obj_puesto_monitoreo->getArreglo();
+                    
+                    $obj_puesto_monitoreo->setCondicion("t_inconsistenciavideo.Estado not in (1,8,9,10)");
+                    $obj_puesto_monitoreo->obtiene_inconsistencias_de_video_basica();
+                    $params2 =$obj_puesto_monitoreo->getArreglo();
+                    
+                    $arreglo_id_revisiones=array();
+                    
+                    if (count($params2)>0){
+                        for ($i = 0; $i < count($params2); $i++) {
+                            $arreglo_id_revisiones[]=$params2[$i]['ID_Bitacora_Revision_Video'];                                
+                        }
+                    }
+                    
+                    $cuenta=0;
+                    $cuenta2=0;
+                    $condicion="(";
+                    if (count($params)>0){
+                        for ($i = 0; $i < count($params); $i++) {
+                            if (!(in_array($params[$i]['ID_Bitacora_Revision_Video'], $arreglo_id_revisiones))) {
+                              
+                                $condicion=$condicion.$params[$i]['ID_Bitacora_Revision_Video'].",";
+                            }else{
+                                
+                            }
+                                                         
+                        }
+                        $condicion = substr($condicion, 0, -1);
+                        $condicion=$condicion.");";
+                        
+                    }
+                    $obj_puesto_monitoreo->setCondicion($condicion);
+                    //$obj_puesto_monitoreo->setCondicion("(357740,357741,357742);");
+                    $obj_puesto_monitoreo->respaldo_informacion_bitacora_revisiones();
+                                                          
                     $cadena.="\r\nFin del proceso";
                     //Abre el archivo para escribirle 
                     $fp = fopen($ruta,"w+"); //no olvidar crear al archivo visitantes.txt y poner el path correcto
@@ -9948,6 +9984,14 @@ class Controller{
             $obj_puesto_monitoreo->setCondicion("t_inconsistenciavideo.Estado not in (1,8,9,10)");
             $obj_puesto_monitoreo->obtiene_inconsistencias_de_video();
             $params =$obj_puesto_monitoreo->getArreglo();
+
+            // $obj_puesto_monitoreo->setCondicion("bd_Gerencia_Seguridad.t_inconsistenciavideo.Estado not in (1,8,9,10)");
+            //$obj_puesto_monitoreo->obtiene_inconsistencias_de_video_historicos();
+            //$params2 =$obj_puesto_monitoreo->getArreglo();
+            
+            //if (count($params2)>0){
+            //    $params=array_merge($params,$params2);
+            //}
 
             require __DIR__.'/../vistas/plantillas/frm_inconsistencias_video_listar.php';
         } else {

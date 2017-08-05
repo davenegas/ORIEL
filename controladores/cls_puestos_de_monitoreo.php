@@ -658,6 +658,23 @@ class cls_puestos_de_monitoreo{
             $this->obj_data_provider->desconectar();
         } 
     }
+    
+     public function obtiene_inconsistencias_de_video_basica(){
+        $this->obj_data_provider->conectar();
+        if($this->condicion==""){
+            $this->arreglo=$this->obj_data_provider->trae_datos("`t_bitacorarevisionesvideo` inner join t_inconsistenciavideo on t_bitacorarevisionesvideo.ID_Bitacora_Revision_Video=t_inconsistenciavideo.ID_Bitacora_Revision_Video",
+                    "*","");
+            $this->arreglo=$this->obj_data_provider->getArreglo();
+            $this->obj_data_provider->desconectar();
+        }
+        else{
+       $this->arreglo=$this->obj_data_provider->trae_datos("`t_bitacorarevisionesvideo` inner join t_inconsistenciavideo on t_bitacorarevisionesvideo.ID_Bitacora_Revision_Video=t_inconsistenciavideo.ID_Bitacora_Revision_Video",
+                    "*",
+                    $this->condicion);
+            $this->arreglo=$this->obj_data_provider->getArreglo();
+            $this->obj_data_provider->desconectar();
+        } 
+    }
    
     public function obtiene_inconsistencias_de_video(){
         $this->obj_data_provider->conectar();
@@ -689,7 +706,22 @@ class cls_puestos_de_monitoreo{
         } 
     }
     
-    
+    public function obtiene_inconsistencias_de_video_historicos(){
+        $this->obj_data_provider->conectar();
+        if($this->condicion==""){
+            $this->arreglo=$this->obj_data_provider->trae_datos("t_inconsistenciavideo INNER JOIN bd_Registro_Trazabilidad.t_bitacorarevisionesvideo ON bd_Registro_Trazabilidad.t_bitacorarevisionesvideo.ID_Bitacora_Revision_Video = bd_Gerencia_Seguridad.t_inconsistenciavideo.ID_Bitacora_Revision_Video INNER JOIN bd_Gerencia_Seguridad.t_usuario ON bd_Gerencia_Seguridad.t_usuario.ID_Usuario = bd_Registro_Trazabilidad.T_BitacoraRevisionesVideo.ID_Usuario Inner join bd_Gerencia_Seguridad.t_unidadvideo on bd_Gerencia_Seguridad.t_unidadvideo.ID_Unidad_Video=bd_Registro_Trazabilidad.t_bitacorarevisionesvideo.ID_Unidad_Video inner join bd_Gerencia_Seguridad.T_PuestoMonitoreo on bd_Gerencia_Seguridad.T_PuestoMonitoreo.ID_Puesto_Monitoreo=bd_Registro_Trazabilidad.t_bitacorarevisionesvideo.ID_Puesto_Monitoreo left join bd_Gerencia_Seguridad.t_usuario tuv on bd_Gerencia_Seguridad.t_inconsistenciavideo.ID_Usuario_Valida=bd_Gerencia_Seguridad.tuv.ID_Usuario left join bd_Gerencia_Seguridad.t_usuario tur on bd_Gerencia_Seguridad.t_inconsistenciavideo.ID_Usuario_Reporta_SE=bd_Gerencia_Seguridad.tur.ID_Usuario left join bd_Gerencia_Seguridad.t_usuario tus on bd_Gerencia_Seguridad.t_inconsistenciavideo.ID_Usuario_Reporta_Solucionada=bd_Gerencia_Seguridad.tus.ID_Usuario order by bd_Gerencia_Seguridad.t_inconsistenciavideo.ID_Inconsistencia_Video",
+                    "bd_Gerencia_Seguridad.t_inconsistenciavideo.* ,bd_Registro_Trazabilidad.T_BitacoraRevisionesVideo.Fecha_Inicia_Revision, bd_Registro_Trazabilidad.T_BitacoraRevisionesVideo.Hora_Inicia_Revision,bd_Registro_Trazabilidad.T_BitacoraRevisionesVideo.ID_Unidad_Video ,bd_Registro_Trazabilidad.T_BitacoraRevisionesVideo.Reporta_Situacion, CONCAT( CONCAT( bd_Gerencia_Seguridad.t_usuario.Nombre,  ' ' ) ,bd_Gerencia_Seguridad.t_usuario.Apellido ) AS Detectado_Por,CONCAT( CONCAT( bd_Gerencia_Seguridad.tuv.Nombre,  ' ' ) , bd_Gerencia_Seguridad.tuv.Apellido ) AS Validado_Por,CONCAT( CONCAT( bd_Gerencia_Seguridad.tur.Nombre,  ' ' ) ,bd_Gerencia_Seguridad.tur.Apellido ) AS Reportado_Por,CONCAT( CONCAT( bd_Gerencia_Seguridad.tus.Nombre,  ' ' ) , bd_Gerencia_Seguridad.tus.Apellido ) AS Solucionado_Por,case bd_Gerencia_Seguridad.t_inconsistenciavideo.Estado  when 0 then 'Pendiente'  when 1 then 'Atendida' when 2 then 'Validada SE' when 3 then 'Validada ATMs' when 4 then 'Validada Mant.' when 5 then 'Reportada SE' when 6 then 'Reportada ATMs' when 7 then 'Reportada Mant.' when 8 then 'Reparada SE' when 9 then 'Reparada ATMs' when 10 then 'Reparada Mant.' end as Estado_Traducido,bd_Gerencia_Seguridad.t_unidadvideo.Descripcion,bd_Gerencia_Seguridad.T_PuestoMonitoreo.Nombre as Nombre_Puesto","");
+            $this->arreglo=$this->obj_data_provider->getArreglo();
+            $this->obj_data_provider->desconectar();
+        }
+        else{
+       $this->arreglo=$this->obj_data_provider->trae_datos("t_inconsistenciavideo INNER JOIN bd_Registro_Trazabilidad.t_bitacorarevisionesvideo ON bd_Registro_Trazabilidad.t_bitacorarevisionesvideo.ID_Bitacora_Revision_Video = bd_Gerencia_Seguridad.t_inconsistenciavideo.ID_Bitacora_Revision_Video INNER JOIN bd_Gerencia_Seguridad.t_usuario ON bd_Gerencia_Seguridad.t_usuario.ID_Usuario = bd_Registro_Trazabilidad.T_BitacoraRevisionesVideo.ID_Usuario Inner join bd_Gerencia_Seguridad.t_unidadvideo on bd_Gerencia_Seguridad.t_unidadvideo.ID_Unidad_Video=bd_Registro_Trazabilidad.t_bitacorarevisionesvideo.ID_Unidad_Video inner join bd_Gerencia_Seguridad.T_PuestoMonitoreo on bd_Gerencia_Seguridad.T_PuestoMonitoreo.ID_Puesto_Monitoreo=bd_Registro_Trazabilidad.t_bitacorarevisionesvideo.ID_Puesto_Monitoreo left join bd_Gerencia_Seguridad.t_usuario tuv on bd_Gerencia_Seguridad.t_inconsistenciavideo.ID_Usuario_Valida=bd_Gerencia_Seguridad.tuv.ID_Usuario left join bd_Gerencia_Seguridad.t_usuario tur on bd_Gerencia_Seguridad.t_inconsistenciavideo.ID_Usuario_Reporta_SE=bd_Gerencia_Seguridad.tur.ID_Usuario left join bd_Gerencia_Seguridad.t_usuario tus on bd_Gerencia_Seguridad.t_inconsistenciavideo.ID_Usuario_Reporta_Solucionada=bd_Gerencia_Seguridad.tus.ID_Usuario",
+                    "bd_Gerencia_Seguridad.t_inconsistenciavideo.* ,bd_Registro_Trazabilidad.T_BitacoraRevisionesVideo.Fecha_Inicia_Revision, bd_Registro_Trazabilidad.T_BitacoraRevisionesVideo.Hora_Inicia_Revision,bd_Registro_Trazabilidad.T_BitacoraRevisionesVideo.ID_Unidad_Video ,bd_Registro_Trazabilidad.T_BitacoraRevisionesVideo.Reporta_Situacion, CONCAT( CONCAT( bd_Gerencia_Seguridad.t_usuario.Nombre,  ' ' ) ,bd_Gerencia_Seguridad.t_usuario.Apellido ) AS Detectado_Por,CONCAT( CONCAT( bd_Gerencia_Seguridad.tuv.Nombre,  ' ' ) , bd_Gerencia_Seguridad.tuv.Apellido ) AS Validado_Por,CONCAT( CONCAT( bd_Gerencia_Seguridad.tur.Nombre,  ' ' ) ,bd_Gerencia_Seguridad.tur.Apellido ) AS Reportado_Por,CONCAT( CONCAT( bd_Gerencia_Seguridad.tus.Nombre,  ' ' ) , bd_Gerencia_Seguridad.tus.Apellido ) AS Solucionado_Por,case bd_Gerencia_Seguridad.t_inconsistenciavideo.Estado  when 0 then 'Pendiente'  when 1 then 'Atendida' when 2 then 'Validada SE' when 3 then 'Validada ATMs' when 4 then 'Validada Mant.' when 5 then 'Reportada SE' when 6 then 'Reportada ATMs' when 7 then 'Reportada Mant.' when 8 then 'Reparada SE' when 9 then 'Reparada ATMs' when 10 then 'Reparada Mant.' end as Estado_Traducido,bd_Gerencia_Seguridad.t_unidadvideo.Descripcion,bd_Gerencia_Seguridad.T_PuestoMonitoreo.Nombre as Nombre_Puesto",
+                    $this->condicion." order by bd_Gerencia_Seguridad.t_inconsistenciavideo.ID_Inconsistencia_Video");
+            $this->arreglo=$this->obj_data_provider->getArreglo();
+            $this->obj_data_provider->desconectar();
+        } 
+    }
     
     public function obtiene_inconsistencias_para_control_de_video(){
         $this->obj_data_provider->conectar();
@@ -1024,8 +1056,25 @@ class cls_puestos_de_monitoreo{
     
     public function respaldo_informacion_bitacora_revisiones(){
         $this->obj_data_provider->conectar();
-        $sql=("call sp_respaldo_bitacora_revisiones('".$this->fecha_solucion."')");
-        $this->obj_data_provider->insertar_datos_con_phpmyadmin($sql);
+        //$sql=("call sp_respaldo_bitacora_revisiones(".$this->condicion.")");
+        //$this->obj_data_provider->insertar_datos_con_phpmyadmin($sql);
+       $this->obj_data_provider->ejecuta_instruccion_sql("INSERT INTO bd_registro_trazabilidad.`t_bitacorarevisionesvideo`(`ID_Bitacora_Revision_Video`, `Fecha_Inicia_Revision`, `Hora_Inicia_Revision`, 
+		`Fecha_Termina_Revision`, `Hora_Termina_Revision`, `ID_Bitacora_Control_Puesto_Monitoreo`, `ID_Usuario`, `ID_Unidad_Video`, 
+		`ID_Puesto_Monitoreo`, `Retraso_Segundos`, `Justificacion_Retraso`, `Resultado_Conexion`, `Duracion_Revision`, `Posicion`, 
+		`Requirio_Mantenimiento`, `Observaciones`, `Reporta_Situacion`, `Estado`)
+		SELECT `ID_Bitacora_Revision_Video`, `Fecha_Inicia_Revision`, 
+		`Hora_Inicia_Revision`, `Fecha_Termina_Revision`, `Hora_Termina_Revision`, `ID_Bitacora_Control_Puesto_Monitoreo`, `ID_Usuario`, `ID_Unidad_Video`, `ID_Puesto_Monitoreo`, 
+		`Retraso_Segundos`, `Justificacion_Retraso`, `Resultado_Conexion`, 
+		`Duracion_Revision`, `Posicion`, `Requirio_Mantenimiento`, 
+		`Observaciones`, `Reporta_Situacion`, `Estado` 
+		FROM bd_gerencia_seguridad.`t_bitacorarevisionesvideo` WHERE bd_gerencia_seguridad.t_bitacorarevisionesvideo.ID_Bitacora_Revision_Video in ".$this->condicion);
+        //$this->obj_data_provider->ejecuta_instruccion_sql("DELETE FROM bd_gerencia_seguridad.`t_bitacorarevisionesvideo` WHERE bd_gerencia_seguridad.t_bitacorarevisionesvideo.ID_Bitacora_Revision_Video in ".$this->condicion);
+        //$sql=("call sp_respaldo_bitacora_revisiones_borra('".$this->fecha_solucion."','".$this->condicion."')");
+        //$this->obj_data_provider->insertar_datos_con_phpmyadmin($sql);
         $this->obj_data_provider->desconectar();
+        $this->obj_data_provider->conectar();
+        $this->obj_data_provider->ejecuta_instruccion_sql("DELETE FROM bd_gerencia_seguridad.`t_bitacorarevisionesvideo` WHERE bd_gerencia_seguridad.t_bitacorarevisionesvideo.ID_Bitacora_Revision_Video in ".$this->condicion);
+        $this->obj_data_provider->desconectar();
+        
     }
 }?>
