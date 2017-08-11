@@ -225,6 +225,36 @@ class cls_cencon {
             $this->resultado_operacion=true;
     }
     
+    public function obtener_todos_eventos_cencon_personal_bcr(){
+        $this->obj_data_provider->conectar();
+        $this->arreglo=$this->obj_data_provider->trae_datos("T_EventoCencon 
+                LEFT OUTER JOIN T_PuntoBCR ON T_PuntoBCR.ID_PuntoBCR = T_EventoCencon.ID_PuntoBCR 
+                LEFT OUTER JOIN T_Usuario ON T_Usuario.ID_Usuario = T_EventoCencon.ID_Usuario
+                LEFT OUTER JOIN t_personal ON t_personal.ID_Persona = t_eventocencon.ID_Persona
+                LEFT OUTER JOIN T_Empresa ON T_Empresa.ID_Empresa = T_EventoCencon.ID_Empresa", 
+            "T_EventoCencon.*, T_PuntoBCR.Nombre, T_PuntoBCR.Codigo,T_Usuario.Nombre as Nombre_usuario,
+                T_Usuario.Apellido as Apellido_usuario, t_personal.Apellido_Nombre as Nombre_Persona, T_Empresa.Empresa", 
+            $this->condicion);
+        $this->arreglo=$this->obj_data_provider->getArreglo();
+        $this->obj_data_provider->desconectar();
+        $this->resultado_operacion=true;
+    }
+    
+    public function obtener_todos_eventos_cencon_personal_externo(){
+        $this->obj_data_provider->conectar();
+        $this->arreglo=$this->obj_data_provider->trae_datos("T_EventoCencon 
+                LEFT OUTER JOIN T_PuntoBCR ON T_PuntoBCR.ID_PuntoBCR = T_EventoCencon.ID_PuntoBCR 
+                LEFT OUTER JOIN T_Usuario ON T_Usuario.ID_Usuario = T_EventoCencon.ID_Usuario
+                LEFT OUTER JOIN t_personalexterno ON t_personalexterno.ID_Persona_Externa = t_eventocencon.ID_Persona
+                LEFT OUTER JOIN T_Empresa ON T_Empresa.ID_Empresa = T_EventoCencon.ID_Empresa", 
+            "T_EventoCencon.*, T_PuntoBCR.Nombre, T_PuntoBCR.Codigo,T_Usuario.Nombre as Nombre_usuario,T_Empresa.Empresa,
+                T_Usuario.Apellido as Apellido_usuario, GROUP_CONCAT(char(10),t_personalexterno.Nombre,' ', t_personalexterno.Apellido) as Nombre_Persona", 
+            $this->condicion);
+        $this->arreglo=$this->obj_data_provider->getArreglo();
+        $this->obj_data_provider->desconectar();
+        $this->resultado_operacion=true;
+    }  
+    
     public function cerrar_evento_cencon(){
         $this->obj_data_provider->conectar();
         $this->obj_data_provider->edita_datos("T_EventoCencon", "Fecha_Cierre='".$this->fecha."', Hora_Cierre='".$this->hora."'", $this->condicion);

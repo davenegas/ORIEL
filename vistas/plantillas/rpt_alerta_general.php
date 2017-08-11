@@ -212,7 +212,7 @@
                     <h5 style="color: mediumblue;text-decoration: underline;">Cajero(s) con apertura especial= <?php echo $cajero_especial;?></h5>
                     <?php if(isset($sin_coordinar[0]['Total'])){ ?>
                         <p><strong>Cantidad de aperturas sin coordinar en tiempo establecido: <?php echo $sin_coordinar[0]['Total']?></strong></p>
-                    <?php }?>
+                    <?php } ?>
                 </div>
             <?php } ?>
         </div>

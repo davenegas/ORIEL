@@ -8038,7 +8038,7 @@ class Controller{
                     $obj_personal->obtener_personas_prontuario();
                     $persona = $obj_personal->getArreglo();
                     $params[$i] = array_merge(array('Nombre_Persona' =>($persona[0]['Apellido_Nombre'])),(array('Correo' =>($persona[0]['Correo']))),$params[$i]);
-                } else{
+                } else {
                     $obj_externo->setCondicion("T_PersonalExterno.ID_Persona_Externa='".$params[$i]['ID_Persona']."'");
                     $obj_externo->obtiene_todo_el_personal_externo();
                     $persona = $obj_externo->getArreglo();
@@ -10848,22 +10848,23 @@ class Controller{
                 $obj_cencon->setCondicion("(T_EventoCencon.Fecha_Apertura between '".$fecha_inicio."' AND '".$fecha_fin."')");
                 $titulo = "Eventos de Cencon de hoy: ".$fecha_inicio;
             }
-            $obj_cencon->setCondicion("(T_EventoCencon.Fecha_Apertura between '".$fecha_inicio."' AND '".$fecha_fin."')");
-            $obj_cencon->obtener_todos_eventos_cencon();
-            $params= $obj_cencon->getArreglo();
-            
-            $tam=count($params);
-            for($i=0;$i<$tam;$i++){
-                if($params[$i]['ID_Empresa']==1){
-                    $obj_personal->setCondicion("ID_Persona='".$params[$i]['ID_Persona']."'");
-                    $obj_personal->obtener_personas_prontuario();
-                    $persona = $obj_personal->getArreglo();
-                    $params[$i] = array_merge((array('Nombre_Persona' =>($persona[0]['Apellido_Nombre']))),$params[$i]);
-                } else {
-                    $obj_externo->setCondicion("T_PersonalExterno.ID_Persona_Externa='".$params[$i]['ID_Persona']."'");
-                    $obj_externo->obtiene_todo_el_personal_externo();
-                    $persona = $obj_externo->getArreglo();
-                    $params[$i] = array_merge((array('Nombre_Persona' =>($persona[0]['Apellido']." ".$persona[0]['Nombre']))),$params[$i]);
+            //Obtiene la información de apertura de Cencon del Personal BCR
+            $obj_cencon->setCondicion("(T_EventoCencon.Fecha_Apertura between '".$fecha_inicio."' AND '".$fecha_fin."') AND t_eventocencon.ID_Empresa=1");
+            $obj_cencon->obtener_todos_eventos_cencon_personal_bcr();
+            $aperturas_bcr = $obj_cencon->getArreglo();
+            //Obtiene la información de aperturas de Cencon del Personal Externo;
+            $obj_cencon->setCondicion("(T_EventoCencon.Fecha_Apertura between '".$fecha_inicio."' AND '".$fecha_fin."') AND t_eventocencon.ID_Empresa<>1 GROUP by t_eventocencon.ID_Evento_Cencon");
+            $obj_cencon->obtener_todos_eventos_cencon_personal_externo();
+            $aperturas_externo = $obj_cencon->getArreglo();
+            //Verifica que cuente con información y luego la junta en $params
+            $params=null;
+            if(count($aperturas_bcr)>0 &&count($aperturas_externo)>0 ){
+                $params= array_merge($aperturas_bcr,$aperturas_externo);
+            } else {
+                if(count($aperturas_bcr)>0){
+                    $params=$aperturas_bcr;
+                }if(count($aperturas_externo)>0){
+                    $params=$aperturas_externo;
                 }
             }
             
