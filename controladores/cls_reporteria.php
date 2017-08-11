@@ -140,6 +140,33 @@ class cls_reporteria{
         $this->obj_data_provider->conectar();
         if($this->condicion==""){
             $this->arreglo=$this->obj_data_provider->trae_datos(
+                    "t_bitacorarevisionesvideo
+                    LEFT OUTER JOIN T_Usuario on T_Usuario.ID_Usuario = t_bitacorarevisionesvideo.ID_Usuario
+                    LEFT OUTER JOIN t_unidadvideo on t_unidadvideo.ID_Unidad_Video = t_bitacorarevisionesvideo.ID_Unidad_Video
+                    LEFT OUTER JOIN t_puestomonitoreo on t_puestomonitoreo.ID_Puesto_Monitoreo = t_bitacorarevisionesvideo.ID_Puesto_Monitoreo", 
+                    "t_bitacorarevisionesvideo.*, t_unidadvideo.Descripcion, t_puestomonitoreo.Nombre, concat(concat(t_usuario.Nombre,' '),t_usuario.Apellido) Nombre_Completo",
+                    "");
+            $this->arreglo=$this->obj_data_provider->getArreglo();
+            $this->obj_data_provider->desconectar();
+        }
+        else{
+            $this->arreglo=$this->obj_data_provider->trae_datos(
+                "t_bitacorarevisionesvideo
+                    LEFT OUTER JOIN T_Usuario on T_Usuario.ID_Usuario = t_bitacorarevisionesvideo.ID_Usuario
+                    LEFT OUTER JOIN t_unidadvideo on t_unidadvideo.ID_Unidad_Video = t_bitacorarevisionesvideo.ID_Unidad_Video
+                    LEFT OUTER JOIN t_puestomonitoreo on t_puestomonitoreo.ID_Puesto_Monitoreo = t_bitacorarevisionesvideo.ID_Puesto_Monitoreo", 
+                "t_bitacorarevisionesvideo.*, t_unidadvideo.Descripcion, t_puestomonitoreo.Nombre, "
+                . "concat(concat(t_usuario.Nombre,' '),t_usuario.Apellido) Nombre_Completo,t_puestomonitoreo.ID_Usuario Control ",
+                $this->condicion." ORDER BY t_puestomonitoreo.Nombre");
+            $this->arreglo=$this->obj_data_provider->getArreglo();
+            $this->obj_data_provider->desconectar();
+        } 
+    }
+    
+    public function obtiene_bitacora_puestos_de_monitoreo_completo_traza(){
+        $this->obj_data_provider->conectar();
+        if($this->condicion==""){
+            $this->arreglo=$this->obj_data_provider->trae_datos(
                     "bd_registro_trazabilidad.t_bitacorarevisionesvideo
                     LEFT OUTER JOIN bd_gerencia_seguridad.T_Usuario on T_Usuario.ID_Usuario = t_bitacorarevisionesvideo.ID_Usuario
                     LEFT OUTER JOIN bd_gerencia_seguridad.t_unidadvideo on t_unidadvideo.ID_Unidad_Video = t_bitacorarevisionesvideo.ID_Unidad_Video

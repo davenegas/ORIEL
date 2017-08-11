@@ -11283,6 +11283,11 @@ class Controller{
                 rsort($vencidos);
             }
             
+            //Información de cantidad de cajero sin coordinar en tiempo establecido
+            $obj_cencon->setCondicion("Fecha='".date('Y-m-j')."'");
+            $obj_cencon->obtener_sin_coordinar_dia();
+            $sin_coordinar= $obj_cencon->getArreglo();
+            
             ////////////////////////////////////////////////////////////////////
             ///////////PENDIENTES DE CADA PUESTO DE MONITOREO
             $pendiente_puesto1[0]['Contador']=0;
@@ -11428,7 +11433,7 @@ class Controller{
                 }
                 //Obtiene la información de las revisiones según los parametros
                 $obj_reporteria->setCondicion($condicion);
-                $obj_reporteria->obtiene_bitacora_puestos_de_monitoreo_completo();
+                $obj_reporteria->obtiene_bitacora_puestos_de_monitoreo_completo_traza();
                 $bitacora_revision_video = $obj_reporteria->getArreglo();
                 
             } else{
