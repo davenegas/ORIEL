@@ -205,22 +205,22 @@ class cls_cencon {
         $this->obj_data_provider->conectar();
             if($this->condicion==""){
                 $this->arreglo=$this->obj_data_provider->trae_datos("T_EventoCencon 
-                        LEFT OUTER JOIN T_PuntoBCR ON T_PuntoBCR.ID_PuntoBCR = T_EventoCencon.ID_PuntoBCR 
-                        LEFT OUTER JOIN T_Empresa ON T_Empresa.ID_Empresa = T_EventoCencon.ID_Empresa 
-                        LEFT OUTER JOIN T_Usuario ON T_Usuario.ID_Usuario = T_EventoCencon.ID_Usuario", 
-                        "T_EventoCencon.*, T_PuntoBCR.Nombre, T_PuntoBCR.Codigo,T_Empresa.Empresa, 
-                        T_Usuario.Nombre as Nombre_usuario, T_Usuario.Apellido as Apellido_usuario", 
-                        "");
+                    LEFT OUTER JOIN T_PuntoBCR ON T_PuntoBCR.ID_PuntoBCR = T_EventoCencon.ID_PuntoBCR 
+                    LEFT OUTER JOIN T_Empresa ON T_Empresa.ID_Empresa = T_EventoCencon.ID_Empresa 
+                    LEFT OUTER JOIN T_Usuario ON T_Usuario.ID_Usuario = T_EventoCencon.ID_Usuario", 
+                    "T_EventoCencon.*, T_PuntoBCR.Nombre, T_PuntoBCR.Codigo,T_Empresa.Empresa, 
+                    T_Usuario.Nombre as Nombre_usuario, T_Usuario.Apellido as Apellido_usuario", 
+                    "");
             }else{
                 $this->arreglo=$this->obj_data_provider->trae_datos("T_EventoCencon 
-                        LEFT OUTER JOIN T_PuntoBCR ON T_PuntoBCR.ID_PuntoBCR = T_EventoCencon.ID_PuntoBCR 
-                        LEFT OUTER JOIN T_Empresa ON T_Empresa.ID_Empresa = T_EventoCencon.ID_Empresa 
-                        LEFT OUTER JOIN T_Usuario ON T_Usuario.ID_Usuario = T_EventoCencon.ID_Usuario", 
-                        "T_EventoCencon.*, T_PuntoBCR.Nombre, T_PuntoBCR.Codigo,T_Empresa.Empresa, 
-                        T_Usuario.Nombre as Nombre_usuario, T_Usuario.Apellido as Apellido_usuario",
-                        $this->condicion);
+                    LEFT OUTER JOIN T_PuntoBCR ON T_PuntoBCR.ID_PuntoBCR = T_EventoCencon.ID_PuntoBCR 
+                    LEFT OUTER JOIN T_Empresa ON T_Empresa.ID_Empresa = T_EventoCencon.ID_Empresa 
+                    LEFT OUTER JOIN T_Usuario ON T_Usuario.ID_Usuario = T_EventoCencon.ID_Usuario", 
+                    "T_EventoCencon.*, T_PuntoBCR.Nombre, T_PuntoBCR.Codigo,T_Empresa.Empresa, 
+                    T_Usuario.Nombre as Nombre_usuario, T_Usuario.Apellido as Apellido_usuario",
+                    $this->condicion);
             }
-             $this->arreglo=$this->obj_data_provider->getArreglo();
+            $this->arreglo=$this->obj_data_provider->getArreglo();
             $this->obj_data_provider->desconectar();
             $this->resultado_operacion=true;
     }
@@ -283,5 +283,25 @@ class cls_cencon {
         $this->obj_data_provider->inserta_datos("t_cencon_sin_coordinar", "ID_Evento_Cencon, Tiempo, Fecha, Hora","'".$this->id."','".$this->id2."','".$this->fecha."','".$this->hora."'");
         $this->obj_data_provider->desconectar();
         $this->resultado_operacion=true;
+    }
+    
+    public function obtener_sin_coordinar_dia(){
+        $this->obj_data_provider->conectar();
+        $this->arreglo=$this->obj_data_provider->trae_datos("t_cencon_sin_coordinar", "Fecha, COUNT(Fecha) as Total", $this->condicion);
+        $this->arreglo=$this->obj_data_provider->getArreglo();
+        $this->obj_data_provider->desconectar();
+        $this->resultado_operacion=true;
+    }
+    
+    public function obtener_info_sin_coordinar(){
+        $this->obj_data_provider->conectar();
+        $this->arreglo=$this->obj_data_provider->trae_datos("t_cencon_sin_coordinar
+                LEFT OUTER JOIN t_eventocencon on t_eventocencon.ID_Evento_Cencon = t_cencon_sin_coordinar.ID_Evento_Cencon 
+                LEFT OUTER JOIN t_puntobcr on t_puntobcr.ID_PuntoBCR = t_eventocencon.ID_PuntoBCR ", 
+            "t_cencon_sin_coordinar.*,  t_eventocencon.Observaciones, t_eventocencon.Seguimiento, t_puntobcr.Nombre",
+            $this->condicion);
+        $this->arreglo=$this->obj_data_provider->getArreglo();
+        $this->obj_data_provider->desconectar();
+        $this->resultado_operacion=true;  
     }
 }?>

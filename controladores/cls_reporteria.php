@@ -120,9 +120,17 @@ class cls_reporteria{
     
     public function obtiene_reporte_puntos_bcr_con_tl300(){
         $this->obj_data_provider->conectar();
-        $this->arreglo= $this->obj_data_provider->trae_datos("t_puntobcr p INNER JOIN t_puntobcrdireccionip pd ON pd.ID_PuntoBCR = p.ID_PuntoBCR INNER JOIN t_direccionip d ON d.ID_Direccion_IP = pd.ID_Direccion_IP INNER JOIN t_tipoip t ON t.ID_Tipo_IP = d.ID_Tipo_IP", 
-                        "p.Nombre,p.Direccion,p.Cuenta_SIS,p.Codigo,d.Direccion_IP", 
-                        "t.ID_Tipo_IP =3");
+        $this->arreglo= $this->obj_data_provider->trae_datos("t_puntobcr p 
+                            INNER JOIN t_puntobcrdireccionip pd ON pd.ID_PuntoBCR = p.ID_PuntoBCR 
+                            INNER JOIN t_direccionip d ON d.ID_Direccion_IP = pd.ID_Direccion_IP
+                            INNER JOIN t_tipoip t ON t.ID_Tipo_IP = d.ID_Tipo_IP", 
+                        "p.Nombre,p.Codigo,p.Cuenta_SIS,
+                            MAX(IF(t.ID_Tipo_IP=1,d.Direccion_IP,null))AS 'Gateway',
+                            MAX(IF(t.ID_Tipo_IP=2,d.Direccion_IP,null))AS 'Video',
+                            MAX(IF(t.ID_Tipo_IP=3,d.Direccion_IP,null))AS 'Alarma',
+                            MAX(IF(t.ID_Tipo_IP=4,d.Direccion_IP,null))AS 'Control_Acceso',
+                            MAX(IF(t.ID_Tipo_IP=6,d.Direccion_IP,null))AS 'Mascara'", 
+                        "p.Estado=1 GROUP By p.Nombre");
         $this->arreglo=$this->obj_data_provider->getArreglo();
         $this->obj_data_provider->desconectar();
         $this->resultado_operacion=true;    
@@ -132,10 +140,10 @@ class cls_reporteria{
         $this->obj_data_provider->conectar();
         if($this->condicion==""){
             $this->arreglo=$this->obj_data_provider->trae_datos(
-                    "t_bitacorarevisionesvideo
-                    LEFT OUTER JOIN T_Usuario on T_Usuario.ID_Usuario = t_bitacorarevisionesvideo.ID_Usuario
-                    LEFT OUTER JOIN t_unidadvideo on t_unidadvideo.ID_Unidad_Video = t_bitacorarevisionesvideo.ID_Unidad_Video
-                    LEFT OUTER JOIN t_puestomonitoreo on t_puestomonitoreo.ID_Puesto_Monitoreo = t_bitacorarevisionesvideo.ID_Puesto_Monitoreo", 
+                    "bd_registro_trazabilidad.t_bitacorarevisionesvideo
+                    LEFT OUTER JOIN bd_gerencia_seguridad.T_Usuario on T_Usuario.ID_Usuario = t_bitacorarevisionesvideo.ID_Usuario
+                    LEFT OUTER JOIN bd_gerencia_seguridad.t_unidadvideo on t_unidadvideo.ID_Unidad_Video = t_bitacorarevisionesvideo.ID_Unidad_Video
+                    LEFT OUTER JOIN bd_gerencia_seguridad.t_puestomonitoreo on t_puestomonitoreo.ID_Puesto_Monitoreo = t_bitacorarevisionesvideo.ID_Puesto_Monitoreo", 
                     "t_bitacorarevisionesvideo.*, t_unidadvideo.Descripcion, t_puestomonitoreo.Nombre, concat(concat(t_usuario.Nombre,' '),t_usuario.Apellido) Nombre_Completo",
                     "");
             $this->arreglo=$this->obj_data_provider->getArreglo();
@@ -143,13 +151,13 @@ class cls_reporteria{
         }
         else{
             $this->arreglo=$this->obj_data_provider->trae_datos(
-                    "t_bitacorarevisionesvideo
-                    LEFT OUTER JOIN T_Usuario on T_Usuario.ID_Usuario = t_bitacorarevisionesvideo.ID_Usuario
-                    LEFT OUTER JOIN t_unidadvideo on t_unidadvideo.ID_Unidad_Video = t_bitacorarevisionesvideo.ID_Unidad_Video
-                    LEFT OUTER JOIN t_puestomonitoreo on t_puestomonitoreo.ID_Puesto_Monitoreo = t_bitacorarevisionesvideo.ID_Puesto_Monitoreo", 
-                    "t_bitacorarevisionesvideo.*, t_unidadvideo.Descripcion, t_puestomonitoreo.Nombre, "
-                    . "concat(concat(t_usuario.Nombre,' '),t_usuario.Apellido) Nombre_Completo,t_puestomonitoreo.ID_Usuario Control ",
-                    $this->condicion." ORDER BY t_puestomonitoreo.Nombre");
+                "bd_registro_trazabilidad.t_bitacorarevisionesvideo
+                    LEFT OUTER JOIN bd_gerencia_seguridad.T_Usuario on T_Usuario.ID_Usuario = t_bitacorarevisionesvideo.ID_Usuario
+                    LEFT OUTER JOIN bd_gerencia_seguridad.t_unidadvideo on t_unidadvideo.ID_Unidad_Video = t_bitacorarevisionesvideo.ID_Unidad_Video
+                    LEFT OUTER JOIN bd_gerencia_seguridad.t_puestomonitoreo on t_puestomonitoreo.ID_Puesto_Monitoreo = t_bitacorarevisionesvideo.ID_Puesto_Monitoreo", 
+                "t_bitacorarevisionesvideo.*, t_unidadvideo.Descripcion, t_puestomonitoreo.Nombre, "
+                . "concat(concat(t_usuario.Nombre,' '),t_usuario.Apellido) Nombre_Completo,t_puestomonitoreo.ID_Usuario Control ",
+                $this->condicion." ORDER BY t_puestomonitoreo.Nombre");
             $this->arreglo=$this->obj_data_provider->getArreglo();
             $this->obj_data_provider->desconectar();
         } 

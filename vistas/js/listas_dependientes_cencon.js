@@ -319,3 +319,13 @@ function limpiar_info_persona(){
     document.getElementById('ID_Persona').value="0";
     document.getElementById('acceso_atms').value= "";
 }
+
+function obtener_info_sin_coordinar(){
+    $.post("index.php?ctl=cencon_lista_sin_coordinar", {}, function(data){
+        console.log(data);
+        document.getElementById('ventana_oculta_4').style.display = "block";
+        $("#info_cencon_sin_coordinar").html(data);
+        document.getElementById('ventana_oculta_4').style.display = "block";
+        $("#info_cencon_sin_coordinar").html(data);
+    });
+}

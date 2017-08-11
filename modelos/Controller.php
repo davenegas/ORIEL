@@ -547,7 +547,6 @@ class Controller{
     public function frm_importar_prontuario_paso_5(){
         //Validación para verificar si el usuario está logeado en el sistema
         if(isset($_SESSION['nombre'])){
-
             //Crea objeto de tipo personal para administración de la tabla
             $obj_personal = new cls_personal();
             //Crea objeto de tipo puesto para administración de la tabla
@@ -856,7 +855,6 @@ class Controller{
                         //$obj_personal->eliminar_personas_bcr_fuera_de_prontuario_para_prontuario();
                         $obj_personal->setEstado(0);
                         $obj_personal->actualizar_estado_persona();
-                        
                     }
                 }
                 
@@ -897,11 +895,11 @@ class Controller{
             $numeros_actualizados=0;
             
             /*
-             * Los siguientes vectores permiten definir un formato específico para la fecha que llevara en el nombre
-             * del archivo generado (xls) una vez se procese la información de inconsistencias en personal. El reporte se
-             * descarga de manera automática en formato excel, una vez se complete el proceso.
-             * Se definen dos vectores, uno para los días de la semana y otro para los meses del año
-             */
+            * Los siguientes vectores permiten definir un formato específico para la fecha que llevara en el nombre
+            * del archivo generado (xls) una vez se procese la información de inconsistencias en personal. El reporte se
+            * descarga de manera automática en formato excel, una vez se complete el proceso.
+            * Se definen dos vectores, uno para los días de la semana y otro para los meses del año
+            */
             
             $dias = array("Domingo","Lunes","Martes","Miercoles","Jueves","Viernes","Sábado");
             $meses = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
@@ -8111,6 +8109,10 @@ class Controller{
                 rsort($vencidos);
             }
            
+            $obj_cencon->setCondicion("Fecha='".date('Y-m-j')."'");
+            $obj_cencon->obtener_sin_coordinar_dia();
+            $sin_coordinar= $obj_cencon->getArreglo();
+            
             unset($obj_cencon); 
             unset($obj_personal);
             unset($obj_externo);
@@ -8473,6 +8475,45 @@ class Controller{
         }
     }
     
+    public function cencon_lista_sin_coordinar(){
+        if(isset($_SESSION['nombre'])){
+            $obj_cencon = new cls_cencon();
+            
+            $obj_cencon->setCondicion("Fecha='".date('Y-m-j')."'");
+            $obj_cencon->obtener_info_sin_coordinar();
+            $sin_coordinar= $obj_cencon->getArreglo();
+            
+            //Procedimiento para crear la tabla y enviarla al html
+            $tam = count($sin_coordinar);
+            $html="";
+            $html.='<thead> 
+                        <th style="text-align:center">Fecha</th>
+                        <th style="text-align:center">Hora</th>
+                        <th style="text-align:center">ATM</th>
+                        <th style="text-align:center">Observaciones</th>
+                        <th style="text-align:center">Seguimiento</th>
+                    </thead>
+                    <tbody>';
+            for($i=0; $i<$tam;$i++){
+                $html .='<tr>'; 
+                $html .='<td style="text-align:center">'.$sin_coordinar[$i]['Fecha'].'</td>';
+                $html .='<td style="text-align:center">'.$sin_coordinar[$i]['Hora'].'</td>';
+                $html .='<td style="text-align:center">'.$sin_coordinar[$i]['Nombre'].'</td>';
+                $html .='<td style="text-align:center">'.$sin_coordinar[$i]['Observaciones'].'</td>';
+                $html .='<td style="text-align:center">'.$sin_coordinar[$i]['Seguimiento'].'</td>';
+                $html .='</tr>'; 
+            }  
+            $html.='</tbody> 
+                    </table>';
+            unset($obj_cencon);
+            echo $html;
+        }
+        else {
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }
+    }
     ////////////////////MANTENIMIENTO DE PERSONAL EXTERNO///////////////////////
     ////////////////////////////////////////////////////////////////////////////
     public function personal_externo_listar(){
@@ -10175,7 +10216,7 @@ class Controller{
 					
             } else{
                 header ("location:/ORIEL/index.php?ctl=puestos_de_monitoreo_listar");
-				}                 
+            }                 
         } else {
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
@@ -10987,15 +11028,50 @@ class Controller{
             $fecha1 = new DateTime($fecha_actual);
             $fecha_actual= getdate();
             $diff="";
-            
+            //Obtiene la información de las pruebas realizadas hoy
+            $obj_prueba->setCondicion("T_PruebaAlarma.Fecha='".date('Y-m-d')."'");
+            $obj_prueba->obtener_prueba_alarma();
+            $prueba_completas= $obj_prueba->getArreglo();
+
             $tam=count($Oficinas);
             for($i=0;$i<$tam;$i++){
-                $prueba="";
-                $obj_prueba->setCondicion("T_PruebaAlarma.ID_PuntoBCR=".$Oficinas[$i]['ID_PuntoBCR']." AND Fecha='".date('Y-m-d')."'");
-		$obj_prueba->obtener_prueba_alarma();
-		$prueba= $obj_prueba->getArreglo();
-                if($prueba[0]['Seguimiento']!='Oficina en Asueto'){
-                    //print_r($prueba);
+                //Se definen los campos del vector en caso de no encontrar una prueba del Punto BCR
+                $prueba[0]['ID_Prueba_Alarma']="";
+                $prueba[0]['ID_PuntoBCR']="";
+                $prueba[0]['Fecha']="";
+                $prueba[0]['ID_Persona_Reporta_Apertura']="";
+                $prueba[0]['ID_Empresa_Persona_Apertura']="";
+                $prueba[0]['Tipo_Prueba']="";
+                $prueba[0]['Revision_cajero']="";
+                $prueba[0]['ID_Usuario_reporte']="";
+                $prueba[0]['Hora_Apertura_Alarma']="";
+                $prueba[0]['Hora_Prueba_Alarma']="";
+                $prueba[0]['Numero_Zona_Prueba']="";
+                $prueba[0]['ID_Usuario_Prueba']="";
+                $prueba[0]['ID_Persona_Reporta_Cierre']="";
+                $prueba[0]['ID_Empresa_Persona_Cierra']="";
+                $prueba[0]['Particion_Secundaria_Cierre']="";
+                $prueba[0]['Particion_Principal_Cierre']="";
+                $prueba[0]['ID_Usuario_Reporte_Cierre']="";
+                $prueba[0]['Hora_Cierre_Alarma']="";
+                $prueba[0]['ID_Usuario_Cierra']="";
+                $prueba[0]['Observaciones']="";
+                $prueba[0]['Seguimiento']="";
+                $prueba[0]['Nombre']="";
+                $prueba[0]['Codigo']="";
+                $prueba[0]['Empresa']="";
+                //Busca si el Punto BCR tiene prueba reportada
+                for($x=0; $x<count($prueba_completas);$x++){
+                    if($prueba_completas[$x]['ID_PuntoBCR']==$Oficinas[$i]['ID_PuntoBCR']){
+                        $prueba[0]=$prueba_completas[$x];
+                    }
+                }
+                //Valida si como seguimiento del Punto BCR esta en asueto de esta forma no la cuenta como pendiente
+                $revisar =1;
+                if($prueba[0]['Seguimiento']=='Oficina en Asueto'){
+                    $revisar=0;
+                }
+                if($revisar==1){
                     switch ($fecha_actual['weekday']) {
                         case 'Monday':
                             if($Oficinas[$i]['Hora_Apertura_Lunes']!="" || $Oficinas[$i]['Hora_Apertura_Lunes']!=null){
@@ -11684,23 +11760,53 @@ class Controller{
             $fecha1 = new DateTime($fecha_actual);
             $fecha_actual= getdate();
             $diff="";
-            
+            //Obtiene la información de las pruebas realizadas hoy
+            $obj_prueba->setCondicion("T_PruebaAlarma.Fecha='".date('Y-m-d')."'");
+            $obj_prueba->obtener_prueba_alarma();
+            $prueba_completas= $obj_prueba->getArreglo();
+
             $tam=count($Oficinas);
             for($i=0;$i<$tam;$i++){
-                unset($prueba);
-                $obj_prueba->setCondicion("T_PruebaAlarma.ID_PuntoBCR=".$Oficinas[$i]['ID_PuntoBCR']." AND T_PruebaAlarma.Fecha='".date('Y-m-d')."'");
-		$obj_prueba->obtener_prueba_alarma();
-		$prueba= $obj_prueba->getArreglo();
-                if($prueba[0]['Seguimiento']!='Oficina en Asueto'){
-                    //print_r($prueba);
-                    $obj_horario->setCondicion("ID_Horario='".$Oficinas[$i]['ID_Horario_Apertura']."'");
-                    $obj_horario->obtiene_todos_los_horarios();
-                    $horariopunto= $obj_horario->getArreglo();
-                    
+                //Se definen los campos del vector en caso de no encontrar una prueba del Punto BCR
+                $prueba[0]['ID_Prueba_Alarma']="";
+                $prueba[0]['ID_PuntoBCR']="";
+                $prueba[0]['Fecha']="";
+                $prueba[0]['ID_Persona_Reporta_Apertura']="";
+                $prueba[0]['ID_Empresa_Persona_Apertura']="";
+                $prueba[0]['Tipo_Prueba']="";
+                $prueba[0]['Revision_cajero']="";
+                $prueba[0]['ID_Usuario_reporte']="";
+                $prueba[0]['Hora_Apertura_Alarma']="";
+                $prueba[0]['Hora_Prueba_Alarma']="";
+                $prueba[0]['Numero_Zona_Prueba']="";
+                $prueba[0]['ID_Usuario_Prueba']="";
+                $prueba[0]['ID_Persona_Reporta_Cierre']="";
+                $prueba[0]['ID_Empresa_Persona_Cierra']="";
+                $prueba[0]['Particion_Secundaria_Cierre']="";
+                $prueba[0]['Particion_Principal_Cierre']="";
+                $prueba[0]['ID_Usuario_Reporte_Cierre']="";
+                $prueba[0]['Hora_Cierre_Alarma']="";
+                $prueba[0]['ID_Usuario_Cierra']="";
+                $prueba[0]['Observaciones']="";
+                $prueba[0]['Seguimiento']="";
+                $prueba[0]['Nombre']="";
+                $prueba[0]['Codigo']="";
+                $prueba[0]['Empresa']="";
+                //Busca si el Punto BCR tiene prueba reportada
+                for($x=0; $x<count($prueba_completas);$x++){
+                    if($prueba_completas[$x]['ID_PuntoBCR']==$Oficinas[$i]['ID_PuntoBCR']){
+                        $prueba[0]=$prueba_completas[$x];
+                    }
+                }
+                //Valida si como seguimiento del Punto BCR esta en asueto de esta forma no la cuenta como pendiente
+                $revisar =1;
+                if($prueba[0]['Seguimiento']=='Oficina en Asueto'){
+                    $revisar=0;
+                }
+                if($revisar==1){
                     switch ($fecha_actual['weekday']) {
                         case 'Monday':
                             if($Oficinas[$i]['Hora_Apertura_Lunes']!="" || $Oficinas[$i]['Hora_Apertura_Lunes']!=null){
-                                /*
                                 //Función para verificar horarios de oficina, validar ingresos, cierres y preubas
                                 //Envia los siguientes parametros: 
                                 //  -Hora apertura (según el día de la semana)
@@ -11708,7 +11814,6 @@ class Controller{
                                 //  -Información anterior almacenada (para almacenar nueva y devolver completa)
                                 //  -Información de prueba de hoy (horas de apertura, hora de prueba, hora de cierre, etc)
                                 //  -Información de la oficina (Nombre, código: para el mensaje cuando sea necesario)
-                                */
                                 $datos=$this->verificar_horario_puntobcr($Oficinas[$i]['Hora_Apertura_Lunes'],$Oficinas[$i]['Hora_Cierre_Lunes'],$datos,$prueba,$Oficinas[$i]);
                             }
                             break;
@@ -11755,7 +11860,7 @@ class Controller{
             if(isset($datos['cierres_pendientes'])){
                 sort($datos['cierres_pendientes']);            
             }
-
+            
             require __DIR__ . '/../vistas/plantillas/frm_pruebas_alarma.php';
         }
         else {
@@ -12221,7 +12326,6 @@ class Controller{
                 $datos['pruebas_pendientes'][$datos['cont_pruebas_pendientes']]['Mensaje']= $Oficina['Codigo']." - ".$Oficina['Nombre'];
                 $datos['pruebas_pendientes'][$datos['cont_pruebas_pendientes']]['Color']="color: orange";
                 $datos['cont_pruebas_pendientes']++;
-                $datos['contador_pruebas']++;
             } if($diff->invert==1 && $difencia_tiempo>1) {
                 $datos['pruebas_pendientes'][$datos['cont_pruebas_pendientes']]['Mensaje']= $Oficina['Codigo']." - ".$Oficina['Nombre'];
                 $datos['pruebas_pendientes'][$datos['cont_pruebas_pendientes']]['Color']="color: red";

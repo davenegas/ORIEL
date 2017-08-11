@@ -4,7 +4,7 @@
         <meta charset="UTF-8">
         <title>Bitácora Cencon</title>
         <script language="javascript" src="vistas/js/jquery.js"></script>
-        <script language="javascript" src="vistas/js/listas_dependientes_cencon.js"></script>
+        <script language="javascript" src="vistas/js/listas_dependientes_cencon.js?1.0.3"></script>
         <link rel="stylesheet" href="vistas/css/ventanaoculta.css"> 
         <?php require_once 'frm_librerias_head.html'; ?> 
     </head>
@@ -127,10 +127,17 @@
 
                 <div class="col-sm-3 sidenav">
                     <div class="well">
-                        <p>Alerta de tiempo de apertura:</p>
+                        <?php if(isset($sin_coordinar[0]['Total'])){ 
+                            if($_SESSION['modulos']['Editar- Puntos BCR']==1){?>
+                                <p onclick="obtener_info_sin_coordinar();">Cantidad de aperturas sin coordinar en tiempo establecido: <?php echo $sin_coordinar[0]['Total']?></p>
+                            <?php } else {?>
+                                <p>Cantidad de aperturas sin coordinar en tiempo establecido: <?php echo $sin_coordinar[0]['Total']?></p>
+                            <?php }
+                        }?>
                     </div>
                     <?php if(isset($vencidos)){ ?>
                         <div class="well" align="left">
+                            <p><strong>Alerta de tiempo de apertura</strong></p>
                             <p><b> | ATM | Días | Horas | Minutos</b></p>
                             <?php 
                             $tam=$tam=count($vencidos);
@@ -198,6 +205,21 @@
                         </select>          
                     <hr>
                     <button onclick="guardar_seguimiento_evento();">Guardar</a></button>
+                </div>
+            </div>
+        </div>
+        
+        <div id="ventana_oculta_4"> 
+            <div id="popupventana2">
+                <div id="ventana2">
+                    <img id="close" src='vistas/Imagenes/cerrar.png' width="25" onclick ="ocultar_elemento()"> 
+                    <h2 align="center" id="titulo_ventana_oculta">Evento Cencon sin coordinar</h2>
+                    <table id="info_cencon_sin_coordinar" class="col-md-12">
+                        <thead> 
+                        </thead>
+                        <tbody>
+                        </tbody> 
+                    </table>
                 </div>
             </div>
         </div>
