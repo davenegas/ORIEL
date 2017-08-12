@@ -332,7 +332,67 @@
                 </table>
             </div>
             <a href="index.php?ctl=personal_externo_listar" class="btn btn-default espacio-arriba" role="button">Volver</a> 
+            <!--<a data-toggle="collapse" class="btn btn-default espacio-arriba" data-target="#Historial_personal_Externo">Agregar Seguimiento</a>-->
         </section>
+        <!--Agregar información al personal externo-->
+        <?php if($_SESSION['modulos']['Validar- Personal Externo']==1){ ?>
+            <div class="container espacio-arriba">
+                <h3 data-toggle="collapse" data-target="#Agregar_seguimiento_personal_Externo"><span class="glyphicon glyphicon-chevron-right"></span>Agregar Seguimiento al personal</h3>
+                <!--Agregar nuevo detalle o seguimiento del personal externo-->
+                <form class="form-horizontal collapse" id="Agregar_seguimiento_personal_Externo" role="form" enctype="multipart/form-data" onSubmit="return enviado()" method="POST" action="index.php?ctl=guardar_historia_persona_externa&id=<?php echo $params[0]['ID_Persona_Externa'];?>">
+                    <div class="row espacio-abajo">
+                        <div class="col-xs-6">
+                            <label for="Fecha">Fecha Seguimiento</label>
+                            <input type="date" required=”required” class="form-control" id="Fecha" name="Fecha" value="<?php echo date("Y-m-d");?>">
+                        </div>
+                        <div class="col-xs-6">
+                            <label for="Hora">Hora Seguimiento</label>
+                            <input type="time" required=”required” class="form-control" id="Hora" name="Hora" value="<?php echo date("H:i", time());?>">
+                        </div>
+                    </div>
+                    <div class="row espacio-abajo">
+                        <div class="col-xs-12">
+                            <label for="DetalleSeguimiento">Detalle del Seguimiento</label>
+                            <textarea type="text" required=”required” class="form-control" id="DetalleSeguimiento" name="DetalleSeguimiento" value="" maxlength="500" minlength="5" placeholder="Máximo 500 caracteres por seguimiento"></textarea>
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <button type="submit" class="btn btn-default">Guardar Seguimiento</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        <?php } ?>
+        
+        <!--Historial de seguimientos al personal externo-->
+        <div class="container espacio-arriba">
+            <h3 class="icon-caret-right" data-toggle="collapse" data-target="#Historial_seguimiento_personal_externo"><span class="glyphicon glyphicon-chevron-right"></span>Historial de seguimientos asociados</h3>
+            <div class="collapse" id="Historial_seguimiento_personal_externo">
+                <table class="table" >
+                    <thead>
+                        <tr>
+                            <th style="text-align:center">Fecha y Hora</th>
+                            <th style="text-align:center">Detalle del Seguimiento</th>
+                            <th style="text-align:center">Ingresado Por</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php 
+                        $tam=count($Historial_Personal_Externo);
+
+                        for ($i = 0; $i <$tam; $i++) { ?>
+                            <tr>
+                                <td style="text-align:center"><?php echo $Historial_Personal_Externo[$i]['Fecha_Hora'];?></td>
+                                <td style="text-align:center"><?php echo $Historial_Personal_Externo[$i]['Detalle'];?></td>
+                                <td style="text-align:center"><?php echo $Historial_Personal_Externo[$i]['Nombre']." ".$Historial_Personal_Externo[$i]['Apellido'];?></td>
+                            </tr>
+                        <?php } ?>
+                    </tbody>
+                </table> 
+            </div>
+        </div>
         <?php require_once 'pie_de_pagina.php' ?>
         
         <!--**FORMULARIOS OCULTOS PARA FUNCIONALIDAD DE LA VENTANA**-->

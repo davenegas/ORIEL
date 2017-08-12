@@ -378,6 +378,7 @@ $map = array(
     'guardar_imagen_persona_externa'=>array('controller'=>'Controller','action'=> 'guardar_imagen_persona_externa'), 
     'eliminar_imagen_personal_externo'=>array('controller'=>'Controller','action'=> 'eliminar_imagen_personal_externo'), 
     'personal_externo_validar'=>array('controller'=>'Controller','action'=> 'personal_externo_validar'), 
+    'guardar_historia_persona_externa'=>array('controller'=>'Controller','action'=> 'guardar_historia_persona_externa'), 
     
     //Importación de Prontuario
     'frm_importar_prontuario_paso_1'=>array('controller'=>'Controller','action'=> 'frm_importar_prontuario_paso_1'),

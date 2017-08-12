@@ -371,4 +371,22 @@ class cls_personal_externo{
         $this->obj_data_provider->desconectar();
         $this->resultado_operacion=true;
     }
+    
+    function obtiene_historico_seguimiento_personal_externo(){
+        $this->obj_data_provider->conectar();
+        $this->arreglo=$this->obj_data_provider->trae_datos("T_HistorialPersonalExterno
+                        LEFT OUTER JOIN T_Usuario ON T_Usuario.ID_Usuario = T_HistorialPersonalExterno.ID_Usuario", 
+                    "T_HistorialPersonalExterno.*, T_Usuario.Nombre, T_Usuario.Apellido",
+                    $this->condicion);
+        $this->arreglo=$this->obj_data_provider->getArreglo();
+        $this->obj_data_provider->desconectar();
+        $this->resultado_operacion=true;
+    }
+    
+    function guardar_historia_personal_externo(){
+        $this->obj_data_provider->conectar();
+        $this->obj_data_provider->inserta_datos("T_HistorialPersonalExterno","ID_Persona_Externa, ID_Usuario, Fecha_Hora, Detalle, Estado",$this->id.",".$this->id2.",'".$this->fecha_ingreso."','".$this->observaciones."',".$this->estado_persona);
+        $this->arreglo=$this->obj_data_provider->getArreglo();
+        $this->obj_data_provider->desconectar();
+    }
 }?>

@@ -143,6 +143,7 @@
                     </table>
                 </div>
             </div>
+            
             <a href="index.php?ctl=personal_listar" class="btn btn-default" role="button">Volver</a> 
         </section>
         <?php require_once 'pie_de_pagina.php' ?>

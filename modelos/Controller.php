@@ -3560,8 +3560,7 @@ class Controller{
     }
     
     //Muestra en pantalla un reportes de eventos cerrados, de acuerdo a parametros de busqueda específicos, como fecha, sitio, etc.
-    public function actualiza_en_vivo_reporte_cerrados()
-            {
+    public function actualiza_en_vivo_reporte_cerrados(){
         //Espera 2 segundos antes de iniciar la ejecución del método, para mostrar un gift de espera en pantalla
         sleep(2);       
         //Validación para verificar si el usuario está logeado en el sistema
@@ -8730,6 +8729,11 @@ class Controller{
             //Asigna el resultado a una variable tipo vector
             $fotos=$obj_padron_fotografico->getArreglo();
             
+            //Obtiene información de historico del Personal externo
+            $obj_personal->setCondicion("ID_Persona_Externa='".$_GET['id']."'");
+            $obj_personal->obtiene_historico_seguimiento_personal_externo();
+            $Historial_Personal_Externo=$obj_personal->getArreglo();
+            
             require __DIR__ . '/../vistas/plantillas/frm_personal_externo_detalle.php';
         }else{
             /*
@@ -8814,6 +8818,31 @@ class Controller{
         }  
     }
     
+    public function guardar_historia_persona_externa(){
+        //Verifica que la sesion de usuario esté activa 
+        if(isset($_SESSION['nombre'])){   
+            //Verifica que el metodo de envio de datos sea por medio del formulario html
+            if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+                //Creacion del objeto de la clase telefono
+                $obj_personal = new cls_personal_externo();
+                
+                $obj_personal->setId($_GET['id']);
+                $obj_personal->setId2($_SESSION['id']);
+                $obj_personal->setFecha_ingreso($_POST['Fecha']." ".$_POST['Hora']);
+                $obj_personal->setObservaciones($_POST['DetalleSeguimiento']);
+                $obj_personal->setEstado_persona(1);
+                $obj_personal->guardar_historia_personal_externo();
+                
+                //Muestra la vista de usuario correspondiente
+                header("location:/ORIEL/index.php?ctl=personal_externo_gestion&id=".$_GET['id']);
+            }
+        }   else    {
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            //Muestra la vista de usuario correspondiente
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }
+    }
     //Metodo que permite guardar la información correspondiente a una persona externa
     public function persona_externa_guardar_informacion(){
         //Verifica que la sesión de usuario esté establecida
@@ -11435,8 +11464,20 @@ class Controller{
                 //Obtiene la información de las revisiones según los parametros
                 $obj_reporteria->setCondicion($condicion);
                 $obj_reporteria->obtiene_bitacora_puestos_de_monitoreo_completo_traza();
-                $bitacora_revision_video = $obj_reporteria->getArreglo();
+                $bitacora_revision_video_traza = $obj_reporteria->getArreglo();
+                $obj_reporteria->obtiene_bitacora_puestos_de_monitoreo_completo();
+                $bitacora_revision_video_original = $obj_reporteria->getArreglo();
                 
+                $params=null;
+                if(count($bitacora_revision_video_traza)>0 &&count($bitacora_revision_video_original)>0 ){
+                    $params= array_merge($bitacora_revision_video_traza,$bitacora_revision_video_original);
+                } else {
+                    if(count($bitacora_revision_video_traza)>0){
+                        $params=$bitacora_revision_video_traza;
+                    }if(count($bitacora_revision_video_original)>0){
+                        $params=$bitacora_revision_video_original;
+                    }
+                }
             } else{
                 $fecha_inicio = date("Y-m-d");
                 $fecha_fin= date("Y-m-d");
