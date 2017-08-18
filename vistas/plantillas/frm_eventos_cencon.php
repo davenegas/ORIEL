@@ -214,7 +214,7 @@
                 <div id="ventana2">
                     <img id="close" src='vistas/Imagenes/cerrar.png' width="25" onclick ="ocultar_elemento()"> 
                     <h2 align="center" id="titulo_ventana_oculta">Evento Cencon sin coordinar</h2>
-                    <table id="info_cencon_sin_coordinar" class="col-md-12">
+                    <table class="table table-striped" id="info_cencon_sin_coordinar" class="col-md-12">
                         <thead> 
                         </thead>
                         <tbody>

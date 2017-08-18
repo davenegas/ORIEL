@@ -8489,6 +8489,7 @@ class Controller{
                         <th style="text-align:center">Fecha</th>
                         <th style="text-align:center">Hora</th>
                         <th style="text-align:center">ATM</th>
+                        <th style="text-align:center">Tiempo</th>
                         <th style="text-align:center">Observaciones</th>
                         <th style="text-align:center">Seguimiento</th>
                     </thead>
@@ -8498,6 +8499,7 @@ class Controller{
                 $html .='<td style="text-align:center">'.$sin_coordinar[$i]['Fecha'].'</td>';
                 $html .='<td style="text-align:center">'.$sin_coordinar[$i]['Hora'].'</td>';
                 $html .='<td style="text-align:center">'.$sin_coordinar[$i]['Nombre'].'</td>';
+                $html .='<td style="text-align:center">'.$sin_coordinar[$i]['Tiempo'].'</td>';
                 $html .='<td style="text-align:center">'.$sin_coordinar[$i]['Observaciones'].'</td>';
                 $html .='<td style="text-align:center">'.$sin_coordinar[$i]['Seguimiento'].'</td>';
                 $html .='</tr>'; 
@@ -11468,14 +11470,14 @@ class Controller{
                 $obj_reporteria->obtiene_bitacora_puestos_de_monitoreo_completo();
                 $bitacora_revision_video_original = $obj_reporteria->getArreglo();
                 
-                $params=null;
+                $bitacora_revision_video=null;
                 if(count($bitacora_revision_video_traza)>0 &&count($bitacora_revision_video_original)>0 ){
-                    $params= array_merge($bitacora_revision_video_traza,$bitacora_revision_video_original);
+                    $bitacora_revision_video_traza= array_merge($bitacora_revision_video_traza,$bitacora_revision_video_original);
                 } else {
                     if(count($bitacora_revision_video_traza)>0){
-                        $params=$bitacora_revision_video_traza;
+                        $bitacora_revision_video=$bitacora_revision_video_traza;
                     }if(count($bitacora_revision_video_original)>0){
-                        $params=$bitacora_revision_video_original;
+                        $bitacora_revision_video=$bitacora_revision_video_original;
                     }
                 }
             } else{
@@ -12445,4 +12447,5 @@ class Controller{
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }
     }
+    
 }

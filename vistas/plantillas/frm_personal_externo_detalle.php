@@ -381,7 +381,7 @@
                     <tbody>
                         <?php 
                         $tam=count($Historial_Personal_Externo);
-
+                        
                         for ($i = 0; $i <$tam; $i++) { ?>
                             <tr>
                                 <td style="text-align:center"><?php echo $Historial_Personal_Externo[$i]['Fecha_Hora'];?></td>
