@@ -21,6 +21,8 @@ class Data_Provider{
     //Variable contenedora de los parámetros de la conexión con la bd
     private $conexion;
     //Variable contenedora de los parámetros de la conexión con la bd
+    private $conexion_PDO_transacciones;
+    //Variable contenedora de los parámetros de la conexión con la bd
     private $conexion_trazabilidad;
     //Variable contenedora de resultados de tipo SELECT en SQL, almacenadora de registros de datos
     private $arreglo;
@@ -30,7 +32,28 @@ class Data_Provider{
     private $resultado_operacion;
     // Variable que almacena el ID de la última inserción realizada en una tabla en específico
     private $ultimo_id_ingresado;
-   
+    
+    private $transaccion;
+    private $resultado_transaccion;
+    
+    function getResultado_transaccion() {
+        return $this->resultado_transaccion;
+    }
+
+    function setResultado_transaccion($resultado_transaccion) {
+        $this->resultado_transaccion = $resultado_transaccion;
+    }
+
+        
+    function getTransaccion() {
+        return $this->transaccion;
+    }
+
+    function setTransaccion($transaccion) {
+        $this->transaccion = $transaccion;
+    }
+
+       
     function getMvc_bd_nombre_trazabilidad() {
         return $this->mvc_bd_nombre_trazabilidad;
     }
@@ -172,6 +195,8 @@ class Data_Provider{
             //$this->mvc_bd_clave    = "";
             //Es capaz de representar cualquier carácter Unicode a nivel de base de datos
             $this->consulta="SET NAMES 'utf8'";
+            
+            $this->conexion_PDO_transacciones=null;
 
             //Acapara los errores que se puedan presentar y muestra en pantalla lo correspondiente
         }catch (Exception $e){
@@ -193,8 +218,10 @@ class Data_Provider{
             $this->conexion_trazabilidad=new mysqli($this->mvc_bd_hostname,$this->mvc_bd_usuario,$this->mvc_bd_clave, $this->mvc_bd_nombre_trazabilidad);
             //Permite ejecutar una consulta debntro de la base de datos
             $this->conexion_trazabilidad->query($this->consulta);
+                        
             // Lleva el control del resultado de la operación ejecuta en la bd
             $this->resultado_operacion=true;
+            
         }catch (Exception $e){
             //Notifica de un error al conectarse a la base de datos
             echo 'Hubo un problema al realizar la conexión a la base de datos';
@@ -208,6 +235,7 @@ class Data_Provider{
         //Cierra la conexión
         mysqli_close($this->conexion);
         mysqli_close($this->conexion_trazabilidad);
+        //$this->conexion_PDO_transacciones=null;
         // Asigna verdadero al resultado de la operación
         $this->resultado_operacion=true;
     }
@@ -224,6 +252,39 @@ class Data_Provider{
         }
     }
     
+    public function iniciar_transaccion_sql(){
+         
+        $this->conexion_PDO_transacciones = new PDO('mysql:dbname=bd_Gerencia_Seguridad;host=localhost', $this->mvc_bd_usuario,$this->mvc_bd_clave);
+        //if ($this->conexion_PDO_transacciones==null){
+        //    $this->conectar();
+        //}
+        $this->conexion_PDO_transacciones->beginTransaction();
+  
+    }
+    
+     public function agrega_edicion_de_datos_a_la_transaccion($table,$campos_valores,$condicion){
+                
+       $this->conexion_PDO_transacciones->exec("update ".$table." set ".$campos_valores." where ".$condicion);
+  
+    }
+    
+     // Método ABC SQL que permite ingresar información en las tablas de la bd
+    public function agrega_inclusion_de_datos_a_la_transaccion($table,$campos,$valores){
+        // Gestión de insercion del metodo de la clase
+        //Arma el insert SQL, de acuerdo a los parámetros recibidos por usuario
+        $this->conexion_PDO_transacciones->exec("insert into ".$table."(".$campos.") values(".$valores.")");
+        //echo ("insert into ".$table."(".$campos.") values(".$valores.");");
+        //Establece a true el resultado de operación
+        //$this->resultado_operacion=true;
+    }    
+    
+    public function ejecutar_transaccion_sql(){
+                       
+        $this->conexion_PDO_transacciones->commit();
+       
+        //$this->conexion_PDO_transacciones->
+        //$this->desconectar();        
+    }
     
     //Método que permite traer información de la base de datos mediante consultas SQL
     //Este metodo recibe el nombre de la tabla, campos de la misma y la condición de búsqueda en caso de que exista

@@ -133,7 +133,10 @@ class Controller{
     public function frm_importar_prontuario_paso_1(){
         //Validación para verificar si el usuario está logeado en el sistema
         if(isset($_SESSION['nombre'])){
+            
+            
             //Llamada al formulario correspondiente de la vista
+            //echo $obj_personal->getObservaciones();
             require __DIR__ . '/../vistas/plantillas/frm_importar_prontuario_paso_1.php';
         }else{
             /*
@@ -554,6 +557,8 @@ class Controller{
             //Crea objeto de tipo ue para administración de la tabla
             $obj_ue = new cls_unidad_ejecutora();
             
+            $obj_personal->iniciar_transaccion_sql();
+            
             /*
             * Los siguientes vectores permiten definir un formato específico para la fecha que llevara en el nombre
             * del archivo generado (xls) una vez se procese la información de inconsistencias en personal. El reporte se
@@ -720,18 +725,22 @@ class Controller{
                 }
                 //Si la consulta inicial arroja un solo resultado, edita la información de la persona
                 if (count($obj_personal->getArreglo())==1){
-                    $obj_personal->edita_persona_para_prontuario();
+                    //$obj_personal->edita_persona_para_prontuario();
+                    $obj_personal->agrega_edicion_de_persona_a_transaccion();
                     //Incrementa la variable de control
                     $editados++;
                 }
                 
                 //En caso de que la consulta no tenga resultados, agrega una persona nueva a la bd
                 if ($obj_personal->getArreglo()==null){
-                    $obj_personal->agregar_nueva_persona_para_prontuario();
+                    //$obj_personal->agregar_nueva_persona_para_prontuario();
+                    $obj_personal->agregar_inclusion_persona_a_transaccion();
                     $nuevos++;
                 } 
             }
           
+            $obj_personal->ejecutar_transaccion_sql();
+            
             //Agrega una linea nueva en el vector de registro de cambios
             $vector_cambios_de_puesto[]=array ("","","","","");
             //Informe final en el vector
@@ -913,6 +922,8 @@ class Controller{
             // Agrega linea en blanco en el vector
             $vector_inconsistencias[]=array ("","");
             
+            //$obj_telefono->iniciar_transaccion_sql();
+            
             // Lee el registro total de personas que se encuentran en el prontuario
             for ($i = 0; $i < count($_SESSION['prontuario']); $i++) {
                 $arreglo_telefonos_celulares[]=array($_SESSION['prontuario'][$i][1],str_replace (" ","",str_replace ("-","",$_SESSION['prontuario'][$i][10])));
@@ -981,6 +992,7 @@ class Controller{
                             $obj_telefono->setNumero($arreglo_telefonos_celulares[$i][1]);
                             //Guarda el numero
                             $obj_telefono->guardar_telefono_para_prontuario();
+                            //$obj_telefono->agregar_guardado_telefono_a_transaccion();
                             //Incrementa la variable de control de nuevos numeros ingresados
                             $numeros_actualizados++;
                         }
@@ -992,6 +1004,7 @@ class Controller{
                        $obj_telefono->setNumero($arreglo_telefonos_celulares[$i][1]);
                        //Guardar el registro en la bd
                        $obj_telefono->guardar_telefono_para_prontuario();
+                       //$obj_telefono->agregar_guardado_telefono_a_transaccion();
                        //Incrementa la variable de control
                        $numeros_actualizados++;
                    }else{
@@ -1001,10 +1014,13 @@ class Controller{
                        $obj_telefono->setTipo_telefono("3");
                        //Guarda el telefono en base de datos
                        $obj_telefono->guardar_telefono_para_prontuario();
+                       //$obj_telefono->agregar_guardado_telefono_a_transaccion();
                        //$numeros_actualizados++;
                    }
                 }
             }
+            
+            $obj_telefono->ejecutar_transaccion_sql();
             
             //Define las variables de resultados para mostrar el summary en pantalla
             $resultados= "Fueron actualizados un total de: ".$numeros_actualizados." números de celular.";
@@ -9537,69 +9553,22 @@ class Controller{
     }
     
     public function guarda_revision_de_video_actual() {
-//        $raiz=$_SERVER['DOCUMENT_ROOT'];
-//        //Formatea la ruta del directorio raiz del proyecto ORIEL
-//        if (substr($raiz,-1)!="/"){
-//            $raiz.="/";
-//        }
-//        //Abre el archivo y agrega la traza del control
-//        $fecha_actual= getdate();
-//        //Convierta la fecha a formto aaaa/mm/dd
-//        $fecha_actual= $fecha_actual['year'].$fecha_actual['mon'].$fecha_actual['mday'];
-//        $ruta=  $raiz."Cuenta_Visitas_Oriel/Log_Control/".$fecha_actual."_Control_Video.txt";
-//        $fp =fopen($ruta,"a+");
-//        fwrite($fp, "\r\n\r\nRevision Numero: ".$_POST['id_revis'].". Linea 939. Hora Actual: ".date("H:i:s", time()). "\r\n");
-		
+	
         if(isset($_SESSION['nombre'])){	
             $obj_puesto_monitoreo = new cls_puestos_de_monitoreo(); 
             $obj_traza = new cls_trazabilidad();
             $resultado="sin nada";
-			//fwrite($fp, "Revision Numero: ".$_POST['id_revis'].". Linea 9397. Hora Actual: ".date("H:i:s", time())."\r\n");
-            
-            /********************CÓDIGO PARA LOG DE REGISTRAR REVISION*********/
-            //cadena es la variable para almacenar en el log, se encuentra en todo la funcion
-            //Se escribe al iniciar la funcion y al finalizar
-//            $cadena="";
-            //$raiz=$_SERVER['DOCUMENT_ROOT'];
-            //Formatea la ruta del directorio raiz del proyecto ORIEL
-            //if (substr($raiz,-1)!="/"){
-               // $raiz.="/";
-            //}
-            //Abre el archivo y agrega la traza del control
-            //$fecha_actual= getdate();
-            //Convierta la fecha a formto aaaa/mm/dd
-            //$fecha_actual= $fecha_actual['year'].$fecha_actual['mon'].$fecha_actual['mday'];
-            //$ruta=  $raiz."Cuenta_Visitas_Oriel/Log_Control/".$fecha_actual."_Control_Video.txt";
-            //Abre el archivo , lo crea si no lo encuentra
-            //$fp = fopen($ruta,"a+");
-            //Escribe en el archivo
-//            $cadena.="INICIO:";
-//            $cadena.="ID Usuario: ".$_SESSION['id']."/ ";
-//            $cadena.="El post envia la siguiente información; id_puesto:".$_POST['id_puesto'].", id_revis:".$_POST['id_revis'].", req_mantenimiento:".$_POST['req_mantenimiento'].", res_conexion:".$_POST['res_conexion'];
-//            $cadena.=", rep_situacion:".$_POST['rep_situacion'].", fecha_ini:".$_POST['fecha_ini'].", hora_ini:".$_POST['hora_ini'].", tiem:".$_POST['tiem'].", id_control_puesto:".$_POST['id_control_puesto'].", id_puesto:".$_POST['id_puesto'].", pos:".$_POST['pos'];
-//            $cadena.="..\r\n";
-            //Escribe en el archivo
-            //fwrite($fp, $cadena);
-            //Cierra el archivo
-            //fclose($fp);
-            
-//            $cadena="";
-//            $cadena.="ID Usuario: ".$_SESSION['id']."/ id_puesto:".$_POST['id_puesto'].", id_revis:".$_POST['id_revis']."..";
-            /*****************INICIO DE PROCESO NORMAL*************/
-            
-			//$fp = fopen($ruta,"a+");fwrite($fp, "Linea 9417 Prueba Alex");fclose($fp);
-            
+	            
             //Valida que el puesto de monitoreo se encuentre tomado por el usuario actual antes de salvar la revisión de video
             $obj_puesto_monitoreo->setCondicion("t_puestomonitoreo.Estado=1 AND t_puestomonitoreo.ID_Usuario=".$_SESSION['id']." AND t_puestomonitoreo.ID_Puesto_Monitoreo=".$_POST['id_puesto']);
             $obj_puesto_monitoreo->obtiene_todos_puestos_de_monitoreo();
 
             if (count($obj_puesto_monitoreo->getArreglo())>0){
-//                $cadena.="Primer if, correcto.";fwrite($fp, "Revision Numero: ".$_POST['id_revis'].". Linea 9436. Hora Actual: ".date("H:i:s", time())."\r\n");
-                //Cambio de línea de código, Diego Venegas 20170627-1510
+
                 $obj_puesto_monitoreo->setCondicion("ID_Usuario=".$_SESSION['id']." AND Estado=0 AND ID_Bitacora_Revision_Video=".$_POST['id_revis']);
-                //$obj_puesto_monitoreo->setCondicion("ID_Usuario=".$_SESSION['id']." AND ID_Bitacora_Revision_Video=".$_POST['id_revis']);
+                
                 if ($obj_puesto_monitoreo->existe_revision_de_video_pendiente_en_bitacora()){
-//                    $cadena.="Segundo if, correcto.";fwrite($fp, "Revision Numero: ".$_POST['id_revis'].". Linea 9441. Hora Actual: ".date("H:i:s", time())."\r\n");
+
                     $obj_puesto_monitoreo->setCondicion("ID_Bitacora_Revision_Video=".$_POST['id_revis']);
                     $obj_puesto_monitoreo->setEstado("1");
                     $obj_puesto_monitoreo->setFecha_termina_revision(date("Y-m-d"));
@@ -9610,119 +9579,117 @@ class Controller{
                     $obj_puesto_monitoreo->setReporta_situacion($_POST['rep_situacion']);
 
                     if (strlen(trim($_POST['rep_situacion']))>5){
-//			fwrite($fp, "Revision Numero: ".$_POST['id_revis'].". Linea 9452. Hora Actual: ".date("H:i:s", time())."\r\n");
+
                         $obj_puesto_monitoreo->setId_bitacora_revision_video($_POST['id_revis']);
                         $obj_puesto_monitoreo->setEstado_inconsistencia("0");
                         $obj_puesto_monitoreo->setTipo_inconsistencia("0");
                         $obj_puesto_monitoreo->agregar_nuevo_registro_inconsistencias_de_video();
-//                        $cadena.="viene con inconsistencia video.";
+
                     }
                     $fechaInicialRevision = $_POST['fecha_ini']." ".$_POST['hora_ini'];     
                     $fechaActual =date("Y-m-d")." ".date("H:i:s", time());
                     $diferenciasegundos = intval(strtotime($fechaActual) - strtotime($fechaInicialRevision));
-//					fwrite($fp, "Revision Numero: ".$_POST['id_revis'].". Linea 9462. Hora Actual: ".date("H:i:s", time())."\r\n");
+
                     $obj_puesto_monitoreo->setDuracion_revision($diferenciasegundos);
                     $tiempo_maximo_revision=intval($_POST['tiem']);
                     
                     if ($diferenciasegundos<=$tiempo_maximo_revision){
-                        $obj_puesto_monitoreo->setRetraso_segundos("0");//fwrite($fp, "Revision Numero: ".$_POST['id_revis'].". Linea 9467. Hora Actual: ".date("H:i:s", time())."\r\n");
+                        $obj_puesto_monitoreo->setRetraso_segundos("0");
                         $obj_puesto_monitoreo->setJustificacion_retraso("");
                         $obj_puesto_monitoreo->guarda_y_concluye_una_revision_de_video();
                         $resultado= 'on_time';
-//                        $cadena.="on_time.";
+
                     }else{
-                        $diferenciasegundos=$diferenciasegundos-$tiempo_maximo_revision;//fwrite($fp, "Revision Numero: ".$_POST['id_revis'].". Linea 9473. Hora Actual: ".date("H:i:s", time())."\r\n");
+                        $diferenciasegundos=$diferenciasegundos-$tiempo_maximo_revision;
                         $obj_puesto_monitoreo->setRetraso_segundos($diferenciasegundos);
                         $obj_traza->setCondicion("(bd_Registro_Trazabilidad.t_traza.ID_Usuario=".$_SESSION['id'].") AND (bd_Registro_Trazabilidad.t_traza.Tabla_Afectada='T_Evento' OR bd_Registro_Trazabilidad.t_traza.Tabla_Afectada='T_detalleEvento' OR bd_Registro_Trazabilidad.t_traza.Tabla_Afectada='T_EventoCencon' OR bd_Registro_Trazabilidad.t_traza.Tabla_Afectada='T_PruebaAlarma') AND (bd_Registro_Trazabilidad.t_traza.Fecha between '".$_POST['fecha_ini']."' AND '".date("Y-m-d")."') AND (bd_Registro_Trazabilidad.t_traza.Hora between '".$_POST['hora_ini']."' AND '".date("H:i:s", time())."')");
                         $obj_traza->obtiene_trazabilidad();
                         if (count($obj_traza->getArreglo())>0){
                             $obj_puesto_monitoreo->setJustificacion_retraso("JUSTIFICADO. Usuario: ".$_SESSION['name']." ".$_SESSION['apellido']." Cédula: ".$_SESSION['nombre']." Id:".$_SESSION['id']." con retraso justificado de ".$diferenciasegundos." segundos, en la revisión de video actual. Atendiendo procesos del centro de control (bitácora, cencon y pruebas de alarma).");
-//                            fwrite($fp, "Revision Numero: ".$_POST['id_revis'].". Linea 9479. Hora Actual: ".date("H:i:s", time())."\r\n");
+
                             $resultado= 'justificado'; 
-//                            $cadena.="justificado.";
+
                         }else{
                             $obj_puesto_monitoreo->setJustificacion_retraso("INJUSTIFICADO. Usuario: ".$_SESSION['name']." ".$_SESSION['apellido']." Cédula: ".$_SESSION['nombre']." Id:".$_SESSION['id']." no justificó el retraso de ".$diferenciasegundos." segundos, en la revisión de video actual. La ventana de justificación fue omitida o cerrada por el usuario.");
-                            $resultado= 'retraso';//fwrite($fp, "Revision Numero: ".$_POST['id_revis'].". Linea 9484. Hora Actual: ".date("H:i:s", time())."\r\n"); 
-//                            $cadena.="retraso.";
+                            $resultado= 'retraso';
+
                         }
                         $obj_puesto_monitoreo->guarda_y_concluye_una_revision_de_video();
                     }
-//                    fwrite($fp, "Revision Numero: ".$_POST['id_revis'].". Linea 9489. Hora Actual: ".date("H:i:s", time())."\r\n");
+
                     $obj_puesto_monitoreo->setCondicion("T_PuestoMonitoreoUnidadVideo.ID_Puesto_Monitoreo=".$_POST['id_puesto']);
                     $obj_puesto_monitoreo->obtiene_todas_las_unidades_asociadas_a_un_puesto_de_monitoreo();
 
                     if (count($obj_puesto_monitoreo->getArreglo())>0){
-//                        $cadena.="if 3 correcto.";fwrite($fp, "Revision Numero: ".$_POST['id_revis'].". Linea 9494. Hora Actual: ".date("H:i:s", time())."\r\n");
+
                         $obj_puesto_monitoreo->setCondicion("t_puestomonitoreo.Estado=1 AND t_puestomonitoreo.ID_Usuario=".$_SESSION['id']." AND t_puestomonitoreo.ID_Puesto_Monitoreo=".$_POST['id_puesto']);
                         $obj_puesto_monitoreo->obtiene_todos_puestos_de_monitoreo();
                         $vector_puesto_de_monitoreo_actual=$obj_puesto_monitoreo->getArreglo();
 
                         if (count($obj_puesto_monitoreo->getArreglo())>0){
-//                            $cadena.="if 4 correcto.";fwrite($fp, "Revision Numero: ".$_POST['id_revis'].". Linea 9500. Hora Actual: ".date("H:i:s", time())."\r\n");
-                            //ingresa en base de datos la siguiente revisión
-                            $obj_puesto_monitoreo->setId_puesto_monitoreo($_POST['id_puesto']);//fwrite($fp, "Revision Numero: ".$_POST['id_revis'].". Linea 9502. Hora Actual: ".date("H:i:s", time())."\r\n");
-                            $obj_puesto_monitoreo->setCondicion("ID_Puesto_Monitoreo=".$_POST['id_puesto']. " AND Estado=1 order by ID_Bitacora_Revision_Video desc");//fwrite($fp, "Revision Numero: ".$_POST['id_revis'].". Linea 9503. Hora Actual: ".date("H:i:s", time())."\r\n");
-                            $obj_puesto_monitoreo->obtiene_ultima_posicion_concluida_en_puesto_de_monitoreo();//fwrite($fp, "Revision Numero: ".$_POST['id_revis'].". Linea 9504. Hora Actual: ".date("H:i:s", time())."\r\n");
-                            $temp_posicion=intval($obj_puesto_monitoreo->getUltima_posicion_concluida());//fwrite($fp, "Revision Numero: ".$_POST['id_revis'].". Linea 9505. Hora Actual: ".date("H:i:s", time())."\r\n");
+
+                            $obj_puesto_monitoreo->setId_puesto_monitoreo($_POST['id_puesto']);
+                            $obj_puesto_monitoreo->setCondicion("ID_Puesto_Monitoreo=".$_POST['id_puesto']. " AND Estado=1 order by ID_Bitacora_Revision_Video desc");
+                            $obj_puesto_monitoreo->obtiene_ultima_posicion_concluida_en_puesto_de_monitoreo();
+                            $temp_posicion=intval($obj_puesto_monitoreo->getUltima_posicion_concluida());
                             $temp_posicion=$temp_posicion+1;
-                            //$obj_puesto_monitoreo->setCondicion("ID_Puesto_Monitoreo=".$_POST['id_puesto']. " AND Posicion=".$obj_puesto_monitoreo->getUltima_posicion_concluida()+1);
-                            $obj_puesto_monitoreo->setCondicion("ID_Puesto_Monitoreo=".$_POST['id_puesto']. " AND Posicion=".$temp_posicion);//fwrite($fp, "Revision Numero: ".$_POST['id_revis'].". Linea 9508. Hora Actual: ".date("H:i:s", time())."\r\n");
+                           
+                            $obj_puesto_monitoreo->setCondicion("ID_Puesto_Monitoreo=".$_POST['id_puesto']. " AND Posicion=".$temp_posicion);
                             if ($obj_puesto_monitoreo->existe_esta_posicion_en_este_puesto_de_monitoreo()){
-                                //$obj_puesto_monitoreo->setPosicion($obj_puesto_monitoreo->getUltima_posicion_concluida()+1);
-//				fwrite($fp, "Revision Numero: ".$_POST['id_revis'].". Linea 9511. Hora Actual: ".date("H:i:s", time())."\r\n");
+
                                 $obj_puesto_monitoreo->setPosicion($temp_posicion);
-//                                $cadena.="siguiente posición ok.";
+
                             }else{
-//				fwrite($fp, "Revision Numero: ".$_POST['id_revis'].". Linea 9515. Hora Actual: ".date("H:i:s", time())."\r\n");
+
                                 $obj_puesto_monitoreo->setCondicion("ID_Puesto_Monitoreo=".$_POST['id_puesto']. " AND Posicion=1");
                                 if ($obj_puesto_monitoreo->existe_esta_posicion_en_este_puesto_de_monitoreo()){
                                     $obj_puesto_monitoreo->setPosicion(1);
-//                                    $cadena.="Inicia el control a 1.";
+
                                 }
                             } 
                             
                             //Validación que permite enviar un sitio 10 posiciones adelante
-                            $verifica_si_hay_para_revisar=-1;//fwrite($fp, "Revision Numero: ".$_POST['id_revis'].". Linea 9524. Hora Actual: ".date("H:i:s", time())."\r\n");
-                            $verifica_si_hay_para_reacomodar=-1;//fwrite($fp, "Revision Numero: ".$_POST['id_revis'].". Linea 9525. Hora Actual: ".date("H:i:s", time())."\r\n");
+                            $verifica_si_hay_para_revisar=-1;
+                            $verifica_si_hay_para_reacomodar=-1;
                             if (($_POST['req_mantenimiento']=="1")&&($_POST['res_conexion']=="2")){
-                                $cadena.="req mantenimiento y res conexion ok +10 sitios.";//fwrite($fp, "Revision Numero: ".$_POST['id_revis'].". Linea 9527. Hora Actual: ".date("H:i:s", time())."\r\n");
+                                $cadena.="req mantenimiento y res conexion ok +10 sitios.";
                                 if (!isset($_SESSION['vector_temp_revision_video'])){
-                                    $vector_temp_revision_video=array();//fwrite($fp, "Revision Numero: ".$_POST['id_revis'].". Linea 9529. Hora Actual: ".date("H:i:s", time())."\r\n");
+                                    $vector_temp_revision_video=array();
                                     $vector_temp_revision_video[]=array("ID_Puesto_Monitoreo"=>$_POST['id_puesto'],"Posicion"=>$_POST['pos'],"ID_Usuario"=>$_SESSION['id'],"Contador"=>0,"Posicion_Real"=>$obj_puesto_monitoreo->getPosicion());
-                                    $_SESSION['vector_temp_revision_video']=$vector_temp_revision_video;//fwrite($fp, "Revision Numero: ".$_POST['id_revis'].". Linea 9531. Hora Actual: ".date("H:i:s", time())."\r\n");
+                                    $_SESSION['vector_temp_revision_video']=$vector_temp_revision_video;
                                 }else{
-                                    $tam=count($_SESSION['vector_temp_revision_video']);//fwrite($fp, "Revision Numero: ".$_POST['id_revis'].". Linea 9533. Hora Actual: ".date("H:i:s", time())."\r\n");
-                                    $ya_existe_esta_posicion=0;//fwrite($fp, "Revision Numero: ".$_POST['id_revis'].". Linea 9534. Hora Actual: ".date("H:i:s", time())."\r\n");
+                                    $tam=count($_SESSION['vector_temp_revision_video']);
+                                    $ya_existe_esta_posicion=0;
                                     for ($i = 0; $i < $tam; $i++) {
                                         if (($_SESSION['vector_temp_revision_video'][$i]['ID_Usuario']==$_SESSION['id'])&&($_SESSION['vector_temp_revision_video'][$i]['ID_Puesto_Monitoreo']==$_POST['id_puesto'])){
                                             if ($_SESSION['vector_temp_revision_video'][$i]['Posicion']==$obj_puesto_monitoreo->getPosicion()){
-                                                $ya_existe_esta_posicion=1;    //fwrite($fp, "Revision Numero: ".$_POST['id_revis'].". Linea 9538. Hora Actual: ".date("H:i:s", time())."\r\n");
+                                                $ya_existe_esta_posicion=1; 
                                             }
                                             $temp=intval($_SESSION['vector_temp_revision_video'][$i]['Contador']);
-                                            $temp=$temp+1;//fwrite($fp, "Revision Numero: ".$_POST['id_revis'].". Linea 9541. Hora Actual: ".date("H:i:s", time())."\r\n");
+                                            $temp=$temp+1;
                                             $_SESSION['vector_temp_revision_video'][$i]['Contador']=$temp;
                                             
                                             if ($_SESSION['vector_temp_revision_video'][$i]['Contador']<11){
-                                                $_SESSION['vector_temp_revision_video'][$i]['Posicion_Real']=$obj_puesto_monitoreo->getPosicion();//fwrite($fp, "Revision Numero: ".$_POST['id_revis'].". Linea 9545. Hora Actual: ".date("H:i:s", time())."\r\n");
+                                                $_SESSION['vector_temp_revision_video'][$i]['Posicion_Real']=$obj_puesto_monitoreo->getPosicion();
                                             }
                                             if ($_SESSION['vector_temp_revision_video'][$i]['Contador']==10){
-                                                $verifica_si_hay_para_revisar=$i;//fwrite($fp, "Revision Numero: ".$_POST['id_revis'].". Linea 9548. Hora Actual: ".date("H:i:s", time())."\r\n");
+                                                $verifica_si_hay_para_revisar=$i;
                                             }
                                             if ($_SESSION['vector_temp_revision_video'][$i]['Contador']==11){
-                                                $verifica_si_hay_para_reacomodar=$i;//fwrite($fp, "Revision Numero: ".$_POST['id_revis'].". Linea 9551. Hora Actual: ".date("H:i:s", time())."\r\n");
+                                                $verifica_si_hay_para_reacomodar=$i;
                                             }
                                         }
                                     }
                                     if ($ya_existe_esta_posicion==0){
-//					fwrite($fp, "Revision Numero: ".$_POST['id_revis'].". Linea 9556. Hora Actual: ".date("H:i:s", time())."\r\n");
+//					
                                         $vector_temp_revision_video[]=array("ID_Puesto_Monitoreo"=>$_POST['id_puesto'],"Posicion"=>$_POST['pos'],"ID_Usuario"=>$_SESSION['id'],"Contador"=>0,"Posicion_Real"=>$obj_puesto_monitoreo->getPosicion());
                                         $_SESSION['vector_temp_revision_video']=  array_merge($_SESSION['vector_temp_revision_video'],$vector_temp_revision_video);
                                     }
                                 }    
                             }else{
-//                                $cadena.="else de req mantenimiento y res conexion.";
+
                                 if (isset($_SESSION['vector_temp_revision_video'])){
-                                    $tam=count($_SESSION['vector_temp_revision_video']);//fwrite($fp, "Revision Numero: ".$_POST['id_revis'].". Linea 9564. Hora Actual: ".date("H:i:s", time())."\r\n");
+                                    $tam=count($_SESSION['vector_temp_revision_video']);
                                     for ($i = 0; $i < $tam; $i++) {
                                         if (($_SESSION['vector_temp_revision_video'][$i]['ID_Usuario']==$_SESSION['id'])&&($_SESSION['vector_temp_revision_video'][$i]['ID_Puesto_Monitoreo']==$_POST['id_puesto'])){
                                             $temp=intval($_SESSION['vector_temp_revision_video'][$i]['Contador']);
@@ -9743,45 +9710,45 @@ class Controller{
                                 }
                             }
                             if ($verifica_si_hay_para_revisar>-1){
-//                                $cadena.="verifica_si_hay_para_revisar ok.";fwrite($fp, "Revision Numero: ".$_POST['id_revis'].". Linea 9585. Hora Actual: ".date("H:i:s", time())."\r\n");
+
                                 $obj_puesto_monitoreo->setCondicion("ID_Puesto_Monitoreo=".$_SESSION['vector_temp_revision_video'][$verifica_si_hay_para_revisar]['ID_Puesto_Monitoreo']. " AND Posicion=".$_SESSION['vector_temp_revision_video'][$verifica_si_hay_para_revisar]['Posicion']);
                                 if ($obj_puesto_monitoreo->existe_esta_posicion_en_este_puesto_de_monitoreo()){
-//                                    fwrite($fp, "Revision Numero: ".$_POST['id_revis'].". Linea 9588. Hora Actual: ".date("H:i:s", time())."\r\n");
+
                                     $obj_puesto_monitoreo->setPosicion($_SESSION['vector_temp_revision_video'][$verifica_si_hay_para_revisar]['Posicion']);
                                 }
-                                $verifica_si_hay_para_revisar=-1;//fwrite($fp, "Revision Numero: ".$_POST['id_revis'].". Linea 9591. Hora Actual: ".date("H:i:s", time())."\r\n");
+                                $verifica_si_hay_para_revisar=-1;
                             }  
                             if ($verifica_si_hay_para_reacomodar>-1){
-//                                $cadena.="verifica_si_hay_para_reacomodar ok.";fwrite($fp, "Revision Numero: ".$_POST['id_revis'].". Linea 9594. Hora Actual: ".date("H:i:s", time())."\r\n");
+
                                 $obj_puesto_monitoreo->setCondicion("ID_Puesto_Monitoreo=".$_SESSION['vector_temp_revision_video'][$verifica_si_hay_para_reacomodar]['ID_Puesto_Monitoreo']. " AND Posicion=".$_SESSION['vector_temp_revision_video'][$verifica_si_hay_para_reacomodar]['Posicion_Real']);
                                 if ($obj_puesto_monitoreo->existe_esta_posicion_en_este_puesto_de_monitoreo()){
-//                                    fwrite($fp, "Revision Numero: ".$_POST['id_revis'].". Linea 9597. Hora Actual: ".date("H:i:s", time())."\r\n");
+
                                     $obj_puesto_monitoreo->setPosicion($_SESSION['vector_temp_revision_video'][$verifica_si_hay_para_reacomodar]['Posicion_Real']);
                                 }
-                                unset($_SESSION['vector_temp_revision_video'][$verifica_si_hay_para_reacomodar]);//fwrite($fp, "Revision Numero: ".$_POST['id_revis'].". Linea 9600. Hora Actual: ".date("H:i:s", time())."\r\n");
+                                unset($_SESSION['vector_temp_revision_video'][$verifica_si_hay_para_reacomodar]);
                                 if(count($_SESSION['vector_temp_revision_video'])==0){
-                                    unset($_SESSION['vector_temp_revision_video']);//fwrite($fp, "Revision Numero: ".$_POST['id_revis'].". Linea 9602. Hora Actual: ".date("H:i:s", time())."\r\n");
+                                    unset($_SESSION['vector_temp_revision_video']);
                                 }else{
-                                    $_SESSION['vector_temp_revision_video'] = array_values($_SESSION['vector_temp_revision_video']);//fwrite($fp, "Revision Numero: ".$_POST['id_revis'].". Linea 9604. Hora Actual: ".date("H:i:s", time())."\r\n");
+                                    $_SESSION['vector_temp_revision_video'] = array_values($_SESSION['vector_temp_revision_video']);
                                     if (isset($_SESSION['vector_temp_revision_video'])){
-                                        $tam=count($_SESSION['vector_temp_revision_video']);//fwrite($fp, "Revision Numero: ".$_POST['id_revis'].". Linea 9606. Hora Actual: ".date("H:i:s", time())."\r\n");
+                                        $tam=count($_SESSION['vector_temp_revision_video']);
                                         for ($i = 0; $i < $tam; $i++) {
                                             if (($_SESSION['vector_temp_revision_video'][$i]['ID_Usuario']==$_SESSION['id'])&&($_SESSION['vector_temp_revision_video'][$i]['ID_Puesto_Monitoreo']==$_POST['id_puesto'])){
                                                 if ($_SESSION['vector_temp_revision_video'][$i]['Contador']==10){
-                                                    $_SESSION['vector_temp_revision_video'][$i]['Contador']=9;//fwrite($fp, "Revision Numero: ".$_POST['id_revis'].". Linea 9610. Hora Actual: ".date("H:i:s", time())."\r\n");
+                                                    $_SESSION['vector_temp_revision_video'][$i]['Contador']=9;
                                                 }
                                                 $obj_puesto_monitoreo->setCondicion("ID_Puesto_Monitoreo=".$_SESSION['vector_temp_revision_video'][$i]['ID_Puesto_Monitoreo']);   
                                                 $temp_ultima_posicion=$obj_puesto_monitoreo->obtiene_ultima_posicion_de_un_puesto_de_monitoreo();
-						//fwrite($fp, "Revision Numero: ".$_POST['id_revis'].". Linea 9614. Hora Actual: ".date("H:i:s", time())."\r\n");
+						
                                                 if ($temp_ultima_posicion>0){
-                                                    $temp_pos_mas_diez=11 + intval($_SESSION['vector_temp_revision_video'][$i]['Posicion']);//fwrite($fp, "Revision Numero: ".$_POST['id_revis'].". Linea 9616. Hora Actual: ".date("H:i:s", time())."\r\n");
+                                                    $temp_pos_mas_diez=11 + intval($_SESSION['vector_temp_revision_video'][$i]['Posicion']);
                                                     if ($temp_pos_mas_diez<$temp_ultima_posicion){
-                                                        $_SESSION['vector_temp_revision_video'][$i]['Posicion_Real']=$temp_pos_mas_diez;//fwrite($fp, "Revision Numero: ".$_POST['id_revis'].". Linea 9618. Hora Actual: ".date("H:i:s", time())."\r\n");
+                                                        $_SESSION['vector_temp_revision_video'][$i]['Posicion_Real']=$temp_pos_mas_diez;
                                                     }else{
                                                         if (($temp_pos_mas_diez-$temp_ultima_posicion)==0){
-                                                            $_SESSION['vector_temp_revision_video'][$i]['Posicion_Real']=1;//fwrite($fp, "Revision Numero: ".$_POST['id_revis'].". Linea 9621. Hora Actual: ".date("H:i:s", time())."\r\n");
+                                                            $_SESSION['vector_temp_revision_video'][$i]['Posicion_Real']=1;
                                                         }else{
-                                                            $_SESSION['vector_temp_revision_video'][$i]['Posicion_Real']=$temp_pos_mas_diez-$temp_ultima_posicion;//fwrite($fp, "Revision Numero: ".$_POST['id_revis'].". Linea 9623. Hora Actual: ".date("H:i:s", time())."\r\n");
+                                                            $_SESSION['vector_temp_revision_video'][$i]['Posicion_Real']=$temp_pos_mas_diez-$temp_ultima_posicion;
                                                         }
                                                     }
                                                 }
@@ -9789,110 +9756,135 @@ class Controller{
                                         }
                                     }
                                 }
-                                $verifica_si_hay_para_reacomodar=-1;//fwrite($fp, "Revision Numero: ".$_POST['id_revis'].". Linea 9631. Hora Actual: ".date("H:i:s", time())."\r\n");
+                                $verifica_si_hay_para_reacomodar=-1;
                             }
 							
-//                            $cadena.="agrega siguiente revision.";        //fwrite($fp, "Revision Numero: ".$_POST['id_revis'].". Linea 9632. Hora Actual: ".date("H:i:s", time())."\r\n");                    
+
                             //Ingresa próxima revision de video en bitacora de revisiones de video.
                             $obj_puesto_monitoreo->setId_ultimo_toma_puesto_ingresada($_POST['id_control_puesto']);
                             $obj_puesto_monitoreo->setFecha_inicia_revision(date("Y-m-d"));
-                            $obj_puesto_monitoreo->setHora_inicia_revision(date("H:i:s", time()));//fwrite($fp, "Revision Numero: ".$_POST['id_revis'].". Linea 9637. Hora Actual: ".date("H:i:s", time())."\r\n");
+                            $obj_puesto_monitoreo->setHora_inicia_revision(date("H:i:s", time()));
                             $obj_puesto_monitoreo->setId_usuario($_SESSION['id']);
                             $obj_puesto_monitoreo->setObservaciones("");
                             $obj_puesto_monitoreo->setEstado(0);
 
-							//*****Prueba Alex******
                             $obj_puesto_monitoreo->setCondicion("ID_Puesto_Monitoreo=".$_POST['id_puesto']. " AND Estado=0");
                             $obj_puesto_monitoreo->obtiene_revisiones_de_video();
                             if ((count($obj_puesto_monitoreo->getArreglo())>0)){
-                            //Se comenta esta linea, prueba Alex
-                            //if ((count($obj_puesto_monitoreo->getArreglo())>0) && (!isset($_SESSION['vector_temp_revision_video']))){
-                                $obj_puesto_monitoreo->edita_usuario_y_tiempo_de_inicio_en_revision_de_video();//fwrite($fp, "Revision Numero: ".$_POST['id_revis'].". Linea 9645. Hora Actual: ".date("H:i:s", time())."\r\n");
+                                $obj_puesto_monitoreo->edita_usuario_y_tiempo_de_inicio_en_revision_de_video();
                                 $cadena.="edita_usuario_y_tiempo_de_inicio_en_revision_de_video.";
                             }else{                                                     
                                 $obj_puesto_monitoreo->agregar_nuevo_registro_bitacora_revisiones_de_video();
-//                                $cadena.="agregar_nuevo_registro_bitacora_revisiones_de_video.";fwrite($fp, "Revision Numero: ".$_POST['id_revis'].". Linea 9649. Hora Actual: ".date("H:i:s", time())."\r\n");
                             }  
                         } else{
-//                            fwrite($fp, "Revision Numero: ".$_POST['id_revis'].". Linea 9652. Hora Actual: ".date("H:i:s", time())."\r\n");
-//                            $cadena.="\r\n ELSE VACIO";
-//                            $cadena.="Esta condicion= t_puestomonitoreo.Estado=1 AND t_puestomonitoreo.ID_Usuario=".$_SESSION['id']." AND t_puestomonitoreo.ID_Puesto_Monitoreo=".$_POST['id_puesto'];
-//                            $cadena.="\r\n Obteniendo -obtiene_todos_puestos_de_monitoreo- NO trae información:\r\n ";
                         }
                     } else{
-//                        $cadena.="\r\n ELSE VACIO";fwrite($fp, "Revision Numero: ".$_POST['id_revis'].". Linea 9658. Hora Actual: ".date("H:i:s", time())."\r\n");
-//                        $cadena.="Esta condicion= T_PuestoMonitoreoUnidadVideo.ID_Puesto_Monitoreo=".$_POST['id_puesto'];
-//                        $cadena.="\r\n Obteniendo -obtiene_todos_puestos_de_monitoreo- NO trae información:\r\n ";
-                    }
-                    echo $resultado;//fwrite($fp, "Revision Numero: ".$_POST['id_revis'].". Linea 9662. Hora Actual: ".date("H:i:s", time())."\r\n");
+                        
+                        //***********************************Control de Video Dinamico************************************
+                        $obj_puesto_monitoreo->setId_ultimo_toma_puesto_ingresada($_POST['id_control_puesto']);
+                        $obj_puesto_monitoreo->setCondicion("ID_Puesto_Monitoreo=".$_POST['id_puesto']. " AND Estado=0 AND ID_Usuario=".$_SESSION['id']);
+                                
+                        if (!($obj_puesto_monitoreo->existe_revision_de_video_pendiente_en_bitacora())){
+                            $obj_puesto_monitoreo->setCondicion("ID_Puesto_Monitoreo=".$_POST['id_puesto']. " AND Estado=0 AND ID_Usuario<>".$_SESSION['id']);
+                            if ($obj_puesto_monitoreo->existe_revision_de_video_pendiente_en_bitacora()){
+                                $obj_puesto_monitoreo->setFecha_inicia_revision(date("Y-m-d"));
+                                $obj_puesto_monitoreo->setHora_inicia_revision(date("H:i:s", time()));
+                                $obj_puesto_monitoreo->setId_usuario($_SESSION['id']);
+                                $obj_puesto_monitoreo->setPosicion('0');
+
+                                $obj_puesto_monitoreo->setCondicion("t_unidadvideo.Estado=0 GROUP by t_bitacorarevisionesvideo.`ID_Unidad_Video` ORDER BY Fecha_Hora ASC limit 10");
+                                $obj_puesto_monitoreo->obtiene_unidades_con_mas_tiempo_sin_revisar();
+                                $params=$obj_puesto_monitoreo->getArreglo();
+
+                                for ($i = 0; $i < count($params); $i++) {
+                                    $obj_puesto_monitoreo->setCondicion("Estado=0 and ID_Unidad_Video=".$params[$i]['ID_Unidad_Video']);
+                                    if (!($obj_puesto_monitoreo->existe_revision_de_video_pendiente_en_bitacora())){
+                                        $obj_puesto_monitoreo->setId_unidad_video($params[$i]['ID_Unidad_Video']);
+                                        break;
+                                    }
+                                }
+                                $obj_puesto_monitoreo->setCondicion("ID_Puesto_Monitoreo=".$_POST['id_puesto']. " AND Estado=0 AND ID_Usuario<>".$_SESSION['id']);
+                                $obj_puesto_monitoreo->edita_usuario_y_tiempo_de_inicio_en_revision_de_video_dinamica();                 
+                            }else{
+
+                                $obj_puesto_monitoreo->setPosicion('0');
+
+                                $obj_puesto_monitoreo->setCondicion("t_unidadvideo.Estado=0 GROUP by t_bitacorarevisionesvideo.`ID_Unidad_Video` ORDER BY Fecha_Hora ASC limit 10");
+                                $obj_puesto_monitoreo->obtiene_unidades_con_mas_tiempo_sin_revisar();
+                                $params=$obj_puesto_monitoreo->getArreglo();
+
+                                for ($i = 0; $i < count($params); $i++) {
+                                    $obj_puesto_monitoreo->setCondicion("Estado=0 and ID_Unidad_Video=".$params[$i]['ID_Unidad_Video']);
+                                    if (!($obj_puesto_monitoreo->existe_revision_de_video_pendiente_en_bitacora())){
+                                        $obj_puesto_monitoreo->setId_unidad_video($params[$i]['ID_Unidad_Video']);
+                                        break;
+                                    }
+                                }
+
+                                //Ingresa nuevo registro de bitacora en la tabla de revisiones de video.
+                                $obj_puesto_monitoreo->setFecha_inicia_revision(date("Y-m-d"));
+                                $obj_puesto_monitoreo->setHora_inicia_revision(date("H:i:s", time()));
+                                $obj_puesto_monitoreo->setId_usuario($_SESSION['id']);
+                                $obj_puesto_monitoreo->setId_puesto_monitoreo($_POST['id_puesto']);
+                                $obj_puesto_monitoreo->setObservaciones("");
+                                $obj_puesto_monitoreo->setEstado(0);
+                                $obj_puesto_monitoreo->agregar_nuevo_registro_bitacora_revisiones_de_video();
+                            }
+                        }else{
+                            $obj_puesto_monitoreo->setCondicion("ID_Puesto_Monitoreo=".$_POST['id_puesto']. " AND Estado=0 AND ID_Usuario=".$_SESSION['id']);
+                            $obj_puesto_monitoreo->edita_toma_de_puesto_en_revision_de_video_pendiente();
+                        }
+    
+                        //*********************************Finalizan Control de Video Dinamico*****************************
+                         }
+                    echo $resultado;
                 } else {		
-                    ///**************************************Codigo de Prueba**************************////
                     $obj_puesto_monitoreo->setCondicion("ID_Puesto_Monitoreo=".$_POST['id_puesto']. " AND Estado=0");
                     $obj_puesto_monitoreo->obtiene_revisiones_de_video();
-					if (!(count($obj_puesto_monitoreo->getArreglo())>0)){
-						$obj_puesto_monitoreo->setCondicion("ID_Puesto_Monitoreo=".$_POST['id_puesto']. " AND Estado=1 order by ID_Bitacora_Revision_Video desc");
-						$obj_puesto_monitoreo->obtiene_ultima_posicion_concluida_en_puesto_de_monitoreo();
-						$temp_posicion=intval($obj_puesto_monitoreo->getUltima_posicion_concluida());
-						$temp_posicion=$temp_posicion+1;//fwrite($fp, "Revision Numero: ".$_POST['id_revis'].". Linea 9682. Hora Actual: ".date("H:i:s", time())."\r\n");
-						//$obj_puesto_monitoreo->setCondicion("ID_Puesto_Monitoreo=".$_POST['id_puesto']. " AND Posicion=".$obj_puesto_monitoreo->getUltima_posicion_concluida()+1);
-						$obj_puesto_monitoreo->setCondicion("ID_Puesto_Monitoreo=".$_POST['id_puesto']. " AND Posicion=".$temp_posicion);
-						if ($obj_puesto_monitoreo->existe_esta_posicion_en_este_puesto_de_monitoreo()){
-							//$obj_puesto_monitoreo->setPosicion($obj_puesto_monitoreo->getUltima_posicion_concluida()+1);
-							$obj_puesto_monitoreo->setPosicion($temp_posicion);
-						}else{
-							$obj_puesto_monitoreo->setCondicion("ID_Puesto_Monitoreo=".$_POST['id_puesto']. " AND Posicion=1");
-							if ($obj_puesto_monitoreo->existe_esta_posicion_en_este_puesto_de_monitoreo()){
-								$obj_puesto_monitoreo->setPosicion(1);
-								
-							}
-						} 
-															 
-						//Ingresa nuevo registro de bitacora en la tabla de revisiones de video.
-						$obj_puesto_monitoreo->setId_ultimo_toma_puesto_ingresada($_POST['id_control_puesto']);
-						$obj_puesto_monitoreo->setFecha_inicia_revision(date("Y-m-d"));
-						$obj_puesto_monitoreo->setHora_inicia_revision(date("H:i:s", time()));
-						$obj_puesto_monitoreo->setId_usuario($_SESSION['id']);
-						$obj_puesto_monitoreo->setId_puesto_monitoreo($_POST['id_puesto']);
-						$obj_puesto_monitoreo->setObservaciones("");
-						$obj_puesto_monitoreo->setEstado(0);
-						$obj_puesto_monitoreo->agregar_nuevo_registro_bitacora_revisiones_de_video();
-						
-						///**************************************Codigo de Prueba**************************////
-					}
+                    if (!(count($obj_puesto_monitoreo->getArreglo())>0)){
+                        $obj_puesto_monitoreo->setCondicion("ID_Puesto_Monitoreo=".$_POST['id_puesto']. " AND Estado=1 order by ID_Bitacora_Revision_Video desc");
+                        $obj_puesto_monitoreo->obtiene_ultima_posicion_concluida_en_puesto_de_monitoreo();
+                        $temp_posicion=intval($obj_puesto_monitoreo->getUltima_posicion_concluida());
+                        $temp_posicion=$temp_posicion+1;
+
+                        $obj_puesto_monitoreo->setCondicion("ID_Puesto_Monitoreo=".$_POST['id_puesto']. " AND Posicion=".$temp_posicion);
+                        if ($obj_puesto_monitoreo->existe_esta_posicion_en_este_puesto_de_monitoreo()){
+
+                                $obj_puesto_monitoreo->setPosicion($temp_posicion);
+                        }else{
+                                $obj_puesto_monitoreo->setCondicion("ID_Puesto_Monitoreo=".$_POST['id_puesto']. " AND Posicion=1");
+                                if ($obj_puesto_monitoreo->existe_esta_posicion_en_este_puesto_de_monitoreo()){
+                                        $obj_puesto_monitoreo->setPosicion(1);
+
+                                }
+                        } 
+
+                        //Ingresa nuevo registro de bitacora en la tabla de revisiones de video.
+                        $obj_puesto_monitoreo->setId_ultimo_toma_puesto_ingresada($_POST['id_control_puesto']);
+                        $obj_puesto_monitoreo->setFecha_inicia_revision(date("Y-m-d"));
+                        $obj_puesto_monitoreo->setHora_inicia_revision(date("H:i:s", time()));
+                        $obj_puesto_monitoreo->setId_usuario($_SESSION['id']);
+                        $obj_puesto_monitoreo->setId_puesto_monitoreo($_POST['id_puesto']);
+                        $obj_puesto_monitoreo->setObservaciones("");
+                        $obj_puesto_monitoreo->setEstado(0);
+                        $obj_puesto_monitoreo->agregar_nuevo_registro_bitacora_revisiones_de_video();
+
+                    }
 					
-                    $cadena.="else de revision cerrada.";//fwrite($fp, "Revision Numero: ".$_POST['id_revis'].". Linea 9709. Hora Actual: ".date("H:i:s", time())."\r\n");
+                    $cadena.="else de revision cerrada.";
                     $resultado="revision_cerrada";
-//					fwrite($fp, "Revision Numero: ".$_POST['id_revis'].". Linea 9679 Resultado: ". $resultado . ". Hora Actual: ".date("H:i:s", time()).".\r\n");
+
                     echo $resultado;
                 }
             }else{
-//                $cadena.="else de no_asignado.";
+
                 $resultado="no_asignado";
-//				fwrite($fp, "Revision Numero: ".$_POST['id_revis'].". Linea 9679 Resultado: ". $resultado . ". Hora Actual: ".date("H:i:s", time()).".\r\n");
+
                 echo $resultado;
             }
-            /********************CÓDIGO PARA LOG DE REGISTRAR REVISION*********/
-            //$raiz=$_SERVER['DOCUMENT_ROOT'];
-            //Formatea la ruta del directorio raiz del proyecto ORIEL
-            //if (substr($raiz,-1)!="/"){
-            //    $raiz.="/";
-           // }
-            //Abre el archivo y agrega la traza del control
-            //$fecha_actual= getdate();
-            //Convierta la fecha a formto aaaa/mm/dd
-            //$fecha_actual= $fecha_actual['year'].$fecha_actual['mon'].$fecha_actual['mday'];
-            //$ruta=  $raiz."Cuenta_Visitas_Oriel/Log_Control/".$fecha_actual."_Control_Video.txt";
-            //Abre el archivo , lo crea si no lo encuentra
-            //$fp = fopen($ruta,"a+");
-            //Escribe en el archivo
-//            $cadena.="FIN \r\n\r\n";
-//			fwrite($fp, "Revision Numero: ".$_POST['id_revis'].". Linea 9679 Resultado: ". $resultado . ". Hora Actual: ".date("H:i:s", time()).".\r\n\r\n");fclose($fp);
-            //fwrite($fp, $cadena);
-            //Cierra el archivo
-            //fclose($fp);
-            /*******************FIN DEL LOG **********************************/
+           
         } else {
-            //$tipo_de_alerta="alert alert-warning";fwrite($fp, "Revision Numero: ".$_POST['id_revis'].". Linea 9696. Hora Actual: ".date("H:i:s", time())."\r\n");
+          
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }  
@@ -9907,7 +9899,6 @@ class Controller{
                 $obj_puesto_monitoreo->setJustificacion_retraso($_POST['txt_retraso']);
                 $obj_puesto_monitoreo->agrega_justificacion_en_retraso_de_una_revision_de_video();
                 $obj_puesto_monitoreo->setFecha_inicia_revision(date("Y-m-d"));
-                //$obj_puesto_monitoreo->setHora_inicia_revision(date("H:i:s", time()));
                 $obj_puesto_monitoreo->setHora_inicia_revision("ADDTIME(Hora_Inicia_Revision,'00:00:15')");
                 $obj_puesto_monitoreo->setCondicion("ID_Puesto_Monitoreo=".$_POST['id_puesto_justificacion']." AND ID_Usuario=".$_SESSION['id']." AND Estado=0");
                 $obj_puesto_monitoreo->edita_tiempo_de_inicio_en_revision_de_video();
@@ -9999,7 +9990,78 @@ class Controller{
                                 }
                                 echo 'Tomado';
                              }else{
-                                  echo 'Sin_Unidades';
+                                 // echo 'Sin_Unidades';///***************************************************
+                                  
+                                $obj_puesto_monitoreo->setFecha_toma_control(date("Y-m-d"));
+                                $obj_puesto_monitoreo->setHora_toma_control(date("H:i:s", time()));
+                                $obj_puesto_monitoreo->setId_usuario($_SESSION['id']);
+                                $obj_puesto_monitoreo->setId_puesto_monitoreo($_POST['id_puesto']);
+                                $obj_puesto_monitoreo->setEstado("1");
+                                $obj_puesto_monitoreo->setCondicion("ID_Puesto_Monitoreo=".$_POST['id_puesto']);
+                                $obj_puesto_monitoreo->insertar_toma_de_puesto_de_monitoreo();
+                                $obj_puesto_monitoreo->setCondicion("ID_Puesto_Monitoreo=".$_POST['id_puesto']. " AND Estado=1 AND ID_Usuario=".$_SESSION['id']);
+                                $obj_puesto_monitoreo->obtiene_id_ultimo_toma_puesto_ingresada();
+                                $obj_puesto_monitoreo->setCondicion("ID_Puesto_Monitoreo=".$_POST['id_puesto']. " AND Estado=0 AND ID_Usuario=".$_SESSION['id']);
+                                
+                                if (!($obj_puesto_monitoreo->existe_revision_de_video_pendiente_en_bitacora())){
+                                    $obj_puesto_monitoreo->setCondicion("ID_Puesto_Monitoreo=".$_POST['id_puesto']. " AND Estado=0 AND ID_Usuario<>".$_SESSION['id']);
+                                    if ($obj_puesto_monitoreo->existe_revision_de_video_pendiente_en_bitacora()){
+                                        $obj_puesto_monitoreo->setFecha_inicia_revision(date("Y-m-d"));
+                                        $obj_puesto_monitoreo->setHora_inicia_revision(date("H:i:s", time()));
+                                        $obj_puesto_monitoreo->setId_usuario($_SESSION['id']);
+                                        $obj_puesto_monitoreo->setPosicion('0');
+                                        
+                                        $obj_puesto_monitoreo->setCondicion("t_unidadvideo.Estado=0 GROUP by t_bitacorarevisionesvideo.`ID_Unidad_Video` ORDER BY Fecha_Hora ASC limit 10");
+                                        $obj_puesto_monitoreo->obtiene_unidades_con_mas_tiempo_sin_revisar();
+                                        $params=$obj_puesto_monitoreo->getArreglo();
+                                        
+                                        for ($i = 0; $i < count($params); $i++) {
+                                            $obj_puesto_monitoreo->setCondicion("Estado=0 and ID_Unidad_Video=".$params[$i]['ID_Unidad_Video']);
+                                            if (!($obj_puesto_monitoreo->existe_revision_de_video_pendiente_en_bitacora())){
+                                                $obj_puesto_monitoreo->setId_unidad_video($params[$i]['ID_Unidad_Video']);
+                                                break;
+                                            }
+                                        }
+                                        $obj_puesto_monitoreo->setCondicion("ID_Puesto_Monitoreo=".$_POST['id_puesto']. " AND Estado=0 AND ID_Usuario<>".$_SESSION['id']);
+                                        $obj_puesto_monitoreo->edita_usuario_y_tiempo_de_inicio_en_revision_de_video_dinamica();                 
+                                    }else{
+                                       
+                                        $obj_puesto_monitoreo->setPosicion('0');
+                                        
+                                        $obj_puesto_monitoreo->setCondicion("t_unidadvideo.Estado=0 GROUP by t_bitacorarevisionesvideo.`ID_Unidad_Video` ORDER BY Fecha_Hora ASC limit 10");
+                                        $obj_puesto_monitoreo->obtiene_unidades_con_mas_tiempo_sin_revisar();
+                                        $params=$obj_puesto_monitoreo->getArreglo();
+                                        
+                                        for ($i = 0; $i < count($params); $i++) {
+                                            $obj_puesto_monitoreo->setCondicion("Estado=0 and ID_Unidad_Video=".$params[$i]['ID_Unidad_Video']);
+                                            if (!($obj_puesto_monitoreo->existe_revision_de_video_pendiente_en_bitacora())){
+                                                $obj_puesto_monitoreo->setId_unidad_video($params[$i]['ID_Unidad_Video']);
+                                                break;
+                                            }
+                                        }
+                                        
+                                        //Ingresa nuevo registro de bitacora en la tabla de revisiones de video.
+                                        $obj_puesto_monitoreo->setFecha_inicia_revision(date("Y-m-d"));
+                                        $obj_puesto_monitoreo->setHora_inicia_revision(date("H:i:s", time()));
+                                        $obj_puesto_monitoreo->setId_usuario($_SESSION['id']);
+                                        $obj_puesto_monitoreo->setId_puesto_monitoreo($_POST['id_puesto']);
+                                        $obj_puesto_monitoreo->setObservaciones("");
+                                        $obj_puesto_monitoreo->setEstado(0);
+                                        $obj_puesto_monitoreo->agregar_nuevo_registro_bitacora_revisiones_de_video();
+                                    }
+                                }else{
+                                    $obj_puesto_monitoreo->setCondicion("ID_Puesto_Monitoreo=".$_POST['id_puesto']. " AND Estado=0 AND ID_Usuario=".$_SESSION['id']);
+                                    $obj_puesto_monitoreo->edita_toma_de_puesto_en_revision_de_video_pendiente();
+                                }
+                                echo 'Tomado';
+                                  
+                                  
+                                //echo 'Sin_Unidades';///***************************************************  
+                                  
+                                  
+                                  
+                                  
+                                  
                              }               
                        }
                     }
@@ -10114,6 +10176,10 @@ class Controller{
              $vector_puesto_de_monitoreo_actual=$obj_puesto_monitoreo->getArreglo();
              //termina la consulta 
              
+             $obj_puesto_monitoreo->setCondicion("T_PuestoMonitoreoUnidadVideo.ID_Puesto_Monitoreo=".$vector_puesto_de_monitoreo_actual[0]['ID_Puesto_Monitoreo']);
+             $obj_puesto_monitoreo->obtiene_todas_las_unidades_asociadas_a_un_puesto_de_monitoreo();
+             $unidades_asociadas_a_un_puesto=$obj_puesto_monitoreo->getArreglo();
+             
               //Vector puesto de monitoreo actual 1
              $obj_puesto_monitoreo->setCondicion("Estado=1 AND ID_Usuario=".$_SESSION['id']." AND ID_Puesto_Monitoreo=".$vector_puesto_de_monitoreo_actual[0]['ID_Puesto_Monitoreo']);
              $obj_puesto_monitoreo->obtiene_bitacora_puestos_de_monitoreo();
@@ -10129,11 +10195,17 @@ class Controller{
                 $vector_revision_de_video_actual=$obj_puesto_monitoreo->getArreglo();
                 //termina la consulta 
 				
-				if (!(count($vector_revision_de_video_actual)>0)){
+                if (!(count($vector_revision_de_video_actual)>0)){
                     ///**************************************Codigo de Prueba**************************////
                     $obj_puesto_monitoreo->setCondicion("ID_Puesto_Monitoreo=".$vector_puesto_de_monitoreo_actual[0]['ID_Puesto_Monitoreo']. " AND Estado=0");
                     $obj_puesto_monitoreo->obtiene_revisiones_de_video();
                     if (!(count($obj_puesto_monitoreo->getArreglo())>0)){
+                            
+                        $obj_puesto_monitoreo->setCondicion("T_PuestoMonitoreoUnidadVideo.ID_Puesto_Monitoreo=".$vector_puesto_de_monitoreo_actual[0]['ID_Puesto_Monitoreo']);
+                        $obj_puesto_monitoreo->obtiene_todas_las_unidades_asociadas_a_un_puesto_de_monitoreo();
+                        $unidades_asociadas_a_un_puesto=$obj_puesto_monitoreo->getArreglo();
+                        if (count($obj_puesto_monitoreo->getArreglo())>0){
+                        
                             $obj_puesto_monitoreo->setCondicion("ID_Puesto_Monitoreo=".$vector_puesto_de_monitoreo_actual[0]['ID_Puesto_Monitoreo']. " AND Estado=1 order by ID_Bitacora_Revision_Video desc");
                             $obj_puesto_monitoreo->obtiene_ultima_posicion_concluida_en_puesto_de_monitoreo();
                             $temp_posicion=intval($obj_puesto_monitoreo->getUltima_posicion_concluida());
@@ -10162,7 +10234,78 @@ class Controller{
                             $obj_puesto_monitoreo->agregar_nuevo_registro_bitacora_revisiones_de_video();
 
                             ///**************************************Codigo de Prueba**************************////
-
+                        }else
+                            {
+                
+                                $obj_puesto_monitoreo->setCondicion("ID_Puesto_Monitoreo=".$vector_puesto_de_monitoreo_actual[0]['ID_Puesto_Monitoreo']. " AND Estado=1 AND ID_Usuario=".$_SESSION['id']);
+                                $obj_puesto_monitoreo->obtiene_id_ultimo_toma_puesto_ingresada();
+                                $obj_puesto_monitoreo->setCondicion("ID_Puesto_Monitoreo=".$vector_puesto_de_monitoreo_actual[0]['ID_Puesto_Monitoreo']. " AND Estado=0 AND ID_Usuario=".$_SESSION['id']);
+                                
+                                if (!($obj_puesto_monitoreo->existe_revision_de_video_pendiente_en_bitacora())){
+                                    $obj_puesto_monitoreo->setCondicion("ID_Puesto_Monitoreo=".$vector_puesto_de_monitoreo_actual[0]['ID_Puesto_Monitoreo']. " AND Estado=0 AND ID_Usuario<>".$_SESSION['id']);
+                                    if ($obj_puesto_monitoreo->existe_revision_de_video_pendiente_en_bitacora()){
+                                        $obj_puesto_monitoreo->setFecha_inicia_revision(date("Y-m-d"));
+                                        $obj_puesto_monitoreo->setHora_inicia_revision(date("H:i:s", time()));
+                                        $obj_puesto_monitoreo->setId_usuario($_SESSION['id']);
+                                        $obj_puesto_monitoreo->setPosicion('0');
+                                        
+                                        $obj_puesto_monitoreo->setCondicion("t_unidadvideo.Estado=0 GROUP by t_bitacorarevisionesvideo.`ID_Unidad_Video` ORDER BY Fecha_Hora ASC limit 10");
+                                        $obj_puesto_monitoreo->obtiene_unidades_con_mas_tiempo_sin_revisar();
+                                        $params=$obj_puesto_monitoreo->getArreglo();
+                                        
+                                        for ($i = 0; $i < count($params); $i++) {
+                                            $obj_puesto_monitoreo->setCondicion("Estado=0 and ID_Unidad_Video=".$params[$i]['ID_Unidad_Video']);
+                                            if (!($obj_puesto_monitoreo->existe_revision_de_video_pendiente_en_bitacora())){
+                                                $obj_puesto_monitoreo->setId_unidad_video($params[$i]['ID_Unidad_Video']);
+                                                break;
+                                            }
+                                        }
+                                        $obj_puesto_monitoreo->setCondicion("ID_Puesto_Monitoreo=".$vector_puesto_de_monitoreo_actual[0]['ID_Puesto_Monitoreo']. " AND Estado=0 AND ID_Usuario<>".$_SESSION['id']);
+                                        $obj_puesto_monitoreo->edita_usuario_y_tiempo_de_inicio_en_revision_de_video_dinamica();                 
+                                    }else{
+                                       
+                                        $obj_puesto_monitoreo->setPosicion('0');
+                                        
+                                        $obj_puesto_monitoreo->setCondicion("t_unidadvideo.Estado=0 GROUP by t_bitacorarevisionesvideo.`ID_Unidad_Video` ORDER BY Fecha_Hora ASC limit 10");
+                                        $obj_puesto_monitoreo->obtiene_unidades_con_mas_tiempo_sin_revisar();
+                                        $params=$obj_puesto_monitoreo->getArreglo();
+                                        
+                                        //echo '<pre>';
+                                        //print_r($params);
+                                       // echo '<pre>';
+                                        //echo count($params);
+                                        
+                                        for ($i = 0; $i < count($params); $i++) {
+                                            $obj_puesto_monitoreo->setCondicion("Estado=0 and ID_Unidad_Video=".$params[$i]['ID_Unidad_Video']);
+                                            if (!($obj_puesto_monitoreo->existe_revision_de_video_pendiente_en_bitacora())){
+                                                $obj_puesto_monitoreo->setId_unidad_video($params[$i]['ID_Unidad_Video']);
+                                                //echo $params[$i]['ID_Unidad_Video'];
+                                                break;
+                                            }
+                                        }
+                                        if (strlen($obj_puesto_monitoreo->getId_unidad_video())==0){
+                                           //$obj_puesto_monitoreo->setId_unidad_video($params[0]['ID_Unidad_Video']); 
+                                        }
+                                         //
+                                        
+                                        //echo $obj_puesto_monitoreo->getId_unidad_video();
+                                        //Ingresa nuevo registro de bitacora en la tabla de revisiones de video.
+                                        $obj_puesto_monitoreo->setFecha_inicia_revision(date("Y-m-d"));
+                                        $obj_puesto_monitoreo->setHora_inicia_revision(date("H:i:s", time()));
+                                        $obj_puesto_monitoreo->setId_usuario($_SESSION['id']);
+                                        $obj_puesto_monitoreo->setId_puesto_monitoreo($vector_puesto_de_monitoreo_actual[0]['ID_Puesto_Monitoreo']);
+                                        $obj_puesto_monitoreo->setObservaciones("");
+                                        $obj_puesto_monitoreo->setEstado(0);
+                                        //echo 'prueba';
+                                        $obj_puesto_monitoreo->agregar_nuevo_registro_bitacora_revisiones_de_video();
+                                    }
+                                }else{
+                                    $obj_puesto_monitoreo->setCondicion("ID_Puesto_Monitoreo=".$vector_puesto_de_monitoreo_actual[0]['ID_Puesto_Monitoreo']. " AND Estado=0 AND ID_Usuario=".$_SESSION['id']);
+                                    $obj_puesto_monitoreo->edita_toma_de_puesto_en_revision_de_video_pendiente();
+                                }
+                            
+                            
+                            }
                     }
                 }
 				
@@ -10187,11 +10330,16 @@ class Controller{
                     //termina la consulta 
 
                     //Vector información puesto de monitoreo-unidad de video 4
-                    $obj_puesto_monitoreo->setCondicion("T_PuestoMonitoreoUnidadVideo.ID_Puesto_Monitoreo=".$vector_revision_de_video_actual[0]['ID_Puesto_Monitoreo']." AND T_PuestoMonitoreoUnidadVideo.Posicion=".$vector_revision_de_video_actual[0]['Posicion']);
-                    $obj_puesto_monitoreo->obtiene_todas_las_unidades_asociadas_a_un_puesto_de_monitoreo();
-                    $vector_puesto_monitoreo_unidad_video=$obj_puesto_monitoreo->getArreglo();
-                    //termina la consulta 
-
+                    if (count($unidades_asociadas_a_un_puesto)>0){
+                        $obj_puesto_monitoreo->setCondicion("T_PuestoMonitoreoUnidadVideo.ID_Puesto_Monitoreo=".$vector_revision_de_video_actual[0]['ID_Puesto_Monitoreo']." AND T_PuestoMonitoreoUnidadVideo.Posicion=".$vector_revision_de_video_actual[0]['Posicion']);
+                        $obj_puesto_monitoreo->obtiene_todas_las_unidades_asociadas_a_un_puesto_de_monitoreo();
+                        $vector_puesto_monitoreo_unidad_video=$obj_puesto_monitoreo->getArreglo();
+                        //termina la consulta 
+                    }else{
+                         $obj_puesto_monitoreo->setCondicion("ID_Puesto_Monitoreo=".$vector_revision_de_video_actual[0]['ID_Puesto_Monitoreo']);
+                         $obj_puesto_monitoreo->obtiene_todos_puestos_de_monitoreo();
+                         $vector_puesto_monitoreo_unidad_video=$obj_puesto_monitoreo->getArreglo();
+                    }
                     //Vector información punto BCR relacionado a la unidad de video 5
                     $obj_puntos_bcr->setCondicion("T_PuntoBCR.ID_PuntoBCR=".$vector_informacion_unidad_video[0]['ID_PuntoBCR']);
                     $obj_puntos_bcr->obtiene_todos_los_puntos_bcr();
@@ -10214,37 +10362,40 @@ class Controller{
                     //termina la consulta 
 
                     //Vector 1 unidad siguiente
-                    $pos=$vector_revision_de_video_actual[0]['Posicion'];
-                    $pos=$pos+1;
-                    $obj_puesto_monitoreo->setCondicion("T_PuestoMonitoreoUnidadVideo.ID_Puesto_Monitoreo=".$vector_revision_de_video_actual[0]['ID_Puesto_Monitoreo']." AND (T_PuestoMonitoreoUnidadVideo.Posicion>".$vector_revision_de_video_actual[0]['Posicion']." AND T_PuestoMonitoreoUnidadVideo.Posicion<=".$pos.")");
-                    $obj_puesto_monitoreo->obtiene_las_unidades_siguientes_para_revision();
-                    $vector_proximas_unidades=$obj_puesto_monitoreo->getArreglo();
-
-                    //Vector 1 Unidades de Video Siguientes
-                    if (count($vector_proximas_unidades)==0){
-                        $pos=1;
-                        $obj_puesto_monitoreo->setCondicion("T_PuestoMonitoreoUnidadVideo.ID_Puesto_Monitoreo=".$vector_revision_de_video_actual[0]['ID_Puesto_Monitoreo']." AND T_PuestoMonitoreoUnidadVideo.Posicion=".$pos);
+                    if (count($unidades_asociadas_a_un_puesto)>0){
+                        $pos=$vector_revision_de_video_actual[0]['Posicion'];
+                        $pos=$pos+1;
+                        $obj_puesto_monitoreo->setCondicion("T_PuestoMonitoreoUnidadVideo.ID_Puesto_Monitoreo=".$vector_revision_de_video_actual[0]['ID_Puesto_Monitoreo']." AND (T_PuestoMonitoreoUnidadVideo.Posicion>".$vector_revision_de_video_actual[0]['Posicion']." AND T_PuestoMonitoreoUnidadVideo.Posicion<=".$pos.")");
                         $obj_puesto_monitoreo->obtiene_las_unidades_siguientes_para_revision();
                         $vector_proximas_unidades=$obj_puesto_monitoreo->getArreglo();
+
+                        //Vector 1 Unidades de Video Siguientes
+                        if (count($vector_proximas_unidades)==0){
+                            $pos=1;
+                            $obj_puesto_monitoreo->setCondicion("T_PuestoMonitoreoUnidadVideo.ID_Puesto_Monitoreo=".$vector_revision_de_video_actual[0]['ID_Puesto_Monitoreo']." AND T_PuestoMonitoreoUnidadVideo.Posicion=".$pos);
+                            $obj_puesto_monitoreo->obtiene_las_unidades_siguientes_para_revision();
+                            $vector_proximas_unidades=$obj_puesto_monitoreo->getArreglo();
+                        }
+
+                        $obj_unidad_video->setCondicion("t_unidadvideo.ID_Unidad_Video=".$vector_proximas_unidades[0]['ID_Unidad_Video']);
+                        $obj_unidad_video->obtiene_todas_las_unidades_de_video();
+                        $vector_informacion_unidad_video_siguiente=$obj_unidad_video->getArreglo();
+
+                        $obj_puntos_bcr->setCondicion("T_PuntoBCR.ID_PuntoBCR=".$vector_informacion_unidad_video_siguiente[0]['ID_PuntoBCR']);
+                        $obj_puntos_bcr->obtiene_todos_los_puntos_bcr();
+                        $vector_punto_bcr_siguiente=$obj_puntos_bcr->getArreglo(); 
                     }
-
-                    $obj_unidad_video->setCondicion("t_unidadvideo.ID_Unidad_Video=".$vector_proximas_unidades[0]['ID_Unidad_Video']);
-                    $obj_unidad_video->obtiene_todas_las_unidades_de_video();
-                    $vector_informacion_unidad_video_siguiente=$obj_unidad_video->getArreglo();
-
-                    $obj_puntos_bcr->setCondicion("T_PuntoBCR.ID_PuntoBCR=".$vector_informacion_unidad_video_siguiente[0]['ID_PuntoBCR']);
-                    $obj_puntos_bcr->obtiene_todos_los_puntos_bcr();
-                    $vector_punto_bcr_siguiente=$obj_puntos_bcr->getArreglo(); 
                     
                     $obj_puesto_monitoreo->setCondicion("i.Estado not in (1,8,9,10) and b.ID_Unidad_Video=".$vector_informacion_unidad_video[0]['ID_Unidad_Video']);
                     $obj_puesto_monitoreo->obtiene_inconsistencias_para_control_de_video();
                     $inconsistencias_reportadas =$obj_puesto_monitoreo->getArreglo();
                                        
                     require __DIR__.'/../vistas/plantillas/frm_controles_de_video_listar.php';
-                } else {
-					
-					}
-					
+                } 
+		
+                            
+               
+                
             } else{
                 header ("location:/ORIEL/index.php?ctl=puestos_de_monitoreo_listar");
             }                 
@@ -10429,16 +10580,634 @@ class Controller{
         if(isset($_SESSION['nombre'])){
             $obj_pm = new cls_puestos_de_monitoreo();
             $obj_reporte = new cls_reporteria();
-            $obj_pm->obtiene_lista_operadores_que_han_realizado_controles();
-            $lista_de_operadores=$obj_pm->getArreglo();
             
-            if(isset($_POST['fecha_inicial'])){
-                $fecha_inicio = $_POST['fecha_inicial'];
-                $fecha_fin= $_POST['fecha_final'];
-                $operador=$_POST['lista_operadores'];
-                $turno=$_POST['turno_monitoreo'];
+            $obj_pm->obtiene_lista_operadores_que_han_realizado_controles_historicos();
+            $lista_de_operadores=$obj_pm->getArreglo();
+                    
+
+            
+            if((isset($_POST['fecha_inicial']))&&(isset($_POST['fecha_final']))){
                 
-                if (($operador=="0")&&($turno=="0")){
+                
+                $fecha_actual = date("Y-m-d");
+                $fecha_actual = strtotime ( '-2 day' , strtotime ( $fecha_actual ) ) ;
+                $fecha_actual = date ( 'Y-m-d' , $fecha_actual );
+
+                if(($_POST['fecha_inicial'] < $fecha_actual)&&(($_POST['fecha_final'] < $fecha_actual)))
+                {
+       
+                    
+                    $fecha_inicio = $_POST['fecha_inicial'];
+                    $fecha_fin= $_POST['fecha_final'];
+                    $operador=$_POST['lista_operadores'];
+                    $turno=$_POST['turno_monitoreo'];
+
+                    if (($operador=="0")&&($turno=="0")){
+                        $obj_reporte->setCondicion("bd_registro_trazabilidad.t_bitacorarevisionesvideo.Fecha_Inicia_Revision BETWEEN '".$fecha_inicio."' AND '".$fecha_fin."'");
+                        $titulo = "Gráfica Gerenal de Sitios Revisados por Operador en Control de Video (todos los puestos de monitoreo).";
+                        $subtitulo = "Del ".date('d-m-Y',strtotime($fecha_inicio))." al ".date('d-m-Y',strtotime($fecha_fin)).".";
+                        $tipo_grafico=1;
+                        $obj_reporte->revisiones_de_video_todos_los_operadores_todos_los_puestos_historicos();
+                        $params= $obj_reporte->getArreglo();
+
+                        $params2=array();
+                        $obj_reporte->setCondicion("(Fecha_Inicia_Revision BETWEEN '".$fecha_inicio."' AND '".$fecha_fin."') and Justificacion_Retraso LIKE 'JUSTIFICADO%' and Retraso_Segundos>0");
+                        $obj_reporte->inconsistencias_en_revisiones_de_video_historicos();
+                        $justificaciones = $obj_reporte->getArreglo();
+                        if (count($justificaciones)>0){
+                           $params2[]=$justificaciones[0];
+                        }else{
+                            $params2[]=array("Total"=>"0");
+                        }
+
+                        $obj_reporte->setCondicion("(Fecha_Inicia_Revision BETWEEN '".$fecha_inicio."' AND '".$fecha_fin."') and (Justificacion_Retraso NOT LIKE 'JUSTIFICADO%' and Justificacion_Retraso NOT LIKE 'INJUSTIFICADO%') and Retraso_Segundos>0");
+                        $obj_reporte->inconsistencias_en_revisiones_de_video_historicos();
+                        $justificaciones = $obj_reporte->getArreglo();
+                        if (count($justificaciones)>0){
+                            $params2[]=$justificaciones[0];
+                        }else{
+                            $params2[]=array("Total"=>"0");
+                        }
+
+                        $obj_reporte->setCondicion("(Fecha_Inicia_Revision BETWEEN '".$fecha_inicio."' AND '".$fecha_fin."') and Justificacion_Retraso LIKE 'INJUSTIFICADO%' and Retraso_Segundos>0");
+                        $obj_reporte->inconsistencias_en_revisiones_de_video_historicos();
+                        $justificaciones = $obj_reporte->getArreglo();
+                        if (count($justificaciones)>0){
+                            $params2[]=$justificaciones[0];
+                        }else{
+                            $params2[]=array("Total"=>"0");
+                        }
+
+                        $suma_revisiones=0;
+                        for ($i = 0; $i < count($params); $i++) {
+                            $suma_revisiones=$suma_revisiones+$params[$i]['TOTAL'];
+                        }
+                        $suma_inconsistencias=0;
+                        for ($i = 0; $i < count($params2); $i++) {
+                            $suma_inconsistencias=$suma_inconsistencias+$params2[$i]['Total'];
+                        }
+                        $titulo2 = "Retrasos en Revisiones de Video (todos los puestos).";
+                    }
+
+                    if (($operador!="0")&&($turno=="0")){
+                        $obj_reporte->setCondicion("(bd_registro_trazabilidad.t_bitacorarevisionesvideo.Fecha_Inicia_Revision BETWEEN '".$fecha_inicio."' AND '".$fecha_fin."') and bd_registro_trazabilidad.t_bitacorarevisionesvideo.ID_Usuario =".$operador);
+                        $titulo = "Cantidad de Revisiones de un Operador en Modulo de Control de Video (todos los puestos, ordenado por mes).";
+                        $subtitulo = "Del ".date('d-m-Y',strtotime($fecha_inicio))." al ".date('d-m-Y',strtotime($fecha_fin)).".";
+                        $tipo_grafico=2;
+                        $obj_reporte->revisiones_de_video_por_operador_historicos();
+                        $params= $obj_reporte->getArreglo();
+
+                        if (count($params)>0){
+                            $titulo = "Cantidad de Revisiones de ". $params[0]['Nombre']. " ".$params[0]['Apellido'] ." en el Modulo de Control de Video (todos los puestos, ordenado por mes).";
+                        }else{
+                            $titulo = "Cantidad de Revisiones de un Operador en Modulo de Control de Video (todos los puestos, ordenado por mes).";
+                        }
+
+                        $params2=array();
+                        $obj_reporte->setCondicion("(Fecha_Inicia_Revision BETWEEN '".$fecha_inicio."' AND '".$fecha_fin."') and Justificacion_Retraso LIKE 'JUSTIFICADO%' and Retraso_Segundos>0 and ID_Usuario =".$operador);
+                        $obj_reporte->inconsistencias_en_revisiones_de_video_historicos();
+                        $justificaciones = $obj_reporte->getArreglo();
+                        if (count($justificaciones)>0){
+                            $params2[]=$justificaciones[0];
+                        }else{
+                            $params2[]=array("Total"=>"0");
+                        }
+
+                        $obj_reporte->setCondicion("(Fecha_Inicia_Revision BETWEEN '".$fecha_inicio."' AND '".$fecha_fin."') and (Justificacion_Retraso NOT LIKE 'JUSTIFICADO%' and Justificacion_Retraso NOT LIKE 'INJUSTIFICADO%') and Retraso_Segundos>0 and ID_Usuario =".$operador);
+                        $obj_reporte->inconsistencias_en_revisiones_de_video_historicos();
+                        $justificaciones = $obj_reporte->getArreglo();
+                        if (count($justificaciones)>0){
+                            $params2[]=$justificaciones[0];
+                        }else{
+                            $params2[]=array("Total"=>"0");
+                        }
+
+                        $obj_reporte->setCondicion("(Fecha_Inicia_Revision BETWEEN '".$fecha_inicio."' AND '".$fecha_fin."') and Justificacion_Retraso LIKE 'INJUSTIFICADO%' and Retraso_Segundos>0 and ID_Usuario =".$operador);
+                        $obj_reporte->inconsistencias_en_revisiones_de_video_historicos();
+                        $justificaciones = $obj_reporte->getArreglo();
+                        if (count($justificaciones)>0){
+                            $params2[]=$justificaciones[0];
+                        }else{
+                            $params2[]=array("Total"=>"0");
+                        }
+
+                        if (count($params)>0){
+                            $titulo2 = "Retrasos en Revisiones de Video de ". $params[0]['Nombre']. " ".$params[0]['Apellido'] ." (todos los puestos).";
+                        }else{
+                            $titulo2 = "Retrasos en Revisiones de Video de un Operador (todos los puestos).";
+                        }
+
+                        $suma_revisiones=0;
+                        for ($i = 0; $i < count($params); $i++) {
+                            $suma_revisiones=$suma_revisiones+$params[$i]['numFilas'];
+                        }
+
+                        $suma_inconsistencias=0;
+                        for ($i = 0; $i < count($params2); $i++) {
+                            $suma_inconsistencias=$suma_inconsistencias+$params2[$i]['Total'];
+                        }
+                    }
+
+                    if (($operador!="0")&&($turno!="0")){
+                        if ($turno=="1"){
+                            $turno_Monitoreo=" and (bd_registro_trazabilidad.t_bitacorarevisionesvideo.Hora_Inicia_Revision BETWEEN '05:54:00' and '13:56:00') "; 
+                            $nombre_turno="mañana";
+                            $esperado_individual=array("mes"=>"Esperado Individual Mensual","numFilas"=>"7840");
+                        }
+                        if ($turno=="2"){
+                            $turno_Monitoreo=" and (bd_registro_trazabilidad.t_bitacorarevisionesvideo.Hora_Inicia_Revision BETWEEN '13:54:00' and '21:56:00') ";                          
+                            $nombre_turno="tarde";
+                            $esperado_individual=array("mes"=>"Esperado Individual Mensual","numFilas"=>"7840");
+                        }
+                        if ($turno=="3"){
+                            $turno_Monitoreo=" and ((bd_registro_trazabilidad.t_bitacorarevisionesvideo.Hora_Inicia_Revision BETWEEN '21:54:00' and '23:59:00') or (bd_registro_trazabilidad.t_bitacorarevisionesvideo.Hora_Inicia_Revision BETWEEN '00:00:00' and '05:56:00')) ";                                                   
+                            $nombre_turno="noche";
+                            $esperado_individual=array("mes"=>"Esperado Individual Mensual","numFilas"=>"9800");
+                        }
+                        $obj_reporte->setCondicion("(bd_registro_trazabilidad.t_bitacorarevisionesvideo.Fecha_Inicia_Revision BETWEEN '".$fecha_inicio."' AND '".$fecha_fin."')". $turno_Monitoreo ."and bd_registro_trazabilidad.t_bitacorarevisionesvideo.ID_Usuario =".$operador);
+                        $titulo = "Cantidad de Revisiones de un Operador en Modulo de Control de Video (un turno específico(".$nombre_turno.")".", ordenado por mes).";
+                        $subtitulo = "Del ".date('d-m-Y',strtotime($fecha_inicio))." al ".date('d-m-Y',strtotime($fecha_fin)).".";
+                        $tipo_grafico=2;
+                        $obj_reporte->revisiones_de_video_por_operador_historicos();
+                        $params= $obj_reporte->getArreglo();
+                        $params[]=$esperado_individual;
+
+                        if (count($params)>1){
+                            $titulo = "Cantidad de Revisiones de ". $params[0]['Nombre']. " ".$params[0]['Apellido'] ." en el Modulo de Control de Video (un puesto específico(".$nombre_turno."), ordenado por mes).";
+                        }else{
+                            $titulo = "Cantidad de Revisiones de un Operador en Modulo de Control de Video (un turno específico(".$nombre_turno."), ordenado por mes).";
+                        }
+
+                        $params2=array();
+                        if ($turno=="1"){
+                            $turno_Monitoreo=" and (Hora_Inicia_Revision BETWEEN '05:54:00' and '13:56:00') "; 
+                        }
+                        if ($turno=="2"){
+                            $turno_Monitoreo=" and (Hora_Inicia_Revision BETWEEN '13:54:00' and '21:56:00') ";                          
+                        }
+                        if ($turno=="3"){
+                            $turno_Monitoreo=" and ((Hora_Inicia_Revision BETWEEN '21:54:00' and '23:59:00') or (Hora_Inicia_Revision BETWEEN '00:00:00' and '05:56:00') ) ";                                                   
+                        }
+
+                        $obj_reporte->setCondicion("(Fecha_Inicia_Revision BETWEEN '".$fecha_inicio."' AND '".$fecha_fin."')".$turno_Monitoreo. "and Justificacion_Retraso LIKE 'JUSTIFICADO%' and Retraso_Segundos>0 and ID_Usuario =".$operador);
+                        $obj_reporte->inconsistencias_en_revisiones_de_video_historicos();
+                        $justificaciones = $obj_reporte->getArreglo();
+                        if (count($justificaciones)>0){
+                            $params2[]=$justificaciones[0];
+                        }else{
+                            $params2[]=array("Total"=>"0");
+                        }
+
+                        $obj_reporte->setCondicion("(Fecha_Inicia_Revision BETWEEN '".$fecha_inicio."' AND '".$fecha_fin."')".$turno_Monitoreo ."and (Justificacion_Retraso NOT LIKE 'JUSTIFICADO%' and Justificacion_Retraso NOT LIKE 'INJUSTIFICADO%') and Retraso_Segundos>0 and ID_Usuario =".$operador);
+                        $obj_reporte->inconsistencias_en_revisiones_de_video_historicos();
+                        $justificaciones = $obj_reporte->getArreglo();
+                        if (count($justificaciones)>0){
+                            $params2[]=$justificaciones[0];
+                        }else{
+                            $params2[]=array("Total"=>"0");
+                        }
+
+                        $obj_reporte->setCondicion("(Fecha_Inicia_Revision BETWEEN '".$fecha_inicio."' AND '".$fecha_fin."')". $turno_Monitoreo."and Justificacion_Retraso LIKE 'INJUSTIFICADO%' and Retraso_Segundos>0 and ID_Usuario =".$operador);
+                        $obj_reporte->inconsistencias_en_revisiones_de_video_historicos();
+                        $justificaciones = $obj_reporte->getArreglo();
+                        if (count($justificaciones)>0){
+                            $params2[]=$justificaciones[0];
+                        }else{
+                            $params2[]=array("Total"=>"0");
+                        }
+
+                        if (count($params)>1){
+                            $titulo2 = "Retrasos en Revisiones de Video de ". $params[0]['Nombre']. " ".$params[0]['Apellido'] ." (".$nombre_turno.").";
+                        }else{
+                            $titulo2 = "Retrasos en Revisiones de Video de un Operador (por turno específico(".$nombre_turno.")).";
+                        }
+
+                        $suma_revisiones=0;
+                        for ($i = 0; $i < count($params); $i++) {
+                            $suma_revisiones=$suma_revisiones+$params[$i]['numFilas'];
+                        }
+
+                        $suma_inconsistencias=0;
+                        for ($i = 0; $i < count($params2); $i++) {
+                            $suma_inconsistencias=$suma_inconsistencias+$params2[$i]['Total'];
+                        }
+                    }
+
+                     if (($operador=="0")&&($turno!="0")){
+                         if ($turno=="1"){
+                             $turno_Monitoreo=" and (bd_registro_trazabilidad.t_bitacorarevisionesvideo.Hora_Inicia_Revision BETWEEN '05:54:00' and '13:56:00') "; 
+                             $nombre_turno="mañana";
+                             $esperado_grupal=array("mes"=>"Esperado Grupal Mensual","numFilas"=>"48608");
+                             $esperado_individual=array("Nombre"=>"Esperado Individual","TOTAL"=>"7840","Apellido"=>" Mensual");
+                         }
+                         if ($turno=="2"){
+                             $turno_Monitoreo=" and (bd_registro_trazabilidad.t_bitacorarevisionesvideo.Hora_Inicia_Revision BETWEEN '13:54:00' and '21:56:00') ";                          
+                             $nombre_turno="tarde";
+                             $esperado_grupal=array("mes"=>"Esperado Grupal Mensual","numFilas"=>"48608");
+                             $esperado_individual=array("Nombre"=>"Esperado Individual","TOTAL"=>"7840","Apellido"=>" Mensual");
+                         }
+                         if ($turno=="3"){
+                             $turno_Monitoreo=" and ((bd_registro_trazabilidad.t_bitacorarevisionesvideo.Hora_Inicia_Revision BETWEEN '21:54:00' and '23:59:00') or (bd_registro_trazabilidad.t_bitacorarevisionesvideo.Hora_Inicia_Revision BETWEEN '00:00:00' and '05:56:00')) ";                                                   
+                             $nombre_turno="noche";
+                             $esperado_grupal=array("mes"=>"Esperado Grupal Mensual","numFilas"=>"60760");
+                             //$$esperado_individual=array();
+                             $esperado_individual=array("Nombre"=>"Esperado Individual","TOTAL"=>"9800","Apellido"=>" Mensual");
+                         }
+                         $obj_reporte->setCondicion("(bd_registro_trazabilidad.t_bitacorarevisionesvideo.Fecha_Inicia_Revision BETWEEN '".$fecha_inicio."' AND '".$fecha_fin."')". $turno_Monitoreo);
+                         $titulo = "Cantidad de Revisiones por Equipo de Trabajo en Modulo de Control de Video (un turno específico(".$nombre_turno.")".", ordenado por mes).";
+                         $subtitulo = "Del ".date('d-m-Y',strtotime($fecha_inicio))." al ".date('d-m-Y',strtotime($fecha_fin)).".";
+                         $tipo_grafico=3;
+                         $obj_reporte->revisiones_de_video_por_operador_historicos();
+                         $params= $obj_reporte->getArreglo();
+                         $params[]=$esperado_grupal;
+
+                         $titulo3 = "Gráfica Gerenal Comparativa de Sitios Revisados por Operador en Control de Video (".$nombre_turno.").";
+                         $subtitulo3 = "Del ".date('d-m-Y',strtotime($fecha_inicio))." al ".date('d-m-Y',strtotime($fecha_fin)).".";
+                         $obj_reporte->revisiones_de_video_todos_los_operadores_todos_los_puestos_historicos();
+                         $params3= $obj_reporte->getArreglo();
+
+                         $vector_temporal=array();
+                         $vector_temporal[]=$esperado_individual;
+
+                         for ($i = 0; $i < count($params3); $i++) {
+                             $vector_temporal[]=$params3[$i];
+                         }
+
+                         $params3=$vector_temporal;
+                        // $params3= array_merge($esperado_individual,$params3 );
+
+                        $suma_revisiones2=0;
+                        for ($i = 0; $i < count($params3); $i++) {
+                            $suma_revisiones2=$suma_revisiones2+$params3[$i]['TOTAL'];
+                        }
+
+                        $params2=array();
+                        if ($turno=="1"){
+                            $turno_Monitoreo=" and (Hora_Inicia_Revision BETWEEN '05:54:00' and '13:56:00') "; 
+                        }
+                        if ($turno=="2"){
+                            $turno_Monitoreo=" and (Hora_Inicia_Revision BETWEEN '13:54:00' and '21:56:00') ";                          
+                        }
+                        if ($turno=="3"){
+                            $turno_Monitoreo=" and ((Hora_Inicia_Revision BETWEEN '21:54:00' and '23:59:00') or (Hora_Inicia_Revision BETWEEN '00:00:00' and '05:56:00') ) ";                                                   
+                        }
+
+                        $obj_reporte->setCondicion("(Fecha_Inicia_Revision BETWEEN '".$fecha_inicio."' AND '".$fecha_fin."')".$turno_Monitoreo. "and Justificacion_Retraso LIKE 'JUSTIFICADO%' and Retraso_Segundos>0");
+                        $obj_reporte->inconsistencias_en_revisiones_de_video_historicos();
+                        $justificaciones = $obj_reporte->getArreglo();
+                        if (count($justificaciones)>0){
+                            $params2[]=$justificaciones[0];
+                        }else{
+                            $params2[]=array("Total"=>"0");
+                        }
+
+                        $obj_reporte->setCondicion("(Fecha_Inicia_Revision BETWEEN '".$fecha_inicio."' AND '".$fecha_fin."')".$turno_Monitoreo ."and (Justificacion_Retraso NOT LIKE 'JUSTIFICADO%' and Justificacion_Retraso NOT LIKE 'INJUSTIFICADO%') and Retraso_Segundos>0");
+                        $obj_reporte->inconsistencias_en_revisiones_de_video_historicos();
+                        $justificaciones = $obj_reporte->getArreglo();
+                        if (count($justificaciones)>0){
+                            $params2[]=$justificaciones[0];
+                        }else{
+                            $params2[]=array("Total"=>"0");
+                        }
+
+                        $obj_reporte->setCondicion("(Fecha_Inicia_Revision BETWEEN '".$fecha_inicio."' AND '".$fecha_fin."')". $turno_Monitoreo."and Justificacion_Retraso LIKE 'INJUSTIFICADO%' and Retraso_Segundos>0");
+                        $obj_reporte->inconsistencias_en_revisiones_de_video_historicos();
+                        $justificaciones = $obj_reporte->getArreglo();
+                        if (count($justificaciones)>0){
+                            $params2[]=$justificaciones[0];
+                        }else{
+                            $params2[]=array("Total"=>"0");
+                        }
+
+                        $titulo2 = "Retrasos en Revisiones de Video por Equipo de Trabajo (por puesto específico(".$nombre_turno.")).";
+
+                        $suma_revisiones=0;
+                        for ($i = 0; $i < count($params); $i++) {
+                            $suma_revisiones=$suma_revisiones+$params[$i]['numFilas'];
+                        }
+
+                        $suma_inconsistencias=0;
+                        for ($i = 0; $i < count($params2); $i++) {
+                            $suma_inconsistencias=$suma_inconsistencias+$params2[$i]['Total'];
+                        }
+                    }
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                }else{
+                    
+                    //$obj_pm->obtiene_lista_operadores_que_han_realizado_controles();
+                    //$lista_de_operadores=$obj_pm->getArreglo();
+                    $obj_pm->obtiene_lista_operadores_que_han_realizado_controles_historicos();
+                    $lista_de_operadores=$obj_pm->getArreglo();
+
+                    //$lista_de_operadores=  array_merge($lista_de_operadores,$lista_de_operadores_temp);
+                    //$lista_de_operadores= array_unique($lista_de_operadores);
+
+                    $fecha_inicio = $_POST['fecha_inicial'];
+                    $fecha_fin= $_POST['fecha_final'];
+                    $operador=$_POST['lista_operadores'];
+                    $turno=$_POST['turno_monitoreo'];
+
+                    if (($operador=="0")&&($turno=="0")){
+                        $obj_reporte->setCondicion("t_bitacorarevisionesvideo.Fecha_Inicia_Revision BETWEEN '".$fecha_inicio."' AND '".$fecha_fin."'");
+                        $titulo = "Gráfica Gerenal de Sitios Revisados por Operador en Control de Video (todos los puestos de monitoreo).";
+                        $subtitulo = "Del ".date('d-m-Y',strtotime($fecha_inicio))." al ".date('d-m-Y',strtotime($fecha_fin)).".";
+                        $tipo_grafico=1;
+                        $obj_reporte->revisiones_de_video_todos_los_operadores_todos_los_puestos();
+                        $params= $obj_reporte->getArreglo();
+
+                        $params2=array();
+                        $obj_reporte->setCondicion("(Fecha_Inicia_Revision BETWEEN '".$fecha_inicio."' AND '".$fecha_fin."') and Justificacion_Retraso LIKE 'JUSTIFICADO%' and Retraso_Segundos>0");
+                        $obj_reporte->inconsistencias_en_revisiones_de_video();
+                        $justificaciones = $obj_reporte->getArreglo();
+                        if (count($justificaciones)>0){
+                           $params2[]=$justificaciones[0];
+                        }else{
+                            $params2[]=array("Total"=>"0");
+                        }
+
+                        $obj_reporte->setCondicion("(Fecha_Inicia_Revision BETWEEN '".$fecha_inicio."' AND '".$fecha_fin."') and (Justificacion_Retraso NOT LIKE 'JUSTIFICADO%' and Justificacion_Retraso NOT LIKE 'INJUSTIFICADO%') and Retraso_Segundos>0");
+                        $obj_reporte->inconsistencias_en_revisiones_de_video();
+                        $justificaciones = $obj_reporte->getArreglo();
+                        if (count($justificaciones)>0){
+                            $params2[]=$justificaciones[0];
+                        }else{
+                            $params2[]=array("Total"=>"0");
+                        }
+
+                        $obj_reporte->setCondicion("(Fecha_Inicia_Revision BETWEEN '".$fecha_inicio."' AND '".$fecha_fin."') and Justificacion_Retraso LIKE 'INJUSTIFICADO%' and Retraso_Segundos>0");
+                        $obj_reporte->inconsistencias_en_revisiones_de_video();
+                        $justificaciones = $obj_reporte->getArreglo();
+                        if (count($justificaciones)>0){
+                            $params2[]=$justificaciones[0];
+                        }else{
+                            $params2[]=array("Total"=>"0");
+                        }
+
+                        $suma_revisiones=0;
+                        for ($i = 0; $i < count($params); $i++) {
+                            $suma_revisiones=$suma_revisiones+$params[$i]['TOTAL'];
+                        }
+                        $suma_inconsistencias=0;
+                        for ($i = 0; $i < count($params2); $i++) {
+                            $suma_inconsistencias=$suma_inconsistencias+$params2[$i]['Total'];
+                        }
+                        $titulo2 = "Retrasos en Revisiones de Video (todos los puestos).";
+                    }
+
+                    if (($operador!="0")&&($turno=="0")){
+                        $obj_reporte->setCondicion("(t_bitacorarevisionesvideo.Fecha_Inicia_Revision BETWEEN '".$fecha_inicio."' AND '".$fecha_fin."') and t_bitacorarevisionesvideo.ID_Usuario =".$operador);
+                        $titulo = "Cantidad de Revisiones de un Operador en Modulo de Control de Video (todos los puestos, ordenado por mes).";
+                        $subtitulo = "Del ".date('d-m-Y',strtotime($fecha_inicio))." al ".date('d-m-Y',strtotime($fecha_fin)).".";
+                        $tipo_grafico=2;
+                        $obj_reporte->revisiones_de_video_por_operador();
+                        $params= $obj_reporte->getArreglo();
+
+                        if (count($params)>0){
+                            $titulo = "Cantidad de Revisiones de ". $params[0]['Nombre']. " ".$params[0]['Apellido'] ." en el Modulo de Control de Video (todos los puestos, ordenado por mes).";
+                        }else{
+                            $titulo = "Cantidad de Revisiones de un Operador en Modulo de Control de Video (todos los puestos, ordenado por mes).";
+                        }
+
+                        $params2=array();
+                        $obj_reporte->setCondicion("(Fecha_Inicia_Revision BETWEEN '".$fecha_inicio."' AND '".$fecha_fin."') and Justificacion_Retraso LIKE 'JUSTIFICADO%' and Retraso_Segundos>0 and ID_Usuario =".$operador);
+                        $obj_reporte->inconsistencias_en_revisiones_de_video();
+                        $justificaciones = $obj_reporte->getArreglo();
+                        if (count($justificaciones)>0){
+                            $params2[]=$justificaciones[0];
+                        }else{
+                            $params2[]=array("Total"=>"0");
+                        }
+
+                        $obj_reporte->setCondicion("(Fecha_Inicia_Revision BETWEEN '".$fecha_inicio."' AND '".$fecha_fin."') and (Justificacion_Retraso NOT LIKE 'JUSTIFICADO%' and Justificacion_Retraso NOT LIKE 'INJUSTIFICADO%') and Retraso_Segundos>0 and ID_Usuario =".$operador);
+                        $obj_reporte->inconsistencias_en_revisiones_de_video();
+                        $justificaciones = $obj_reporte->getArreglo();
+                        if (count($justificaciones)>0){
+                            $params2[]=$justificaciones[0];
+                        }else{
+                            $params2[]=array("Total"=>"0");
+                        }
+
+                        $obj_reporte->setCondicion("(Fecha_Inicia_Revision BETWEEN '".$fecha_inicio."' AND '".$fecha_fin."') and Justificacion_Retraso LIKE 'INJUSTIFICADO%' and Retraso_Segundos>0 and ID_Usuario =".$operador);
+                        $obj_reporte->inconsistencias_en_revisiones_de_video();
+                        $justificaciones = $obj_reporte->getArreglo();
+                        if (count($justificaciones)>0){
+                            $params2[]=$justificaciones[0];
+                        }else{
+                            $params2[]=array("Total"=>"0");
+                        }
+
+                        if (count($params)>0){
+                            $titulo2 = "Retrasos en Revisiones de Video de ". $params[0]['Nombre']. " ".$params[0]['Apellido'] ." (todos los puestos).";
+                        }else{
+                            $titulo2 = "Retrasos en Revisiones de Video de un Operador (todos los puestos).";
+                        }
+
+                        $suma_revisiones=0;
+                        for ($i = 0; $i < count($params); $i++) {
+                            $suma_revisiones=$suma_revisiones+$params[$i]['numFilas'];
+                        }
+
+                        $suma_inconsistencias=0;
+                        for ($i = 0; $i < count($params2); $i++) {
+                            $suma_inconsistencias=$suma_inconsistencias+$params2[$i]['Total'];
+                        }
+                    }
+
+                    if (($operador!="0")&&($turno!="0")){
+                        if ($turno=="1"){
+                            $turno_Monitoreo=" and (t_bitacorarevisionesvideo.Hora_Inicia_Revision BETWEEN '05:54:00' and '13:56:00') "; 
+                            $nombre_turno="mañana";
+                            $esperado_individual=array("mes"=>"Esperado Individual Mensual","numFilas"=>"7840");
+                        }
+                        if ($turno=="2"){
+                            $turno_Monitoreo=" and (t_bitacorarevisionesvideo.Hora_Inicia_Revision BETWEEN '13:54:00' and '21:56:00') ";                          
+                            $nombre_turno="tarde";
+                            $esperado_individual=array("mes"=>"Esperado Individual Mensual","numFilas"=>"7840");
+                        }
+                        if ($turno=="3"){
+                            $turno_Monitoreo=" and ((t_bitacorarevisionesvideo.Hora_Inicia_Revision BETWEEN '21:54:00' and '23:59:00') or (t_bitacorarevisionesvideo.Hora_Inicia_Revision BETWEEN '00:00:00' and '05:56:00')) ";                                                   
+                            $nombre_turno="noche";
+                            $esperado_individual=array("mes"=>"Esperado Individual Mensual","numFilas"=>"9800");
+                        }
+                        $obj_reporte->setCondicion("(t_bitacorarevisionesvideo.Fecha_Inicia_Revision BETWEEN '".$fecha_inicio."' AND '".$fecha_fin."')". $turno_Monitoreo ."and t_bitacorarevisionesvideo.ID_Usuario =".$operador);
+                        $titulo = "Cantidad de Revisiones de un Operador en Modulo de Control de Video (un turno específico(".$nombre_turno.")".", ordenado por mes).";
+                        $subtitulo = "Del ".date('d-m-Y',strtotime($fecha_inicio))." al ".date('d-m-Y',strtotime($fecha_fin)).".";
+                        $tipo_grafico=2;
+                        $obj_reporte->revisiones_de_video_por_operador();
+                        $params= $obj_reporte->getArreglo();
+                        $params[]=$esperado_individual;
+
+                        if (count($params)>1){
+                            $titulo = "Cantidad de Revisiones de ". $params[0]['Nombre']. " ".$params[0]['Apellido'] ." en el Modulo de Control de Video (un puesto específico(".$nombre_turno."), ordenado por mes).";
+                        }else{
+                            $titulo = "Cantidad de Revisiones de un Operador en Modulo de Control de Video (un turno específico(".$nombre_turno."), ordenado por mes).";
+                        }
+
+                        $params2=array();
+                        if ($turno=="1"){
+                            $turno_Monitoreo=" and (Hora_Inicia_Revision BETWEEN '05:54:00' and '13:56:00') "; 
+                        }
+                        if ($turno=="2"){
+                            $turno_Monitoreo=" and (Hora_Inicia_Revision BETWEEN '13:54:00' and '21:56:00') ";                          
+                        }
+                        if ($turno=="3"){
+                            $turno_Monitoreo=" and ((Hora_Inicia_Revision BETWEEN '21:54:00' and '23:59:00') or (Hora_Inicia_Revision BETWEEN '00:00:00' and '05:56:00') ) ";                                                   
+                        }
+
+                        $obj_reporte->setCondicion("(Fecha_Inicia_Revision BETWEEN '".$fecha_inicio."' AND '".$fecha_fin."')".$turno_Monitoreo. "and Justificacion_Retraso LIKE 'JUSTIFICADO%' and Retraso_Segundos>0 and ID_Usuario =".$operador);
+                        $obj_reporte->inconsistencias_en_revisiones_de_video();
+                        $justificaciones = $obj_reporte->getArreglo();
+                        if (count($justificaciones)>0){
+                            $params2[]=$justificaciones[0];
+                        }else{
+                            $params2[]=array("Total"=>"0");
+                        }
+
+                        $obj_reporte->setCondicion("(Fecha_Inicia_Revision BETWEEN '".$fecha_inicio."' AND '".$fecha_fin."')".$turno_Monitoreo ."and (Justificacion_Retraso NOT LIKE 'JUSTIFICADO%' and Justificacion_Retraso NOT LIKE 'INJUSTIFICADO%') and Retraso_Segundos>0 and ID_Usuario =".$operador);
+                        $obj_reporte->inconsistencias_en_revisiones_de_video();
+                        $justificaciones = $obj_reporte->getArreglo();
+                        if (count($justificaciones)>0){
+                            $params2[]=$justificaciones[0];
+                        }else{
+                            $params2[]=array("Total"=>"0");
+                        }
+
+                        $obj_reporte->setCondicion("(Fecha_Inicia_Revision BETWEEN '".$fecha_inicio."' AND '".$fecha_fin."')". $turno_Monitoreo."and Justificacion_Retraso LIKE 'INJUSTIFICADO%' and Retraso_Segundos>0 and ID_Usuario =".$operador);
+                        $obj_reporte->inconsistencias_en_revisiones_de_video();
+                        $justificaciones = $obj_reporte->getArreglo();
+                        if (count($justificaciones)>0){
+                            $params2[]=$justificaciones[0];
+                        }else{
+                            $params2[]=array("Total"=>"0");
+                        }
+
+                        if (count($params)>1){
+                            $titulo2 = "Retrasos en Revisiones de Video de ". $params[0]['Nombre']. " ".$params[0]['Apellido'] ." (".$nombre_turno.").";
+                        }else{
+                            $titulo2 = "Retrasos en Revisiones de Video de un Operador (por turno específico(".$nombre_turno.")).";
+                        }
+
+                        $suma_revisiones=0;
+                        for ($i = 0; $i < count($params); $i++) {
+                            $suma_revisiones=$suma_revisiones+$params[$i]['numFilas'];
+                        }
+
+                        $suma_inconsistencias=0;
+                        for ($i = 0; $i < count($params2); $i++) {
+                            $suma_inconsistencias=$suma_inconsistencias+$params2[$i]['Total'];
+                        }
+                    }
+
+                     if (($operador=="0")&&($turno!="0")){
+                         if ($turno=="1"){
+                             $turno_Monitoreo=" and (t_bitacorarevisionesvideo.Hora_Inicia_Revision BETWEEN '05:54:00' and '13:56:00') "; 
+                             $nombre_turno="mañana";
+                             $esperado_grupal=array("mes"=>"Esperado Grupal Mensual","numFilas"=>"48608");
+                             $esperado_individual=array("Nombre"=>"Esperado Individual","TOTAL"=>"7840","Apellido"=>" Mensual");
+                         }
+                         if ($turno=="2"){
+                             $turno_Monitoreo=" and (t_bitacorarevisionesvideo.Hora_Inicia_Revision BETWEEN '13:54:00' and '21:56:00') ";                          
+                             $nombre_turno="tarde";
+                             $esperado_grupal=array("mes"=>"Esperado Grupal Mensual","numFilas"=>"48608");
+                             $esperado_individual=array("Nombre"=>"Esperado Individual","TOTAL"=>"7840","Apellido"=>" Mensual");
+                         }
+                         if ($turno=="3"){
+                             $turno_Monitoreo=" and ((t_bitacorarevisionesvideo.Hora_Inicia_Revision BETWEEN '21:54:00' and '23:59:00') or (t_bitacorarevisionesvideo.Hora_Inicia_Revision BETWEEN '00:00:00' and '05:56:00')) ";                                                   
+                             $nombre_turno="noche";
+                             $esperado_grupal=array("mes"=>"Esperado Grupal Mensual","numFilas"=>"60760");
+                             //$$esperado_individual=array();
+                             $esperado_individual=array("Nombre"=>"Esperado Individual","TOTAL"=>"9800","Apellido"=>" Mensual");
+                         }
+                         $obj_reporte->setCondicion("(t_bitacorarevisionesvideo.Fecha_Inicia_Revision BETWEEN '".$fecha_inicio."' AND '".$fecha_fin."')". $turno_Monitoreo);
+                         $titulo = "Cantidad de Revisiones por Equipo de Trabajo en Modulo de Control de Video (un turno específico(".$nombre_turno.")".", ordenado por mes).";
+                         $subtitulo = "Del ".date('d-m-Y',strtotime($fecha_inicio))." al ".date('d-m-Y',strtotime($fecha_fin)).".";
+                         $tipo_grafico=3;
+                         $obj_reporte->revisiones_de_video_por_operador();
+                         $params= $obj_reporte->getArreglo();
+                         $params[]=$esperado_grupal;
+
+                         $titulo3 = "Gráfica Gerenal Comparativa de Sitios Revisados por Operador en Control de Video (".$nombre_turno.").";
+                         $subtitulo3 = "Del ".date('d-m-Y',strtotime($fecha_inicio))." al ".date('d-m-Y',strtotime($fecha_fin)).".";
+                         $obj_reporte->revisiones_de_video_todos_los_operadores_todos_los_puestos();
+                         $params3= $obj_reporte->getArreglo();
+
+                         $vector_temporal=array();
+                         $vector_temporal[]=$esperado_individual;
+
+                         for ($i = 0; $i < count($params3); $i++) {
+                             $vector_temporal[]=$params3[$i];
+                         }
+
+                         $params3=$vector_temporal;
+                        // $params3= array_merge($esperado_individual,$params3 );
+
+                        $suma_revisiones2=0;
+                        for ($i = 0; $i < count($params3); $i++) {
+                            $suma_revisiones2=$suma_revisiones2+$params3[$i]['TOTAL'];
+                        }
+
+                        $params2=array();
+                        if ($turno=="1"){
+                            $turno_Monitoreo=" and (Hora_Inicia_Revision BETWEEN '05:54:00' and '13:56:00') "; 
+                        }
+                        if ($turno=="2"){
+                            $turno_Monitoreo=" and (Hora_Inicia_Revision BETWEEN '13:54:00' and '21:56:00') ";                          
+                        }
+                        if ($turno=="3"){
+                            $turno_Monitoreo=" and ((Hora_Inicia_Revision BETWEEN '21:54:00' and '23:59:00') or (Hora_Inicia_Revision BETWEEN '00:00:00' and '05:56:00') ) ";                                                   
+                        }
+
+                        $obj_reporte->setCondicion("(Fecha_Inicia_Revision BETWEEN '".$fecha_inicio."' AND '".$fecha_fin."')".$turno_Monitoreo. "and Justificacion_Retraso LIKE 'JUSTIFICADO%' and Retraso_Segundos>0");
+                        $obj_reporte->inconsistencias_en_revisiones_de_video();
+                        $justificaciones = $obj_reporte->getArreglo();
+                        if (count($justificaciones)>0){
+                            $params2[]=$justificaciones[0];
+                        }else{
+                            $params2[]=array("Total"=>"0");
+                        }
+
+                        $obj_reporte->setCondicion("(Fecha_Inicia_Revision BETWEEN '".$fecha_inicio."' AND '".$fecha_fin."')".$turno_Monitoreo ."and (Justificacion_Retraso NOT LIKE 'JUSTIFICADO%' and Justificacion_Retraso NOT LIKE 'INJUSTIFICADO%') and Retraso_Segundos>0");
+                        $obj_reporte->inconsistencias_en_revisiones_de_video();
+                        $justificaciones = $obj_reporte->getArreglo();
+                        if (count($justificaciones)>0){
+                            $params2[]=$justificaciones[0];
+                        }else{
+                            $params2[]=array("Total"=>"0");
+                        }
+
+                        $obj_reporte->setCondicion("(Fecha_Inicia_Revision BETWEEN '".$fecha_inicio."' AND '".$fecha_fin."')". $turno_Monitoreo."and Justificacion_Retraso LIKE 'INJUSTIFICADO%' and Retraso_Segundos>0");
+                        $obj_reporte->inconsistencias_en_revisiones_de_video();
+                        $justificaciones = $obj_reporte->getArreglo();
+                        if (count($justificaciones)>0){
+                            $params2[]=$justificaciones[0];
+                        }else{
+                            $params2[]=array("Total"=>"0");
+                        }
+
+                        $titulo2 = "Retrasos en Revisiones de Video por Equipo de Trabajo (por puesto específico(".$nombre_turno.")).";
+
+                        $suma_revisiones=0;
+                        for ($i = 0; $i < count($params); $i++) {
+                            $suma_revisiones=$suma_revisiones+$params[$i]['numFilas'];
+                        }
+
+                        $suma_inconsistencias=0;
+                        for ($i = 0; $i < count($params2); $i++) {
+                            $suma_inconsistencias=$suma_inconsistencias+$params2[$i]['Total'];
+                        }
+                    }
+                }
+            }else{
+                    //$fecha_inicio = '2016-01-01';
+                    $fecha_inicio = date("Y-m-d");
+                    $fecha_fin= date("Y-m-d");
                     $obj_reporte->setCondicion("t_bitacorarevisionesvideo.Fecha_Inicia_Revision BETWEEN '".$fecha_inicio."' AND '".$fecha_fin."'");
                     $titulo = "Gráfica Gerenal de Sitios Revisados por Operador en Control de Video (todos los puestos de monitoreo).";
                     $subtitulo = "Del ".date('d-m-Y',strtotime($fecha_inicio))." al ".date('d-m-Y',strtotime($fecha_fin)).".";
@@ -10451,7 +11220,7 @@ class Controller{
                     $obj_reporte->inconsistencias_en_revisiones_de_video();
                     $justificaciones = $obj_reporte->getArreglo();
                     if (count($justificaciones)>0){
-                       $params2[]=$justificaciones[0];
+                        $params2[]=$justificaciones[0];
                     }else{
                         $params2[]=array("Total"=>"0");
                     }
@@ -10482,301 +11251,9 @@ class Controller{
                     for ($i = 0; $i < count($params2); $i++) {
                         $suma_inconsistencias=$suma_inconsistencias+$params2[$i]['Total'];
                     }
+
                     $titulo2 = "Retrasos en Revisiones de Video (todos los puestos).";
-                }
-                
-                if (($operador!="0")&&($turno=="0")){
-                    $obj_reporte->setCondicion("(t_bitacorarevisionesvideo.Fecha_Inicia_Revision BETWEEN '".$fecha_inicio."' AND '".$fecha_fin."') and t_bitacorarevisionesvideo.ID_Usuario =".$operador);
-                    $titulo = "Cantidad de Revisiones de un Operador en Modulo de Control de Video (todos los puestos, ordenado por mes).";
-                    $subtitulo = "Del ".date('d-m-Y',strtotime($fecha_inicio))." al ".date('d-m-Y',strtotime($fecha_fin)).".";
-                    $tipo_grafico=2;
-                    $obj_reporte->revisiones_de_video_por_operador();
-                    $params= $obj_reporte->getArreglo();
 
-                    if (count($params)>0){
-                        $titulo = "Cantidad de Revisiones de ". $params[0]['Nombre']. " ".$params[0]['Apellido'] ." en el Modulo de Control de Video (todos los puestos, ordenado por mes).";
-                    }else{
-                        $titulo = "Cantidad de Revisiones de un Operador en Modulo de Control de Video (todos los puestos, ordenado por mes).";
-                    }
-
-                    $params2=array();
-                    $obj_reporte->setCondicion("(Fecha_Inicia_Revision BETWEEN '".$fecha_inicio."' AND '".$fecha_fin."') and Justificacion_Retraso LIKE 'JUSTIFICADO%' and Retraso_Segundos>0 and ID_Usuario =".$operador);
-                    $obj_reporte->inconsistencias_en_revisiones_de_video();
-                    $justificaciones = $obj_reporte->getArreglo();
-                    if (count($justificaciones)>0){
-                        $params2[]=$justificaciones[0];
-                    }else{
-                        $params2[]=array("Total"=>"0");
-                    }
-
-                    $obj_reporte->setCondicion("(Fecha_Inicia_Revision BETWEEN '".$fecha_inicio."' AND '".$fecha_fin."') and (Justificacion_Retraso NOT LIKE 'JUSTIFICADO%' and Justificacion_Retraso NOT LIKE 'INJUSTIFICADO%') and Retraso_Segundos>0 and ID_Usuario =".$operador);
-                    $obj_reporte->inconsistencias_en_revisiones_de_video();
-                    $justificaciones = $obj_reporte->getArreglo();
-                    if (count($justificaciones)>0){
-                        $params2[]=$justificaciones[0];
-                    }else{
-                        $params2[]=array("Total"=>"0");
-                    }
-
-                    $obj_reporte->setCondicion("(Fecha_Inicia_Revision BETWEEN '".$fecha_inicio."' AND '".$fecha_fin."') and Justificacion_Retraso LIKE 'INJUSTIFICADO%' and Retraso_Segundos>0 and ID_Usuario =".$operador);
-                    $obj_reporte->inconsistencias_en_revisiones_de_video();
-                    $justificaciones = $obj_reporte->getArreglo();
-                    if (count($justificaciones)>0){
-                        $params2[]=$justificaciones[0];
-                    }else{
-                        $params2[]=array("Total"=>"0");
-                    }
-
-                    if (count($params)>0){
-                        $titulo2 = "Retrasos en Revisiones de Video de ". $params[0]['Nombre']. " ".$params[0]['Apellido'] ." (todos los puestos).";
-                    }else{
-                        $titulo2 = "Retrasos en Revisiones de Video de un Operador (todos los puestos).";
-                    }
-
-                    $suma_revisiones=0;
-                    for ($i = 0; $i < count($params); $i++) {
-                        $suma_revisiones=$suma_revisiones+$params[$i]['numFilas'];
-                    }
-
-                    $suma_inconsistencias=0;
-                    for ($i = 0; $i < count($params2); $i++) {
-                        $suma_inconsistencias=$suma_inconsistencias+$params2[$i]['Total'];
-                    }
-                }
-                  
-                if (($operador!="0")&&($turno!="0")){
-                    if ($turno=="1"){
-                        $turno_Monitoreo=" and (t_bitacorarevisionesvideo.Hora_Inicia_Revision BETWEEN '05:54:00' and '13:56:00') "; 
-                        $nombre_turno="mañana";
-                        $esperado_individual=array("mes"=>"Esperado Individual Mensual","numFilas"=>"7840");
-                    }
-                    if ($turno=="2"){
-                        $turno_Monitoreo=" and (t_bitacorarevisionesvideo.Hora_Inicia_Revision BETWEEN '13:54:00' and '21:56:00') ";                          
-                        $nombre_turno="tarde";
-                        $esperado_individual=array("mes"=>"Esperado Individual Mensual","numFilas"=>"7840");
-                    }
-                    if ($turno=="3"){
-                        $turno_Monitoreo=" and ((t_bitacorarevisionesvideo.Hora_Inicia_Revision BETWEEN '21:54:00' and '23:59:00') or (t_bitacorarevisionesvideo.Hora_Inicia_Revision BETWEEN '00:00:00' and '05:56:00')) ";                                                   
-                        $nombre_turno="noche";
-                        $esperado_individual=array("mes"=>"Esperado Individual Mensual","numFilas"=>"9800");
-                    }
-                    $obj_reporte->setCondicion("(t_bitacorarevisionesvideo.Fecha_Inicia_Revision BETWEEN '".$fecha_inicio."' AND '".$fecha_fin."')". $turno_Monitoreo ."and t_bitacorarevisionesvideo.ID_Usuario =".$operador);
-                    $titulo = "Cantidad de Revisiones de un Operador en Modulo de Control de Video (un turno específico(".$nombre_turno.")".", ordenado por mes).";
-                    $subtitulo = "Del ".date('d-m-Y',strtotime($fecha_inicio))." al ".date('d-m-Y',strtotime($fecha_fin)).".";
-                    $tipo_grafico=2;
-                    $obj_reporte->revisiones_de_video_por_operador();
-                    $params= $obj_reporte->getArreglo();
-                    $params[]=$esperado_individual;
-
-                    if (count($params)>1){
-                        $titulo = "Cantidad de Revisiones de ". $params[0]['Nombre']. " ".$params[0]['Apellido'] ." en el Modulo de Control de Video (un puesto específico(".$nombre_turno."), ordenado por mes).";
-                    }else{
-                        $titulo = "Cantidad de Revisiones de un Operador en Modulo de Control de Video (un turno específico(".$nombre_turno."), ordenado por mes).";
-                    }
-
-                    $params2=array();
-                    if ($turno=="1"){
-                        $turno_Monitoreo=" and (Hora_Inicia_Revision BETWEEN '05:54:00' and '13:56:00') "; 
-                    }
-                    if ($turno=="2"){
-                        $turno_Monitoreo=" and (Hora_Inicia_Revision BETWEEN '13:54:00' and '21:56:00') ";                          
-                    }
-                    if ($turno=="3"){
-                        $turno_Monitoreo=" and ((Hora_Inicia_Revision BETWEEN '21:54:00' and '23:59:00') or (Hora_Inicia_Revision BETWEEN '00:00:00' and '05:56:00') ) ";                                                   
-                    }
-
-                    $obj_reporte->setCondicion("(Fecha_Inicia_Revision BETWEEN '".$fecha_inicio."' AND '".$fecha_fin."')".$turno_Monitoreo. "and Justificacion_Retraso LIKE 'JUSTIFICADO%' and Retraso_Segundos>0 and ID_Usuario =".$operador);
-                    $obj_reporte->inconsistencias_en_revisiones_de_video();
-                    $justificaciones = $obj_reporte->getArreglo();
-                    if (count($justificaciones)>0){
-                        $params2[]=$justificaciones[0];
-                    }else{
-                        $params2[]=array("Total"=>"0");
-                    }
-
-                    $obj_reporte->setCondicion("(Fecha_Inicia_Revision BETWEEN '".$fecha_inicio."' AND '".$fecha_fin."')".$turno_Monitoreo ."and (Justificacion_Retraso NOT LIKE 'JUSTIFICADO%' and Justificacion_Retraso NOT LIKE 'INJUSTIFICADO%') and Retraso_Segundos>0 and ID_Usuario =".$operador);
-                    $obj_reporte->inconsistencias_en_revisiones_de_video();
-                    $justificaciones = $obj_reporte->getArreglo();
-                    if (count($justificaciones)>0){
-                        $params2[]=$justificaciones[0];
-                    }else{
-                        $params2[]=array("Total"=>"0");
-                    }
-
-                    $obj_reporte->setCondicion("(Fecha_Inicia_Revision BETWEEN '".$fecha_inicio."' AND '".$fecha_fin."')". $turno_Monitoreo."and Justificacion_Retraso LIKE 'INJUSTIFICADO%' and Retraso_Segundos>0 and ID_Usuario =".$operador);
-                    $obj_reporte->inconsistencias_en_revisiones_de_video();
-                    $justificaciones = $obj_reporte->getArreglo();
-                    if (count($justificaciones)>0){
-                        $params2[]=$justificaciones[0];
-                    }else{
-                        $params2[]=array("Total"=>"0");
-                    }
-
-                    if (count($params)>1){
-                        $titulo2 = "Retrasos en Revisiones de Video de ". $params[0]['Nombre']. " ".$params[0]['Apellido'] ." (".$nombre_turno.").";
-                    }else{
-                        $titulo2 = "Retrasos en Revisiones de Video de un Operador (por turno específico(".$nombre_turno.")).";
-                    }
-
-                    $suma_revisiones=0;
-                    for ($i = 0; $i < count($params); $i++) {
-                        $suma_revisiones=$suma_revisiones+$params[$i]['numFilas'];
-                    }
-
-                    $suma_inconsistencias=0;
-                    for ($i = 0; $i < count($params2); $i++) {
-                        $suma_inconsistencias=$suma_inconsistencias+$params2[$i]['Total'];
-                    }
-                }
-                
-                 if (($operador=="0")&&($turno!="0")){
-                     if ($turno=="1"){
-                         $turno_Monitoreo=" and (t_bitacorarevisionesvideo.Hora_Inicia_Revision BETWEEN '05:54:00' and '13:56:00') "; 
-                         $nombre_turno="mañana";
-                         $esperado_grupal=array("mes"=>"Esperado Grupal Mensual","numFilas"=>"48608");
-                         $esperado_individual=array("Nombre"=>"Esperado Individual","TOTAL"=>"7840","Apellido"=>" Mensual");
-                     }
-                     if ($turno=="2"){
-                         $turno_Monitoreo=" and (t_bitacorarevisionesvideo.Hora_Inicia_Revision BETWEEN '13:54:00' and '21:56:00') ";                          
-                         $nombre_turno="tarde";
-                         $esperado_grupal=array("mes"=>"Esperado Grupal Mensual","numFilas"=>"48608");
-                         $esperado_individual=array("Nombre"=>"Esperado Individual","TOTAL"=>"7840","Apellido"=>" Mensual");
-                     }
-                     if ($turno=="3"){
-                         $turno_Monitoreo=" and ((t_bitacorarevisionesvideo.Hora_Inicia_Revision BETWEEN '21:54:00' and '23:59:00') or (t_bitacorarevisionesvideo.Hora_Inicia_Revision BETWEEN '00:00:00' and '05:56:00')) ";                                                   
-                         $nombre_turno="noche";
-                         $esperado_grupal=array("mes"=>"Esperado Grupal Mensual","numFilas"=>"60760");
-                         //$$esperado_individual=array();
-                         $esperado_individual=array("Nombre"=>"Esperado Individual","TOTAL"=>"9800","Apellido"=>" Mensual");
-                     }
-                     $obj_reporte->setCondicion("(t_bitacorarevisionesvideo.Fecha_Inicia_Revision BETWEEN '".$fecha_inicio."' AND '".$fecha_fin."')". $turno_Monitoreo);
-                     $titulo = "Cantidad de Revisiones por Equipo de Trabajo en Modulo de Control de Video (un turno específico(".$nombre_turno.")".", ordenado por mes).";
-                     $subtitulo = "Del ".date('d-m-Y',strtotime($fecha_inicio))." al ".date('d-m-Y',strtotime($fecha_fin)).".";
-                     $tipo_grafico=3;
-                     $obj_reporte->revisiones_de_video_por_operador();
-                     $params= $obj_reporte->getArreglo();
-                     $params[]=$esperado_grupal;
-                                          
-                     $titulo3 = "Gráfica Gerenal Comparativa de Sitios Revisados por Operador en Control de Video (".$nombre_turno.").";
-                     $subtitulo3 = "Del ".date('d-m-Y',strtotime($fecha_inicio))." al ".date('d-m-Y',strtotime($fecha_fin)).".";
-                     $obj_reporte->revisiones_de_video_todos_los_operadores_todos_los_puestos();
-                     $params3= $obj_reporte->getArreglo();
-                     
-                     $vector_temporal=array();
-                     $vector_temporal[]=$esperado_individual;
-                     
-                     for ($i = 0; $i < count($params3); $i++) {
-                         $vector_temporal[]=$params3[$i];
-                     }
-                     
-                     $params3=$vector_temporal;
-                    // $params3= array_merge($esperado_individual,$params3 );
-
-                    $suma_revisiones2=0;
-                    for ($i = 0; $i < count($params3); $i++) {
-                        $suma_revisiones2=$suma_revisiones2+$params3[$i]['TOTAL'];
-                    }
-
-                    $params2=array();
-                    if ($turno=="1"){
-                        $turno_Monitoreo=" and (Hora_Inicia_Revision BETWEEN '05:54:00' and '13:56:00') "; 
-                    }
-                    if ($turno=="2"){
-                        $turno_Monitoreo=" and (Hora_Inicia_Revision BETWEEN '13:54:00' and '21:56:00') ";                          
-                    }
-                    if ($turno=="3"){
-                        $turno_Monitoreo=" and ((Hora_Inicia_Revision BETWEEN '21:54:00' and '23:59:00') or (Hora_Inicia_Revision BETWEEN '00:00:00' and '05:56:00') ) ";                                                   
-                    }
-
-                    $obj_reporte->setCondicion("(Fecha_Inicia_Revision BETWEEN '".$fecha_inicio."' AND '".$fecha_fin."')".$turno_Monitoreo. "and Justificacion_Retraso LIKE 'JUSTIFICADO%' and Retraso_Segundos>0");
-                    $obj_reporte->inconsistencias_en_revisiones_de_video();
-                    $justificaciones = $obj_reporte->getArreglo();
-                    if (count($justificaciones)>0){
-                        $params2[]=$justificaciones[0];
-                    }else{
-                        $params2[]=array("Total"=>"0");
-                    }
-
-                    $obj_reporte->setCondicion("(Fecha_Inicia_Revision BETWEEN '".$fecha_inicio."' AND '".$fecha_fin."')".$turno_Monitoreo ."and (Justificacion_Retraso NOT LIKE 'JUSTIFICADO%' and Justificacion_Retraso NOT LIKE 'INJUSTIFICADO%') and Retraso_Segundos>0");
-                    $obj_reporte->inconsistencias_en_revisiones_de_video();
-                    $justificaciones = $obj_reporte->getArreglo();
-                    if (count($justificaciones)>0){
-                        $params2[]=$justificaciones[0];
-                    }else{
-                        $params2[]=array("Total"=>"0");
-                    }
-
-                    $obj_reporte->setCondicion("(Fecha_Inicia_Revision BETWEEN '".$fecha_inicio."' AND '".$fecha_fin."')". $turno_Monitoreo."and Justificacion_Retraso LIKE 'INJUSTIFICADO%' and Retraso_Segundos>0");
-                    $obj_reporte->inconsistencias_en_revisiones_de_video();
-                    $justificaciones = $obj_reporte->getArreglo();
-                    if (count($justificaciones)>0){
-                        $params2[]=$justificaciones[0];
-                    }else{
-                        $params2[]=array("Total"=>"0");
-                    }
-
-                    $titulo2 = "Retrasos en Revisiones de Video por Equipo de Trabajo (por puesto específico(".$nombre_turno.")).";
-
-                    $suma_revisiones=0;
-                    for ($i = 0; $i < count($params); $i++) {
-                        $suma_revisiones=$suma_revisiones+$params[$i]['numFilas'];
-                    }
-
-                    $suma_inconsistencias=0;
-                    for ($i = 0; $i < count($params2); $i++) {
-                        $suma_inconsistencias=$suma_inconsistencias+$params2[$i]['Total'];
-                    }
-                }
-                
-            }else{
-                $fecha_inicio = '2016-01-01';
-                $fecha_fin= date("Y-m-d");
-                $obj_reporte->setCondicion("t_bitacorarevisionesvideo.Fecha_Inicia_Revision BETWEEN '".$fecha_inicio."' AND '".$fecha_fin."'");
-                $titulo = "Gráfica Gerenal de Sitios Revisados por Operador en Control de Video (todos los puestos de monitoreo).";
-                $subtitulo = "Del ".date('d-m-Y',strtotime($fecha_inicio))." al ".date('d-m-Y',strtotime($fecha_fin)).".";
-                $tipo_grafico=1;
-                $obj_reporte->revisiones_de_video_todos_los_operadores_todos_los_puestos();
-                $params= $obj_reporte->getArreglo();
-                
-                $params2=array();
-                $obj_reporte->setCondicion("(Fecha_Inicia_Revision BETWEEN '".$fecha_inicio."' AND '".$fecha_fin."') and Justificacion_Retraso LIKE 'JUSTIFICADO%' and Retraso_Segundos>0");
-                $obj_reporte->inconsistencias_en_revisiones_de_video();
-                $justificaciones = $obj_reporte->getArreglo();
-                if (count($justificaciones)>0){
-                    $params2[]=$justificaciones[0];
-                }else{
-                    $params2[]=array("Total"=>"0");
-                }
-
-                $obj_reporte->setCondicion("(Fecha_Inicia_Revision BETWEEN '".$fecha_inicio."' AND '".$fecha_fin."') and (Justificacion_Retraso NOT LIKE 'JUSTIFICADO%' and Justificacion_Retraso NOT LIKE 'INJUSTIFICADO%') and Retraso_Segundos>0");
-                $obj_reporte->inconsistencias_en_revisiones_de_video();
-                $justificaciones = $obj_reporte->getArreglo();
-                if (count($justificaciones)>0){
-                    $params2[]=$justificaciones[0];
-                }else{
-                    $params2[]=array("Total"=>"0");
-                }
-
-                $obj_reporte->setCondicion("(Fecha_Inicia_Revision BETWEEN '".$fecha_inicio."' AND '".$fecha_fin."') and Justificacion_Retraso LIKE 'INJUSTIFICADO%' and Retraso_Segundos>0");
-                $obj_reporte->inconsistencias_en_revisiones_de_video();
-                $justificaciones = $obj_reporte->getArreglo();
-                if (count($justificaciones)>0){
-                    $params2[]=$justificaciones[0];
-                }else{
-                    $params2[]=array("Total"=>"0");
-                }
-                
-                $suma_revisiones=0;
-                for ($i = 0; $i < count($params); $i++) {
-                    $suma_revisiones=$suma_revisiones+$params[$i]['TOTAL'];
-                }
-                $suma_inconsistencias=0;
-                for ($i = 0; $i < count($params2); $i++) {
-                    $suma_inconsistencias=$suma_inconsistencias+$params2[$i]['Total'];
-                }
-
-                $titulo2 = "Retrasos en Revisiones de Video (todos los puestos).";
-                
             }
             require __DIR__ . '/../vistas/plantillas/rpt_controles_de_video.php';
         } else {

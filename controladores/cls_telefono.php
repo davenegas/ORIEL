@@ -142,6 +142,26 @@ class cls_telefono{
         }
     }
     
+    function iniciar_transaccion_sql(){
+           
+        $this->obj_data_provider->iniciar_transaccion_sql();
+  
+    }
+    
+  
+    function agregar_guardado_telefono_a_transaccion(){
+        //$this->obj_data_provider->conectar();
+        $this->estado="1";
+        $this->obj_data_provider->agrega_inclusion_de_datos_a_la_transaccion("T_Telefono","Numero,ID_Tipo_Telefono, ID, Observaciones, Estado","'".$this->numero."','".$this->tipo_telefono."','".$this->id2."','".$this->observaciones."','".$this->estado."'");
+        //$this->obj_data_provider->inserta_datos_para_prontuario();
+        //$this->obj_data_provider->desconectar();
+    }
+     
+    function ejecutar_transaccion_sql(){
+                       
+        $this->obj_data_provider->ejecutar_transaccion_sql();   
+    }
+     
     
      public function guardar_telefono_para_prontuario(){
         $this->obj_data_provider->conectar();

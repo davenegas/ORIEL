@@ -71,6 +71,18 @@ class cls_reporteria{
         $this->resultado_operacion=true;
     }
     
+    public function revisiones_de_video_todos_los_operadores_todos_los_puestos_historicos(){
+        $this->obj_data_provider->conectar();
+        $this->arreglo= $this->obj_data_provider->trae_datos("bd_registro_trazabilidad.t_bitacorarevisionesvideo LEFT OUTER JOIN bd_gerencia_seguridad.T_Usuario on bd_gerencia_seguridad.T_Usuario.ID_Usuario = bd_registro_trazabilidad.t_bitacorarevisionesvideo.ID_Usuario", 
+                        "bd_registro_trazabilidad.t_bitacorarevisionesvideo.`ID_Usuario`, count(bd_registro_trazabilidad.t_bitacorarevisionesvideo.`ID_Usuario`) TOTAL, bd_gerencia_seguridad.T_Usuario.Nombre, bd_gerencia_seguridad.T_Usuario.Apellido", 
+                        $this->condicion." group by bd_registro_trazabilidad.t_bitacorarevisionesvideo.`ID_Usuario`
+		having count(bd_registro_trazabilidad.t_bitacorarevisionesvideo.`ID_Usuario`)
+		ORDER BY TOTAL desc");
+        $this->arreglo=$this->obj_data_provider->getArreglo();
+        $this->obj_data_provider->desconectar();
+        $this->resultado_operacion=true;
+    }
+    
     
     public function revisiones_de_video_por_operador(){
         $this->obj_data_provider->conectar();
@@ -83,9 +95,31 @@ class cls_reporteria{
         $this->resultado_operacion=true;
     }
     
+    public function revisiones_de_video_por_operador_historicos(){
+        $this->obj_data_provider->conectar();
+        $this->obj_data_provider->ejecuta_instruccion_sql("SET lc_time_names = 'es_CR';");
+        $this->arreglo= $this->obj_data_provider->trae_datos("bd_registro_trazabilidad.t_bitacorarevisionesvideo LEFT OUTER JOIN bd_gerencia_seguridad.T_Usuario ON bd_gerencia_seguridad.T_Usuario.ID_Usuario = bd_registro_trazabilidad.t_bitacorarevisionesvideo.ID_Usuario", 
+                        "YEAR( Fecha_Inicia_Revision ) AS y, MONTH( Fecha_Inicia_Revision ) AS m, CONCAT( UPPER( LEFT( MONTHNAME( Fecha_Inicia_Revision ) , 1 ) ) , SUBSTR( MONTHNAME( Fecha_Inicia_Revision ) , 2 ) ) AS mes, COUNT( * ) AS numFilas, bd_registro_trazabilidad.t_bitacorarevisionesvideo.`ID_Usuario` , bd_gerencia_seguridad.T_Usuario.Nombre, bd_gerencia_seguridad.T_Usuario.Apellido", 
+                        $this->condicion." GROUP BY mes ORDER BY y, m");
+        $this->arreglo=$this->obj_data_provider->getArreglo();
+        $this->obj_data_provider->desconectar();
+        $this->resultado_operacion=true;
+    }
+    
+        
     public function inconsistencias_en_revisiones_de_video(){
         $this->obj_data_provider->conectar();
         $this->arreglo= $this->obj_data_provider->trae_datos("t_bitacorarevisionesvideo", 
+                        "count(*) Total", 
+                        $this->condicion);
+        $this->arreglo=$this->obj_data_provider->getArreglo();
+        $this->obj_data_provider->desconectar();
+        $this->resultado_operacion=true;
+    }
+    
+    public function inconsistencias_en_revisiones_de_video_historicos(){
+        $this->obj_data_provider->conectar();
+        $this->arreglo= $this->obj_data_provider->trae_datos("bd_registro_trazabilidad.t_bitacorarevisionesvideo", 
                         "count(*) Total", 
                         $this->condicion);
         $this->arreglo=$this->obj_data_provider->getArreglo();

@@ -411,6 +411,7 @@ class cls_personal{
     }
     
     function edita_persona_para_prontuario(){
+        
         $this->obj_data_provider->conectar();
         
         //Llama al metodo para editar los datos correspondientes
@@ -420,7 +421,33 @@ class cls_personal{
         $this->obj_data_provider->desconectar();
        
     }
+    
+    function iniciar_transaccion_sql(){
+           
+        $this->obj_data_provider->iniciar_transaccion_sql();
   
+    }
+    
+    function agrega_edicion_de_persona_a_transaccion(){
+         
+        
+        $this->obj_data_provider->agrega_edicion_de_datos_a_la_transaccion("t_personal","Cedula='".$this->cedula."',Apellido_Nombre='".$this->apellidonombre."',ID_Unidad_Ejecutora=".$this->id_unidad_ejecutora.",ID_Puesto=".$this->id_puesto.",Direccion='".$this->direccion."',Link_Foto='".$this->linkfoto."',ID_Empresa=".$this->id_empresa.",Correo='".$this->correo."',Estado='".$this->estado."'",$this->condicion);
+        //$this->obj_data_provider->agrega_edicion_de_datos_a_la_transaccion("t_personal","Apellido_Nombre='VENEGAS MONGE DIEGO ALBERTOs'","Cedula='01-1310-0038'");
+        
+     }
+     
+    function agregar_inclusion_persona_a_transaccion(){
+        //$this->obj_data_provider->conectar();
+        $this->obj_data_provider->agrega_inclusion_de_datos_a_la_transaccion("t_personal", "Cedula,Apellido_Nombre,ID_Unidad_Ejecutora,ID_Puesto,Direccion,Link_Foto,ID_Empresa,Estado,Correo", "'".$this->cedula."','".$this->apellidonombre."',".$this->id_unidad_ejecutora.",".$this->id_puesto.",'".$this->direccion."','".$this->linkfoto."',".$this->id_empresa.",'".$this->estado."','".$this->correo."'");
+        //$this->obj_data_provider->inserta_datos_para_prontuario();
+        //$this->obj_data_provider->desconectar();
+    }
+     
+    function ejecutar_transaccion_sql(){
+                       
+        $this->obj_data_provider->ejecutar_transaccion_sql();   
+    }
+      
     //Obtener el último id de evento para saber que se debe ingresar
     function obtiene_id_ultima_persona_ingresada(){
       //Establece la conexión con la bd

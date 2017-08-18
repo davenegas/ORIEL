@@ -675,6 +675,24 @@ class cls_puestos_de_monitoreo{
             $this->obj_data_provider->desconectar();
         } 
     }
+    
+    public function obtiene_unidades_con_mas_tiempo_sin_revisar(){
+        $this->obj_data_provider->conectar();
+        if($this->condicion==""){
+            $this->arreglo=$this->obj_data_provider->trae_datos("t_bitacorarevisionesvideo LEFT OUTER JOIN t_unidadvideo on t_unidadvideo.ID_Unidad_Video = t_bitacorarevisionesvideo.ID_Unidad_Video",
+                    "t_bitacorarevisionesvideo.`ID_Unidad_Video`, MAX(concat(`Fecha_Termina_Revision`,' ',`Hora_Termina_Revision`)) Fecha_Hora","");
+            $this->arreglo=$this->obj_data_provider->getArreglo();
+            $this->obj_data_provider->desconectar();
+        }
+        else{
+       $this->arreglo=$this->obj_data_provider->trae_datos("t_bitacorarevisionesvideo LEFT OUTER JOIN t_unidadvideo on t_unidadvideo.ID_Unidad_Video = t_bitacorarevisionesvideo.ID_Unidad_Video",
+                    "t_bitacorarevisionesvideo.`ID_Unidad_Video`, MAX(concat(`Fecha_Termina_Revision`,' ',`Hora_Termina_Revision`)) Fecha_Hora",
+                    $this->condicion);
+            $this->arreglo=$this->obj_data_provider->getArreglo();
+            $this->obj_data_provider->desconectar();
+        } 
+    }
+    
    
     public function obtiene_inconsistencias_de_video(){
         $this->obj_data_provider->conectar();
@@ -867,6 +885,16 @@ class cls_puestos_de_monitoreo{
        
     }
     
+     //Este metodo realiza la modificación del estado del modulo, de activo a inactivo o viceversa en la bd
+    function edita_usuario_y_tiempo_de_inicio_en_revision_de_video_dinamica(){
+        $this->obj_data_provider->conectar();
+        //Llama al metodo para editar los datos correspondientes
+        $this->obj_data_provider->edita_datos("T_BitacoraRevisionesVideo","Fecha_Inicia_Revision='".$this->fecha_inicia_revision."',Hora_Inicia_Revision='".$this->hora_inicia_revision."',ID_Usuario=".$this->id_usuario.",ID_Bitacora_Control_Puesto_Monitoreo=".$this->id_ultimo_toma_puesto_ingresada.",Posicion=".$this->posicion.",ID_Unidad_Video=".$this->id_unidad_video,$this->condicion);
+        //Metodo de la clase data provider que desconecta la sesión con la base de datos
+        $this->obj_data_provider->desconectar();
+       
+    }
+    
     //Este metodo realiza la modificación del estado del modulo, de activo a inactivo o viceversa en la bd
     function edita_tiempo_de_inicio_en_revision_de_video(){
         $this->obj_data_provider->conectar();
@@ -1046,6 +1074,29 @@ class cls_puestos_de_monitoreo{
             $this->arreglo=$this->obj_data_provider->trae_datos(
                   "t_bitacorarevisionesvideo left outer join t_usuario on t_bitacorarevisionesvideo.ID_Usuario=t_usuario.ID_usuario", 
                     "distinct(t_bitacorarevisionesvideo.ID_Usuario),concat(t_usuario.Nombre,' ',t_usuario.Apellido) as Nombre_Completo",
+                    $this->condicion. " order by Nombre_Completo");
+            $this->arreglo=$this->obj_data_provider->getArreglo();
+            $this->obj_data_provider->desconectar();
+            $this->resultado_operacion=true;
+        }  
+        
+    }
+    
+     public function obtiene_lista_operadores_que_han_realizado_controles_historicos() {
+        $this->obj_data_provider->conectar();
+        if($this->condicion==""){
+            $this->arreglo=$this->obj_data_provider->trae_datos(
+                    "bd_registro_trazabilidad.t_bitacorarevisionesvideo left outer join bd_gerencia_seguridad.t_usuario on bd_registro_trazabilidad.t_bitacorarevisionesvideo.ID_Usuario=bd_gerencia_seguridad.t_usuario.ID_usuario order by Nombre_Completo", 
+                    "distinct(bd_registro_trazabilidad.t_bitacorarevisionesvideo.ID_Usuario),concat(bd_gerencia_seguridad.t_usuario.Nombre,' ',bd_gerencia_seguridad.t_usuario.Apellido) as Nombre_Completo",
+                    "");
+            $this->arreglo=$this->obj_data_provider->getArreglo();
+            $this->obj_data_provider->desconectar();
+            $this->resultado_operacion=true;
+        }
+        else{
+            $this->arreglo=$this->obj_data_provider->trae_datos(
+                  "bd_registro_trazabilidad.t_bitacorarevisionesvideo left outer join bd_gerencia_seguridad.t_usuario on bd_registro_trazabilidad.t_bitacorarevisionesvideo.ID_Usuario=bd_gerencia_seguridad.t_usuario.ID_usuario", 
+                    "distinct(bd_registro_trazabilidad.t_bitacorarevisionesvideo.ID_Usuario),concat(bd_gerencia_seguridad.t_usuario.Nombre,' ',bd_gerencia_seguridad.t_usuario.Apellido) as Nombre_Completo",
                     $this->condicion. " order by Nombre_Completo");
             $this->arreglo=$this->obj_data_provider->getArreglo();
             $this->obj_data_provider->desconectar();

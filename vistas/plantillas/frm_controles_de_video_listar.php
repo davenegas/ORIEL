@@ -9,7 +9,11 @@
             var muestra_reportes=0;
             var centesimas = 0;
             var segundos = <?php echo $diferenciasegundos; ?>;
-            var limite_segundos = <?php echo $vector_puesto_monitoreo_unidad_video[0]['Tiempo_Personalizado_Revision'];?>;
+            <?php if (count($unidades_asociadas_a_un_puesto)>0){?>;
+                var limite_segundos = <?php echo $vector_puesto_monitoreo_unidad_video[0]['Tiempo_Personalizado_Revision'];?>;
+            <?php }else{?>;
+                var limite_segundos = <?php echo $vector_puesto_monitoreo_unidad_video[0]['Tiempo_Estandar_Revision'];?>;
+            <?php }?>;
             var minutos = 0;
             var horas = 0;
             function inicio () {
@@ -360,7 +364,12 @@
                             <input hidden="hidden" type="button" class="boton" id="reinicio" value="Reset &#8635;" onclick="reinicio();" disabled>
                             <!--</div>-->                       
                         </td>
-                        <td style="text-align:center" align="center"><h4><b>Tiempo Estimado para revisión (segundos):</b> <?php echo $vector_puesto_monitoreo_unidad_video[0]['Tiempo_Personalizado_Revision'];?> </h4></td>  
+                         <?php if (count($unidades_asociadas_a_un_puesto)>0){?>;
+                            <td style="text-align:center" align="center"><h4><b>Tiempo Estimado para revisión (segundos):</b> <?php echo $vector_puesto_monitoreo_unidad_video[0]['Tiempo_Personalizado_Revision'];?> </h4></td>  
+                        <?php }else{?>;
+                            <td style="text-align:center" align="center"><h4><b>Tiempo Estimado para revisión (segundos):</b> <?php echo $vector_puesto_monitoreo_unidad_video[0]['Tiempo_Estandar_Revision'];?> </h4></td>                             
+                        <?php }?>;
+                        
                     </tr>
                   
                     <tr style="text-align:center" align="center">
@@ -396,9 +405,19 @@
                 </tbody> 
             </table>
             <div >
-                <a  href="#" class="btn btn-default" role="button" onclick="guarda_revision_de_video_actual('<?php echo $vector_revision_de_video_actual[0]['ID_Bitacora_Revision_Video'];?>','<?php echo $vector_revision_de_video_actual[0]['Fecha_Inicia_Revision'];?>','<?php echo $vector_revision_de_video_actual[0]['Hora_Inicia_Revision'];?>','<?php echo $vector_puesto_monitoreo_unidad_video[0]['Tiempo_Personalizado_Revision'];?>','<?php echo $vector_revision_de_video_actual[0]['ID_Bitacora_Control_Puesto_Monitoreo'];?>','<?php echo $vector_revision_de_video_actual[0]['ID_Puesto_Monitoreo'];?>','<?php echo $vector_revision_de_video_actual[0]['Posicion'];?>');">Registrar Revisión</a>
+                 <?php if (count($unidades_asociadas_a_un_puesto)>0){?>;
+                       <a  href="#" class="btn btn-default" role="button" onclick="guarda_revision_de_video_actual('<?php echo $vector_revision_de_video_actual[0]['ID_Bitacora_Revision_Video'];?>','<?php echo $vector_revision_de_video_actual[0]['Fecha_Inicia_Revision'];?>','<?php echo $vector_revision_de_video_actual[0]['Hora_Inicia_Revision'];?>','<?php echo $vector_puesto_monitoreo_unidad_video[0]['Tiempo_Personalizado_Revision'];?>','<?php echo $vector_revision_de_video_actual[0]['ID_Bitacora_Control_Puesto_Monitoreo'];?>','<?php echo $vector_revision_de_video_actual[0]['ID_Puesto_Monitoreo'];?>','<?php echo $vector_revision_de_video_actual[0]['Posicion'];?>');">Registrar Revisión</a>     
+                 <?php }else{?>;
+                        <a  href="#" class="btn btn-default" role="button" onclick="guarda_revision_de_video_actual('<?php echo $vector_revision_de_video_actual[0]['ID_Bitacora_Revision_Video'];?>','<?php echo $vector_revision_de_video_actual[0]['Fecha_Inicia_Revision'];?>','<?php echo $vector_revision_de_video_actual[0]['Hora_Inicia_Revision'];?>','<?php echo $vector_puesto_monitoreo_unidad_video[0]['Tiempo_Estandar_Revision'];?>','<?php echo $vector_revision_de_video_actual[0]['ID_Bitacora_Control_Puesto_Monitoreo'];?>','<?php echo $vector_revision_de_video_actual[0]['ID_Puesto_Monitoreo'];?>','<?php echo $vector_revision_de_video_actual[0]['Posicion'];?>');">Registrar Revisión</a>                       
+                 <?php }?>;
+                
             </div>
-            <h4 style="float:right;"><b>Próximo Sitio ► </b> <?php echo $vector_informacion_unidad_video_siguiente[0]['Descripcion'];?> (<?php echo $vector_punto_bcr_siguiente[0]['Codigo'];?>)</h4>
+            <?php if (count($unidades_asociadas_a_un_puesto)>0){?>;
+                       <h4 style="float:right;"><b>Próximo Sitio ► </b> <?php echo $vector_informacion_unidad_video_siguiente[0]['Descripcion'];?> (<?php echo $vector_punto_bcr_siguiente[0]['Codigo'];?>)</h4>
+            <?php }else{?>;
+                        <h4 style="float:right;"><b>Próximo Sitio ► </b> No Disponible (puesto dinámico de unidades retrasadas)</h4>
+            <?php }?>;
+            
             <br> <br> <br>
             <div align="center">
                 <img align="center" src="../../../Padron_Fotografico_Unidades_Video/<?php echo $vector_padron_fotografico[0]['Nombre_Ruta'];?>" alt="" width="1000px" class="img-responsive" alt="Cinque Terre"> 
