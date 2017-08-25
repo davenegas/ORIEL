@@ -369,6 +369,15 @@ $map = array(
     'personal_cambiar_puesto'=>array('controller'=>'Controller','action'=> 'personal_cambiar_puesto'),
     'persona_guardar_informacion_general'=>array('controller'=>'Controller','action'=> 'persona_guardar_informacion_general'),
     
+    //Control de Acceso
+        //Controller
+    'actualizar_controladores_inicio'=>array('controller'=>'Controller','action'=> 'actualizar_controladores_inicio'),
+    'actualizar_controladores_paso_1'=>array('controller'=>'Controller','action'=> 'actualizar_controladores_paso_1'),
+        //Puertas controladas
+    'actualizar_puerta_controlada_inicio'=>array('controller'=>'Controller','action'=> 'actualizar_puerta_controlada_inicio'),
+        //Módulos de puertas controladas
+    'actualizar_modulo_puerta_inicio'=>array('controller'=>'Controller','action'=> 'actualizar_modulo_puerta_inicio'),
+    
     //Controlador de Personal Externo
     'personal_externo_listar'=>array('controller'=>'Controller','action'=> 'personal_externo_listar'), 
     'personal_externo_gestion'=>array('controller'=>'Controller','action'=> 'personal_externo_gestion'), 

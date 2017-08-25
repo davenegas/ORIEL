@@ -5386,61 +5386,6 @@ class Controller{
                     }
                 }
                 break;    
-            case "Control_Video":
-                if(date("H:i:s", $time)>='05:50:00' && date("H:i:s", $time)<='06:10:00'){
-                    $ruta=  $raiz."Cuenta_Visitas_Oriel/Ejecucion_Procesos/".date("Ymd", $time)." Control01.txt";
-                    if(!file_exists($ruta)){
-                        //Abre el archivo , lo crea si no lo encuentra
-                        $fp = fopen($ruta,"a+");
-                        //Cierra el archivo
-                        fclose($fp);
-                        
-                        $cadena_incosistencias=$this->asignar_sitios_control_video();
-                        
-                        //no olvidar crear al archivo visitantes.txt y poner el path correcto
-                        $fp = fopen($ruta,"w+"); 
-                        //Escribe en el archivo
-                        fwrite($fp, $cadena_incosistencias);
-                        //Cierra el archivo
-                        fclose($fp);
-                    }
-                }
-                if(date("H:i:s", $time)>='13:50:00' && date("H:i:s", $time)<='14:10:00'){
-                    $ruta=  $raiz."Cuenta_Visitas_Oriel/Ejecucion_Procesos/".date("Ymd", $time)." Control02.txt";
-                    if(!file_exists($ruta)){
-                        //Abre el archivo , lo crea si no lo encuentra
-                        $fp = fopen($ruta,"a+");
-                        //Cierra el archivo
-                        fclose($fp);
-                        
-                        $cadena_incosistencias=$this->asignar_sitios_control_video();
-                        //no olvidar crear al archivo visitantes.txt y poner el path correcto
-                        $fp = fopen($ruta,"w+"); 
-                        //Escribe en el archivo
-                        fwrite($fp, $cadena_incosistencias);
-                        //Cierra el archivo
-                        fclose($fp);
-                    }
-                }
-                if(date("H:i:s", $time)>='21:50:00' && date("H:i:s", $time)<='22:10:00'){
-                    $ruta=  $raiz."Cuenta_Visitas_Oriel/Ejecucion_Procesos/".date("Ymd", $time)." Control03.txt";
-                    if(!file_exists($ruta)){
-                        //Abre el archivo , lo crea si no lo encuentra
-                        $fp = fopen($ruta,"a+");
-                        //Cierra el archivo
-                        fclose($fp);
-                        
-                        $cadena_incosistencias=$this->asignar_sitios_control_video();
-                        
-                        //no olvidar crear al archivo visitantes.txt y poner el path correcto
-                        $fp = fopen($ruta,"w+"); 
-                        //Escribe en el archivo
-                        fwrite($fp, $cadena_incosistencias);
-                        //Cierra el archivo
-                        fclose($fp);
-                    }
-                }
-                break;
             case "Respaldo_Bitacora_Revisiones":
                 $ruta=  $raiz."Cuenta_Visitas_Oriel/Ejecucion_Procesos/".date("Ymd", $time)." Respaldo_Bitacora_Revisiones.txt";
                 if(!file_exists($ruta)){
@@ -11498,7 +11443,6 @@ class Controller{
     public function alertas_generales(){
         if(isset($_SESSION['nombre'])){
             //Ejecuta un proceso automatico de actualizar el control de video
-            $this->ejecucion_automatico_proceso("Control_Video");
             //Clases que se necesitan para la ventana de alertas
             $obj_cencon = new cls_cencon();
             $obj_personal = new cls_personal();
@@ -11646,10 +11590,15 @@ class Controller{
             $fecha1 = new DateTime($fecha_actual);
             $diff="";
             //Contadores sobre ultimas revisiones
+            //Revisiones en menos de una hora
             $revision_0_60=0;
+            //revisiones entre 1 y 2 horas
             $revision_61_120=0;
+            //Revisiones entre 2 y 3 horas
             $revision_121_180=0;
+            //Revisiones entre 3 y 4 horas
             $revision_181_240=0;
+            //Revisiones mas de 4 horas
             $revision_241_mas=0;
             $tam=  count($ultima_revision);
             for ($i = 0; $i <$tam; $i++) {
@@ -11679,7 +11628,7 @@ class Controller{
                     }
                 }
             }
-            
+            $total_suma_revisiones= ($revision_0_60*1)+($revision_61_120*1)+($revision_121_180*3)+($revision_181_240*5)+($revision_241_mas*10);
             ////////////////////////////////////////////////////////////////////
             //OBTIENE INFORMACIÓN DE APERTURA DE CERRADURAS DE CENCON
             $obj_cencon->setCondicion("Hora_Cierre is null");
@@ -12884,9 +12833,22 @@ class Controller{
     }
     
     ////////////////////////////////////////////////////////////////////////////
-    //////////////////////Funciones para Pruebas de alarma//////////////////////  
+    //////////////////////Funciones para Control de Acceso//////////////////////  
     ////////////////////////////////////////////////////////////////////////////
-    public function actualizar_controladores_archivo(){
+    public function actualizar_controladores_inicio(){
+        if(isset($_SESSION['nombre'])){
+            //Pendiente obtener información de los controladores actuales
+            
+            require __DIR__ . '/../vistas/plantillas/frm_ca_contralores_accesos_lista.php';
+        }else {
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            //Llamada al formulario correspondiente de la vista
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }
+    }
+    
+    public function actualizar_controladores_paso_1(){
         if(isset($_SESSION['nombre'])){
             //En la variable recepcion de archivo, recibe el estado en el que fue recibido el archivo desde el formulario anterior
             $recepcion_archivo=$_FILES['seleccionar_archivo']['error'];
@@ -12902,21 +12864,25 @@ class Controller{
             $handle= fopen ($_FILES['seleccionar_archivo']['tmp_name'],"r");
             
             //Contiene en las variables params y record, el total de regsitros del archivo mediante la funcion fgetcsv
-            $params=$record = fgetcsv($handle);
+            $record = fgetcsv($handle);
             
             //Declara un vector, el cual contendrá de manera oficial toda la información del documento.
-            $prontuario =array();
+            $controladores =array();
             //Variable contador del ciclo
             $i=0;
             
             //Almacena en la variable record, cada registro mientras handle tenga lineas disponibles que recorrer
-            while ($record = fgetcsv($handle,0,";")){
+            while ($record = fgetcsv($handle,0,",")){
                 // a prontuario le va asignando cada uno de los registros del documento
-                $prontuario[]=$record;
+                $controladores[]=$record;
                 // Va incrementado el contador
                 $i++;
             }
             
+            $_SESSION['controladores']=$controladores;   
+            
+            //Llamada al formulario correspondiente de la vista
+            require __DIR__ . '/../vistas/plantillas/frm_ca_controladores_actualizar_paso_1.php';  
         }else {
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
@@ -12924,5 +12890,31 @@ class Controller{
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }
     }
+    
+    public function actualizar_puerta_controlada_inicio(){
+        if(isset($_SESSION['nombre'])){
+            //Pendiente obtener información de los controladores actuales
+            
+            require __DIR__ . '/../vistas/plantillas/frm_ca_puertas_controladas_lista.php';
+        }else {
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            //Llamada al formulario correspondiente de la vista
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }
+    }
+    
+    public function actualizar_modulo_puerta_inicio(){
+        if(isset($_SESSION['nombre'])){
+            //Pendiente obtener información de los controladores actuales
+            
+            require __DIR__ . '/../vistas/plantillas/frm_ca_modulos_puerta_controlada_lista.php';
+        }else {
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            //Llamada al formulario correspondiente de la vista
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }
+}
     
 }

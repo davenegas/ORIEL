@@ -188,18 +188,13 @@
                             <option value="Oficina en Asueto">Oficina en Asueto</option>
                             <option value="Oficina con trabajos">Oficina con Trabajos</option>
                             <option value="Alarma abierta 24 horas">Alarma abierta 24 horas</option>
+                            <option value="Falla de alarma">Falla de alarma</option>
                         </select>
                     </div>  
                     <div class="col-md-4 espacio-abajo-5">
                         <label for="observaciones">Observaciones</label>
                         <input type="text"  class="form-control" id="observaciones" name="observaciones" onchange="guardar_observaciones();" placeholder="Observaciones o comentarios de la prueba de alarma">
                     </div>
-                    
-                    <!--<div>
-                        <h4><b>Pruebas de alarma Reportadas</b></h4>
-                        <table id="tabla4" class="display" cellspacing="0" width="100%">
-                        </table>
-                    </div>-->
                 </div>
 
                 <div class="col-sm-3 sidenav">

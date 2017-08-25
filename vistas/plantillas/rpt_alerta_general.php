@@ -176,7 +176,7 @@
         <div class="col-sm-4 sidenav espacio-abajo">
             <div class="well" align="center">SISTEMA DE ALARMA</div>
             <?php if($datos['contador_pruebas']!=0 || $datos['cont_pruebas_pendientes']!=0){ ?>
-                <div id="pruebas"  style="min-width: 300px; height: 350px; max-width: 500px; margin: 0 auto"></div>
+                <div id="pruebas"  style="min-width: 200px; height: 200px; max-width: 300px; margin: 0 auto"></div>
             <?php } ?>
             <?php if($datos['contador_aperturas']!=0 || $datos['cont_aperturas_pendientes']!=0){ ?>
                 <div id="aperturas" style="min-width: 300px; height: 350px; max-width: 500px; margin: 0 auto"></div>

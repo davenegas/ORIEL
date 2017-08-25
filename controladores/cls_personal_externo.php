@@ -301,7 +301,8 @@ class cls_personal_externo{
         //Si no, creará una persona nueva
         if($this->condicion==""){
             $this->obj_data_provider->conectar();
-            $sql_datos= "null,'".$this->identificacion."','".$this->apellido."','".$this->nombre."','".$this->fecha_nacimiento."'";
+            $sql_datos= "null,'".$this->identificacion."','".$this->apellido."','".$this->nombre."'";
+            if($this->fecha_nacimiento==''){$sql_datos.=",null";}else{$sql_datos.=",'".$this->fecha_nacimiento."'";}
             if($this->fecha_residencia==''){$sql_datos.=",null";}else{$sql_datos.=",'".$this->fecha_residencia."'";}
             if($this->fecha_portacion==''){$sql_datos.=",null";}else{$sql_datos.=",'".$this->fecha_portacion."'";}
             if($this->fecha_ingreso==''){$sql_datos.=",null";}else{$sql_datos.=",'".$this->fecha_ingreso."'";}
@@ -315,7 +316,8 @@ class cls_personal_externo{
         }   else {
             $this->obj_data_provider->conectar();
             //Llama al metodo para editar los datos correspondientes
-            $sql_datos= "Identificacion='".$this->identificacion."',Apellido='".$this->apellido."',Nombre='".$this->nombre."',Fecha_Nacimiento='".$this->fecha_nacimiento."'";
+            $sql_datos= "Identificacion='".$this->identificacion."',Apellido='".$this->apellido."',Nombre='".$this->nombre."'";
+            if($this->fecha_nacimiento==''){$sql_datos.=",Fecha_Nacimiento=null";}else{$sql_datos.=",Fecha_Nacimiento='".$this->fecha_nacimiento."'";}
             if($this->fecha_residencia==''){$sql_datos.=",Fecha_Vencimiento_Residencia=null";}else{$sql_datos.=",Fecha_Vencimiento_Residencia='".$this->fecha_residencia."'";}
             if($this->fecha_portacion==''){$sql_datos.=",Fecha_Vencimiento_Portacion=null";}else{$sql_datos.=",Fecha_Vencimiento_Portacion='".$this->fecha_portacion."'";}
             if($this->fecha_ingreso==''){$sql_datos.=",Fecha_Ingreso=null";}else{$sql_datos.=",Fecha_Ingreso='".$this->fecha_ingreso."'";}

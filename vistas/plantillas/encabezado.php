@@ -162,7 +162,18 @@
                             <?php  if ($_SESSION['modulos']['Catálogos-Cencon']==1){?>
                                <li><a href="index.php?ctl=cencon_gestion">Registro Cencon</a></li>
                             <?php  }; ?>
-
+                               
+                            <?php if ($_SESSION['modulos']['Catálogos-Inconsistencias de Video']==1){ ?>
+                                <li class="dropdown-submenu">
+                                    <a class="multilevel" tabindex="-1" href="#">Control de acceso<span class="caret"></span></a>
+                                    <ul class="dropdown-menu">
+                                      <li><a tabindex="-1" href="index.php?ctl=actualizar_controladores_inicio">Actualizar Controladores</a></li>
+                                      <li><a tabindex="-1" href="index.php?ctl=actualizar_puerta_controlada_inicio">Actualizar puertas</a></li>
+                                      <li><a tabindex="-1" href="index.php?ctl=actualizar_modulo_puerta_inicio">Actualizar módulos</a></li>
+                                    </ul>
+                                </li>
+                            <?php }; ?> 
+                                
                             <?php  if ($_SESSION['modulos']['Importar- Prontuario']==1){?>
                                <li><a href="index.php?ctl=frm_importar_prontuario_paso_1">Importar Prontuario</a></li> 
                             <?php  }; ?>  
