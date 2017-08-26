@@ -11,9 +11,9 @@
             var segundos = <?php echo $diferenciasegundos; ?>;
             <?php if (count($unidades_asociadas_a_un_puesto)>0){?>;
                 var limite_segundos = <?php echo $vector_puesto_monitoreo_unidad_video[0]['Tiempo_Personalizado_Revision'];?>;
-            <?php }else{?>;
+            <?php }else{?>
                 var limite_segundos = <?php echo $vector_puesto_monitoreo_unidad_video[0]['Tiempo_Estandar_Revision'];?>;
-            <?php }?>;
+            <?php }?>
             var minutos = 0;
             var horas = 0;
             function inicio () {
@@ -345,8 +345,7 @@
         <div class="container animated fadeIn col-xs-10 quitar-float" style="text-align:center">
             <h2 style="text-align:center">Control de Video <?php echo $vector_puesto_de_monitoreo_actual[0]['Nombre'];?></h2>
             <h4 style="text-align:center">Unidad de Video Actual: <?php echo $vector_informacion_unidad_video[0]['Descripcion'];?> (<?php echo $vector_punto_bcr[0]['Codigo'];?>) </h4>
-            <h4><a href="#" onclick="liberar_puesto_de_monitoreo('<?php echo $vector_revision_de_video_actual[0]['ID_Puesto_Monitoreo'];?>');">
-            Liberar Puesto de Monitoreo</a></h4>
+            <h4><a href="#" onclick="liberar_puesto_de_monitoreo('<?php echo $vector_revision_de_video_actual[0]['ID_Puesto_Monitoreo']?>')">Liberar Puesto de Monitoreo</a></h4>
             <!--<p>A continuación se detallan los diferentes puestos de monitoreo registrados en el sistema:</p>-->            
             <table id="myTable" class="table table-hover" style="text-align:center">
                 <tbody>
@@ -364,11 +363,11 @@
                             <input hidden="hidden" type="button" class="boton" id="reinicio" value="Reset &#8635;" onclick="reinicio();" disabled>
                             <!--</div>-->                       
                         </td>
-                         <?php if (count($unidades_asociadas_a_un_puesto)>0){?>;
+                         <?php if (count($unidades_asociadas_a_un_puesto)>0){?>
                             <td style="text-align:center" align="center"><h4><b>Tiempo Estimado para revisión (segundos):</b> <?php echo $vector_puesto_monitoreo_unidad_video[0]['Tiempo_Personalizado_Revision'];?> </h4></td>  
-                        <?php }else{?>;
+                        <?php }else{?>
                             <td style="text-align:center" align="center"><h4><b>Tiempo Estimado para revisión (segundos):</b> <?php echo $vector_puesto_monitoreo_unidad_video[0]['Tiempo_Estandar_Revision'];?> </h4></td>                             
-                        <?php }?>;
+                        <?php }?>
                         
                     </tr>
                   
@@ -407,16 +406,16 @@
             <div >
                  <?php if (count($unidades_asociadas_a_un_puesto)>0){?>;
                        <a  href="#" class="btn btn-default" role="button" onclick="guarda_revision_de_video_actual('<?php echo $vector_revision_de_video_actual[0]['ID_Bitacora_Revision_Video'];?>','<?php echo $vector_revision_de_video_actual[0]['Fecha_Inicia_Revision'];?>','<?php echo $vector_revision_de_video_actual[0]['Hora_Inicia_Revision'];?>','<?php echo $vector_puesto_monitoreo_unidad_video[0]['Tiempo_Personalizado_Revision'];?>','<?php echo $vector_revision_de_video_actual[0]['ID_Bitacora_Control_Puesto_Monitoreo'];?>','<?php echo $vector_revision_de_video_actual[0]['ID_Puesto_Monitoreo'];?>','<?php echo $vector_revision_de_video_actual[0]['Posicion'];?>');">Registrar Revisión</a>     
-                 <?php }else{?>;
+                 <?php }else{?>
                         <a  href="#" class="btn btn-default" role="button" onclick="guarda_revision_de_video_actual('<?php echo $vector_revision_de_video_actual[0]['ID_Bitacora_Revision_Video'];?>','<?php echo $vector_revision_de_video_actual[0]['Fecha_Inicia_Revision'];?>','<?php echo $vector_revision_de_video_actual[0]['Hora_Inicia_Revision'];?>','<?php echo $vector_puesto_monitoreo_unidad_video[0]['Tiempo_Estandar_Revision'];?>','<?php echo $vector_revision_de_video_actual[0]['ID_Bitacora_Control_Puesto_Monitoreo'];?>','<?php echo $vector_revision_de_video_actual[0]['ID_Puesto_Monitoreo'];?>','<?php echo $vector_revision_de_video_actual[0]['Posicion'];?>');">Registrar Revisión</a>                       
-                 <?php }?>;
+                 <?php }?>
                 
             </div>
             <?php if (count($unidades_asociadas_a_un_puesto)>0){?>;
                        <h4 style="float:right;"><b>Próximo Sitio ► </b> <?php echo $vector_informacion_unidad_video_siguiente[0]['Descripcion'];?> (<?php echo $vector_punto_bcr_siguiente[0]['Codigo'];?>)</h4>
-            <?php }else{?>;
+            <?php }else{?>
                         <h4 style="float:right;"><b>Próximo Sitio ► </b> No Disponible (puesto dinámico de unidades retrasadas)</h4>
-            <?php }?>;
+            <?php }?>
             
             <br> <br> <br>
             <div align="center">

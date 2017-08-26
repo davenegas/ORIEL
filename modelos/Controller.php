@@ -10255,7 +10255,8 @@ class Controller{
                 }
 				
 				
-				//***********************************Codigo en Prueba*****************************
+				//
+				//Vector revision de video actual en bitacora 2***********************************Codigo en Prueba*****************************
 				
 				
 				//Vector revision de video actual en bitacora 2
