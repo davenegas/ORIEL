@@ -303,9 +303,9 @@
                     <thead>
                         <tr>  
                             <th style="text-align:center">Categoría</th>
-                            <th style="text-align:center">Nombre Imágen</th>
+                            <th style="text-align:center">Nombre Imagen</th>
                             <th style="text-align:center">Descripción</th>
-                            <th style="text-align:center">Imágen</th>
+                            <th style="text-align:center">Imagen</th>
                             <?php if($_SESSION['modulos']['Editar- Personal Externo']==1){ ?>
                                 <th style="text-align:center">Gestión</th>
                             <?php } ?>
@@ -467,7 +467,7 @@
                                 <option value="Documentos" >Documentos</option>
                             </select>
                         </div>
-                        <button><a href="javascript:%20valida_foto()" id="submit">Guardar Imágen</a></button>
+                        <button><a href="javascript:%20valida_foto()" id="submit">Guardar Imagen</a></button>
                     </form>
                 </div>
             </div>

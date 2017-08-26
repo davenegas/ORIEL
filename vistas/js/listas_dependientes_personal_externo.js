@@ -217,7 +217,7 @@ function eliminar_imagen(id_imagen){
             $.post("index.php?ctl=eliminar_imagen_personal_externo", {id_imagen:id_imagen});//,function(data){
                 $.alert({
                     title: 'Información!',
-                    content: 'Imágen eliminada con exito con éxito!!!',      
+                    content: 'Imagen eliminada con éxito!!!',      
                 });       
             location.reload();  
             },

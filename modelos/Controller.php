@@ -5013,15 +5013,15 @@ class Controller{
     public function guardar_imagen_unidades_de_video(){
         if(isset($_SESSION['nombre'])){
             if (!(isset($_POST['Nombre']))){
-                echo "<script type=\"text/javascript\">alert('Es necesario ingresar un nombre de referencia para la imágen!');history.go(-1);</script>";;
+                echo "<script type=\"text/javascript\">alert('Es necesario ingresar un nombre de referencia para la imagen!');history.go(-1);</script>";;
                 exit();
             }
             if (!(isset($_POST['Descripcion']))){
-                echo "<script type=\"text/javascript\">alert('Es necesario ingresar una descripción básica para la imágen!');history.go(-1);</script>";;
+                echo "<script type=\"text/javascript\">alert('Es necesario ingresar una descripción básica para la imagen!');history.go(-1);</script>";;
                 exit();
             }
             if (!(isset($_POST['Categoria']))){
-                echo "<script type=\"text/javascript\">alert('Es necesario elegir una categoría para la imágen!');history.go(-1);</script>";;
+                echo "<script type=\"text/javascript\">alert('Es necesario elegir una categoría para la imagen!');history.go(-1);</script>";;
                 exit();
             }
             if (!(isset($_POST['id_unidad_video']))){ 
@@ -5122,15 +5122,15 @@ class Controller{
     public function guardar_imagen_puntos_bcr(){
         if(isset($_SESSION['nombre'])){
             if (!(isset($_POST['Nombre']))){
-                echo "<script type=\"text/javascript\">alert('Es necesario ingresar un nombre de referencia para la imágen!');history.go(-1);</script>";;
+                echo "<script type=\"text/javascript\">alert('Es necesario ingresar un nombre de referencia para la imagen!');history.go(-1);</script>";
                 exit();
             }
             if (!(isset($_POST['Descripcion']))){
-                echo "<script type=\"text/javascript\">alert('Es necesario ingresar una descripción básica para la imágen!');history.go(-1);</script>";;
+                echo "<script type=\"text/javascript\">alert('Es necesario ingresar una descripción básica para la imagen!');history.go(-1);</script>";
                 exit();
             }
             if (!(isset($_POST['Categoria']))){
-                echo "<script type=\"text/javascript\">alert('Es necesario elegir una categoría para la imágen!');history.go(-1);</script>";;
+                echo "<script type=\"text/javascript\">alert('Es necesario elegir una categoría para la imagen!');history.go(-1);</script>";
                 exit();
             }
             if (!(isset($_POST['id_punto_bcr']))){
@@ -8882,21 +8882,21 @@ class Controller{
             //Verifica que el nombre de la imagen exista en los parametros enviados
             if (!(isset($_POST['Nombre']))){
                 //Muestra advertencia en pantalla
-                echo "<script type=\"text/javascript\">alert('Es necesario ingresar un nombre de referencia para la imágen!');history.go(-1);</script>";;
+                echo "<script type=\"text/javascript\">alert('Es necesario ingresar un nombre de referencia para la imagen!');history.go(-1);</script>";;
                 //Sale del metodo
                 exit();
             }
             //Verifica que la descripcion de la imagen exista en los parametros enviados
             if (!(isset($_POST['Descripcion']))){
                 //Muestra advertencia en pantalla
-                echo "<script type=\"text/javascript\">alert('Es necesario ingresar una descripción básica para la imágen!');history.go(-1);</script>";;
+                echo "<script type=\"text/javascript\">alert('Es necesario ingresar una descripción básica para la imagen!');history.go(-1);</script>";;
                 //Sale del metodo
                 exit();
             } 
             //Verifica que la categoria de la imagen exista en los parametros enviados
             if (!(isset($_POST['Categoria']))){
                 //Muestra advertencia en pantalla
-                echo "<script type=\"text/javascript\">alert('Es necesario elegir una categoría para la imágen!');history.go(-1);</script>";;
+                echo "<script type=\"text/javascript\">alert('Es necesario elegir una categoría para la imagen!');history.go(-1);</script>";;
                 //Sale del metodo
                 exit();
             }
@@ -10529,9 +10529,7 @@ class Controller{
             
             $obj_pm->obtiene_lista_operadores_que_han_realizado_controles_historicos();
             $lista_de_operadores=$obj_pm->getArreglo();
-                    
 
-            
             if((isset($_POST['fecha_inicial']))&&(isset($_POST['fecha_final']))){
                 
                 
@@ -10541,8 +10539,7 @@ class Controller{
 
                 if(($_POST['fecha_inicial'] < $fecha_actual)&&(($_POST['fecha_final'] < $fecha_actual)))
                 {
-       
-                    
+
                     $fecha_inicio = $_POST['fecha_inicial'];
                     $fecha_fin= $_POST['fecha_final'];
                     $operador=$_POST['lista_operadores'];
@@ -10732,6 +10729,7 @@ class Controller{
                         for ($i = 0; $i < count($params); $i++) {
                             $suma_revisiones=$suma_revisiones+$params[$i]['numFilas'];
                         }
+                        $suma_revisiones=$suma_revisiones-$esperado_individual['numFilas'];
 
                         $suma_inconsistencias=0;
                         for ($i = 0; $i < count($params2); $i++) {
@@ -10786,6 +10784,8 @@ class Controller{
                         for ($i = 0; $i < count($params3); $i++) {
                             $suma_revisiones2=$suma_revisiones2+$params3[$i]['TOTAL'];
                         }
+                        
+                        $suma_revisiones2=$suma_revisiones2-$esperado_individual['TOTAL'];
 
                         $params2=array();
                         if ($turno=="1"){
@@ -10831,20 +10831,14 @@ class Controller{
                         for ($i = 0; $i < count($params); $i++) {
                             $suma_revisiones=$suma_revisiones+$params[$i]['numFilas'];
                         }
+                        $suma_revisiones=$suma_revisiones-$esperado_grupal['numFilas'];
 
                         $suma_inconsistencias=0;
                         for ($i = 0; $i < count($params2); $i++) {
                             $suma_inconsistencias=$suma_inconsistencias+$params2[$i]['Total'];
                         }
                     }
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
+                      
                 }else{
                     
                     //$obj_pm->obtiene_lista_operadores_que_han_realizado_controles();
@@ -11044,6 +11038,7 @@ class Controller{
                         for ($i = 0; $i < count($params); $i++) {
                             $suma_revisiones=$suma_revisiones+$params[$i]['numFilas'];
                         }
+                        $suma_revisiones=$suma_revisiones-$esperado_individual['numFilas'];
 
                         $suma_inconsistencias=0;
                         for ($i = 0; $i < count($params2); $i++) {
@@ -11098,6 +11093,7 @@ class Controller{
                         for ($i = 0; $i < count($params3); $i++) {
                             $suma_revisiones2=$suma_revisiones2+$params3[$i]['TOTAL'];
                         }
+                        $suma_revisiones2=$suma_revisiones2-$esperado_individual['TOTAL'];
 
                         $params2=array();
                         if ($turno=="1"){
@@ -11143,6 +11139,7 @@ class Controller{
                         for ($i = 0; $i < count($params); $i++) {
                             $suma_revisiones=$suma_revisiones+$params[$i]['numFilas'];
                         }
+                        $suma_revisiones=$suma_revisiones-$esperado_grupal['numFilas'];
 
                         $suma_inconsistencias=0;
                         for ($i = 0; $i < count($params2); $i++) {

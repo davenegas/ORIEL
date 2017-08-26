@@ -428,9 +428,9 @@
                 <thead>
                     <tr>  
                         <th style="text-align:center">Categoría</th>
-                        <th style="text-align:center">Nombre Imágen</th>
+                        <th style="text-align:center">Nombre Imagen</th>
                         <th style="text-align:center">Descripción</th>
-                        <th style="text-align:center">Imágen</th>
+                        <th style="text-align:center">Imagen</th>
                         <th style="text-align:center" hidden="hidden">Nombre Ruta</th>
                     </tr>
                 </thead>

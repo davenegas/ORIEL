@@ -6,7 +6,6 @@ class Mail_Provider{
      * Variables publicas, que determinan los parametros de conexión a la base de datos,
      * así como el uso de variables propias de la clase para gestión de la información
      */
-   private $error="";
    private $mail;
    
    //Constructor que inicializa las variables 
@@ -93,59 +92,3 @@ class Mail_Provider{
        }
    }
 }
-//            //Objeto de la clase
-//            $this->mail = new PHPMailer();
-//            
-//            //indico a la clase que use SMTP
-//            $this->mail->isSMTP();
-//            
-//            //Debo de hacer autenticación SMTP
-//            $this->mail->SMTPAuth = true;
-//            
-//            //$this->mail->SMTPSecure = "ssl";
-//            $this->mail->SMTPSecure = "tls";
-//            
-//            //indico el servidor 
-//            $this->mail->Host = "smtp.office365.com";
-//           
-//            //indico el puerto que usa 
-//            $this->mail->Port = 587;
-//
-//            //Nombre de usuario
-//            $this->mail->Username = "111690771@bancobcr.com";
-//            
-//            //Password
-//            $this->mail->Password = "******";
-//         
-
-/*
- * 
- * 
- * 
- *   $this->mail = new PHPMailer();
-            //indico a la clase que use SMTP
-            $this->mail->isSMTP();
-            //permite modo debug para ver mensajes de las cosas que van ocurriendo
-            $this->mail->SMTPDebug=2;
-            //Debo de hacer autenticación SMTP
-            $this->mail->SMTPAuth = true;
-            $this->mail->CharSet='UTF-8';
-            //$this->mail->SMTPSecure = "ssl";
-            $this->mail->SMTPSecure = "tls";
-            //indico el servidor de Gmail para SMTP
-			//$this->mail->Host = "smtp.gmail.com";
-            $this->mail->Host = "10.1.8.175";
-            //indico el puerto que usa Gmail
-            //$this->mail->Port = 465;
-            $this->mail->Port = 25;
-
-            //indico un usuario / clave de un usuario de gmail
-            //$this->mail->Username = "orielinforma@gmail.com";
-			$this->mail->Username = "oriel@bancobcr.com";
-            //$this->mail->Password = "holaholabcr";
-			$this->mail->Password = "S3gur1d4d16";
-			//$this->mail->SetFrom('orielinforma@gmail.com', 'Oriel Jefatura de Seguridad');
-            //$this->mail->addReplyTo('orielinforma@gmail.com', 'Oriel Jefatura de Seguridad');
-            $this->mail->SetFrom('oriel@bancobcr.com', 'Oriel Jefatura de Seguridad');
-            $this->mail->addReplyTo('oriel@bancobcr.com', 'Oriel Jefatura de Seguridad');
- */

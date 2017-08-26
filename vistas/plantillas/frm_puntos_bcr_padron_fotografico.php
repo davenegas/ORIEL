@@ -30,7 +30,7 @@
                         $.post("index.php?ctl=eliminar_imagen_padron_puntobcr", {id_imagen:id_imagen,ruta_imagen:ruta_imagen});//,function(data){
                             $.alert({
                                 title: 'Información!',
-                                content: 'Imágen eliminada con exito con éxito!!!',
+                                content: 'Imagen eliminada con éxito!!!',
                             });       
                             location.reload();  
                     },
@@ -45,7 +45,7 @@
         <div class="container animated fadeIn">
             <h1 align="center">Padrón Fotográfico</h1>
             <?php if($_SESSION['modulos']['Editar- Padrón Fotográfico Puntos BCR']==1){ ?>
-                <h3>Agregar nueva Imágen (no aplica para capturas de grabador de video)</h3>
+                <h3>Agregar nueva Imagen (no aplica para capturas de grabador de video)</h3>
                 <!--Agregar nuevo detalle o seguimiento del evento-->
                 <form class="form-horizontal" role="form" enctype="multipart/form-data" method="POST" action="index.php?ctl=guardar_imagen_puntos_bcr">
                     
@@ -86,7 +86,7 @@
                         </select>
                     </div>
 
-                <button type="submit" class="btn btn-default">Guardar Imágen</button>
+                <button type="submit" class="btn btn-default">Guardar Imagen</button>
                 </form>
             <?php }?>
         
@@ -99,9 +99,9 @@
                 <thead>
                     <tr>  
                         <th style="text-align:center">Categoría</th>
-                        <th style="text-align:center">Nombre Imágen</th>
+                        <th style="text-align:center">Nombre Imagen</th>
                         <th style="text-align:center">Descripción</th>
-                        <th style="text-align:center">Imágen</th>
+                        <th style="text-align:center">Imagen</th>
                         <?php if($_SESSION['modulos']['Editar- Padrón Fotográfico Puntos BCR']==1){ ?>
                             <th style="text-align:center">Gestión</th>
                         <?php } ?>
@@ -136,9 +136,9 @@
             <thead>
             <tr>  
                 <th style="text-align:center">Categoría</th>
-                <th style="text-align:center">Nombre Imágen</th>
+                <th style="text-align:center">Nombre Imagen</th>
                 <th style="text-align:center">Descripción</th>
-                <th style="text-align:center">Imágen</th>
+                <th style="text-align:center">Imagen</th>
                 
                 <th style="text-align:center" hidden="hidden">Nombre Ruta</th>
             </tr>

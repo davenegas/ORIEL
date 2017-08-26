@@ -161,7 +161,7 @@
                     <select class="form-control" id="tipo_inconsistencia" name="tipo_inconsistencia" > 
                         <option value="0">Cámara(s) Movida(s)</option>
                         <option value="1">Falla Color</option>
-                        <option value="2">Falla Imágen</option> 
+                        <option value="2">Falla Imagen</option> 
                         <option value="3">Cámara Desenfocada</option> 
                         <option value="4">Diferencia Cantidad Cámaras</option> 
                         <option value="5">Falla Grabador de Video</option> 
