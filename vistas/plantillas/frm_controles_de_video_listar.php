@@ -346,7 +346,8 @@
             <h2 style="text-align:center">Control de Video <?php echo $vector_puesto_de_monitoreo_actual[0]['Nombre'];?></h2>
             <h4 style="text-align:center">Unidad de Video Actual: <?php echo $vector_informacion_unidad_video[0]['Descripcion'];?> (<?php echo $vector_punto_bcr[0]['Codigo'];?>) </h4>
             <h4><a href="#" onclick="liberar_puesto_de_monitoreo('<?php echo $vector_revision_de_video_actual[0]['ID_Puesto_Monitoreo']?>')">Liberar Puesto de Monitoreo</a></h4>
-            <!--<p>A continuación se detallan los diferentes puestos de monitoreo registrados en el sistema:</p>-->            
+            <!--<p>A continuación se detallan los diferentes puestos de monitoreo registrados en el sistema:</p>-->      
+            
             <table id="myTable" class="table table-hover" style="text-align:center">
                 <tbody>
                     <tr style="text-align:center" align="center">

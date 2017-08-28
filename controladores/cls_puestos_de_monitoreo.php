@@ -895,6 +895,18 @@ class cls_puestos_de_monitoreo{
        
     }
     
+     //Este metodo realiza la modificación del estado del modulo, de activo a inactivo o viceversa en la bd
+    function edita_usuario_y_tiempo_de_inicio_en_revision_de_video_dinamica_pruebas(){
+        $this->obj_data_provider->conectar();
+       
+        //Llama al metodo para editar los datos correspondientes
+        $this->obj_data_provider->edita_datos("T_BitacoraRevisionesVideo","Fecha_Inicia_Revision='".$this->fecha_inicia_revision."',Hora_Inicia_Revision='".$this->hora_inicia_revision."',ID_Usuario=".$this->id_usuario.",ID_Bitacora_Control_Puesto_Monitoreo=".$this->id_ultimo_toma_puesto_ingresada.",Posicion=".$this->posicion.",ID_Unidad_Video=(select temp.ID_Unidad_Video from (select uv.ID_Unidad_Video,MAX(concat(br.Fecha_Termina_Revision,' ',br.Hora_Termina_Revision)) Fecha_Hora from t_unidadvideo uv left join t_bitacorarevisionesvideo br on uv.ID_Unidad_Video=br.ID_Unidad_Video left join t_bitacoracontrolpuestomonitoreo cp on cp.ID_Bitacora_Control_Puesto_Monitoreo=br.ID_Bitacora_Control_Puesto_Monitoreo where uv.Estado=0 and (br.Estado is null or br.Estado = 1 or (br.Estado=0 and cp.Fecha_Libera_Control is NOT null) or (br.Estado=0 and cp.Fecha_Libera_Control is null and TIMESTAMPDIFF(MINUTE, concat(br.Fecha_Inicia_Revision,' ',br.Hora_Inicia_Revision),NOW())>20)) group by uv.ID_Unidad_Video order by Fecha_Hora asc limit ".rand(0,5).",1) temp)",$this->condicion);
+        //Metodo de la clase data provider que desconecta la sesión con la base de datos
+        $this->obj_data_provider->desconectar();
+       
+    }
+
+    
     //Este metodo realiza la modificación del estado del modulo, de activo a inactivo o viceversa en la bd
     function edita_tiempo_de_inicio_en_revision_de_video(){
         $this->obj_data_provider->conectar();
@@ -998,6 +1010,13 @@ class cls_puestos_de_monitoreo{
     public function agregar_nuevo_registro_bitacora_revisiones_de_video(){
         $this->obj_data_provider->conectar();
         $this->obj_data_provider->inserta_datos("t_bitacorarevisionesvideo", "ID_Bitacora_Revision_Video,Fecha_Inicia_Revision,Hora_Inicia_Revision,ID_Bitacora_Control_Puesto_Monitoreo,ID_Usuario,ID_Unidad_Video,ID_Puesto_Monitoreo,Posicion,Observaciones,Estado", "null,'".$this->fecha_inicia_revision."','".$this->hora_inicia_revision."',".$this->id_ultimo_toma_puesto_ingresada.",".$this->id_usuario.",".$this->id_unidad_video.",".$this->id_puesto_monitoreo.",".$this->posicion.",'".$this->observaciones."',".$this->estado);
+        $this->arreglo=$this->obj_data_provider->getArreglo();
+        $this->obj_data_provider->desconectar();
+    }
+    
+    public function agregar_nuevo_registro_bitacora_revisiones_de_video_pruebas(){
+        $this->obj_data_provider->conectar();
+        $this->obj_data_provider->inserta_datos("t_bitacorarevisionesvideo", "ID_Bitacora_Revision_Video,Fecha_Inicia_Revision,Hora_Inicia_Revision,ID_Bitacora_Control_Puesto_Monitoreo,ID_Usuario,ID_Unidad_Video,ID_Puesto_Monitoreo,Posicion,Observaciones,Estado", "null,'".$this->fecha_inicia_revision."','".$this->hora_inicia_revision."',".$this->id_ultimo_toma_puesto_ingresada.",".$this->id_usuario.",(select temp.ID_Unidad_Video from (select uv.ID_Unidad_Video,MAX(concat(br.Fecha_Termina_Revision,' ',br.Hora_Termina_Revision)) Fecha_Hora from t_unidadvideo uv left join t_bitacorarevisionesvideo br on uv.ID_Unidad_Video=br.ID_Unidad_Video left join t_bitacoracontrolpuestomonitoreo cp on cp.ID_Bitacora_Control_Puesto_Monitoreo=br.ID_Bitacora_Control_Puesto_Monitoreo where uv.Estado=0 and (br.Estado is null or br.Estado = 1 or (br.Estado=0 and cp.Fecha_Libera_Control is NOT null) or (br.Estado=0 and cp.Fecha_Libera_Control is null and TIMESTAMPDIFF(MINUTE, concat(br.Fecha_Inicia_Revision,' ',br.Hora_Inicia_Revision),NOW())>20)) group by uv.ID_Unidad_Video order by Fecha_Hora asc limit ".rand(0,5).",1) temp),".$this->id_puesto_monitoreo.",".$this->posicion.",'".$this->observaciones."',".$this->estado);
         $this->arreglo=$this->obj_data_provider->getArreglo();
         $this->obj_data_provider->desconectar();
     }

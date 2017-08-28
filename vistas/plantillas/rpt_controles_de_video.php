@@ -40,7 +40,7 @@
                     yAxis: {
                         min: 0,
                         title: {
-                            text: 'Cantidad de Revisiones de Video',
+                            text: 'Cantidad de Revisiones de Video ',
                             align: 'high'
 			},
                         labels: {
@@ -58,7 +58,7 @@
 			enabled: false
                     },
                     series: [{
-                        name: 'Cantidad Revisiones de Video:'+'<?php echo $suma_revisiones;?>',
+                        name: 'Cantidad Revisiones de Video: '+'<?php echo $suma_revisiones;?>',
 			data: (function() { var data = [];
                             <?php   for($i = 0 ;$i<count($params);$i++){     ?>
                             data.push([<?php echo $params[$i]['TOTAL'];?>]);
@@ -108,7 +108,7 @@
                         }
                     },
                     series: [{
-                        name: 'Cantidad de Retrasos'+'<?php echo $suma_inconsistencias;?>',
+                        name: 'Cantidad de Retrasos: '+'<?php echo $suma_inconsistencias;?>',
                         data: (function() { var data = [];
                             <?php   for($i = 0 ;$i<count($params2);$i++){     ?>
                             data.push([<?php echo $params2[$i]['Total'];?>]);
@@ -168,7 +168,7 @@
                     },
              
                     series: [{
-                        name: 'Cantidad Revisiones de Video:'+'<?php echo $suma_revisiones;?>',
+                        name: 'Cantidad Revisiones de Video: '+'<?php echo $suma_revisiones;?>',
                         data:(function() { var data = [];
                             <?php   for($i = 0 ;$i<count($params);$i++){     ?>
                             data.push(['<?php echo $params[$i]['mes'];?>',<?php echo $params[$i]['numFilas'];?>]);
@@ -297,7 +297,7 @@
                         },
              
                         series: [{
-                            name: 'Cantidad Revisiones de Video:'+'<?php echo $suma_revisiones;?>',
+                            name: 'Cantidad Revisiones de Video: '+'<?php echo $suma_revisiones;?>',
                             data:(function() { var data = [];
                                 <?php   for($i = 0 ;$i<count($params);$i++){     ?>
                                 data.push(['<?php echo $params[$i]['mes'];?>',<?php echo $params[$i]['numFilas'];?>]);
@@ -342,7 +342,7 @@
                     yAxis: {
                         min: 0,
                         title: {
-                            text: 'Cantidad de Revisiones de Video',
+                            text: 'Cantidad de Revisiones de Video ',
                             align: 'high'
 			},
                         labels: {
@@ -360,7 +360,7 @@
 			enabled: false
                     },
                     series: [{
-                        name: 'Cantidad Revisiones de Video:'+'<?php echo $suma_revisiones2;?>',
+                        name: 'Cantidad Revisiones de Video: '+'<?php echo $suma_revisiones2;?>',
 			data: (function() { var data = [];
                             <?php   for($i = 0 ;$i<count($params3);$i++){     ?>
                             data.push([<?php echo $params3[$i]['TOTAL'];?>]);

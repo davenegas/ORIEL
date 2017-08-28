@@ -464,6 +464,7 @@
                         <option value="1" >Sin Utilizar/Disponible</option>   
                         <option value="2" >En Taller/Con Avería</option>   
                         <option value="3" >Obsoleto/Descontinuado</option>   
+                        <option value="4" >En Producción/Fuera de Control de Video</option>
                     </select>
                     <button><a href="javascript:%20check_empty_Estado_Unidad_Video()" id="submit">Guardar</a></button>
                 </div>
