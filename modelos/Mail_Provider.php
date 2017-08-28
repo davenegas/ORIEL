@@ -17,7 +17,7 @@ class Mail_Provider{
             //indico a la clase que use SMTP
             $this->mail->isSMTP();
             //permite modo debug para ver mensajes de las cosas que van ocurriendo
-            $this->mail->SMTPDebug=2;
+            //$this->mail->SMTPDebug=2;
             //Debo de hacer autenticación SMTP
             $this->mail->SMTPAuth = true;
             $this->mail->CharSet='UTF-8';

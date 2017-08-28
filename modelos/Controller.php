@@ -11897,11 +11897,11 @@ class Controller{
                 
                 $bitacora_revision_video=null;
                 if(count($bitacora_revision_video_traza)>0 &&count($bitacora_revision_video_original)>0 ){
-                    $bitacora_revision_video_traza= array_merge($bitacora_revision_video_traza,$bitacora_revision_video_original);
+                    $bitacora_revision_video= array_merge($bitacora_revision_video_traza,$bitacora_revision_video_original);
                 } else {
                     if(count($bitacora_revision_video_traza)>0){
                         $bitacora_revision_video=$bitacora_revision_video_traza;
-                    }if(count($bitacora_revision_video_original)>0){
+                    }if(count($bitacora_revision_video_original)>0) {
                         $bitacora_revision_video=$bitacora_revision_video_original;
                     }
                 }
