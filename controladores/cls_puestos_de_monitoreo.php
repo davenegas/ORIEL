@@ -1147,4 +1147,18 @@ class cls_puestos_de_monitoreo{
         $this->obj_data_provider->desconectar();
         
     }
+    
+    //Obtenine información de las revisiones, suma.
+    public function obtener_revision_contador(){
+        $this->obj_data_provider->conectar();
+        $this->arreglo=$this->obj_data_provider->trae_datos("T_Revision_Contador", "*", $this->condicion);
+        $this->arreglo=$this->obj_data_provider->getArreglo();
+        $this->obj_data_provider->desconectar();
+    }
+    public function agregar_revision_contador(){
+        $this->obj_data_provider->conectar();
+        $this->obj_data_provider->inserta_datos("T_Revision_Contador", "ID_Revision_Contador,Fecha_Hora,Numero_Hora,Suma_Revisiones,Convinacion", "null,'".$this->fecha_validacion."','".$this->hora_reporta."','".$this->campos_valores."','".$this->descripcion."'");
+        $this->arreglo=$this->obj_data_provider->getArreglo();
+        $this->obj_data_provider->desconectar();
+    } 
 }?>

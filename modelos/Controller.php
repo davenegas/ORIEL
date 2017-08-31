@@ -2461,7 +2461,8 @@ class Controller{
                 //Agrega el asunto del correo para envio al usuario realizando la solicitud
                 $obj_correo->agregar_asunto_de_correo("Recordatorio Clave Sistema Oriel");
                 //Agrega detalle de correo
-                $obj_correo->agregar_detalle_de_correo("Este es un mensaje automático, favor no responderlo.</br> Su clave del sistema Oriel es: ".$pass);
+                $obj_correo->agregar_detalle_de_correo("Este es un mensaje automático, favor no responderlo.</br> "
+                        . "Su clave del sistema Oriel es: ".$pass);
                 //Agrega direccion de correo del destinatario
                 $obj_correo->agregar_direccion_de_correo($correo, $usuario);
                 //Procede a enviar el correo
@@ -11595,10 +11596,8 @@ class Controller{
             $revision_61_120=0;
             //Revisiones entre 2 y 3 horas
             $revision_121_180=0;
-            //Revisiones entre 3 y 4 horas
-            $revision_181_240=0;
-            //Revisiones mas de 4 horas
-            $revision_241_mas=0;
+            //Revisiones mas 3 horas
+            $revision_181_mas=0;
             $tam=  count($ultima_revision);
             for ($i = 0; $i <$tam; $i++) {
                 //asigna da date2 la fecha que trae en el arreglo
@@ -11611,11 +11610,7 @@ class Controller{
                     if($suma_tiempos>60){
                         if($suma_tiempos>120){
                             if($suma_tiempos>180){
-                                if($suma_tiempos>240){
-                                    $revision_241_mas++;
-                                }else{
-                                    $revision_181_240++;
-                                }
+                                $revision_181_mas++;
                             }else{
                                $revision_121_180++; 
                             }
@@ -11627,7 +11622,10 @@ class Controller{
                     }
                 }
             }
-            $total_suma_revisiones= ($revision_0_60*1)+($revision_61_120*1)+($revision_121_180*3)+($revision_181_240*5)+($revision_241_mas*10);
+            //Obtiene el total de la revisión actual
+            $total_suma_revisiones= ($revision_0_60*1)+($revision_61_120*1)+($revision_121_180*10)+($revision_181_mas*50);
+            $convinacion = "menos 1 hr:".$revision_0_60.", entre 1y2 hrs:".$revision_61_120.", entre 2y3 hrs:".$revision_121_180.", mas 3 hrs:".$revision_181_mas;
+            $this->revision_contador($total_suma_revisiones, $convinacion);
             ////////////////////////////////////////////////////////////////////
             //OBTIENE INFORMACIÓN DE APERTURA DE CERRADURAS DE CENCON
             $obj_cencon->setCondicion("Hora_Cierre is null");
@@ -12187,6 +12185,34 @@ class Controller{
             }
         }
         echo $data;
+    }
+    
+    public function revision_contador($suma, $convinacion){
+        $time = time();
+        $obj_monitoreo = new cls_puestos_de_monitoreo();
+        if(date("i", $time)>='00' && date("i", $time)<='05'){
+            $obj_monitoreo->setCondicion("Fecha_Hora= '".date('Y-m-j')." ".date("H", $time).":00:00'");
+            $obj_monitoreo->obtener_revision_contador();
+            if(count($obj_monitoreo->getArreglo())==0){
+                $obj_monitoreo->setFecha_validacion(date('Y-m-j')." ".date("H", $time).":00:00");
+                $obj_monitoreo->setHora_reporta(date("H", $time));
+                $obj_monitoreo->setCampos_valores($suma);
+                $obj_monitoreo->setDescripcion($convinacion);
+                
+                $obj_monitoreo->agregar_revision_contador();
+            }
+        } if(date("i", $time)>='30' && date("i", $time)<='35'){
+            $obj_monitoreo->setCondicion("Fecha_Hora= '".date('Y-m-j')." ".date("H", $time).":30:00'");
+            $obj_monitoreo->obtener_revision_contador();
+            if(count($obj_monitoreo->getArreglo())==0){
+                $obj_monitoreo->setFecha_validacion(date('Y-m-j')." ".date("H", $time).":30:00");
+                $obj_monitoreo->setHora_reporta(date("H", $time).".5");
+                $obj_monitoreo->setCampos_valores($suma);
+                $obj_monitoreo->setDescripcion($convinacion);
+                
+                $obj_monitoreo->agregar_revision_contador();
+            }
+        }
     }
    
     ////////////////////////////////////////////////////////////////////////////

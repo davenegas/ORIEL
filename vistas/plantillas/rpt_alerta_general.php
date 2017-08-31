@@ -175,34 +175,16 @@
         
         <div class="col-sm-4 sidenav espacio-abajo">
             <div class="well" align="center">SISTEMA DE ALARMA</div>
-            <?php if($datos['contador_pruebas']!=0 || $datos['cont_pruebas_pendientes']!=0){ ?>
-                <div id="pruebas"  style="min-width: 200px; height: 200px; max-width: 300px; margin: 0 auto"></div>
-            <?php } ?>
-            <?php if($datos['contador_aperturas']!=0 || $datos['cont_aperturas_pendientes']!=0){ ?>
-                <div id="aperturas" style="min-width: 300px; height: 350px; max-width: 500px; margin: 0 auto"></div>
-            <?php } ?>
-            <?php if($datos['contador_cierres']!=0 || $datos['cont_cierres_pendientes']!=0){ ?>
-                <div id="cierres" style="min-width: 300px; height: 350px; max-width: 500px; margin: 0 auto"></div>
-            <?php } ?>
-            <?php if($datos['contador_pruebas']==0 && $datos['cont_pruebas_pendientes']==0 && $datos['contador_aperturas']==0 && 
-                $datos['cont_aperturas_pendientes']==0 && $datos['contador_cierres']==0){?>
-                <div class="well" align="center">No hay pendientes con el sistema de alarma</div>
-             <?php } ?>    
-        </div>
-        
-        <div class="col-sm-4 sidenav espacio-abajo">
-            <div class="well" align="center" >CONTROL DE VIDEO</div>
-            
-            <div id="datos_control" style="text-align: justify;" class="espacio-abajo borde-gris"></div>
-            
-            <div class="espacio-abajo well">
-                <h5 style="color: red;">Unidades de video, ultima revisión más de 4 horas: <?php echo $revision_241_mas;?></h5>
-                <h5 style="color: orange;">Unidades de video, ultima revisión entre 3 y 4 horas: <?php echo $revision_181_240;?></h5>
-                <h5>Unidades de video, ultima revisión entre 2 y 3 horas: <?php echo $revision_121_180;?></h5>
-                <h5>Unidades de video, ultima revisión entre 1 y 2 horas: <?php echo $revision_61_120;?></h5>
-                <h5>Unidades de video, ultima revisión en menos de una hora: <?php echo $revision_0_60;?></h5>
+            <div class="">
+                <h5><strong>Pruebas pendientes: <?php echo $datos['cont_pruebas_pendientes'];?></strong></h5>
+                <h5>Pruebas recibidas: <?php echo $datos['contador_pruebas'];?></h5>
+                <h5><strong>Aperturas pendientes: <?php echo $datos['cont_aperturas_pendientes'];?></strong></h5>
+                <h5>Aperturas recibidas: <?php echo $datos['contador_aperturas'];?></h5>
+                <h5><strong>Cierres pendientes: <?php echo $datos['cont_cierres_pendientes'];?></strong></h5>
+                <h5>Cierres recibidas: <?php echo $datos['contador_cierres'];?></h5>
             </div>
-            <div class="well" align="center" >CERRADURAS CENCON</div>
+            
+            <div class="well espacio-arriba" align="center" >CERRADURAS CENCON</div>
             <?php if(isset($vencidos)){ ?>
                 <div style="text-align: justify;" >
                     <h5 style="color: blueviolet">Cajero(s) informado al coordinador BCR= <?php echo $cajero_violeta;?></h5> 
@@ -215,6 +197,20 @@
                     <?php } ?>
                 </div>
             <?php } ?>
+        </div>
+        
+        <div class="col-sm-4 sidenav espacio-abajo">
+            <div class="well" align="center" >CONTROL DE VIDEO</div>
+            <div class="espacio-abajo well">
+                <h5 style="color: red;">Unidades de video, ultima revisión más de 3 horas: <?php echo $revision_181_mas;?></h5>
+                <h5 style="color: orange;">Unidades de video, ultima revisión entre 2 y 3 horas: <?php echo $revision_121_180;?></h5>
+                <h5>Unidades de video, ultima revisión entre 1 y 2 horas: <?php echo $revision_61_120;?></h5>
+                <h5>Unidades de video, ultima revisión en menos de una hora: <?php echo $revision_0_60;?></h5>
+            </div>
+            
+            <div id="datos_control" style="text-align: justify;" class="espacio-abajo borde-gris"></div>
+
+            
         </div>
         
         <div class="col-sm-4 sidenav espacio-abajo">
