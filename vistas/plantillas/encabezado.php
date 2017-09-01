@@ -252,8 +252,8 @@
                                 <li><a href="index.php?ctl=reporte_revisiones_video">Revisiones de Video</a></li> 
                             <?php }; ?>-->
                                 
-                            <?php if ($_SESSION['modulos']['Reportes-TL300 Puntos BCR']==1){ ?>
-                                <li><a href="index.php?ctl=reporte_tl300_en_puntos_bcr_listar">TL300 en Puntos BCR</a></li> 
+                            <?php if ($_SESSION['modulos']['Reportes-Alertas Generales']==1){ ?>
+                                <li><a href="index.php?ctl=reporte_tl300_en_puntos_bcr_listar">Direccionamiento Fo</a></li> 
                             <?php }; ?> 
                                 
                             <?php if ($_SESSION['modulos']['Reportes-Controles de Video']==1){ ?>

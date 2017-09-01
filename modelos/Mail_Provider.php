@@ -33,15 +33,16 @@ class Mail_Provider{
             //$this->mail->Port = 587;
 
             //indico un usuario / clave de un usuario de gmail
-            //$this->mail->Username = "orielinforma@gmail.com";
+            //$this->mail->Username = "113100038@bancobcr.com";
             $this->mail->Username = "oriel@bancobcr.com";
-            //$this->mail->Password = "holaholabcr";
+            //$this->mail->Password = "Entoas78.";
             $this->mail->Password = "asdf123.";
             //$this->mail->SetFrom('orielinforma@gmail.com', 'Oriel Jefatura de Seguridad');
             //$this->mail->addReplyTo('orielinforma@gmail.com', 'Oriel Jefatura de Seguridad');
             
-            $this->mail->SetFrom('oriel@bancobcr.com', 'Sistema Oriel');
-            $this->mail->addReplyTo('oriel@bancobcr.com', 'Sistema Oriel');
+            //$this->mail->SetFrom('113100038@bancobcr.com', 'Oriel');
+            $this->mail->SetFrom('oriel@bancobcr.com', 'Oriel');
+            $this->mail->addReplyTo('oriel@bancobcr.com', 'Oriel');
           
             
             //Acapara los errores que se puedan presentar y muestra en pantalla lo correspondiente

@@ -2461,8 +2461,11 @@ class Controller{
                 //Agrega el asunto del correo para envio al usuario realizando la solicitud
                 $obj_correo->agregar_asunto_de_correo("Recordatorio Clave Sistema Oriel");
                 //Agrega detalle de correo
-                $obj_correo->agregar_detalle_de_correo("Este es un mensaje automático, favor no responderlo.</br> "
-                        . "Su clave del sistema Oriel es: ".$pass);
+                $obj_correo->agregar_detalle_de_correo("Gracias por usar Oriel</br></br> "
+                        . "En respuesta a su solicitud, le reenviamos su clave: <strong>".$pass."</strong><br></br>"
+                        . "Le recordamos que su clave en Oriel no vence y es usted quien decide cuando cambiarla.<br><br>"
+                        . "Este es un mensaje automático, por favor no reponderlo. Si requiere ayuda, comuníquese con el Centro de Control Ext: 79066.</br></br>"
+                        . "<a>http://oriel</a>");
                 //Agrega direccion de correo del destinatario
                 $obj_correo->agregar_direccion_de_correo($correo, $usuario);
                 //Procede a enviar el correo
@@ -5249,7 +5252,10 @@ class Controller{
                     //Cierra el archivo
                     fclose($fp);
                     $cadena_oficiales="";
+                    $detalle="";
                     $obj_personal=new cls_personal_externo();
+                    $obj_correo = new Mail_Provider();
+                    
                     $fecha_actual= getdate();
                     $fecha_actual= $fecha_actual['year']."-".$fecha_actual['mon']."-".$fecha_actual['mday'];
 
@@ -5267,6 +5273,8 @@ class Controller{
                         //$cadena_oficiales.='Identificacion: '.$params[$i]['Identificacion'].";\r\n";
                         $sql = http_build_query($params[$i],null,', ');
                         $cadena_oficiales.= $sql.";\r\n\r\n";
+                        $detalle.=" Nombre: ".$params[$i]['Nombre']." ".$params[$i]['Apellido'].", Identificacion: ".$params[$i]['Identificacion']
+                                .", Vencimiento portación: ".$params[$i]['Fecha_Vencimiento_Portacion'].", Empresa: ".$params[$i]['Empresa'].".<br>";
                     }
                     //Abre el archivo para escribirle 
                     $fp = fopen($ruta,"w+"); //no olvidar crear al archivo visitantes.txt y poner el path correcto
@@ -5275,6 +5283,29 @@ class Controller{
                     //Cierra el archivo
                     fclose($fp);
                     //echo ($cadena_oficiales);
+                    if(count($cadena_oficiales)>0){
+                        //Asigna correo y nombre de los destinatarios
+                        $correo="davenegas@bancobcr.com";
+                        $usuario="";
+                        $obj_correo->agregar_direccion_de_correo($correo, $usuario);
+                        
+                        $correo="edvasquez@bancobcr.com";
+                        $usuario="";
+                        $obj_correo->agregar_direccion_de_correo($correo, $usuario);
+                         
+                        //Agrega el asunto del correo para envio al usuario realizando la solicitud
+                        $obj_correo->agregar_asunto_de_correo("Información personal externo");
+                        //Agrega detalle de correo
+                        $obj_correo->agregar_detalle_de_correo("Gracias por usar Oriel</br></br> "
+                            . "Las siguientes personas han sido deshabilitas del sistema:</br>"
+                            . $detalle."<br><br>"
+                            . "Este es un mensaje automático, por favor no reponderlo. Si requiere ayuda, comuníquese con el Centro de Control Ext: 79066.</br></br>"
+                            . "<a>http://oriel</a>");
+                        //Agrega direccion de correo del destinatario
+                        $obj_correo->agregar_direccion_de_correo($correo, $usuario);
+                        //Procede a enviar el correo
+                        $obj_correo->enviar_correo();
+                    }
                 }
                 break;
             case "Pruebas":
