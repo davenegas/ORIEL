@@ -35,7 +35,7 @@ class Mail_Provider{
             //indico un usuario / clave de un usuario de gmail
             //$this->mail->Username = "113100038@bancobcr.com";
             $this->mail->Username = "oriel@bancobcr.com";
-            //$this->mail->Password = "Entoas78.";
+            //$this->mail->Password = "Entoas79.";
             $this->mail->Password = "asdf123.";
             //$this->mail->SetFrom('orielinforma@gmail.com', 'Oriel Jefatura de Seguridad');
             //$this->mail->addReplyTo('orielinforma@gmail.com', 'Oriel Jefatura de Seguridad');
@@ -74,6 +74,23 @@ class Mail_Provider{
    public function agregar_direccion_de_correo($direccion,$nombre_destinatario){
     try{
        $this->mail->addAddress($direccion, $nombre_destinatario);
+    }catch (Exception $e){
+           echo 'Hubo un problema al agregar la dirección de correo';
+       }
+   }
+   
+   //Metodo que agrega detalle a la base de datos
+   public function agregar_direccion_de_correo_copia($direccion,$nombre_destinatario){
+    try{
+       $this->mail->addCC($direccion, $nombre_destinatario);
+    }catch (Exception $e){
+           echo 'Hubo un problema al agregar la dirección de correo';
+       }
+   }
+   //Metodo que agrega detalle a la base de datos
+   public function agregar_direccion_de_correo_oculta($direccion,$nombre_destinatario){
+    try{
+       $this->mail->addBCC($direccion, $nombre_destinatario);
     }catch (Exception $e){
            echo 'Hubo un problema al agregar la dirección de correo';
        }

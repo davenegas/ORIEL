@@ -5283,15 +5283,20 @@ class Controller{
                     //Cierra el archivo
                     fclose($fp);
                     //echo ($cadena_oficiales);
-                    if(count($cadena_oficiales)>0){
+                    if(count($params)>0){
                         //Asigna correo y nombre de los destinatarios
+                        $correo="PER_0150@bancobcr.com";
+                        $usuario="Operaciones de Seguridad";
+                        $obj_correo->agregar_direccion_de_correo($correo, $usuario);
+                        //Asigna copia del correo 
+                        $correo="Coordinacion_Centro_de_Control@bancobcr.com";
+                        $usuario="Coordinacion Centro Control";
+                        $obj_correo->agregar_direccion_de_correo_copia($correo, $usuario);
+                        //Agregar direccion de correo oculta
                         $correo="davenegas@bancobcr.com";
-                        $usuario="";
-                        $obj_correo->agregar_direccion_de_correo($correo, $usuario);
+                        $usuario="Diego Venegas";
+                        $obj_correo->agregar_direccion_de_correo_oculta($correo, $usuario);
                         
-                        $correo="edvasquez@bancobcr.com";
-                        $usuario="";
-                        $obj_correo->agregar_direccion_de_correo($correo, $usuario);
                          
                         //Agrega el asunto del correo para envio al usuario realizando la solicitud
                         $obj_correo->agregar_asunto_de_correo("Información personal externo");
@@ -7170,18 +7175,18 @@ class Controller{
     }
     
     public function direcciones_ip_guardar() {
-          if(isset($_SESSION['nombre'])){
-               $obj_tipo_ip = new cls_direccionIP();
-               $obj_tipo_ip->setTipo_IP($_POST['nombre']);
-               $obj_tipo_ip->setDireccionIP($_POST['numero']); 
-               $obj_tipo_ip->setObservaciones($_POST['observaciones']);
-               
-              if ($_POST['ID_Direccion_IP']==0){
-                   $obj_tipo_ip->agregar_direccion_ip();
-                }else{
-                    $obj_tipo_ip->setCondicion("ID_Direccion_IP='".$_POST['ID_Direccion_IP']."'");
-                    $obj_tipo_ip->edita_ip();
-                }       
+        if(isset($_SESSION['nombre'])){
+            $obj_tipo_ip = new cls_direccionIP();
+            $obj_tipo_ip->setTipo_IP($_POST['nombre']);
+            $obj_tipo_ip->setDireccionIP($_POST['numero']); 
+            $obj_tipo_ip->setObservaciones($_POST['observaciones']);
+
+            if ($_POST['ID_Direccion_IP']==0){
+                $obj_tipo_ip->agregar_direccion_ip();
+            }else{
+                $obj_tipo_ip->setCondicion("ID_Direccion_IP='".$_POST['ID_Direccion_IP']."'");
+                $obj_tipo_ip->edita_ip();
+            }       
                    
            $obj_tipo_ip->setCondicion("");    
            $obj_tipo_ip->obtiene_direccionesIP();
@@ -12222,6 +12227,7 @@ class Controller{
         $time = time();
         $obj_monitoreo = new cls_puestos_de_monitoreo();
         if(date("i", $time)>='00' && date("i", $time)<='05'){
+            sleep (rand(1,4));
             $obj_monitoreo->setCondicion("Fecha_Hora= '".date('Y-m-j')." ".date("H", $time).":00:00'");
             $obj_monitoreo->obtener_revision_contador();
             if(count($obj_monitoreo->getArreglo())==0){
@@ -12233,6 +12239,7 @@ class Controller{
                 $obj_monitoreo->agregar_revision_contador();
             }
         } if(date("i", $time)>='30' && date("i", $time)<='35'){
+            sleep (rand(1,4));
             $obj_monitoreo->setCondicion("Fecha_Hora= '".date('Y-m-j')." ".date("H", $time).":30:00'");
             $obj_monitoreo->obtener_revision_contador();
             if(count($obj_monitoreo->getArreglo())==0){

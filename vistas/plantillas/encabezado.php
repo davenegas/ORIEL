@@ -284,13 +284,8 @@
                         <a class="dropdown-toggle" data-toggle="dropdown" href="#">Módulos
                         <span class="caret"></span></a>
                         <ul class="dropdown-menu">
-
                             <?php if ($_SESSION['modulos']['Módulo-Bitácora Digital']==1){ ?>
                                 <li><a href="index.php?ctl=frm_eventos_listar">Bitácora Digital</a></li>
-                            <?php }; ?>
-
-                            <?php  if ($_SESSION['modulos']['Módulo-MRI BCR']==1){ ?>
-                                <!--<li><a href="#">MRI-BCR</a></li>-->
                             <?php }; ?>
 
                             <?php if ($_SESSION['modulos']['Módulo-PuntosBCR']==1){ ?>
@@ -320,17 +315,28 @@
                             <?php if ($_SESSION['modulos']['Módulo-Pruebas alarma']==1){?>
                                 <li><a href="index.php?ctl=pruebas_alarma">Pruebas alarma</a></li> 
                             <?php }; ?>
-                                
-                            <!--<?php if ($_SESSION['modulos']['Módulo-Control de Video']==1){?>
-                                <li><a href="http://10.170.5.80/Operaciones_de_Seguridad/ctrlvideo/consulta.html">Controles de Video</a></li>
-                            <?php }; ?>-->
-
+                            
                         </ul>
                     </li>
 
                 <?php }; ?>
-
-                   <?php 
+                    
+                <?php 
+                //************************************************Pinta Menu de Proyectos***************************************************************
+                if (($_SESSION['modulos']['Seguridad-Trazabilidad']==1)){ ?>
+                    <li class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">Proyectos
+                            <span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <?php if ($_SESSION['modulos']['Módulo-Pruebas alarma']==1){?>
+                                <li><a href="http://localhost/ORIEL-Cajeros/index.php?ctl=inicio">Control y Seguimiento ATM's</a></li> 
+                            <?php }; ?>
+                                
+                        </ul>
+                    </li>
+                <?php  };    ?>
+                    
+                <?php 
                 //************************************************Pinta Menu de Ayuda***************************************************************
                 if (($_SESSION['modulos']['Ayuda']==1)){ ?>
                     <li class="dropdown">
