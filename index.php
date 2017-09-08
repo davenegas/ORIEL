@@ -139,6 +139,8 @@ $map = array(
     'iniciar_sesion' => array('controller' =>'Controller', 'action' =>'iniciar_sesion'),
     'ejecucion_automatico_proceso' => array('controller' =>'Controller', 'action' =>'ejecucion_automatico_proceso'),
     
+    'comite_crisis' => array('controller' =>'Controller', 'action' =>'comite_crisis'),
+    
     //Controlador de Manuales de ayuda
     'manual_ayuda_privado'=>array('controller'=>'Controller', 'action'=>'manual_ayuda_privado'),
     'manual_personal_externo_publico'=>array('controller'=>'Controller', 'action'=>'manual_personal_externo_publico'),

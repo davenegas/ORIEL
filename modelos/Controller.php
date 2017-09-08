@@ -12978,6 +12978,24 @@ class Controller{
             //Llamada al formulario correspondiente de la vista
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }
-}
+    }
     
+    ////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////COMITÉ DE CRISSI////////////////////////////////
+    public function comite_crisis(){
+        if(isset($_SESSION['nombre'])){
+            $obj_general = new cls_general();
+            //Procede a ejecutar la consulta SQL para traer todas las notas contenidas en la bd.
+            $obj_general->obtener_notas();
+            //Obtener el vector de la consulta
+            $notas= $obj_general->getArreglo(); 
+            
+            require __DIR__ . '/../vistas/plantillas/frm_comite_crisis.php';
+        }else {
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            //Llamada al formulario correspondiente de la vista
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }
+    }
 }

@@ -27,8 +27,8 @@
 
                     myToast = $().toastmessage('showSuccessToast', "Revisiones de Control activadas");
                     $().toastmessage('removeToast', myToast);
-                    revision_controles();
-                    setInterval(revision_controles,60000);
+                    //revision_controles();
+                    //setInterval(revision_controles,60000);
                 <?php } ?>
             });
 
@@ -330,6 +330,9 @@
                         <ul class="dropdown-menu">
                             <?php if ($_SESSION['modulos']['Módulo-Pruebas alarma']==1){?>
                                 <li><a href="http://localhost/ORIEL-Cajeros/index.php?ctl=inicio">Control y Seguimiento ATM's</a></li> 
+                            <?php }; ?>
+                            <?php if ($_SESSION['modulos']['Módulo-Pruebas alarma']==1){?>
+                                <li><a href="index.php?ctl=comite_crisis">Comité de Crisis</a></li> 
                             <?php }; ?>
                                 
                         </ul>
