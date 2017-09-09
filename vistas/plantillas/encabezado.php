@@ -27,8 +27,8 @@
 
                     myToast = $().toastmessage('showSuccessToast', "Revisiones de Control activadas");
                     $().toastmessage('removeToast', myToast);
-                    //revision_controles();
-                    //setInterval(revision_controles,60000);
+                    revision_controles();
+                    setInterval(revision_controles,60000);
                 <?php } ?>
             });
 
