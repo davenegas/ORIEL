@@ -198,63 +198,63 @@ class cls_puntosBCR{
         $this->obj_data_provider->conectar();
         if($this->condicion==""){
             $this->arreglo=$this->obj_data_provider->trae_datos(
-                    "T_PuntoBCR
-			LEFT OUTER JOIN T_Horario ON T_PuntoBCR.ID_Horario= T_Horario.ID_Horario
-			LEFT OUTER JOIN T_TipoPuntoBCR ON T_PuntoBCR.ID_Tipo_Punto = T_TipoPuntoBCR.ID_Tipo_Punto
-			LEFT OUTER JOIN T_Empresa ON T_PuntoBCR.ID_Empresa = T_Empresa.ID_Empresa
-			LEFT OUTER JOIN T_Distrito ON T_PuntoBCR.ID_Distrito = T_Distrito.ID_Distrito
-			LEFT OUTER JOIN t_canton on t_distrito.ID_canton=t_canton.ID_canton
-			LEFT OUTER JOIN t_provincia on t_canton.ID_provincia=t_provincia.ID_provincia
-			LEFT OUTER JOIN T_UE_PuntoBCR ON T_PuntoBCR.ID_PuntoBCR= T_UE_PuntoBCR.ID_PuntoBCR
-			LEFT OUTER JOIN T_UnidadEjecutora ON T_UE_PuntoBCR.ID_Unidad_Ejecutora = T_UnidadEjecutora.ID_Unidad_Ejecutora
-			LEFT OUTER JOIN T_PuntoBCREnlace ON T_PuntoBCREnlace.ID_PuntoBCR = T_PuntoBCR.ID_PuntoBCR
-			LEFT OUTER JOIN T_EnlaceTelecomunicaciones ON T_EnlaceTelecomunicaciones.ID_Enlace = T_PuntoBCREnlace.ID_Enlace
-			LEFT OUTER JOIN T_PuntoBCRDireccionIP ON T_PuntoBCRDireccionIP.ID_PuntoBCR = T_PuntoBCR.ID_PuntoBCR
-			LEFT OUTER JOIN T_DireccionIP ON T_DireccionIP.ID_Direccion_IP = T_PuntoBCRDireccionIP.ID_Direccion_IP
-			GROUP by T_PuntoBCR.ID_PuntoBCR  order by T_TipoPuntoBCR.Tipo_Punto", 
-                    "T_PuntoBCR.ID_PuntoBCR, T_PuntoBCR.Nombre, T_PuntoBCR.Direccion, T_PuntoBCR.Codigo, 
-			T_PuntoBCR.Cuenta_SIS, T_PuntoBCR.Observaciones as Observaciones_Punto, 
-                        T_PuntoBCR.Estado as Estado_Punto, T_PuntoBCR.ID_Gerente_Zona, T_PuntoBCR.ID_Supervisor_Zona, 
-                        T_PuntoBCR.ID_Horario_Apertura, T_PuntoBCR.Geolocalizacion,
-			T_Horario.*, T_Provincia.Nombre_Provincia,T_Provincia.ID_Provincia,
-			T_TipoPuntoBCR.ID_Tipo_Punto, T_TipoPuntoBCR.Tipo_Punto,
-			T_Empresa.ID_Empresa, T_Empresa.Empresa,
-			T_Distrito.ID_Distrito, T_Distrito.Nombre_Distrito,
-			T_UnidadEjecutora.ID_Unidad_Ejecutora, T_UnidadEjecutora.Departamento,
-			GROUP_CONCAT(char(10),T_EnlaceTelecomunicaciones.Numero_Linea) as Numero_Linea,
-                        GROUP_CONCAT(char(10),T_DireccionIP.Direccion_IP) as Direccion_IP ",
-                    "");
+                "T_PuntoBCR
+                    LEFT OUTER JOIN T_Horario ON T_PuntoBCR.ID_Horario= T_Horario.ID_Horario
+                    LEFT OUTER JOIN T_TipoPuntoBCR ON T_PuntoBCR.ID_Tipo_Punto = T_TipoPuntoBCR.ID_Tipo_Punto
+                    LEFT OUTER JOIN T_Empresa ON T_PuntoBCR.ID_Empresa = T_Empresa.ID_Empresa
+                    LEFT OUTER JOIN T_Distrito ON T_PuntoBCR.ID_Distrito = T_Distrito.ID_Distrito
+                    LEFT OUTER JOIN t_canton on t_distrito.ID_canton=t_canton.ID_canton
+                    LEFT OUTER JOIN t_provincia on t_canton.ID_provincia=t_provincia.ID_provincia
+                    LEFT OUTER JOIN T_UE_PuntoBCR ON T_PuntoBCR.ID_PuntoBCR= T_UE_PuntoBCR.ID_PuntoBCR
+                    LEFT OUTER JOIN T_UnidadEjecutora ON T_UE_PuntoBCR.ID_Unidad_Ejecutora = T_UnidadEjecutora.ID_Unidad_Ejecutora
+                    LEFT OUTER JOIN T_PuntoBCREnlace ON T_PuntoBCREnlace.ID_PuntoBCR = T_PuntoBCR.ID_PuntoBCR
+                    LEFT OUTER JOIN T_EnlaceTelecomunicaciones ON T_EnlaceTelecomunicaciones.ID_Enlace = T_PuntoBCREnlace.ID_Enlace
+                    LEFT OUTER JOIN T_PuntoBCRDireccionIP ON T_PuntoBCRDireccionIP.ID_PuntoBCR = T_PuntoBCR.ID_PuntoBCR
+                    LEFT OUTER JOIN T_DireccionIP ON T_DireccionIP.ID_Direccion_IP = T_PuntoBCRDireccionIP.ID_Direccion_IP
+                    GROUP by T_PuntoBCR.ID_PuntoBCR  order by T_TipoPuntoBCR.Tipo_Punto", 
+                "T_PuntoBCR.ID_PuntoBCR, T_PuntoBCR.Nombre, T_PuntoBCR.Direccion, T_PuntoBCR.Codigo, 
+                    T_PuntoBCR.Cuenta_SIS, T_PuntoBCR.Observaciones as Observaciones_Punto, 
+                    T_PuntoBCR.Estado as Estado_Punto, T_PuntoBCR.ID_Gerente_Zona, T_PuntoBCR.ID_Supervisor_Zona, 
+                    T_PuntoBCR.ID_Horario_Apertura, T_PuntoBCR.Geolocalizacion,
+                    T_Horario.*, T_Provincia.Nombre_Provincia,T_Provincia.ID_Provincia,
+                    T_TipoPuntoBCR.ID_Tipo_Punto, T_TipoPuntoBCR.Tipo_Punto,
+                    T_Empresa.ID_Empresa, T_Empresa.Empresa,
+                    T_Distrito.ID_Distrito, T_Distrito.Nombre_Distrito,
+                    T_UnidadEjecutora.ID_Unidad_Ejecutora, T_UnidadEjecutora.Departamento,
+                    GROUP_CONCAT(char(10),T_EnlaceTelecomunicaciones.Numero_Linea) as Numero_Linea,
+                    GROUP_CONCAT(char(10),T_DireccionIP.Direccion_IP) as Direccion_IP ",
+                "");
             $this->arreglo=$this->obj_data_provider->getArreglo();
             $this->obj_data_provider->desconectar();
             $this->resultado_operacion=true;
         }
         else{
             $this->arreglo=$this->obj_data_provider->trae_datos(
-                    "T_PuntoBCR
-			LEFT OUTER JOIN T_Horario ON T_PuntoBCR.ID_Horario= T_Horario.ID_Horario
-			LEFT OUTER JOIN T_TipoPuntoBCR ON T_PuntoBCR.ID_Tipo_Punto = T_TipoPuntoBCR.ID_Tipo_Punto
-			LEFT OUTER JOIN T_Empresa ON T_PuntoBCR.ID_Empresa = T_Empresa.ID_Empresa
-			LEFT OUTER JOIN T_Distrito ON T_PuntoBCR.ID_Distrito = T_Distrito.ID_Distrito
-			LEFT OUTER JOIN t_canton on t_distrito.ID_canton=t_canton.ID_canton
-			LEFT OUTER JOIN t_provincia on t_canton.ID_provincia=t_provincia.ID_provincia
-			LEFT OUTER JOIN T_UE_PuntoBCR ON T_PuntoBCR.ID_PuntoBCR= T_UE_PuntoBCR.ID_PuntoBCR
-			LEFT OUTER JOIN T_UnidadEjecutora ON T_UE_PuntoBCR.ID_Unidad_Ejecutora = T_UnidadEjecutora.ID_Unidad_Ejecutora
-			LEFT OUTER JOIN T_PuntoBCREnlace ON T_PuntoBCREnlace.ID_PuntoBCR = T_PuntoBCR.ID_PuntoBCR
-			LEFT OUTER JOIN T_EnlaceTelecomunicaciones ON T_EnlaceTelecomunicaciones.ID_Enlace = T_PuntoBCREnlace.ID_Enlace
-			LEFT OUTER JOIN T_PuntoBCRDireccionIP ON T_PuntoBCRDireccionIP.ID_PuntoBCR = T_PuntoBCR.ID_PuntoBCR
-			LEFT OUTER JOIN T_DireccionIP ON T_DireccionIP.ID_Direccion_IP = T_PuntoBCRDireccionIP.ID_Direccion_IP", 
-                    "T_PuntoBCR.ID_PuntoBCR, T_PuntoBCR.Nombre, T_PuntoBCR.Direccion, T_PuntoBCR.Codigo, 
-			T_PuntoBCR.Cuenta_SIS, T_PuntoBCR.Observaciones as Observaciones_Punto, 
-                        T_PuntoBCR.Estado as Estado_Punto, T_PuntoBCR.ID_Gerente_Zona, T_PuntoBCR.ID_Supervisor_Zona,
-                        T_PuntoBCR.ID_Horario_Apertura,T_PuntoBCR.Geolocalizacion,
-			T_Horario.*, t_Provincia.Nombre_Provincia,T_Provincia.ID_Provincia,
-			T_TipoPuntoBCR.ID_Tipo_Punto, T_TipoPuntoBCR.Tipo_Punto,
-			T_Empresa.ID_Empresa, T_Empresa.Empresa,
-			T_Distrito.ID_Distrito, T_Distrito.Nombre_Distrito,
-			T_UnidadEjecutora.ID_Unidad_Ejecutora, T_UnidadEjecutora.Departamento,
-			GROUP_CONCAT(char(10),T_EnlaceTelecomunicaciones.Numero_Linea) as Numero_Linea,
-                        GROUP_CONCAT(char(10),T_DireccionIP.Direccion_IP) as Direccion_IP ",
-                    $this->condicion." GROUP by T_PuntoBCR.ID_PuntoBCR  order by T_TipoPuntoBCR.Tipo_Punto");
+                "T_PuntoBCR
+                    LEFT OUTER JOIN T_Horario ON T_PuntoBCR.ID_Horario= T_Horario.ID_Horario
+                    LEFT OUTER JOIN T_TipoPuntoBCR ON T_PuntoBCR.ID_Tipo_Punto = T_TipoPuntoBCR.ID_Tipo_Punto
+                    LEFT OUTER JOIN T_Empresa ON T_PuntoBCR.ID_Empresa = T_Empresa.ID_Empresa
+                    LEFT OUTER JOIN T_Distrito ON T_PuntoBCR.ID_Distrito = T_Distrito.ID_Distrito
+                    LEFT OUTER JOIN t_canton on t_distrito.ID_canton=t_canton.ID_canton
+                    LEFT OUTER JOIN t_provincia on t_canton.ID_provincia=t_provincia.ID_provincia
+                    LEFT OUTER JOIN T_UE_PuntoBCR ON T_PuntoBCR.ID_PuntoBCR= T_UE_PuntoBCR.ID_PuntoBCR
+                    LEFT OUTER JOIN T_UnidadEjecutora ON T_UE_PuntoBCR.ID_Unidad_Ejecutora = T_UnidadEjecutora.ID_Unidad_Ejecutora
+                    LEFT OUTER JOIN T_PuntoBCREnlace ON T_PuntoBCREnlace.ID_PuntoBCR = T_PuntoBCR.ID_PuntoBCR
+                    LEFT OUTER JOIN T_EnlaceTelecomunicaciones ON T_EnlaceTelecomunicaciones.ID_Enlace = T_PuntoBCREnlace.ID_Enlace
+                    LEFT OUTER JOIN T_PuntoBCRDireccionIP ON T_PuntoBCRDireccionIP.ID_PuntoBCR = T_PuntoBCR.ID_PuntoBCR
+                    LEFT OUTER JOIN T_DireccionIP ON T_DireccionIP.ID_Direccion_IP = T_PuntoBCRDireccionIP.ID_Direccion_IP", 
+                "T_PuntoBCR.ID_PuntoBCR, T_PuntoBCR.Nombre, T_PuntoBCR.Direccion, T_PuntoBCR.Codigo, 
+                    T_PuntoBCR.Cuenta_SIS, T_PuntoBCR.Observaciones as Observaciones_Punto, 
+                    T_PuntoBCR.Estado as Estado_Punto, T_PuntoBCR.ID_Gerente_Zona, T_PuntoBCR.ID_Supervisor_Zona,
+                    T_PuntoBCR.ID_Horario_Apertura,T_PuntoBCR.Geolocalizacion,
+                    T_Horario.*, t_Provincia.Nombre_Provincia,T_Provincia.ID_Provincia,
+                    T_TipoPuntoBCR.ID_Tipo_Punto, T_TipoPuntoBCR.Tipo_Punto,
+                    T_Empresa.ID_Empresa, T_Empresa.Empresa,
+                    T_Distrito.ID_Distrito, T_Distrito.Nombre_Distrito,
+                    T_UnidadEjecutora.ID_Unidad_Ejecutora, T_UnidadEjecutora.Departamento,
+                    GROUP_CONCAT(char(10),T_EnlaceTelecomunicaciones.Numero_Linea) as Numero_Linea,
+                    GROUP_CONCAT(char(10),T_DireccionIP.Direccion_IP) as Direccion_IP ",
+                $this->condicion." GROUP by T_PuntoBCR.ID_PuntoBCR  order by T_TipoPuntoBCR.Tipo_Punto");
             $this->arreglo=$this->obj_data_provider->getArreglo();
             $this->obj_data_provider->desconectar();
             $this->resultado_operacion=true;
@@ -265,18 +265,18 @@ class cls_puntosBCR{
         $this->obj_data_provider->conectar();
         if($this->condicion==""){
             $this->arreglo=$this->obj_data_provider->trae_datos(
-                    "T_TipoPuntoBCR", 
-                    "*",
-                    "");
+                "T_TipoPuntoBCR", 
+                "*",
+                "");
             $this->arreglo=$this->obj_data_provider->getArreglo();
             $this->obj_data_provider->desconectar();
             $this->resultado_operacion=true;
         }
         else{
             $this->arreglo=$this->obj_data_provider->trae_datos(
-                    "T_TipoPuntoBCR", 
-                    "*",
-                    $this->condicion);
+                "T_TipoPuntoBCR", 
+                "*",
+                $this->condicion);
             $this->arreglo=$this->obj_data_provider->getArreglo();
             $this->obj_data_provider->desconectar();
             $this->resultado_operacion=true;
@@ -287,7 +287,7 @@ class cls_puntosBCR{
         $this->obj_data_provider->conectar();
         $this->arreglo=$this->obj_data_provider->trae_datos(
             "T_UnidadEjecutora
-			LEFT OUTER JOIN T_UE_PuntoBCR ON T_UE_PuntoBCR.ID_Unidad_Ejecutora = T_UnidadEjecutora.ID_Unidad_Ejecutora", 
+            LEFT OUTER JOIN T_UE_PuntoBCR ON T_UE_PuntoBCR.ID_Unidad_Ejecutora = T_UnidadEjecutora.ID_Unidad_Ejecutora", 
             "*",
             $this->condicion);
         $this->arreglo=$this->obj_data_provider->getArreglo();
@@ -374,22 +374,22 @@ class cls_puntosBCR{
         $this->obj_data_provider->conectar();
         if($this->condicion==""){
             $this->arreglo=$this->obj_data_provider->trae_datos(
-                    "T_PuntoBCR
-			LEFT OUTER JOIN T_Horario ON T_PuntoBCR.ID_Horario= T_Horario.ID_Horario
-			LEFT OUTER JOIN T_TipoPuntoBCR ON T_PuntoBCR.ID_Tipo_Punto = T_TipoPuntoBCR.ID_Tipo_Punto
-			LEFT OUTER JOIN T_UE_PuntoBCR ON T_PuntoBCR.ID_PuntoBCR= T_UE_PuntoBCR.ID_PuntoBCR
-			LEFT OUTER JOIN T_UnidadEjecutora ON T_UE_PuntoBCR.ID_Unidad_Ejecutora = T_UnidadEjecutora.ID_Unidad_Ejecutora
-                        LEFT OUTER JOIN T_Telefono on T_PuntoBCR.ID_PuntoBCR = T_Telefono.ID
-			LEFT OUTER JOIN T_TipoTelefono ON T_Telefono.ID_Tipo_Telefono = T_TipoTelefono.ID_Tipo_Telefono", 
-                    "T_PuntoBCR.ID_PuntoBCR, T_PuntoBCR.Nombre, T_PuntoBCR.Direccion,T_PuntoBCR.Geolocalizacion,
-			T_Horario.*,
-			T_TipoPuntoBCR.ID_Tipo_Punto, T_TipoPuntoBCR.Tipo_Punto,
-			T_UnidadEjecutora.ID_Unidad_Ejecutora, T_UnidadEjecutora.Departamento,
-                        GROUP_CONCAT(char(10),T_TipoTelefono.Tipo_Telefono,': ',T_Telefono.Numero) as Numero",
-                    "(T_TipoTelefono.ID_Tipo_Telefono = '1') AND 
-                        (T_TipoPuntoBCR.ID_Tipo_Punto='1' OR T_TipoPuntoBCR.ID_Tipo_Punto='5' OR T_TipoPuntoBCR.ID_Tipo_Punto='9'
-                        OR T_TipoPuntoBCR.ID_Tipo_Punto='10' OR T_TipoPuntoBCR.ID_Tipo_Punto='11') AND (T_PuntoBCR.Estado='1') 
-                        group by T_PuntoBCR.ID_PuntoBCR");
+                "T_PuntoBCR
+                    LEFT OUTER JOIN T_Horario ON T_PuntoBCR.ID_Horario= T_Horario.ID_Horario
+                    LEFT OUTER JOIN T_TipoPuntoBCR ON T_PuntoBCR.ID_Tipo_Punto = T_TipoPuntoBCR.ID_Tipo_Punto
+                    LEFT OUTER JOIN T_UE_PuntoBCR ON T_PuntoBCR.ID_PuntoBCR= T_UE_PuntoBCR.ID_PuntoBCR
+                    LEFT OUTER JOIN T_UnidadEjecutora ON T_UE_PuntoBCR.ID_Unidad_Ejecutora = T_UnidadEjecutora.ID_Unidad_Ejecutora
+                    LEFT OUTER JOIN T_Telefono on T_PuntoBCR.ID_PuntoBCR = T_Telefono.ID
+                    LEFT OUTER JOIN T_TipoTelefono ON T_Telefono.ID_Tipo_Telefono = T_TipoTelefono.ID_Tipo_Telefono", 
+                "T_PuntoBCR.ID_PuntoBCR, T_PuntoBCR.Nombre, T_PuntoBCR.Direccion,T_PuntoBCR.Geolocalizacion,
+                    T_Horario.*,
+                    T_TipoPuntoBCR.ID_Tipo_Punto, T_TipoPuntoBCR.Tipo_Punto,
+                    T_UnidadEjecutora.ID_Unidad_Ejecutora, T_UnidadEjecutora.Departamento,
+                    GROUP_CONCAT(char(10),T_TipoTelefono.Tipo_Telefono,': ',T_Telefono.Numero) as Numero",
+                "(T_TipoTelefono.ID_Tipo_Telefono = '1') AND 
+                    (T_TipoPuntoBCR.ID_Tipo_Punto='1' OR T_TipoPuntoBCR.ID_Tipo_Punto='5' OR T_TipoPuntoBCR.ID_Tipo_Punto='9'
+                    OR T_TipoPuntoBCR.ID_Tipo_Punto='10' OR T_TipoPuntoBCR.ID_Tipo_Punto='11') AND (T_PuntoBCR.Estado='1') 
+                    group by T_PuntoBCR.ID_PuntoBCR");
             $this->arreglo=$this->obj_data_provider->getArreglo();
             $this->obj_data_provider->desconectar();
             $this->resultado_operacion=true;
@@ -400,19 +400,19 @@ class cls_puntosBCR{
         $this->obj_data_provider->conectar();
         if($this->condicion==""){
             $this->arreglo=$this->obj_data_provider->trae_datos(
-                    "T_PuntoBCR
-			LEFT OUTER JOIN T_TipoPuntoBCR ON T_PuntoBCR.ID_Tipo_Punto = T_TipoPuntoBCR.ID_Tipo_Punto
-			LEFT OUTER JOIN T_UE_PuntoBCR ON T_PuntoBCR.ID_PuntoBCR= T_UE_PuntoBCR.ID_PuntoBCR
-			LEFT OUTER JOIN T_UnidadEjecutora ON T_UE_PuntoBCR.ID_Unidad_Ejecutora = T_UnidadEjecutora.ID_Unidad_Ejecutora
-                        LEFT OUTER JOIN T_Telefono on T_PuntoBCR.ID_PuntoBCR = T_Telefono.ID
-			LEFT OUTER JOIN T_TipoTelefono ON T_Telefono.ID_Tipo_Telefono = T_TipoTelefono.ID_Tipo_Telefono", 
-                    "T_PuntoBCR.ID_PuntoBCR, T_PuntoBCR.Nombre, T_PuntoBCR.Direccion, T_PuntoBCR.Codigo,
-			T_TipoPuntoBCR.ID_Tipo_Punto, T_TipoPuntoBCR.Tipo_Punto,
-			T_UnidadEjecutora.ID_Unidad_Ejecutora, T_UnidadEjecutora.Departamento,
-                        GROUP_CONCAT(char(10),T_TipoTelefono.Tipo_Telefono,': ',T_Telefono.Numero) as Numero",
-                    "(T_TipoTelefono.ID_Tipo_Telefono = '1' OR T_TipoTelefono.ID_Tipo_Telefono = '6') 
-                        AND (T_PuntoBCR.Estado='1') 
-                        group by T_PuntoBCR.ID_PuntoBCR");
+                "T_PuntoBCR
+                    LEFT OUTER JOIN T_TipoPuntoBCR ON T_PuntoBCR.ID_Tipo_Punto = T_TipoPuntoBCR.ID_Tipo_Punto
+                    LEFT OUTER JOIN T_UE_PuntoBCR ON T_PuntoBCR.ID_PuntoBCR= T_UE_PuntoBCR.ID_PuntoBCR
+                    LEFT OUTER JOIN T_UnidadEjecutora ON T_UE_PuntoBCR.ID_Unidad_Ejecutora = T_UnidadEjecutora.ID_Unidad_Ejecutora
+                    LEFT OUTER JOIN T_Telefono on T_PuntoBCR.ID_PuntoBCR = T_Telefono.ID
+                    LEFT OUTER JOIN T_TipoTelefono ON T_Telefono.ID_Tipo_Telefono = T_TipoTelefono.ID_Tipo_Telefono", 
+                "T_PuntoBCR.ID_PuntoBCR, T_PuntoBCR.Nombre, T_PuntoBCR.Direccion, T_PuntoBCR.Codigo,
+                    T_TipoPuntoBCR.ID_Tipo_Punto, T_TipoPuntoBCR.Tipo_Punto,
+                    T_UnidadEjecutora.ID_Unidad_Ejecutora, T_UnidadEjecutora.Departamento,
+                    GROUP_CONCAT(char(10),T_TipoTelefono.Tipo_Telefono,': ',T_Telefono.Numero) as Numero",
+                "(T_TipoTelefono.ID_Tipo_Telefono = '1' OR T_TipoTelefono.ID_Tipo_Telefono = '6') 
+                    AND (T_PuntoBCR.Estado='1') 
+                    group by T_PuntoBCR.ID_PuntoBCR");
             $this->arreglo=$this->obj_data_provider->getArreglo();
             $this->obj_data_provider->desconectar();
             $this->resultado_operacion=true;
@@ -423,18 +423,18 @@ class cls_puntosBCR{
         $this->obj_data_provider->conectar();
         if($this->condicion==""){
             $this->arreglo=$this->obj_data_provider->trae_datos(
-                    "T_PuntoBCR", 
-                    "*",
-                    "");
+                "T_PuntoBCR", 
+                "*",
+                "");
             $this->arreglo=$this->obj_data_provider->getArreglo();
             $this->obj_data_provider->desconectar();
             $this->resultado_operacion=true;
         }
         else{
             $this->arreglo=$this->obj_data_provider->trae_datos(
-                    "T_PuntoBCR", 
-                    "*",
-                    $this->condicion);
+                "T_PuntoBCR", 
+                "*",
+                $this->condicion);
             $this->arreglo=$this->obj_data_provider->getArreglo();
             $this->obj_data_provider->desconectar();
             $this->resultado_operacion=true;

@@ -1,6 +1,5 @@
   <?php
 class cls_puestos_de_monitoreo{
-    
     public $obj_data_provider;
     public $id_puesto_monitoreo;
     public $id_puesto_monitoreo_unidad_video;
@@ -34,7 +33,6 @@ class cls_puestos_de_monitoreo{
     public $observaciones;
     public $tiempo_estandar_revision;
     public $tiempo_personalizado_revision;
-    
     public $id_inconsistencia_video;
     public $estado_inconsistencia;
     public $tipo_inconsistencia;
@@ -306,7 +304,7 @@ class cls_puestos_de_monitoreo{
         $this->tiempo_personalizado_revision = $tiempo_personalizado_revision;
     }
 
-        function getObj_data_provider() {
+    function getObj_data_provider() {
         return $this->obj_data_provider;
     }
 
@@ -394,7 +392,7 @@ class cls_puestos_de_monitoreo{
         $this->tiempo_estandar_revision = $tiempo_estandar_revision;
     }
 
-        public function __construct() {
+    public function __construct() {
         $this->id_puesto_monitoreo="";
         $this->id_bitacora_control_puesto_monitoreo="";
         $this->fecha_toma_control="";
@@ -429,7 +427,6 @@ class cls_puestos_de_monitoreo{
         $this->tiempo_personalizado_revision="";
         $this->id_inconsistencia_video="";
         $this->tipo_inconsistencia="";
-    
    }
    
    //Valida que no se ingrese el mismo tipo de evento en un sitio, si ya hay uno pendiente
@@ -444,8 +441,7 @@ class cls_puestos_de_monitoreo{
 
         if (count($this->arreglo)>0){
           return true;
-        }else
-        {
+        }else {
           return false;
         }    
     }
@@ -454,17 +450,17 @@ class cls_puestos_de_monitoreo{
         $this->obj_data_provider->conectar();
         if($this->condicion==""){
             $this->arreglo=$this->obj_data_provider->trae_datos(
-                    "t_puestomonitoreo left outer join t_usuario on t_puestomonitoreo.ID_Usuario=t_usuario.ID_Usuario", 
-                    "t_puestomonitoreo.*,IFNULL(concat(concat(t_usuario.Nombre,' '),t_usuario.Apellido),'Libre') Nombre_Completo",
-                    "");
+                "t_puestomonitoreo left outer join t_usuario on t_puestomonitoreo.ID_Usuario=t_usuario.ID_Usuario", 
+                "t_puestomonitoreo.*,IFNULL(concat(concat(t_usuario.Nombre,' '),t_usuario.Apellido),'Libre') Nombre_Completo",
+                "");
             $this->arreglo=$this->obj_data_provider->getArreglo();
             $this->obj_data_provider->desconectar();
         }
         else{
             $this->arreglo=$this->obj_data_provider->trae_datos(
-                    "t_puestomonitoreo left outer join t_usuario on t_puestomonitoreo.ID_Usuario=t_usuario.ID_Usuario", 
-                    "t_puestomonitoreo.*,IFNULL(concat(concat(t_usuario.Nombre,' '),t_usuario.Apellido),'Libre') Nombre_Completo",
-                    $this->condicion);
+                "t_puestomonitoreo left outer join t_usuario on t_puestomonitoreo.ID_Usuario=t_usuario.ID_Usuario", 
+                "t_puestomonitoreo.*,IFNULL(concat(concat(t_usuario.Nombre,' '),t_usuario.Apellido),'Libre') Nombre_Completo",
+                $this->condicion);
             $this->arreglo=$this->obj_data_provider->getArreglo();
             $this->obj_data_provider->desconectar();
         } 
@@ -474,17 +470,16 @@ class cls_puestos_de_monitoreo{
         $this->obj_data_provider->conectar();
         if($this->condicion==""){
             $this->arreglo=$this->obj_data_provider->trae_datos(
-                    "t_bitacoracontrolpuestomonitoreo", 
-                    "*",
-                    "");
+                "t_bitacoracontrolpuestomonitoreo", 
+                "*",
+                "");
             $this->arreglo=$this->obj_data_provider->getArreglo();
             $this->obj_data_provider->desconectar();
-        }
-        else{
+        } else {
             $this->arreglo=$this->obj_data_provider->trae_datos(
-                    "t_bitacoracontrolpuestomonitoreo", 
-                    "*",
-                    $this->condicion);
+                "t_bitacoracontrolpuestomonitoreo", 
+                "*",
+                $this->condicion);
             $this->arreglo=$this->obj_data_provider->getArreglo();
             $this->obj_data_provider->desconectar();
         } 
@@ -494,17 +489,16 @@ class cls_puestos_de_monitoreo{
         $this->obj_data_provider->conectar();
         if($this->condicion==""){
             $this->arreglo=$this->obj_data_provider->trae_datos(
-                    "t_puestomonitoreounidadvideo", 
-                    "*",
-                    "");
+                "t_puestomonitoreounidadvideo", 
+                "*",
+                "");
             $this->arreglo=$this->obj_data_provider->getArreglo();
             $this->obj_data_provider->desconectar();
-        }
-        else{
+        } else {
             $this->arreglo=$this->obj_data_provider->trae_datos(
-                    "t_puestomonitoreounidadvideo", 
-                    "*",
-                    $this->condicion);
+                "t_puestomonitoreounidadvideo", 
+                "*",
+                $this->condicion);
             $this->arreglo=$this->obj_data_provider->getArreglo();
             $this->obj_data_provider->desconectar();
         } 
@@ -514,54 +508,50 @@ class cls_puestos_de_monitoreo{
         $this->obj_data_provider->conectar();
         if($this->condicion==""){
             $this->arreglo=$this->obj_data_provider->trae_datos(
-                    "T_PuestoMonitoreoUnidadVideo
-                        inner join T_UnidadVideo on T_UnidadVideo.ID_Unidad_Video=T_PuestoMonitoreoUnidadVideo.ID_Unidad_Video group by T_PuestoMonitoreoUnidadVideo.ID_Puesto_Monitoreo", 
-                    "round(sum(Tiempo_Personalizado_Revision)/60) Total_Minutos,count(Tiempo_Personalizado_Revision) Total_Unidades, sum(Camaras_Habilitadas) Total_Camaras",
-                    "");
+                "T_PuestoMonitoreoUnidadVideo
+                    inner join T_UnidadVideo on T_UnidadVideo.ID_Unidad_Video=T_PuestoMonitoreoUnidadVideo.ID_Unidad_Video group by T_PuestoMonitoreoUnidadVideo.ID_Puesto_Monitoreo", 
+                "round(sum(Tiempo_Personalizado_Revision)/60) Total_Minutos,count(Tiempo_Personalizado_Revision) Total_Unidades, sum(Camaras_Habilitadas) Total_Camaras",
+                "");
             $this->arreglo=$this->obj_data_provider->getArreglo();
             $this->obj_data_provider->desconectar();
-        }
-        else{
+        } else{
             $this->arreglo=$this->obj_data_provider->trae_datos(
-                    "T_PuestoMonitoreoUnidadVideo
-                        inner join T_UnidadVideo on T_UnidadVideo.ID_Unidad_Video=T_PuestoMonitoreoUnidadVideo.ID_Unidad_Video", 
-                    "round(sum(Tiempo_Personalizado_Revision)/60) Total_Minutos,count(Tiempo_Personalizado_Revision) Total_Unidades, sum(Camaras_Habilitadas) Total_Camaras",
-                    $this->condicion." group by T_PuestoMonitoreoUnidadVideo.ID_Puesto_Monitoreo");
+                "T_PuestoMonitoreoUnidadVideo
+                    inner join T_UnidadVideo on T_UnidadVideo.ID_Unidad_Video=T_PuestoMonitoreoUnidadVideo.ID_Unidad_Video", 
+                "round(sum(Tiempo_Personalizado_Revision)/60) Total_Minutos,count(Tiempo_Personalizado_Revision) Total_Unidades, sum(Camaras_Habilitadas) Total_Camaras",
+                $this->condicion." group by T_PuestoMonitoreoUnidadVideo.ID_Puesto_Monitoreo");
             $this->arreglo=$this->obj_data_provider->getArreglo();
             $this->obj_data_provider->desconectar();
         } 
     }
     
-    
-    
-    
+
     public function obtiene_todas_las_unidades_asociadas_a_un_puesto_de_monitoreo(){
         $this->obj_data_provider->conectar();
         if($this->condicion==""){
             $this->arreglo=$this->obj_data_provider->trae_datos(
-                    "T_PuestoMonitoreoUnidadVideo
-                        inner join T_PuestoMonitoreo on T_PuestoMonitoreo.ID_Puesto_Monitoreo=T_PuestoMonitoreoUnidadVideo.ID_Puesto_Monitoreo
-                        inner join T_UnidadVideo on T_UnidadVideo.ID_Unidad_Video=T_PuestoMonitoreoUnidadVideo.ID_Unidad_Video
-                        inner join t_puntoBCR on t_unidadvideo.ID_PuntoBCR=t_puntoBCR.ID_PuntoBCR 
-                        inner join T_TipoPuntoBCR ON T_PuntoBCR.ID_Tipo_Punto = T_TipoPuntoBCR.ID_Tipo_Punto order by T_PuestoMonitoreoUnidadVideo.ID_Puesto_Monitoreo_Unidad_Video ", 
-                    "T_PuestoMonitoreoUnidadVideo.ID_Puesto_Monitoreo_Unidad_Video,T_PuestoMonitoreoUnidadVideo.ID_Puesto_Monitoreo,
-                        T_UnidadVideo.ID_Unidad_Video,t_puntoBCR.Nombre,T_UnidadVideo.Descripcion,T_TipoPuntoBCR.Tipo_Punto,
-                        T_UnidadVideo.Camaras_Habilitadas,Tiempo_Personalizado_Revision,T_PuestoMonitoreo.Tiempo_Estandar_Revision",
-                    "");
+                "T_PuestoMonitoreoUnidadVideo
+                    inner join T_PuestoMonitoreo on T_PuestoMonitoreo.ID_Puesto_Monitoreo=T_PuestoMonitoreoUnidadVideo.ID_Puesto_Monitoreo
+                    inner join T_UnidadVideo on T_UnidadVideo.ID_Unidad_Video=T_PuestoMonitoreoUnidadVideo.ID_Unidad_Video
+                    inner join t_puntoBCR on t_unidadvideo.ID_PuntoBCR=t_puntoBCR.ID_PuntoBCR 
+                    inner join T_TipoPuntoBCR ON T_PuntoBCR.ID_Tipo_Punto = T_TipoPuntoBCR.ID_Tipo_Punto order by T_PuestoMonitoreoUnidadVideo.ID_Puesto_Monitoreo_Unidad_Video ", 
+                "T_PuestoMonitoreoUnidadVideo.ID_Puesto_Monitoreo_Unidad_Video,T_PuestoMonitoreoUnidadVideo.ID_Puesto_Monitoreo,
+                    T_UnidadVideo.ID_Unidad_Video,t_puntoBCR.Nombre,T_UnidadVideo.Descripcion,T_TipoPuntoBCR.Tipo_Punto,
+                    T_UnidadVideo.Camaras_Habilitadas,Tiempo_Personalizado_Revision,T_PuestoMonitoreo.Tiempo_Estandar_Revision",
+                "");
             $this->arreglo=$this->obj_data_provider->getArreglo();
             $this->obj_data_provider->desconectar();
-        }
-        else{
+        } else{
             $this->arreglo=$this->obj_data_provider->trae_datos(
-                                   "T_PuestoMonitoreoUnidadVideo
-                                        inner join T_PuestoMonitoreo on T_PuestoMonitoreo.ID_Puesto_Monitoreo=T_PuestoMonitoreoUnidadVideo.ID_Puesto_Monitoreo
-                                        inner join T_UnidadVideo on T_UnidadVideo.ID_Unidad_Video=T_PuestoMonitoreoUnidadVideo.ID_Unidad_Video
-                                        inner join t_puntoBCR on t_unidadvideo.ID_PuntoBCR=t_puntoBCR.ID_PuntoBCR 
-                                        inner join T_TipoPuntoBCR ON T_PuntoBCR.ID_Tipo_Punto = T_TipoPuntoBCR.ID_Tipo_Punto", 
-                    "T_PuestoMonitoreoUnidadVideo.ID_Puesto_Monitoreo_Unidad_Video,T_PuestoMonitoreoUnidadVideo.ID_Puesto_Monitoreo,
-                        T_UnidadVideo.ID_Unidad_Video,t_puntoBCR.Nombre,T_UnidadVideo.Descripcion,T_TipoPuntoBCR.Tipo_Punto,
-                        T_UnidadVideo.Camaras_Habilitadas,Tiempo_Personalizado_Revision,T_PuestoMonitoreo.Tiempo_Estandar_Revision",
-                    $this->condicion. " order by T_PuestoMonitoreoUnidadVideo.ID_Puesto_Monitoreo_Unidad_Video ");
+                "T_PuestoMonitoreoUnidadVideo
+                     inner join T_PuestoMonitoreo on T_PuestoMonitoreo.ID_Puesto_Monitoreo=T_PuestoMonitoreoUnidadVideo.ID_Puesto_Monitoreo
+                     inner join T_UnidadVideo on T_UnidadVideo.ID_Unidad_Video=T_PuestoMonitoreoUnidadVideo.ID_Unidad_Video
+                     inner join t_puntoBCR on t_unidadvideo.ID_PuntoBCR=t_puntoBCR.ID_PuntoBCR 
+                     inner join T_TipoPuntoBCR ON T_PuntoBCR.ID_Tipo_Punto = T_TipoPuntoBCR.ID_Tipo_Punto", 
+                "T_PuestoMonitoreoUnidadVideo.ID_Puesto_Monitoreo_Unidad_Video,T_PuestoMonitoreoUnidadVideo.ID_Puesto_Monitoreo,
+                    T_UnidadVideo.ID_Unidad_Video,t_puntoBCR.Nombre,T_UnidadVideo.Descripcion,T_TipoPuntoBCR.Tipo_Punto,
+                    T_UnidadVideo.Camaras_Habilitadas,Tiempo_Personalizado_Revision,T_PuestoMonitoreo.Tiempo_Estandar_Revision",
+                $this->condicion. " order by T_PuestoMonitoreoUnidadVideo.ID_Puesto_Monitoreo_Unidad_Video ");
             $this->arreglo=$this->obj_data_provider->getArreglo();
             $this->obj_data_provider->desconectar();
         } 
@@ -571,37 +561,34 @@ class cls_puestos_de_monitoreo{
         $this->obj_data_provider->conectar();
         if($this->condicion==""){
             $this->arreglo=$this->obj_data_provider->trae_datos(
-                    "T_PuestoMonitoreoUnidadVideo
-                        inner join T_PuestoMonitoreo on T_PuestoMonitoreo.ID_Puesto_Monitoreo=T_PuestoMonitoreoUnidadVideo.ID_Puesto_Monitoreo
-                        inner join T_UnidadVideo on T_UnidadVideo.ID_Unidad_Video=T_PuestoMonitoreoUnidadVideo.ID_Unidad_Video
-                        inner join t_puntoBCR on t_unidadvideo.ID_PuntoBCR=t_puntoBCR.ID_PuntoBCR 
-                        inner join T_TipoPuntoBCR ON T_PuntoBCR.ID_Tipo_Punto = T_TipoPuntoBCR.ID_Tipo_Punto order by T_PuestoMonitoreoUnidadVideo.Posicion ", 
-                    "T_PuestoMonitoreoUnidadVideo.ID_Puesto_Monitoreo_Unidad_Video,T_PuestoMonitoreoUnidadVideo.ID_Puesto_Monitoreo,
-                        T_UnidadVideo.ID_Unidad_Video,t_puntoBCR.Nombre,T_UnidadVideo.Descripcion,T_TipoPuntoBCR.Tipo_Punto,
-                        T_UnidadVideo.Camaras_Habilitadas,Tiempo_Personalizado_Revision,T_PuestoMonitoreo.Tiempo_Estandar_Revision",
-                    "");
+                "T_PuestoMonitoreoUnidadVideo
+                    inner join T_PuestoMonitoreo on T_PuestoMonitoreo.ID_Puesto_Monitoreo=T_PuestoMonitoreoUnidadVideo.ID_Puesto_Monitoreo
+                    inner join T_UnidadVideo on T_UnidadVideo.ID_Unidad_Video=T_PuestoMonitoreoUnidadVideo.ID_Unidad_Video
+                    inner join t_puntoBCR on t_unidadvideo.ID_PuntoBCR=t_puntoBCR.ID_PuntoBCR 
+                    inner join T_TipoPuntoBCR ON T_PuntoBCR.ID_Tipo_Punto = T_TipoPuntoBCR.ID_Tipo_Punto order by T_PuestoMonitoreoUnidadVideo.Posicion ", 
+                "T_PuestoMonitoreoUnidadVideo.ID_Puesto_Monitoreo_Unidad_Video,T_PuestoMonitoreoUnidadVideo.ID_Puesto_Monitoreo,
+                    T_UnidadVideo.ID_Unidad_Video,t_puntoBCR.Nombre,T_UnidadVideo.Descripcion,T_TipoPuntoBCR.Tipo_Punto,
+                    T_UnidadVideo.Camaras_Habilitadas,Tiempo_Personalizado_Revision,T_PuestoMonitoreo.Tiempo_Estandar_Revision",
+                "");
             $this->arreglo=$this->obj_data_provider->getArreglo();
             $this->obj_data_provider->desconectar();
-        }
-        else{
+        } else{
             $this->arreglo=$this->obj_data_provider->trae_datos(
-                                   "T_PuestoMonitoreoUnidadVideo
-                                        inner join T_PuestoMonitoreo on T_PuestoMonitoreo.ID_Puesto_Monitoreo=T_PuestoMonitoreoUnidadVideo.ID_Puesto_Monitoreo
-                                        inner join T_UnidadVideo on T_UnidadVideo.ID_Unidad_Video=T_PuestoMonitoreoUnidadVideo.ID_Unidad_Video
-                                        inner join t_puntoBCR on t_unidadvideo.ID_PuntoBCR=t_puntoBCR.ID_PuntoBCR 
-                                        inner join T_TipoPuntoBCR ON T_PuntoBCR.ID_Tipo_Punto = T_TipoPuntoBCR.ID_Tipo_Punto", 
-                    "T_PuestoMonitoreoUnidadVideo.ID_Puesto_Monitoreo_Unidad_Video,T_PuestoMonitoreoUnidadVideo.ID_Puesto_Monitoreo,
-                        T_UnidadVideo.ID_Unidad_Video,t_puntoBCR.Nombre,T_UnidadVideo.Descripcion,T_TipoPuntoBCR.Tipo_Punto,
-                        T_UnidadVideo.Camaras_Habilitadas,Tiempo_Personalizado_Revision,T_PuestoMonitoreo.Tiempo_Estandar_Revision",
-                    $this->condicion. " order by T_PuestoMonitoreoUnidadVideo.Posicion ");
+                "T_PuestoMonitoreoUnidadVideo
+                     inner join T_PuestoMonitoreo on T_PuestoMonitoreo.ID_Puesto_Monitoreo=T_PuestoMonitoreoUnidadVideo.ID_Puesto_Monitoreo
+                     inner join T_UnidadVideo on T_UnidadVideo.ID_Unidad_Video=T_PuestoMonitoreoUnidadVideo.ID_Unidad_Video
+                     inner join t_puntoBCR on t_unidadvideo.ID_PuntoBCR=t_puntoBCR.ID_PuntoBCR 
+                     inner join T_TipoPuntoBCR ON T_PuntoBCR.ID_Tipo_Punto = T_TipoPuntoBCR.ID_Tipo_Punto", 
+                "T_PuestoMonitoreoUnidadVideo.ID_Puesto_Monitoreo_Unidad_Video,T_PuestoMonitoreoUnidadVideo.ID_Puesto_Monitoreo,
+                    T_UnidadVideo.ID_Unidad_Video,t_puntoBCR.Nombre,T_UnidadVideo.Descripcion,T_TipoPuntoBCR.Tipo_Punto,
+                    T_UnidadVideo.Camaras_Habilitadas,Tiempo_Personalizado_Revision,T_PuestoMonitoreo.Tiempo_Estandar_Revision",
+                $this->condicion. " order by T_PuestoMonitoreoUnidadVideo.Posicion ");
             $this->arreglo=$this->obj_data_provider->getArreglo();
             $this->obj_data_provider->desconectar();
-            
         } 
     }
     
     function liberar_puesto_monitoreo(){
-        
         $this->obj_data_provider->conectar();
         $this->obj_data_provider->edita_datos("t_PuestoMonitoreo","ID_Usuario=0",$this->condicion);
         $this->obj_data_provider->edita_datos("t_bitacoracontrolpuestomonitoreo","Estado=".$this->estado.",Fecha_Libera_Control='".$this->fecha_libera_control."',Hora_Libera_Control='".$this->hora_libera_control."'",$this->condicion);
@@ -609,7 +596,6 @@ class cls_puestos_de_monitoreo{
     }
     
     function cambiar_estado_puesto_monitoreo(){
-        
         $this->obj_data_provider->conectar();
         $this->obj_data_provider->edita_datos("t_PuestoMonitoreo","Estado='".$this->estado."'",$this->condicion);
         $this->obj_data_provider->desconectar();
@@ -621,7 +607,7 @@ class cls_puestos_de_monitoreo{
         $this->obj_data_provider->desconectar();
     }
     
-     public function insertar_toma_de_puesto_de_monitoreo(){
+    public function insertar_toma_de_puesto_de_monitoreo(){
         $this->obj_data_provider->conectar();
         $this->obj_data_provider->inserta_datos("t_bitacoracontrolpuestomonitoreo", "ID_Bitacora_Control_Puesto_Monitoreo, Fecha_Toma_Control,Hora_Toma_Control,ID_Usuario,ID_Puesto_Monitoreo,Estado", "null,'".$this->fecha_toma_control."','".$this->hora_toma_control."',".$this->id_usuario.",".$this->id_puesto_monitoreo.",".$this->estado);
         $this->obj_data_provider->edita_datos("t_PuestoMonitoreo","ID_Usuario=".$this->id_usuario,$this->condicion);
@@ -633,27 +619,26 @@ class cls_puestos_de_monitoreo{
         $this->obj_data_provider->conectar();
         if($this->condicion==""){
             $this->arreglo=$this->obj_data_provider->trae_datos(
-                    "t_unidadvideo 
-                        inner join t_puntoBCR on t_unidadvideo.ID_PuntoBCR=t_puntoBCR.ID_PuntoBCR 
-                        inner join t_distrito on t_puntoBCR.ID_distrito=t_distrito.ID_distrito
-                        inner join t_canton on t_distrito.ID_canton=t_canton.ID_canton
-                        inner join t_provincia on t_canton.ID_provincia=t_provincia.ID_provincia
-                        inner join T_TipoPuntoBCR ON T_PuntoBCR.ID_Tipo_Punto = T_TipoPuntoBCR.ID_Tipo_Punto", 
-                    "*,t_Provincia.Nombre_Provincia,t_unidadvideo.Estado as Estad,t_unidadvideo.Observaciones as Obser,t_puntoBCR.Nombre,T_TipoPuntoBCR.Tipo_Punto",
-                    "");
+                "t_unidadvideo 
+                    inner join t_puntoBCR on t_unidadvideo.ID_PuntoBCR=t_puntoBCR.ID_PuntoBCR 
+                    inner join t_distrito on t_puntoBCR.ID_distrito=t_distrito.ID_distrito
+                    inner join t_canton on t_distrito.ID_canton=t_canton.ID_canton
+                    inner join t_provincia on t_canton.ID_provincia=t_provincia.ID_provincia
+                    inner join T_TipoPuntoBCR ON T_PuntoBCR.ID_Tipo_Punto = T_TipoPuntoBCR.ID_Tipo_Punto", 
+                "*,t_Provincia.Nombre_Provincia,t_unidadvideo.Estado as Estad,t_unidadvideo.Observaciones as Obser,t_puntoBCR.Nombre,T_TipoPuntoBCR.Tipo_Punto",
+                "");
             $this->arreglo=$this->obj_data_provider->getArreglo();
             $this->obj_data_provider->desconectar();
-        }
-        else{
+        } else {
             $this->arreglo=$this->obj_data_provider->trae_datos(
-                                   "t_unidadvideo 
-                        inner join t_puntoBCR on t_unidadvideo.ID_PuntoBCR=t_puntoBCR.ID_PuntoBCR 
-                        inner join t_distrito on t_puntoBCR.ID_distrito=t_distrito.ID_distrito
-                        inner join t_canton on t_distrito.ID_canton=t_canton.ID_canton
-                        inner join t_provincia on t_canton.ID_provincia=t_provincia.ID_provincia
-                        inner join T_TipoPuntoBCR ON T_PuntoBCR.ID_Tipo_Punto = T_TipoPuntoBCR.ID_Tipo_Punto", 
-                    "*,t_Provincia.Nombre_Provincia,t_unidadvideo.Estado as Estad,t_unidadvideo.Observaciones as Obser,t_puntoBCR.Nombre,T_TipoPuntoBCR.Tipo_Punto",
-                    $this->condicion);
+                "t_unidadvideo 
+                    inner join t_puntoBCR on t_unidadvideo.ID_PuntoBCR=t_puntoBCR.ID_PuntoBCR 
+                    inner join t_distrito on t_puntoBCR.ID_distrito=t_distrito.ID_distrito
+                    inner join t_canton on t_distrito.ID_canton=t_canton.ID_canton
+                    inner join t_provincia on t_canton.ID_provincia=t_provincia.ID_provincia
+                    inner join T_TipoPuntoBCR ON T_PuntoBCR.ID_Tipo_Punto = T_TipoPuntoBCR.ID_Tipo_Punto", 
+                "*,t_Provincia.Nombre_Provincia,t_unidadvideo.Estado as Estad,t_unidadvideo.Observaciones as Obser,t_puntoBCR.Nombre,T_TipoPuntoBCR.Tipo_Punto",
+                $this->condicion);
             $this->arreglo=$this->obj_data_provider->getArreglo();
             $this->obj_data_provider->desconectar();
         } 
@@ -663,14 +648,13 @@ class cls_puestos_de_monitoreo{
         $this->obj_data_provider->conectar();
         if($this->condicion==""){
             $this->arreglo=$this->obj_data_provider->trae_datos("`t_bitacorarevisionesvideo` inner join t_inconsistenciavideo on t_bitacorarevisionesvideo.ID_Bitacora_Revision_Video=t_inconsistenciavideo.ID_Bitacora_Revision_Video",
-                    "*","");
+                "*","");
             $this->arreglo=$this->obj_data_provider->getArreglo();
             $this->obj_data_provider->desconectar();
-        }
-        else{
-       $this->arreglo=$this->obj_data_provider->trae_datos("`t_bitacorarevisionesvideo` inner join t_inconsistenciavideo on t_bitacorarevisionesvideo.ID_Bitacora_Revision_Video=t_inconsistenciavideo.ID_Bitacora_Revision_Video",
-                    "*",
-                    $this->condicion);
+        } else{
+            $this->arreglo=$this->obj_data_provider->trae_datos("`t_bitacorarevisionesvideo` inner join t_inconsistenciavideo on t_bitacorarevisionesvideo.ID_Bitacora_Revision_Video=t_inconsistenciavideo.ID_Bitacora_Revision_Video",
+                "*",
+                $this->condicion);
             $this->arreglo=$this->obj_data_provider->getArreglo();
             $this->obj_data_provider->desconectar();
         } 
@@ -680,14 +664,13 @@ class cls_puestos_de_monitoreo{
         $this->obj_data_provider->conectar();
         if($this->condicion==""){
             $this->arreglo=$this->obj_data_provider->trae_datos("t_bitacorarevisionesvideo LEFT OUTER JOIN t_unidadvideo on t_unidadvideo.ID_Unidad_Video = t_bitacorarevisionesvideo.ID_Unidad_Video",
-                    "t_bitacorarevisionesvideo.`ID_Unidad_Video`, MAX(concat(`Fecha_Termina_Revision`,' ',`Hora_Termina_Revision`)) Fecha_Hora","");
+                "t_bitacorarevisionesvideo.`ID_Unidad_Video`, MAX(concat(`Fecha_Termina_Revision`,' ',`Hora_Termina_Revision`)) Fecha_Hora","");
             $this->arreglo=$this->obj_data_provider->getArreglo();
             $this->obj_data_provider->desconectar();
-        }
-        else{
-       $this->arreglo=$this->obj_data_provider->trae_datos("t_bitacorarevisionesvideo LEFT OUTER JOIN t_unidadvideo on t_unidadvideo.ID_Unidad_Video = t_bitacorarevisionesvideo.ID_Unidad_Video",
-                    "t_bitacorarevisionesvideo.`ID_Unidad_Video`, MAX(concat(`Fecha_Termina_Revision`,' ',`Hora_Termina_Revision`)) Fecha_Hora",
-                    $this->condicion);
+        } else{
+            $this->arreglo=$this->obj_data_provider->trae_datos("t_bitacorarevisionesvideo LEFT OUTER JOIN t_unidadvideo on t_unidadvideo.ID_Unidad_Video = t_bitacorarevisionesvideo.ID_Unidad_Video",
+                "t_bitacorarevisionesvideo.`ID_Unidad_Video`, MAX(concat(`Fecha_Termina_Revision`,' ',`Hora_Termina_Revision`)) Fecha_Hora",
+                $this->condicion);
             $this->arreglo=$this->obj_data_provider->getArreglo();
             $this->obj_data_provider->desconectar();
         } 
@@ -698,27 +681,27 @@ class cls_puestos_de_monitoreo{
         $this->obj_data_provider->conectar();
         if($this->condicion==""){
             $this->arreglo=$this->obj_data_provider->trae_datos(" t_inconsistenciavideo INNER JOIN t_bitacorarevisionesvideo ON t_bitacorarevisionesvideo.ID_Bitacora_Revision_Video = t_inconsistenciavideo.ID_Bitacora_Revision_Video
-                    INNER JOIN t_usuario ON t_usuario.ID_Usuario = T_BitacoraRevisionesVideo.ID_Usuario
-                    Inner join t_unidadvideo on t_unidadvideo.ID_Unidad_Video=t_bitacorarevisionesvideo.ID_Unidad_Video
-                    inner join T_PuestoMonitoreo on T_PuestoMonitoreo.ID_Puesto_Monitoreo=t_bitacorarevisionesvideo.ID_Puesto_Monitoreo
-                    left join t_usuario tuv on t_inconsistenciavideo.ID_Usuario_Valida=tuv.ID_Usuario
-                    left join t_usuario tur on t_inconsistenciavideo.ID_Usuario_Reporta_SE=tur.ID_Usuario
-                    left join t_usuario tus on t_inconsistenciavideo.ID_Usuario_Reporta_Solucionada=tus.ID_Usuario
-                    order by ID_Inconsistencia_Video",
-                    "t_inconsistenciavideo . * ,T_BitacoraRevisionesVideo.Fecha_Inicia_Revision, T_BitacoraRevisionesVideo.Hora_Inicia_Revision,T_BitacoraRevisionesVideo.ID_Unidad_Video ,T_BitacoraRevisionesVideo.Reporta_Situacion, CONCAT( CONCAT( t_usuario.Nombre,  ' ' ) , t_usuario.Apellido ) AS Detectado_Por,CONCAT( CONCAT( tuv.Nombre,  ' ' ) , tuv.Apellido ) AS Validado_Por,CONCAT( CONCAT( tur.Nombre,  ' ' ) , tur.Apellido ) AS Reportado_Por,CONCAT( CONCAT( tus.Nombre,  ' ' ) , tus.Apellido ) AS Solucionado_Por,case t_inconsistenciavideo.Estado  when 0 then 'Pendiente'  when 1 then 'Atendida'  when 2 then 'Validada SE' when 3 then 'Validada ATMs' when 4 then 'Validada Mant.' when 5 then 'Reportada SE' when 6 then 'Reportada ATMs' when 7 then 'Reportada Mant.' when 8 then 'Reparada SE' when 9 then 'Reparada ATMs' when 10 then 'Reparada Mant.' end as Estado_Traducido,t_unidadvideo.Descripcion,T_PuestoMonitoreo.Nombre as Nombre_Puesto","");
+                INNER JOIN t_usuario ON t_usuario.ID_Usuario = T_BitacoraRevisionesVideo.ID_Usuario
+                Inner join t_unidadvideo on t_unidadvideo.ID_Unidad_Video=t_bitacorarevisionesvideo.ID_Unidad_Video
+                inner join T_PuestoMonitoreo on T_PuestoMonitoreo.ID_Puesto_Monitoreo=t_bitacorarevisionesvideo.ID_Puesto_Monitoreo
+                left join t_usuario tuv on t_inconsistenciavideo.ID_Usuario_Valida=tuv.ID_Usuario
+                left join t_usuario tur on t_inconsistenciavideo.ID_Usuario_Reporta_SE=tur.ID_Usuario
+                left join t_usuario tus on t_inconsistenciavideo.ID_Usuario_Reporta_Solucionada=tus.ID_Usuario
+                order by ID_Inconsistencia_Video",
+                "t_inconsistenciavideo . * ,T_BitacoraRevisionesVideo.Fecha_Inicia_Revision, T_BitacoraRevisionesVideo.Hora_Inicia_Revision,T_BitacoraRevisionesVideo.ID_Unidad_Video ,T_BitacoraRevisionesVideo.Reporta_Situacion, CONCAT( CONCAT( t_usuario.Nombre,  ' ' ) , t_usuario.Apellido ) AS Detectado_Por,CONCAT( CONCAT( tuv.Nombre,  ' ' ) , tuv.Apellido ) AS Validado_Por,CONCAT( CONCAT( tur.Nombre,  ' ' ) , tur.Apellido ) AS Reportado_Por,CONCAT( CONCAT( tus.Nombre,  ' ' ) , tus.Apellido ) AS Solucionado_Por,case t_inconsistenciavideo.Estado  when 0 then 'Pendiente'  when 1 then 'Atendida'  when 2 then 'Validada SE' when 3 then 'Validada ATMs' when 4 then 'Validada Mant.' when 5 then 'Reportada SE' when 6 then 'Reportada ATMs' when 7 then 'Reportada Mant.' when 8 then 'Reparada SE' when 9 then 'Reparada ATMs' when 10 then 'Reparada Mant.' end as Estado_Traducido,t_unidadvideo.Descripcion,T_PuestoMonitoreo.Nombre as Nombre_Puesto","");
             $this->arreglo=$this->obj_data_provider->getArreglo();
             $this->obj_data_provider->desconectar();
         }
         else{
        $this->arreglo=$this->obj_data_provider->trae_datos(" t_inconsistenciavideo INNER JOIN t_bitacorarevisionesvideo ON t_bitacorarevisionesvideo.ID_Bitacora_Revision_Video = t_inconsistenciavideo.ID_Bitacora_Revision_Video
-                    INNER JOIN t_usuario ON t_usuario.ID_Usuario = T_BitacoraRevisionesVideo.ID_Usuario
-                    Inner join t_unidadvideo on t_unidadvideo.ID_Unidad_Video=t_bitacorarevisionesvideo.ID_Unidad_Video
-                    inner join T_PuestoMonitoreo on T_PuestoMonitoreo.ID_Puesto_Monitoreo=t_bitacorarevisionesvideo.ID_Puesto_Monitoreo
-                    left join t_usuario tuv on t_inconsistenciavideo.ID_Usuario_Valida=tuv.ID_Usuario
-                    left join t_usuario tur on t_inconsistenciavideo.ID_Usuario_Reporta_SE=tur.ID_Usuario
-                    left join t_usuario tus on t_inconsistenciavideo.ID_Usuario_Reporta_Solucionada=tus.ID_Usuario",
-                    "t_inconsistenciavideo . * ,T_BitacoraRevisionesVideo.Fecha_Inicia_Revision, T_BitacoraRevisionesVideo.Hora_Inicia_Revision,T_BitacoraRevisionesVideo.ID_Unidad_Video ,T_BitacoraRevisionesVideo.Reporta_Situacion, CONCAT( CONCAT( t_usuario.Nombre,  ' ' ) , t_usuario.Apellido ) AS Detectado_Por,CONCAT( CONCAT( tuv.Nombre,  ' ' ) , tuv.Apellido ) AS Validado_Por,CONCAT( CONCAT( tur.Nombre,  ' ' ) , tur.Apellido ) AS Reportado_Por,CONCAT( CONCAT( tus.Nombre,  ' ' ) , tus.Apellido ) AS Solucionado_Por,case t_inconsistenciavideo.Estado  when 0 then 'Pendiente'  when 1 then 'Atendida'  when 2 then 'Validada SE' when 3 then 'Validada ATMs' when 4 then 'Validada Mant.' when 5 then 'Reportada SE' when 6 then 'Reportada ATMs' when 7 then 'Reportada Mant.' when 8 then 'Reparada SE' when 9 then 'Reparada ATMs' when 10 then 'Reparada Mant.' end as Estado_Traducido,t_unidadvideo.Descripcion,T_PuestoMonitoreo.Nombre as Nombre_Puesto",
-                    $this->condicion." order by ID_Inconsistencia_Video");
+                INNER JOIN t_usuario ON t_usuario.ID_Usuario = T_BitacoraRevisionesVideo.ID_Usuario
+                Inner join t_unidadvideo on t_unidadvideo.ID_Unidad_Video=t_bitacorarevisionesvideo.ID_Unidad_Video
+                inner join T_PuestoMonitoreo on T_PuestoMonitoreo.ID_Puesto_Monitoreo=t_bitacorarevisionesvideo.ID_Puesto_Monitoreo
+                left join t_usuario tuv on t_inconsistenciavideo.ID_Usuario_Valida=tuv.ID_Usuario
+                left join t_usuario tur on t_inconsistenciavideo.ID_Usuario_Reporta_SE=tur.ID_Usuario
+                left join t_usuario tus on t_inconsistenciavideo.ID_Usuario_Reporta_Solucionada=tus.ID_Usuario",
+                "t_inconsistenciavideo . * ,T_BitacoraRevisionesVideo.Fecha_Inicia_Revision, T_BitacoraRevisionesVideo.Hora_Inicia_Revision,T_BitacoraRevisionesVideo.ID_Unidad_Video ,T_BitacoraRevisionesVideo.Reporta_Situacion, CONCAT( CONCAT( t_usuario.Nombre,  ' ' ) , t_usuario.Apellido ) AS Detectado_Por,CONCAT( CONCAT( tuv.Nombre,  ' ' ) , tuv.Apellido ) AS Validado_Por,CONCAT( CONCAT( tur.Nombre,  ' ' ) , tur.Apellido ) AS Reportado_Por,CONCAT( CONCAT( tus.Nombre,  ' ' ) , tus.Apellido ) AS Solucionado_Por,case t_inconsistenciavideo.Estado  when 0 then 'Pendiente'  when 1 then 'Atendida'  when 2 then 'Validada SE' when 3 then 'Validada ATMs' when 4 then 'Validada Mant.' when 5 then 'Reportada SE' when 6 then 'Reportada ATMs' when 7 then 'Reportada Mant.' when 8 then 'Reparada SE' when 9 then 'Reparada ATMs' when 10 then 'Reparada Mant.' end as Estado_Traducido,t_unidadvideo.Descripcion,T_PuestoMonitoreo.Nombre as Nombre_Puesto",
+                $this->condicion." order by ID_Inconsistencia_Video");
             $this->arreglo=$this->obj_data_provider->getArreglo();
             $this->obj_data_provider->desconectar();
         } 
@@ -728,14 +711,13 @@ class cls_puestos_de_monitoreo{
         $this->obj_data_provider->conectar();
         if($this->condicion==""){
             $this->arreglo=$this->obj_data_provider->trae_datos("t_inconsistenciavideo INNER JOIN bd_Registro_Trazabilidad.t_bitacorarevisionesvideo ON bd_Registro_Trazabilidad.t_bitacorarevisionesvideo.ID_Bitacora_Revision_Video = bd_Gerencia_Seguridad.t_inconsistenciavideo.ID_Bitacora_Revision_Video INNER JOIN bd_Gerencia_Seguridad.t_usuario ON bd_Gerencia_Seguridad.t_usuario.ID_Usuario = bd_Registro_Trazabilidad.T_BitacoraRevisionesVideo.ID_Usuario Inner join bd_Gerencia_Seguridad.t_unidadvideo on bd_Gerencia_Seguridad.t_unidadvideo.ID_Unidad_Video=bd_Registro_Trazabilidad.t_bitacorarevisionesvideo.ID_Unidad_Video inner join bd_Gerencia_Seguridad.T_PuestoMonitoreo on bd_Gerencia_Seguridad.T_PuestoMonitoreo.ID_Puesto_Monitoreo=bd_Registro_Trazabilidad.t_bitacorarevisionesvideo.ID_Puesto_Monitoreo left join bd_Gerencia_Seguridad.t_usuario tuv on bd_Gerencia_Seguridad.t_inconsistenciavideo.ID_Usuario_Valida=bd_Gerencia_Seguridad.tuv.ID_Usuario left join bd_Gerencia_Seguridad.t_usuario tur on bd_Gerencia_Seguridad.t_inconsistenciavideo.ID_Usuario_Reporta_SE=bd_Gerencia_Seguridad.tur.ID_Usuario left join bd_Gerencia_Seguridad.t_usuario tus on bd_Gerencia_Seguridad.t_inconsistenciavideo.ID_Usuario_Reporta_Solucionada=bd_Gerencia_Seguridad.tus.ID_Usuario order by bd_Gerencia_Seguridad.t_inconsistenciavideo.ID_Inconsistencia_Video",
-                    "bd_Gerencia_Seguridad.t_inconsistenciavideo.* ,bd_Registro_Trazabilidad.T_BitacoraRevisionesVideo.Fecha_Inicia_Revision, bd_Registro_Trazabilidad.T_BitacoraRevisionesVideo.Hora_Inicia_Revision,bd_Registro_Trazabilidad.T_BitacoraRevisionesVideo.ID_Unidad_Video ,bd_Registro_Trazabilidad.T_BitacoraRevisionesVideo.Reporta_Situacion, CONCAT( CONCAT( bd_Gerencia_Seguridad.t_usuario.Nombre,  ' ' ) ,bd_Gerencia_Seguridad.t_usuario.Apellido ) AS Detectado_Por,CONCAT( CONCAT( bd_Gerencia_Seguridad.tuv.Nombre,  ' ' ) , bd_Gerencia_Seguridad.tuv.Apellido ) AS Validado_Por,CONCAT( CONCAT( bd_Gerencia_Seguridad.tur.Nombre,  ' ' ) ,bd_Gerencia_Seguridad.tur.Apellido ) AS Reportado_Por,CONCAT( CONCAT( bd_Gerencia_Seguridad.tus.Nombre,  ' ' ) , bd_Gerencia_Seguridad.tus.Apellido ) AS Solucionado_Por,case bd_Gerencia_Seguridad.t_inconsistenciavideo.Estado  when 0 then 'Pendiente'  when 1 then 'Atendida' when 2 then 'Validada SE' when 3 then 'Validada ATMs' when 4 then 'Validada Mant.' when 5 then 'Reportada SE' when 6 then 'Reportada ATMs' when 7 then 'Reportada Mant.' when 8 then 'Reparada SE' when 9 then 'Reparada ATMs' when 10 then 'Reparada Mant.' end as Estado_Traducido,bd_Gerencia_Seguridad.t_unidadvideo.Descripcion,bd_Gerencia_Seguridad.T_PuestoMonitoreo.Nombre as Nombre_Puesto","");
+                "bd_Gerencia_Seguridad.t_inconsistenciavideo.* ,bd_Registro_Trazabilidad.T_BitacoraRevisionesVideo.Fecha_Inicia_Revision, bd_Registro_Trazabilidad.T_BitacoraRevisionesVideo.Hora_Inicia_Revision,bd_Registro_Trazabilidad.T_BitacoraRevisionesVideo.ID_Unidad_Video ,bd_Registro_Trazabilidad.T_BitacoraRevisionesVideo.Reporta_Situacion, CONCAT( CONCAT( bd_Gerencia_Seguridad.t_usuario.Nombre,  ' ' ) ,bd_Gerencia_Seguridad.t_usuario.Apellido ) AS Detectado_Por,CONCAT( CONCAT( bd_Gerencia_Seguridad.tuv.Nombre,  ' ' ) , bd_Gerencia_Seguridad.tuv.Apellido ) AS Validado_Por,CONCAT( CONCAT( bd_Gerencia_Seguridad.tur.Nombre,  ' ' ) ,bd_Gerencia_Seguridad.tur.Apellido ) AS Reportado_Por,CONCAT( CONCAT( bd_Gerencia_Seguridad.tus.Nombre,  ' ' ) , bd_Gerencia_Seguridad.tus.Apellido ) AS Solucionado_Por,case bd_Gerencia_Seguridad.t_inconsistenciavideo.Estado  when 0 then 'Pendiente'  when 1 then 'Atendida' when 2 then 'Validada SE' when 3 then 'Validada ATMs' when 4 then 'Validada Mant.' when 5 then 'Reportada SE' when 6 then 'Reportada ATMs' when 7 then 'Reportada Mant.' when 8 then 'Reparada SE' when 9 then 'Reparada ATMs' when 10 then 'Reparada Mant.' end as Estado_Traducido,bd_Gerencia_Seguridad.t_unidadvideo.Descripcion,bd_Gerencia_Seguridad.T_PuestoMonitoreo.Nombre as Nombre_Puesto","");
             $this->arreglo=$this->obj_data_provider->getArreglo();
             $this->obj_data_provider->desconectar();
-        }
-        else{
-       $this->arreglo=$this->obj_data_provider->trae_datos("t_inconsistenciavideo INNER JOIN bd_Registro_Trazabilidad.t_bitacorarevisionesvideo ON bd_Registro_Trazabilidad.t_bitacorarevisionesvideo.ID_Bitacora_Revision_Video = bd_Gerencia_Seguridad.t_inconsistenciavideo.ID_Bitacora_Revision_Video INNER JOIN bd_Gerencia_Seguridad.t_usuario ON bd_Gerencia_Seguridad.t_usuario.ID_Usuario = bd_Registro_Trazabilidad.T_BitacoraRevisionesVideo.ID_Usuario Inner join bd_Gerencia_Seguridad.t_unidadvideo on bd_Gerencia_Seguridad.t_unidadvideo.ID_Unidad_Video=bd_Registro_Trazabilidad.t_bitacorarevisionesvideo.ID_Unidad_Video inner join bd_Gerencia_Seguridad.T_PuestoMonitoreo on bd_Gerencia_Seguridad.T_PuestoMonitoreo.ID_Puesto_Monitoreo=bd_Registro_Trazabilidad.t_bitacorarevisionesvideo.ID_Puesto_Monitoreo left join bd_Gerencia_Seguridad.t_usuario tuv on bd_Gerencia_Seguridad.t_inconsistenciavideo.ID_Usuario_Valida=bd_Gerencia_Seguridad.tuv.ID_Usuario left join bd_Gerencia_Seguridad.t_usuario tur on bd_Gerencia_Seguridad.t_inconsistenciavideo.ID_Usuario_Reporta_SE=bd_Gerencia_Seguridad.tur.ID_Usuario left join bd_Gerencia_Seguridad.t_usuario tus on bd_Gerencia_Seguridad.t_inconsistenciavideo.ID_Usuario_Reporta_Solucionada=bd_Gerencia_Seguridad.tus.ID_Usuario",
-                    "bd_Gerencia_Seguridad.t_inconsistenciavideo.* ,bd_Registro_Trazabilidad.T_BitacoraRevisionesVideo.Fecha_Inicia_Revision, bd_Registro_Trazabilidad.T_BitacoraRevisionesVideo.Hora_Inicia_Revision,bd_Registro_Trazabilidad.T_BitacoraRevisionesVideo.ID_Unidad_Video ,bd_Registro_Trazabilidad.T_BitacoraRevisionesVideo.Reporta_Situacion, CONCAT( CONCAT( bd_Gerencia_Seguridad.t_usuario.Nombre,  ' ' ) ,bd_Gerencia_Seguridad.t_usuario.Apellido ) AS Detectado_Por,CONCAT( CONCAT( bd_Gerencia_Seguridad.tuv.Nombre,  ' ' ) , bd_Gerencia_Seguridad.tuv.Apellido ) AS Validado_Por,CONCAT( CONCAT( bd_Gerencia_Seguridad.tur.Nombre,  ' ' ) ,bd_Gerencia_Seguridad.tur.Apellido ) AS Reportado_Por,CONCAT( CONCAT( bd_Gerencia_Seguridad.tus.Nombre,  ' ' ) , bd_Gerencia_Seguridad.tus.Apellido ) AS Solucionado_Por,case bd_Gerencia_Seguridad.t_inconsistenciavideo.Estado  when 0 then 'Pendiente'  when 1 then 'Atendida' when 2 then 'Validada SE' when 3 then 'Validada ATMs' when 4 then 'Validada Mant.' when 5 then 'Reportada SE' when 6 then 'Reportada ATMs' when 7 then 'Reportada Mant.' when 8 then 'Reparada SE' when 9 then 'Reparada ATMs' when 10 then 'Reparada Mant.' end as Estado_Traducido,bd_Gerencia_Seguridad.t_unidadvideo.Descripcion,bd_Gerencia_Seguridad.T_PuestoMonitoreo.Nombre as Nombre_Puesto",
-                    $this->condicion." order by bd_Gerencia_Seguridad.t_inconsistenciavideo.ID_Inconsistencia_Video");
+        } else{
+            $this->arreglo=$this->obj_data_provider->trae_datos("t_inconsistenciavideo INNER JOIN bd_Registro_Trazabilidad.t_bitacorarevisionesvideo ON bd_Registro_Trazabilidad.t_bitacorarevisionesvideo.ID_Bitacora_Revision_Video = bd_Gerencia_Seguridad.t_inconsistenciavideo.ID_Bitacora_Revision_Video INNER JOIN bd_Gerencia_Seguridad.t_usuario ON bd_Gerencia_Seguridad.t_usuario.ID_Usuario = bd_Registro_Trazabilidad.T_BitacoraRevisionesVideo.ID_Usuario Inner join bd_Gerencia_Seguridad.t_unidadvideo on bd_Gerencia_Seguridad.t_unidadvideo.ID_Unidad_Video=bd_Registro_Trazabilidad.t_bitacorarevisionesvideo.ID_Unidad_Video inner join bd_Gerencia_Seguridad.T_PuestoMonitoreo on bd_Gerencia_Seguridad.T_PuestoMonitoreo.ID_Puesto_Monitoreo=bd_Registro_Trazabilidad.t_bitacorarevisionesvideo.ID_Puesto_Monitoreo left join bd_Gerencia_Seguridad.t_usuario tuv on bd_Gerencia_Seguridad.t_inconsistenciavideo.ID_Usuario_Valida=bd_Gerencia_Seguridad.tuv.ID_Usuario left join bd_Gerencia_Seguridad.t_usuario tur on bd_Gerencia_Seguridad.t_inconsistenciavideo.ID_Usuario_Reporta_SE=bd_Gerencia_Seguridad.tur.ID_Usuario left join bd_Gerencia_Seguridad.t_usuario tus on bd_Gerencia_Seguridad.t_inconsistenciavideo.ID_Usuario_Reporta_Solucionada=bd_Gerencia_Seguridad.tus.ID_Usuario",
+                "bd_Gerencia_Seguridad.t_inconsistenciavideo.* ,bd_Registro_Trazabilidad.T_BitacoraRevisionesVideo.Fecha_Inicia_Revision, bd_Registro_Trazabilidad.T_BitacoraRevisionesVideo.Hora_Inicia_Revision,bd_Registro_Trazabilidad.T_BitacoraRevisionesVideo.ID_Unidad_Video ,bd_Registro_Trazabilidad.T_BitacoraRevisionesVideo.Reporta_Situacion, CONCAT( CONCAT( bd_Gerencia_Seguridad.t_usuario.Nombre,  ' ' ) ,bd_Gerencia_Seguridad.t_usuario.Apellido ) AS Detectado_Por,CONCAT( CONCAT( bd_Gerencia_Seguridad.tuv.Nombre,  ' ' ) , bd_Gerencia_Seguridad.tuv.Apellido ) AS Validado_Por,CONCAT( CONCAT( bd_Gerencia_Seguridad.tur.Nombre,  ' ' ) ,bd_Gerencia_Seguridad.tur.Apellido ) AS Reportado_Por,CONCAT( CONCAT( bd_Gerencia_Seguridad.tus.Nombre,  ' ' ) , bd_Gerencia_Seguridad.tus.Apellido ) AS Solucionado_Por,case bd_Gerencia_Seguridad.t_inconsistenciavideo.Estado  when 0 then 'Pendiente'  when 1 then 'Atendida' when 2 then 'Validada SE' when 3 then 'Validada ATMs' when 4 then 'Validada Mant.' when 5 then 'Reportada SE' when 6 then 'Reportada ATMs' when 7 then 'Reportada Mant.' when 8 then 'Reparada SE' when 9 then 'Reparada ATMs' when 10 then 'Reparada Mant.' end as Estado_Traducido,bd_Gerencia_Seguridad.t_unidadvideo.Descripcion,bd_Gerencia_Seguridad.T_PuestoMonitoreo.Nombre as Nombre_Puesto",
+                $this->condicion." order by bd_Gerencia_Seguridad.t_inconsistenciavideo.ID_Inconsistencia_Video");
             $this->arreglo=$this->obj_data_provider->getArreglo();
             $this->obj_data_provider->desconectar();
         } 
@@ -745,17 +727,16 @@ class cls_puestos_de_monitoreo{
         $this->obj_data_provider->conectar();
         if($this->condicion==""){
             $this->arreglo=$this->obj_data_provider->trae_datos("t_bitacorarevisionesvideo b
-            inner join t_inconsistenciavideo i on i.ID_Bitacora_Revision_Video=b.ID_Bitacora_Revision_Video
-            inner join t_usuario u on u.ID_Usuario=b.ID_Usuario order by b.Fecha_Termina_Revision,b.Hora_Termina_Revision desc",
-                    "b.Reporta_Situacion,concat(concat(u.Nombre,' '),u.Apellido) Nombre_Completo,b.ID_Unidad_Video,concat(concat(b.Fecha_Termina_Revision,' '),b.Hora_Termina_Revision) Tiempo_Reporte","");
+                inner join t_inconsistenciavideo i on i.ID_Bitacora_Revision_Video=b.ID_Bitacora_Revision_Video
+                inner join t_usuario u on u.ID_Usuario=b.ID_Usuario order by b.Fecha_Termina_Revision,b.Hora_Termina_Revision desc",
+                "b.Reporta_Situacion,concat(concat(u.Nombre,' '),u.Apellido) Nombre_Completo,b.ID_Unidad_Video,concat(concat(b.Fecha_Termina_Revision,' '),b.Hora_Termina_Revision) Tiempo_Reporte","");
             $this->arreglo=$this->obj_data_provider->getArreglo();
             $this->obj_data_provider->desconectar();
-        }
-        else{
-       $this->arreglo=$this->obj_data_provider->trae_datos("t_bitacorarevisionesvideo b
-            inner join t_inconsistenciavideo i on i.ID_Bitacora_Revision_Video=b.ID_Bitacora_Revision_Video
-            inner join t_usuario u on u.ID_Usuario=b.ID_Usuario","b.Reporta_Situacion,concat(concat(u.Nombre,' '),u.Apellido) Nombre_Completo,b.ID_Unidad_Video,concat(concat(b.Fecha_Termina_Revision,' '),b.Hora_Termina_Revision) Tiempo_Reporte",
-                    $this->condicion." order by b.Fecha_Termina_Revision,b.Hora_Termina_Revision desc");
+        } else{
+            $this->arreglo=$this->obj_data_provider->trae_datos("t_bitacorarevisionesvideo b
+                inner join t_inconsistenciavideo i on i.ID_Bitacora_Revision_Video=b.ID_Bitacora_Revision_Video
+                inner join t_usuario u on u.ID_Usuario=b.ID_Usuario","b.Reporta_Situacion,concat(concat(u.Nombre,' '),u.Apellido) Nombre_Completo,b.ID_Unidad_Video,concat(concat(b.Fecha_Termina_Revision,' '),b.Hora_Termina_Revision) Tiempo_Reporte",
+                $this->condicion." order by b.Fecha_Termina_Revision,b.Hora_Termina_Revision desc");
             $this->arreglo=$this->obj_data_provider->getArreglo();
             $this->obj_data_provider->desconectar();
         } 
@@ -766,17 +747,16 @@ class cls_puestos_de_monitoreo{
         if($this->condicion==""){
             $this->arreglo=$this->obj_data_provider->trae_datos("t_unidadvideo
                 left OUTER join t_puestomonitoreounidadvideo on t_puestomonitoreounidadvideo.ID_Unidad_Video = t_unidadvideo.ID_Unidad_Video
-                 LEFT OUTER JOIN t_puestomonitoreo ON t_puestomonitoreo.ID_Puesto_Monitoreo = t_puestomonitoreounidadvideo.ID_Puesto_Monitoreo GROUP BY t_unidadvideo.ID_Unidad_Video",
-                    "t_unidadvideo.Descripcion descrip, COUNT(t_puestomonitoreo.ID_Puesto_Monitoreo) Cantidad_Puestos, GROUP_CONCAT(t_puestomonitoreo.Nombre, ' ') Lista_Puestos,t_unidadvideo.Camaras_Habilitadas","");
+                LEFT OUTER JOIN t_puestomonitoreo ON t_puestomonitoreo.ID_Puesto_Monitoreo = t_puestomonitoreounidadvideo.ID_Puesto_Monitoreo GROUP BY t_unidadvideo.ID_Unidad_Video",
+                "t_unidadvideo.Descripcion descrip, COUNT(t_puestomonitoreo.ID_Puesto_Monitoreo) Cantidad_Puestos, GROUP_CONCAT(t_puestomonitoreo.Nombre, ' ') Lista_Puestos,t_unidadvideo.Camaras_Habilitadas","");
             $this->arreglo=$this->obj_data_provider->getArreglo();
             $this->obj_data_provider->desconectar();
-        }
-        else{
-        $this->arreglo=$this->obj_data_provider->trae_datos("t_unidadvideo
-	left OUTER join t_puestomonitoreounidadvideo on t_puestomonitoreounidadvideo.ID_Unidad_Video = t_unidadvideo.ID_Unidad_Video
-    LEFT OUTER JOIN t_puestomonitoreo ON t_puestomonitoreo.ID_Puesto_Monitoreo = t_puestomonitoreounidadvideo.ID_Puesto_Monitoreo",
-                    "t_unidadvideo.Descripcion descrip, COUNT(t_puestomonitoreo.ID_Puesto_Monitoreo) Cantidad_Puestos, GROUP_CONCAT(t_puestomonitoreo.Nombre, ' ') Lista_Puestos,t_unidadvideo.Camaras_Habilitadas",
-                    $this->condicion." GROUP BY t_unidadvideo.ID_Unidad_Video");
+        } else{
+            $this->arreglo=$this->obj_data_provider->trae_datos("t_unidadvideo
+                left OUTER join t_puestomonitoreounidadvideo on t_puestomonitoreounidadvideo.ID_Unidad_Video = t_unidadvideo.ID_Unidad_Video
+                LEFT OUTER JOIN t_puestomonitoreo ON t_puestomonitoreo.ID_Puesto_Monitoreo = t_puestomonitoreounidadvideo.ID_Puesto_Monitoreo",
+                "t_unidadvideo.Descripcion descrip, COUNT(t_puestomonitoreo.ID_Puesto_Monitoreo) Cantidad_Puestos, GROUP_CONCAT(t_puestomonitoreo.Nombre, ' ') Lista_Puestos,t_unidadvideo.Camaras_Habilitadas",
+                $this->condicion." GROUP BY t_unidadvideo.ID_Unidad_Video");
             $this->arreglo=$this->obj_data_provider->getArreglo();
             $this->obj_data_provider->desconectar();
         } 
@@ -803,7 +783,6 @@ class cls_puestos_de_monitoreo{
         $this->obj_data_provider->edita_datos("t_PuestoMonitoreo","Nombre='".$this->nombre."',Descripcion='".$this->descripcion."',Observaciones='".$this->observaciones."',Tiempo_Estandar_Revision=".$this->tiempo_estandar_revision,$this->condicion);
         //Metodo de la clase data provider que desconecta la sesión con la base de datos
         $this->obj_data_provider->desconectar();
-       
     }
     
     //Este metodo realiza la modificación del estado del modulo, de activo a inactivo o viceversa en la bd
@@ -813,7 +792,6 @@ class cls_puestos_de_monitoreo{
         $this->obj_data_provider->edita_datos("t_PuestoMonitoreounidadvideo","Tiempo_Personalizado_Revision=".$this->tiempo_estandar_revision,$this->condicion);
         //Metodo de la clase data provider que desconecta la sesión con la base de datos
         $this->obj_data_provider->desconectar();
-       
     }
     
      //Este metodo realiza la modificación del estado del modulo, de activo a inactivo o viceversa en la bd
@@ -823,18 +801,15 @@ class cls_puestos_de_monitoreo{
         $this->obj_data_provider->edita_datos("t_PuestoMonitoreounidadvideo","Posicion=".$this->posicion,$this->condicion);
         //Metodo de la clase data provider que desconecta la sesión con la base de datos
         $this->obj_data_provider->desconectar();
-       
     }
     
-    function eliminar_registros_puesto_de_monitoreo(){
-          
+    function eliminar_registros_puesto_de_monitoreo(){ 
         $this->obj_data_provider->conectar();
         $this->obj_data_provider->eliminar_datos_para_prontuario("t_puestomonitoreounidadvideo", $this->condicion);
         $this->obj_data_provider->desconectar();
-  
     }
     
-     public function agregar_nueva_unidad_de_video_a_puesto_de_monitoreo(){
+    public function agregar_nueva_unidad_de_video_a_puesto_de_monitoreo(){
         $this->obj_data_provider->conectar();
         $this->obj_data_provider->inserta_datos("T_PuestoMonitoreoUnidadVideo", "`ID_Puesto_Monitoreo_Unidad_Video`,`ID_Puesto_Monitoreo`,`ID_Unidad_Video`,`Tiempo_Personalizado_Revision`,`Posicion`", "null,".$this->id_puesto_monitoreo.",".$this->id_unidad_video.",".$this->tiempo_personalizado_revision.",".$this->posicion);
         $this->arreglo=$this->obj_data_provider->getArreglo();
@@ -843,36 +818,34 @@ class cls_puestos_de_monitoreo{
     
      //Valida que no se ingrese el mismo tipo de evento en un sitio, si ya hay uno pendiente
     function existe_revision_de_video_pendiente_en_bitacora(){
-      //Establece la conexión con la bd
-      $this->obj_data_provider->conectar();
-      $this->obj_data_provider->trae_datos("T_BitacoraRevisionesVideo","*",$this->condicion);
-      $this->arreglo=$this->obj_data_provider->getArreglo();
-      $this->obj_data_provider->desconectar();
-      $this->resultado_operacion=true;
-      
-      if (count($this->arreglo)>0){
-        return true;
-      }else
-      {
-        return false;
-      }    
+        //Establece la conexión con la bd
+        $this->obj_data_provider->conectar();
+        $this->obj_data_provider->trae_datos("T_BitacoraRevisionesVideo","*",$this->condicion);
+        $this->arreglo=$this->obj_data_provider->getArreglo();
+        $this->obj_data_provider->desconectar();
+        $this->resultado_operacion=true;
+
+        if (count($this->arreglo)>0){
+          return true;
+        }else {
+          return false;
+        }    
     }
     
       //Valida que no se ingrese el mismo tipo de evento en un sitio, si ya hay uno pendiente
     function obtiene_ultima_posicion_de_un_puesto_de_monitoreo(){
-      //Establece la conexión con la bd
-      $this->obj_data_provider->conectar();
-      $this->obj_data_provider->trae_datos("t_puestomonitoreounidadvideo","*",$this->condicion." order by Posicion desc");
-      $this->arreglo=$this->obj_data_provider->getArreglo();
-      $this->obj_data_provider->desconectar();
-      $this->resultado_operacion=true;
-      
-      if (count($this->arreglo)>0){
-        return intval($this->arreglo[0]['Posicion']);
-      }else
-      {
-        return 0;
-      }    
+        //Establece la conexión con la bd
+        $this->obj_data_provider->conectar();
+        $this->obj_data_provider->trae_datos("t_puestomonitoreounidadvideo","*",$this->condicion." order by Posicion desc");
+        $this->arreglo=$this->obj_data_provider->getArreglo();
+        $this->obj_data_provider->desconectar();
+        $this->resultado_operacion=true;
+
+        if (count($this->arreglo)>0){
+          return intval($this->arreglo[0]['Posicion']);
+        }else {
+          return 0;
+        }    
     }
     
     //Este metodo realiza la modificación del estado del modulo, de activo a inactivo o viceversa en la bd
@@ -881,8 +854,7 @@ class cls_puestos_de_monitoreo{
         //Llama al metodo para editar los datos correspondientes
         $this->obj_data_provider->edita_datos("T_BitacoraRevisionesVideo","Fecha_Inicia_Revision='".$this->fecha_inicia_revision."',Hora_Inicia_Revision='".$this->hora_inicia_revision."',ID_Usuario=".$this->id_usuario.",ID_Bitacora_Control_Puesto_Monitoreo=".$this->id_ultimo_toma_puesto_ingresada,$this->condicion);
         //Metodo de la clase data provider que desconecta la sesión con la base de datos
-        $this->obj_data_provider->desconectar();
-       
+        $this->obj_data_provider->desconectar(); 
     }
     
      //Este metodo realiza la modificación del estado del modulo, de activo a inactivo o viceversa en la bd
@@ -892,18 +864,15 @@ class cls_puestos_de_monitoreo{
         $this->obj_data_provider->edita_datos("T_BitacoraRevisionesVideo","Fecha_Inicia_Revision='".$this->fecha_inicia_revision."',Hora_Inicia_Revision='".$this->hora_inicia_revision."',ID_Usuario=".$this->id_usuario.",ID_Bitacora_Control_Puesto_Monitoreo=".$this->id_ultimo_toma_puesto_ingresada.",Posicion=".$this->posicion.",ID_Unidad_Video=".$this->id_unidad_video,$this->condicion);
         //Metodo de la clase data provider que desconecta la sesión con la base de datos
         $this->obj_data_provider->desconectar();
-       
     }
     
      //Este metodo realiza la modificación del estado del modulo, de activo a inactivo o viceversa en la bd
     function edita_usuario_y_tiempo_de_inicio_en_revision_de_video_dinamica_pruebas(){
         $this->obj_data_provider->conectar();
-       
         //Llama al metodo para editar los datos correspondientes
         $this->obj_data_provider->edita_datos("T_BitacoraRevisionesVideo","Fecha_Inicia_Revision='".$this->fecha_inicia_revision."',Hora_Inicia_Revision='".$this->hora_inicia_revision."',ID_Usuario=".$this->id_usuario.",ID_Bitacora_Control_Puesto_Monitoreo=".$this->id_ultimo_toma_puesto_ingresada.",Posicion=".$this->posicion.",ID_Unidad_Video=(select temp.ID_Unidad_Video from (select uv.ID_Unidad_Video,MAX(concat(br.Fecha_Termina_Revision,' ',br.Hora_Termina_Revision)) Fecha_Hora from t_unidadvideo uv left join t_bitacorarevisionesvideo br on uv.ID_Unidad_Video=br.ID_Unidad_Video left join t_bitacoracontrolpuestomonitoreo cp on cp.ID_Bitacora_Control_Puesto_Monitoreo=br.ID_Bitacora_Control_Puesto_Monitoreo where uv.Estado=0 and (br.Estado is null or br.Estado = 1 or (br.Estado=0 and cp.Fecha_Libera_Control is NOT null) or (br.Estado=0 and cp.Fecha_Libera_Control is null and TIMESTAMPDIFF(MINUTE, concat(br.Fecha_Inicia_Revision,' ',br.Hora_Inicia_Revision),NOW())>20)) group by uv.ID_Unidad_Video order by Fecha_Hora asc limit ".rand(0,5).",1) temp)",$this->condicion);
         //Metodo de la clase data provider que desconecta la sesión con la base de datos
         $this->obj_data_provider->desconectar();
-       
     }
 
     
@@ -914,7 +883,6 @@ class cls_puestos_de_monitoreo{
         $this->obj_data_provider->edita_datos("T_BitacoraRevisionesVideo","Fecha_Inicia_Revision='".$this->fecha_inicia_revision."',Hora_inicia_Revision=".$this->hora_inicia_revision."",$this->condicion);
         //Metodo de la clase data provider que desconecta la sesión con la base de datos
         $this->obj_data_provider->desconectar();
-       
     }
     
     //Este metodo realiza la modificación del estado del modulo, de activo a inactivo o viceversa en la bd
@@ -924,7 +892,6 @@ class cls_puestos_de_monitoreo{
         $this->obj_data_provider->edita_datos("T_BitacoraRevisionesVideo","Fecha_Termina_Revision='".$this->fecha_termina_revision."',Hora_Termina_Revision='".$this->hora_termina_revision."',Estado=".$this->estado.",Requirio_Mantenimiento=".$this->requirio_mantenimiento.",Duracion_Revision=".$this->duracion_revision.",Retraso_Segundos=".$this->retraso_segundos.",Resultado_Conexion=".$this->resultado_conexion.",Reporta_Situacion='".$this->reporta_situacion."',Justificacion_Retraso='".$this->justificacion_retraso."'",$this->condicion);
         //Metodo de la clase data provider que desconecta la sesión con la base de datos
         $this->obj_data_provider->desconectar();
-       
     }
     
     //Este metodo realiza la modificación del estado del modulo, de activo a inactivo o viceversa en la bd
@@ -934,7 +901,6 @@ class cls_puestos_de_monitoreo{
         $this->obj_data_provider->edita_datos("T_BitacoraRevisionesVideo","Justificacion_Retraso='".$this->justificacion_retraso."'",$this->condicion);
         //Metodo de la clase data provider que desconecta la sesión con la base de datos
         $this->obj_data_provider->desconectar();
-       
     }
     
     //Este metodo realiza la modificación del estado del modulo, de activo a inactivo o viceversa en la bd
@@ -944,27 +910,21 @@ class cls_puestos_de_monitoreo{
         $this->obj_data_provider->edita_datos("T_BitacoraRevisionesVideo","ID_Bitacora_Control_Puesto_Monitoreo=".$this->id_ultimo_toma_puesto_ingresada,$this->condicion);
         //Metodo de la clase data provider que desconecta la sesión con la base de datos
         $this->obj_data_provider->desconectar();
-       
     }
     
     //Obtener el último id de evento para saber que se debe ingresar
     function obtiene_id_ultimo_toma_puesto_ingresada(){
         //Establece la conexión con la bd
         $this->obj_data_provider->conectar();
-
         $this->obj_data_provider->trae_datos("t_bitacoracontrolpuestomonitoreo","max(ID_Bitacora_Control_Puesto_Monitoreo) ID_Bitacora_Control_Puesto_Monitoreo",$this->condicion);
-
         $this->arreglo=$this->obj_data_provider->getArreglo();
-
         $this->obj_data_provider->desconectar();
 
         if (count($this->arreglo)>0){
             $this->setId_ultimo_toma_puesto_ingresada($this->arreglo[0]['ID_Bitacora_Control_Puesto_Monitoreo']);
-
-        }else
-        {
+        }else {
             $this->setId_ultimo_toma_puesto_ingresada(0);
-      }   
+        }   
     }
     
     
@@ -972,39 +932,33 @@ class cls_puestos_de_monitoreo{
     function obtiene_ultima_posicion_concluida_en_puesto_de_monitoreo(){
         //Establece la conexión con la bd
         $this->obj_data_provider->conectar();
-
         //$this->obj_data_provider->trae_datos("t_bitacorarevisionesvideo","max(ID_Bitacora_Revision_Video) ID_Bitacora_Revision_Video,Posicion",$this->condicion);
         $this->obj_data_provider->trae_datos("t_bitacorarevisionesvideo","ID_Bitacora_Revision_Video,Posicion",$this->condicion);
         $this->arreglo=$this->obj_data_provider->getArreglo();
-
         $this->obj_data_provider->desconectar();
 
         if (count($this->arreglo)>0){
             $this->setUltima_posicion_concluida($this->arreglo[0]['Posicion']);
-
-        }else
-        {
+        } else {
             $this->setUltima_posicion_concluida(0);
-        }   
-           
+        }       
     }
     
      //Valida que no se ingrese el mismo tipo de evento en un sitio, si ya hay uno pendiente
     function existe_esta_posicion_en_este_puesto_de_monitoreo(){
-      //Establece la conexión con la bd
-      $this->obj_data_provider->conectar();
-      $this->obj_data_provider->trae_datos("t_puestomonitoreounidadvideo","*",$this->condicion);
-      $this->arreglo=$this->obj_data_provider->getArreglo();
-      $this->obj_data_provider->desconectar();
-      $this->resultado_operacion=true;
-      
-      if (count($this->arreglo)>0){
-        $this->setId_unidad_video($this->arreglo[0]['ID_Unidad_Video']);
-        return true;
-      }else
-      {
-        return false;
-      }    
+        //Establece la conexión con la bd
+        $this->obj_data_provider->conectar();
+        $this->obj_data_provider->trae_datos("t_puestomonitoreounidadvideo","*",$this->condicion);
+        $this->arreglo=$this->obj_data_provider->getArreglo();
+        $this->obj_data_provider->desconectar();
+        $this->resultado_operacion=true;
+
+        if (count($this->arreglo)>0){
+            $this->setId_unidad_video($this->arreglo[0]['ID_Unidad_Video']);
+            return true;
+        }else {
+            return false;
+        }    
     }
     
     public function agregar_nuevo_registro_bitacora_revisiones_de_video(){
@@ -1028,7 +982,6 @@ class cls_puestos_de_monitoreo{
         $this->obj_data_provider->edita_datos("T_InconsistenciaVideo","ID_Usuario_Valida=".$this->id_usuario.",Fecha_Validacion='".$this->fecha_validacion."',Hora_Validacion='".$this->hora_validacion."',Estado=".$this->estado.",Tipo_Inconsistencia=".$this->tipo_inconsistencia.",Observaciones_Validacion='".$this->observaciones."'",$this->condicion);
         //Metodo de la clase data provider que desconecta la sesión con la base de datos
         $this->obj_data_provider->desconectar();
-       
     }
     
     //Este metodo realiza la modificación del estado del modulo, de activo a inactivo o viceversa en la bd
@@ -1038,7 +991,6 @@ class cls_puestos_de_monitoreo{
         $this->obj_data_provider->edita_datos("T_InconsistenciaVideo","ID_Usuario_Reporta_SE=".$this->id_usuario.",Fecha_Reporta='".$this->fecha_reporta."',Hora_Reporta='".$this->hora_reporta."',Estado=".$this->estado.",ID_Averia='".$this->id_averia."',Observaciones_Reporte='".$this->observaciones."'",$this->condicion);
         //Metodo de la clase data provider que desconecta la sesión con la base de datos
         $this->obj_data_provider->desconectar();
-       
     }
     
     //Este metodo realiza la modificación del estado del modulo, de activo a inactivo o viceversa en la bd
@@ -1048,10 +1000,9 @@ class cls_puestos_de_monitoreo{
         $this->obj_data_provider->edita_datos("T_InconsistenciaVideo","ID_Usuario_Reporta_Solucionada=".$this->id_usuario.",Fecha_Solucionada='".$this->fecha_solucion."',Hora_Solucionada='".$this->hora_solucion."',Estado=".$this->estado.",Observaciones_Solucionada='".$this->observaciones."'",$this->condicion);
         //Metodo de la clase data provider que desconecta la sesión con la base de datos
         $this->obj_data_provider->desconectar();
-       
     }
     
-     public function agregar_nuevo_registro_inconsistencias_de_video(){
+    public function agregar_nuevo_registro_inconsistencias_de_video(){
         $this->obj_data_provider->conectar();
         $this->obj_data_provider->inserta_datos("T_InconsistenciaVideo", "ID_Inconsistencia_Video,ID_Bitacora_Revision_Video,Estado,Tipo_Inconsistencia", "null,".$this->id_bitacora_revision_video.",".$this->estado_inconsistencia.",".$this->tipo_inconsistencia);
         $this->arreglo=$this->obj_data_provider->getArreglo();
@@ -1062,17 +1013,16 @@ class cls_puestos_de_monitoreo{
         $this->obj_data_provider->conectar();
         if($this->condicion==""){
             $this->arreglo=$this->obj_data_provider->trae_datos(
-                    "t_bitacorarevisionesvideo", 
-                    "*",
-                    "");
+                "t_bitacorarevisionesvideo", 
+                "*",
+                "");
             $this->arreglo=$this->obj_data_provider->getArreglo();
             $this->obj_data_provider->desconectar();
-        }
-        else{
+        } else{
             $this->arreglo=$this->obj_data_provider->trae_datos(
-                    "t_bitacorarevisionesvideo", 
-                    "*",
-                    $this->condicion);
+                "t_bitacorarevisionesvideo", 
+                "*",
+                $this->condicion);
             $this->arreglo=$this->obj_data_provider->getArreglo();
             $this->obj_data_provider->desconectar();
         } 
@@ -1082,18 +1032,17 @@ class cls_puestos_de_monitoreo{
         $this->obj_data_provider->conectar();
         if($this->condicion==""){
             $this->arreglo=$this->obj_data_provider->trae_datos(
-                    "t_bitacorarevisionesvideo left outer join t_usuario on t_bitacorarevisionesvideo.ID_Usuario=t_usuario.ID_usuario order by Nombre_Completo", 
-                    "distinct(t_bitacorarevisionesvideo.ID_Usuario),concat(t_usuario.Nombre,' ',t_usuario.Apellido) as Nombre_Completo",
-                    "");
+                "t_bitacorarevisionesvideo left outer join t_usuario on t_bitacorarevisionesvideo.ID_Usuario=t_usuario.ID_usuario order by Nombre_Completo", 
+                "distinct(t_bitacorarevisionesvideo.ID_Usuario),concat(t_usuario.Nombre,' ',t_usuario.Apellido) as Nombre_Completo",
+                "");
             $this->arreglo=$this->obj_data_provider->getArreglo();
             $this->obj_data_provider->desconectar();
             $this->resultado_operacion=true;
-        }
-        else{
+        } else{
             $this->arreglo=$this->obj_data_provider->trae_datos(
-                  "t_bitacorarevisionesvideo left outer join t_usuario on t_bitacorarevisionesvideo.ID_Usuario=t_usuario.ID_usuario", 
-                    "distinct(t_bitacorarevisionesvideo.ID_Usuario),concat(t_usuario.Nombre,' ',t_usuario.Apellido) as Nombre_Completo",
-                    $this->condicion. " order by Nombre_Completo");
+                "t_bitacorarevisionesvideo left outer join t_usuario on t_bitacorarevisionesvideo.ID_Usuario=t_usuario.ID_usuario", 
+                "distinct(t_bitacorarevisionesvideo.ID_Usuario),concat(t_usuario.Nombre,' ',t_usuario.Apellido) as Nombre_Completo",
+                $this->condicion. " order by Nombre_Completo");
             $this->arreglo=$this->obj_data_provider->getArreglo();
             $this->obj_data_provider->desconectar();
             $this->resultado_operacion=true;
@@ -1105,18 +1054,17 @@ class cls_puestos_de_monitoreo{
         $this->obj_data_provider->conectar();
         if($this->condicion==""){
             $this->arreglo=$this->obj_data_provider->trae_datos(
-                    "bd_registro_trazabilidad.t_bitacorarevisionesvideo left outer join bd_gerencia_seguridad.t_usuario on bd_registro_trazabilidad.t_bitacorarevisionesvideo.ID_Usuario=bd_gerencia_seguridad.t_usuario.ID_usuario order by Nombre_Completo", 
-                    "distinct(bd_registro_trazabilidad.t_bitacorarevisionesvideo.ID_Usuario),concat(bd_gerencia_seguridad.t_usuario.Nombre,' ',bd_gerencia_seguridad.t_usuario.Apellido) as Nombre_Completo",
-                    "");
+                "bd_registro_trazabilidad.t_bitacorarevisionesvideo left outer join bd_gerencia_seguridad.t_usuario on bd_registro_trazabilidad.t_bitacorarevisionesvideo.ID_Usuario=bd_gerencia_seguridad.t_usuario.ID_usuario order by Nombre_Completo", 
+                "distinct(bd_registro_trazabilidad.t_bitacorarevisionesvideo.ID_Usuario),concat(bd_gerencia_seguridad.t_usuario.Nombre,' ',bd_gerencia_seguridad.t_usuario.Apellido) as Nombre_Completo",
+                "");
             $this->arreglo=$this->obj_data_provider->getArreglo();
             $this->obj_data_provider->desconectar();
             $this->resultado_operacion=true;
-        }
-        else{
+        } else {
             $this->arreglo=$this->obj_data_provider->trae_datos(
-                  "bd_registro_trazabilidad.t_bitacorarevisionesvideo left outer join bd_gerencia_seguridad.t_usuario on bd_registro_trazabilidad.t_bitacorarevisionesvideo.ID_Usuario=bd_gerencia_seguridad.t_usuario.ID_usuario", 
-                    "distinct(bd_registro_trazabilidad.t_bitacorarevisionesvideo.ID_Usuario),concat(bd_gerencia_seguridad.t_usuario.Nombre,' ',bd_gerencia_seguridad.t_usuario.Apellido) as Nombre_Completo",
-                    $this->condicion. " order by Nombre_Completo");
+                "bd_registro_trazabilidad.t_bitacorarevisionesvideo left outer join bd_gerencia_seguridad.t_usuario on bd_registro_trazabilidad.t_bitacorarevisionesvideo.ID_Usuario=bd_gerencia_seguridad.t_usuario.ID_usuario", 
+                "distinct(bd_registro_trazabilidad.t_bitacorarevisionesvideo.ID_Usuario),concat(bd_gerencia_seguridad.t_usuario.Nombre,' ',bd_gerencia_seguridad.t_usuario.Apellido) as Nombre_Completo",
+                $this->condicion. " order by Nombre_Completo");
             $this->arreglo=$this->obj_data_provider->getArreglo();
             $this->obj_data_provider->desconectar();
             $this->resultado_operacion=true;
@@ -1145,7 +1093,6 @@ class cls_puestos_de_monitoreo{
         $this->obj_data_provider->conectar();
         $this->obj_data_provider->ejecuta_instruccion_sql("DELETE FROM bd_gerencia_seguridad.`t_bitacorarevisionesvideo` WHERE bd_gerencia_seguridad.t_bitacorarevisionesvideo.ID_Bitacora_Revision_Video in ".$this->condicion);
         $this->obj_data_provider->desconectar();
-        
     }
     
     //Obtenine información de las revisiones, suma.
@@ -1155,6 +1102,7 @@ class cls_puestos_de_monitoreo{
         $this->arreglo=$this->obj_data_provider->getArreglo();
         $this->obj_data_provider->desconectar();
     }
+    
     public function agregar_revision_contador(){
         $this->obj_data_provider->conectar();
         $this->obj_data_provider->inserta_datos("T_Revision_Contador", "ID_Revision_Contador,Fecha_Hora,Numero_Hora,Suma_Revisiones,Convinacion", "null,'".$this->fecha_validacion."','".$this->hora_reporta."','".$this->campos_valores."','".$this->descripcion."'");

@@ -200,7 +200,6 @@ class cls_personal{
     }
  
     public function __construct() {
-       
         $this->obj_data_provider=new Data_Provider();
         $this->condicion="";
         $this->id="";
@@ -229,46 +228,46 @@ class cls_personal{
         $this->obj_data_provider->conectar();
         if($this->condicion==""){
             $this->arreglo=$this->obj_data_provider->trae_datos(
-                    "T_Personal
-			LEFT OUTER JOIN	T_UnidadEjecutora ON T_Personal.ID_Unidad_Ejecutora = T_UnidadEjecutora.ID_Unidad_Ejecutora
-			LEFT OUTER JOIN T_Empresa ON T_Personal.ID_Empresa = T_Empresa.ID_Empresa
-			LEFT OUTER JOIN T_Telefono on T_Personal.ID_Persona = T_Telefono.ID
-			LEFT OUTER JOIN T_TipoTelefono ON T_Telefono.ID_Tipo_Telefono = T_TipoTelefono.ID_Tipo_Telefono
-			LEFT OUTER JOIN T_Puesto ON T_Personal.ID_Puesto = T_Puesto.ID_Puesto", 
-                    " T_Personal.*,
-			T_UnidadEjecutora.ID_Unidad_Ejecutora, T_UnidadEjecutora.Departamento,
-			T_Empresa.ID_Empresa, T_Empresa.Empresa,
-			T_TipoTelefono.Tipo_Telefono, T_TipoTelefono.ID_Tipo_Telefono,
-			GROUP_CONCAT(char(10),T_TipoTelefono.Tipo_Telefono,': ',T_Telefono.Numero) as Numero,
-                        T_Telefono.ID_Telefono,T_Telefono.Observaciones as Observaciones_Tel,
-			T_Puesto.ID_Puesto, T_Puesto.Puesto",
-                    "(T_TipoTelefono.ID_Tipo_Telefono = '2' OR 
-			T_TipoTelefono.ID_Tipo_Telefono = '3' OR 
-			T_TipoTelefono.ID_Tipo_Telefono = '4'OR 
-			T_TipoTelefono.ID_Tipo_Telefono = '27') GROUP by T_Personal.ID_Persona");
+                "T_Personal
+                    LEFT OUTER JOIN	T_UnidadEjecutora ON T_Personal.ID_Unidad_Ejecutora = T_UnidadEjecutora.ID_Unidad_Ejecutora
+                    LEFT OUTER JOIN T_Empresa ON T_Personal.ID_Empresa = T_Empresa.ID_Empresa
+                    LEFT OUTER JOIN T_Telefono on T_Personal.ID_Persona = T_Telefono.ID
+                    LEFT OUTER JOIN T_TipoTelefono ON T_Telefono.ID_Tipo_Telefono = T_TipoTelefono.ID_Tipo_Telefono
+                    LEFT OUTER JOIN T_Puesto ON T_Personal.ID_Puesto = T_Puesto.ID_Puesto", 
+                " T_Personal.*,
+                    T_UnidadEjecutora.ID_Unidad_Ejecutora, T_UnidadEjecutora.Departamento,
+                    T_Empresa.ID_Empresa, T_Empresa.Empresa,
+                    T_TipoTelefono.Tipo_Telefono, T_TipoTelefono.ID_Tipo_Telefono,
+                    GROUP_CONCAT(char(10),T_TipoTelefono.Tipo_Telefono,': ',T_Telefono.Numero) as Numero,
+                    T_Telefono.ID_Telefono,T_Telefono.Observaciones as Observaciones_Tel,
+                    T_Puesto.ID_Puesto, T_Puesto.Puesto",
+                "(T_TipoTelefono.ID_Tipo_Telefono = '2' OR 
+                    T_TipoTelefono.ID_Tipo_Telefono = '3' OR 
+                    T_TipoTelefono.ID_Tipo_Telefono = '4'OR 
+                    T_TipoTelefono.ID_Tipo_Telefono = '27') GROUP by T_Personal.ID_Persona");
             $this->arreglo=$this->obj_data_provider->getArreglo();
             $this->obj_data_provider->desconectar();
             $this->resultado_operacion=true;
         }
         else{
             $this->arreglo=$this->obj_data_provider->trae_datos(
-                    "T_Personal
-			LEFT OUTER JOIN	T_UnidadEjecutora ON T_Personal.ID_Unidad_Ejecutora = T_UnidadEjecutora.ID_Unidad_Ejecutora
-			LEFT OUTER JOIN T_Empresa ON T_Personal.ID_Empresa = T_Empresa.ID_Empresa
-			LEFT OUTER JOIN T_Telefono on T_Personal.ID_Persona = T_Telefono.ID
-			LEFT OUTER JOIN T_TipoTelefono ON T_Telefono.ID_Tipo_Telefono = T_TipoTelefono.ID_Tipo_Telefono
-			LEFT OUTER JOIN T_Puesto ON T_Personal.ID_Puesto = T_Puesto.ID_Puesto", 
-                    "T_Personal.*,
-			T_UnidadEjecutora.ID_Unidad_Ejecutora, T_UnidadEjecutora.Departamento,
-			T_Empresa.ID_Empresa, T_Empresa.Empresa,
-			T_TipoTelefono.Tipo_Telefono, T_TipoTelefono.ID_Tipo_Telefono,
-			GROUP_CONCAT(char(10),T_TipoTelefono.Tipo_Telefono,': ',T_Telefono.Numero) as Numero,
-                        T_Telefono.ID_Telefono,T_Telefono.Observaciones as Observaciones_Tel,
-			T_Puesto.ID_Puesto, T_Puesto.Puesto",
-                    "(".$this->condicion.") AND (T_TipoTelefono.ID_Tipo_Telefono = '2' OR 
-			T_TipoTelefono.ID_Tipo_Telefono = '3' OR 
-			T_TipoTelefono.ID_Tipo_Telefono = '4' OR 
-			T_TipoTelefono.ID_Tipo_Telefono = '27') GROUP by T_Personal.ID_Persona");
+                "T_Personal
+                    LEFT OUTER JOIN	T_UnidadEjecutora ON T_Personal.ID_Unidad_Ejecutora = T_UnidadEjecutora.ID_Unidad_Ejecutora
+                    LEFT OUTER JOIN T_Empresa ON T_Personal.ID_Empresa = T_Empresa.ID_Empresa
+                    LEFT OUTER JOIN T_Telefono on T_Personal.ID_Persona = T_Telefono.ID
+                    LEFT OUTER JOIN T_TipoTelefono ON T_Telefono.ID_Tipo_Telefono = T_TipoTelefono.ID_Tipo_Telefono
+                    LEFT OUTER JOIN T_Puesto ON T_Personal.ID_Puesto = T_Puesto.ID_Puesto", 
+                "T_Personal.*,
+                    T_UnidadEjecutora.ID_Unidad_Ejecutora, T_UnidadEjecutora.Departamento,
+                    T_Empresa.ID_Empresa, T_Empresa.Empresa,
+                    T_TipoTelefono.Tipo_Telefono, T_TipoTelefono.ID_Tipo_Telefono,
+                    GROUP_CONCAT(char(10),T_TipoTelefono.Tipo_Telefono,': ',T_Telefono.Numero) as Numero,
+                    T_Telefono.ID_Telefono,T_Telefono.Observaciones as Observaciones_Tel,
+                    T_Puesto.ID_Puesto, T_Puesto.Puesto",
+                "(".$this->condicion.") AND (T_TipoTelefono.ID_Tipo_Telefono = '2' OR 
+                    T_TipoTelefono.ID_Tipo_Telefono = '3' OR 
+                    T_TipoTelefono.ID_Tipo_Telefono = '4' OR 
+                    T_TipoTelefono.ID_Tipo_Telefono = '27') GROUP by T_Personal.ID_Persona");
             $this->arreglo=$this->obj_data_provider->getArreglo();
             $this->obj_data_provider->desconectar();
             $this->resultado_operacion=true;
@@ -279,32 +278,32 @@ class cls_personal{
         $this->obj_data_provider->conectar();
         if($this->condicion==""){
             $this->arreglo=$this->obj_data_provider->trae_datos(
-                    "T_GerenteZonaBCR
-			LEFT OUTER JOIN T_Personal ON T_GerenteZonaBCR.ID_Persona = T_Personal.ID_Persona
-			LEFT OUTER JOIN T_Telefono ON T_GerenteZonaBCR.ID_Persona = T_Telefono.ID
-			LEFT OUTER JOIN T_TipoTelefono ON T_Telefono.ID_Tipo_Telefono = T_TipoTelefono.ID_Tipo_Telefono", 
-                    "T_GerenteZonaBCR.*, 
-			T_Personal.Apellido_Nombre,
-			GROUP_CONCAT(char(10),T_TipoTelefono.Tipo_Telefono,': ',T_Telefono.Numero) as Numero",
-                    "(T_TipoTelefono.ID_Tipo_Telefono = '3' OR 
-			  T_TipoTelefono.ID_Tipo_Telefono = '4') 
-			  GROUP BY T_GerenteZonaBCR.ID_Gerente_Zona");
+                "T_GerenteZonaBCR
+                    LEFT OUTER JOIN T_Personal ON T_GerenteZonaBCR.ID_Persona = T_Personal.ID_Persona
+                    LEFT OUTER JOIN T_Telefono ON T_GerenteZonaBCR.ID_Persona = T_Telefono.ID
+                    LEFT OUTER JOIN T_TipoTelefono ON T_Telefono.ID_Tipo_Telefono = T_TipoTelefono.ID_Tipo_Telefono", 
+                "T_GerenteZonaBCR.*, 
+                    T_Personal.Apellido_Nombre,
+                    GROUP_CONCAT(char(10),T_TipoTelefono.Tipo_Telefono,': ',T_Telefono.Numero) as Numero",
+                "(T_TipoTelefono.ID_Tipo_Telefono = '3' OR 
+                      T_TipoTelefono.ID_Tipo_Telefono = '4') 
+                      GROUP BY T_GerenteZonaBCR.ID_Gerente_Zona");
             $this->arreglo=$this->obj_data_provider->getArreglo();
             $this->obj_data_provider->desconectar();
             $this->resultado_operacion=true;
         }
         else{
             $this->arreglo=$this->obj_data_provider->trae_datos(
-                    "T_GerenteZonaBCR
-			LEFT OUTER JOIN T_Personal ON T_GerenteZonaBCR.ID_Persona = T_Personal.ID_Persona
-			LEFT OUTER JOIN T_Telefono ON T_GerenteZonaBCR.ID_Persona = T_Telefono.ID
-			LEFT OUTER JOIN T_TipoTelefono ON T_Telefono.ID_Tipo_Telefono = T_TipoTelefono.ID_Tipo_Telefono", 
-                    "T_GerenteZonaBCR.*, 
-			T_Personal.Apellido_Nombre,
-			GROUP_CONCAT(char(10),T_TipoTelefono.Tipo_Telefono,': ',T_Telefono.Numero) as Numero",
-                    "(".$this->condicion.") AND (T_TipoTelefono.ID_Tipo_Telefono = '3' OR 
-			  T_TipoTelefono.ID_Tipo_Telefono = '4') 
-			  GROUP BY T_GerenteZonaBCR.ID_Gerente_Zona");
+                "T_GerenteZonaBCR
+                    LEFT OUTER JOIN T_Personal ON T_GerenteZonaBCR.ID_Persona = T_Personal.ID_Persona
+                    LEFT OUTER JOIN T_Telefono ON T_GerenteZonaBCR.ID_Persona = T_Telefono.ID
+                    LEFT OUTER JOIN T_TipoTelefono ON T_Telefono.ID_Tipo_Telefono = T_TipoTelefono.ID_Tipo_Telefono", 
+                "T_GerenteZonaBCR.*, 
+                    T_Personal.Apellido_Nombre,
+                    GROUP_CONCAT(char(10),T_TipoTelefono.Tipo_Telefono,': ',T_Telefono.Numero) as Numero",
+                "(".$this->condicion.") AND (T_TipoTelefono.ID_Tipo_Telefono = '3' OR 
+                      T_TipoTelefono.ID_Tipo_Telefono = '4') 
+                      GROUP BY T_GerenteZonaBCR.ID_Gerente_Zona");
             $this->arreglo=$this->obj_data_provider->getArreglo();
             $this->obj_data_provider->desconectar();
             $this->resultado_operacion=true;
@@ -315,30 +314,30 @@ class cls_personal{
         $this->obj_data_provider->conectar();
         if($this->condicion==""){
             $this->arreglo=$this->obj_data_provider->trae_datos(
-                    "T_SupervisorZona
-			LEFT OUTER JOIN T_PersonalExterno ON T_SupervisorZona.ID_Persona_Externa = T_PersonalExterno.ID_Persona_Externa
-			LEFT OUTER JOIN T_Telefono ON T_PersonalExterno.ID_Persona_Externa = T_Telefono.ID
-			LEFT OUTER JOIN T_TipoTelefono ON T_Telefono.ID_Tipo_Telefono = T_TipoTelefono.ID_Tipo_Telefono", 
-                    "T_SupervisorZona.*, 
-			T_PersonalExterno.Apellido,T_PersonalExterno.Nombre,
-			GROUP_CONCAT(T_TipoTelefono.Tipo_Telefono,': ',T_Telefono.Numero) as Numero",
-                    "(T_TipoTelefono.ID_Tipo_Telefono = '28' OR T_TipoTelefono.ID_Tipo_Telefono = '29')
-			GROUP BY T_SupervisorZona.ID_Supervisor_Zona");
+                "T_SupervisorZona
+                    LEFT OUTER JOIN T_PersonalExterno ON T_SupervisorZona.ID_Persona_Externa = T_PersonalExterno.ID_Persona_Externa
+                    LEFT OUTER JOIN T_Telefono ON T_PersonalExterno.ID_Persona_Externa = T_Telefono.ID
+                    LEFT OUTER JOIN T_TipoTelefono ON T_Telefono.ID_Tipo_Telefono = T_TipoTelefono.ID_Tipo_Telefono", 
+                "T_SupervisorZona.*, 
+                    T_PersonalExterno.Apellido,T_PersonalExterno.Nombre,
+                    GROUP_CONCAT(T_TipoTelefono.Tipo_Telefono,': ',T_Telefono.Numero) as Numero",
+                "(T_TipoTelefono.ID_Tipo_Telefono = '28' OR T_TipoTelefono.ID_Tipo_Telefono = '29')
+                    GROUP BY T_SupervisorZona.ID_Supervisor_Zona");
             $this->arreglo=$this->obj_data_provider->getArreglo();
             $this->obj_data_provider->desconectar();
             $this->resultado_operacion=true;
         }
         else{
             $this->arreglo=$this->obj_data_provider->trae_datos(
-                    "T_SupervisorZona
-			LEFT OUTER JOIN T_Personal ON T_SupervisorZona.ID_Persona = T_Personal.ID_Persona
-			LEFT OUTER JOIN T_Telefono ON T_Personal.ID_Persona = T_Telefono.ID
-			LEFT OUTER JOIN T_TipoTelefono ON T_Telefono.ID_Tipo_Telefono = T_TipoTelefono.ID_Tipo_Telefono", 
-                    "T_SupervisorZona.*, 
-			T_Personal.Apellido_Nombre,
-			GROUP_CONCAT(T_TipoTelefono.Tipo_Telefono,': ',T_Telefono.Numero) as Numero",
-                    "(".$this->condicion.") AND (T_TipoTelefono.ID_Tipo_Telefono = '3')
-			GROUP BY T_SupervisorZona.ID_Supervisor_Zona");
+                "T_SupervisorZona
+                    LEFT OUTER JOIN T_Personal ON T_SupervisorZona.ID_Persona = T_Personal.ID_Persona
+                    LEFT OUTER JOIN T_Telefono ON T_Personal.ID_Persona = T_Telefono.ID
+                    LEFT OUTER JOIN T_TipoTelefono ON T_Telefono.ID_Tipo_Telefono = T_TipoTelefono.ID_Tipo_Telefono", 
+                "T_SupervisorZona.*, 
+                    T_Personal.Apellido_Nombre,
+                    GROUP_CONCAT(T_TipoTelefono.Tipo_Telefono,': ',T_Telefono.Numero) as Numero",
+                "(".$this->condicion.") AND (T_TipoTelefono.ID_Tipo_Telefono = '3')
+                    GROUP BY T_SupervisorZona.ID_Supervisor_Zona");
             $this->arreglo=$this->obj_data_provider->getArreglo();
             $this->obj_data_provider->desconectar();
             $this->resultado_operacion=true;
@@ -349,17 +348,17 @@ class cls_personal{
         $this->obj_data_provider->conectar();
         if($this->condicion==""){
             $this->arreglo=$this->obj_data_provider->trae_datos(
-                    "T_personal", 
-                    "*",
-                    "");
+                "T_personal", 
+                "*",
+                "");
             $this->arreglo=$this->obj_data_provider->getArreglo();
             $this->obj_data_provider->desconectar();
         }
         else{
             $this->arreglo=$this->obj_data_provider->trae_datos(
-                    "T_personal", 
-                    "*",
-                    $this->condicion);
+                "T_personal", 
+                "*",
+                $this->condicion);
             $this->arreglo=$this->obj_data_provider->getArreglo();
             $this->obj_data_provider->desconectar();
             $this->resultado_operacion=true;
@@ -370,17 +369,17 @@ class cls_personal{
         $this->obj_data_provider->conectar();
         if($this->condicion==""){
             $this->arreglo=$this->obj_data_provider->trae_datos(
-                    "T_personal", 
-                    "Apellido_Nombre,Cedula,ID_Persona",
-                    "");
+                "T_personal", 
+                "Apellido_Nombre,Cedula,ID_Persona",
+                "");
             $this->arreglo=$this->obj_data_provider->getArreglo();
             $this->obj_data_provider->desconectar();
         }
         else{
             $this->arreglo=$this->obj_data_provider->trae_datos(
-                    "T_personal", 
-                    "Apellido_Nombre,Cedula,ID_Persona",
-                    $this->condicion);
+                "T_personal", 
+                "Apellido_Nombre,Cedula,ID_Persona",
+                $this->condicion);
             $this->arreglo=$this->obj_data_provider->getArreglo();
             $this->obj_data_provider->desconectar();
             $this->resultado_operacion=true;
@@ -401,40 +400,39 @@ class cls_personal{
     
     function edita_persona(){
         $this->obj_data_provider->conectar();
-        
         //Llama al metodo para editar los datos correspondientes
-        $this->obj_data_provider->edita_datos("t_personal","Cedula='".$this->cedula."',Apellido_Nombre='".$this->apellidonombre."',ID_Unidad_Ejecutora=".$this->id_unidad_ejecutora.",ID_Puesto=".$this->id_puesto.",Direccion='".$this->direccion."',Link_Foto='".$this->linkfoto."',ID_Empresa=".$this->id_empresa.",Observaciones='".$this->observaciones."',Estado='".$this->estado."'",$this->condicion);
-       
+        $this->obj_data_provider->edita_datos("t_personal",
+            "Cedula='".$this->cedula."',Apellido_Nombre='".$this->apellidonombre."',ID_Unidad_Ejecutora=".$this->id_unidad_ejecutora.
+                ",ID_Puesto=".$this->id_puesto.",Direccion='".$this->direccion."',Link_Foto='".$this->linkfoto.
+                "',ID_Empresa=".$this->id_empresa.",Observaciones='".$this->observaciones."',Estado='".$this->estado."'",
+            $this->condicion);
         //Metodo de la clase data provider que desconecta la sesión con la base de datos
         $this->obj_data_provider->desconectar();
        
     }
     
     function edita_persona_para_prontuario(){
-        
         $this->obj_data_provider->conectar();
-        
         //Llama al metodo para editar los datos correspondientes
-        $this->obj_data_provider->edita_datos_para_prontuario("t_personal","Cedula='".$this->cedula."',Apellido_Nombre='".$this->apellidonombre."',ID_Unidad_Ejecutora=".$this->id_unidad_ejecutora.",ID_Puesto=".$this->id_puesto.",Direccion='".$this->direccion."',Link_Foto='".$this->linkfoto."',ID_Empresa=".$this->id_empresa.",Correo='".$this->correo."',Estado='".$this->estado."'",$this->condicion);
-       
+        $this->obj_data_provider->edita_datos_para_prontuario("t_personal",
+            "Cedula='".$this->cedula."',Apellido_Nombre='".$this->apellidonombre.
+                "',ID_Unidad_Ejecutora=".$this->id_unidad_ejecutora.",ID_Puesto=".$this->id_puesto.
+                ",Direccion='".$this->direccion."',Link_Foto='".$this->linkfoto.
+                "',ID_Empresa=".$this->id_empresa.",Correo='".$this->correo."',Estado='".$this->estado."'",
+            $this->condicion);
         //Metodo de la clase data provider que desconecta la sesión con la base de datos
         $this->obj_data_provider->desconectar();
        
     }
     
     function iniciar_transaccion_sql(){
-           
         $this->obj_data_provider->iniciar_transaccion_sql();
-  
     }
     
     function agrega_edicion_de_persona_a_transaccion(){
-         
-        
         $this->obj_data_provider->agrega_edicion_de_datos_a_la_transaccion("t_personal","Cedula='".$this->cedula."',Apellido_Nombre='".$this->apellidonombre."',ID_Unidad_Ejecutora=".$this->id_unidad_ejecutora.",ID_Puesto=".$this->id_puesto.",Direccion='".$this->direccion."',Link_Foto='".$this->linkfoto."',ID_Empresa=".$this->id_empresa.",Correo='".$this->correo."',Estado='".$this->estado."'",$this->condicion);
         //$this->obj_data_provider->agrega_edicion_de_datos_a_la_transaccion("t_personal","Apellido_Nombre='VENEGAS MONGE DIEGO ALBERTOs'","Cedula='01-1310-0038'");
-        
-     }
+    }
      
     function agregar_inclusion_persona_a_transaccion(){
         //$this->obj_data_provider->conectar();
@@ -443,160 +441,123 @@ class cls_personal{
         //$this->obj_data_provider->desconectar();
     }
      
-    function ejecutar_transaccion_sql(){
-                       
+    function ejecutar_transaccion_sql(){     
         $this->obj_data_provider->ejecutar_transaccion_sql();   
     }
       
     //Obtener el último id de evento para saber que se debe ingresar
     function obtiene_id_ultima_persona_ingresada(){
-      //Establece la conexión con la bd
-      $this->obj_data_provider->conectar();
-      
-      $this->obj_data_provider->trae_datos("t_personal","max(ID_Persona) ID_Persona","");
-      
-      $this->arreglo2=$this->obj_data_provider->getArreglo();
-     
-      $this->obj_data_provider->desconectar();
-      
-      if (count($this->arreglo2)>0){
-          $this->setId_ultima_persona_ingresada($this->arreglo2[0]['ID_Persona']);
-         
-      }else
-      {
-          $this->setId_ultima_persona_ingresada(0);
-      }   
-  }
+        //Establece la conexión con la bd
+        $this->obj_data_provider->conectar();
+        $this->obj_data_provider->trae_datos("t_personal","max(ID_Persona) ID_Persona","");
+        $this->arreglo2=$this->obj_data_provider->getArreglo();
+        $this->obj_data_provider->desconectar();
+        if (count($this->arreglo2)>0){
+            $this->setId_ultima_persona_ingresada($this->arreglo2[0]['ID_Persona']);
+        }else {
+            $this->setId_ultima_persona_ingresada(0);
+        }   
+    }
   
     //Obtener el último id de evento para saber que se debe ingresar
     function obtiene_id_de_persona_para_prontuario(){
-      //Establece la conexión con la bd
-      $this->obj_data_provider->conectar();
-      
-      $this->obj_data_provider->trae_datos("t_personal","ID_Persona",$this->condicion);
-      
-      $this->arreglo=$this->obj_data_provider->getArreglo();
-     
-      $this->obj_data_provider->desconectar();
-      
-      if (count($this->arreglo)>0){
-          $this->setId($this->arreglo[0]['ID_Persona']);
-         
-      }else
-      {
-          $this->setId(0);
-      }   
-  }
+        //Establece la conexión con la bd
+        $this->obj_data_provider->conectar();
+        $this->obj_data_provider->trae_datos("t_personal","ID_Persona",$this->condicion);
+        $this->arreglo=$this->obj_data_provider->getArreglo();
+        $this->obj_data_provider->desconectar();
+
+        if (count($this->arreglo)>0){
+            $this->setId($this->arreglo[0]['ID_Persona']);
+        }else {
+            $this->setId(0);
+        }   
+    }
   
     //Este metodo realiza la modificación del estado del modulo, de activo a inactivo o viceversa en la bd
     function edita_id_persona_en_tabla_telefonos(){
         $this->obj_data_provider->conectar();
-        
         //Llama al metodo para editar los datos correspondientes
         $this->obj_data_provider->edita_datos("t_telefono","ID=".$this->id_ultima_persona_ingresada,$this->condicion);
         //Metodo de la clase data provider que desconecta la sesión con la base de datos
         $this->obj_data_provider->desconectar();
-       
     }
     
     //Este metodo realiza la modificación del estado del modulo, de activo a inactivo o viceversa en la bd
     function edita_id_persona_en_tabla_telefonos_para_prontuario(){
         $this->obj_data_provider->conectar();
-        
         //Llama al metodo para editar los datos correspondientes
         $this->obj_data_provider->edita_datos_para_prontuario("t_telefono","ID=".$this->id_ultima_persona_ingresada,$this->condicion);
         //Metodo de la clase data provider que desconecta la sesión con la base de datos
         $this->obj_data_provider->desconectar();
-       
     }
     
     //Este metodo realiza la modificación del estado del modulo, de activo a inactivo o viceversa en la bd
     function edita_id_persona_en_tabla_gerente_zona_bcr(){
         $this->obj_data_provider->conectar();
-        
         //Llama al metodo para editar los datos correspondientes
         $this->obj_data_provider->edita_datos("t_gerentezonabcr","ID_Persona=".$this->id_ultima_persona_ingresada,$this->condicion);
         //Metodo de la clase data provider que desconecta la sesión con la base de datos
         $this->obj_data_provider->desconectar();
-       
     }
     
     //Este metodo realiza la modificación del estado del modulo, de activo a inactivo o viceversa en la bd
     function edita_id_persona_en_tabla_gerente_zona_bcr_para_prontuario(){
         $this->obj_data_provider->conectar();
-        
         //Llama al metodo para editar los datos correspondientes
         $this->obj_data_provider->edita_datos_para_prontuario("t_gerentezonabcr","ID_Persona=".$this->id_ultima_persona_ingresada,$this->condicion);
         //Metodo de la clase data provider que desconecta la sesión con la base de datos
         $this->obj_data_provider->desconectar();
-       
     }
         
     function eliminar_telefonos_personas_bcr_fuera_de_prontuario_para_prontuario(){
-          
         $this->obj_data_provider->conectar();
         $this->obj_data_provider->eliminar_datos_para_prontuario("t_telefono", "(".$this->condicion.") AND (ID_Tipo_Telefono=2 OR ID_Tipo_Telefono=3 OR ID_Tipo_Telefono=4 OR ID_Tipo_Telefono=27)");
         $this->obj_data_provider->desconectar();
-  
     }
     
     function eliminar_personas_bcr_fuera_de_prontuario_para_prontuario(){
-          
         $this->obj_data_provider->conectar();
         $this->obj_data_provider->eliminar_datos_para_prontuario("t_personal", $this->condicion);
         $this->obj_data_provider->desconectar();
-  
     }
     
     function eliminar_telefonos_personas_bcr_fuera_de_prontuario(){
-          
         $this->obj_data_provider->conectar();
         $this->obj_data_provider->eliminar_datos("t_telefono", "(".$this->condicion.") AND (ID_Tipo_Telefono=2 OR ID_Tipo_Telefono=3 OR ID_Tipo_Telefono=4 OR ID_Tipo_Telefono=27)");
         $this->obj_data_provider->desconectar();
-  
     }
     
     function eliminar_personas_bcr_fuera_de_prontuario(){
-          
         $this->obj_data_provider->conectar();
         $this->obj_data_provider->eliminar_datos("t_personal", $this->condicion);
         $this->obj_data_provider->desconectar();
-  
     }
     
     //Obtener el último id de evento para saber que se debe ingresar
     function verifica_si_la_persona_es_gerente_zona_bcr(){
-      //Establece la conexión con la bd
-      $this->obj_data_provider->conectar();
-      
-      $this->obj_data_provider->trae_datos("t_gerentezonabcr","*",$this->condicion);
-      
-      $this->arreglo3=$this->obj_data_provider->getArreglo();
-     
-      $this->obj_data_provider->desconectar();
-      
-      if (count($this->arreglo3)>0){
-          return true;
-      }else
-      {
-          return false;
-      }   
-  }
+        //Establece la conexión con la bd
+        $this->obj_data_provider->conectar();
+        $this->obj_data_provider->trae_datos("t_gerentezonabcr","*",$this->condicion);
+        $this->arreglo3=$this->obj_data_provider->getArreglo();
+        $this->obj_data_provider->desconectar();
+        if (count($this->arreglo3)>0){
+            return true;
+        }else {
+            return false;
+        }   
+    }
   
     function eliminar_personas_sobrantes(){
-          
         $this->obj_data_provider->conectar();
         $this->obj_data_provider->eliminar_datos("t_personal", $this->condicion);
         $this->obj_data_provider->desconectar();
-  
     }
     
     function eliminar_personas_sobrantes_para_prontuario(){
-          
         $this->obj_data_provider->conectar();
         $this->obj_data_provider->eliminar_datos_para_prontuario("t_personal", $this->condicion);
         $this->obj_data_provider->desconectar();
-  
     }
     
     public function actualizar_estado_persona(){
@@ -639,21 +600,21 @@ class cls_personal{
         $this->obj_data_provider->conectar();
         if($this->condicion==""){                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
             $this->arreglo=$this->obj_data_provider->trae_datos(
-                    "T_Personal
-			LEFT OUTER JOIN	T_UnidadEjecutora ON T_Personal.ID_Unidad_Ejecutora = T_UnidadEjecutora.ID_Unidad_Ejecutora
-			LEFT OUTER JOIN T_Empresa ON T_Personal.ID_Empresa = T_Empresa.ID_Empresa
-			LEFT OUTER JOIN T_Telefono on T_Personal.ID_Persona = T_Telefono.ID
-			LEFT OUTER JOIN T_TipoTelefono ON T_Telefono.ID_Tipo_Telefono = T_TipoTelefono.ID_Tipo_Telefono
-			LEFT OUTER JOIN T_Puesto ON T_Personal.ID_Puesto = T_Puesto.ID_Puesto", 
-                    " T_Personal.*,
-			T_UnidadEjecutora.ID_Unidad_Ejecutora, T_UnidadEjecutora.Departamento, T_UnidadEjecutora.Observaciones as Observaciones_UE,
-			T_Empresa.ID_Empresa, T_Empresa.Empresa,
-			T_TipoTelefono.Tipo_Telefono, T_TipoTelefono.ID_Tipo_Telefono,
-			GROUP_CONCAT(char(10),T_TipoTelefono.Tipo_Telefono,': ',T_Telefono.Numero) as Numero,
-                        T_Telefono.ID_Telefono,T_Telefono.Observaciones as Observaciones_Tel,
-			T_Puesto.ID_Puesto, T_Puesto.Puesto",
-                    "(T_TipoTelefono.ID_Tipo_Telefono = '4'OR 
-			T_TipoTelefono.ID_Tipo_Telefono = '27') AND (T_Empresa.ID_Empresa='1') AND (T_Personal.Estado='1') group by T_Personal.ID_Persona");
+                "T_Personal
+                    LEFT OUTER JOIN	T_UnidadEjecutora ON T_Personal.ID_Unidad_Ejecutora = T_UnidadEjecutora.ID_Unidad_Ejecutora
+                    LEFT OUTER JOIN T_Empresa ON T_Personal.ID_Empresa = T_Empresa.ID_Empresa
+                    LEFT OUTER JOIN T_Telefono on T_Personal.ID_Persona = T_Telefono.ID
+                    LEFT OUTER JOIN T_TipoTelefono ON T_Telefono.ID_Tipo_Telefono = T_TipoTelefono.ID_Tipo_Telefono
+                    LEFT OUTER JOIN T_Puesto ON T_Personal.ID_Puesto = T_Puesto.ID_Puesto", 
+                " T_Personal.*,
+                    T_UnidadEjecutora.ID_Unidad_Ejecutora, T_UnidadEjecutora.Departamento, T_UnidadEjecutora.Observaciones as Observaciones_UE,
+                    T_Empresa.ID_Empresa, T_Empresa.Empresa,
+                    T_TipoTelefono.Tipo_Telefono, T_TipoTelefono.ID_Tipo_Telefono,
+                    GROUP_CONCAT(char(10),T_TipoTelefono.Tipo_Telefono,': ',T_Telefono.Numero) as Numero,
+                    T_Telefono.ID_Telefono,T_Telefono.Observaciones as Observaciones_Tel,
+                    T_Puesto.ID_Puesto, T_Puesto.Puesto",
+                "(T_TipoTelefono.ID_Tipo_Telefono = '4'OR 
+                    T_TipoTelefono.ID_Tipo_Telefono = '27') AND (T_Empresa.ID_Empresa='1') AND (T_Personal.Estado='1') group by T_Personal.ID_Persona");
             $this->arreglo=$this->obj_data_provider->getArreglo();
             $this->obj_data_provider->desconectar();
             $this->resultado_operacion=true;
@@ -664,23 +625,23 @@ class cls_personal{
         $this->obj_data_provider->conectar();
         if($this->condicion==""){
             $this->arreglo=$this->obj_data_provider->trae_datos(
-                    "T_Personal
-			LEFT OUTER JOIN	T_UnidadEjecutora ON T_Personal.ID_Unidad_Ejecutora = T_UnidadEjecutora.ID_Unidad_Ejecutora
-			LEFT OUTER JOIN T_Empresa ON T_Personal.ID_Empresa = T_Empresa.ID_Empresa
-			LEFT OUTER JOIN T_Telefono on T_Personal.ID_Persona = T_Telefono.ID
-			LEFT OUTER JOIN T_TipoTelefono ON T_Telefono.ID_Tipo_Telefono = T_TipoTelefono.ID_Tipo_Telefono
-			LEFT OUTER JOIN T_Puesto ON T_Personal.ID_Puesto = T_Puesto.ID_Puesto", 
-                    " T_Personal.ID_Persona, T_Personal.Cedula, T_Personal.Apellido_Nombre,T_Personal.Estado,T_Personal.Observaciones,
-			T_UnidadEjecutora.ID_Unidad_Ejecutora, T_UnidadEjecutora.Departamento,
-			T_Empresa.ID_Empresa, T_Empresa.Empresa,
-			T_TipoTelefono.Tipo_Telefono, T_TipoTelefono.ID_Tipo_Telefono,
-			GROUP_CONCAT(char(10),T_TipoTelefono.Tipo_Telefono,': ',T_Telefono.Numero) as Numero,
-                        T_Telefono.ID_Telefono,T_Telefono.Observaciones as Observaciones_Tel,
-			T_Puesto.ID_Puesto, T_Puesto.Puesto",
-                    "(T_TipoTelefono.ID_Tipo_Telefono = '2' OR 
-			T_TipoTelefono.ID_Tipo_Telefono = '3' OR 
-			T_TipoTelefono.ID_Tipo_Telefono = '4'OR 
-			T_TipoTelefono.ID_Tipo_Telefono = '27') group by T_Personal.ID_Persona");
+                "T_Personal
+                    LEFT OUTER JOIN	T_UnidadEjecutora ON T_Personal.ID_Unidad_Ejecutora = T_UnidadEjecutora.ID_Unidad_Ejecutora
+                    LEFT OUTER JOIN T_Empresa ON T_Personal.ID_Empresa = T_Empresa.ID_Empresa
+                    LEFT OUTER JOIN T_Telefono on T_Personal.ID_Persona = T_Telefono.ID
+                    LEFT OUTER JOIN T_TipoTelefono ON T_Telefono.ID_Tipo_Telefono = T_TipoTelefono.ID_Tipo_Telefono
+                    LEFT OUTER JOIN T_Puesto ON T_Personal.ID_Puesto = T_Puesto.ID_Puesto", 
+                " T_Personal.ID_Persona, T_Personal.Cedula, T_Personal.Apellido_Nombre,T_Personal.Estado,T_Personal.Observaciones,
+                    T_UnidadEjecutora.ID_Unidad_Ejecutora, T_UnidadEjecutora.Departamento,
+                    T_Empresa.ID_Empresa, T_Empresa.Empresa,
+                    T_TipoTelefono.Tipo_Telefono, T_TipoTelefono.ID_Tipo_Telefono,
+                    GROUP_CONCAT(char(10),T_TipoTelefono.Tipo_Telefono,': ',T_Telefono.Numero) as Numero,
+                    T_Telefono.ID_Telefono,T_Telefono.Observaciones as Observaciones_Tel,
+                    T_Puesto.ID_Puesto, T_Puesto.Puesto",
+                "(T_TipoTelefono.ID_Tipo_Telefono = '2' OR 
+                    T_TipoTelefono.ID_Tipo_Telefono = '3' OR 
+                    T_TipoTelefono.ID_Tipo_Telefono = '4'OR 
+                    T_TipoTelefono.ID_Tipo_Telefono = '27') group by T_Personal.ID_Persona");
             $this->arreglo=$this->obj_data_provider->getArreglo();
             $this->obj_data_provider->desconectar();
             $this->resultado_operacion=true;

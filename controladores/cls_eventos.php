@@ -228,165 +228,158 @@ class cls_eventos{
         $this->observaciones_supervision="";
         $this->referencia_mezcla="";
         $this->fecha_notas_supervision="";
-        ;
     }
     
     //Este metodo realiza la modificación del estado del modulo, de activo a inactivo o viceversa en la bd
     function edita_estado_evento($nuevo_estado){
-      $this->obj_data_provider->conectar();
-      //Llama al metodo para editar los datos correspondientes
-      $this->obj_data_provider->edita_datos("T_Evento","ID_EstadoEvento=".$nuevo_estado,"ID_Evento=".$this->id);
-      //Metodo de la clase data provider que desconecta la sesión con la base de datos
-      $this->obj_data_provider->desconectar();
-      $this->resultado_operacion=$this->obj_data_provider->getResultado_operacion();
-  }
+        $this->obj_data_provider->conectar();
+        //Llama al metodo para editar los datos correspondientes
+        $this->obj_data_provider->edita_datos("T_Evento","ID_EstadoEvento=".$nuevo_estado,"ID_Evento=".$this->id);
+        //Metodo de la clase data provider que desconecta la sesión con la base de datos
+        $this->obj_data_provider->desconectar();
+        $this->resultado_operacion=$this->obj_data_provider->getResultado_operacion();
+    }
   
     //Este metodo realiza la modificación del estado del modulo, de activo a inactivo o viceversa en la bd
     function edita_notas_supervision_evento(){
-      $this->obj_data_provider->conectar();
-      //Llama al metodo para editar los datos correspondientes
-      $this->obj_data_provider->edita_datos("T_Evento","Observaciones_Evento='".$this->observaciones_supervision."',Fecha_Observaciones='".$this->fecha_notas_supervision."'","ID_Evento=".$this->id);
-      //Metodo de la clase data provider que desconecta la sesión con la base de datos
-      $this->obj_data_provider->desconectar();
-      $this->resultado_operacion=$this->obj_data_provider->getResultado_operacion();
-  }
+        $this->obj_data_provider->conectar();
+        //Llama al metodo para editar los datos correspondientes
+        $this->obj_data_provider->edita_datos("T_Evento","Observaciones_Evento='".$this->observaciones_supervision."',Fecha_Observaciones='".$this->fecha_notas_supervision."'","ID_Evento=".$this->id);
+        //Metodo de la clase data provider que desconecta la sesión con la base de datos
+        $this->obj_data_provider->desconectar();
+        $this->resultado_operacion=$this->obj_data_provider->getResultado_operacion();
+    }
     
     //Obtener el último id de evento para saber que se debe ingresar
     function obtiene_id_ultimo_evento_ingresado(){
-      //Establece la conexión con la bd
-      $this->obj_data_provider->conectar();
-      $this->obj_data_provider->trae_datos("T_Evento","max(ID_Evento) ID_Evento","ID_Usuario=".$this->id_usuario." AND ID_Tipo_Evento=".$this->tipo_evento." AND ID_PuntoBCR=".$this->punto_bcr);
-      $this->arreglo=$this->obj_data_provider->getArreglo();
-      $this->obj_data_provider->desconectar();
-      $this->resultado_operacion=true;
+        //Establece la conexión con la bd
+        $this->obj_data_provider->conectar();
+        $this->obj_data_provider->trae_datos("T_Evento","max(ID_Evento) ID_Evento","ID_Usuario=".$this->id_usuario." AND ID_Tipo_Evento=".$this->tipo_evento." AND ID_PuntoBCR=".$this->punto_bcr);
+        $this->arreglo=$this->obj_data_provider->getArreglo();
+        $this->obj_data_provider->desconectar();
+        $this->resultado_operacion=true;
 
-      if (count($this->arreglo)>0){
-        $this->setId_ultimo_evento_ingresado($this->arreglo[0]['ID_Evento']);
-      }else
-      {
-        $this->setId_ultimo_evento_ingresado(1);
-      }    
-  }
+        if (count($this->arreglo)>0){
+          $this->setId_ultimo_evento_ingresado($this->arreglo[0]['ID_Evento']);
+        }else {
+          $this->setId_ultimo_evento_ingresado(1);
+        }    
+    }
   
     //Valida que no se ingrese el mismo tipo de evento en un sitio, si ya hay uno pendiente
     function existe_abierto_este_tipo_de_evento_en_este_sitio(){
-      //Establece la conexión con la bd
-      $this->obj_data_provider->conectar();
-      $this->obj_data_provider->trae_datos("T_Evento","*","ID_Tipo_Evento=".$this->tipo_evento." AND ID_PuntoBCR=".$this->punto_bcr." AND ID_EstadoEvento<>3"." AND ID_EstadoEvento<>5");
-      $this->arreglo=$this->obj_data_provider->getArreglo();
-      $this->obj_data_provider->desconectar();
-      $this->resultado_operacion=true;
-      
-      if (count($this->arreglo)>0){
-        return true;
-      }else
-      {
-        return false;
-      }    
-  }
+        //Establece la conexión con la bd
+        $this->obj_data_provider->conectar();
+        $this->obj_data_provider->trae_datos("T_Evento","*","ID_Tipo_Evento=".$this->tipo_evento." AND ID_PuntoBCR=".$this->punto_bcr." AND ID_EstadoEvento<>3"." AND ID_EstadoEvento<>5");
+        $this->arreglo=$this->obj_data_provider->getArreglo();
+        $this->obj_data_provider->desconectar();
+        $this->resultado_operacion=true;
+
+        if (count($this->arreglo)>0){
+            return true;
+        } else {
+            return false;
+        }    
+    }
   
     //Valida que no se ingrese el mismo tipo de evento en un sitio, si ya hay uno pendiente
     function eliminar_mezcla_del_sistema(){
-      //Establece la conexión con la bd
-      $this->obj_data_provider->conectar();
-      $this->obj_data_provider->eliminar_datos("T_MezclaEvento",$this->condicion);
-      $this->obj_data_provider->desconectar();
-     
-  }
+        //Establece la conexión con la bd
+        $this->obj_data_provider->conectar();
+        $this->obj_data_provider->eliminar_datos("T_MezclaEvento",$this->condicion);
+        $this->obj_data_provider->desconectar();
+    }
   
     //Valida que no se ingrese la misma mezcla de eventos en el sistema
     function existe_esta_mezcla_de_eventos_en_el_sistema(){
-      //Establece la conexión con la bd
-      $this->obj_data_provider->conectar();
-      $this->obj_data_provider->trae_datos("T_MezclaEvento","*","Referencia_Mezcla='".$this->referencia_mezcla."'");
-      $this->arreglo=$this->obj_data_provider->getArreglo();
-      $this->obj_data_provider->desconectar();
-      $this->resultado_operacion=true;
-      
-      if (count($this->arreglo)>0){
-        return true;
-      }else
-      {
-        return false;
-      }    
-  }
+        //Establece la conexión con la bd
+        $this->obj_data_provider->conectar();
+        $this->obj_data_provider->trae_datos("T_MezclaEvento","*","Referencia_Mezcla='".$this->referencia_mezcla."'");
+        $this->arreglo=$this->obj_data_provider->getArreglo();
+        $this->obj_data_provider->desconectar();
+        $this->resultado_operacion=true;
+
+        if (count($this->arreglo)>0){
+          return true;
+        }else {
+          return false;
+        }    
+    }
   
     //Valida que no se ingrese la misma mezcla de eventos en el sistema
     function existe_este_evento_en_otra_mezcla(){
-      //Establece la conexión con la bd
-      $this->obj_data_provider->conectar();
-      $this->obj_data_provider->trae_datos("T_MezclaEvento","*","ID_Evento=".$this->id);
-      $this->arreglo=$this->obj_data_provider->getArreglo();
-      $this->obj_data_provider->desconectar();
-      $this->resultado_operacion=true;
-      
-      if (count($this->arreglo)>0){
-        return true;
-      }else
-      {
-        return false;
-      }    
-  }
+        //Establece la conexión con la bd
+        $this->obj_data_provider->conectar();
+        $this->obj_data_provider->trae_datos("T_MezclaEvento","*","ID_Evento=".$this->id);
+        $this->arreglo=$this->obj_data_provider->getArreglo();
+        $this->obj_data_provider->desconectar();
+        $this->resultado_operacion=true;
+
+        if (count($this->arreglo)>0){
+          return true;
+        }else {
+          return false;
+        }    
+    }
   
     //Valida que no se ingrese el mismo tipo de evento en un sitio, si ya hay uno pendiente
     function obtiene_prioridad_de_tipo_de_evento(){
-      //Establece la conexión con la bd
-      $this->obj_data_provider->conectar();
-      $this->obj_data_provider->trae_datos("T_TipoEvento","*","ID_Tipo_Evento=".$this->tipo_evento);
-      $this->arreglo=$this->obj_data_provider->getArreglo();
-      $this->obj_data_provider->desconectar();
-      $this->resultado_operacion=true;
-      
-      if (count($this->arreglo)>0){
-        return $this->arreglo[0]['Prioridad'];
-         
-      }else
-      {
-        return 0;
-      }    
-  }
+        //Establece la conexión con la bd
+        $this->obj_data_provider->conectar();
+        $this->obj_data_provider->trae_datos("T_TipoEvento","*","ID_Tipo_Evento=".$this->tipo_evento);
+        $this->arreglo=$this->obj_data_provider->getArreglo();
+        $this->obj_data_provider->desconectar();
+        $this->resultado_operacion=true;
+
+        if (count($this->arreglo)>0){
+            return $this->arreglo[0]['Prioridad'];
+
+        }else {
+            return 0;
+        }    
+    }
     
     //Eventos de Bitacora
     public function obtiene_todos_los_eventos(){
         $this->obj_data_provider->conectar();
         if($this->condicion==""){
             $this->arreglo=$this->obj_data_provider->trae_datos(
-                    "T_Evento 
-                        LEFT OUTER JOIN T_Provincia ON T_Evento.ID_Provincia = T_Provincia.ID_Provincia
-                        LEFT OUTER JOIN T_TipoPuntoBCR ON T_Evento.ID_Tipo_Punto = T_TipoPuntoBCR.ID_Tipo_Punto
-                        LEFT OUTER JOIN T_PuntoBCR ON T_Evento.ID_PuntoBCR = T_PuntoBCR.ID_PuntoBCR
-                        LEFT OUTER JOIN T_Usuario ON T_Evento.ID_Usuario = T_Usuario.ID_Usuario
-                        LEFT OUTER JOIN T_TipoEvento ON T_Evento.ID_Tipo_Evento = T_TipoEvento.ID_Tipo_Evento
-                        LEFT OUTER JOIN T_EstadoEvento ON T_Evento.ID_EstadoEvento = T_EstadoEvento.ID_EstadoEvento", 
-                    "T_Evento.ID_Evento, T_Evento.Fecha, T_Evento.Hora, T_Evento.Observaciones_Evento, T_Evento.Fecha_Observaciones,
-                        T_Provincia.Nombre_Provincia, T_Provincia.ID_Provincia,
-                        T_TipoPuntoBCR.Tipo_Punto, T_TipoPuntoBCR.ID_Tipo_Punto ,
-                        T_PuntoBCR.Nombre, T_PuntoBCR.ID_PuntoBCR,T_PuntoBCR.Codigo,
-                        T_TipoEvento.Evento, T_TipoEvento.ID_Tipo_Evento,
-                        T_EstadoEvento.ID_EstadoEvento, T_EstadoEvento.Estado_Evento, T_Usuario.ID_Usuario,
-                        T_Usuario.Nombre Nombre_Usuario,T_Usuario.Apellido",
-                    "");
+                "T_Evento 
+                    LEFT OUTER JOIN T_Provincia ON T_Evento.ID_Provincia = T_Provincia.ID_Provincia
+                    LEFT OUTER JOIN T_TipoPuntoBCR ON T_Evento.ID_Tipo_Punto = T_TipoPuntoBCR.ID_Tipo_Punto
+                    LEFT OUTER JOIN T_PuntoBCR ON T_Evento.ID_PuntoBCR = T_PuntoBCR.ID_PuntoBCR
+                    LEFT OUTER JOIN T_Usuario ON T_Evento.ID_Usuario = T_Usuario.ID_Usuario
+                    LEFT OUTER JOIN T_TipoEvento ON T_Evento.ID_Tipo_Evento = T_TipoEvento.ID_Tipo_Evento
+                    LEFT OUTER JOIN T_EstadoEvento ON T_Evento.ID_EstadoEvento = T_EstadoEvento.ID_EstadoEvento", 
+                "T_Evento.ID_Evento, T_Evento.Fecha, T_Evento.Hora, T_Evento.Observaciones_Evento, T_Evento.Fecha_Observaciones,
+                    T_Provincia.Nombre_Provincia, T_Provincia.ID_Provincia,
+                    T_TipoPuntoBCR.Tipo_Punto, T_TipoPuntoBCR.ID_Tipo_Punto ,
+                    T_PuntoBCR.Nombre, T_PuntoBCR.ID_PuntoBCR,T_PuntoBCR.Codigo,
+                    T_TipoEvento.Evento, T_TipoEvento.ID_Tipo_Evento,
+                    T_EstadoEvento.ID_EstadoEvento, T_EstadoEvento.Estado_Evento, T_Usuario.ID_Usuario,
+                    T_Usuario.Nombre Nombre_Usuario,T_Usuario.Apellido",
+                "");
             $this->arreglo=$this->obj_data_provider->getArreglo();
             $this->obj_data_provider->desconectar();
             $this->resultado_operacion=true;
         }
         else{
             $this->arreglo=$this->obj_data_provider->trae_datos(
-                    "T_Evento 
-                        LEFT OUTER JOIN T_Provincia ON T_Evento.ID_Provincia = T_Provincia.ID_Provincia
-                        LEFT OUTER JOIN T_TipoPuntoBCR ON T_Evento.ID_Tipo_Punto = T_TipoPuntoBCR.ID_Tipo_Punto
-                        LEFT OUTER JOIN T_PuntoBCR ON T_Evento.ID_PuntoBCR = T_PuntoBCR.ID_PuntoBCR
-                        LEFT OUTER JOIN T_Usuario ON T_Evento.ID_Usuario = T_Usuario.ID_Usuario
-                        LEFT OUTER JOIN T_TipoEvento ON T_Evento.ID_Tipo_Evento = T_TipoEvento.ID_Tipo_Evento
-                        LEFT OUTER JOIN T_EstadoEvento ON T_Evento.ID_EstadoEvento = T_EstadoEvento.ID_EstadoEvento", 
-                    "T_Evento.ID_Evento, T_Evento.Fecha, T_Evento.Hora, T_Evento.Observaciones_Evento, T_Evento.Fecha_Observaciones,
-                        T_Provincia.Nombre_Provincia, T_Provincia.ID_Provincia,
-                        T_TipoPuntoBCR.Tipo_Punto, T_TipoPuntoBCR.ID_Tipo_Punto ,
-                        T_PuntoBCR.Nombre, T_PuntoBCR.ID_PuntoBCR,T_PuntoBCR.Codigo,
-                        T_TipoEvento.Evento, T_TipoEvento.ID_Tipo_Evento,
-                        T_EstadoEvento.ID_EstadoEvento, T_EstadoEvento.Estado_Evento, T_Usuario.ID_Usuario,
-                        T_Usuario.Nombre Nombre_Usuario,T_Usuario.Apellido",
-                    $this->condicion);
+                "T_Evento 
+                    LEFT OUTER JOIN T_Provincia ON T_Evento.ID_Provincia = T_Provincia.ID_Provincia
+                    LEFT OUTER JOIN T_TipoPuntoBCR ON T_Evento.ID_Tipo_Punto = T_TipoPuntoBCR.ID_Tipo_Punto
+                    LEFT OUTER JOIN T_PuntoBCR ON T_Evento.ID_PuntoBCR = T_PuntoBCR.ID_PuntoBCR
+                    LEFT OUTER JOIN T_Usuario ON T_Evento.ID_Usuario = T_Usuario.ID_Usuario
+                    LEFT OUTER JOIN T_TipoEvento ON T_Evento.ID_Tipo_Evento = T_TipoEvento.ID_Tipo_Evento
+                    LEFT OUTER JOIN T_EstadoEvento ON T_Evento.ID_EstadoEvento = T_EstadoEvento.ID_EstadoEvento", 
+                "T_Evento.ID_Evento, T_Evento.Fecha, T_Evento.Hora, T_Evento.Observaciones_Evento, T_Evento.Fecha_Observaciones,
+                    T_Provincia.Nombre_Provincia, T_Provincia.ID_Provincia,
+                    T_TipoPuntoBCR.Tipo_Punto, T_TipoPuntoBCR.ID_Tipo_Punto ,
+                    T_PuntoBCR.Nombre, T_PuntoBCR.ID_PuntoBCR,T_PuntoBCR.Codigo,
+                    T_TipoEvento.Evento, T_TipoEvento.ID_Tipo_Evento,
+                    T_EstadoEvento.ID_EstadoEvento, T_EstadoEvento.Estado_Evento, T_Usuario.ID_Usuario,
+                    T_Usuario.Nombre Nombre_Usuario,T_Usuario.Apellido",
+                $this->condicion);
             $this->arreglo=$this->obj_data_provider->getArreglo();
             $this->obj_data_provider->desconectar();
             $this->resultado_operacion=true;
@@ -404,8 +397,7 @@ class cls_eventos{
             $this->arreglo=$this->obj_data_provider->getArreglo();
             $this->obj_data_provider->desconectar();
         $this->resultado_operacion=true;
-        }   catch (Exception $e){
-        }
+        }   catch (Exception $e){}
     }
     
     //Metodo utilizado en el momento que escogen algun tipo de punto o provincia en específico (actualizacione en vivo, en pantalla)
@@ -419,14 +411,12 @@ class cls_eventos{
             $this->arreglo=$this->obj_data_provider->getArreglo();
             $this->obj_data_provider->desconectar();
         $this->resultado_operacion=true;
-        }   catch (Exception $e){
-        }
+        }   catch (Exception $e){}
     }
     
     public function ingresar_seguimiento_evento(){
         try{
             $this->obj_data_provider->conectar();
-            
             if ($this->id2==0){
                 //Registro de la trazabilidad del sistema
                $cadena_sql=str_replace(","," - ","call sp_set_detalleEvento(Inserta datos en T_detalleEvento ID_Seguimiento='".$this->id2."',ID_Evento='".$this->id."',Fecha='".$this->fecha."',Hora='".$this->hora."',Detalle='".$this->detalle."',Usuario='".$this->id_usuario."',Adjunto='".$this->adjunto."')");
@@ -456,7 +446,7 @@ class cls_eventos{
             $this->obj_data_provider->inserta_datos_para_uso_de_trazabilidad($detalle_sql);
             }
       
-             // Llamada al procedimiento almacenado de mysql para gestión de seguimiento de evento
+            // Llamada al procedimiento almacenado de mysql para gestión de seguimiento de evento
       
             $sql=("call sp_set_detalleEvento('".$this->id2."','".$this->id."','".$this->fecha."','".$this->hora."','".$this->detalle."','".$this->id_usuario."','".$this->adjunto."')");
             $this->obj_data_provider->insertar_datos_con_phpmyadmin($sql);
@@ -471,15 +461,15 @@ class cls_eventos{
             $this->obj_data_provider->conectar();
             
             //Registro de la trazabilidad del sistema
-           $cadena_sql=str_replace(","," - ","call sp_set_Evento(Inserta datos en T_Evento ID_Evento='"."0"."',Fecha='".$this->fecha."',Hora='".$this->hora."',Usuario='".$this->id_usuario."',Provincia='".$this->provincia."',Tipo de Punto='".$this->tipo_punto."',Punto BCR='".$this->punto_bcr."',Tipo de Evento='".$this->tipo_evento."',Estado del Evento='".$this->estado_evento."')");
-           $cadena_sql=str_replace("'"," ",$cadena_sql);
-           $cadena_sql = str_replace("(","[",$cadena_sql);
-           $cadena_sql = str_replace(")","]",$cadena_sql);
+            $cadena_sql=str_replace(","," - ","call sp_set_Evento(Inserta datos en T_Evento ID_Evento='"."0"."',Fecha='".$this->fecha."',Hora='".$this->hora."',Usuario='".$this->id_usuario."',Provincia='".$this->provincia."',Tipo de Punto='".$this->tipo_punto."',Punto BCR='".$this->punto_bcr."',Tipo de Evento='".$this->tipo_evento."',Estado del Evento='".$this->estado_evento."')");
+            $cadena_sql=str_replace("'"," ",$cadena_sql);
+            $cadena_sql = str_replace("(","[",$cadena_sql);
+            $cadena_sql = str_replace(")","]",$cadena_sql);
 
-           $detalle_sql="insert into t_traza (ID_Traza,Fecha,Hora,ID_Usuario,Tabla_Afectada,Dato_Anterior,Dato_Actualizado) values(null,'".date("Y-m-d")."','".date("H:i:s", time())."',".$_SESSION['id'].",'"."T_Evento"."','Insercion - Sin Valores Anteriores','".$cadena_sql."');";
-           $this->obj_data_provider->inserta_datos_para_uso_de_trazabilidad($detalle_sql);
+            $detalle_sql="insert into t_traza (ID_Traza,Fecha,Hora,ID_Usuario,Tabla_Afectada,Dato_Anterior,Dato_Actualizado) values(null,'".date("Y-m-d")."','".date("H:i:s", time())."',".$_SESSION['id'].",'"."T_Evento"."','Insercion - Sin Valores Anteriores','".$cadena_sql."');";
+            $this->obj_data_provider->inserta_datos_para_uso_de_trazabilidad($detalle_sql);
       
-             // Llamada al procedimiento almacenado de mysql para gestión de eventos
+            // Llamada al procedimiento almacenado de mysql para gestión de eventos
             
             
             $sql=("call sp_set_Evento('"."0"."','".$this->fecha."','".$this->hora."','".$this->id_usuario."','".$this->provincia."','".$this->tipo_punto."','".$this->punto_bcr."','".$this->tipo_evento."','".$this->estado_evento."')");
@@ -519,32 +509,32 @@ class cls_eventos{
         $this->obj_data_provider->conectar();
         
         if ($this->id==0){
-                //Registro de la trazabilidad del sistema
-               $cadena_sql=str_replace(","," - ","call sp_set_tipoEvento(Inserta datos en T_tipoevento Id_tipo_evento='".$this->id."',Evento='".$this->tipo_evento."',Prioridad='".$this->prioridad."',Observaciones='".$this->observaciones."',Estado='".$this->estado."')");
-               $cadena_sql=str_replace("'"," ",$cadena_sql);
-               $cadena_sql = str_replace("(","[",$cadena_sql);
-               $cadena_sql = str_replace(")","]",$cadena_sql);
+            //Registro de la trazabilidad del sistema
+            $cadena_sql=str_replace(","," - ","call sp_set_tipoEvento(Inserta datos en T_tipoevento Id_tipo_evento='".$this->id."',Evento='".$this->tipo_evento."',Prioridad='".$this->prioridad."',Observaciones='".$this->observaciones."',Estado='".$this->estado."')");
+            $cadena_sql=str_replace("'"," ",$cadena_sql);
+            $cadena_sql = str_replace("(","[",$cadena_sql);
+            $cadena_sql = str_replace(")","]",$cadena_sql);
 
-               $detalle_sql="insert into t_traza (ID_Traza,Fecha,Hora,ID_Usuario,Tabla_Afectada,Dato_Anterior,Dato_Actualizado) values(null,'".date("Y-m-d")."','".date("H:i:s", time())."',".$_SESSION['id'].",'"."T_tipoevento"."','Insercion - Sin Valores Anteriores','".$cadena_sql."');";
-               $this->obj_data_provider->inserta_datos_para_uso_de_trazabilidad($detalle_sql);
+            $detalle_sql="insert into t_traza (ID_Traza,Fecha,Hora,ID_Usuario,Tabla_Afectada,Dato_Anterior,Dato_Actualizado) values(null,'".date("Y-m-d")."','".date("H:i:s", time())."',".$_SESSION['id'].",'"."T_tipoevento"."','Insercion - Sin Valores Anteriores','".$cadena_sql."');";
+            $this->obj_data_provider->inserta_datos_para_uso_de_trazabilidad($detalle_sql);
         }else{
-                $this->obj_data_provider->trae_datos("T_tipoevento", "*", "ID_Tipo_Evento=".$this->id);
-                $valores_iniciales="Edicion - Valores anteriores de la tabla formato SELECT:\n ";
-                if (count($this->obj_data_provider->getArreglo())>0){
-                    $valores_iniciales= $valores_iniciales ." ". implode(" - ",$this->obj_data_provider->getArreglo());
-                }
-                $valores_iniciales=$valores_iniciales . "\nA continuacion valores anteriores de la tabla formato arreglo:\n ";
-                $temp=$this->obj_data_provider->getArreglo();
-                $valores_iniciales=$valores_iniciales . serialize($temp[0]);
+            $this->obj_data_provider->trae_datos("T_tipoevento", "*", "ID_Tipo_Evento=".$this->id);
+            $valores_iniciales="Edicion - Valores anteriores de la tabla formato SELECT:\n ";
+            if (count($this->obj_data_provider->getArreglo())>0){
+                $valores_iniciales= $valores_iniciales ." ". implode(" - ",$this->obj_data_provider->getArreglo());
+            }
+            $valores_iniciales=$valores_iniciales . "\nA continuacion valores anteriores de la tabla formato arreglo:\n ";
+            $temp=$this->obj_data_provider->getArreglo();
+            $valores_iniciales=$valores_iniciales . serialize($temp[0]);
 
-                 //Registro de la trazabilidad del sistema
-                $cadena_sql=str_replace(","," - ","call sp_set_tipoEvento(Modifica datos en T_tipoevento Id_tipo_evento='".$this->id."',Evento='".$this->tipo_evento."',Prioridad='".$this->prioridad."',Observaciones='".$this->observaciones."',Estado='".$this->estado."')");
-                $cadena_sql=str_replace("'"," ",$cadena_sql);
-                $cadena_sql = str_replace("(","[",$cadena_sql);
-                $cadena_sql = str_replace(")","]",$cadena_sql);
+             //Registro de la trazabilidad del sistema
+            $cadena_sql=str_replace(","," - ","call sp_set_tipoEvento(Modifica datos en T_tipoevento Id_tipo_evento='".$this->id."',Evento='".$this->tipo_evento."',Prioridad='".$this->prioridad."',Observaciones='".$this->observaciones."',Estado='".$this->estado."')");
+            $cadena_sql=str_replace("'"," ",$cadena_sql);
+            $cadena_sql = str_replace("(","[",$cadena_sql);
+            $cadena_sql = str_replace(")","]",$cadena_sql);
 
-                $detalle_sql="insert into t_traza (ID_Traza,Fecha,Hora,ID_Usuario,Tabla_Afectada,Dato_Anterior,Dato_Actualizado) values(null,'".date("Y-m-d")."','".date("H:i:s", time())."',".$_SESSION['id'].",'"."T_tipoevento"."','".$valores_iniciales. "','".$cadena_sql."');";       
-                $this->obj_data_provider->inserta_datos_para_uso_de_trazabilidad($detalle_sql);
+            $detalle_sql="insert into t_traza (ID_Traza,Fecha,Hora,ID_Usuario,Tabla_Afectada,Dato_Anterior,Dato_Actualizado) values(null,'".date("Y-m-d")."','".date("H:i:s", time())."',".$_SESSION['id'].",'"."T_tipoevento"."','".$valores_iniciales. "','".$cadena_sql."');";       
+            $this->obj_data_provider->inserta_datos_para_uso_de_trazabilidad($detalle_sql);
         }
       
         // Llamada al procedimiento almacenado de mysql para gestión de seguimiento de evento
@@ -553,7 +543,7 @@ class cls_eventos{
         if ($this->estado=="Activo"){
             $this->estado="1";
         } if($this->estado=="Inactivo") {
-             $this->estado="0";
+            $this->estado="0";
         }
         
         $sql=("call sp_set_tipoEvento('".$this->id."','".$this->tipo_evento."','".$this->prioridad."','".$this->observaciones."','".$this->estado."')");
@@ -621,12 +611,11 @@ class cls_eventos{
     }
     
     public function guardar_registro_en_mezcla_de_eventos(){
-         
         $this->obj_data_provider->conectar();
         $this->obj_data_provider->inserta_datos("T_MezclaEvento","ID_Mezcla_Evento,Referencia_Mezcla,ID_Evento,ID_Usuario,Fecha,Hora","null,'".$this->referencia_mezcla."',".$this->id.",".$this->id_usuario.",'".$this->fecha."','".$this->hora."'");     
         $this->obj_data_provider->desconectar();
         $this->resultado_operacion=true;
-     }
+    }
      
     public function obtener_informacion_general_de_la_mezcla(){
         try{

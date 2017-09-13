@@ -5707,13 +5707,13 @@ class Controller{
                             }
                         }else{
                             if ($estadoEven[$i]['Estado_Evento']!="Solicitar Cierre"){
-                           $html .= '<option value="'.$estadoEven[$i]['ID_EstadoEvento'].'">'.$estadoEven[$i]['Estado_Evento'].'</option>';
-                         }                       
+                                $html .= '<option value="'.$estadoEven[$i]['ID_EstadoEvento'].'">'.$estadoEven[$i]['Estado_Evento'].'</option>';
+                            }                       
                         }
                     }else{
                         if ($estadoEven[$i]['Estado_Evento']!="Solicitar Cierre"){
-                           $html .= '<option value="'.$estadoEven[$i]['ID_EstadoEvento'].'">'.$estadoEven[$i]['Estado_Evento'].'</option>';
-                         }     
+                            $html .= '<option value="'.$estadoEven[$i]['ID_EstadoEvento'].'">'.$estadoEven[$i]['Estado_Evento'].'</option>';
+                        }     
                     }
                 }      
             }

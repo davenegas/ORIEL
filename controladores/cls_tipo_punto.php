@@ -102,7 +102,6 @@
     }
 
     public function __construct() {
-        
         $this->id="";
         $this->id2="";
         $this->condicion="";
@@ -116,40 +115,34 @@
     
     //Obtener el último id de evento para saber que se debe ingresar
     function obtiene_id_tp_por_nombre(){
-    //Establece la conexión con la bd
-      $this->obj_data_provider->conectar();
-      
-      $this->obj_data_provider->trae_datos("t_tipopuntobcr","ID_Tipo_Punto","Tipo_Punto='".$this->tipo."'");
-      
-      $this->arreglo=$this->obj_data_provider->getArreglo();
-     
-      $this->obj_data_provider->desconectar();
-      
-      if (count($this->arreglo)>0){
-          $this->setId($this->arreglo[0]['ID_Tipo_Punto']);
-         
-      }else
-      {
-          $this->setId(0);
-      }   
-  }
+        //Establece la conexión con la bd
+        $this->obj_data_provider->conectar();
+        $this->obj_data_provider->trae_datos("t_tipopuntobcr","ID_Tipo_Punto","Tipo_Punto='".$this->tipo."'");
+        $this->arreglo=$this->obj_data_provider->getArreglo();
+        $this->obj_data_provider->desconectar();
+
+        if (count($this->arreglo)>0){
+            $this->setId($this->arreglo[0]['ID_Tipo_Punto']);
+        }else{
+            $this->setId(0);
+        }   
+    }
     
     public function obtener_tipo_punto() {
         $this->obj_data_provider->conectar();
         if($this->condicion==""){
             $this->arreglo=$this->obj_data_provider->trae_datos(
-                    "T_TipoPuntoBCR", 
-                    "*",
-                    "");
+                "T_TipoPuntoBCR", 
+                "*",
+                "");
             $this->arreglo=$this->obj_data_provider->getArreglo();
             $this->obj_data_provider->desconectar();
             $this->resultado_operacion=true;
-        }
-        else{
+        } else{
             $this->arreglo=$this->obj_data_provider->trae_datos(
-                    "T_TipoPuntoBCR", 
-                    "*",
-                    $this->condicion);
+                "T_TipoPuntoBCR", 
+                "*",
+                $this->condicion);
             $this->arreglo=$this->obj_data_provider->getArreglo();
             $this->obj_data_provider->desconectar();
             $this->resultado_operacion=true;
@@ -161,13 +154,14 @@
         $this->obj_data_provider->inserta_datos("T_TT_PuntoBCR", "ID_PuntoBCR, ID_Tipo_Punto", "'".$this->id2."','".$this->id."'");
         $this->obj_data_provider->desconectar();
     }
+    
     public function eliminar_relacion_puntobcr_tp(){
         $this->obj_data_provider->conectar();
         $this->obj_data_provider->eliminar_datos("T_TT_PuntoBCR", "ID_PuntoBCR='".$this->id2."' AND ID_Tipo_Punto='".$this->id."'");
         $this->obj_data_provider->desconectar();
     }
     
-     public function agregar_nueva_tp(){
+    public function agregar_nueva_tp(){
         $this->obj_data_provider->conectar();
         $this->obj_data_provider->inserta_datos("t_tipopuntobcr", "ID_Tipo_Punto, Tipo_Punto, Observaciones, Estado", "null,'".$this->tipo."','".$this->observaciones."','".$this->estado."'");
         $this->obj_data_provider->desconectar();
@@ -186,51 +180,41 @@
         $this->obj_data_provider->edita_datos("t_tipopuntobcr","Tipo_Punto='".$this->tipo."',Observaciones='".$this->observaciones."',Estado='".$this->estado."'",$this->condicion);
         //Metodo de la clase data provider que desconecta la sesión con la base de datos
         $this->obj_data_provider->desconectar();
-       
     }
     
     //Este metodo realiza la modificación del estado del modulo, de activo a inactivo o viceversa en la bd
     function edita_tp_para_prontuario(){
         $this->obj_data_provider->conectar();
-        
         //Llama al metodo para editar los datos correspondientes
         $this->obj_data_provider->edita_datos_para_prontuario("t_tipopuntobcr","ID_Tipo_Punto='".$this->numero_tt."',Tipo='".$this->tipo."',Observaciones='".$this->observaciones."',Estado='".$this->estado."'",$this->condicion);
         //Metodo de la clase data provider que desconecta la sesión con la base de datos
         $this->obj_data_provider->desconectar();
-       
     }
 
-     //Obtener el último id de evento para saber que se debe ingresar
+    //Obtener el último id de evento para saber que se debe ingresar
     function obtiene_id_ultima_tp_ingresada(){
-      //Establece la conexión con la bd
-      $this->obj_data_provider->conectar();
-      
-      $this->obj_data_provider->trae_datos("t_tipopuntobcr","max(ID_Tipo_Punto) ID_Tipo_Punto","");
-      
-      $this->arreglo2=$this->obj_data_provider->getArreglo();
-     
-      $this->obj_data_provider->desconectar();
-      
-      if (count($this->arreglo2)>0){
-          $this->setId_ultima_tp_ingresada($this->arreglo2[0]['ID_Tipo_Punto']);
-         
-      }else
-      {
-          $this->setId_ultima_tp_ingresada(0);
-      }   
-  }
-     //Este metodo realiza la modificación del estado del modulo, de activo a inactivo o viceversa en la bd
+        //Establece la conexión con la bd
+        $this->obj_data_provider->conectar();
+        $this->obj_data_provider->trae_datos("t_tipopuntobcr","max(ID_Tipo_Punto) ID_Tipo_Punto","");
+        $this->arreglo2=$this->obj_data_provider->getArreglo();
+        $this->obj_data_provider->desconectar();
+
+        if (count($this->arreglo2)>0){
+            $this->setId_ultima_tp_ingresada($this->arreglo2[0]['ID_Tipo_Punto']);
+        }else {
+            $this->setId_ultima_tp_ingresada(0);
+        }   
+    }
+    //Este metodo realiza la modificación del estado del modulo, de activo a inactivo o viceversa en la bd
     function edita_tp_de_personas(){
         $this->obj_data_provider->conectar();
-        
         //Llama al metodo para editar los datos correspondientes
         $this->obj_data_provider->edita_datos("t_personal","ID_Tipo_Punto=".$this->id_ultima_tp_ingresada,$this->condicion);
         //Metodo de la clase data provider que desconecta la sesión con la base de datos
         $this->obj_data_provider->desconectar();
-       
     }
     
-     //Este metodo realiza la modificación del estado del modulo, de activo a inactivo o viceversa en la bd
+    //Este metodo realiza la modificación del estado del modulo, de activo a inactivo o viceversa en la bd
     function edita_tp_de_personas_para_prontuario(){
         $this->obj_data_provider->conectar();
         //Llama al metodo para editar los datos correspondientes
@@ -240,45 +224,38 @@
        
     }
     
-      //Este metodo realiza la modificación del estado del modulo, de activo a inactivo o viceversa en la bd
+    //Este metodo realiza la modificación del estado del modulo, de activo a inactivo o viceversa en la bd
     function edita_tp_de_sitios_bcr(){
         $this->obj_data_provider->conectar();
-        
         //Llama al metodo para editar los datos correspondientes
         $this->obj_data_provider->edita_datos("t_tt_puntobcr","ID_Tipo_Punto=".$this->id_ultima_tp_ingresada,$this->condicion);
         //Metodo de la clase data provider que desconecta la sesión con la base de datos
         $this->obj_data_provider->desconectar();
-       
     }
     
       //Este metodo realiza la modificación del estado del modulo, de activo a inactivo o viceversa en la bd
     function edita_tp_de_sitios_bcr_para_prontuario(){
         $this->obj_data_provider->conectar();
-        
         //Llama al metodo para editar los datos correspondientes
         $this->obj_data_provider->edita_datos_para_prontuario("t_tt_puntobcr","ID_Tipo_Punto=".$this->id_ultima_tp_ingresada,$this->condicion);
         //Metodo de la clase data provider que desconecta la sesión con la base de datos
         $this->obj_data_provider->desconectar();
-       
     }
-     function eliminar_tp_sobrantes_para_prontuario(){
-          
+    
+    function eliminar_tp_sobrantes_para_prontuario(){
         $this->obj_data_provider->conectar();
         $this->obj_data_provider->eliminar_datos_para_prontuario("t_tipopuntobcr", $this->condicion);
         $this->obj_data_provider->desconectar();
-  
     }
     function eliminar_tp_sobrantes(){
-          
         $this->obj_data_provider->conectar();
         $this->obj_data_provider->eliminar_datos("t_tipopuntobcr", $this->condicion);
         $this->obj_data_provider->desconectar();
-  
     }
     function cambiar_estado_tp(){
-        
         $this->obj_data_provider->conectar();
         $this->obj_data_provider->edita_datos("t_tipopuntobcr","Estado='".$this->estado."'",$this->condicion);
         $this->obj_data_provider->desconectar();
     }
+    
  }?>

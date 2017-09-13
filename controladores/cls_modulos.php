@@ -1,11 +1,4 @@
 <?php
-
-/*
- * Clase Modulos perteneciente a la capa controlador, la cual permite realizar gestiones
- * en la tabla módulos de seguridad del sistema
- * 
- */
-
 class cls_modulos{
         
     // Definicion de atributos de la clase
@@ -87,38 +80,33 @@ class cls_modulos{
         //Instancia el objeto de la clase data provider
         $this->obj_data_provider=new Data_Provider();
         $this->condicion="";
-
     }
 
     //Metodo que utiliza el objeto data provider, para traer el listado completo de modulos de seguridad del sistema
     function obtiene_todos_los_modulos(){
         if ($this->condicion==""){
-          $this->obj_data_provider->conectar();
-          //Llama al metodo que realiza la consulta a la bd
-          $this->obj_data_provider->trae_datos("T_Modulo ORDER BY Descripcion", "*", "");
-          $this->arreglo_modulos=$this->obj_data_provider->getArreglo();
-          $this->obj_data_provider->desconectar();
-          $this->resultado_operacion=true;
-        }
-        else 
-        {
-          $this->obj_data_provider->conectar();
-          //Llama al metodo que realiza la consulta a la bd
-          $this->obj_data_provider->trae_datos("T_Modulo", "*", $this->condicion." ORDER BY Descripcion");
-          $this->arreglo_modulos=$this->obj_data_provider->getArreglo();
-          $this->obj_data_provider->desconectar();
-          $this->resultado_operacion=true;
+            $this->obj_data_provider->conectar();
+            //Llama al metodo que realiza la consulta a la bd
+            $this->obj_data_provider->trae_datos("T_Modulo ORDER BY Descripcion", "*", "");
+            $this->arreglo_modulos=$this->obj_data_provider->getArreglo();
+            $this->obj_data_provider->desconectar();
+            $this->resultado_operacion=true;
+        } else {
+            $this->obj_data_provider->conectar();
+            //Llama al metodo que realiza la consulta a la bd
+            $this->obj_data_provider->trae_datos("T_Modulo", "*", $this->condicion." ORDER BY Descripcion");
+            $this->arreglo_modulos=$this->obj_data_provider->getArreglo();
+            $this->obj_data_provider->desconectar();
+            $this->resultado_operacion=true;
         }
     }  
 
     public function obtiene_lista_de_modulos_por_rol($rol){
-
-          $this->obj_data_provider->conectar();
-          $this->arreglo=$this->obj_data_provider->trae_datos("T_RolSubModulo inner join T_Rol on T_RolSubModulo.ID_Rol=T_Rol.ID_Rol inner join T_Modulo on T_RolSubModulo.ID_Modulo=T_Modulo.ID_Modulo", "T_Modulo.Descripcion", "T_Rol.ID_Rol=".$rol);
-          $this->arreglo_modulos=$this->obj_data_provider->getArreglo();
-          $this->obj_data_provider->desconectar();
-          $this->resultado_operacion=true;
-
+        $this->obj_data_provider->conectar();
+        $this->arreglo=$this->obj_data_provider->trae_datos("T_RolSubModulo inner join T_Rol on T_RolSubModulo.ID_Rol=T_Rol.ID_Rol inner join T_Modulo on T_RolSubModulo.ID_Modulo=T_Modulo.ID_Modulo", "T_Modulo.Descripcion", "T_Rol.ID_Rol=".$rol);
+        $this->arreglo_modulos=$this->obj_data_provider->getArreglo();
+        $this->obj_data_provider->desconectar();
+        $this->resultado_operacion=true;
     }  
 
     //Metodo que inserta un nuevo modulo del sistema en la bd mediante el objeto data provider
@@ -156,24 +144,17 @@ class cls_modulos{
 
     //Este metodo realiza la tarea de actualizar la información de un módulo de seguridad en específico en la bd
     function edita_modulo(){
-
         //Establece la conexión con la bd
         $this->obj_data_provider->conectar();
-
         //Verifica el estado del modulo de seguridad
-         if ($this->estado=="Activo"){
+        if ($this->estado=="Activo"){
             $this->estado="1";
         }  else {
-             $this->estado="0";
+            $this->estado="0";
         }
 
-
         //Llama al metodo de edición de la clase data provider y envía los parámetros respectivos
-        $this->obj_data_provider->
-                edita_datos("T_Modulo",
-                        "Estado=".$this->estado.",Descripcion='".$this->descripcion."'",
-                "ID_Modulo=".$this->id);
-
+        $this->obj_data_provider-> edita_datos("T_Modulo", "Estado=".$this->estado.",Descripcion='".$this->descripcion."'", "ID_Modulo=".$this->id);
         //Desconecta la bd
         $this->obj_data_provider->desconectar();
         $this->resultado_operacion=$this->obj_data_provider->getResultado_operacion();
@@ -181,28 +162,25 @@ class cls_modulos{
 
     //Metodo que verifica si ya existe un nombre de módulo en la bd
     function existe_modulo($nombre_de_modulo){
-      
-      //Conecta con la bd
-      $this->obj_data_provider->conectar();
-      //Ejecuta el metodo que busca en la bd
-      $this->arreglo_modulos=$this->obj_data_provider->trae_datos("T_Modulo", "*", "Descripcion='".$nombre_de_modulo."'");
-      //Desconecta el enlace
-      $this->obj_data_provider->desconectar();
-      
-      //Obtiene el numero de filas contenidas en el arreglo, producto de la consulta.
-      $contador=  count($this->arreglo_modulos);
-      
-      //Verifica si hay filas, para determinar si existe o no el modulo de seguridad.
-      if ($contador>0){
-          return true;
-      }else{
-          return false;
-      }
-      
-  }  
+        //Conecta con la bd
+        $this->obj_data_provider->conectar();
+        //Ejecuta el metodo que busca en la bd
+        $this->arreglo_modulos=$this->obj_data_provider->trae_datos("T_Modulo", "*", "Descripcion='".$nombre_de_modulo."'");
+        //Desconecta el enlace
+        $this->obj_data_provider->desconectar();
+
+        //Obtiene el numero de filas contenidas en el arreglo, producto de la consulta.
+        $contador=  count($this->arreglo_modulos);
+
+        //Verifica si hay filas, para determinar si existe o no el modulo de seguridad.
+        if ($contador>0){
+            return true;
+        }else{
+            return false;
+        }
+    }  
   
     function eliminar_modulos_roles($id){
-          
         $this->obj_data_provider->conectar();
         $this->obj_data_provider->eliminar_datos("T_RolSubModulo", "ID_Modulo=".$id);
         $this->obj_data_provider->desconectar();

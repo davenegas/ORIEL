@@ -2,7 +2,7 @@
 <html lang="es">
     <head>
         <meta charset="utf-8"/>
-        <title>Gestión de Puntos BCR</title>
+        <title>Comité de Crisis</title>
         <script language="javascript" src="vistas/js/jquery.js"></script>
         <?php require_once 'frm_librerias_head.html'; ?>
         <script>
@@ -13,37 +13,37 @@
                         id=2;
                         $.post("index.php?ctl=nota_guardar", { nota: nota, id:id }, function(data){ console.log(data); });
                         break;
-                    case 'text_gerente_general':
+                    case 'text_administracion_finanzas':
                         nota = document.getElementById('text_administracion_finanzas').value;
                         id=3;
                         $.post("index.php?ctl=nota_guardar", { nota: nota, id:id }, function(data){ console.log(data); });
                         break;
-                    case 'text_gerente_general':
+                    case 'text_banca_minorista':
                         nota = document.getElementById('text_banca_minorista').value;
                         id=4;
                         $.post("index.php?ctl=nota_guardar", { nota: nota, id:id }, function(data){ console.log(data); });
                         break;
-                    case 'text_gerente_general':
+                    case 'text_banca_mayorista':
                         nota = document.getElementById('text_banca_mayorista').value;
                         id=5;
                         $.post("index.php?ctl=nota_guardar", { nota: nota, id:id }, function(data){ console.log(data); });
                         break;
-                    case 'text_gerente_general':
+                    case 'text_riesgo_control':
                         nota = document.getElementById('text_riesgo_control').value;
                         id=6;
                         $.post("index.php?ctl=nota_guardar", { nota: nota, id:id }, function(data){ console.log(data); });
                         break;
-                    case 'text_gerente_general':
+                    case 'text_capital_humano':
                         nota = document.getElementById('text_capital_humano').value;
                         id=7;
                         $.post("index.php?ctl=nota_guardar", { nota: nota, id:id }, function(data){ console.log(data); });
                         break;
-                    case 'text_gerente_general':
+                    case 'text_juridico':
                         nota = document.getElementById('text_juridico').value;
                         id=8;
                         $.post("index.php?ctl=nota_guardar", { nota: nota, id:id }, function(data){ console.log(data); });
                         break;
-                    case 'text_gerente_general':
+                    case 'text_tecnologia_informacion':
                         nota = document.getElementById('text_tecnologia_informacion').value;
                         id=9;
                         $.post("index.php?ctl=nota_guardar", { nota: nota, id:id }, function(data){ console.log(data); });
@@ -288,7 +288,7 @@ Responsive section
                             <div class="item">
                                 <h3 style="text-align: center;">Gerente General</h3>
                                 <img src="vistas/Imagenes/Comite_Crisis/01-0985-0602.jpg">
-                                <h4 style="text-align: center;">Andres Víquez Lizano</h4>
+                                <h4 style="text-align: center;">Andrés Víquez Lizano</h4>
                             </div>
                             <div class="item">
                                 <h3 style="text-align: center;">Gerente General</h3>
@@ -332,12 +332,12 @@ Responsive section
                             <div class="item">
                                 <h4 style="text-align: center;">Subgerente General de Administracióny Finanzas</h4>
                                 <img src="vistas/Imagenes/Comite_Crisis/01-0551-0368.jpg">
-                                <h4 style="text-align: center;">Tatiana Cardenas Carnice</h4>
+                                <h4 style="text-align: center;">Tatiana Cárdenas Carnice</h4>
                             </div>
                             <div class="item">
                                 <h4 style="text-align: center;">Subgerente General de Administracióny Finanzas</h4>
                                 <img src="vistas/Imagenes/Comite_Crisis/01-0905-0292.jpg">
-                                <h4 style="text-align: center;">Gabriel Alpizar Cháves</h4>
+                                <h4 style="text-align: center;">Gabriel Alpízar Chaves</h4>
                             </div>
                         </div>
                         <!-- Left and right controls -->
@@ -381,7 +381,7 @@ Responsive section
                             <div class="item">
                                 <h4 style="text-align: center;">Subgerente General de Banca Minorista</h4>
                                 <img src="vistas/Imagenes/Comite_Crisis/01-0822-0295.jpg">
-                                <h4 style="text-align: center;">Rodrigo Ramírez Rodriguez</h4>
+                                <h4 style="text-align: center;">Rodrigo Ramírez Rodríguez</h4>
                             </div>
                         </div>
                         <!-- Left and right controls -->
@@ -415,7 +415,7 @@ Responsive section
                             <div class="item" >
                                 <h4 style="text-align: center;">Subgerente General de Banca Mayorista</h4>
                                 <img src="vistas/Imagenes/Comite_Crisis/01-0985-0602.jpg">
-                                <h4 style="text-align: center;">Andres Víquez Lizano</h4>
+                                <h4 style="text-align: center;">Andrés Víquez Lizano</h4>
                             </div>
                             <div class="item">
                                 <h4 style="text-align: center;">Subgerente General de Banca Mayorista</h4>
@@ -467,7 +467,7 @@ Responsive section
                             <div class="item">
                                 <h4 style="text-align: center;">Gerente Corporativo de Riesgo y Control Interno</h4>
                                 <img src="vistas/Imagenes/Comite_Crisis/02-0512-0833.jpg">
-                                <h4 style="text-align: center;">Oscar Jimmy Jimenez Bastos</h4>
+                                <h4 style="text-align: center;">Oscar Jimmy Jiménez Bastos</h4>
                             </div>
                             <div class="item">
                                 <h4 style="text-align: center;">Gerente Corporativo de Riesgo y Control Interno</h4>
@@ -516,7 +516,7 @@ Responsive section
                             <div class="item">
                                 <h4 style="text-align: center;">Gerente Corporativo Capital Humano</h4>
                                 <img src="vistas/Imagenes/Comite_Crisis/01-0869-0178.jpg">
-                                <h4 style="text-align: center;">Lucia Mora Rodriguez</h4>
+                                <h4 style="text-align: center;">Lucía Mora Rodríguez</h4>
                             </div>
                         </div>
                         <!-- Left and right controls -->
@@ -555,12 +555,12 @@ Responsive section
                             <div class="item">
                                 <h4 style="text-align: center;">Gerente Corporativo<br> Jurídico</h4>
                                 <img src="vistas/Imagenes/Comite_Crisis/01-0489-0519.jpg">
-                                <h4 style="text-align: center;">Leovigildo Ramírez Anchia</h4>
+                                <h4 style="text-align: center;">Leovigildo Ramírez Anchía</h4>
                             </div>
                             <div class="item">
                                 <h4 style="text-align: center;">Gerente Corporativo<br> Jurídico</h4>
                                 <img src="vistas/Imagenes/Comite_Crisis/01-0615-0847.jpg">
-                                <h4 style="text-align: center;">Gilbert Aguilar Gutierrez</h4>
+                                <h4 style="text-align: center;">Gilbert Aguilar Gutiérrez</h4>
                             </div>
                         </div>
                         <!-- Left and right controls -->
@@ -604,7 +604,7 @@ Responsive section
                             <div class="item">
                                 <h4 style="text-align: center;">Gerente Tecnología <br> Información</h4>
                                 <img src="vistas/Imagenes/Comite_Crisis/03-0315-0719.jpg">
-                                <h4 style="text-align: center;">Leonardo Gutierrez Fallas</h4>
+                                <h4 style="text-align: center;">Leonardo Gutiérrez Fallas</h4>
                             </div>
                         </div>
                         <!-- Left and right controls -->
@@ -632,23 +632,23 @@ Responsive section
                             </a>
                             <ul>
                                 <li><a>Marco Tulio Meza</a></li>
-                                <li><a>Oscar Fallas</a></li>
+                                <li><a>Oscar Fallas Jaubert</a></li>
                             </ul>
                         </li>
                         <li><a>Gerencia de Seguridad<br>
                                 <input type="text" class="form-control" id="text_seguridad" onblur="guardar_nota('text_seguridad');" 
                                     value="<?php echo $notas[10]['Nota']?>" placeholder="Notas importantes"></a>
                             <ul>
-                                <li><a>Edgar Fonseca</a></li>
-                                <li><a>Edwards Vasquez</a></li>
+                                <li><a>Edgar Fonseca Aguilar</a></li>
+                                <li><a>Edwards Vásquez Solano</a></li>
                             </ul>
                         </li>
                         <li><a>Salud Ocupacional<br>
                                 <input type="text" class="form-control" id="text_salud_ocupacional" onblur="guardar_nota('text_salud_ocupacional');" 
                                     value="<?php echo $notas[11]['Nota']?>" placeholder="Notas importantes"></a>
                             <ul>
-                                <li><a>Esteban Ardon</a></li>
-                                <li><a>Michael Brenes</a></li>
+                                <li><a>Esteban Ardón Morera</a></li>
+                                <li><a>Michael Brenes Carvajal</a></li>
                             </ul>
                         </li>
 
@@ -666,24 +666,24 @@ Responsive section
                                 <input type="text" class="form-control" id="text_comunicacion" onblur="guardar_nota('text_comunicacion');" 
                                     value="<?php echo $notas[12]['Nota']?>" placeholder="Notas importantes"></a>
                             <ul>
-                                <li><a>Marlen Sanchez</a></li>
-                                <li><a>Mariana Villalobos</a></li>
+                                <li><a>Marlen Sánchez Badilla</a></li>
+                                <li><a>Mariana Villalobos Soto</a></li>
                             </ul>
                         </li>
                         <li><a>Continuidad de TI<br>
                                 <input type="text" class="form-control" id="text_continuidad_ti" onblur="guardar_nota('text_continuidad_ti');" 
                                     value="<?php echo $notas[13]['Nota']?>" placeholder="Notas importantes"></a>
                             <ul>
-                                <li><a>Jorge Castro</a></li>
-                                <li><a>Carla Rodriguez</a></li>
+                                <li><a>Jorge Castro Aguilar</a></li>
+                                <li><a>Karla Rodríguez Solano</a></li>
                             </ul>
                         </li>
                         <li><a>Continuidad del Negocio<br>
                                 <input type="text" class="form-control" id="text_continuidad_negocio" onblur="guardar_nota('text_continuidad_negocio');" 
                                     value="<?php echo $notas[14]['Nota']?>" placeholder="Notas importantes"></a>
                             <ul>
-                                <li><a>Jorge Santamaría</a></li>
-                                <li><a>Giani Mora</a></li>
+                                <li><a>Jorge Santamaría Roldán</a></li>
+                                <li><a>Gianni Mora Flores</a></li>
                             </ul>
                         </li>
                     </ul>

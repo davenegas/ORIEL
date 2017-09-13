@@ -9,6 +9,7 @@ $(document).ready(function(){
         $("#cajeros_persona").html("");
     });
 });
+
 ////////////////////////////////////////////////////////////////////////////////
 ////////////Función para ventanas ocultas General///////////////////////////////
 function ocultar_elemento(){
@@ -27,6 +28,7 @@ function buscar_persona() {
         document.getElementById('ventana_oculta_2').style.display = "block";
     }
 }
+
 function agregar_persona(id,ident, nombre, depart, empresa){
     document.getElementById('ID_Persona').value=id;
     document.getElementById('ID_Empresa').value=empresa;
@@ -43,11 +45,13 @@ function agregar_persona(id,ident, nombre, depart, empresa){
         $("#cajeros_persona").html(data);
     });
 }
+
 function cencon_observaciones(ide, obser){
     document.getElementById('ID_Cencon').value=ide;
     document.getElementById('observaciones_cencon').value=document.getElementById(ide).innerHTML;
     document.getElementById('ventana_oculta_4').style.display = "block";
 }
+
 function guardar_observaciones_cencon(){
     id_cencon= document.getElementById('ID_Cencon').value;
     observaciones= document.getElementById('observaciones_cencon').value;
@@ -56,11 +60,13 @@ function guardar_observaciones_cencon(){
     });
     document.getElementById('ventana_oculta_4').style.display = "none";
 }
+
 function buscar_cajero(){
     if(document.getElementById('tipo_funcionario').value==0 || document.getElementById('tipo_funcionario').value==1){
         document.getElementById('ventana_oculta_3').style.display = "block";
     }
 }
+
 function agregar_atm(id){
     id_atm= id;
     id_persona = document.getElementById('ID_Persona').value;
@@ -72,15 +78,17 @@ function agregar_atm(id){
     });
     document.getElementById('ventana_oculta_3').style.display = "none";    
 }
+
 function eliminar_cajero(id){
     id_cencon= id;
     id_persona = document.getElementById('ID_Persona').value;
     empresa = document.getElementById('ID_Empresa').value;
     $.post("index.php?ctl=cencon_eliminar_relacion", { id_cencon: id_cencon, id_persona:id_persona, empresa: empresa}, function(data){
-            //alert(data);
-            $("#cajeros_persona").html(data);
-          });
+        //alert(data);
+        $("#cajeros_persona").html(data);
+    });
 }
+
 function todos_cajero(funcion){
     //alert ("todos");
     accion = funcion;
@@ -93,13 +101,14 @@ function todos_cajero(funcion){
             $.post("index.php?ctl=todos_cajero_relacion", { accion:accion, id_persona: id_persona, cedula: cedula, empresa:empresa }, function(data){
                 //alert (data);
                 $("#cajeros_persona").html(data);
-              });
+            });
         },
         cancel: function(){
             //$.alert('Canceled!')
         }
     });
 }
+
 ////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////FUNCIONES DE MÓDULO CENCON///////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
@@ -110,7 +119,6 @@ function evento_buscar_cajero(){
         if(n==-1){
             var res = data.substring(data.indexOf("{"), data.length);
             var datos =JSON.parse(res);
-            
             document.getElementById('ID_PuntoBCR').value=datos['ID_PuntoBCR'];
             document.getElementById('nombre_atm').value=datos['Nombre'];
             document.getElementById('tipo_atm').value=datos['Tipo_Punto'];
@@ -182,6 +190,7 @@ function evento_buscar_persona(){
             document.getElementById('acceso_atms').value= accesos;
         });
 }
+
 function agregar_evento_cencon(){
     if (document.getElementById('cedula').value == "" || document.getElementById('numero_atm').value == "") {
         alert("Digite el número de cajero y el número de cedula para generar una apertura!");
@@ -241,6 +250,7 @@ function agregar_evento_cencon(){
         });
     }
 }
+
 function evento_cencon_cerrar(ide, numero){
     var f=new Date();
     cad=f.getHours()+":"+f.getMinutes(); 
@@ -257,11 +267,13 @@ function evento_cencon_cerrar(ide, numero){
         }
     });
 }
+
 function editar_observaciones(ide, obser){
     document.getElementById('ID_Evento_Cencon').value=ide;
     document.getElementById('observaciones_evento').value=obser;
     document.getElementById('ventana_oculta_1').style.display = "block";
 }
+
 function guardar_observaciones_evento(){
     id_evento_cencon= document.getElementById('ID_Evento_Cencon').value;
     observaciones= document.getElementById('observaciones_evento').value;
@@ -271,11 +283,13 @@ function guardar_observaciones_evento(){
     });
     document.getElementById('ventana_oculta_1').style.display = "none";
 }
+
 function editar_seguimiento(ide, seguimiento){
     document.getElementById('ID_Evento_Cencon').value=ide;
     $("#seguimiento_evento option[value='"+seguimiento+"']").attr("selected",true);
     document.getElementById('ventana_oculta_3').style.display = "block";
 }
+
 function guardar_seguimiento_evento(){
     id_evento_cencon= document.getElementById('ID_Evento_Cencon').value;
     seguimiento= document.getElementById('seguimiento_evento').value;
@@ -286,12 +300,14 @@ function guardar_seguimiento_evento(){
     });
     document.getElementById('ventana_oculta_3').style.display = "none";
 }
+
 function reasignar_apertura(ide,cajero, obser){
     document.getElementById('ID_Evento_Cencon').value=ide;
     document.getElementById('numero_cajero').value=cajero;
     document.getElementById('Cedula_persona').value="";
     document.getElementById('ventana_oculta_2').style.display = "block";
 }
+
 function reasignar_apertura_cencon(){
     $.confirm({title: 'Confirmación!', content: 'Desea reasignar la apertura de este cajero?', 
         confirm: function(){
@@ -308,11 +324,13 @@ function reasignar_apertura_cencon(){
         }
     });
 }
+
 function limpiar_info_cajero(){
     document.getElementById('nombre_atm').value="";
     document.getElementById('tipo_atm').value="";
     document.getElementById('ID_PuntoBCR').value="0";
 }
+
 function limpiar_info_persona(){
     document.getElementById('nombre_persona').value="";
     document.getElementById('unidad_ejecutora').value="";

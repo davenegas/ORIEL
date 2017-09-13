@@ -152,16 +152,16 @@ class cls_enlace_telecom{
             $this->obj_data_provider->conectar();
             //Llama al metodo que realiza la consulta a la bd
             $this->obj_data_provider->trae_datos("T_EnlaceTelecomunicaciones 
-                                        LEFT OUTER JOIN T_PuntoBCREnlace ON T_PuntoBCREnlace.ID_Enlace = T_EnlaceTelecomunicaciones.ID_Enlace
-                                        LEFT OUTER JOIN T_MedioEnlace ON T_MedioEnlace.ID_Medio_Enlace = T_EnlaceTelecomunicaciones.ID_Medio_Enlace
-                                        LEFT OUTER JOIN T_Proveedor ON T_Proveedor.ID_Proveedor = T_EnlaceTelecomunicaciones.ID_Proveedor
-                                        LEFT OUTER JOIN T_TipoEnlace ON T_TipoEnlace.ID_Tipo_Enlace = T_EnlaceTelecomunicaciones.ID_Tipo_Enlace", 
-                                        "T_EnlaceTelecomunicaciones.*, 
-                                        T_PuntoBCREnlace.*, 
-                                        T_MedioEnlace.ID_Medio_Enlace, T_MedioEnlace.Medio_Enlace, T_MedioEnlace.Observaciones as Obser_medio,
-                                        T_Proveedor.ID_Proveedor, T_Proveedor.Nombre_Proveedor, T_Proveedor.Observaciones as Obser_proveedor,
-                                        T_TipoEnlace.ID_Tipo_Enlace, T_TipoEnlace.Tipo_Enlace, T_TipoEnlace.Observaciones as Obser_tipo",   
-                                                    "");
+                LEFT OUTER JOIN T_PuntoBCREnlace ON T_PuntoBCREnlace.ID_Enlace = T_EnlaceTelecomunicaciones.ID_Enlace
+                LEFT OUTER JOIN T_MedioEnlace ON T_MedioEnlace.ID_Medio_Enlace = T_EnlaceTelecomunicaciones.ID_Medio_Enlace
+                LEFT OUTER JOIN T_Proveedor ON T_Proveedor.ID_Proveedor = T_EnlaceTelecomunicaciones.ID_Proveedor
+                LEFT OUTER JOIN T_TipoEnlace ON T_TipoEnlace.ID_Tipo_Enlace = T_EnlaceTelecomunicaciones.ID_Tipo_Enlace", 
+                "T_EnlaceTelecomunicaciones.*, 
+                T_PuntoBCREnlace.*, 
+                T_MedioEnlace.ID_Medio_Enlace, T_MedioEnlace.Medio_Enlace, T_MedioEnlace.Observaciones as Obser_medio,
+                T_Proveedor.ID_Proveedor, T_Proveedor.Nombre_Proveedor, T_Proveedor.Observaciones as Obser_proveedor,
+                T_TipoEnlace.ID_Tipo_Enlace, T_TipoEnlace.Tipo_Enlace, T_TipoEnlace.Observaciones as Obser_tipo",   
+                "");
             $this->arreglo=$this->obj_data_provider->getArreglo();
             $this->obj_data_provider->desconectar();
             $this->resultado_operacion=true;
@@ -170,16 +170,16 @@ class cls_enlace_telecom{
             $this->obj_data_provider->conectar();
             //Llama al metodo que realiza la consulta a la bd
             $this->obj_data_provider->trae_datos("T_EnlaceTelecomunicaciones 
-                                                LEFT OUTER JOIN T_PuntoBCREnlace ON T_PuntoBCREnlace.ID_Enlace = T_EnlaceTelecomunicaciones.ID_Enlace
-                                                LEFT OUTER JOIN T_MedioEnlace ON T_MedioEnlace.ID_Medio_Enlace = T_EnlaceTelecomunicaciones.ID_Medio_Enlace
-                                                LEFT OUTER JOIN T_Proveedor ON T_Proveedor.ID_Proveedor = T_EnlaceTelecomunicaciones.ID_Proveedor
-                                                LEFT OUTER JOIN T_TipoEnlace ON T_TipoEnlace.ID_Tipo_Enlace = T_EnlaceTelecomunicaciones.ID_Tipo_Enlace", 
-                                                "T_EnlaceTelecomunicaciones.*, 
-                                                T_PuntoBCREnlace.*, 
-                                                T_MedioEnlace.ID_Medio_Enlace, T_MedioEnlace.Medio_Enlace, T_MedioEnlace.Observaciones as Obser_medio,
-                                                T_Proveedor.ID_Proveedor, T_Proveedor.Nombre_Proveedor, T_Proveedor.Observaciones as Obser_proveedor,
-                                                T_TipoEnlace.ID_Tipo_Enlace, T_TipoEnlace.Tipo_Enlace, T_TipoEnlace.Observaciones as Obser_tipo", 
-                                                $this->condicion);
+                LEFT OUTER JOIN T_PuntoBCREnlace ON T_PuntoBCREnlace.ID_Enlace = T_EnlaceTelecomunicaciones.ID_Enlace
+                LEFT OUTER JOIN T_MedioEnlace ON T_MedioEnlace.ID_Medio_Enlace = T_EnlaceTelecomunicaciones.ID_Medio_Enlace
+                LEFT OUTER JOIN T_Proveedor ON T_Proveedor.ID_Proveedor = T_EnlaceTelecomunicaciones.ID_Proveedor
+                LEFT OUTER JOIN T_TipoEnlace ON T_TipoEnlace.ID_Tipo_Enlace = T_EnlaceTelecomunicaciones.ID_Tipo_Enlace", 
+                "T_EnlaceTelecomunicaciones.*, 
+                T_PuntoBCREnlace.*, 
+                T_MedioEnlace.ID_Medio_Enlace, T_MedioEnlace.Medio_Enlace, T_MedioEnlace.Observaciones as Obser_medio,
+                T_Proveedor.ID_Proveedor, T_Proveedor.Nombre_Proveedor, T_Proveedor.Observaciones as Obser_proveedor,
+                T_TipoEnlace.ID_Tipo_Enlace, T_TipoEnlace.Tipo_Enlace, T_TipoEnlace.Observaciones as Obser_tipo", 
+                $this->condicion);
             $this->arreglo=$this->obj_data_provider->getArreglo();
             $this->obj_data_provider->desconectar();
             $this->resultado_operacion=true;
@@ -191,7 +191,7 @@ class cls_enlace_telecom{
             $this->obj_data_provider->conectar();
             //Llama al metodo que realiza la consulta a la bd
             $this->obj_data_provider->inserta_datos("T_EnlaceTelecomunicaciones", "ID_Enlace, Enlace, Interface_Enlace, Numero_Linea,Bandwidth,	ID_Proveedor, ID_Tipo_Enlace, ID_Medio_Enlace, Observaciones, Estado", 
-                    "null,'".$this->enlace."','".$this->interface."','".$this->linea."','".$this->bandwidth."','".$this->proveedor."','".$this->tipo_enlace."','".$this->medio_enlace."','".$this->observaciones."','".$this->estado."'");
+                "null,'".$this->enlace."','".$this->interface."','".$this->linea."','".$this->bandwidth."','".$this->proveedor."','".$this->tipo_enlace."','".$this->medio_enlace."','".$this->observaciones."','".$this->estado."'");
             $this->obj_data_provider->trae_datos("T_EnlaceTelecomunicaciones ORDER BY ID_Enlace DESC LIMIT 1","ID_Enlace","");
             $this->arreglo=$this->obj_data_provider->getArreglo();
             $this->obj_data_provider->desconectar();
@@ -208,10 +208,10 @@ class cls_enlace_telecom{
     public function guardar_puntobcr_enlace() {
         $this->obj_data_provider->conectar();
         $this->obj_data_provider->inserta_datos("T_PuntoBCREnlace", "ID_PuntoBCR, ID_Enlace", $this->id2.",".$this->id);
-            $this->obj_data_provider->trae_datos("T_EnlaceTelecomunicaciones ORDER BY ID_Enlace DESC LIMIT 1","ID_Enlace","");
-            $this->arreglo=$this->obj_data_provider->getArreglo();
-            $this->obj_data_provider->desconectar();
-            $this->resultado_operacion=true;
+        $this->obj_data_provider->trae_datos("T_EnlaceTelecomunicaciones ORDER BY ID_Enlace DESC LIMIT 1","ID_Enlace","");
+        $this->arreglo=$this->obj_data_provider->getArreglo();
+        $this->obj_data_provider->desconectar();
+        $this->resultado_operacion=true;
     }
     
     public function cambiar_estado_medio_enlace(){
@@ -238,22 +238,22 @@ class cls_enlace_telecom{
         $this->obj_data_provider->conectar();
         //Llama al metodo que realiza la consulta a la bd
         $this->obj_data_provider->trae_datos("T_EnlaceTelecomunicaciones
-                    LEFT OUTER JOIN T_PuntoBCREnlace ON T_PuntoBCREnlace.ID_Enlace = T_EnlaceTelecomunicaciones.ID_Enlace
-                    LEFT OUTER JOIN T_PuntoBCR ON T_PuntoBCR.ID_PuntoBCR = T_PuntoBCREnlace.ID_PuntoBCR
-                    LEFT OUTER JOIN T_UE_PuntoBCR ON T_PuntoBCR.ID_PuntoBCR= T_UE_PuntoBCR.ID_PuntoBCR
-                    LEFT OUTER JOIN T_UnidadEjecutora ON T_UE_PuntoBCR.ID_Unidad_Ejecutora = T_UnidadEjecutora.ID_Unidad_Ejecutora
-                    LEFT OUTER JOIN T_MedioEnlace ON T_MedioEnlace.ID_Medio_Enlace = T_EnlaceTelecomunicaciones.ID_Medio_Enlace
-                    LEFT OUTER JOIN T_Proveedor ON T_Proveedor.ID_Proveedor = T_EnlaceTelecomunicaciones.ID_Proveedor
-                    LEFT OUTER JOIN T_TipoEnlace ON T_TipoEnlace.ID_Tipo_Enlace = T_EnlaceTelecomunicaciones.ID_Tipo_Enlace
-                    ORDER BY  T_PuntoBCR.Nombre, T_EnlaceTelecomunicaciones.Enlace", 
-                                        
-                        "T_PuntoBCR.ID_PuntoBCR, T_PuntoBCR.Nombre, T_PuntoBCR.Codigo, T_PuntoBCR.Estado Estado_Oficina,
-                    T_UnidadEjecutora.ID_Unidad_Ejecutora, T_UnidadEjecutora.Departamento, T_UnidadEjecutora.Numero_UE,
-                    T_EnlaceTelecomunicaciones.*,
-                    T_MedioEnlace.ID_Medio_Enlace, T_MedioEnlace.Medio_Enlace,
-                    T_Proveedor.ID_Proveedor, T_Proveedor.Nombre_Proveedor,
-                    T_TipoEnlace.ID_Tipo_Enlace, T_TipoEnlace.Tipo_Enlace",   
-                                        "");
+            LEFT OUTER JOIN T_PuntoBCREnlace ON T_PuntoBCREnlace.ID_Enlace = T_EnlaceTelecomunicaciones.ID_Enlace
+            LEFT OUTER JOIN T_PuntoBCR ON T_PuntoBCR.ID_PuntoBCR = T_PuntoBCREnlace.ID_PuntoBCR
+            LEFT OUTER JOIN T_UE_PuntoBCR ON T_PuntoBCR.ID_PuntoBCR= T_UE_PuntoBCR.ID_PuntoBCR
+            LEFT OUTER JOIN T_UnidadEjecutora ON T_UE_PuntoBCR.ID_Unidad_Ejecutora = T_UnidadEjecutora.ID_Unidad_Ejecutora
+            LEFT OUTER JOIN T_MedioEnlace ON T_MedioEnlace.ID_Medio_Enlace = T_EnlaceTelecomunicaciones.ID_Medio_Enlace
+            LEFT OUTER JOIN T_Proveedor ON T_Proveedor.ID_Proveedor = T_EnlaceTelecomunicaciones.ID_Proveedor
+            LEFT OUTER JOIN T_TipoEnlace ON T_TipoEnlace.ID_Tipo_Enlace = T_EnlaceTelecomunicaciones.ID_Tipo_Enlace
+            ORDER BY  T_PuntoBCR.Nombre, T_EnlaceTelecomunicaciones.Enlace", 
+
+                "T_PuntoBCR.ID_PuntoBCR, T_PuntoBCR.Nombre, T_PuntoBCR.Codigo, T_PuntoBCR.Estado Estado_Oficina,
+            T_UnidadEjecutora.ID_Unidad_Ejecutora, T_UnidadEjecutora.Departamento, T_UnidadEjecutora.Numero_UE,
+            T_EnlaceTelecomunicaciones.*,
+            T_MedioEnlace.ID_Medio_Enlace, T_MedioEnlace.Medio_Enlace,
+            T_Proveedor.ID_Proveedor, T_Proveedor.Nombre_Proveedor,
+            T_TipoEnlace.ID_Tipo_Enlace, T_TipoEnlace.Tipo_Enlace",   
+            "");
         $this->arreglo=$this->obj_data_provider->getArreglo();
         $this->obj_data_provider->desconectar();
         $this->resultado_operacion=true;

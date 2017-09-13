@@ -5,9 +5,9 @@
  */
 class Data_Provider{
     /*
-     * Variables publicas, que determinan los parametros de conexión a la base de datos,
-     * así como el uso de variables propias de la clase para gestión de la información
-     */
+    * Variables publicas, que determinan los parametros de conexión a la base de datos,
+    * así como el uso de variables propias de la clase para gestión de la información
+    */
     //Nombre del hospedaje de la base de datos
     private $mvc_bd_hostname="";
     //Nombre de la base de datos a usar
@@ -44,7 +44,6 @@ class Data_Provider{
         $this->resultado_transaccion = $resultado_transaccion;
     }
 
-        
     function getTransaccion() {
         return $this->transaccion;
     }
@@ -53,7 +52,6 @@ class Data_Provider{
         $this->transaccion = $transaccion;
     }
 
-       
     function getMvc_bd_nombre_trazabilidad() {
         return $this->mvc_bd_nombre_trazabilidad;
     }
@@ -195,10 +193,8 @@ class Data_Provider{
             //$this->mvc_bd_clave    = "";
             //Es capaz de representar cualquier carácter Unicode a nivel de base de datos
             $this->consulta="SET NAMES 'utf8'";
-            
             $this->conexion_PDO_transacciones=null;
-
-            //Acapara los errores que se puedan presentar y muestra en pantalla lo correspondiente
+        //Acapara los errores que se puedan presentar y muestra en pantalla lo correspondiente
         }catch (Exception $e){
            //Muestra en pantalla un mensaje de error
            echo 'Hubo un problema al inicializar las variables de conexión';
@@ -221,8 +217,7 @@ class Data_Provider{
                         
             // Lleva el control del resultado de la operación ejecuta en la bd
             $this->resultado_operacion=true;
-            
-        }catch (Exception $e){
+        } catch (Exception $e){
             //Notifica de un error al conectarse a la base de datos
             echo 'Hubo un problema al realizar la conexión a la base de datos';
             //Asigna a falso el valor de la variable resultado de la operación.
@@ -244,7 +239,7 @@ class Data_Provider{
     //Este metodo recibe el nombre de la tabla, campos de la misma y la condición de búsqueda en caso de que exista
     public function ejecuta_instruccion_sql($consulta_sql){
         unset($this->arreglo);
-            //Verifica si la consulta SQL tiene una condición de búsqueda
+        //Verifica si la consulta SQL tiene una condición de búsqueda
         if ($consulta_sql!=""){
             //En caso de no tener condición, agrega campos y nombre de la tabla solamente
             $consulta=$this->conexion->query($consulta_sql);
@@ -253,22 +248,18 @@ class Data_Provider{
     }
     
     public function iniciar_transaccion_sql(){
-         
         $this->conexion_PDO_transacciones = new PDO('mysql:dbname=bd_Gerencia_Seguridad;host=localhost', $this->mvc_bd_usuario,$this->mvc_bd_clave);
         //if ($this->conexion_PDO_transacciones==null){
         //    $this->conectar();
         //}
         $this->conexion_PDO_transacciones->beginTransaction();
-  
     }
     
-     public function agrega_edicion_de_datos_a_la_transaccion($table,$campos_valores,$condicion){
-                
+    public function agrega_edicion_de_datos_a_la_transaccion($table,$campos_valores,$condicion){      
        $this->conexion_PDO_transacciones->exec("update ".$table." set ".$campos_valores." where ".$condicion);
-  
     }
     
-     // Método ABC SQL que permite ingresar información en las tablas de la bd
+    // Método ABC SQL que permite ingresar información en las tablas de la bd
     public function agrega_inclusion_de_datos_a_la_transaccion($table,$campos,$valores){
         // Gestión de insercion del metodo de la clase
         //Arma el insert SQL, de acuerdo a los parámetros recibidos por usuario
@@ -278,10 +269,8 @@ class Data_Provider{
         //$this->resultado_operacion=true;
     }    
     
-    public function ejecutar_transaccion_sql(){
-                       
+    public function ejecutar_transaccion_sql(){        
         $this->conexion_PDO_transacciones->commit();
-       
         //$this->conexion_PDO_transacciones->
         //$this->desconectar();        
     }
@@ -290,9 +279,9 @@ class Data_Provider{
     //Este metodo recibe el nombre de la tabla, campos de la misma y la condición de búsqueda en caso de que exista
     public function trae_datos($table,$campos,$condicion){
         //echo "select ".$campos." from ".$table." where ".$condicion.";";
-            //Elimina la instancia del arreglo
+        //Elimina la instancia del arreglo
         unset($this->arreglo);
-            //Verifica si la consulta SQL tiene una condición de búsqueda
+        //Verifica si la consulta SQL tiene una condición de búsqueda
         if ($condicion==""){
             //En caso de no tener condición, agrega campos y nombre de la tabla solamente
             $consulta=$this->conexion->query("select ".$campos." from ".$table.";");

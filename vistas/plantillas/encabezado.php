@@ -329,7 +329,7 @@
                             <span class="caret"></span></a>
                         <ul class="dropdown-menu">
                             <?php if ($_SESSION['modulos']['Módulo-Pruebas alarma']==1){?>
-                                <li><a href="http://localhost/ORIEL-Cajeros/index.php?ctl=inicio">Control y Seguimiento ATM's</a></li> 
+                                <li><a href="http://10.170.5.92:8080/ORIEL-Cajeros/index.php?ctl=inicio">Control y Seguimiento ATM's</a></li> 
                             <?php }; ?>
                             <?php if ($_SESSION['modulos']['Módulo-Pruebas alarma']==1){?>
                                 <li><a href="index.php?ctl=comite_crisis">Comité de Crisis</a></li> 
