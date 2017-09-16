@@ -676,6 +676,84 @@ class cls_puestos_de_monitoreo{
         } 
     }
     
+    public function obtiene_unidades_con_mas_tiempo_sin_revisar_pruebas(){
+        $this->obj_data_provider->conectar();
+        
+        $vector_temporal1=array();
+        $vector_temporal2=array();
+        $vector_temporal3=array();
+        $vector_temporal4=array();
+        $vector_temporal5=array();
+        $vector_temporal6=array();
+        
+        //Trae unidades en producción que no han sido revisadas y las asigna con prioridad 1 para el monitoreo
+        $this->arreglo=$this->obj_data_provider->trae_datos("t_unidadvideo left join t_bitacorarevisionesvideo on t_unidadvideo.ID_Unidad_Video=t_bitacorarevisionesvideo.ID_Unidad_Video where t_unidadvideo.Estado=0 and t_bitacorarevisionesvideo.ID_Bitacora_Revision_Video is null and t_unidadvideo.ID_Unidad_Video not in (512,180,262)",
+            "DISTINCT t_unidadvideo.ID_Unidad_Video","");
+        if (count($this->obj_data_provider->getArreglo())>0){
+            //$this->arreglo=$this->obj_data_provider->getArreglo();
+            $vector_temporal1=$this->obj_data_provider->getArreglo();
+        }
+        
+        //Agrega al vector las unidades que tienen una revision abierta por mas de 20 minutos
+        $this->arreglo=$this->obj_data_provider->trae_datos("t_bitacorarevisionesvideo inner join t_unidadvideo on t_bitacorarevisionesvideo.ID_Unidad_Video=t_unidadvideo.ID_Unidad_Video where t_bitacorarevisionesvideo.Estado=0 and (TIMESTAMPDIFF(MINUTE, concat(Fecha_Inicia_Revision,' ',Hora_Inicia_Revision),NOW())>20) and t_unidadvideo.Estado=0",
+            "t_bitacorarevisionesvideo.ID_Unidad_Video","");
+        if (count($this->obj_data_provider->getArreglo())>0){
+            
+            $vector_temporal5=$this->obj_data_provider->getArreglo();
+            
+            $this->arreglo=$this->obj_data_provider->trae_datos("t_bitacorarevisionesvideo where Estado=1 and (TIMESTAMPDIFF(MINUTE, concat(Fecha_Termina_Revision,' ',Hora_Termina_Revision),NOW())<120) and ID_Unidad_Video in (Select t_bitacorarevisionesvideo.ID_Unidad_Video from t_bitacorarevisionesvideo inner join t_unidadvideo on t_bitacorarevisionesvideo.ID_Unidad_Video=t_unidadvideo.ID_Unidad_Video where t_bitacorarevisionesvideo.Estado=0 and (TIMESTAMPDIFF(MINUTE, concat(Fecha_Inicia_Revision,' ',Hora_Inicia_Revision),NOW())>20) and t_unidadvideo.Estado=0)",
+            "distinct t_bitacorarevisionesvideo.ID_Unidad_Video","");
+            
+            if (count($this->obj_data_provider->getArreglo())>0){
+                $vector_temporal6=$this->obj_data_provider->getArreglo();
+                $ban=0;
+                
+                for ($i = 0; $i < count($vector_temporal5); $i++) {
+                  for ($j = 0; $j < count($vector_temporal6); $j++) {
+                      if ($vector_temporal5[$i]['ID_Unidad_Video']==$vector_temporal6[$j]['ID_Unidad_Video']){
+                          $ban=1;
+                      }
+                  }   
+                  if ($ban==0){
+                      $vector_temporal2[] = $vector_temporal5[$i];
+                  }
+                  $ban=0;
+                }
+            } 
+        }
+        
+        //Agrega al vector las unidades que tienen mas tiempo sin revision
+        $this->arreglo=$this->obj_data_provider->trae_datos("(select t_bitacorarevisionesvideo.`ID_Unidad_Video`, MAX(concat(`Fecha_Termina_Revision`,' ',`Hora_Termina_Revision`)) Fecha_Hora from t_bitacorarevisionesvideo LEFT OUTER JOIN t_unidadvideo on t_unidadvideo.ID_Unidad_Video = t_bitacorarevisionesvideo.ID_Unidad_Video where t_unidadvideo.Estado=0 GROUP by t_bitacorarevisionesvideo.`ID_Unidad_Video` ORDER BY Fecha_Hora ASC limit 20) temp",
+            "temp.ID_Unidad_Video","");
+        
+        if (count($this->obj_data_provider->getArreglo())>0){
+            //$this->arreglo=$this->obj_data_provider->getArreglo();
+            $vector_temporal3=$this->obj_data_provider->getArreglo();
+        }
+        
+       if ((count($vector_temporal1)>0)&&(count($vector_temporal2)>0)){
+           $vector_temporal4=  array_merge($vector_temporal1,$vector_temporal2);
+           $this->arreglo=  array_merge($vector_temporal4,$vector_temporal3);
+       }
+       
+       if ((!(count($vector_temporal1)>0))&&(!(count($vector_temporal2)>0))){
+           //$vector_temporal4=  array_merge($vector_temporal1,$vector_temporal2);
+           $this->arreglo=  $vector_temporal3;
+       }
+       
+       if ((!(count($vector_temporal1)>0))&&((count($vector_temporal2)>0))){
+           //$vector_temporal4=  array_merge($vector_temporal1,$vector_temporal2);
+           $this->arreglo=  array_merge($vector_temporal2,$vector_temporal3);
+       }
+       
+       if (((count($vector_temporal1)>0))&&(!(count($vector_temporal2)>0))){
+           //$vector_temporal4=  array_merge($vector_temporal1,$vector_temporal2);
+           $this->arreglo=  array_merge($vector_temporal1,$vector_temporal3);
+       }
+       
+       $this->obj_data_provider->desconectar();
+        
+    }        
    
     public function obtiene_inconsistencias_de_video(){
         $this->obj_data_provider->conectar();
