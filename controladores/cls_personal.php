@@ -428,7 +428,7 @@ class cls_personal{
   
     }
     
-    function agrega_edicion_de_persona_a_transaccion(){
+    function agregar_edicion_de_persona_a_transaccion(){
          
         
         $this->obj_data_provider->agrega_edicion_de_datos_a_la_transaccion("t_personal","Cedula='".$this->cedula."',Apellido_Nombre='".$this->apellidonombre."',ID_Unidad_Ejecutora=".$this->id_unidad_ejecutora.",ID_Puesto=".$this->id_puesto.",Direccion='".$this->direccion."',Link_Foto='".$this->linkfoto."',ID_Empresa=".$this->id_empresa.",Correo='".$this->correo."',Estado='".$this->estado."'",$this->condicion);
@@ -438,7 +438,7 @@ class cls_personal{
      
     function agregar_inclusion_persona_a_transaccion(){
         //$this->obj_data_provider->conectar();
-        $this->obj_data_provider->agrega_inclusion_de_datos_a_la_transaccion("t_personal", "Cedula,Apellido_Nombre,ID_Unidad_Ejecutora,ID_Puesto,Direccion,Link_Foto,ID_Empresa,Estado,Correo", "'".$this->cedula."','".$this->apellidonombre."',".$this->id_unidad_ejecutora.",".$this->id_puesto.",'".$this->direccion."','".$this->linkfoto."',".$this->id_empresa.",'".$this->estado."','".$this->correo."'");
+        $this->obj_data_provider->agregar_inclusion_de_datos_a_la_transaccion("t_personal", "Cedula,Apellido_Nombre,ID_Unidad_Ejecutora,ID_Puesto,Direccion,Link_Foto,ID_Empresa,Estado,Correo", "'".$this->cedula."','".$this->apellidonombre."',".$this->id_unidad_ejecutora.",".$this->id_puesto.",'".$this->direccion."','".$this->linkfoto."',".$this->id_empresa.",'".$this->estado."','".$this->correo."'");
         //$this->obj_data_provider->inserta_datos_para_prontuario();
         //$this->obj_data_provider->desconectar();
     }

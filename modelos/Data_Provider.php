@@ -262,14 +262,14 @@ class Data_Provider{
   
     }
     
-     public function agrega_edicion_de_datos_a_la_transaccion($table,$campos_valores,$condicion){
+     public function agregar_edicion_de_datos_a_la_transaccion($table,$campos_valores,$condicion){
                 
        $this->conexion_PDO_transacciones->exec("update ".$table." set ".$campos_valores." where ".$condicion);
   
     }
     
      // Método ABC SQL que permite ingresar información en las tablas de la bd
-    public function agrega_inclusion_de_datos_a_la_transaccion($table,$campos,$valores){
+    public function agregar_inclusion_de_datos_a_la_transaccion($table,$campos,$valores){
         // Gestión de insercion del metodo de la clase
         //Arma el insert SQL, de acuerdo a los parámetros recibidos por usuario
         $this->conexion_PDO_transacciones->exec("insert into ".$table."(".$campos.") values(".$valores.")");

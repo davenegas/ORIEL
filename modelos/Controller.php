@@ -726,7 +726,7 @@ class Controller{
                 //Si la consulta inicial arroja un solo resultado, edita la información de la persona
                 if (count($obj_personal->getArreglo())==1){
                     //$obj_personal->edita_persona_para_prontuario();
-                    $obj_personal->agrega_edicion_de_persona_a_transaccion();
+                    $obj_personal->agregar_edicion_de_persona_a_transaccion();
                     //Incrementa la variable de control
                     $editados++;
                 }
@@ -1020,7 +1020,7 @@ class Controller{
                 }
             }
             
-            $obj_telefono->ejecutar_transaccion_sql();
+            //$obj_telefono->ejecutar_transaccion_sql();
             
             //Define las variables de resultados para mostrar el summary en pantalla
             $resultados= "Fueron actualizados un total de: ".$numeros_actualizados." números de celular.";
