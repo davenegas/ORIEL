@@ -120,21 +120,21 @@ class cls_direccionIP{
         $this->obj_data_provider->conectar();
         if($this->condicion==""){
             $this->arreglo=$this->obj_data_provider->trae_datos(
-                    "T_DireccionIP
-			LEFT OUTER JOIN T_TipoIP ON T_DireccionIP.ID_Tipo_IP = T_TipoIP.ID_Tipo_IP", 
-                    "DISTINCT T_DireccionIP.*, T_TipoIP.ID_Tipo_IP, T_TipoIP.Tipo_IP ",
-                    "");
+                "T_DireccionIP
+                    LEFT OUTER JOIN T_TipoIP ON T_DireccionIP.ID_Tipo_IP = T_TipoIP.ID_Tipo_IP", 
+                "DISTINCT T_DireccionIP.*, T_TipoIP.ID_Tipo_IP, T_TipoIP.Tipo_IP ",
+                "");
             $this->arreglo=$this->obj_data_provider->getArreglo();
             $this->obj_data_provider->desconectar();
             $this->resultado_operacion=true;
         }
         else{
             $this->arreglo=$this->obj_data_provider->trae_datos(
-                    "T_DireccionIP
-			LEFT OUTER JOIN T_TipoIP ON T_DireccionIP.ID_Tipo_IP = T_TipoIP.ID_Tipo_IP
-			LEFT OUTER JOIN T_PuntoBCRDireccionIP ON T_DireccionIP.ID_Direccion_IP = T_PuntoBCRDireccionIP.ID_Direccion_IP", 
-                    "DISTINCT T_DireccionIP.*, T_PuntoBCRDireccionIP.*, T_TipoIP.ID_Tipo_IP, T_TipoIP.Tipo_IP ",
-                    $this->condicion);
+                "T_DireccionIP
+                    LEFT OUTER JOIN T_TipoIP ON T_DireccionIP.ID_Tipo_IP = T_TipoIP.ID_Tipo_IP
+                    LEFT OUTER JOIN T_PuntoBCRDireccionIP ON T_DireccionIP.ID_Direccion_IP = T_PuntoBCRDireccionIP.ID_Direccion_IP", 
+                "DISTINCT T_DireccionIP.*, T_PuntoBCRDireccionIP.*, T_TipoIP.ID_Tipo_IP, T_TipoIP.Tipo_IP ",
+                $this->condicion);
             $this->arreglo=$this->obj_data_provider->getArreglo();
             $this->obj_data_provider->desconectar();
             $this->resultado_operacion=true;
@@ -181,18 +181,18 @@ class cls_direccionIP{
         $this->obj_data_provider->conectar();
         if($this->condicion==""){
             $this->arreglo=$this->obj_data_provider->trae_datos(
-                    "T_TipoIP", 
-                    "*",
-                    "");
+                "T_TipoIP", 
+                "*",
+                "");
             $this->arreglo=$this->obj_data_provider->getArreglo();
             $this->obj_data_provider->desconectar();
             $this->resultado_operacion=true;
         }
         else{
-            $this->arreglo=$this->obj_data_provider->trae_datos(
-                    "T_TipoIP", 
-                    "*",
-                    $this->condicion);
+        $this->arreglo=$this->obj_data_provider->trae_datos(
+                "T_TipoIP", 
+                "*",
+                $this->condicion);
             $this->arreglo=$this->obj_data_provider->getArreglo();
             $this->obj_data_provider->desconectar();
             $this->resultado_operacion=true;

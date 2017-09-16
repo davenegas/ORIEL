@@ -61,11 +61,11 @@ div#tabla_dos{
 }
 
 #foto_personal{
-        width:350px;
-        height:300px;
-        right: 20px;
-        position: static; 
-        top: 25px;
+    width:350px;
+    height:300px;
+    right: 20px;
+    position: static; 
+    top: 25px;
 }
 
 /* Remove the navbar's default margin-bottom and rounded borders */

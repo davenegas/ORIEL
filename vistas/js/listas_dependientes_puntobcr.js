@@ -113,13 +113,13 @@ $(document).ready(function(){
             
             $.post("index.php?ctl=PuntoBCR_actualiza_informacion_adicional", {id_puntobcr:id_puntobcr, id_empresa:id_empresa,
                 observaciones:observaciones, id_gerente:id_gerente,id_supervisor:id_supervisor }, function(data){
-                    //alert (data);
-                    location.reload();    
-                    
-           });   
+                //alert (data);
+                location.reload();    
+            });   
         }
     });
 });  
+
 //////////////////////////////////////////////////////////
 //Función para Ocultas ventanas
 function ocultar_elemento(){
@@ -142,6 +142,7 @@ function check_empty() {
         document.getElementById('ventana_oculta_1').style.display = "none";
     }
 }
+
 function mostrar_agregar_telefono() {
     $("#Tipo_Telefono option[value=1]").attr("selected",true);
     document.getElementById('ID_Telefono').value="0";
@@ -150,6 +151,7 @@ function mostrar_agregar_telefono() {
     
     document.getElementById('ventana_oculta_1').style.display = "block";
 }
+
 function eliminar_telefono(ide){
     $.confirm({title: 'Confirmación!', content: 'Desea eliminar este número de teléfono?', 
         confirm: function(){
@@ -164,6 +166,7 @@ function eliminar_telefono(ide){
         }
     });
 }
+
 function editar_telefono(id_tel, tipo_tel, num, obser){
     $("#Tipo_Telefono option[value="+tipo_tel+"]").attr("selected",true);
     document.getElementById('ID_Telefono').value=id_tel;
@@ -178,6 +181,7 @@ function editar_telefono(id_tel, tipo_tel, num, obser){
 function mostrar_lista_ue(){
     document.getElementById('ventana_oculta_2').style.display = "block";
 }
+
 function agregar_ue(id_ue){
     id_unidad_ejecutora = id_ue;
     id_puntobcr = document.getElementById('ID_PuntoBCR').value;
@@ -187,6 +191,7 @@ function agregar_ue(id_ue){
             //alert (data);
           });
 }
+
 function eliminar_ue(ide){
     $.confirm({title: 'Confirmación!', content: 'Desea eliminar la Unidad Ejecutora?', 
         confirm: function(){
@@ -195,10 +200,10 @@ function eliminar_ue(ide){
             $.post("index.php?ctl=puntobcr_desligar_ue", { id_unidad_ejecutora: id_unidad_ejecutora,id_puntobcr:id_puntobcr }, function(data){
                 location.reload();
                 //alert (data);
-              });
+            });
         },
         cancel: function(){
-                //$.alert('Canceled!')
+            //$.alert('Canceled!')
         }
     });
 }
@@ -208,6 +213,7 @@ function eliminar_ue(ide){
 function mostrar_area_apoyo(){
     document.getElementById('ventana_oculta_3').style.display = "block";
 }
+
 function validar_area(){
      if (document.getElementById('nombre').value == "") {
         alert("Digita el nombre del Area de Apoyo !");
@@ -216,15 +222,17 @@ function validar_area(){
         document.getElementById('nueva_area_apoyo').submit();
         document.getElementById('ventana_oculta_3').style.display = "none";
     }
- }
+}
+ 
 function agregar_area(id){
     id_area_apoyo = id;
     id_puntobcr = document.getElementById('ID_PuntoBCR').value;
     $.post("index.php?ctl=puntobcr_asignar_area_apoyo", { id_area_apoyo: id_area_apoyo, id_puntobcr:id_puntobcr}, function(data){
-            //alert (data);
-            location.reload();
-          });
+        //alert (data);
+        location.reload();
+    });
 }
+
 function eliminar_area(ide){
     id_area_apoyo= ide;
     $.confirm({title: 'Confirmación!', content: 'Desea eliminar el area de apoyo?', 
@@ -233,7 +241,7 @@ function eliminar_area(ide){
             $.post("index.php?ctl=puntobcr_desligar_area_apoyo", { id_area_apoyo: id_area_apoyo, id_puntobcr:id_puntobcr }, function(data){
                 location.reload();
                 //alert (data);
-              });
+            });
         },
         cancel: function(){
                 //$.alert('Canceled!')
@@ -250,14 +258,16 @@ function mostrar_direccion_IP(){
     document.getElementById('observaciones_ip').value = "";
     document.getElementById('ventana_oculta_4').style.display = "block";
 }
+
 function asignar_ip(id){
     id_direccion_ip = id;
     id_puntobcr = document.getElementById('ID_PuntoBCR').value;
     $.post("index.php?ctl=puntobcr_asignar_direccion_ip", { id_direccion_ip: id_direccion_ip, id_puntobcr:id_puntobcr}, function(data){
-            //alert (data);
-            location.reload();
-          });
+        //alert (data);
+        location.reload();
+    });
 }
+
 function eliminar_ip(ide){
     id_direccion_ip= ide;
     $.confirm({title: 'Confirmación!', content: 'Desea eliminar la dirección IP?', 
@@ -266,13 +276,14 @@ function eliminar_ip(ide){
             $.post("index.php?ctl=puntobcr_desligar_direccion_ip", { id_direccion_ip: id_direccion_ip, id_puntobcr:id_puntobcr }, function(data){
                 location.reload();
                 //alert (data);
-              });
+            });
         },
         cancel: function(){
                 //$.alert('Canceled!')
         }
     });
 }
+
 function validar_direccion_ip(){
    if (document.getElementById('direccion_ip').value == "") {
         alert("Digita la dirección IP !");
@@ -282,6 +293,7 @@ function validar_direccion_ip(){
         document.getElementById('ventana_oculta_4').style.display = "none";
     } 
 }
+
 function editar_ip(ide, tipo, direc, obser){
     document.getElementById('lista_direcciones').hidden=true;
     document.getElementById('ID_Direccion_IP').value = ide;
@@ -290,21 +302,24 @@ function editar_ip(ide, tipo, direc, obser){
     document.getElementById('observaciones_ip').value = obser;
     document.getElementById('ventana_oculta_4').style.display = "block";
 }
+
 ///////////////////////////////////////////////////////////
 //Funciones para asignar Horario al Punto BCR
 function mostrar_horario(){
     document.getElementById('ventana_oculta_5').style.display = "block";
 }
+
 function asignar_horario(id_hora, tipo){
     id_horario = id_hora;
     tipo_horario= tipo;
     id_puntobcr = document.getElementById('ID_PuntoBCR').value;
     document.getElementById('ventana_oculta_5').style.display = "none";
     $.post("index.php?ctl=puntobcr_asignar_horario", { id_horario: id_horario, id_puntobcr:id_puntobcr, tipo_horario: tipo_horario}, function(data){
-            //alert (data);
-            location.reload();
-          });
+        //alert (data);
+        location.reload();
+    });
 }
+
 function eliminar_horario(tipo){
     tipo_horario = tipo;
     $.confirm({title: 'Confirmación!', content: 'Desea eliminar el Horario del Punto?', 
@@ -313,7 +328,7 @@ function eliminar_horario(tipo){
             $.post("index.php?ctl=puntobcr_eliminar_horario", { id_puntobcr:id_puntobcr, tipo_horario:tipo_horario}, function(data){
                 location.reload();
                 //alert (data);
-              });
+            });
         },
         cancel: function(){
                 //$.alert('Canceled!')
@@ -335,6 +350,7 @@ function mostrar_enlace_telecom(){
     document.getElementById('observaciones_enlace').value="";
     document.getElementById('ventana_oculta_6').style.display = "block";
 }
+
 function mostrar_editar_enlace(id, enlace, interf, linea,provee, tipo, bandw, medio, obser ){
     document.getElementById('ID_Enlace').value=id;
     $("#enlace option[value='"+enlace+"']").attr("selected",true);
@@ -347,6 +363,7 @@ function mostrar_editar_enlace(id, enlace, interf, linea,provee, tipo, bandw, me
     document.getElementById('observaciones_enlace').value=obser;
     document.getElementById('ventana_oculta_6').style.display = "block";
 }
+
 function eliminar_enlace(ide){
     id_enlace= ide;
     $.confirm({title: 'Confirmación!', content: 'Desea eliminar el enlace de Telecomunicaciones?', 
@@ -355,16 +372,17 @@ function eliminar_enlace(ide){
             $.post("index.php?ctl=puntobcr_eliminar_enlace", { id_enlace: id_enlace, id_puntobcr:id_puntobcr }, function(data){
                 location.reload();
                 //alert (data);
-              });
+            });
         },
         cancel: function(){
                 //$.alert('Canceled!')
         }
     });
 }
+
 function validar_enlace(){
    if (document.getElementById('interface').value == "" ||document.getElementById('linea').value==""
-           ||document.getElementById('bandwidth').value=="") {
+        ||document.getElementById('bandwidth').value=="") {
         alert("Completa la información del enlace !");
     } else {
         //alert("Form Submitted Successfully...");

@@ -128,7 +128,7 @@ class cls_padron_fotografico_puntosbcr{
             $this->obj_data_provider->conectar();
             //Llama al metodo que realiza la consulta a la bd
             $this->obj_data_provider->inserta_datos("T_PadronFotograficoPuntoBCR", "ID_Padron_PuntoBCR,ID_PuntoBCR, Nombre_Ruta, Nombre_Imagen, Descripcion,Categoria,Formato", 
-                    "null,".$this->id_puntobcr.",'".$this->nombre_ruta."','".$this->nombre_imagen."','".$this->descripcion."','".$this->categoria."','".$this->formato."'");
+                "null,".$this->id_puntobcr.",'".$this->nombre_ruta."','".$this->nombre_imagen."','".$this->descripcion."','".$this->categoria."','".$this->formato."'");
             $this->obj_data_provider->desconectar();
          
         }   else    {
@@ -154,7 +154,7 @@ class cls_padron_fotografico_puntosbcr{
             $this->obj_data_provider->conectar();
             //Llama al metodo que realiza la consulta a la bd
             $this->obj_data_provider->inserta_datos("T_PadronFotograficoPersonalExterno", "ID_Padron_Personal,ID_Persona_Externa, Nombre_Ruta, Nombre_Imagen, Descripcion,Categoria,Formato", 
-                    "null,".$this->id_puntobcr.",'".$this->nombre_ruta."','".$this->nombre_imagen."','".$this->descripcion."','".$this->categoria."','".$this->formato."'");
+                "null,".$this->id_puntobcr.",'".$this->nombre_ruta."','".$this->nombre_imagen."','".$this->descripcion."','".$this->categoria."','".$this->formato."'");
             $this->obj_data_provider->desconectar();
          
         }   else    {
@@ -174,8 +174,7 @@ class cls_padron_fotografico_puntosbcr{
             $this->obj_data_provider->trae_datos("T_PadronFotograficoPersonalExterno", "*", "");
             $this->arreglo=$this->obj_data_provider->getArreglo();
             $this->obj_data_provider->desconectar();
-        }
-        else{
+        } else{
             $this->obj_data_provider->conectar();
             //Llama al metodo que realiza la consulta a la bd
             $this->obj_data_provider->trae_datos("T_PadronFotograficoPersonalExterno", "*", $this->condicion);
@@ -188,7 +187,6 @@ class cls_padron_fotografico_puntosbcr{
         $this->obj_data_provider->conectar();
         $this->arreglo=$this->obj_data_provider->eliminar_datos("T_PadronFotograficoPersonalExterno", $this->condicion);
         $this->obj_data_provider->desconectar();
-       
     }
 }
 ?>

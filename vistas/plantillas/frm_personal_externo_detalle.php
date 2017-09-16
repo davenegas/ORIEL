@@ -26,7 +26,7 @@
                 <!--Identificación de la persona externa-->
                 <div class="col-md-4 espacio-abajo">
                     <label for="identificacion">Identificación</label>
-                    <input type="text" required="cedula" readonly class="form-control" id="identificacion" name="identificacion" value="<?php echo $params[0]['Identificacion'];?>">
+                    <input type="number" required="cedula" readonly class="form-control" id="identificacion" name="identificacion" value="<?php echo $params[0]['Identificacion'];?>">
                 </div>
                 <!--Select de empresas registradas en el sistema y a la cual pertenece la persona externa-->
                 <div class="col-md-4 col-xs-4 espacio-abajo">

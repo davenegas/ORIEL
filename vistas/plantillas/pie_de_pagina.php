@@ -7,7 +7,7 @@ requerida
     <!--<center><img src="vistas/Imagenes/Oriel.jpg" alt=""/></center>-->
     <footer class="container-fluid" align="center">
         <hr/>
-        Jefatura de Seguridad Banco de Costa Rica - Centro de Control y Monitoreo &copy; <br>
+        Jefatura de Seguridad Banco de Costa Rica - Centro de Control &copy; <br>
         <?php 
         $hoy = date("F j, Y, g:i a"); ?>
            

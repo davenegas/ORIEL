@@ -278,18 +278,18 @@ class cls_horario{
        $this->obj_data_provider->conectar();
         if($this->condicion==""){
             $this->arreglo=$this->obj_data_provider->trae_datos(
-                    "T_Horario", 
-                    "*",
-                    "");
+                "T_Horario", 
+                "*",
+                "");
             $this->arreglo=$this->obj_data_provider->getArreglo();
             $this->obj_data_provider->desconectar();
             $this->resultado_operacion=true;
         }
         else{
             $this->arreglo=$this->obj_data_provider->trae_datos(
-                    "T_Horario", 
-                    "*",
-                    $this->condicion);
+                "T_Horario", 
+                "*",
+                $this->condicion);
             $this->arreglo=$this->obj_data_provider->getArreglo();
             $this->obj_data_provider->desconectar();
             $this->resultado_operacion=true;
@@ -299,9 +299,9 @@ class cls_horario{
     public function agregar_horario(){
         $this->obj_data_provider->conectar();
         $this->arreglo= $this->obj_data_provider->inserta_datos("T_Horario", "ID_Horario, Hora_Apertura_Domingo, Hora_Cierre_Domingo, Hora_Apertura_Lunes, Hora_Cierre_Lunes, Hora_Apertura_Martes, Hora_Cierre_Martes,Hora_Apertura_Miercoles, Hora_Cierre_Miercoles, "
-                . "Hora_Apertura_Jueves, Hora_Cierre_Jueves, Hora_Apertura_Viernes, Hora_Cierre_Viernes, Hora_Apertura_Sabado, Hora_Cierre_Sabado, Tipo_Horario, Observaciones, Estado",
-                        "null,'".$this->hora_apertura_domingo."','".$this->hora_cierre_domingo."','".$this->hora_apertura_lunes."','".$this->hora_cierre_lunes."','".$this->hora_apertura_martes."','".$this->hora_cierre_martes."','".$this->hora_apertura_miercoles."','".$this->hora_cierre_miercoles."','"
-                .$this->hora_apertura_jueves."','".$this->hora_cierre_jueves."','".$this->hora_apertura_viernes."','".$this->hora_cierre_viernes."','".$this->hora_apertura_sabado."','".$this->hora_cierre_sabado."','".$this->tipo_horario."','".$this->observaciones."','".$this->estado."'");
+            . "Hora_Apertura_Jueves, Hora_Cierre_Jueves, Hora_Apertura_Viernes, Hora_Cierre_Viernes, Hora_Apertura_Sabado, Hora_Cierre_Sabado, Tipo_Horario, Observaciones, Estado",
+            "null,'".$this->hora_apertura_domingo."','".$this->hora_cierre_domingo."','".$this->hora_apertura_lunes."','".$this->hora_cierre_lunes."','".$this->hora_apertura_martes."','".$this->hora_cierre_martes."','".$this->hora_apertura_miercoles."','".$this->hora_cierre_miercoles."','"
+            .$this->hora_apertura_jueves."','".$this->hora_cierre_jueves."','".$this->hora_apertura_viernes."','".$this->hora_cierre_viernes."','".$this->hora_apertura_sabado."','".$this->hora_cierre_sabado."','".$this->tipo_horario."','".$this->observaciones."','".$this->estado."'");
         $this->obj_data_provider->desconectar();
         $this->resultado_operacion=true;
     }
@@ -319,9 +319,9 @@ class cls_horario{
     public function actualizar_horario() {
         $this->obj_data_provider->conectar();
         $this->obj_data_provider->edita_datos("T_Horario", "Hora_Apertura_Domingo='".$this->hora_apertura_domingo."', Hora_Cierre_Domingo='".$this->hora_cierre_domingo."',Hora_Apertura_Lunes='".$this->hora_apertura_lunes."', Hora_Cierre_Lunes='".$this->hora_cierre_lunes.
-                "', Hora_Apertura_Martes='".$this->hora_apertura_martes."', Hora_Cierre_Martes='".$this->hora_cierre_martes."', Hora_Apertura_Miercoles='".$this->hora_apertura_miercoles."', Hora_Cierre_Miercoles='".$this->hora_cierre_miercoles.
-                "', Hora_Apertura_Jueves='".$this->hora_apertura_jueves."', Hora_Cierre_Jueves='".$this->hora_cierre_jueves."', Hora_Apertura_Viernes='".$this->hora_apertura_viernes."', Hora_Cierre_Viernes='".$this->hora_cierre_viernes."', Hora_Apertura_Sabado='".$this->hora_apertura_sabado."', Hora_Cierre_Sabado='".$this->hora_cierre_sabado.
-                "', Tipo_Horario='".$this->tipo_horario."', Observaciones='".$this->observaciones."', Estado='".$this->estado."'",$this->condicion);
+            "', Hora_Apertura_Martes='".$this->hora_apertura_martes."', Hora_Cierre_Martes='".$this->hora_cierre_martes."', Hora_Apertura_Miercoles='".$this->hora_apertura_miercoles."', Hora_Cierre_Miercoles='".$this->hora_cierre_miercoles.
+            "', Hora_Apertura_Jueves='".$this->hora_apertura_jueves."', Hora_Cierre_Jueves='".$this->hora_cierre_jueves."', Hora_Apertura_Viernes='".$this->hora_apertura_viernes."', Hora_Cierre_Viernes='".$this->hora_cierre_viernes."', Hora_Apertura_Sabado='".$this->hora_apertura_sabado."', Hora_Cierre_Sabado='".$this->hora_cierre_sabado.
+            "', Tipo_Horario='".$this->tipo_horario."', Observaciones='".$this->observaciones."', Estado='".$this->estado."'",$this->condicion);
         $this->obj_data_provider->desconectar();
     }
     
@@ -336,18 +336,17 @@ class cls_horario{
     }
     
     public function guardar_horario() {
-       if($this->id_horario=="0"){
-       $this->obj_data_provider->conectar();
-       $this->arreglo=$this->obj_data_provider->inserta_datos("T_horario", "ID_Horario,Horario,Observaciones,Estado", "null,'".$this->horario."','".$this->observaciones."','".$this->estado."'");
-       $this->arreglo=$this->obj_data_provider->getArreglo();
-       $this->obj_data_provider->desconectar();
-       }else{
+        if($this->id_horario=="0"){
+            $this->obj_data_provider->conectar();
+            $this->arreglo=$this->obj_data_provider->inserta_datos("T_horario", "ID_Horario,Horario,Observaciones,Estado", "null,'".$this->horario."','".$this->observaciones."','".$this->estado."'");
+            $this->arreglo=$this->obj_data_provider->getArreglo();
+            $this->obj_data_provider->desconectar();
+        }else{
            $this->obj_data_provider->conectar();
-       $this->arreglo=$this->obj_data_provider->edita_datos("T_horario", "Horario='".$this->horario."',Observaciones='".$this->observaciones."',Estado='".$this->estado."'", "ID_Horario=".$this->id_horario);
-       $this->arreglo=$this->obj_data_provider->getArreglo();
-       $this->obj_data_provider->desconectar();
-       }
-        
+            $this->arreglo=$this->obj_data_provider->edita_datos("T_horario", "Horario='".$this->horario."',Observaciones='".$this->observaciones."',Estado='".$this->estado."'", "ID_Horario=".$this->id_horario);
+            $this->arreglo=$this->obj_data_provider->getArreglo();
+            $this->obj_data_provider->desconectar();
+        }
     }
 
 }

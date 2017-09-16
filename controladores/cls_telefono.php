@@ -99,18 +99,17 @@ class cls_telefono{
         $this->obj_data_provider->conectar();
         if($this->condicion==""){
             $this->arreglo=$this->obj_data_provider->trae_datos(
-                    "T_TipoTelefono", 
-                    "*",
-                    "");
+                "T_TipoTelefono", 
+                "*",
+                "");
             $this->arreglo=$this->obj_data_provider->getArreglo();
             $this->obj_data_provider->desconectar();
             $this->resultado_operacion=true;
-        }
-        else{
+        } else{
             $this->arreglo=$this->obj_data_provider->trae_datos(
-                    "*", 
-                    "T_TipoTelefono",
-                    $this->condicion);
+                "*", 
+                "T_TipoTelefono",
+                $this->condicion);
             $this->arreglo=$this->obj_data_provider->getArreglo();
             $this->obj_data_provider->desconectar();
             $this->resultado_operacion=true;
@@ -120,9 +119,9 @@ class cls_telefono{
     public function obtiene_telefonos_por_criterio_para_prontuario(){
         $this->obj_data_provider->conectar();
         $this->arreglo=$this->obj_data_provider->trae_datos(
-                "T_Telefono", 
-                "Numero",
-                $this->condicion);
+            "T_Telefono", 
+            "Numero",
+            $this->condicion);
         $this->arreglo=$this->obj_data_provider->getArreglo();
         $this->obj_data_provider->desconectar();
     }
@@ -143,9 +142,7 @@ class cls_telefono{
     }
     
     function iniciar_transaccion_sql(){
-           
         $this->obj_data_provider->iniciar_transaccion_sql();
-  
     }
     
   
@@ -157,24 +154,22 @@ class cls_telefono{
         //$this->obj_data_provider->desconectar();
     }
      
-    function ejecutar_transaccion_sql(){
-                       
+    function ejecutar_transaccion_sql(){       
         $this->obj_data_provider->ejecutar_transaccion_sql();   
     }
      
-    
-     public function guardar_telefono_para_prontuario(){
+    public function guardar_telefono_para_prontuario(){
         $this->obj_data_provider->conectar();
         $this->estado="1";
-         $this->obj_data_provider->inserta_datos_para_prontuario("T_Telefono","Numero,ID_Tipo_Telefono, ID, Observaciones, Estado","'".$this->numero."','".$this->tipo_telefono."','".$this->id2."','".$this->observaciones."','".$this->estado."'");
+        $this->obj_data_provider->inserta_datos_para_prontuario("T_Telefono","Numero,ID_Tipo_Telefono, ID, Observaciones, Estado","'".$this->numero."','".$this->tipo_telefono."','".$this->id2."','".$this->observaciones."','".$this->estado."'");
         $this->obj_data_provider->desconectar();
         $this->resultado_operacion=$this->obj_data_provider->getResultado_operacion();  
     }
     
-     public function agrega_extension_cero_en_personas_sin_telefonos_asociados_para_prontuario(){
+    public function agrega_extension_cero_en_personas_sin_telefonos_asociados_para_prontuario(){
         $this->obj_data_provider->conectar();
         $this->estado="1";
-         $this->obj_data_provider->inserta_datos_para_prontuario_especial("t_telefono","Numero,ID_Tipo_Telefono,ID,Observaciones,Estado","Select 0,4,ID_Persona,'',1 From t_personal where not ID_Persona In (Select ID From t_telefono where ID_Tipo_Telefono in(4,27))");
+        $this->obj_data_provider->inserta_datos_para_prontuario_especial("t_telefono","Numero,ID_Tipo_Telefono,ID,Observaciones,Estado","Select 0,4,ID_Persona,'',1 From t_personal where not ID_Persona In (Select ID From t_telefono where ID_Tipo_Telefono in(4,27))");
         $this->obj_data_provider->desconectar();
         $this->resultado_operacion=$this->obj_data_provider->getResultado_operacion();  
     }
@@ -219,10 +214,10 @@ class cls_telefono{
     public function obtiene_telefonos_personal_externo(){
         $this->obj_data_provider->conectar();
         $this->arreglo=$this->obj_data_provider->trae_datos("T_Telefono
-                LEFT OUTER JOIN T_TipoTelefono ON T_Telefono.ID_Tipo_Telefono = T_TipoTelefono.ID_Tipo_Telefono", 
-                "T_Telefono.*, T_TipoTelefono.ID_Tipo_Telefono, T_TipoTelefono.Tipo_Telefono",
-                $this->condicion. "AND (T_TipoTelefono.ID_Tipo_Telefono = '28' OR 
-		T_TipoTelefono.ID_Tipo_Telefono = '29')");
+            LEFT OUTER JOIN T_TipoTelefono ON T_Telefono.ID_Tipo_Telefono = T_TipoTelefono.ID_Tipo_Telefono", 
+            "T_Telefono.*, T_TipoTelefono.ID_Tipo_Telefono, T_TipoTelefono.Tipo_Telefono",
+            $this->condicion. "AND (T_TipoTelefono.ID_Tipo_Telefono = '28' OR 
+            T_TipoTelefono.ID_Tipo_Telefono = '29')");
         $this->arreglo=$this->obj_data_provider->getArreglo();
         $this->obj_data_provider->desconectar();
         $this->resultado_operacion=true;  

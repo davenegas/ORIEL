@@ -1,4 +1,4 @@
- <!DOCTYPE HTML>
+<!DOCTYPE HTML>
 <html lang="es">
     <head>
         <meta charset="utf-8"/>
@@ -204,14 +204,11 @@
                 <thead>
                     <tr>
                         <th hidden="true">ID_Evento</th>
-                         <?php 
-                        //Solamente los coordinadores ven esta columna
-                        if($_SESSION['modulos']['Módulo-Bitácora Digital-Notas de Supervisión']==1){    
-                        ?>
-                              <th style="text-align:center">Notas de Coordinación</th>
                         <?php 
-                        }
-                        ?>
+                        //Solamente los coordinadores ven esta columna
+                        if($_SESSION['modulos']['Módulo-Bitácora Digital-Notas de Supervisión']==1){ ?>
+                            <th style="text-align:center">Notas de Coordinación</th>
+                        <?php } ?>
                         <th style="text-align:center">Fecha</th>
                         <th style="text-align:center">Hora</th>
                         <th style="text-align:center">Lapso</th>

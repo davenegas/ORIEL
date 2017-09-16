@@ -21,11 +21,13 @@ $(document).ready(function(){
         });
     });
 });
+
 ////////////////////////////////////////////////////////////
 //Función para Ocultas ventanas
 function ocultar_elemento(){
     document.getElementById('ventana_oculta_1').style.display = "none";
 }
+
 ///////////////////////////////////////////////////////
 //Funciones para ventana oculta de Agregar Número PuntoBCR
 function check_empty() {
@@ -37,12 +39,14 @@ function check_empty() {
         document.getElementById('ventana_oculta_1').style.display = "none";
     }
 }
+
 function mostrar_agregar_telefono() {
     document.getElementById('ID_Telefono').value="0";
     document.getElementById('numero').value=null;
     document.getElementById('observaciones_tel').value=null;
     document.getElementById('ventana_oculta_1').style.display = "block";
 }
+
 function eliminar_telefono(ide){
     $.confirm({title: 'Confirmación!', content: 'Desea eliminar este número de teléfono?', 
         confirm: function(){
@@ -50,13 +54,14 @@ function eliminar_telefono(ide){
             $.post("index.php?ctl=area_apoyo_eliminar_telefono", { id_telefono: id_telefono}, function(data){
                 location.reload();
                 //alert (data);
-              });
+            });
         },
         cancel: function(){
-                //$.alert('Canceled!')
+            //$.alert('Canceled!')
         }
     });
 };
+
 function Editar_telefono(id_tel, tipo_tel, num, obser){
     $("#Tipo_Telefono option[value="+tipo_tel+"]").attr("selected",true);
     document.getElementById('ID_Telefono').value=id_tel;

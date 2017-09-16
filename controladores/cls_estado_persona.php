@@ -73,8 +73,7 @@ class cls_estado_persona {
             $this->arreglo=$this->obj_data_provider->getArreglo();
             $this->obj_data_provider->desconectar();
             $this->resultado_operacion=true;
-        }
-        else{
+        } else{
             $this->obj_data_provider->conectar();
             //Llama al metodo que realiza la consulta a la bd
             $this->obj_data_provider->trae_datos("T_EstadoPersona", "*", $this->condicion);

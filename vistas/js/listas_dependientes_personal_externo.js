@@ -27,7 +27,7 @@ $(document).ready(function(){
             $("#genero").attr("disabled",false);
             $("#validado").attr("disabled",false);
             document.getElementById('ocupacion').readOnly=false;
-        }   else   {
+        } else {
             //Bloquea todos los elemetos del formulario
             document.getElementById('identificacion').readOnly=true;
             $("#Empresa").attr("disabled",true);
@@ -158,6 +158,7 @@ function check_empty() {
         document.getElementById('ventana_oculta_1').style.display = "none";
     }
 }
+
 function mostrar_agregar_telefono() {
     if (document.getElementById('ID_Persona').value > 0) {
         document.getElementById('ID_Persona_Telefono').value = document.getElementById('ID_Persona').value;
@@ -167,6 +168,7 @@ function mostrar_agregar_telefono() {
         document.getElementById('ventana_oculta_1').style.display = "block";
     }
 }
+
 function eliminar_telefono(ide){
     $.confirm({title: 'Confirmación!', content: 'Desea eliminar este número de teléfono?', 
         confirm: function(){
@@ -181,6 +183,7 @@ function eliminar_telefono(ide){
         }
     });
 };
+
 function Editar_telefono(id_tel, tipo_tel, num, obser){
     $("#Tipo_Telefono option[value="+tipo_tel+"]").attr("selected",true);
     document.getElementById('ID_Telefono').value=id_tel;
@@ -197,6 +200,7 @@ function mostrar_agregar_foto(){
         document.getElementById('ventana_oculta_2').style.display = "block";
     } 
 }
+
 function valida_foto(){
     if (document.getElementById('Nombre').value == "" || document.getElementById('Descripcion').value == "") {
         alert("Digita el nombre y la descripción de la foto !");
@@ -206,6 +210,7 @@ function valida_foto(){
         document.getElementById('ventana_oculta_2').style.display = "none";
     }
 }
+
 function eliminar_imagen(id_imagen){
     id=id_imagen;
     //alert(id_imagen);   
@@ -224,8 +229,8 @@ function eliminar_imagen(id_imagen){
         cancel: function(){
         }
     });
-            
 }  
+
 function validar_persona_externa(){
     id_persona = document.getElementById('ID_Persona').value;
     validar = document.getElementById('validado').value;
@@ -263,5 +268,4 @@ function validar_persona_externa(){
             location.reload(); 
         }); 
     }
-     
 }

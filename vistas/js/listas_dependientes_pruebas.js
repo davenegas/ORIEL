@@ -39,7 +39,6 @@ function evento_buscar_puntobcr(){
         
         id_tipo = datos['ID_Tipo_Punto'];
         id_puntobcr=document.getElementById('ID_PuntoBCR').value;
-        
         $.post("index.php?ctl=numero_zona_prueba_realizadas", { id_puntobcr: id_puntobcr, id_tipo: id_tipo}, function(data){
             //console.log(data);
             $("#pruebas_anteriores").html(data);
@@ -174,13 +173,11 @@ function buscar_pruebas_alarma(id_puntobcr){
         $.post("index.php?ctl=pruebas_alarma_anteriores", { id_puntobcr: id_puntobcr}, function(data){
             $("#personas_anteriores").html(data);
         });
-        
     });
 }
 
 function buscar_persona_prueba(){
    document.getElementById('ventana_oculta_1').style.display = "block";
-
 }
 
 function guardar_registro_prueba(tipo){
@@ -296,8 +293,8 @@ function guardar_prueba_alarma(){
             tipo = "Hora_Prueba_Alarma_SIS";
             punto_bcr = document.getElementById('ID_PuntoBCR').value;
             $.post("index.php?ctl=prueba_alarma_guardar", { id_prueba: id_prueba, tipo: tipo, hora_prueba:hora_prueba, zona:zona, punto_bcr:punto_bcr}, function(data){
-//                alert(data);
-//                console.log(data);
+                //alert(data);
+                //console.log(data);
             });
         }
     }
@@ -440,10 +437,10 @@ function guardar_observaciones(){
         $.post("index.php?ctl=prueba_alarma_guardar", { id_prueba: id_prueba,tipo:tipo, punto_bcr:punto_bcr, observaciones:observaciones}, function(data){
             //alert(data);
             numero= data.replace(/\D/g,'');
-                if(numero>0){
-                    numero= parseInt(numero);
-                    document.getElementById('ID_Prueba_Alarma').value=numero;
-                }
+            if(numero>0){
+                numero= parseInt(numero);
+                document.getElementById('ID_Prueba_Alarma').value=numero;
+            }
         });
     }
 }

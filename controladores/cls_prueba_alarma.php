@@ -219,16 +219,16 @@ class cls_prueba_alarma{
         $this->obj_data_provider->conectar();
         if($this->condicion==""){
             $this->arreglo=$this->obj_data_provider->trae_datos("T_PruebaAlarma 
-                    LEFT OUTER JOIN T_PuntoBCR ON T_PuntoBCR.ID_PuntoBCR = T_PruebaAlarma.ID_PuntoBCR 
-                    LEFT OUTER JOIN T_Empresa ON T_Empresa.ID_Empresa = T_PruebaAlarma.ID_Empresa_Persona_Apertura", 
-                    "T_PruebaAlarma.*, T_PuntoBCR.Nombre, T_PuntoBCR.Codigo,T_Empresa.Empresa", 
-                    "");
+                LEFT OUTER JOIN T_PuntoBCR ON T_PuntoBCR.ID_PuntoBCR = T_PruebaAlarma.ID_PuntoBCR 
+                LEFT OUTER JOIN T_Empresa ON T_Empresa.ID_Empresa = T_PruebaAlarma.ID_Empresa_Persona_Apertura", 
+                "T_PruebaAlarma.*, T_PuntoBCR.Nombre, T_PuntoBCR.Codigo,T_Empresa.Empresa", 
+                "");
         }else{
             $this->arreglo=$this->obj_data_provider->trae_datos("T_PruebaAlarma 
-                    LEFT OUTER JOIN T_PuntoBCR ON T_PuntoBCR.ID_PuntoBCR = T_PruebaAlarma.ID_PuntoBCR 
-                    LEFT OUTER JOIN T_Empresa ON T_Empresa.ID_Empresa = T_PruebaAlarma.ID_Empresa_Persona_Apertura", 
-                    "T_PruebaAlarma.*, T_PuntoBCR.Nombre, T_PuntoBCR.Codigo,T_Empresa.Empresa",
-                    $this->condicion);
+                LEFT OUTER JOIN T_PuntoBCR ON T_PuntoBCR.ID_PuntoBCR = T_PruebaAlarma.ID_PuntoBCR 
+                LEFT OUTER JOIN T_Empresa ON T_Empresa.ID_Empresa = T_PruebaAlarma.ID_Empresa_Persona_Apertura", 
+                "T_PruebaAlarma.*, T_PuntoBCR.Nombre, T_PuntoBCR.Codigo,T_Empresa.Empresa",
+                $this->condicion);
         }
         $this->arreglo=$this->obj_data_provider->getArreglo();
         $this->obj_data_provider->desconectar();
@@ -392,8 +392,8 @@ class cls_prueba_alarma{
     public function obtener_zonas_alarma(){
         $this->obj_data_provider->conectar();
         $this->arreglo=$this->obj_data_provider->trae_datos("T_PruebaAlarma", 
-                "T_PruebaAlarma.Numero_Zona_Prueba, COUNT(*) Cantidad",
-                $this->condicion);
+            "T_PruebaAlarma.Numero_Zona_Prueba, COUNT(*) Cantidad",
+            $this->condicion);
         $this->arreglo=$this->obj_data_provider->getArreglo();
         $this->obj_data_provider->desconectar();
         $this->resultado_operacion=true;

@@ -11,23 +11,20 @@ class cls_validaciones{
     public $hora;
     public $direccionIP;
     
-public function validar_email($email){
+    public function validar_email($email){
+        if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            return true;
+        } else{
+            return false;
+        }
+    }
+
+    public function validar_direccion_ip($ip){
+        if (filter_var($ip, FILTER_VALIDATE_IP)) {
+            return true;
+        } else{
+            return false;
+        }
+    }
     
-    if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        return true;
-    }
-    else{
-        return false;
-    }
-}
-
-public function validar_direccion_ip($ip){
-    if (filter_var($ip, FILTER_VALIDATE_IP)) {
-        return true;
-    }
-    else{
-        return false;
-    }
-}
-
 }

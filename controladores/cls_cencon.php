@@ -136,34 +136,34 @@ class cls_cencon {
             //Obtiene informacion del personal del BCR
             if($this->condicion==""){
                 $this->arreglo=$this->obj_data_provider->trae_datos("T_Cencon
-                        LEFT OUTER JOIN T_PuntoBCR ON T_PuntoBCR.ID_PuntoBCR = T_Cencon.ID_PuntoBCR
-                        LEFT OUTER JOIN T_Personal ON T_Personal.ID_Persona = T_Cencon.ID_Persona", 
-                        "*, T_Cencon.Observaciones as Observaciones_Cencon, T_PuntoBCR.Nombre as Nombre_Punto", 
-                        "");
+                    LEFT OUTER JOIN T_PuntoBCR ON T_PuntoBCR.ID_PuntoBCR = T_Cencon.ID_PuntoBCR
+                    LEFT OUTER JOIN T_Personal ON T_Personal.ID_Persona = T_Cencon.ID_Persona", 
+                    "*, T_Cencon.Observaciones as Observaciones_Cencon, T_PuntoBCR.Nombre as Nombre_Punto", 
+                    "");
             }
             else{
                 $this->arreglo=$this->obj_data_provider->trae_datos("T_Cencon 
-                        LEFT OUTER JOIN T_PuntoBCR ON T_PuntoBCR.ID_PuntoBCR = T_Cencon.ID_PuntoBCR
-                        LEFT OUTER JOIN T_Personal ON T_Personal.ID_Persona = T_Cencon.ID_Persona", 
-                        "*, T_Cencon.Observaciones as Observaciones_Cencon, T_PuntoBCR.Nombre as Nombre_Punto",
-                        $this->condicion);
+                    LEFT OUTER JOIN T_PuntoBCR ON T_PuntoBCR.ID_PuntoBCR = T_Cencon.ID_PuntoBCR
+                    LEFT OUTER JOIN T_Personal ON T_Personal.ID_Persona = T_Cencon.ID_Persona", 
+                    "*, T_Cencon.Observaciones as Observaciones_Cencon, T_PuntoBCR.Nombre as Nombre_Punto",
+                    $this->condicion);
             }
         }
         //Obtiene informacion del personal externo
         if($this->empresa<>1) {
             if($this->condicion==""){
                 $this->arreglo=$this->obj_data_provider->trae_datos("T_Cencon
-                        LEFT OUTER JOIN T_PuntoBCR ON T_PuntoBCR.ID_PuntoBCR = T_Cencon.ID_PuntoBCR
-                        LEFT OUTER JOIN T_PersonalExterno ON T_PersonalExterno.ID_Persona_Externa = T_Cencon.ID_Persona", 
-                        "*, T_Cencon.Observaciones as Observaciones_Cencon, T_PuntoBCR.Nombre as Nombre_Punto", 
-                        "");
+                    LEFT OUTER JOIN T_PuntoBCR ON T_PuntoBCR.ID_PuntoBCR = T_Cencon.ID_PuntoBCR
+                    LEFT OUTER JOIN T_PersonalExterno ON T_PersonalExterno.ID_Persona_Externa = T_Cencon.ID_Persona", 
+                    "*, T_Cencon.Observaciones as Observaciones_Cencon, T_PuntoBCR.Nombre as Nombre_Punto", 
+                    "");
             }
             else{
                 $this->arreglo=$this->obj_data_provider->trae_datos("T_Cencon 
-                        LEFT OUTER JOIN T_PuntoBCR ON T_PuntoBCR.ID_PuntoBCR = T_Cencon.ID_PuntoBCR
-                        LEFT OUTER JOIN T_PersonalExterno ON T_PersonalExterno.ID_Persona_Externa = T_Cencon.ID_Persona", 
-                        "*, T_Cencon.Observaciones as Observaciones_Cencon, T_PuntoBCR.Nombre as Nombre_Punto",
-                        $this->condicion);
+                    LEFT OUTER JOIN T_PuntoBCR ON T_PuntoBCR.ID_PuntoBCR = T_Cencon.ID_PuntoBCR
+                    LEFT OUTER JOIN T_PersonalExterno ON T_PersonalExterno.ID_Persona_Externa = T_Cencon.ID_Persona", 
+                    "*, T_Cencon.Observaciones as Observaciones_Cencon, T_PuntoBCR.Nombre as Nombre_Punto",
+                    $this->condicion);
             }
         }
         $this->arreglo=$this->obj_data_provider->getArreglo();
@@ -182,14 +182,14 @@ class cls_cencon {
        $this->obj_data_provider->conectar();
             if($this->condicion==""){
                 $this->arreglo=$this->obj_data_provider->trae_datos("T_Cencon", 
-                        "*", 
-                        "");
+                    "*", 
+                    "");
             }else{
                 $this->arreglo=$this->obj_data_provider->trae_datos("T_Cencon", 
-                        "*",
-                        $this->condicion);
+                    "*",
+                    $this->condicion);
             }
-             $this->arreglo=$this->obj_data_provider->getArreglo();
+            $this->arreglo=$this->obj_data_provider->getArreglo();
             $this->obj_data_provider->desconectar();
             $this->resultado_operacion=true;
     }
@@ -203,26 +203,26 @@ class cls_cencon {
     
     public function obtener_todos_eventos_cencon(){
         $this->obj_data_provider->conectar();
-            if($this->condicion==""){
-                $this->arreglo=$this->obj_data_provider->trae_datos("T_EventoCencon 
-                    LEFT OUTER JOIN T_PuntoBCR ON T_PuntoBCR.ID_PuntoBCR = T_EventoCencon.ID_PuntoBCR 
-                    LEFT OUTER JOIN T_Empresa ON T_Empresa.ID_Empresa = T_EventoCencon.ID_Empresa 
-                    LEFT OUTER JOIN T_Usuario ON T_Usuario.ID_Usuario = T_EventoCencon.ID_Usuario", 
-                    "T_EventoCencon.*, T_PuntoBCR.Nombre, T_PuntoBCR.Codigo,T_Empresa.Empresa, 
-                    T_Usuario.Nombre as Nombre_usuario, T_Usuario.Apellido as Apellido_usuario", 
-                    "");
-            }else{
-                $this->arreglo=$this->obj_data_provider->trae_datos("T_EventoCencon 
-                    LEFT OUTER JOIN T_PuntoBCR ON T_PuntoBCR.ID_PuntoBCR = T_EventoCencon.ID_PuntoBCR 
-                    LEFT OUTER JOIN T_Empresa ON T_Empresa.ID_Empresa = T_EventoCencon.ID_Empresa 
-                    LEFT OUTER JOIN T_Usuario ON T_Usuario.ID_Usuario = T_EventoCencon.ID_Usuario", 
-                    "T_EventoCencon.*, T_PuntoBCR.Nombre, T_PuntoBCR.Codigo,T_Empresa.Empresa, 
-                    T_Usuario.Nombre as Nombre_usuario, T_Usuario.Apellido as Apellido_usuario",
-                    $this->condicion);
-            }
-            $this->arreglo=$this->obj_data_provider->getArreglo();
-            $this->obj_data_provider->desconectar();
-            $this->resultado_operacion=true;
+        if($this->condicion==""){
+            $this->arreglo=$this->obj_data_provider->trae_datos("T_EventoCencon 
+                LEFT OUTER JOIN T_PuntoBCR ON T_PuntoBCR.ID_PuntoBCR = T_EventoCencon.ID_PuntoBCR 
+                LEFT OUTER JOIN T_Empresa ON T_Empresa.ID_Empresa = T_EventoCencon.ID_Empresa 
+                LEFT OUTER JOIN T_Usuario ON T_Usuario.ID_Usuario = T_EventoCencon.ID_Usuario", 
+                "T_EventoCencon.*, T_PuntoBCR.Nombre, T_PuntoBCR.Codigo,T_Empresa.Empresa, 
+                T_Usuario.Nombre as Nombre_usuario, T_Usuario.Apellido as Apellido_usuario", 
+                "");
+        }else{
+            $this->arreglo=$this->obj_data_provider->trae_datos("T_EventoCencon 
+                LEFT OUTER JOIN T_PuntoBCR ON T_PuntoBCR.ID_PuntoBCR = T_EventoCencon.ID_PuntoBCR 
+                LEFT OUTER JOIN T_Empresa ON T_Empresa.ID_Empresa = T_EventoCencon.ID_Empresa 
+                LEFT OUTER JOIN T_Usuario ON T_Usuario.ID_Usuario = T_EventoCencon.ID_Usuario", 
+                "T_EventoCencon.*, T_PuntoBCR.Nombre, T_PuntoBCR.Codigo,T_Empresa.Empresa, 
+                T_Usuario.Nombre as Nombre_usuario, T_Usuario.Apellido as Apellido_usuario",
+                $this->condicion);
+        }
+        $this->arreglo=$this->obj_data_provider->getArreglo();
+        $this->obj_data_provider->desconectar();
+        $this->resultado_operacion=true;
     }
     
     public function obtener_todos_eventos_cencon_personal_bcr(){
@@ -293,8 +293,8 @@ class cls_cencon {
     public function informacion_reporte(){
         $this->obj_data_provider->conectar();
         $this->arreglo=$this->obj_data_provider->trae_datos("T_EventoCencon", 
-                        "COUNT(*) TOTAL",
-                        $this->condicion);
+            "COUNT(*) TOTAL",
+            $this->condicion);
         $this->arreglo=$this->obj_data_provider->getArreglo();
         $this->obj_data_provider->desconectar();
         $this->resultado_operacion=true;

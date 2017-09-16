@@ -2,7 +2,7 @@
 
 class cls_trazabilidad{
         
-  // Definicion de atributos de la clase
+    // Definicion de atributos de la clase
     private $id_traza;
     private $fecha;
     private $hora;
@@ -45,7 +45,6 @@ class cls_trazabilidad{
         return $this->arreglo;
     }
 
-    
     function getCondicion() {
         return $this->condicion;
     }
@@ -136,18 +135,18 @@ class cls_trazabilidad{
         $this->obj_data_provider->conectar();
         if($this->condicion==""){
             $this->arreglo=$this->obj_data_provider->trae_datos(
-                    "bd_Registro_Trazabilidad.t_traza left outer join bd_gerencia_seguridad.t_usuario on bd_Registro_Trazabilidad.t_traza.ID_Usuario=bd_gerencia_seguridad.t_usuario.ID_usuario", 
-                    "bd_Registro_Trazabilidad.t_traza.*,bd_gerencia_seguridad.t_usuario.Nombre,bd_gerencia_seguridad.t_usuario.Apellido",
-                    "");
+                "bd_Registro_Trazabilidad.t_traza left outer join bd_gerencia_seguridad.t_usuario on bd_Registro_Trazabilidad.t_traza.ID_Usuario=bd_gerencia_seguridad.t_usuario.ID_usuario", 
+                "bd_Registro_Trazabilidad.t_traza.*,bd_gerencia_seguridad.t_usuario.Nombre,bd_gerencia_seguridad.t_usuario.Apellido",
+                "");
             $this->arreglo=$this->obj_data_provider->getArreglo();
             $this->obj_data_provider->desconectar();
             $this->resultado_operacion=true;
         }
         else{
             $this->arreglo=$this->obj_data_provider->trae_datos(
-                    "bd_Registro_Trazabilidad.t_traza left outer join bd_gerencia_seguridad.t_usuario on bd_Registro_Trazabilidad.t_traza.ID_Usuario=bd_gerencia_seguridad.t_usuario.ID_usuario", 
-                    "bd_Registro_Trazabilidad.t_traza.*,bd_gerencia_seguridad.t_usuario.Nombre,bd_gerencia_seguridad.t_usuario.Apellido",
-                    $this->condicion);
+                "bd_Registro_Trazabilidad.t_traza left outer join bd_gerencia_seguridad.t_usuario on bd_Registro_Trazabilidad.t_traza.ID_Usuario=bd_gerencia_seguridad.t_usuario.ID_usuario", 
+                "bd_Registro_Trazabilidad.t_traza.*,bd_gerencia_seguridad.t_usuario.Nombre,bd_gerencia_seguridad.t_usuario.Apellido",
+                $this->condicion);
             $this->arreglo=$this->obj_data_provider->getArreglo();
             $this->obj_data_provider->desconectar();
             $this->resultado_operacion=true;
@@ -158,18 +157,18 @@ class cls_trazabilidad{
         $this->obj_data_provider->conectar();
         if($this->condicion==""){
             $this->arreglo=$this->obj_data_provider->trae_datos(
-                    "bd_Registro_Trazabilidad.t_traza left outer join bd_gerencia_seguridad.t_usuario on bd_Registro_Trazabilidad.t_traza.ID_Usuario=bd_gerencia_seguridad.t_usuario.ID_usuario order by Nombre_Completo", 
-                    "distinct(bd_Registro_Trazabilidad.t_traza.ID_Usuario),concat(bd_gerencia_seguridad.t_usuario.Nombre,' ',bd_gerencia_seguridad.t_usuario.Apellido) as Nombre_Completo",
-                    "");
+                "bd_Registro_Trazabilidad.t_traza left outer join bd_gerencia_seguridad.t_usuario on bd_Registro_Trazabilidad.t_traza.ID_Usuario=bd_gerencia_seguridad.t_usuario.ID_usuario order by Nombre_Completo", 
+                "distinct(bd_Registro_Trazabilidad.t_traza.ID_Usuario),concat(bd_gerencia_seguridad.t_usuario.Nombre,' ',bd_gerencia_seguridad.t_usuario.Apellido) as Nombre_Completo",
+                "");
             $this->arreglo=$this->obj_data_provider->getArreglo();
             $this->obj_data_provider->desconectar();
             $this->resultado_operacion=true;
         }
         else{
             $this->arreglo=$this->obj_data_provider->trae_datos(
-                    "bd_Registro_Trazabilidad.t_traza left outer join bd_gerencia_seguridad.t_usuario on bd_Registro_Trazabilidad.t_traza.ID_Usuario=bd_gerencia_seguridad.t_usuario.ID_usuario", 
-                    "distinct(t_traza.ID_Usuario),concat(t_usuario.Nombre,' ',t_usuario.Apellido) as Nombre_Completo",
-                    $this->condicion." order by Nombre_Completo");
+                "bd_Registro_Trazabilidad.t_traza left outer join bd_gerencia_seguridad.t_usuario on bd_Registro_Trazabilidad.t_traza.ID_Usuario=bd_gerencia_seguridad.t_usuario.ID_usuario", 
+                "distinct(t_traza.ID_Usuario),concat(t_usuario.Nombre,' ',t_usuario.Apellido) as Nombre_Completo",
+                $this->condicion." order by Nombre_Completo");
             $this->arreglo=$this->obj_data_provider->getArreglo();
             $this->obj_data_provider->desconectar();
             $this->resultado_operacion=true;
@@ -180,23 +179,23 @@ class cls_trazabilidad{
         $this->obj_data_provider->conectar();
         if($this->condicion==""){
             $this->arreglo=$this->obj_data_provider->trae_datos(
-                    "bd_Registro_Trazabilidad.t_traza order by bd_Registro_Trazabilidad.t_traza.Tabla_Afectada", 
-                    "distinct(bd_Registro_Trazabilidad.t_traza.Tabla_Afectada)",
-                    "");
+                "bd_Registro_Trazabilidad.t_traza order by bd_Registro_Trazabilidad.t_traza.Tabla_Afectada", 
+                "distinct(bd_Registro_Trazabilidad.t_traza.Tabla_Afectada)",
+                "");
             $this->arreglo=$this->obj_data_provider->getArreglo();
             $this->obj_data_provider->desconectar();
             $this->resultado_operacion=true;
         }
         else{
             $this->arreglo=$this->obj_data_provider->trae_datos(
-                    "bd_Registro_Trazabilidad.t_traza", 
-                    "distinct(bd_Registro_Trazabilidad.t_traza.Tabla_Afectada",
-                    $this->condicion." order by bd_Registro_Trazabilidad.t_traza.Tabla_Afectada");
+                "bd_Registro_Trazabilidad.t_traza", 
+                "distinct(bd_Registro_Trazabilidad.t_traza.Tabla_Afectada",
+                $this->condicion." order by bd_Registro_Trazabilidad.t_traza.Tabla_Afectada");
             $this->arreglo=$this->obj_data_provider->getArreglo();
             $this->obj_data_provider->desconectar();
             $this->resultado_operacion=true;
         }  
-        }
+    }
     
 }
   

@@ -169,10 +169,10 @@ class cls_empresa{
             $this->obj_data_provider->conectar();
             //Llama al metodo que realiza la consulta a la bd
             $this->obj_data_provider->trae_datos("T_Empresa LEFT OUTER JOIN T_PersonalExterno ON T_PersonalExterno.ID_Persona_Externa = T_Empresa.ID_Persona_Externa
-                    LEFT OUTER JOIN T_Personal ON T_Personal.ID_Persona = T_Empresa.ID_Persona
-                    LEFT OUTER JOIN T_UnidadEjecutora ON T_UnidadEjecutora.ID_Unidad_Ejecutora = T_Empresa.ID_Unidad_Ejecutora", 
-                    "T_Empresa.*, T_PersonalExterno.Nombre as Nombre_Externo, T_PersonalExterno.Apellido as Apellido_Externo, 
-                    T_Personal.Apellido_Nombre, T_UnidadEjecutora.Departamento", "");
+                LEFT OUTER JOIN T_Personal ON T_Personal.ID_Persona = T_Empresa.ID_Persona
+                LEFT OUTER JOIN T_UnidadEjecutora ON T_UnidadEjecutora.ID_Unidad_Ejecutora = T_Empresa.ID_Unidad_Ejecutora", 
+                "T_Empresa.*, T_PersonalExterno.Nombre as Nombre_Externo, T_PersonalExterno.Apellido as Apellido_Externo, 
+                T_Personal.Apellido_Nombre, T_UnidadEjecutora.Departamento", "");
             $this->arreglo=$this->obj_data_provider->getArreglo();
             $this->obj_data_provider->desconectar();
        
@@ -182,11 +182,11 @@ class cls_empresa{
             $this->obj_data_provider->conectar();
             //Llama al metodo que realiza la consulta a la bd
             $this->obj_data_provider->trae_datos("T_Empresa LEFT OUTER JOIN T_PersonalExterno ON T_PersonalExterno.ID_Persona_Externa = T_Empresa.ID_Persona_Externa
-                    LEFT OUTER JOIN T_Personal ON T_Personal.ID_Persona = T_Empresa.ID_Persona
-                    LEFT OUTER JOIN T_UnidadEjecutora ON T_UnidadEjecutora.ID_Unidad_Ejecutora = T_Empresa.ID_Unidad_Ejecutora", 
-                    "T_Empresa.*, T_PersonalExterno.Nombre as Nombre_Externo, T_PersonalExterno.Apellido as Apellido_Externo,
-                    T_Personal.Apellido_Nombre, T_UnidadEjecutora.Departamento", 
-                    $this->condicion);
+                LEFT OUTER JOIN T_Personal ON T_Personal.ID_Persona = T_Empresa.ID_Persona
+                LEFT OUTER JOIN T_UnidadEjecutora ON T_UnidadEjecutora.ID_Unidad_Ejecutora = T_Empresa.ID_Unidad_Ejecutora", 
+                "T_Empresa.*, T_PersonalExterno.Nombre as Nombre_Externo, T_PersonalExterno.Apellido as Apellido_Externo,
+                T_Personal.Apellido_Nombre, T_UnidadEjecutora.Departamento", 
+                $this->condicion);
             $this->arreglo=$this->obj_data_provider->getArreglo();
             $this->obj_data_provider->desconectar();
             $this->resultado_operacion=true;
@@ -202,11 +202,11 @@ class cls_empresa{
             
         }else{
             $this->obj_data_provider->edita_datos("T_Empresa", "Empresa='".$this->empresa."', Observaciones='".$this->observaciones
-                    ."', Estado='".$this->estado."', Cedula_Juridica='".$this->cedula_juridica."', ID_Persona_Externa='".$this->id_externo.
-                    "', Telefono_Empresa='".$this->telefono."', Direccion='".$this->direccion."', Tipo_Empresa='".$this->tipo_empresa.
-                    "', ID_Unidad_Ejecutora='".$this->id_ue."', ID_Persona='".$this->id_persona."', Fecha_Inicio='".$this->fecha_inicio.
-                    "', Fecha_Final='".$this->fecha_final."'",
-                    "ID_Empresa=".$this->id);
+                ."', Estado='".$this->estado."', Cedula_Juridica='".$this->cedula_juridica."', ID_Persona_Externa='".$this->id_externo.
+                "', Telefono_Empresa='".$this->telefono."', Direccion='".$this->direccion."', Tipo_Empresa='".$this->tipo_empresa.
+                "', ID_Unidad_Ejecutora='".$this->id_ue."', ID_Persona='".$this->id_persona."', Fecha_Inicio='".$this->fecha_inicio.
+                "', Fecha_Final='".$this->fecha_final."'",
+                "ID_Empresa=".$this->id);
         }
         $this->obj_data_provider->desconectar();
         $this->resultado_operacion=true;

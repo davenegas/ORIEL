@@ -269,26 +269,26 @@ class cls_personal_externo{
         $this->obj_data_provider->conectar();
         if($this->condicion==""){
             $this->arreglo=$this->obj_data_provider->trae_datos(
-                    "T_PersonalExterno
-                        LEFT OUTER JOIN T_Empresa ON T_Empresa.ID_Empresa = T_PersonalExterno.ID_Empresa
-                        LEFT OUTER JOIN T_EstadoPersona ON T_EstadoPersona.ID_Estado_Persona = T_PersonalExterno.ID_Estado_Persona
-                        LEFT OUTER JOIN T_Usuario ON T_Usuario.ID_Usuario = T_PersonalExterno.ID_Usuario", 
-                    "T_PersonalExterno.*,T_EstadoPersona.*,
-                        T_Empresa.ID_Empresa, T_Empresa.Empresa, T_Usuario.Nombre as Nombre_Usuario, T_Usuario.Apellido as Apellido_Usuario",
-                    "");
+                "T_PersonalExterno
+                    LEFT OUTER JOIN T_Empresa ON T_Empresa.ID_Empresa = T_PersonalExterno.ID_Empresa
+                    LEFT OUTER JOIN T_EstadoPersona ON T_EstadoPersona.ID_Estado_Persona = T_PersonalExterno.ID_Estado_Persona
+                    LEFT OUTER JOIN T_Usuario ON T_Usuario.ID_Usuario = T_PersonalExterno.ID_Usuario", 
+                "T_PersonalExterno.*,T_EstadoPersona.*,
+                    T_Empresa.ID_Empresa, T_Empresa.Empresa, T_Usuario.Nombre as Nombre_Usuario, T_Usuario.Apellido as Apellido_Usuario",
+                "");
             $this->arreglo=$this->obj_data_provider->getArreglo();
             $this->obj_data_provider->desconectar();
             $this->resultado_operacion=true;
         }
         else{
             $this->arreglo=$this->obj_data_provider->trae_datos(
-                    "T_PersonalExterno
-                        LEFT OUTER JOIN T_Empresa ON T_Empresa.ID_Empresa = T_PersonalExterno.ID_Empresa
-                        LEFT OUTER JOIN T_EstadoPersona ON T_EstadoPersona.ID_Estado_Persona = T_PersonalExterno.ID_Estado_Persona
-                        LEFT OUTER JOIN T_Usuario ON T_Usuario.ID_Usuario = T_PersonalExterno.ID_Usuario", 
-                    "T_PersonalExterno.*,T_EstadoPersona.*,
-                        T_Empresa.ID_Empresa, T_Empresa.Empresa, T_Usuario.Nombre as Nombre_Usuario, T_Usuario.Apellido as Apellido_Usuario",
-                    $this->condicion);
+                "T_PersonalExterno
+                    LEFT OUTER JOIN T_Empresa ON T_Empresa.ID_Empresa = T_PersonalExterno.ID_Empresa
+                    LEFT OUTER JOIN T_EstadoPersona ON T_EstadoPersona.ID_Estado_Persona = T_PersonalExterno.ID_Estado_Persona
+                    LEFT OUTER JOIN T_Usuario ON T_Usuario.ID_Usuario = T_PersonalExterno.ID_Usuario", 
+                "T_PersonalExterno.*,T_EstadoPersona.*,
+                    T_Empresa.ID_Empresa, T_Empresa.Empresa, T_Usuario.Nombre as Nombre_Usuario, T_Usuario.Apellido as Apellido_Usuario",
+                $this->condicion);
             $this->arreglo=$this->obj_data_provider->getArreglo();
             $this->obj_data_provider->desconectar();
             $this->resultado_operacion=true;
@@ -332,13 +332,13 @@ class cls_personal_externo{
     function obtiene_todo_personal_externo_filtrado(){
         $this->obj_data_provider->conectar();
         $this->arreglo=$this->obj_data_provider->trae_datos("T_PersonalExterno
-                        LEFT OUTER JOIN T_Empresa ON T_Empresa.ID_Empresa = T_PersonalExterno.ID_Empresa
-                        LEFT OUTER JOIN T_PadronFotograficoPersonalExterno ON T_PadronFotograficoPersonalExterno.ID_Persona_Externa = T_PersonalExterno.ID_Persona_Externa
-                        LEFT OUTER JOIN T_Usuario ON T_Usuario.ID_Usuario = T_PersonalExterno.ID_Usuario
-                        LEFT OUTER JOIN T_Personal ON T_Personal.ID_Persona = T_Empresa.ID_Persona", 
-                    "T_PersonalExterno.*,T_PadronFotograficoPersonalExterno.*,
-                        T_Empresa.ID_Empresa, T_Empresa.Empresa, T_Usuario.Nombre as Nombre_Usuario, T_Usuario.Apellido as Apellido_Usuario, T_Personal.Apellido_Nombre",
-                    "T_PersonalExterno.ID_Estado_Persona=1 AND T_PersonalExterno.Validado=1");
+                LEFT OUTER JOIN T_Empresa ON T_Empresa.ID_Empresa = T_PersonalExterno.ID_Empresa
+                LEFT OUTER JOIN T_PadronFotograficoPersonalExterno ON T_PadronFotograficoPersonalExterno.ID_Persona_Externa = T_PersonalExterno.ID_Persona_Externa
+                LEFT OUTER JOIN T_Usuario ON T_Usuario.ID_Usuario = T_PersonalExterno.ID_Usuario
+                LEFT OUTER JOIN T_Personal ON T_Personal.ID_Persona = T_Empresa.ID_Persona", 
+            "T_PersonalExterno.*,T_PadronFotograficoPersonalExterno.*,
+                T_Empresa.ID_Empresa, T_Empresa.Empresa, T_Usuario.Nombre as Nombre_Usuario, T_Usuario.Apellido as Apellido_Usuario, T_Personal.Apellido_Nombre",
+            "T_PersonalExterno.ID_Estado_Persona=1 AND T_PersonalExterno.Validado=1");
         $this->arreglo=$this->obj_data_provider->getArreglo();
         $this->obj_data_provider->desconectar();
         $this->resultado_operacion=true;
@@ -363,12 +363,12 @@ class cls_personal_externo{
     public function obtiene_todo_el_personal_externo_prueba_alarma(){
         $this->obj_data_provider->conectar();
         $this->arreglo=$this->obj_data_provider->trae_datos(
-                "T_PersonalExterno
-                    LEFT OUTER JOIN T_Empresa ON T_Empresa.ID_Empresa = T_PersonalExterno.ID_Empresa", 
-                "T_PersonalExterno.ID_Persona_Externa as ID_Persona, T_PersonalExterno.Identificacion as Cedula,T_PersonalExterno.ID_Empresa,
-                    GROUP_CONCAT(T_PersonalExterno.Apellido,' ', T_PersonalExterno.Nombre) as Apellido_Nombre,
-                    T_Empresa.Empresa",
-                "(T_PersonalExterno.ID_Empresa=2 OR T_PersonalExterno.ID_Empresa=3) AND (T_PersonalExterno.ID_Estado_Persona<>2) GROUP BY T_PersonalExterno.Identificacion");
+            "T_PersonalExterno
+                LEFT OUTER JOIN T_Empresa ON T_Empresa.ID_Empresa = T_PersonalExterno.ID_Empresa", 
+            "T_PersonalExterno.ID_Persona_Externa as ID_Persona, T_PersonalExterno.Identificacion as Cedula,T_PersonalExterno.ID_Empresa,
+                GROUP_CONCAT(T_PersonalExterno.Apellido,' ', T_PersonalExterno.Nombre) as Apellido_Nombre,
+                T_Empresa.Empresa",
+            "(T_PersonalExterno.ID_Empresa=2 OR T_PersonalExterno.ID_Empresa=3) AND (T_PersonalExterno.ID_Estado_Persona<>2) GROUP BY T_PersonalExterno.Identificacion");
         $this->arreglo=$this->obj_data_provider->getArreglo();
         $this->obj_data_provider->desconectar();
         $this->resultado_operacion=true;
@@ -377,9 +377,9 @@ class cls_personal_externo{
     function obtiene_historico_seguimiento_personal_externo(){
         $this->obj_data_provider->conectar();
         $this->arreglo=$this->obj_data_provider->trae_datos("T_HistorialPersonalExterno
-                        LEFT OUTER JOIN T_Usuario ON T_Usuario.ID_Usuario = T_HistorialPersonalExterno.ID_Usuario", 
-                    "T_HistorialPersonalExterno.*, T_Usuario.Nombre, T_Usuario.Apellido",
-                    $this->condicion);
+                LEFT OUTER JOIN T_Usuario ON T_Usuario.ID_Usuario = T_HistorialPersonalExterno.ID_Usuario", 
+            "T_HistorialPersonalExterno.*, T_Usuario.Nombre, T_Usuario.Apellido",
+            $this->condicion);
         $this->arreglo=$this->obj_data_provider->getArreglo();
         $this->obj_data_provider->desconectar();
         $this->resultado_operacion=true;

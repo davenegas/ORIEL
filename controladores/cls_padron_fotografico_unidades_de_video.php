@@ -106,7 +106,6 @@ class cls_padron_fotografico_unidades_de_video{
     }
     
     public function obtener_imagenes_unidades_de_video(){
-        
         if($this->condicion==""){
             $this->obj_data_provider->conectar();
             //Llama al metodo que realiza la consulta a la bd
@@ -124,7 +123,6 @@ class cls_padron_fotografico_unidades_de_video{
     }
     
     public function obtener_imagenes_unidades_de_video_desde_punto_bcr(){
-        
         if($this->condicion==""){
             $this->obj_data_provider->conectar();
             //Llama al metodo que realiza la consulta a la bd
@@ -133,8 +131,7 @@ class cls_padron_fotografico_unidades_de_video{
                 inner join t_padronfotograficounidadvideo on t_padronfotograficounidadvideo.ID_Unidad_Video=t_unidadvideo.ID_Unidad_Video order by t_padronfotograficounidadvideo.Categoria", "t_padronfotograficounidadvideo.*,IF(t_padronfotograficounidadvideo.Categoria = 0, 'Día', 'Noche') Categoria_Nombre", "");
             $this->arreglo=$this->obj_data_provider->getArreglo();
             $this->obj_data_provider->desconectar();
-        }
-        else{
+        } else {
             $this->obj_data_provider->conectar();
             //Llama al metodo que realiza la consulta a la bd
             $this->obj_data_provider->trae_datos("t_puntobcr 
@@ -150,15 +147,13 @@ class cls_padron_fotografico_unidades_de_video{
             $this->obj_data_provider->conectar();
             //Llama al metodo que realiza la consulta a la bd
             $this->obj_data_provider->inserta_datos("T_PadronFotograficoUnidadVideo", "ID_Padron_Unidad_Video,ID_Unidad_Video, Nombre_Ruta, Nombre_Imagen, Descripcion,Categoria,Formato", 
-                    "null,".$this->id_unidad_video.",'".$this->nombre_ruta."','".$this->nombre_imagen."','".$this->descripcion."',".$this->categoria.",'".$this->formato."'");
+                "null,".$this->id_unidad_video.",'".$this->nombre_ruta."','".$this->nombre_imagen."','".$this->descripcion."',".$this->categoria.",'".$this->formato."'");
             $this->obj_data_provider->desconectar();
-         
-        }   else    {
+        } else {
             $this->obj_data_provider->conectar();
             //Llama al metodo que realiza la consulta a la bd
             $this->obj_data_provider->edita_datos("T_PadronFotograficoUnidadVideo", "ID_Unidad_Video=".$this->id_unidad_video.", Nombre_Ruta='".$this->nombre_ruta."', Nombre_Imagen='".$this->nombre_imagen."', Descripcion='".$this->descripcion."', Categoria=".$this->categoria.", Formato='".$this->formato."'", $this->condicion);
             $this->obj_data_provider->desconectar();
-           
         }
     }
     
@@ -166,7 +161,6 @@ class cls_padron_fotografico_unidades_de_video{
         $this->obj_data_provider->conectar();
         $this->arreglo=$this->obj_data_provider->eliminar_datos("T_PadronFotograficoUnidadVideo", $this->condicion);
         $this->obj_data_provider->desconectar();
-       
     }
    
 }
