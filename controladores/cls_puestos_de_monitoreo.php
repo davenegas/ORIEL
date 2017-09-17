@@ -676,6 +676,16 @@ class cls_puestos_de_monitoreo{
         } 
     }
     
+    public function obtiene_revisiones_pendientes_de_mas_tres_horas(){
+        $this->obj_data_provider->conectar();
+         $this->arreglo=$this->obj_data_provider->trae_datos("(SELECT t_bitacorarevisionesvideo.`ID_Unidad_Video`, MAX(concat(`Fecha_Termina_Revision`,' ',`Hora_Termina_Revision`)) Fecha_Hora ,t_unidadvideo.Descripcion FROM t_bitacorarevisionesvideo LEFT OUTER JOIN t_unidadvideo on t_unidadvideo.ID_Unidad_Video = t_bitacorarevisionesvideo.ID_Unidad_Video where t_unidadvideo.Estado=0 GROUP by t_bitacorarevisionesvideo.`ID_Unidad_Video` ORDER BY Fecha_Hora ASC) temp",
+            "*","TIMESTAMPDIFF(MINUTE, Fecha_Hora,NOW())>170");
+        $this->arreglo=$this->obj_data_provider->getArreglo();
+        $this->obj_data_provider->desconectar();
+        
+    }
+    
+    
     public function obtiene_unidades_con_mas_tiempo_sin_revisar_pruebas(){
         $this->obj_data_provider->conectar();
         
@@ -723,7 +733,7 @@ class cls_puestos_de_monitoreo{
         }
         
         //Agrega al vector las unidades que tienen mas tiempo sin revision
-        $this->arreglo=$this->obj_data_provider->trae_datos("(select t_bitacorarevisionesvideo.`ID_Unidad_Video`, MAX(concat(`Fecha_Termina_Revision`,' ',`Hora_Termina_Revision`)) Fecha_Hora from t_bitacorarevisionesvideo LEFT OUTER JOIN t_unidadvideo on t_unidadvideo.ID_Unidad_Video = t_bitacorarevisionesvideo.ID_Unidad_Video where t_unidadvideo.Estado=0 GROUP by t_bitacorarevisionesvideo.`ID_Unidad_Video` ORDER BY Fecha_Hora ASC limit 20) temp",
+        $this->arreglo=$this->obj_data_provider->trae_datos("(select t_bitacorarevisionesvideo.`ID_Unidad_Video`, MAX(concat(`Fecha_Termina_Revision`,' ',`Hora_Termina_Revision`)) Fecha_Hora from t_bitacorarevisionesvideo LEFT OUTER JOIN t_unidadvideo on t_unidadvideo.ID_Unidad_Video = t_bitacorarevisionesvideo.ID_Unidad_Video where t_unidadvideo.Estado=0 GROUP by t_bitacorarevisionesvideo.`ID_Unidad_Video` ORDER BY Fecha_Hora ASC limit 100) temp",
             "temp.ID_Unidad_Video","");
         
         if (count($this->obj_data_provider->getArreglo())>0){
