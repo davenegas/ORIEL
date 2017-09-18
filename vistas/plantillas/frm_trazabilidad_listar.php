@@ -68,6 +68,7 @@
                     </thead>
                     <tbody id="cuerpo">
                       <?php 
+                      if(isset($paramas)){
                       $tam=count($params);
 
                       for ($i = 0; $i <$tam; $i++) { ?>
@@ -75,7 +76,7 @@
                             <?php
                             $fecha_evento = date_create($params[$i]['Fecha']);
                             $fecha_actual = date_create(date("d-m-Y"));
-                            $dias_abierto= date_diff($fecha_evento, $fecha_actual);
+                            $dias_abierto= date_diff($fecha_evento, $fecha_actual); 
                             ?>
                             <td><?php echo $params[$i]['ID_Traza'];?></td>
                             <td><?php echo date_format($fecha_evento, 'd/m/Y');?></td>
@@ -86,7 +87,7 @@
                             <td><?php echo $params[$i]['Dato_Actualizado'];?></td>
                             <td><?php echo $params[$i]['Dato_Anterior'];?></td>
                         </tr>
-                      <?php } ?>
+                      <?php }} ?>
                     </tbody>
                 </table>
             </section>

@@ -2970,9 +2970,9 @@ class Controller{
             //Establece la condición de busqueda de eventos cerrados del modulo de bitacora digital.
             $obj_eventos->setCondicion("(T_Evento.ID_EstadoEvento=3 OR T_Evento.ID_EstadoEvento=5) AND T_Evento.Fecha='".date("Y-m-d")."'");
             //Ejecuta la sentecia SQL
-            $obj_eventos ->obtiene_todos_los_eventos(); 
+            //$obj_eventos ->obtiene_todos_los_eventos(); 
             //Asigna al vector correspondiente el resultado de la consulta SQL
-            $params= $obj_eventos->getArreglo();
+            //$params= $obj_eventos->getArreglo();
             
             //Metodo de la clase que permite obtener todas las provincias que se encuentran listadas en el sistema.
             $obj_eventos->obtener_todas_las_provincias();
@@ -2993,7 +2993,7 @@ class Controller{
             $obj_eventos->filtra_sitios_bcr_bitacora();
             //Obtiene el resultado de la consulta en una variable vector.
             $lista_puntos_bcr_oficinas_sj=$obj_eventos->getArreglo(); 
-            
+            /*
             //Extrae la cantidad de registros en el vector que almacena la consulta
             $tamano=count($params);
             //Verifica que hayan registros 
@@ -3046,7 +3046,7 @@ class Controller{
                 }
                 }
             }
-            
+            */
             //Obtiene todos los tipos de eventos
             $obj_eventos->setCondicion("");
             $obj_eventos->obtener_todos_los_tipos_eventos();   
@@ -3581,8 +3581,8 @@ class Controller{
     
     //Muestra en pantalla un reportes de eventos cerrados, de acuerdo a parametros de busqueda específicos, como fecha, sitio, etc.
     public function actualiza_en_vivo_reporte_cerrados(){
-        //Espera 2 segundos antes de iniciar la ejecución del método, para mostrar un gift de espera en pantalla
-        sleep(2);       
+        //Espera 1 segundos antes de iniciar la ejecución del método, para mostrar un gift de espera en pantalla
+        sleep(1);       
         //Validación para verificar si el usuario está logeado en el sistema
         if(isset($_SESSION['nombre'])){
             //Creación de un nuevo objeto de la clase eventos
@@ -7640,7 +7640,7 @@ class Controller{
     /////////////////////FUNCIONES PARA EVENTOS/////////////////////////////////
     public function frm_trazabilidad_listar(){
         if(isset($_SESSION['nombre'])){
-            $obj_traza = new cls_trazabilidad();
+            /*$obj_traza = new cls_trazabilidad();
             $obj_traza->setCondicion("bd_Registro_Trazabilidad.t_traza.Fecha='".date("Y-m-d")."'");
             $obj_traza ->obtiene_trazabilidad(); 
             $params= $obj_traza->getArreglo();
@@ -7649,10 +7649,9 @@ class Controller{
             $lista_de_usuarios=$obj_traza->getArreglo();
             $obj_traza->setCondicion("");
             $obj_traza->obtiene_lista_tablas_afectadas_en_el_sistema();
-            $lista_tablas_afectadas=$obj_traza->getArreglo();
+            $lista_tablas_afectadas=$obj_traza->getArreglo();*/
             require __DIR__.'/../vistas/plantillas/frm_trazabilidad_listar.php';
-        }
-        else {
+        } else {
             /*
             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
@@ -12369,7 +12368,7 @@ class Controller{
             }//else {$data.="<p style='color: black'>";}
             
             
-            if($bitacora_revision_video[$i]['Control']>0){
+            if($bitacora_revision_video[$i]['Control']>=0){
                 $data.=$bitacora_revision_video[$i]['Nombre']."= ".$bitacora_revision_video[$i]['Nombre_Completo']." (".$tiempo_transcurrido.")";
             } else{
                 $data.=$bitacora_revision_video[$i]['Nombre']."= Libre";
