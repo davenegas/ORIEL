@@ -10432,16 +10432,18 @@ class Controller{
              $vector_puesto_de_monitoreo_actual=$obj_puesto_monitoreo->getArreglo();
              //termina la consulta 
              
-             $obj_puesto_monitoreo->setCondicion("T_PuestoMonitoreoUnidadVideo.ID_Puesto_Monitoreo=".$vector_puesto_de_monitoreo_actual[0]['ID_Puesto_Monitoreo']);
-             $obj_puesto_monitoreo->obtiene_todas_las_unidades_asociadas_a_un_puesto_de_monitoreo();
-             $unidades_asociadas_a_un_puesto=$obj_puesto_monitoreo->getArreglo();
-             
-              //Vector puesto de monitoreo actual 1
-             $obj_puesto_monitoreo->setCondicion("Estado=1 AND ID_Usuario=".$_SESSION['id']." AND ID_Puesto_Monitoreo=".$vector_puesto_de_monitoreo_actual[0]['ID_Puesto_Monitoreo']);
-             $obj_puesto_monitoreo->obtiene_bitacora_puestos_de_monitoreo();
-             $vector_bitacora_control_de_puesto=$obj_puesto_monitoreo->getArreglo();
+             if (count($vector_puesto_de_monitoreo_actual)>0){
+                 
+                $obj_puesto_monitoreo->setCondicion("T_PuestoMonitoreoUnidadVideo.ID_Puesto_Monitoreo=".$vector_puesto_de_monitoreo_actual[0]['ID_Puesto_Monitoreo']);
+                $obj_puesto_monitoreo->obtiene_todas_las_unidades_asociadas_a_un_puesto_de_monitoreo();
+                $unidades_asociadas_a_un_puesto=$obj_puesto_monitoreo->getArreglo();
 
-            if (count($vector_puesto_de_monitoreo_actual)>0){
+                 //Vector puesto de monitoreo actual 1
+                $obj_puesto_monitoreo->setCondicion("Estado=1 AND ID_Usuario=".$_SESSION['id']." AND ID_Puesto_Monitoreo=".$vector_puesto_de_monitoreo_actual[0]['ID_Puesto_Monitoreo']);
+                $obj_puesto_monitoreo->obtiene_bitacora_puestos_de_monitoreo();
+                $vector_bitacora_control_de_puesto=$obj_puesto_monitoreo->getArreglo();
+
+            //if (count($vector_puesto_de_monitoreo_actual)>0){
 				
 				//***********************************Codigo en Prueba*****************************
 				
