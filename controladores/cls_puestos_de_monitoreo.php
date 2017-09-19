@@ -705,13 +705,13 @@ class cls_puestos_de_monitoreo{
         }
         
         //Agrega al vector las unidades que tienen una revision abierta por mas de 20 minutos
-        $this->arreglo=$this->obj_data_provider->trae_datos("t_bitacorarevisionesvideo inner join t_unidadvideo on t_bitacorarevisionesvideo.ID_Unidad_Video=t_unidadvideo.ID_Unidad_Video where t_bitacorarevisionesvideo.Estado=0 and (TIMESTAMPDIFF(MINUTE, concat(Fecha_Inicia_Revision,' ',Hora_Inicia_Revision),NOW())>20) and t_unidadvideo.Estado=0",
+        $this->arreglo=$this->obj_data_provider->trae_datos("t_bitacorarevisionesvideo inner join t_unidadvideo on t_bitacorarevisionesvideo.ID_Unidad_Video=t_unidadvideo.ID_Unidad_Video where t_bitacorarevisionesvideo.Estado=0 and (TIMESTAMPDIFF(MINUTE, concat(Fecha_Inicia_Revision,' ',Hora_Inicia_Revision),NOW())>10) and t_unidadvideo.Estado=0",
             "t_bitacorarevisionesvideo.ID_Unidad_Video","");
         if (count($this->obj_data_provider->getArreglo())>0){
             
             $vector_temporal5=$this->obj_data_provider->getArreglo();
             
-            $this->arreglo=$this->obj_data_provider->trae_datos("t_bitacorarevisionesvideo where Estado=1 and (TIMESTAMPDIFF(MINUTE, concat(Fecha_Termina_Revision,' ',Hora_Termina_Revision),NOW())<120) and ID_Unidad_Video in (Select t_bitacorarevisionesvideo.ID_Unidad_Video from t_bitacorarevisionesvideo inner join t_unidadvideo on t_bitacorarevisionesvideo.ID_Unidad_Video=t_unidadvideo.ID_Unidad_Video where t_bitacorarevisionesvideo.Estado=0 and (TIMESTAMPDIFF(MINUTE, concat(Fecha_Inicia_Revision,' ',Hora_Inicia_Revision),NOW())>20) and t_unidadvideo.Estado=0)",
+            $this->arreglo=$this->obj_data_provider->trae_datos("t_bitacorarevisionesvideo where Estado=1 and (TIMESTAMPDIFF(MINUTE, concat(Fecha_Termina_Revision,' ',Hora_Termina_Revision),NOW())<120) and ID_Unidad_Video in (Select t_bitacorarevisionesvideo.ID_Unidad_Video from t_bitacorarevisionesvideo inner join t_unidadvideo on t_bitacorarevisionesvideo.ID_Unidad_Video=t_unidadvideo.ID_Unidad_Video where t_bitacorarevisionesvideo.Estado=0 and (TIMESTAMPDIFF(MINUTE, concat(Fecha_Inicia_Revision,' ',Hora_Inicia_Revision),NOW())>10) and t_unidadvideo.Estado=0)",
             "distinct t_bitacorarevisionesvideo.ID_Unidad_Video","");
             
             if (count($this->obj_data_provider->getArreglo())>0){
