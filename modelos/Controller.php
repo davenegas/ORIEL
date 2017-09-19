@@ -12497,18 +12497,16 @@ class Controller{
             
         }
         
-        if(in_array($_SESSION['id'], array_column($bitacora_revision_video, 'Control'))){
-            $id = array_search($_SESSION['id'], array_column($bitacora_revision_video, 'ID_Usuario'));
-            //$data="Operador: ".$bitacora_revision_video[$id]['ID_Puesto_Monitoreo']."<br>";
-            
-            $fecha2 = new DateTime($bitacora_revision_video[$id]['Fecha_Inicia_Revision']." ".$bitacora_revision_video[$id]['Hora_Inicia_Revision']);
-            $diff = $fecha1->diff($fecha2);
-            $suma_tiempos =(intval($diff->d)*1440)+(intval($diff->h)*60)+(intval($diff->i)*1);
-            if($suma_tiempos>10){
-                $data="-".$bitacora_revision_video[$id]['Nombre']." desatendido por ".$suma_tiempos." min<br>";
+        for($i=0; $i<count($bitacora_revision_video);$i++){
+            if($_SESSION['id']==$bitacora_revision_video[$i]['Control']){
+                $fecha2 = new DateTime($bitacora_revision_video[$i]['Fecha_Inicia_Revision']." ".$bitacora_revision_video[$i]['Hora_Inicia_Revision']);
+                $diff = $fecha1->diff($fecha2);
+                $suma_tiempos =(intval($diff->d)*1440)+(intval($diff->h)*60)+(intval($diff->i)*1);
+                if($suma_tiempos>10){
+                    $data="-".$bitacora_revision_video[$i]['Nombre']." desatendido por ".$suma_tiempos." min<br>";
+                }
             }
         }
-        
         echo $data;
     }
     

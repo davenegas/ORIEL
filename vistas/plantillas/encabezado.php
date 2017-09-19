@@ -23,10 +23,8 @@
         </style>
         <script>
             $(document).ready(function () {
-                <?php if( $_SESSION['rol']==1 || $_SESSION['rol']==11){?>
-                    revision_controles();
-                    setInterval(revision_controles,60000);
-                <?php } ?>
+                revision_controles();
+                setInterval(revision_controles,60000);
             });
 
             function revision_controles(){
