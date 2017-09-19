@@ -9198,7 +9198,7 @@ class Controller{
         }  
     }
     
-    
+
     ////////////////////////////////////////////////////////////////////////////
     ///////////////////////Funciones de Tipo Punto/////////////////////          
     ////////////////////////////////////////////////////////////////////////////
@@ -10421,30 +10421,27 @@ class Controller{
     } 
     
     public function controles_de_video_listar() { 
-         if(isset($_SESSION['nombre'])){
+        if(isset($_SESSION['nombre'])){
             $obj_puesto_monitoreo = new cls_puestos_de_monitoreo();
             $obj_unidad_video = new cls_unidad_video();
             $obj_puntos_bcr = new cls_puntosBCR();
 
             //Vector puesto de monitoreo actual 1
-             $obj_puesto_monitoreo->setCondicion("t_puestomonitoreo.Estado=1 AND t_puestomonitoreo.ID_Usuario=".$_SESSION['id']);
-             $obj_puesto_monitoreo->obtiene_todos_puestos_de_monitoreo();
-             $vector_puesto_de_monitoreo_actual=$obj_puesto_monitoreo->getArreglo();
-             //termina la consulta 
-             
-             $obj_puesto_monitoreo->setCondicion("T_PuestoMonitoreoUnidadVideo.ID_Puesto_Monitoreo=".$vector_puesto_de_monitoreo_actual[0]['ID_Puesto_Monitoreo']);
-             $obj_puesto_monitoreo->obtiene_todas_las_unidades_asociadas_a_un_puesto_de_monitoreo();
-             $unidades_asociadas_a_un_puesto=$obj_puesto_monitoreo->getArreglo();
-             
-              //Vector puesto de monitoreo actual 1
-             $obj_puesto_monitoreo->setCondicion("Estado=1 AND ID_Usuario=".$_SESSION['id']." AND ID_Puesto_Monitoreo=".$vector_puesto_de_monitoreo_actual[0]['ID_Puesto_Monitoreo']);
-             $obj_puesto_monitoreo->obtiene_bitacora_puestos_de_monitoreo();
-             $vector_bitacora_control_de_puesto=$obj_puesto_monitoreo->getArreglo();
+            $obj_puesto_monitoreo->setCondicion("t_puestomonitoreo.Estado=1 AND t_puestomonitoreo.ID_Usuario=".$_SESSION['id']);
+            $obj_puesto_monitoreo->obtiene_todos_puestos_de_monitoreo();
+            $vector_puesto_de_monitoreo_actual=$obj_puesto_monitoreo->getArreglo();
+            //termina la consulta 
 
             if (count($vector_puesto_de_monitoreo_actual)>0){
-				
-				//***********************************Codigo en Prueba*****************************
-				
+                $obj_puesto_monitoreo->setCondicion("T_PuestoMonitoreoUnidadVideo.ID_Puesto_Monitoreo=".$vector_puesto_de_monitoreo_actual[0]['ID_Puesto_Monitoreo']);
+                $obj_puesto_monitoreo->obtiene_todas_las_unidades_asociadas_a_un_puesto_de_monitoreo();
+                $unidades_asociadas_a_un_puesto=$obj_puesto_monitoreo->getArreglo();
+
+                //Vector puesto de monitoreo actual 1
+                $obj_puesto_monitoreo->setCondicion("Estado=1 AND ID_Usuario=".$_SESSION['id']." AND ID_Puesto_Monitoreo=".$vector_puesto_de_monitoreo_actual[0]['ID_Puesto_Monitoreo']);
+                $obj_puesto_monitoreo->obtiene_bitacora_puestos_de_monitoreo();
+                $vector_bitacora_control_de_puesto=$obj_puesto_monitoreo->getArreglo();
+	
                 //Vector revision de video actual en bitacora 2
                 $obj_puesto_monitoreo->setCondicion("Estado=0 AND ID_Usuario=".$_SESSION['id']." AND ID_Puesto_Monitoreo=".$vector_puesto_de_monitoreo_actual[0]['ID_Puesto_Monitoreo']);
                 $obj_puesto_monitoreo->obtiene_revisiones_de_video();
@@ -10452,31 +10449,31 @@ class Controller{
                 //termina la consulta 
 				
                 if (!(count($vector_revision_de_video_actual)>0)){
-                    ///**************************************Codigo de Prueba**************************////
+                    //**************************************Codigo de Prueba**************************//
                     $obj_puesto_monitoreo->setCondicion("ID_Puesto_Monitoreo=".$vector_puesto_de_monitoreo_actual[0]['ID_Puesto_Monitoreo']. " AND Estado=0");
                     $obj_puesto_monitoreo->obtiene_revisiones_de_video();
+                    
                     if (!(count($obj_puesto_monitoreo->getArreglo())>0)){
-                            
                         $obj_puesto_monitoreo->setCondicion("T_PuestoMonitoreoUnidadVideo.ID_Puesto_Monitoreo=".$vector_puesto_de_monitoreo_actual[0]['ID_Puesto_Monitoreo']);
                         $obj_puesto_monitoreo->obtiene_todas_las_unidades_asociadas_a_un_puesto_de_monitoreo();
                         $unidades_asociadas_a_un_puesto=$obj_puesto_monitoreo->getArreglo();
-                        if (count($obj_puesto_monitoreo->getArreglo())>0){
                         
+                        if (count($obj_puesto_monitoreo->getArreglo())>0){
                             $obj_puesto_monitoreo->setCondicion("ID_Puesto_Monitoreo=".$vector_puesto_de_monitoreo_actual[0]['ID_Puesto_Monitoreo']. " AND Estado=1 order by ID_Bitacora_Revision_Video desc");
                             $obj_puesto_monitoreo->obtiene_ultima_posicion_concluida_en_puesto_de_monitoreo();
                             $temp_posicion=intval($obj_puesto_monitoreo->getUltima_posicion_concluida());
                             $temp_posicion=$temp_posicion+1;//fwrite($fp, "Revision Numero: ".$_POST['id_revis'].". Linea 9682. Hora Actual: ".date("H:i:s", time())."\r\n");
                             //$obj_puesto_monitoreo->setCondicion("ID_Puesto_Monitoreo=".$_POST['id_puesto']. " AND Posicion=".$obj_puesto_monitoreo->getUltima_posicion_concluida()+1);
                             $obj_puesto_monitoreo->setCondicion("ID_Puesto_Monitoreo=".$vector_puesto_de_monitoreo_actual[0]['ID_Puesto_Monitoreo']. " AND Posicion=".$temp_posicion);
+                            
                             if ($obj_puesto_monitoreo->existe_esta_posicion_en_este_puesto_de_monitoreo()){
-                                    //$obj_puesto_monitoreo->setPosicion($obj_puesto_monitoreo->getUltima_posicion_concluida()+1);
-                                    $obj_puesto_monitoreo->setPosicion($temp_posicion);
+                                //$obj_puesto_monitoreo->setPosicion($obj_puesto_monitoreo->getUltima_posicion_concluida()+1);
+                                $obj_puesto_monitoreo->setPosicion($temp_posicion);
                             }else{
-                                    $obj_puesto_monitoreo->setCondicion("ID_Puesto_Monitoreo=".$vector_puesto_de_monitoreo_actual[0]['ID_Puesto_Monitoreo']. " AND Posicion=1");
-                                    if ($obj_puesto_monitoreo->existe_esta_posicion_en_este_puesto_de_monitoreo()){
-                                            $obj_puesto_monitoreo->setPosicion(1);
-
-                                    }
+                                $obj_puesto_monitoreo->setCondicion("ID_Puesto_Monitoreo=".$vector_puesto_de_monitoreo_actual[0]['ID_Puesto_Monitoreo']. " AND Posicion=1");
+                                if ($obj_puesto_monitoreo->existe_esta_posicion_en_este_puesto_de_monitoreo()){
+                                    $obj_puesto_monitoreo->setPosicion(1);
+                                }
                             } 
 
                             //Ingresa nuevo registro de bitacora en la tabla de revisiones de video.
@@ -10489,217 +10486,96 @@ class Controller{
                             $obj_puesto_monitoreo->setEstado(0);
                             $obj_puesto_monitoreo->agregar_nuevo_registro_bitacora_revisiones_de_video();
 
-                            ///**************************************Codigo de Prueba**************************////
-                        }else
-                            {
-                
-                                $obj_puesto_monitoreo->setCondicion("ID_Puesto_Monitoreo=".$vector_puesto_de_monitoreo_actual[0]['ID_Puesto_Monitoreo']. " AND Estado=1 AND ID_Usuario=".$_SESSION['id']);
-                                $obj_puesto_monitoreo->obtiene_id_ultimo_toma_puesto_ingresada();
-                                $obj_puesto_monitoreo->setCondicion("ID_Puesto_Monitoreo=".$vector_puesto_de_monitoreo_actual[0]['ID_Puesto_Monitoreo']. " AND Estado=0 AND ID_Usuario=".$_SESSION['id']);
-                                
-                                if (!($obj_puesto_monitoreo->existe_revision_de_video_pendiente_en_bitacora())){
+                        }else{
+                            $obj_puesto_monitoreo->setCondicion("ID_Puesto_Monitoreo=".$vector_puesto_de_monitoreo_actual[0]['ID_Puesto_Monitoreo']. " AND Estado=1 AND ID_Usuario=".$_SESSION['id']);
+                            $obj_puesto_monitoreo->obtiene_id_ultimo_toma_puesto_ingresada();
+                            $obj_puesto_monitoreo->setCondicion("ID_Puesto_Monitoreo=".$vector_puesto_de_monitoreo_actual[0]['ID_Puesto_Monitoreo']. " AND Estado=0 AND ID_Usuario=".$_SESSION['id']);
+
+                            if (!($obj_puesto_monitoreo->existe_revision_de_video_pendiente_en_bitacora())){
+                                $obj_puesto_monitoreo->setCondicion("ID_Puesto_Monitoreo=".$vector_puesto_de_monitoreo_actual[0]['ID_Puesto_Monitoreo']. " AND Estado=0 AND ID_Usuario<>".$_SESSION['id']);
+                                if ($obj_puesto_monitoreo->existe_revision_de_video_pendiente_en_bitacora()){
+                                    $obj_puesto_monitoreo->setFecha_inicia_revision(date("Y-m-d"));
+                                    //$obj_puesto_monitoreo->setHora_inicia_revision(date("H:i:s", time()+10));
+                                    $obj_puesto_monitoreo->setHora_inicia_revision(date("H:i:s", time()));
+                                    $obj_puesto_monitoreo->setId_usuario($_SESSION['id']);
+                                    $obj_puesto_monitoreo->setPosicion('0');
+                                        
+                                    $obj_puesto_monitoreo->obtiene_unidades_con_mas_tiempo_sin_revisar_pruebas();
+                                    //$params=$obj_puesto_monitoreo->getArreglo();
+
+                                    $params=$obj_puesto_monitoreo->getArreglo();
+
+                                    $obj_puesto_monitoreo->setCondicion("t_puestomonitoreo.Estado=1 and t_puestomonitoreo.ID_Usuario<>0");
+                                    $obj_puesto_monitoreo->obtiene_todos_puestos_de_monitoreo();
+                                    $cantidad_puestos_activos=count($obj_puesto_monitoreo->getArreglo());
+                                    $puestos_activos=$obj_puesto_monitoreo->getArreglo();
+                                    $posicion_aleatoria_inicial=$cantidad_puestos_activos;
+                                    $posicion_aleatoria_final=50;
+                                    $pos=0;
+                                                                
+                                    for ($i = 0; $i < $cantidad_puestos_activos; $i++) {
+                                        if ($_POST['id_puesto']==$puestos_activos[$i]['ID_Puesto_Monitoreo']){
+                                            $obj_puesto_monitoreo->setCondicion("Estado=0 and (TIMESTAMPDIFF(MINUTE, concat(Fecha_Inicia_Revision,' ',Hora_Inicia_Revision),NOW())<10) and ID_Unidad_Video=".$params[$i]['ID_Unidad_Video']);
+                                            if (!($obj_puesto_monitoreo->existe_revision_de_video_pendiente_en_bitacora())){
+                                                $obj_puesto_monitoreo->setId_unidad_video($params[$i]['ID_Unidad_Video']);
+                                                break;
+                                            }else{
+                                                $pos=rand($posicion_aleatoria_inicial,$posicion_aleatoria_final);
+                                                $obj_puesto_monitoreo->setId_unidad_video($params[$pos]['ID_Unidad_Video']);
+                                                break;
+                                            }
+                                        } 
+                                    }
                                     $obj_puesto_monitoreo->setCondicion("ID_Puesto_Monitoreo=".$vector_puesto_de_monitoreo_actual[0]['ID_Puesto_Monitoreo']. " AND Estado=0 AND ID_Usuario<>".$_SESSION['id']);
-                                    if ($obj_puesto_monitoreo->existe_revision_de_video_pendiente_en_bitacora()){
-                                        $obj_puesto_monitoreo->setFecha_inicia_revision(date("Y-m-d"));
-                                        //$obj_puesto_monitoreo->setHora_inicia_revision(date("H:i:s", time()+10));
-                                        $obj_puesto_monitoreo->setHora_inicia_revision(date("H:i:s", time()));
-                                        $obj_puesto_monitoreo->setId_usuario($_SESSION['id']);
-                                        $obj_puesto_monitoreo->setPosicion('0');
-                                        
-                                        //Se comenta este codigo para validar y probar nuevo codigo de unidades dinamico
-                                //$obj_puesto_monitoreo->setCondicion("t_unidadvideo.Estado=0 GROUP by t_bitacorarevisionesvideo.`ID_Unidad_Video` ORDER BY Fecha_Hora ASC limit 10");
-                                //$obj_puesto_monitoreo->obtiene_unidades_con_mas_tiempo_sin_revisar();
-                                
-                                //$obj_puesto_monitoreo->obtiene_revisiones_pendientes_de_mas_tres_horas();
-                                
-                                $obj_puesto_monitoreo->obtiene_unidades_con_mas_tiempo_sin_revisar_pruebas();
-                                //$params=$obj_puesto_monitoreo->getArreglo();
-                                
-                                $params=$obj_puesto_monitoreo->getArreglo();
-                                
-                                $obj_puesto_monitoreo->setCondicion("t_puestomonitoreo.Estado=1 and t_puestomonitoreo.ID_Usuario<>0");
-                                $obj_puesto_monitoreo->obtiene_todos_puestos_de_monitoreo();
-                                $cantidad_puestos_activos=count($obj_puesto_monitoreo->getArreglo());
-                                $puestos_activos=$obj_puesto_monitoreo->getArreglo();
-                                $posicion_aleatoria_inicial=$cantidad_puestos_activos;
-                                $posicion_aleatoria_final=50;
-                                $pos=0;
-                                                                
-                                for ($i = 0; $i < $cantidad_puestos_activos; $i++) {
-                                    if ($_POST['id_puesto']==$puestos_activos[$i]['ID_Puesto_Monitoreo']){
-                                        $obj_puesto_monitoreo->setCondicion("Estado=0 and (TIMESTAMPDIFF(MINUTE, concat(Fecha_Inicia_Revision,' ',Hora_Inicia_Revision),NOW())<10) and ID_Unidad_Video=".$params[$i]['ID_Unidad_Video']);
-                                        if (!($obj_puesto_monitoreo->existe_revision_de_video_pendiente_en_bitacora())){
-                                            $obj_puesto_monitoreo->setId_unidad_video($params[$i]['ID_Unidad_Video']);
-                                            break;
-                                        }else{
-                                             $pos=rand($posicion_aleatoria_inicial,$posicion_aleatoria_final);
-                                             $obj_puesto_monitoreo->setId_unidad_video($params[$pos]['ID_Unidad_Video']);
-                                             break;
-                                        }
-                                       
-                                    }
-                                        
-                                }
-                                
-//                                if ((count($obj_puesto_monitoreo->getArreglo())>0)&&($_POST['id_puesto']=='10')){
-//                                    $cantidad=count($obj_puesto_monitoreo->getArreglo());
-//                                    $params=$obj_puesto_monitoreo->getArreglo();
-//                                    $cantidad=$cantidad-1;
-//                                    if ($cantidad>0){
-//                                        $pos=rand(0,$cantidad);
-//                                    }else{
-//                                        $pos=0;
-//                                    }
-//                                    $obj_puesto_monitoreo->setId_unidad_video($params[$pos]['ID_Unidad_Video']);
-//                                }else{
-//                                
-//                                    $obj_puesto_monitoreo->setCondicion("t_puestomonitoreo.Estado=1 and t_puestomonitoreo.ID_Usuario<>0");
-//                                    $obj_puesto_monitoreo->obtiene_todos_puestos_de_monitoreo();
-//                                    $cantidad_puestos_activos=count($obj_puesto_monitoreo->getArreglo());
-//                                    $maximo_opciones=0;
-//                                    if ($cantidad_puestos_activos>0){
-//                                        $maximo_opciones=$cantidad_puestos_activos*10;
-//                                    }
-//
-//                                    $posicion_asignada=rand(0,$maximo_opciones);
-//
-//                                    $obj_puesto_monitoreo->obtiene_unidades_con_mas_tiempo_sin_revisar_pruebas();
-//                                    $params=$obj_puesto_monitoreo->getArreglo();
-//
-//                                    //echo '<pre>';
-//                                    //print_r($params);
-//                                    //echo '<pre>';
-//
-//                                    for ($i = 0; $i < count($params); $i++) {
-//                                        //$obj_puesto_monitoreo->setCondicion("Estado=0 and ID_Unidad_Video=".$params[$i]['ID_Unidad_Video']);
-//                                        //if (!($obj_puesto_monitoreo->existe_revision_de_video_pendiente_en_bitacora())){
-//                                        //    $obj_puesto_monitoreo->setId_unidad_video($params[$i]['ID_Unidad_Video']);
-//                                        //    break;
-//                                        //}
-//
-//                                        if ($posicion_asignada==$i){
-//                                            $obj_puesto_monitoreo->setId_unidad_video($params[$i]['ID_Unidad_Video']);
-//                                            break;
-//                                        }
-//                                    }
-//                                }
-                                        $obj_puesto_monitoreo->setCondicion("ID_Puesto_Monitoreo=".$vector_puesto_de_monitoreo_actual[0]['ID_Puesto_Monitoreo']. " AND Estado=0 AND ID_Usuario<>".$_SESSION['id']);
-                                        $obj_puesto_monitoreo->edita_usuario_y_tiempo_de_inicio_en_revision_de_video_dinamica();                 
-                                        //$obj_puesto_monitoreo->edita_usuario_y_tiempo_de_inicio_en_revision_de_video_dinamica_pruebas();                 
-                                    }else{
-                                       
-                                        $obj_puesto_monitoreo->setPosicion('0');
-                                        
-                                        //Se comenta este codigo para validar y probar nuevo codigo de unidades dinamico
-                                //$obj_puesto_monitoreo->setCondicion("t_unidadvideo.Estado=0 GROUP by t_bitacorarevisionesvideo.`ID_Unidad_Video` ORDER BY Fecha_Hora ASC limit 10");
-                                //$obj_puesto_monitoreo->obtiene_unidades_con_mas_tiempo_sin_revisar();
-                                
-                                //$obj_puesto_monitoreo->obtiene_revisiones_pendientes_de_mas_tres_horas();
-                                
-                                $obj_puesto_monitoreo->obtiene_unidades_con_mas_tiempo_sin_revisar_pruebas();
-                                //$params=$obj_puesto_monitoreo->getArreglo();
-                                
-                                $params=$obj_puesto_monitoreo->getArreglo();
-                                
-                                $obj_puesto_monitoreo->setCondicion("t_puestomonitoreo.Estado=1 and t_puestomonitoreo.ID_Usuario<>0");
-                                $obj_puesto_monitoreo->obtiene_todos_puestos_de_monitoreo();
-                                $cantidad_puestos_activos=count($obj_puesto_monitoreo->getArreglo());
-                                $puestos_activos=$obj_puesto_monitoreo->getArreglo();
-                                $posicion_aleatoria_inicial=$cantidad_puestos_activos;
-                                $posicion_aleatoria_final=50;
-                                $pos=0;
-                                                                
-                                for ($i = 0; $i < $cantidad_puestos_activos; $i++) {
-                                    if ($_POST['id_puesto']==$puestos_activos[$i]['ID_Puesto_Monitoreo']){
-                                        $obj_puesto_monitoreo->setCondicion("Estado=0 and (TIMESTAMPDIFF(MINUTE, concat(Fecha_Inicia_Revision,' ',Hora_Inicia_Revision),NOW())<10) and ID_Unidad_Video=".$params[$i]['ID_Unidad_Video']);
-                                        if (!($obj_puesto_monitoreo->existe_revision_de_video_pendiente_en_bitacora())){
-                                            $obj_puesto_monitoreo->setId_unidad_video($params[$i]['ID_Unidad_Video']);
-                                            break;
-                                        }else{
-                                             $pos=rand($posicion_aleatoria_inicial,$posicion_aleatoria_final);
-                                             $obj_puesto_monitoreo->setId_unidad_video($params[$pos]['ID_Unidad_Video']);
-                                             break;
-                                        }
-                                       
-                                    }
-                                        
-                                }
-                                
-//                                if ((count($obj_puesto_monitoreo->getArreglo())>0)&&($_POST['id_puesto']=='10')){
-//                                    $cantidad=count($obj_puesto_monitoreo->getArreglo());
-//                                    $params=$obj_puesto_monitoreo->getArreglo();
-//                                    $cantidad=$cantidad-1;
-//                                    if ($cantidad>0){
-//                                        $pos=rand(0,$cantidad);
-//                                    }else{
-//                                        $pos=0;
-//                                    }
-//                                    $obj_puesto_monitoreo->setId_unidad_video($params[$pos]['ID_Unidad_Video']);
-//                                }else{
-//                                
-//                                    $obj_puesto_monitoreo->setCondicion("t_puestomonitoreo.Estado=1 and t_puestomonitoreo.ID_Usuario<>0");
-//                                    $obj_puesto_monitoreo->obtiene_todos_puestos_de_monitoreo();
-//                                    $cantidad_puestos_activos=count($obj_puesto_monitoreo->getArreglo());
-//                                    $maximo_opciones=0;
-//                                    if ($cantidad_puestos_activos>0){
-//                                        $maximo_opciones=$cantidad_puestos_activos*10;
-//                                    }
-//
-//                                    $posicion_asignada=rand(0,$maximo_opciones);
-//
-//                                    $obj_puesto_monitoreo->obtiene_unidades_con_mas_tiempo_sin_revisar_pruebas();
-//                                    $params=$obj_puesto_monitoreo->getArreglo();
-//
-//                                    //echo '<pre>';
-//                                    //print_r($params);
-//                                    //echo '<pre>';
-//
-//                                    for ($i = 0; $i < count($params); $i++) {
-//                                        //$obj_puesto_monitoreo->setCondicion("Estado=0 and ID_Unidad_Video=".$params[$i]['ID_Unidad_Video']);
-//                                        //if (!($obj_puesto_monitoreo->existe_revision_de_video_pendiente_en_bitacora())){
-//                                        //    $obj_puesto_monitoreo->setId_unidad_video($params[$i]['ID_Unidad_Video']);
-//                                        //    break;
-//                                        //}
-//
-//                                        if ($posicion_asignada==$i){
-//                                            $obj_puesto_monitoreo->setId_unidad_video($params[$i]['ID_Unidad_Video']);
-//                                            break;
-//                                        }
-//                                    }
-//                                }
-                                        if (strlen($obj_puesto_monitoreo->getId_unidad_video())==0){
-                                           //$obj_puesto_monitoreo->setId_unidad_video($params[0]['ID_Unidad_Video']); 
-                                        }
-                                 
-                                        //echo $obj_puesto_monitoreo->getId_unidad_video();
-                                        //Ingresa nuevo registro de bitacora en la tabla de revisiones de video.
-                                        $obj_puesto_monitoreo->setFecha_inicia_revision(date("Y-m-d"));
-                                        $obj_puesto_monitoreo->setHora_inicia_revision(date("H:i:s", time()));
-                                        //$obj_puesto_monitoreo->setHora_inicia_revision(date("H:i:s", time()+10));
-                                        $obj_puesto_monitoreo->setId_usuario($_SESSION['id']);
-                                        $obj_puesto_monitoreo->setId_puesto_monitoreo($vector_puesto_de_monitoreo_actual[0]['ID_Puesto_Monitoreo']);
-                                        $obj_puesto_monitoreo->setObservaciones("");
-                                        $obj_puesto_monitoreo->setEstado(0);
-                                        //echo 'prueba';
-                                        $obj_puesto_monitoreo->agregar_nuevo_registro_bitacora_revisiones_de_video();
-                                        //$obj_puesto_monitoreo->agregar_nuevo_registro_bitacora_revisiones_de_video_pruebas();
-                                    }
+                                    $obj_puesto_monitoreo->edita_usuario_y_tiempo_de_inicio_en_revision_de_video_dinamica();                                
                                 }else{
-                                    $obj_puesto_monitoreo->setCondicion("ID_Puesto_Monitoreo=".$vector_puesto_de_monitoreo_actual[0]['ID_Puesto_Monitoreo']. " AND Estado=0 AND ID_Usuario=".$_SESSION['id']);
-                                    $obj_puesto_monitoreo->edita_toma_de_puesto_en_revision_de_video_pendiente();
+                                    $obj_puesto_monitoreo->setPosicion('0');
+                                    $obj_puesto_monitoreo->obtiene_unidades_con_mas_tiempo_sin_revisar_pruebas();
+                                    //$params=$obj_puesto_monitoreo->getArreglo();
+                                    $params=$obj_puesto_monitoreo->getArreglo();
+
+                                    $obj_puesto_monitoreo->setCondicion("t_puestomonitoreo.Estado=1 and t_puestomonitoreo.ID_Usuario<>0");
+                                    $obj_puesto_monitoreo->obtiene_todos_puestos_de_monitoreo();
+                                    $cantidad_puestos_activos=count($obj_puesto_monitoreo->getArreglo());
+                                    $puestos_activos=$obj_puesto_monitoreo->getArreglo();
+                                    $posicion_aleatoria_inicial=$cantidad_puestos_activos;
+                                    $posicion_aleatoria_final=50;
+                                    $pos=0;
+                                                                
+                                    for ($i = 0; $i < $cantidad_puestos_activos; $i++) {
+                                        if ($_POST['id_puesto']==$puestos_activos[$i]['ID_Puesto_Monitoreo']){
+                                            $obj_puesto_monitoreo->setCondicion("Estado=0 and (TIMESTAMPDIFF(MINUTE, concat(Fecha_Inicia_Revision,' ',Hora_Inicia_Revision),NOW())<10) and ID_Unidad_Video=".$params[$i]['ID_Unidad_Video']);
+                                            if (!($obj_puesto_monitoreo->existe_revision_de_video_pendiente_en_bitacora())){
+                                                $obj_puesto_monitoreo->setId_unidad_video($params[$i]['ID_Unidad_Video']);
+                                                break;
+                                            }else{
+                                                $pos=rand($posicion_aleatoria_inicial,$posicion_aleatoria_final);
+                                                $obj_puesto_monitoreo->setId_unidad_video($params[$pos]['ID_Unidad_Video']);
+                                                break;
+                                            }
+                                        }
+                                    }
+                                    
+                                    //Ingresa nuevo registro de bitacora en la tabla de revisiones de video.
+                                    $obj_puesto_monitoreo->setFecha_inicia_revision(date("Y-m-d"));
+                                    $obj_puesto_monitoreo->setHora_inicia_revision(date("H:i:s", time()));
+                                    //$obj_puesto_monitoreo->setHora_inicia_revision(date("H:i:s", time()+10));
+                                    $obj_puesto_monitoreo->setId_usuario($_SESSION['id']);
+                                    $obj_puesto_monitoreo->setId_puesto_monitoreo($vector_puesto_de_monitoreo_actual[0]['ID_Puesto_Monitoreo']);
+                                    $obj_puesto_monitoreo->setObservaciones("");
+                                    $obj_puesto_monitoreo->setEstado(0);
+
+                                    $obj_puesto_monitoreo->agregar_nuevo_registro_bitacora_revisiones_de_video();
+                                    //$obj_puesto_monitoreo->agregar_nuevo_registro_bitacora_revisiones_de_video_pruebas();
                                 }
-                            
-                            
+                            }else{
+                                $obj_puesto_monitoreo->setCondicion("ID_Puesto_Monitoreo=".$vector_puesto_de_monitoreo_actual[0]['ID_Puesto_Monitoreo']. " AND Estado=0 AND ID_Usuario=".$_SESSION['id']);
+                                $obj_puesto_monitoreo->edita_toma_de_puesto_en_revision_de_video_pendiente();
                             }
+                        }
                     }
                 }
-				
-				
-				//
-				//Vector revision de video actual en bitacora 2***********************************Codigo en Prueba*****************************
-				
-				
-				//Vector revision de video actual en bitacora 2
+
                 $obj_puesto_monitoreo->setCondicion("Estado=0 AND ID_Usuario=".$_SESSION['id']." AND ID_Puesto_Monitoreo=".$vector_puesto_de_monitoreo_actual[0]['ID_Puesto_Monitoreo']);
                 $obj_puesto_monitoreo->obtiene_revisiones_de_video();
                 $vector_revision_de_video_actual=$obj_puesto_monitoreo->getArreglo();			
@@ -10722,9 +10598,9 @@ class Controller{
                         $vector_puesto_monitoreo_unidad_video=$obj_puesto_monitoreo->getArreglo();
                         //termina la consulta 
                     }else{
-                         $obj_puesto_monitoreo->setCondicion("ID_Puesto_Monitoreo=".$vector_revision_de_video_actual[0]['ID_Puesto_Monitoreo']);
-                         $obj_puesto_monitoreo->obtiene_todos_puestos_de_monitoreo();
-                         $vector_puesto_monitoreo_unidad_video=$obj_puesto_monitoreo->getArreglo();
+                        $obj_puesto_monitoreo->setCondicion("ID_Puesto_Monitoreo=".$vector_revision_de_video_actual[0]['ID_Puesto_Monitoreo']);
+                        $obj_puesto_monitoreo->obtiene_todos_puestos_de_monitoreo();
+                        $vector_puesto_monitoreo_unidad_video=$obj_puesto_monitoreo->getArreglo();
                     }
                     //Vector información punto BCR relacionado a la unidad de video 5
                     $obj_puntos_bcr->setCondicion("T_PuntoBCR.ID_PuntoBCR=".$vector_informacion_unidad_video[0]['ID_PuntoBCR']);
@@ -10891,7 +10767,6 @@ class Controller{
               
         //echo $_GET['id'];
         require __DIR__ . '/../vistas/plantillas/frm_puestos_de_monitoreo_editar.php';
-        
     }
      
     public function actualiza_puesto_de_monitoreo(){
@@ -10911,8 +10786,6 @@ class Controller{
                 $obj_puestos_de_monitoreo->agregar_nueva_unidad_de_video_a_puesto_de_monitoreo();
             }
         }
-        
-        //print_r($elementos[0]);
     }
 
     
@@ -12545,7 +12418,7 @@ class Controller{
             }//else {$data.="<p style='color: black'>";}
             
             
-            if($bitacora_revision_video[$i]['Control']>=0){
+            if($bitacora_revision_video[$i]['Control']>0){
                 $data.=$bitacora_revision_video[$i]['Nombre']."= ".$bitacora_revision_video[$i]['Nombre_Completo']." (".$tiempo_transcurrido.")";
             } else{
                 $data.=$bitacora_revision_video[$i]['Nombre']."= Libre";
@@ -12572,53 +12445,69 @@ class Controller{
         $fecha1 = new DateTime($fecha_actual);
         $diff="";
         $time = time();
-        for($i=0; $i<count($bitacora_revision_video);$i++){
-            $fecha2 = new DateTime($bitacora_revision_video[$i]['Fecha_Inicia_Revision']." ".$bitacora_revision_video[$i]['Hora_Inicia_Revision']);
-            $diff = $fecha1->diff($fecha2);
-            $suma_tiempos=(intval($diff->d)*1440)+(intval($diff->h)*60)+(intval($diff->i)*1);
-            
-            if($bitacora_revision_video[$i]['ID_Puesto_Monitoreo']>=1 && $bitacora_revision_video[$i]['ID_Puesto_Monitoreo']<=4 || $bitacora_revision_video[$i]['ID_Puesto_Monitoreo']==15){
-                if($bitacora_revision_video[$i]['Control']==0 && $suma_tiempos>=10){
-                    $data.="-".$bitacora_revision_video[$i]['Nombre']." Libre por más de 10 min <br>";
+        if( $_SESSION['rol']==1 || $_SESSION['rol']==11){
+            for($i=0; $i<count($bitacora_revision_video);$i++){
+                $fecha2 = new DateTime($bitacora_revision_video[$i]['Fecha_Inicia_Revision']." ".$bitacora_revision_video[$i]['Hora_Inicia_Revision']);
+                $diff = $fecha1->diff($fecha2);
+                $suma_tiempos=(intval($diff->d)*1440)+(intval($diff->h)*60)+(intval($diff->i)*1);
+
+                if($bitacora_revision_video[$i]['ID_Puesto_Monitoreo']>=1 && $bitacora_revision_video[$i]['ID_Puesto_Monitoreo']<=4 || $bitacora_revision_video[$i]['ID_Puesto_Monitoreo']==15){
+                    if($bitacora_revision_video[$i]['Control']==0 && $suma_tiempos>=10){
+                        $data.="-".$bitacora_revision_video[$i]['Nombre']." Libre por más de 10 min <br>";
+                    }
                 }
-            }
-            if($bitacora_revision_video[$i]['ID_Puesto_Monitoreo']==6){
-                if(date("H:i:s", $time)>='06:30:00' && date("H:i:s", $time)<='19:30:00' && $bitacora_revision_video[$i]['Control']==0 && $suma_tiempos>=10){
-                    $data.="-".$bitacora_revision_video[$i]['Nombre']." Libre por más de 10 min <br>";
+                if($bitacora_revision_video[$i]['ID_Puesto_Monitoreo']==6){
+                    if(date("H:i:s", $time)>='06:30:00' && date("H:i:s", $time)<='19:30:00' && $bitacora_revision_video[$i]['Control']==0 && $suma_tiempos>=10){
+                        $data.="-".$bitacora_revision_video[$i]['Nombre']." Libre por más de 10 min <br>";
+                    }
                 }
-            }
-            if($bitacora_revision_video[$i]['ID_Puesto_Monitoreo']==7){
-                if(date("H:i:s", $time)>='08:00:00' && date("H:i:s", $time)<='16:00:00' && $bitacora_revision_video[$i]['Control']==0 && $suma_tiempos>=10){
-                    $data.="-".$bitacora_revision_video[$i]['Nombre']." Libre por más de 10 min <br>";
+                if($bitacora_revision_video[$i]['ID_Puesto_Monitoreo']==7){
+                    if(date("H:i:s", $time)>='08:00:00' && date("H:i:s", $time)<='16:00:00' && $bitacora_revision_video[$i]['Control']==0 && $suma_tiempos>=10){
+                        $data.="-".$bitacora_revision_video[$i]['Nombre']." Libre por más de 10 min <br>";
+                    }
                 }
-            }
-            if($bitacora_revision_video[$i]['ID_Puesto_Monitoreo']==8){
-                if(date("H:i:s", $time)>='10:00:00' && date("H:i:s", $time)<='18:00:00' && $bitacora_revision_video[$i]['Control']==0 && $suma_tiempos>=10){
-                    $data.="-".$bitacora_revision_video[$i]['Nombre']." Libre por más de 10 min <br>";
+                if($bitacora_revision_video[$i]['ID_Puesto_Monitoreo']==8){
+                    if(date("H:i:s", $time)>='10:00:00' && date("H:i:s", $time)<='18:00:00' && $bitacora_revision_video[$i]['Control']==0 && $suma_tiempos>=10){
+                        $data.="-".$bitacora_revision_video[$i]['Nombre']." Libre por más de 10 min <br>";
+                    }
                 }
-            }
-            if($bitacora_revision_video[$i]['ID_Puesto_Monitoreo']==9){
-                if((date("H:i:s", $time)<='07:00:00' || date("H:i:s", $time)>='12:00:00') && $bitacora_revision_video[$i]['Control']==0 && $suma_tiempos>=10){
-                    $data.="-".$bitacora_revision_video[$i]['Nombre']." Libre por más de 10 min <br>";
+                if($bitacora_revision_video[$i]['ID_Puesto_Monitoreo']==9){
+                    if((date("H:i:s", $time)<='07:00:00' || date("H:i:s", $time)>='12:00:00') && $bitacora_revision_video[$i]['Control']==0 && $suma_tiempos>=10){
+                        $data.="-".$bitacora_revision_video[$i]['Nombre']." Libre por más de 10 min <br>";
+                    }
                 }
-            }
-            if($bitacora_revision_video[$i]['ID_Puesto_Monitoreo']==10){
-                if(date("H:i:s", $time)>='12:00:00' && date("H:i:s", $time)<='22:00:00' && $bitacora_revision_video[$i]['Control']==0 && $suma_tiempos>=10){
-                    $data.="-".$bitacora_revision_video[$i]['Nombre']." Libre por más de 10 min <br>";
+                if($bitacora_revision_video[$i]['ID_Puesto_Monitoreo']==10){
+                    if(date("H:i:s", $time)>='12:00:00' && date("H:i:s", $time)<='22:00:00' && $bitacora_revision_video[$i]['Control']==0 && $suma_tiempos>=10){
+                        $data.="-".$bitacora_revision_video[$i]['Nombre']." Libre por más de 10 min <br>";
+                    }
                 }
-            }
-            if($bitacora_revision_video[$i]['Control']>0 && $suma_tiempos>10){
-                if($suma_tiempos>30){ 
-                    $data.="-".$bitacora_revision_video[$i]['Nombre']." desatendido por más de 30 min<br>";
-                }else {
-                    $obj_traza->setCondicion("(t_traza.ID_Usuario=".$bitacora_revision_video[$i]['ID_Usuario'].") AND (t_traza.Tabla_Afectada='T_Evento' OR t_traza.Tabla_Afectada='T_detalleEvento' OR t_traza.Tabla_Afectada='T_EventoCencon' OR t_traza.Tabla_Afectada='T_PruebaAlarma') AND (t_traza.Fecha between '".$bitacora_revision_video[$i]['Fecha_Inicia_Revision']."' AND '".date("Y-m-d")."') AND (t_traza.Hora between '".$bitacora_revision_video[$i]['Hora_Inicia_Revision']."' AND '".date("H:i:s", time())."')");
-                    $obj_traza->obtiene_trazabilidad();
-                    if (count($obj_traza->getArreglo())==0){
-                        $data.="-".$bitacora_revision_video[$i]['Nombre']." desatendido por más de 10 min<br>";
+                if($bitacora_revision_video[$i]['Control']>0 && $suma_tiempos>10){
+                    if($suma_tiempos>30){ 
+                        $data.="-".$bitacora_revision_video[$i]['Nombre']." desatendido por más de 30 min<br>";
+                    }else {
+                        $obj_traza->setCondicion("(t_traza.ID_Usuario=".$bitacora_revision_video[$i]['ID_Usuario'].") AND (t_traza.Tabla_Afectada='T_Evento' OR t_traza.Tabla_Afectada='T_detalleEvento' OR t_traza.Tabla_Afectada='T_EventoCencon' OR t_traza.Tabla_Afectada='T_PruebaAlarma') AND (t_traza.Fecha between '".$bitacora_revision_video[$i]['Fecha_Inicia_Revision']."' AND '".date("Y-m-d")."') AND (t_traza.Hora between '".$bitacora_revision_video[$i]['Hora_Inicia_Revision']."' AND '".date("H:i:s", time())."')");
+                        $obj_traza->obtiene_trazabilidad();
+                        if (count($obj_traza->getArreglo())==0){
+                            $data.="-".$bitacora_revision_video[$i]['Nombre']." desatendido por más de 10 min<br>";
+                        }
                     }
                 }
             }
+            
         }
+        
+        if(in_array($_SESSION['id'], array_column($bitacora_revision_video, 'Control'))){
+            $id = array_search($_SESSION['id'], array_column($bitacora_revision_video, 'ID_Usuario'));
+            //$data="Operador: ".$bitacora_revision_video[$id]['ID_Puesto_Monitoreo']."<br>";
+            
+            $fecha2 = new DateTime($bitacora_revision_video[$id]['Fecha_Inicia_Revision']." ".$bitacora_revision_video[$id]['Hora_Inicia_Revision']);
+            $diff = $fecha1->diff($fecha2);
+            $suma_tiempos =(intval($diff->d)*1440)+(intval($diff->h)*60)+(intval($diff->i)*1);
+            if($suma_tiempos>10){
+                $data="-".$bitacora_revision_video[$id]['Nombre']." desatendido por ".$suma_tiempos." min<br>";
+            }
+        }
+        
         echo $data;
     }
     

@@ -24,9 +24,6 @@
         <script>
             $(document).ready(function () {
                 <?php if( $_SESSION['rol']==1 || $_SESSION['rol']==11){?>
-
-                    myToast = $().toastmessage('showSuccessToast', "Revisiones de Control activadas");
-                    $().toastmessage('removeToast', myToast);
                     revision_controles();
                     setInterval(revision_controles,60000);
                 <?php } ?>
@@ -34,11 +31,13 @@
 
             function revision_controles(){
                 $.post("index.php?ctl=revision_controles_desatendidos", {}, function(data){
-                    $().toastmessage('removeToast', myToast);
-                    $().toastmessage({sticky : true});
                     var srt = data;
                         var n= srt.search("<br>");
+                        if(typeof(myToast)!== 'undefined'){
+                            $().toastmessage('removeToast', myToast);
+                        }
                         if(n!=-1){
+                            $().toastmessage({sticky : true});
                             myToast = $().toastmessage('showWarningToast', data); 
                         }
                 });

@@ -189,8 +189,8 @@ class Data_Provider{
             //Inicializa el nombre del usuario que puede acceder la base de datos
             $this->mvc_bd_usuario  = "root";
             //Inicializa la clave de acceso a la base de datos
-            //$this->mvc_bd_clave    = "123456Aa";
-            $this->mvc_bd_clave    = "eda198319871983oriel";
+            $this->mvc_bd_clave    = "123456Aa";
+            //$this->mvc_bd_clave    = "eda198319871983oriel";
             //$this->mvc_bd_clave    = "";
             //Es capaz de representar cualquier carácter Unicode a nivel de base de datos
             $this->consulta="SET NAMES 'utf8'";
