@@ -9794,7 +9794,8 @@ class Controller{
                                 $pos=0;
                                                                 
                                 for ($i = 0; $i < $cantidad_puestos_activos; $i++) {
-                                    if ($_POST['id_puesto']==$puestos_activos[$i]['ID_Puesto_Monitoreo']){
+                                    //if ($_POST['id_puesto']==$puestos_activos[$i]['ID_Puesto_Monitoreo']){
+                                      if ($_SESSION['id']==$puestos_activos[$i]['ID_Usuario']){
                                         $obj_puesto_monitoreo->setCondicion("Estado=0 and (TIMESTAMPDIFF(MINUTE, concat(Fecha_Inicia_Revision,' ',Hora_Inicia_Revision),NOW())<10) and ID_Unidad_Video=".$params[$i]['ID_Unidad_Video']);
                                         if (!($obj_puesto_monitoreo->existe_revision_de_video_pendiente_en_bitacora())){
                                             $obj_puesto_monitoreo->setId_unidad_video($params[$i]['ID_Unidad_Video']);
@@ -9878,7 +9879,8 @@ class Controller{
                                 $pos=0;
                                                                 
                                 for ($i = 0; $i < $cantidad_puestos_activos; $i++) {
-                                    if ($_POST['id_puesto']==$puestos_activos[$i]['ID_Puesto_Monitoreo']){
+                                    //if ($_POST['id_puesto']==$puestos_activos[$i]['ID_Puesto_Monitoreo']){
+                                      if ($_SESSION['id']==$puestos_activos[$i]['ID_Usuario']){
                                         $obj_puesto_monitoreo->setCondicion("Estado=0 and (TIMESTAMPDIFF(MINUTE, concat(Fecha_Inicia_Revision,' ',Hora_Inicia_Revision),NOW())<10) and ID_Unidad_Video=".$params[$i]['ID_Unidad_Video']);
                                         if (!($obj_puesto_monitoreo->existe_revision_de_video_pendiente_en_bitacora())){
                                             $obj_puesto_monitoreo->setId_unidad_video($params[$i]['ID_Unidad_Video']);
@@ -10148,7 +10150,8 @@ class Controller{
                                 $pos=0;
                                                                 
                                 for ($i = 0; $i < $cantidad_puestos_activos; $i++) {
-                                    if ($_POST['id_puesto']==$puestos_activos[$i]['ID_Puesto_Monitoreo']){
+                                    //if ($_POST['id_puesto']==$puestos_activos[$i]['ID_Puesto_Monitoreo']){
+                                      if ($_SESSION['id']==$puestos_activos[$i]['ID_Usuario']){
                                         $obj_puesto_monitoreo->setCondicion("Estado=0 and (TIMESTAMPDIFF(MINUTE, concat(Fecha_Inicia_Revision,' ',Hora_Inicia_Revision),NOW())<10) and ID_Unidad_Video=".$params[$i]['ID_Unidad_Video']);
                                         if (!($obj_puesto_monitoreo->existe_revision_de_video_pendiente_en_bitacora())){
                                             $obj_puesto_monitoreo->setId_unidad_video($params[$i]['ID_Unidad_Video']);
@@ -10233,7 +10236,8 @@ class Controller{
                                 $pos=0;
                                                                 
                                 for ($i = 0; $i < $cantidad_puestos_activos; $i++) {
-                                    if ($_POST['id_puesto']==$puestos_activos[$i]['ID_Puesto_Monitoreo']){
+                                    //if ($_POST['id_puesto']==$puestos_activos[$i]['ID_Puesto_Monitoreo']){
+                                      if ($_SESSION['id']==$puestos_activos[$i]['ID_Usuario']){
                                         $obj_puesto_monitoreo->setCondicion("Estado=0 and (TIMESTAMPDIFF(MINUTE, concat(Fecha_Inicia_Revision,' ',Hora_Inicia_Revision),NOW())<10) and ID_Unidad_Video=".$params[$i]['ID_Unidad_Video']);
                                         if (!($obj_puesto_monitoreo->existe_revision_de_video_pendiente_en_bitacora())){
                                             $obj_puesto_monitoreo->setId_unidad_video($params[$i]['ID_Unidad_Video']);
@@ -10515,7 +10519,8 @@ class Controller{
                                     $pos=0;
                                                                 
                                     for ($i = 0; $i < $cantidad_puestos_activos; $i++) {
-                                        if ($_POST['id_puesto']==$puestos_activos[$i]['ID_Puesto_Monitoreo']){
+                                        //if ($_POST['id_puesto']==$puestos_activos[$i]['ID_Puesto_Monitoreo']){
+                                          if ($_SESSION['id']==$puestos_activos[$i]['ID_Usuario']){
                                             $obj_puesto_monitoreo->setCondicion("Estado=0 and (TIMESTAMPDIFF(MINUTE, concat(Fecha_Inicia_Revision,' ',Hora_Inicia_Revision),NOW())<10) and ID_Unidad_Video=".$params[$i]['ID_Unidad_Video']);
                                             if (!($obj_puesto_monitoreo->existe_revision_de_video_pendiente_en_bitacora())){
                                                 $obj_puesto_monitoreo->setId_unidad_video($params[$i]['ID_Unidad_Video']);
@@ -10544,7 +10549,8 @@ class Controller{
                                     $pos=0;
                                                                 
                                     for ($i = 0; $i < $cantidad_puestos_activos; $i++) {
-                                        if ($_POST['id_puesto']==$puestos_activos[$i]['ID_Puesto_Monitoreo']){
+                                        //if ($_POST['id_puesto']==$puestos_activos[$i]['ID_Puesto_Monitoreo']){
+                                          if ($_SESSION['id']==$puestos_activos[$i]['ID_Usuario']){
                                             $obj_puesto_monitoreo->setCondicion("Estado=0 and (TIMESTAMPDIFF(MINUTE, concat(Fecha_Inicia_Revision,' ',Hora_Inicia_Revision),NOW())<10) and ID_Unidad_Video=".$params[$i]['ID_Unidad_Video']);
                                             if (!($obj_puesto_monitoreo->existe_revision_de_video_pendiente_en_bitacora())){
                                                 $obj_puesto_monitoreo->setId_unidad_video($params[$i]['ID_Unidad_Video']);
