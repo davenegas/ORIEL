@@ -250,7 +250,7 @@
                             <?php }; ?>-->
                                 
                             <?php if ($_SESSION['modulos']['Reportes-Alertas Generales']==1){ ?>
-                                <li><a href="index.php?ctl=reporte_tl300_en_puntos_bcr_listar">Direccionamiento Fogligt</a></li> 
+                                <li><a href="index.php?ctl=reporte_tl300_en_puntos_bcr_listar">Direccionamiento Foglight</a></li> 
                             <?php }; ?> 
                                 
                             <?php if ($_SESSION['modulos']['Reportes-Controles de Video']==1){ ?>
