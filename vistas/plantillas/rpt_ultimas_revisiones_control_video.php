@@ -29,7 +29,7 @@
                             <th style="text-align:center">Tiempo promedio en segundos</th>
                             <th style="text-align:center">Tiempo promedio de revisión</th>
                             <th style="text-align:center">Unidad de Video</th>
-                            <th style="text-align:center">Puestos</th>
+                            <th style="text-align:center">Puesto revisando</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -44,7 +44,11 @@
                                 <td style="text-align:center"><?php echo $ultima_revision[$i]['Tiempo_Promedio_Segundos'];?></td>
                                 <td style="text-align:center"><?php echo $ultima_revision[$i]['Tiempo_Promedio'];?></td>
                                 <td style="text-align:center"><?php echo $ultima_revision[$i]['Descripcion'];?></td>
-                                <td style="text-align:center"><?php echo $ultima_revision[$i]['Lista_Puestos'];?></td>
+                                <?php if($ultima_revision[$i]['Lista_Puestos']==1){ ?>
+                                    <td style="text-align:center">NA</td>
+                                <?php } else { ?>
+                                    <td style="text-align:center"><?php echo $ultima_revision[$i]['Lista_Puestos'];?></td>
+                                <?php } ?>
                             </tr>
                         <?php } ?>
                     </tbody>

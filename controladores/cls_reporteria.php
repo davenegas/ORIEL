@@ -190,7 +190,7 @@ class cls_reporteria{
                     LEFT OUTER JOIN t_puestomonitoreo on t_puestomonitoreo.ID_Puesto_Monitoreo = t_bitacorarevisionesvideo.ID_Puesto_Monitoreo", 
                 "t_bitacorarevisionesvideo.*, t_unidadvideo.Descripcion, t_puestomonitoreo.Nombre, "
                 . "concat(concat(t_usuario.Nombre,' '),t_usuario.Apellido) Nombre_Completo,t_puestomonitoreo.ID_Usuario Control ",
-                $this->condicion." ORDER BY t_puestomonitoreo.Nombre");
+                $this->condicion." ORDER BY t_puestomonitoreo.ID_Puesto_Monitoreo");
             $this->arreglo=$this->obj_data_provider->getArreglo();
             $this->obj_data_provider->desconectar();
         } 
@@ -229,7 +229,7 @@ class cls_reporteria{
             left OUTER join t_puestomonitoreounidadvideo on t_puestomonitoreounidadvideo.ID_Unidad_Video = t_unidadvideo.ID_Unidad_Video
             LEFT OUTER JOIN t_puestomonitoreo ON t_puestomonitoreo.ID_Puesto_Monitoreo = t_puestomonitoreounidadvideo.ID_Puesto_Monitoreo",
             "t_bitacorarevisionesvideo.`ID_Unidad_Video`, MAX(concat(`Fecha_Termina_Revision`,' ',`Hora_Termina_Revision`)) Fecha_Hora ,
-            t_unidadvideo.Descripcion, GROUP_CONCAT(DISTINCT t_puestomonitoreo.Nombre, ' ') Lista_Puestos",
+            t_unidadvideo.Descripcion, GROUP_CONCAT(DISTINCT t_bitacorarevisionesvideo.Estado, '') Lista_Puestos",
             "t_unidadvideo.Estado=0
             GROUP by t_bitacorarevisionesvideo.`ID_Unidad_Video` ORDER BY Fecha_Hora ASC");
         $this->arreglo=$this->obj_data_provider->getArreglo();
@@ -257,5 +257,16 @@ class cls_reporteria{
         $this->arreglo=$this->obj_data_provider->getArreglo();
         $this->obj_data_provider->desconectar();
     }
+    
+    public function obtener_Revisiones_pendientes(){
+        $this->obj_data_provider->conectar();
+        $this->arreglo=$this->obj_data_provider->trae_datos("t_bitacorarevisionesvideo
+            INNER JOIN t_puestomonitoreo ON t_puestomonitoreo.ID_Puesto_Monitoreo = t_bitacorarevisionesvideo.ID_Puesto_Monitoreo",
+            "t_bitacorarevisionesvideo.ID_Unidad_Video, concat(t_puestomonitoreo.Nombre,' ') Descripcion",
+            $this->condicion);
+        $this->arreglo=$this->obj_data_provider->getArreglo();
+        $this->obj_data_provider->desconectar();
+    }
+    
     
 }?>

@@ -104,10 +104,14 @@ class Controller{
     public function principal(){
         //Validación para verificar si el usuario está logeado en el sistema
         if(isset($_SESSION['nombre'])){
-
-        //Llamada al formulario correspondiente de la vista
-        require __DIR__ . '/../vistas/plantillas/frm_principal.php';
-           
+            if($_SESSION['rol']==25){
+                //echo "Control y Seguimiento de cajeros";
+                //header("Location: http://localhost/ORIEL-Cajeros/index.php?ctl=inicio");
+                header("Location: http://10.170.5.92:8080/ORIEL-Cajeros/index.php?ctl=inicio");
+            }else {
+                //Llamada al formulario correspondiente de la vista
+                require __DIR__ . '/../vistas/plantillas/frm_principal.php';
+            }
         }else{
             /*
             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
@@ -2461,7 +2465,7 @@ class Controller{
                 //Agrega el asunto del correo para envio al usuario realizando la solicitud
                 $obj_correo->agregar_asunto_de_correo("Recordatorio Clave Sistema Oriel");
                 //Agrega detalle de correo
-                $obj_correo->agregar_detalle_de_correo("Gracias por usar Oriel</br></br> "
+                $obj_correo->agregar_detalle_de_correo("Gracias por utilizar Oriel</br></br> "
                         . "En respuesta a su solicitud, le reenviamos su clave: <strong>".$pass."</strong><br></br>"
                         . "Le recordamos que su clave en Oriel no vence y es usted quien decide cuando cambiarla.<br><br>"
                         . "Este es un mensaje automático, por favor no reponderlo. Si requiere ayuda, comuníquese con el Centro de Control Ext: 79066.</br></br>"
@@ -5301,7 +5305,7 @@ class Controller{
                         //Agrega el asunto del correo para envio al usuario realizando la solicitud
                         $obj_correo->agregar_asunto_de_correo("Información personal externo");
                         //Agrega detalle de correo
-                        $obj_correo->agregar_detalle_de_correo("Gracias por usar Oriel</br></br> "
+                        $obj_correo->agregar_detalle_de_correo("Gracias por utilizar Oriel</br></br> "
                             . "Las siguientes personas han sido deshabilitas del sistema:</br>"
                             . $detalle."<br><br>"
                             . "Este es un mensaje automático, por favor no reponderlo. Si requiere ayuda, comuníquese con el Centro de Control Ext: 79066.</br></br>"
@@ -6943,49 +6947,58 @@ class Controller{
         if(isset($_SESSION['nombre'])){
             $obj_area_apoyo= new cls_areasapoyo();
             $obj_telefono = new cls_telefono();
-            //Obtiene la información enviada por el formulario POST
-            $obj_area_apoyo->setId(null);
-            $obj_area_apoyo->setTipo_area($_POST['Tipo_Area_Apoyo']);
-            echo ($_POST['Tipo_Area_Apoyo']);
-            $obj_area_apoyo->setDistrito($_POST['distrito2']);
-            $obj_area_apoyo->setNombre_area($_POST['nombre']);
-            $obj_area_apoyo->setDireccion($_POST['direccion']);
-            $obj_area_apoyo->setObservaciones($_POST['observaciones']);
-            //agrega el area de apoyo nueva
-            $obj_area_apoyo->setCondicion("");
-            $obj_area_apoyo->agregar_area_apoyo();
-            //Luego de agregar el area de apoyo devuelve el ID del area agregada
-            $area_apoyo = $obj_area_apoyo->getArreglo();
-            //Valida que el arreglo tenga información
-            if($area_apoyo==""){
-                echo 'Error al traer area de apoyo nueva';
-            }   else    {
-                //Crea el número del area de apoyo nueva
-                $obj_telefono->setId(null);
-                $obj_telefono->setNumero($_POST['numero']);
-                $obj_telefono->setTipo_telefono($_POST['Tipo_Telefono']);
-                $obj_telefono->setId2($area_apoyo[0]['ID_Area_Apoyo']); 
-                $obj_telefono->setObservaciones("");
-                $obj_telefono->guardar_telefono();
-            }
-            //Asigna el area de apoyo al puntoBCR
-            $obj_area_apoyo = new cls_areasapoyo();
-            $obj_area_apoyo->setId($area_apoyo[0]['ID_Area_Apoyo']);
-            $obj_area_apoyo->setId2($_POST['ID_PuntoBCR']);
-
-            //Establece la condicion para buscar si el area de apoyo ya está asignada al punto bcr
-            $obj_area_apoyo->setCondicion("T_PuntoBCRAreaApoyo.ID_PuntoBCR='".$_POST['ID_PuntoBCR']."' AND T_PuntoBCRAreaApoyo.ID_Area_Apoyo='".$area_apoyo[0]['ID_Area_Apoyo']."'");
-            //Ejecuta la consulta sobre la bd
-
-            $obj_area_apoyo->obtiene_todos_las_areas_apoyo();
-            $areas_apoyo =$obj_area_apoyo->getArreglo();
-            if($areas_apoyo==""){
-                $obj_area_apoyo->agregar_PuntoBCR_AreaApoyo();
-            }   else    {
-                echo "El Area de Apoyo ya se encuentra asignada al PuntoBCR";
-            }
             
-            header("location:/ORIEL/index.php?ctl=gestion_punto_bcr&id=".$_POST['ID_PuntoBCR']);
+            $obj_telefono->setCondicion("Numero='".$_POST['numero']."'");
+            $obj_telefono->obtiene_telefonos_por_criterio_para_prontuario();
+            $numero_telefono= $obj_telefono->getArreglo();
+            
+            if(count($numero_telefono)==0){
+                //Obtiene la información enviada por el formulario POST
+                $obj_area_apoyo->setId(null);
+                $obj_area_apoyo->setTipo_area($_POST['Tipo_Area_Apoyo']);
+                echo ($_POST['Tipo_Area_Apoyo']);
+                $obj_area_apoyo->setDistrito($_POST['distrito2']);
+                $obj_area_apoyo->setNombre_area($_POST['nombre']);
+                $obj_area_apoyo->setDireccion($_POST['direccion']);
+                $obj_area_apoyo->setObservaciones($_POST['observaciones']);
+                //agrega el area de apoyo nueva
+                $obj_area_apoyo->setCondicion("");
+                $obj_area_apoyo->agregar_area_apoyo();
+                //Luego de agregar el area de apoyo devuelve el ID del area agregada
+                $area_apoyo = $obj_area_apoyo->getArreglo();
+                //Valida que el arreglo tenga información
+                if($area_apoyo==""){
+                    echo 'Error al traer area de apoyo nueva';
+                }   else    {
+                    //Crea el número del area de apoyo nueva
+                    $obj_telefono->setId(null);
+                    $obj_telefono->setNumero($_POST['numero']);
+                    $obj_telefono->setTipo_telefono($_POST['Tipo_Telefono']);
+                    $obj_telefono->setId2($area_apoyo[0]['ID_Area_Apoyo']); 
+                    $obj_telefono->setObservaciones("");
+                    $obj_telefono->guardar_telefono();
+                }
+                //Asigna el area de apoyo al puntoBCR
+                $obj_area_apoyo = new cls_areasapoyo();
+                $obj_area_apoyo->setId($area_apoyo[0]['ID_Area_Apoyo']);
+                $obj_area_apoyo->setId2($_POST['ID_PuntoBCR']);
+
+                //Establece la condicion para buscar si el area de apoyo ya está asignada al punto bcr
+                $obj_area_apoyo->setCondicion("T_PuntoBCRAreaApoyo.ID_PuntoBCR='".$_POST['ID_PuntoBCR']."' AND T_PuntoBCRAreaApoyo.ID_Area_Apoyo='".$area_apoyo[0]['ID_Area_Apoyo']."'");
+                //Ejecuta la consulta sobre la bd
+
+                $obj_area_apoyo->obtiene_todos_las_areas_apoyo();
+                $areas_apoyo =$obj_area_apoyo->getArreglo();
+                if($areas_apoyo==""){
+                    $obj_area_apoyo->agregar_PuntoBCR_AreaApoyo();
+                }   else    {
+                    echo "El Area de Apoyo ya se encuentra asignada al PuntoBCR";
+                }
+
+                header("location:/ORIEL/index.php?ctl=gestion_punto_bcr&id=".$_POST['ID_PuntoBCR']);
+            } else {
+                echo "<script type=\"text/javascript\">alert('Este número en áreas de apoyo ya existe!');history.go(-1);</script>";
+            }
         }else{
             /*
             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
@@ -7080,19 +7093,28 @@ class Controller{
         if(isset($_SESSION['nombre'])){   
             if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 $obj_telefono = new cls_telefono();
-                $obj_telefono->setId($_POST['ID_Telefono']);
-                $obj_telefono->setId2($_POST['ID_Area_Apoyo']);
-                $obj_telefono->setTipo_telefono($_POST['Tipo_Telefono']);
-                $obj_telefono->setNumero($_POST['numero']);
-                $obj_telefono->setObservaciones($_POST['observaciones_tel']);
-                if($_POST['ID_Telefono']==0){
-                    $obj_telefono->guardar_telefono();
+                
+                $obj_telefono->setCondicion("Numero='".$_POST['numero']."'");
+                $obj_telefono->obtiene_telefonos_por_criterio_para_prontuario();
+                $numero_telefono= $obj_telefono->getArreglo();
+
+                if(count($numero_telefono)==0){
+                    $obj_telefono->setId($_POST['ID_Telefono']);
+                    $obj_telefono->setId2($_POST['ID_Area_Apoyo']);
+                    $obj_telefono->setTipo_telefono($_POST['Tipo_Telefono']);
+                    $obj_telefono->setNumero($_POST['numero']);
+                    $obj_telefono->setObservaciones($_POST['observaciones_tel']);
+                    if($_POST['ID_Telefono']==0){
+                        $obj_telefono->guardar_telefono();
+                    }
+                    else{
+                        $obj_telefono->setCondicion("ID_Telefono='".$_POST['ID_Telefono']."'");
+                        $obj_telefono->actualizar_telefono();
+                    }
+                    header("location:/ORIEL/index.php?ctl=area_apoyo_gestion&id=".$_POST['ID_Area_Apoyo']);
+                }else{ 
+                    echo "<script type=\"text/javascript\">alert('Este número en áreas de apoyo ya existe!');history.go(-1);</script>";
                 }
-                else{
-                    $obj_telefono->setCondicion("ID_Telefono='".$_POST['ID_Telefono']."'");
-                    $obj_telefono->actualizar_telefono();
-                }
-                header("location:/ORIEL/index.php?ctl=area_apoyo_gestion&id=".$_POST['ID_Area_Apoyo']);
             }
         }   else{
             /*
@@ -12277,6 +12299,12 @@ class Controller{
             
             $tam=  count($ultima_revision);
             for ($i = 0; $i <$tam; $i++) {
+                if($ultima_revision[$i]['Lista_Puestos']=='1,0'){
+                    $obj_reporteria->setCondicion("t_bitacorarevisionesvideo.ID_Unidad_VIdeo=".$ultima_revision[$i]['ID_Unidad_Video']." and t_bitacorarevisionesvideo.Estado=0");
+                    $obj_reporteria->obtener_Revisiones_pendientes();
+                    $Puesto_revisando= $obj_reporteria->getArreglo();
+                    $ultima_revision[$i]['Lista_Puestos']=$Puesto_revisando[0]['Descripcion'];
+                }
                 //asigna da date2 la fecha que trae en el arreglo
                 $fecha2 = new DateTime($ultima_revision[$i]['Fecha_Hora']);
                 $diff = $fecha1->diff($fecha2);
@@ -12393,33 +12421,37 @@ class Controller{
             $bitacora_revision_video[$i]= array_merge($bitacora_revision_video[$i],array('Total_Tiempo'=>$tiempo_transcurrido));
             //Defini el color del texto
             $data.="<p style='color: black'>";
-            if($bitacora_revision_video[$i]['ID_Puesto_Monitoreo']>=1 && $bitacora_revision_video[$i]['ID_Puesto_Monitoreo']<=4 || $bitacora_revision_video[$i]['ID_Puesto_Monitoreo']==15){
+            //Alerta puesto del 1 al 4, Z2 y SIS 1 (24hrs)
+            if($bitacora_revision_video[$i]['ID_Puesto_Monitoreo']>=1 && $bitacora_revision_video[$i]['ID_Puesto_Monitoreo']<=4 || $bitacora_revision_video[$i]['ID_Puesto_Monitoreo']==6 || $bitacora_revision_video[$i]['ID_Puesto_Monitoreo']==7){
                 if($bitacora_revision_video[$i]['Control']==0){
                     $data.="<p style='color: red'>";
                 } //else {$data.="<p style='color: black'>";}
             }//else {$data.="<p style='color: black'>";}
-            if($bitacora_revision_video[$i]['ID_Puesto_Monitoreo']==6){
+            
+            //Alertas puesto de Cencon 1 (6:30 a 19:30)
+            if($bitacora_revision_video[$i]['ID_Puesto_Monitoreo']==9){
                 if(date("H:i:s", $time)>='06:30:00' && date("H:i:s", $time)<='19:30:00' && $bitacora_revision_video[$i]['Control']==0){
                     $data="<p style='color: red'>";
                 }//else {$data.="<p style='color: black'>";}
             }//else {$data.="<p style='color: black'>";}
-            if($bitacora_revision_video[$i]['ID_Puesto_Monitoreo']==7){
+            
+            //Alerta puesto Cencon 2 (08 a 16)
+            if($bitacora_revision_video[$i]['ID_Puesto_Monitoreo']==10){
                 if(date("H:i:s", $time)>='08:00:00' && date("H:i:s", $time)<='16:00:00' && $bitacora_revision_video[$i]['Control']==0){
                     $data.="<p style='color: red'>";
                 }//else {$data.="<p style='color: black'>";}
             }//else {$data.="<p style='color: black'>";}
-            if($bitacora_revision_video[$i]['ID_Puesto_Monitoreo']==8){
+            
+            //alerta de Cencon 3 (10 a 18)
+            if($bitacora_revision_video[$i]['ID_Puesto_Monitoreo']==11){
                 if(date("H:i:s", $time)>='10:00:00' && date("H:i:s", $time)<='18:00:00' && $bitacora_revision_video[$i]['Control']==0){
                     $data.="<p style='color: red'>";
                 }//else {$data.="<p style='color: black'>";}
             }//else {$data.="<p style='color: black'>";}
-            if($bitacora_revision_video[$i]['ID_Puesto_Monitoreo']==9){
-                if((date("H:i:s", $time)<='07:00:00' || date("H:i:s", $time)>='12:00:00') && $bitacora_revision_video[$i]['Control']==0){
-                    $data.="<p style='color: red'>";
-                }//else {$data.="<p style='color: black'>";}
-            }//else {$data.="<p style='color: black'>";}
-            if($bitacora_revision_video[$i]['ID_Puesto_Monitoreo']==10){
-                if(date("H:i:s", $time)>='12:00:00' && date("H:i:s", $time)<='22:00:00' && $bitacora_revision_video[$i]['Control']==0){
+            
+            //Alerta de SIS 2 y Puesto 5 (6 a 22)
+            if($bitacora_revision_video[$i]['ID_Puesto_Monitoreo']==8 ||$bitacora_revision_video[$i]['ID_Puesto_Monitoreo']==5){
+                if(date("H:i:s", $time)>='06:00:00' && date("H:i:s", $time)<='22:00:00' && $bitacora_revision_video[$i]['Control']==0){
                     $data.="<p style='color: red'>";
                 }//else {$data.="<p style='color: black'>";}
             }//else {$data.="<p style='color: black'>";}

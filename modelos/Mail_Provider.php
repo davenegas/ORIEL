@@ -42,8 +42,7 @@ class Mail_Provider{
             //$this->mail->SetFrom('113100038@bancobcr.com', 'Oriel');
             $this->mail->SetFrom('oriel@bancobcr.com', 'Oriel');
             $this->mail->addReplyTo('oriel@bancobcr.com', 'Oriel');
-          
-            
+
         //Acapara los errores que se puedan presentar y muestra en pantalla lo correspondiente
         }catch (Exception $e){
            echo 'Hubo un problema al inicializar las variables de la clase Mail_Provider';

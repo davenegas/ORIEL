@@ -145,6 +145,7 @@
                     </thead>
                     <tbody id="cuerpo">
                     <?php 
+                    if (isset($params)){
                     $tam=count($params);
                     for ($i = 0; $i <$tam; $i++) { ?>
                         <tr data-toggle="tooltip" title="<?php echo $detalle_y_ultimo_usuario[$i]['Detalle'];?>">
@@ -185,7 +186,7 @@
 
                             <td hidden="true"><?php echo $cadena;?></td>
                         </tr>
-                    <?php } ?>
+                    <?php } } ?>
                     </tbody>
                 </table>
             </div>
