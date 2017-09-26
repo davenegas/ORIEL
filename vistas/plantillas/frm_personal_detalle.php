@@ -117,6 +117,7 @@
                                 <th style="text-align:center">Número teléfono</th>
                                 <th style="text-align:center">Observaciones</th>
                                 <?php if($_SESSION['modulos']['Editar- Personal']==1){ ?>
+                                <th style="text-align:center">Estado Teléfono</th>
                                 <th style="text-align:center" colspan="2">Opciones número</th>
                                 <?php } ?>
                             </tr>
@@ -129,7 +130,23 @@
                                     <td style="text-align:center"><?php echo $params[$i]['Tipo_Telefono'];?></td>
                                     <td style="text-align:center"><?php echo $params[$i]['Numero'];?></td>
                                     <td style="text-align:center"><?php echo $params[$i]['Observaciones_Tel'];?></td>
+                                    <!--<td style="text-align:center"><?php echo $params[$i]['Estado_Telefono'];?></td>-->
                                     <?php if($_SESSION['modulos']['Editar- Personal']==1){  ?>
+                                        <?php if ($params[$i]['Estado_Telefono']==1){  ?>
+<!--                                        <td style="text-align:center"><a class="btn azul" role="button" id="prueba" name="prueba" 
+                                                onclick="Editar_Estado_telefono('<?php echo $params[$i]['ID_Telefono'];?>','<?php echo $params[$i]['Estado_Telefono'];?>')">
+                                            Correcto</a></td> -->
+                                            <td style="text-align:center"><a href="index.php?ctl=telefono_cambiar_estado&id=
+                                             <?php echo $params[$i]['ID_Telefono']?>&estado=<?php echo $params[$i]['Estado_Telefono']?>&id_persona=<?php echo $params[0]['ID_Persona']?>">
+                                               Correcto</a></td>
+                                        <?php }else{ ?>
+                                            <td style="text-align:center"><a href="index.php?ctl=telefono_cambiar_estado&id=
+                                               <?php echo $params[$i]['ID_Telefono']?>&estado=<?php echo $params[$i]['Estado_Telefono']?>&id_persona=<?php echo $params[0]['ID_Persona']?>">
+                                                Incorrecto</a></td>
+<!--                                            <td style="text-align:center"><a class="btn azul" role="button" id="prueba" name="prueba" 
+                                                onclick="Editar_Estado_telefono('<?php echo $params[$i]['ID_Telefono'];?>','<?php echo $params[$i]['Estado_Telefono'];?>')">
+                                            Incorrecto</a></td> -->
+                                        <?php } ?>
                                         <td style="text-align:center"><a class="btn azul" role="button" id="prueba" name="prueba" 
                                                 onclick="Editar_telefono(<?php echo $params[$i]['ID_Telefono'];?>,<?php echo $params[$i]['ID_Tipo_Telefono'];?>,'<?php echo $params[$i]['Numero'];?>','<?php echo $params[$i]['Observaciones_Tel'];?>')">
                                             Editar</a></td> 

@@ -1,4 +1,4 @@
-<?php
+ <?php
 /*
  * Clase DataProvider, parte de la capa modelo de acceso a los datos
  * Clase principal para interactuar con la base de datos BD_Gerencia_Seguridad de MySQL

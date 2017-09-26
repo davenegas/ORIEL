@@ -6561,6 +6561,39 @@ class Controller{
         }
     }
     
+    
+    public function telefono_cambiar_estado(){
+        if(isset($_SESSION['nombre'])){
+            if (isset($_GET['id'])) {
+                if (isset($_GET['estado'])) { 
+                    if (isset($_GET['id_persona'])) { 
+                        $obj_telefono = new cls_telefono();
+
+                        if($_GET['estado']==1){
+                            $obj_telefono->setEstado("0");
+                        }
+                        else {
+                            $obj_telefono->setEstado("1");
+                        }
+                        $obj_telefono->setCondicion("ID_Telefono='".$_GET['id']."'");
+                        $obj_telefono->actualizar_estado_telefono();
+                        header ("location:/ORIEL/index.php?ctl=personal_gestion&id=".$_GET['id_persona']);
+                    }
+                }
+            }
+        }else{
+            /*
+            * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+            * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+            * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+            * En la última línea llama a la pagina de inicio de sesión.
+            */
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }
+    }
+    
     public function puntobcr_asignar_horario() {
         if(isset($_SESSION['nombre'])){
             $obj_horario = new cls_horario();

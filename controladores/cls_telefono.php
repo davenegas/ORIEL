@@ -95,6 +95,12 @@ class cls_telefono{
         
     }
     
+    public function actualizar_estado_telefono(){
+        $this->obj_data_provider->conectar();
+        $this->obj_data_provider->edita_datos("T_Telefono", "Estado=".$this->estado,$this->condicion);
+        $this->obj_data_provider->desconectar();
+    }
+    
     public function obtiene_tipo_telefonos(){
         $this->obj_data_provider->conectar();
         if($this->condicion==""){

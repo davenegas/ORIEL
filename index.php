@@ -370,6 +370,8 @@ $map = array(
     'personal_cambiar_ue'=>array('controller'=>'Controller','action'=> 'personal_cambiar_ue'),
     'personal_cambiar_puesto'=>array('controller'=>'Controller','action'=> 'personal_cambiar_puesto'),
     'persona_guardar_informacion_general'=>array('controller'=>'Controller','action'=> 'persona_guardar_informacion_general'),
+    'telefono_cambiar_estado'=>array('controller'=>'Controller','action'=> 'telefono_cambiar_estado'),
+    
     
     //Control de Acceso
         //Controller
