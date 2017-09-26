@@ -16,7 +16,7 @@
         <div id="cargando">
             <center><img align="center" src="vistas/Imagenes/Espere.gif"/></center>
         </div>
-        <div class="container animated fadeIn">
+        <div class="animated fadeIn">
             <h2>Listado de Controladores Recibidos (1/?):</h2>
             
             <a href="index.php?ctl=" class="btn btn-default espacio-abajo" role="button">Validar información</a>

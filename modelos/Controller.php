@@ -104,14 +104,7 @@ class Controller{
     public function principal(){
         //Validación para verificar si el usuario está logeado en el sistema
         if(isset($_SESSION['nombre'])){
-            if($_SESSION['rol']==25){
-                //echo "Control y Seguimiento de cajeros";
-                //header("Location: http://localhost/ORIEL-Cajeros/index.php?ctl=inicio");
-                header("Location: http://10.170.5.92:8080/ORIEL-Cajeros/index.php?ctl=inicio");
-            }else {
-                //Llamada al formulario correspondiente de la vista
-                require __DIR__ . '/../vistas/plantillas/frm_principal.php';
-            }
+            require __DIR__ . '/../vistas/plantillas/frm_principal.php';
         }else{
             /*
             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
@@ -2570,7 +2563,14 @@ class Controller{
                             }
                             //Llamada al formulario correspondiente de la vista
                             //require __DIR__ . '/../vistas/plantillas/frm_principal.php';
-                            header ("location:/ORIEL/index.php?ctl=principal");
+                            if($_SESSION['rol']==25){
+                                //echo "Control y Seguimiento de cajeros";
+                                header("Location: http://10.170.5.92:8080/ORIEL-Cajeros/index.php?ctl=inicio");
+                            }else {
+                                //Llamada al formulario correspondiente de la vista
+                                header ("location:/ORIEL/index.php?ctl=principal");
+                            }
+                            
                         }else{
                             //Define las variables de notificacion en pantalla para el usuario, en caso de que la clave y el usuario sean el mismo.
                             $tipo_de_alerta="alert alert-info";
@@ -5689,18 +5689,15 @@ class Controller{
     // de la prioridad del tipo de evento y rol de usuario que esté manipulando la información
     public function actualiza_en_vivo_estado_evento(){
         if(isset($_SESSION['nombre'])){
-        
             $obj_even = new cls_eventos();
             $id_tipo_evento= $_POST['id_tipo_evento'];
              
             $obj_even->setTipo_evento($id_tipo_evento);
             $prioridad_tipo_evento= $obj_even->obtiene_prioridad_de_tipo_de_evento();
-
             $obj_even->obtener_seguimientos();
             $estadoEven = $obj_even->getArreglo(); 
 
             $tam = count($estadoEven);
-
             for($i=0; $i<$tam;$i++){
                 //if($estadoEventos[$i]['Estado_Evento']==$params[0]['Estado_Evento']){
                 if ($estadoEven[$i]['Estado_Evento']!="Abierto por Error"){
@@ -5709,7 +5706,7 @@ class Controller{
                             if ($estadoEven[$i]['Estado_Evento']!="Cerrado"){
                                 $html .= '<option value="'.$estadoEven[$i]['ID_EstadoEvento'].'">'.$estadoEven[$i]['Estado_Evento'].'</option>';
                             }
-                        }else{
+                        }else {
                             if ($estadoEven[$i]['Estado_Evento']!="Solicitar Cierre"){
                                 $html .= '<option value="'.$estadoEven[$i]['ID_EstadoEvento'].'">'.$estadoEven[$i]['Estado_Evento'].'</option>';
                             }                       
@@ -5779,7 +5776,7 @@ class Controller{
                 $empresa[0]['Apellido_Externo'] ="";
                 $empresa[0]['Apellido_Nombre'] ="";
                 $empresa[0]['Departamento'] ="";
-            }   else   {
+            } else {
                 $obj_empresa->setCondicion("T_Empresa.ID_Empresa='".$_GET['id']."'");
                 $obj_empresa->obtiene_todas_las_empresas();
                 $empresa= $obj_empresa->getArreglo();
@@ -5799,7 +5796,7 @@ class Controller{
             $unidad_ejecutora = $obj_ue->getArreglo();
             require __DIR__ . '/../vistas/plantillas/frm_empresas_editar.php';
             
-        }   else    {
+        } else {
             /*
             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
@@ -5831,11 +5828,8 @@ class Controller{
                 $obj_empresas->setFecha_final($_POST['fecha_final']);
                 
                 $obj_empresas->guardar_empresa();
-                //header ("location:/ORIEL/index.php?ctl=empresas_listar");
-                //$this->empresas_listar();
             }
-            
-        } else    {
+        } else {
             /*
             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
@@ -5867,7 +5861,7 @@ class Controller{
                     //$this->empresas_listar();
                 }
             }
-        }else{
+        } else {
             /*
             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
@@ -6092,8 +6086,7 @@ class Controller{
 
                 require __DIR__ . '/../vistas/plantillas/frm_puntos_bcr_editar.php';
             }
-            
-        }   else    {
+        } else {
             /*
             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
@@ -6163,7 +6156,6 @@ class Controller{
     //Metodo que permite actualizar en tiempo real la lista de puntos bcr
     public function actualiza_en_vivo_punto_bcr(){
         if(isset($_SESSION['nombre'])){
-            
             $obj_ev =new cls_eventos();
             $id_tipo_punto_bcr= $_POST['id_tipo_punto_bcr'];
             $id_provincia= $_POST['id_provincia'];
@@ -6463,7 +6455,7 @@ class Controller{
     
     public function direccionIP_agregar(){
         if(isset($_SESSION['nombre'])){
-            //echo "<script>alert('test msgbox')</script>";
+            
             $obj_direccion_ip = new cls_direccionIP();
             //Paramatros para crear nueva Dirección IP
             $obj_direccion_ip->setId($_POST['ID_Direccion_IP']);
@@ -12065,7 +12057,7 @@ class Controller{
             
             $tam=  count($ultima_revision);
             for ($i = 0; $i <$tam; $i++) {
-                if($ultima_revision[$i]['Lista_Puestos']=='1,0'){
+                if($ultima_revision[$i]['Lista_Puestos']=='1,0' || $ultima_revision[$i]['Lista_Puestos']=='0,1'){
                     $obj_reporteria->setCondicion("t_bitacorarevisionesvideo.ID_Unidad_VIdeo=".$ultima_revision[$i]['ID_Unidad_Video']." and t_bitacorarevisionesvideo.Estado=0");
                     $obj_reporteria->obtener_Revisiones_pendientes();
                     $Puesto_revisando= $obj_reporteria->getArreglo();
