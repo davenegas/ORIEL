@@ -3,6 +3,11 @@
  * Clase DataProvider, parte de la capa modelo de acceso a los datos
  * Clase principal para interactuar con la base de datos BD_Gerencia_Seguridad de MySQL
  */
+ 
+ 
+ // Problemas de conexion en driver 
+ //https://www.sitepoint.com/using-an-access-database-with-php/
+ 
 class Access_Provider{
     /*
      * Variables publicas, que determinan los parametros de conexión a la base de datos,
@@ -97,7 +102,7 @@ class Access_Provider{
             //Es capaz de representar cualquier carácter Unicode a nivel de base de datos
             $this->mvc_ruta_archivo_mdb    = $bd_ruta;
 
-            $this->consulta="SET NAMES 'utf8'";
+            //$this->consulta="SET NAMES 'utf8'";
 
             //Acapara los errores que se puedan presentar y muestra en pantalla lo correspondiente
        }catch (Exception $e){
@@ -112,7 +117,7 @@ class Access_Provider{
         try{
             
             $this->conexion = new PDO("odbc:DRIVER={Microsoft Access Driver (*.mdb)}; DBQ=".$this->mvc_ruta_archivo_mdb.$this->mvc_bd_nombre.".mdb"."; Uid=".$this->mvc_bd_usuario."; Pwd=".$this->mvc_bd_clave.";");
-            $consulta=$this->conexion->query("SET NAMES 'utf8'");
+            //$consulta=$this->conexion->query("SET NAMES 'utf8'");
                           
         }catch (Exception $e){
             //Notifica de un error al conectarse a la base de datos
@@ -127,23 +132,7 @@ class Access_Provider{
        mysqli_close($this->conexion);
        // Asigna verdadero al resultado de la operación
        $this->resultado_operacion=true;
-    }
-
-    //Método que permite traer información de la base de datos mediante consultas SQL
-    //Este metodo recibe el nombre de la tabla, campos de la misma y la condición de búsqueda en caso de que exista
-    public function ejecuta_instruccion_sql($consulta_sql){
-       
-        unset($this->arreglo);
-       
-            //Verifica si la consulta SQL tiene una condición de búsqueda
-        if ($consulta_sql!=""){
-            //En caso de no tener condición, agrega campos y nombre de la tabla solamente
-            $consulta=$this->conexion->query($consulta_sql);
-            //echo ("select ".$campos." from ".$table.";");
-        }
-
-    }
-    
+    }   
     
     //Método que permite traer información de la base de datos mediante consultas SQL
     //Este metodo recibe el nombre de la tabla, campos de la misma y la condición de búsqueda en caso de que exista
@@ -152,11 +141,30 @@ class Access_Provider{
         //echo "select ".$campos." from ".$table." where ".$condicion.";";
             //Elimina la instancia del arreglo
         unset($this->arreglo);
+        
+        
+                  //  $result = $db->query($sql);
+//            //echo $result->odb;
+            //$row = $result->fetch();
+//
+//            
+//            
+           // echo $result->columnCount();
+           // while ($row = $result->fetch()) {
+                //$strSiteName        = utf8_encode($row["strSiteName"]);
+               // $strSiteName        = utf8_encode($row[1]);
+                //$strSerialNo = $row["strSerialNo"];
+                //$iRelMajor       = $row["iRelMajor"];
+               // echo "<br>";
+              //  echo $strSiteName;
+          //  }
+        
        
             //Verifica si la consulta SQL tiene una condición de búsqueda
                
         if ($condicion==""){
             //En caso de no tener condición, agrega campos y nombre de la tabla solamente
+            //$consulta=$this->conexion->query("select ".$campos." from ".$table.";");
             $consulta=$this->conexion->query("select ".$campos." from ".$table.";");
             //echo ("select ".$campos." from ".$table.";");
         }else{
@@ -177,8 +185,7 @@ class Access_Provider{
             //Si el arreglo no está establecido, lo inicializa en null
             if (!(isset($this->arreglo))){
                 //Inicializa en null
-                $this->arreglo=null;
-              
+                $this->arreglo=null; 
             }
         }else{
             

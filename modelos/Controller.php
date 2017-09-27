@@ -5668,6 +5668,10 @@ class Controller{
             $puntosbcr_sin_video=$obj_puntos->getArreglo();
            
             require __DIR__ . '/../vistas/plantillas/frm_unidades_de_video_listar.php';
+            
+            
+              //$this->revision_automatica_base_de_datos_rapid_eye();
+              
         }else{
             /*
             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
@@ -5681,6 +5685,135 @@ class Controller{
         }
     }
     
+
+    // Permite comparar, la base de datos de Rapid Eye contra la tabla de unidades de video de ORIEL
+    public function revision_automatica_base_de_datos_rapid_eye(){
+        
+            $obj_base_datos_rapíd = new cls_rapid_eye_db();
+            $obj_unidad_de_video= new cls_unidad_video();
+
+            $obj_unidad_de_video->obtiene_todas_las_unidades_de_video();
+            $params2=$obj_unidad_de_video->getArreglo();
+
+            $obj_base_datos_rapíd->obtiene_todos_los_sitios_de_rapid_eye();
+
+            $params= $obj_base_datos_rapíd->getArreglo();
+
+            $cuenta=0;
+
+
+            //Variables para revisión
+
+            $estructura_base_de_datos="<br><h2>Carpetas de distribución de tipos de sitios y localización que tiene la base de datos</h2>";
+
+            $sitios_rapid_eye_no_encontrados_en_oriel_por_serie="<br><h2>Números de Serie de la bd Rapid Eye no encontrados en la BD de ORIEL</h2>";
+
+            $sitios_rapid_eye_no_encontrados_en_oriel_por_nombre="<br><h2>Nombres de Grabadores de la bd Rapid Eye no encontrados en la BD de ORIEL</h2>";
+
+            $grabadores_oriel_no_encontrados_en_rapid_por_serie="<br><h2>Números de Serie de ORIEL no encontrados en la BD de Rapid Eye</h2>";
+
+            $grabadores_oriel_no_encontrados_en_rapid_por_nombre="<br><h2>Nombres de Grabadores de ORIEL no encontrados en la BD de Rapid</h2>";
+            
+            $grabadores_oriel_iguales_en_rapid_por_serie="<br><h2>Números de Serie de ORIEL encontrados en la BD de Rapid Eye</h2>";
+
+            $grabadores_oriel_iguales_en_rapid_por_nombre="<br><h2>Nombres de Grabadores de ORIEL encontrados en la BD de Rapid</h2>";
+
+            for ($i = 0; $i < count($params); $i++) {
+                   $params[$i]['strSiteName']=utf8_encode($params[$i]['strSiteName']);
+                   $params[$i][1]=utf8_encode($params[$i][1]);
+
+                   if ($params[$i]['strSerialNo']=='(not set)'){
+                       $estructura_base_de_datos= $estructura_base_de_datos.$params[$i]['strSiteName'].'<br>';          
+                   } else{
+                       $serie_sin_ceros = ltrim($params[$i]['strSerialNo'],'0');
+                       $nombre_sitio_rapid=$params[$i]['strSiteName'];
+
+                       $ban_serie=0;
+                       $ban_nombre=0;
+
+                       for ($j = 0; $j < count($params2); $j++) {
+                           if (strcmp($serie_sin_ceros,$params2[$j]['Serie'])==0){
+                               $ban_serie=1;
+                           }
+                            if (strcmp($nombre_sitio_rapid,$params2[$j]['Descripcion'])==0){
+                               $ban_nombre=1;
+                           }
+                       }
+
+                       if ($ban_serie==0){
+                           $sitios_rapid_eye_no_encontrados_en_oriel_por_serie=$sitios_rapid_eye_no_encontrados_en_oriel_por_serie.$params[$i]['strSiteName'].",Número de Serie en Rapid Eye: ".$params[$i]['strSerialNo']."<br>";
+                       }
+
+                       if ($ban_nombre==0){
+                           $sitios_rapid_eye_no_encontrados_en_oriel_por_nombre=$sitios_rapid_eye_no_encontrados_en_oriel_por_nombre.$params[$i]['strSiteName'].",Número de Serie en Rapid Eye: ".$params[$i]['strSerialNo']."<br>";
+                          // $cuenta=$cuenta+1;
+                       }
+
+                   }
+            }    
+
+           echo $estructura_base_de_datos; 
+           echo $sitios_rapid_eye_no_encontrados_en_oriel_por_serie;
+           echo $sitios_rapid_eye_no_encontrados_en_oriel_por_nombre;
+
+           for ($i = 0; $i < count($params2); $i++) {
+               $serie_grabador_oriel=$params2[$i]['Serie'];
+               $nombre_sitio_oriel=$params2[$i]['Descripcion'];
+               $ban_serie_oriel=0;
+               $ban_nombre_oriel=0;
+
+                for ($j = 0; $j < count($params); $j++) {
+                    $serie_sin_ceros = ltrim($params[$j]['strSerialNo'],'0');
+                    if (strcmp($serie_sin_ceros,$serie_grabador_oriel)==0){
+                         $ban_serie_oriel=1;
+                    }
+                    if (strcmp($nombre_sitio_oriel,$params[$j]['strSiteName'])==0){
+                         $ban_nombre_oriel=1;
+                    }
+                }
+                if ($ban_serie_oriel==0){
+                   $grabadores_oriel_no_encontrados_en_rapid_por_serie=$grabadores_oriel_no_encontrados_en_rapid_por_serie.$params2[$i]['Descripcion'].",Número de Serie en Oriel: ".$params2[$i]['Serie']."<br>";
+                }
+
+                if ($ban_nombre_oriel==0){
+                   $grabadores_oriel_no_encontrados_en_rapid_por_nombre=$grabadores_oriel_no_encontrados_en_rapid_por_nombre.$params2[$i]['Descripcion'].",Número de Serie en Oriel: ".$params2[$i]['Serie']."<br>";
+                   //$cuenta=$cuenta+1;
+                }
+           }
+
+           echo $grabadores_oriel_no_encontrados_en_rapid_por_serie;
+           echo $grabadores_oriel_no_encontrados_en_rapid_por_nombre;
+           
+           for ($i = 0; $i < count($params2); $i++) {
+               $serie_grabador_oriel=$params2[$i]['Serie'];
+               $nombre_sitio_oriel=$params2[$i]['Descripcion'];
+               $ban_serie_oriel=0;
+               $ban_nombre_oriel=0;
+
+                for ($j = 0; $j < count($params); $j++) {
+                    $serie_sin_ceros = ltrim($params[$j]['strSerialNo'],'0');
+                    if (strcmp($serie_sin_ceros,$serie_grabador_oriel)==0){
+                         $ban_serie_oriel=1;
+                    }
+                    if (strcmp($nombre_sitio_oriel,$params[$j]['strSiteName'])==0){
+                         $ban_nombre_oriel=1;
+                    }
+                }
+                if ($ban_serie_oriel==1){
+                   $grabadores_oriel_iguales_en_rapid_por_serie=$grabadores_oriel_iguales_en_rapid_por_serie.$params2[$i]['Descripcion'].",Número de Serie en Oriel: ".$params2[$i]['Serie']."<br>";
+                }
+
+                if ($ban_nombre_oriel==1){
+                   $grabadores_oriel_iguales_en_rapid_por_nombre=$grabadores_oriel_iguales_en_rapid_por_nombre.$params2[$i]['Descripcion'].",Número de Serie en Oriel: ".$params2[$i]['Serie']."<br>";
+                   //$cuenta=$cuenta+1;
+                }
+           }
+
+           echo $grabadores_oriel_iguales_en_rapid_por_serie;
+           echo $grabadores_oriel_iguales_en_rapid_por_nombre;
+           //echo $cuenta;
+    }
+
     //////////////////////////
     //Metodos relacionados del area de Empresas de Seguridad del Sistema
     //////////////////////////
@@ -6731,6 +6864,7 @@ class Controller{
     public function personal_listar(){
         if(isset($_SESSION['nombre'])){
             $obj_personal=new cls_personal();
+            //$obj_personal->setCondicion("T_Telefono.Estado=1");
             $obj_personal->obtiene_todo_el_personal_modulo_personas();
             $personas= $obj_personal->getArreglo();
             // echo "<pre>";

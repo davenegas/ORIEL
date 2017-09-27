@@ -126,6 +126,7 @@
                             <?php 
                             $tam=count($params);
                             for ($i = 0; $i <$tam; $i++) { ?>
+                                <?php if (($params[$i]['Estado_Telefono']==1) || (($params[$i]['Estado_Telefono']==0)&&($_SESSION['modulos']['Editar- Personal']==1))){  ?>
                                 <tr>
                                     <td style="text-align:center"><?php echo $params[$i]['Tipo_Telefono'];?></td>
                                     <td style="text-align:center"><?php echo $params[$i]['Numero'];?></td>
@@ -155,6 +156,7 @@
 
                                     <?php } ?>
                                 </tr>
+                                  <?php } ?>
                             <?php } ?>
                         </tbody> 
                     </table>

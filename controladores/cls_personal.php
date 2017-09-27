@@ -661,10 +661,10 @@ class cls_personal{
 			T_TipoTelefono.Tipo_Telefono, T_TipoTelefono.ID_Tipo_Telefono,
 			T_Telefono.Numero,T_Telefono.ID_Telefono,T_Telefono.Observaciones as Observaciones_Tel,T_Telefono.Estado as Estado_Telefono,
 			T_Puesto.ID_Puesto, T_Puesto.Puesto",
-                    "(".$this->condicion.") AND (T_TipoTelefono.ID_Tipo_Telefono = '2' OR 
+                    "(".$this->condicion.") and (T_TipoTelefono.ID_Tipo_Telefono = '2' OR 
 			T_TipoTelefono.ID_Tipo_Telefono = '3' OR 
 			T_TipoTelefono.ID_Tipo_Telefono = '4' OR 
-			T_TipoTelefono.ID_Tipo_Telefono = '27') and (T_Telefono.Estado=1) ORDER BY T_Personal.Apellido_Nombre");
+			T_TipoTelefono.ID_Tipo_Telefono = '27') ORDER BY T_Personal.Apellido_Nombre");
             $this->arreglo=$this->obj_data_provider->getArreglo();
             $this->obj_data_provider->desconectar();
             $this->resultado_operacion=true;
