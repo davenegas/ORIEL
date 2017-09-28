@@ -17,12 +17,12 @@
             <center><img align="center" src="vistas/Imagenes/Espere.gif"/></center>
         </div>
         <div class="animated fadeIn">
-            <h2>Listado de Controladores Recibidos (1/?):</h2>
+            <h2>Listado de Controladores Recibidos:</h2>
             
-            <a href="index.php?ctl=" class="btn btn-default espacio-abajo" role="button">Validar información</a>
+            <a href="index.php?ctl=actualizar_controladores_paso_2" class="btn btn-default espacio-abajo" role="button">Validar información</a>
             <a href="index.php?ctl=principal" class="btn btn-default espacio-abajo" role="button">Salir del Asistente</a> 
 
-            <table id="tabla" class="display">
+            <table id="tabla" class="display espacio-arriba">
                 <thead>
                     <tr>
                         <th style="text-align:center">Owner</th>
@@ -42,7 +42,7 @@
                 <tbody>
                     <?php 
                     $tam=count($_SESSION['controladores']);
-                    for ($i = 0; $i <$tam; $i++) { ?>
+                    for ($i = 0; $i <$tam; $i++){ ?>
                         <tr>
                             <td style="text-align:center"><?php echo $_SESSION['controladores'][$i][0];?></td>
                             <td style="text-align:center"><?php echo $_SESSION['controladores'][$i][1];?></td>

@@ -13117,9 +13117,21 @@ class Controller{
     ////////////////////////////////////////////////////////////////////////////
     public function actualizar_controladores_inicio(){
         if(isset($_SESSION['nombre'])){
-            //Pendiente obtener información de los controladores actuales
+            $obj_controlador= new cls_control_acceso();
+            $obj_controlador->setCondicion("Estado=1");
+            $obj_controlador->obtener_controladores_completos();
+            $controladores_bd = $obj_controlador->getArreglo();
             
             require __DIR__ . '/../vistas/plantillas/frm_ca_contralores_accesos_lista.php';
+            
+            if(isset($_GET['correo'])){
+                if ($_GET['correo']=="''" ||$_GET['correo']==null){
+                    echo "<script type=\"text/javascript\">alert('Revisión de Controladores. <br>Todo se encontró Normal, no se realizaron cambios importante');</script>";
+                } else {
+                    echo "<script type=\"text/javascript\">alert(".$_GET['correo'].");</script>";
+                }
+                unset($_GET['correo']);
+            }
         }else {
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
@@ -13136,7 +13148,8 @@ class Controller{
             //Valida que el tipo de archivo suministrado por el usuario sea del tipo CSV, delimitado por comas
             if (!($_FILES['seleccionar_archivo']['type']==="application/vnd.ms-excel")){
                 //En caso de que sea diferente, muestra una advertencia en pantalla para el usario y se sale del paso
-                echo "<script type=\"text/javascript\">alert('Debe Importar un archivo tipo CSV!!!!');history.go(-1);</script>";;
+                echo "<script type=\"text/javascript\">alert('Debe Importar un archivo tipo CSV!!!!');</script>";
+                header ("location:/ORIEL/index.php?ctl=actualizar_controladores_inicio");
                 exit();
             }
             
@@ -13171,6 +13184,94 @@ class Controller{
         }
     }
     
+    public function actualizar_controladores_paso_2(){
+        if(isset($_SESSION['nombre'])){
+            $obj_controlador= new cls_control_acceso();
+            
+            $obj_controlador->setCondicion("Estado=1");
+            $obj_controlador->obtener_controladores_completos();
+            $controladores_bd = $obj_controlador->getArreglo();
+            $correo="";
+            $controladores_subidos=$_SESSION['controladores'];
+            $obj_controlador->iniciar_transaccion_sql();
+            
+            //Verificar información de controladores
+            for ($i = 0; $i < count($controladores_subidos); $i++){
+                for ($c = 0; $c < count($controladores_bd); $c++){
+                    //Verifica si el controlador existe en la base de datos
+                    if($controladores_subidos[$i][11]===$controladores_bd[$c]['ID_Control_Acceso']){
+                        if($controladores_subidos[$i][1]!==$controladores_bd[$c]['Name']){
+                           $correo.="Se actualizó el nombre del controlador ".$controladores_bd[$c]['Name']." a: ".$controladores_subidos[$i][1].".<br>";
+                        }
+                        if($controladores_subidos[$i][4]!=$controladores_bd[$c]['CommStatus']){
+                           $correo.="Se actualizó el CommStatus del controlador ".$controladores_bd[$c]['CommStatus']." el controlador ".$controladores_bd[$c]['Name'].".<br>";
+                        }
+                        $obj_controlador->setOwner($controladores_subidos[$i][0]);
+                        $obj_controlador->setName($controladores_subidos[$i][1]);
+                        $obj_controlador->setNetworkid($controladores_subidos[$i][2]);
+                        $obj_controlador->setIpaddress($controladores_subidos[$i][3]);
+                        $obj_controlador->setCommstatus($controladores_subidos[$i][4]);
+                        $obj_controlador->setCreatetime($controladores_subidos[$i][5]);
+                        $obj_controlador->setCreateby($controladores_subidos[$i][6]);
+                        $obj_controlador->setVersionnum($controladores_subidos[$i][7]);
+                        $obj_controlador->setSerialnum($controladores_subidos[$i][8]);
+                        $obj_controlador->setSubnetmask($controladores_subidos[$i][9]);
+                        $obj_controlador->setModel($controladores_subidos[$i][10]);
+                        $obj_controlador->setEstado("1");
+                        $obj_controlador->setCondicion("ID_Control_Acceso='".$controladores_subidos[$i][11]."'");
+                        
+                        $obj_controlador->edicion_de_controlador_a_transaccion();
+                        //Se asigna 0 al id del controlador para saber que ya se editó la información y separarlo de los nuevo
+                        $controladores_subidos[$i][1]="0";
+                        //Se asigna 0 al id del controlador para saber que ya se editó la información y separarlo de los nuevos
+                        $controladores_bd[$c]['name']="0";
+                    }
+                }
+            }
+            
+            //Verifica los contraladores subido que no fueron encontrados en la base de datos actual
+            for ($i = 0; $i < count($controladores_subidos); $i++){
+                if($controladores_subidos[$i][1]<>"0"){
+                    $correo.="El siguiente controlador es nuevo en la base de datos ".$controladores_subidos[$i]['1'].".<br>";
+                    $obj_controlador->setOwner($controladores_subidos[$i][0]);
+                    $obj_controlador->setName($controladores_subidos[$i][1]);
+                    $obj_controlador->setNetworkid($controladores_subidos[$i][2]);
+                    $obj_controlador->setIpaddress($controladores_subidos[$i][3]);
+                    $obj_controlador->setCommstatus($controladores_subidos[$i][4]);
+                    $obj_controlador->setCreatetime($controladores_subidos[$i][5]);
+                    $obj_controlador->setCreateby($controladores_subidos[$i][6]);
+                    $obj_controlador->setVersionnum($controladores_subidos[$i][7]);
+                    $obj_controlador->setSerialnum($controladores_subidos[$i][8]);
+                    $obj_controlador->setSubnetmask($controladores_subidos[$i][9]);
+                    $obj_controlador->setModel($controladores_subidos[$i][10]);
+                    $obj_controlador->setId($controladores_subidos[$i][11]);
+                    $obj_controlador->setEstado(1);
+                    
+                    $obj_controlador->agregar_controlador_a_transaccion();
+                }
+            }
+            
+            for ($i = 0; $i < count($controladores_bd); $i++){
+                if($controladores_bd[$i]['name']<>"0"){
+                    $correo.="El siguiente controlador no se encontró en el archivo y fue deshabilitado base de datos ".$controladores_bd[$i]['Name'].".<br>";
+                    $obj_controlador->setEstado(0);
+                    $obj_controlador->setCondicion("ID_Control_Acceso='".$controladores_bd[$i]['ID_Control_Acceso']."'");
+                    $obj_controlador->editar_estado_controlador_a_transaccion();
+                }
+            }
+            
+            $obj_controlador->ejecutar_transaccion_sql();
+            
+            $_SESSION['controladores']="";
+            header ("location:/ORIEL/index.php?ctl=actualizar_controladores_inicio&correo='".$correo."'");
+        }else {
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            //Llamada al formulario correspondiente de la vista
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }
+    }
+            
     public function actualizar_puerta_controlada_inicio(){
         if(isset($_SESSION['nombre'])){
             //Pendiente obtener información de los controladores actuales
