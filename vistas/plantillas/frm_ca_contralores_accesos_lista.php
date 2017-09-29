@@ -42,6 +42,7 @@
                             <th style="text-align:center">VersionNum</th>
                             <th style="text-align:center">SubnetMask</th>
                             <th style="text-align:center">Model</th>
+                            <th style="text-align:center">Estado</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -60,6 +61,11 @@
                                 <td style="text-align:center"><?php echo $controladores_bd[$i]['VersionNum'];?></td>
                                 <td style="text-align:center"><?php echo $controladores_bd[$i]['SubnetMask'];?></td>
                                 <td style="text-align:center"><?php echo $controladores_bd[$i]['Model'];?></td>
+                                <?php if ($controladores_bd[$i]['Estado']==1){  ?>  
+                                    <td style="text-align:center">Activo</td>
+                                <?php } else {?>  
+                                    <td style="text-align:center">Inactivo</td>
+                                <?php }?>
                             </tr>
                         <?php } ?>
                     </tbody>

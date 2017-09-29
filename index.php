@@ -380,8 +380,12 @@ $map = array(
     'actualizar_controladores_paso_2'=>array('controller'=>'Controller','action'=> 'actualizar_controladores_paso_2'),
         //Puertas controladas
     'actualizar_puerta_controlada_inicio'=>array('controller'=>'Controller','action'=> 'actualizar_puerta_controlada_inicio'),
+    'actualizar_puertas_paso_1'=>array('controller'=>'Controller','action'=> 'actualizar_puertas_paso_1'),
+    'actualizar_puertas_paso_2'=>array('controller'=>'Controller','action'=> 'actualizar_puertas_paso_2'),
         //Módulos de puertas controladas
     'actualizar_modulo_puerta_inicio'=>array('controller'=>'Controller','action'=> 'actualizar_modulo_puerta_inicio'),
+    'actualizar_modulo_puerta_paso_1'=>array('controller'=>'Controller','action'=> 'actualizar_modulo_puerta_paso_1'),
+    'actualizar_modulo_puerta_paso_2'=>array('controller'=>'Controller','action'=> 'actualizar_modulo_puerta_paso_2'),
     
     //Controlador de Personal Externo
     'personal_externo_listar'=>array('controller'=>'Controller','action'=> 'personal_externo_listar'), 

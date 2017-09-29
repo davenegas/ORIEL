@@ -16,30 +16,20 @@ class Mail_Provider{
             //indico a la clase que use SMTP
             $this->mail->isSMTP();
             //permite modo debug para ver mensajes de las cosas que van ocurriendo
-            //$this->mail->SMTPDebug=2;
+            $this->mail->SMTPDebug=2;
             //Debo de hacer autenticación SMTP
             $this->mail->SMTPAuth = true;
             $this->mail->CharSet='UTF-8';
             //$this->mail->SMTPSecure = "ssl";
             $this->mail->SMTPSecure = "tls";
+            
             //indico el servidor de Gmail para SMTP
-            //$this->mail->Host = "smtp.gmail.com";
-            //$this->mail->Host = "smtp.office365.com";
             $this->mail->Host = "10.1.8.1";
             //indico el puerto que usa Gmail
-            //$this->mail->Port = 465;
             $this->mail->Port = 25;
-            //$this->mail->Port = 587;
-
             //indico un usuario / clave de un usuario de gmail
-            //$this->mail->Username = "113100038@bancobcr.com";
             $this->mail->Username = "oriel@bancobcr.com";
-            //$this->mail->Password = "Entoas79.";
             $this->mail->Password = "asdf123.";
-            //$this->mail->SetFrom('orielinforma@gmail.com', 'Oriel Jefatura de Seguridad');
-            //$this->mail->addReplyTo('orielinforma@gmail.com', 'Oriel Jefatura de Seguridad');
-            
-            //$this->mail->SetFrom('113100038@bancobcr.com', 'Oriel');
             $this->mail->SetFrom('oriel@bancobcr.com', 'Oriel');
             $this->mail->addReplyTo('oriel@bancobcr.com', 'Oriel');
 

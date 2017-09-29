@@ -212,7 +212,7 @@ class cls_control_acceso {
         $this->arreglo;
         $this->obj_data_provider=new Data_Provider();
     }
-    /////////////////////////
+    ///////////////////////// FUNCIONES PARA CONTROLADORES//////////////////////
     public function obtener_controladores_completos(){
        $this->obj_data_provider->conectar();
         if($this->condicion==""){
@@ -227,46 +227,6 @@ class cls_control_acceso {
         $this->arreglo=$this->obj_data_provider->getArreglo();
         $this->obj_data_provider->desconectar();
         $this->resultado_operacion=true;
-    }
-    
-    public function obtener_puertas_controladas_completos(){
-       $this->obj_data_provider->conectar();
-        if($this->condicion==""){
-            $this->arreglo=$this->obj_data_provider->trae_datos("T_Puerta_Controlada", 
-                "*", 
-                "");
-        }else{
-            $this->arreglo=$this->obj_data_provider->trae_datos("T_Puerta_Controlada", 
-                "*",
-                $this->condicion);
-        }
-        $this->arreglo=$this->obj_data_provider->getArreglo();
-        $this->obj_data_provider->desconectar();
-        $this->resultado_operacion=true;
-    }
-    
-    public function obtener_modulos_controlados_completos(){
-        $this->obj_data_provider->conectar();
-        if($this->condicion==""){
-            $this->arreglo=$this->obj_data_provider->trae_datos("T_Modulo_Puerta_Controlada", 
-                "*", 
-                "");
-        }else{
-            $this->arreglo=$this->obj_data_provider->trae_datos("T_Modulo_Puerta_Controlada", 
-                "*",
-                $this->condicion);
-        }
-        $this->arreglo=$this->obj_data_provider->getArreglo();
-        $this->obj_data_provider->desconectar();
-        $this->resultado_operacion=true;
-    }
-    
-    function iniciar_transaccion_sql(){
-        $this->obj_data_provider->iniciar_transaccion_sql();
-    }
-    
-    function ejecutar_transaccion_sql(){     
-        $this->obj_data_provider->ejecutar_transaccion_sql();   
     }
     
     function edicion_de_controlador_a_transaccion(){
@@ -289,4 +249,79 @@ class cls_control_acceso {
         $this->obj_data_provider->agregar_edicion_de_datos_a_la_transaccion("T_Control_Acceso","Estado='".$this->estado."'",$this->condicion);
     }
     
+    ///////////////////// FUNCIONES PARA PUERTAS CONTROLADAS////////////////////
+    public function obtener_puertas_controladas_completos(){
+       $this->obj_data_provider->conectar();
+        if($this->condicion==""){
+            $this->arreglo=$this->obj_data_provider->trae_datos("T_Puerta_Controlada", 
+                "*", 
+                "");
+        }else{
+            $this->arreglo=$this->obj_data_provider->trae_datos("T_Puerta_Controlada", 
+                "*",
+                $this->condicion);
+        }
+        $this->arreglo=$this->obj_data_provider->getArreglo();
+        $this->obj_data_provider->desconectar();
+        $this->resultado_operacion=true;
+    }
+    
+    function edicion_de_puerta_a_transaccion(){
+        $this->obj_data_provider->agregar_edicion_de_datos_a_la_transaccion("T_Puerta_Controlada",
+            "Owner='".$this->owner."',Name='".$this->name."',State='".$this->state.
+            "',DoorSwitch='".$this->doorswitch."',value='".$this->value."',Estado='".$this->estado."'",
+            $this->condicion);
+    }
+     
+    function agregar_puerta_a_transaccion(){
+        $this->obj_data_provider->agregar_inclusion_de_datos_a_la_transaccion("T_Puerta_Controlada", 
+            "ID_Puerta_Controlada, Owner, Name, State, DoorSwitch, value, Estado", 
+            "'".$this->id."','".$this->owner."','".$this->name."','".$this->state."','".$this->doorswitch."','".$this->value."','".$this->estado."'");
+    }
+    
+    function editar_estado_puerta_a_transaccion(){
+        $this->obj_data_provider->agregar_edicion_de_datos_a_la_transaccion("T_Puerta_Controlada","Estado='".$this->estado."'",$this->condicion);
+    }
+    ///////////////////// FUNCIONES PARA MODULOS CONTROLADOS////////////////////
+    public function obtener_modulos_controlados_completos(){
+        $this->obj_data_provider->conectar();
+        if($this->condicion==""){
+            $this->arreglo=$this->obj_data_provider->trae_datos("T_Modulo_Puerta_Controlada", 
+                "*", 
+                "");
+        }else{
+            $this->arreglo=$this->obj_data_provider->trae_datos("T_Modulo_Puerta_Controlada", 
+                "*",
+                $this->condicion);
+        }
+        $this->arreglo=$this->obj_data_provider->getArreglo();
+        $this->obj_data_provider->desconectar();
+        $this->resultado_operacion=true;
+    }
+    
+    function edicion_de_modulo_a_transaccion(){
+        $this->obj_data_provider->agregar_edicion_de_datos_a_la_transaccion("T_Modulo_Puerta_Controlada",
+            "Owner='".$this->owner."',Name='".$this->name."',IOU='".$this->iou.
+            "',ModuloID='".$this->moduloid."',CommStatus='".$this->commstatus."',Estado='".$this->estado."'",
+            $this->condicion);
+    }
+     
+    function agregar_modulo_a_transaccion(){
+        $this->obj_data_provider->agregar_inclusion_de_datos_a_la_transaccion("T_Modulo_Puerta_Controlada", 
+            "ID_Modulo_Puerta_Controlada, Owner, Name, IOU, ModuloID, CommStatus, Estado", 
+            "'".$this->id."','".$this->owner."','".$this->name."','".$this->iou."','".$this->moduloid."','".$this->commstatus."','".$this->estado."'");
+    }
+    
+    function editar_estado_modulo_a_transaccion(){
+        $this->obj_data_provider->agregar_edicion_de_datos_a_la_transaccion("T_Modulo_Puerta_Controlada","Estado='".$this->estado."'",$this->condicion);
+    }
+    
+    ///////////////////////////// FUNCIONES GENERALES///////////////////////////
+    function iniciar_transaccion_sql(){
+        $this->obj_data_provider->iniciar_transaccion_sql();
+    }
+    
+    function ejecutar_transaccion_sql(){     
+        $this->obj_data_provider->ejecutar_transaccion_sql();   
+    }
 }

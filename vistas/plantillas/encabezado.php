@@ -23,8 +23,8 @@
         </style>
         <script>
             $(document).ready(function () {
-                revision_controles();
-                setInterval(revision_controles,60000);
+                //revision_controles();
+                //setInterval(revision_controles,60000);
             });
 
             function revision_controles(){

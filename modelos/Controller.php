@@ -13118,20 +13118,11 @@ class Controller{
     public function actualizar_controladores_inicio(){
         if(isset($_SESSION['nombre'])){
             $obj_controlador= new cls_control_acceso();
-            $obj_controlador->setCondicion("Estado=1");
+            $obj_controlador->setCondicion("");
             $obj_controlador->obtener_controladores_completos();
             $controladores_bd = $obj_controlador->getArreglo();
             
             require __DIR__ . '/../vistas/plantillas/frm_ca_contralores_accesos_lista.php';
-            
-            if(isset($_GET['correo'])){
-                if ($_GET['correo']=="''" ||$_GET['correo']==null){
-                    echo "<script type=\"text/javascript\">alert('Revisión de Controladores. <br>Todo se encontró Normal, no se realizaron cambios importante');</script>";
-                } else {
-                    echo "<script type=\"text/javascript\">alert(".$_GET['correo'].");</script>";
-                }
-                unset($_GET['correo']);
-            }
         }else {
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
@@ -13188,7 +13179,7 @@ class Controller{
         if(isset($_SESSION['nombre'])){
             $obj_controlador= new cls_control_acceso();
             
-            $obj_controlador->setCondicion("Estado=1");
+            $obj_controlador->setCondicion("");
             $obj_controlador->obtener_controladores_completos();
             $controladores_bd = $obj_controlador->getArreglo();
             $correo="";
@@ -13253,7 +13244,9 @@ class Controller{
             
             for ($i = 0; $i < count($controladores_bd); $i++){
                 if($controladores_bd[$i]['name']<>"0"){
-                    $correo.="El siguiente controlador no se encontró en el archivo y fue deshabilitado base de datos ".$controladores_bd[$i]['Name'].".<br>";
+                    if($controladores_bd[$i]['Estado']==1){
+                        $correo.="El siguiente controlador no se encontró en el archivo y fue deshabilitado base de datos ".$controladores_bd[$i]['Name'].".<br>";
+                    }
                     $obj_controlador->setEstado(0);
                     $obj_controlador->setCondicion("ID_Control_Acceso='".$controladores_bd[$i]['ID_Control_Acceso']."'");
                     $obj_controlador->editar_estado_controlador_a_transaccion();
@@ -13263,7 +13256,11 @@ class Controller{
             $obj_controlador->ejecutar_transaccion_sql();
             
             $_SESSION['controladores']="";
-            header ("location:/ORIEL/index.php?ctl=actualizar_controladores_inicio&correo='".$correo."'");
+            
+            $tipo="Controladores";
+            $this->correo_actualizacion_contralador($correo, $tipo);
+            
+            header ("location:/ORIEL/index.php?ctl=actualizar_controladores_inicio");
         }else {
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
@@ -13274,7 +13271,10 @@ class Controller{
             
     public function actualizar_puerta_controlada_inicio(){
         if(isset($_SESSION['nombre'])){
-            //Pendiente obtener información de los controladores actuales
+            $obj_controlador= new cls_control_acceso();
+            $obj_controlador->setCondicion("");
+            $obj_controlador->obtener_puertas_controladas_completos();
+            $params = $obj_controlador->getArreglo();
             
             require __DIR__ . '/../vistas/plantillas/frm_ca_puertas_controladas_lista.php';
         }else {
@@ -13285,9 +13285,138 @@ class Controller{
         }
     }
     
+    public function actualizar_puertas_paso_1(){
+        if(isset($_SESSION['nombre'])){
+            //En la variable recepcion de archivo, recibe el estado en el que fue recibido el archivo desde el formulario anterior
+            $recepcion_archivo=$_FILES['seleccionar_archivo']['error'];
+
+            //Valida que el tipo de archivo suministrado por el usuario sea del tipo CSV, delimitado por comas
+            if (!($_FILES['seleccionar_archivo']['type']==="application/vnd.ms-excel")){
+                //En caso de que sea diferente, muestra una advertencia en pantalla para el usario y se sale del paso
+                echo "<script type=\"text/javascript\">alert('Debe Importar un archivo tipo CSV!!!!');</script>";
+                header ("location:/ORIEL/index.php?ctl=actualizar_puerta_controlada_inicio");
+                exit();
+            }
+            
+            //Asigna a la variable el archivo abierto en modo lectura para recorrer la información contenida en el.
+            $handle= fopen ($_FILES['seleccionar_archivo']['tmp_name'],"r");
+            
+            //Contiene en las variables params y record, el total de regsitros del archivo mediante la funcion fgetcsv
+            $record = fgetcsv($handle);
+            
+            //Declara un vector, el cual contendrá de manera oficial toda la información del documento.
+            $controladores =array();
+            //Variable contador del ciclo
+            $i=0;
+            
+            //Almacena en la variable record, cada registro mientras handle tenga lineas disponibles que recorrer
+            while ($record = fgetcsv($handle,0,",")){
+                // a prontuario le va asignando cada uno de los registros del documento
+                $controladores[]=$record;
+                // Va incrementado el contador
+                $i++;
+            }
+            
+            $_SESSION['controladores']=$controladores;   
+            
+            //Llamada al formulario correspondiente de la vista
+            require __DIR__ . '/../vistas/plantillas/frm_ca_puertas_actualizar_paso_1.php';  
+        }else {
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            //Llamada al formulario correspondiente de la vista
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }
+    }
+    
+    public function actualizar_puertas_paso_2(){
+        if(isset($_SESSION['nombre'])){
+            $obj_controlador= new cls_control_acceso();
+            
+            $obj_controlador->setCondicion("");
+            $obj_controlador->obtener_puertas_controladas_completos();
+            $controladores_bd = $obj_controlador->getArreglo();
+            $correo="";
+            $controladores_subidos=$_SESSION['controladores'];
+            $obj_controlador->iniciar_transaccion_sql();
+            
+            //Verificar información de controladores
+            for ($i = 0; $i < count($controladores_subidos); $i++){
+                for ($c = 0; $c < count($controladores_bd); $c++){
+                    //Verifica si el controlador existe en la base de datos
+                    if($controladores_subidos[$i][5]===$controladores_bd[$c]['ID_Puerta_Controlada']){
+                        if($controladores_subidos[$i][1]!==$controladores_bd[$c]['Name']){
+                           $correo.="Se actualizó el nombre de la puerta ".$controladores_bd[$c]['Name']." a: ".$controladores_subidos[$i][1]." del controlador".$controladores_subidos[$i][0].".<br>";
+                        }
+                        if($controladores_subidos[$i][3]!=$controladores_bd[$c]['DoorSwitch']){
+                           $correo.="Se actualizó el DoorSwitch de la puerta ".$controladores_bd[$c]['DoorSwitch']." el controlador ".$controladores_bd[$c]['Name'].".<br>";
+                        }
+                        $obj_controlador->setOwner($controladores_subidos[$i][0]);
+                        $obj_controlador->setName($controladores_subidos[$i][1]);
+                        $obj_controlador->setState($controladores_subidos[$i][2]);
+                        $obj_controlador->setDoorswitch($controladores_subidos[$i][3]);
+                        $obj_controlador->setValue($controladores_subidos[$i][4]);
+                        $obj_controlador->setEstado("1");
+                        $obj_controlador->setCondicion("ID_Puerta_Controlada='".$controladores_subidos[$i][5]."'");
+                        
+                        $obj_controlador->edicion_de_puerta_a_transaccion();
+                        //Se asigna 0 al id del controlador para saber que ya se editó la información y separarlo de los nuevo
+                        $controladores_subidos[$i][1]="0";
+                        //Se asigna 0 al id del controlador para saber que ya se editó la información y separarlo de los nuevos
+                        $controladores_bd[$c]['name']="0";
+                    }
+                }
+            }
+            
+            //Verifica los contraladores subido que no fueron encontrados en la base de datos actual
+            for ($i = 0; $i < count($controladores_subidos); $i++){
+                if($controladores_subidos[$i][1]<>"0"){
+                    $correo.="La siguiente Puerta es nueva en la base de datos ".$controladores_subidos[$i]['1'].", controlador ".$controladores_subidos[$i]['0'].".<br>";
+                    $obj_controlador->setOwner($controladores_subidos[$i][0]);
+                    $obj_controlador->setName($controladores_subidos[$i][1]);
+                    $obj_controlador->setState($controladores_subidos[$i][2]);
+                    $obj_controlador->setDoorswitch($controladores_subidos[$i][3]);
+                    $obj_controlador->setValue($controladores_subidos[$i][4]);
+                    $obj_controlador->setId($controladores_subidos[$i][5]);
+                    $obj_controlador->setEstado(1);
+                    
+                    $obj_controlador->agregar_puerta_a_transaccion();
+                }
+            }
+            
+            for ($i = 0; $i < count($controladores_bd); $i++){
+                if($controladores_bd[$i]['name']<>"0"){
+                    if($controladores_bd[$i]['Estado']==1){
+                        $correo.="La siguiente puerta no se encontró en el archivo y fue deshabilitado base de datos ".$controladores_bd[$i]['Name'].".<br>";
+                    }
+                    $obj_controlador->setEstado(0);
+                    $obj_controlador->setCondicion("ID_Puerta_Controlada='".$controladores_bd[$i]['ID_Puerta_Controlada']."'");
+                    $obj_controlador->editar_estado_puerta_a_transaccion();
+                }
+            }
+            
+            $obj_controlador->ejecutar_transaccion_sql();
+            
+            $_SESSION['controladores']="";
+            
+            $tipo="Puertas";
+            $this->correo_actualizacion_contralador($correo, $tipo);
+            
+            header ("location:/ORIEL/index.php?ctl=actualizar_puerta_controlada_inicio");
+        }else {
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            //Llamada al formulario correspondiente de la vista
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }
+    }
+    
     public function actualizar_modulo_puerta_inicio(){
         if(isset($_SESSION['nombre'])){
-            //Pendiente obtener información de los controladores actuales
+            $obj_controlador= new cls_control_acceso();
+            $obj_controlador->setCondicion("");
+            $obj_controlador->obtener_modulos_controlados_completos();
+            $params = $obj_controlador->getArreglo();
             
             require __DIR__ . '/../vistas/plantillas/frm_ca_modulos_puerta_controlada_lista.php';
         }else {
@@ -13298,6 +13427,166 @@ class Controller{
         }
     }
     
+    public function actualizar_modulo_puerta_paso_1(){
+        if(isset($_SESSION['nombre'])){
+            //En la variable recepcion de archivo, recibe el estado en el que fue recibido el archivo desde el formulario anterior
+            $recepcion_archivo=$_FILES['seleccionar_archivo']['error'];
+
+            //Valida que el tipo de archivo suministrado por el usuario sea del tipo CSV, delimitado por comas
+            if (!($_FILES['seleccionar_archivo']['type']==="application/vnd.ms-excel")){
+                //En caso de que sea diferente, muestra una advertencia en pantalla para el usario y se sale del paso
+                echo "<script type=\"text/javascript\">alert('Debe Importar un archivo tipo CSV!!!!');</script>";
+                header ("location:/ORIEL/index.php?ctl=actualizar_modulo_puerta_inicio");
+                exit();
+            }
+            
+            //Asigna a la variable el archivo abierto en modo lectura para recorrer la información contenida en el.
+            $handle= fopen ($_FILES['seleccionar_archivo']['tmp_name'],"r");
+            
+            //Contiene en las variables params y record, el total de regsitros del archivo mediante la funcion fgetcsv
+            $record = fgetcsv($handle);
+            
+            //Declara un vector, el cual contendrá de manera oficial toda la información del documento.
+            $controladores =array();
+            //Variable contador del ciclo
+            $i=0;
+            
+            //Almacena en la variable record, cada registro mientras handle tenga lineas disponibles que recorrer
+            while ($record = fgetcsv($handle,0,",")){
+                // a prontuario le va asignando cada uno de los registros del documento
+                $controladores[]=$record;
+                // Va incrementado el contador
+                $i++;
+            }
+            
+            $_SESSION['controladores']=$controladores;   
+            
+            //Llamada al formulario correspondiente de la vista
+            require __DIR__ . '/../vistas/plantillas/frm_ca_modulos_actualizar_paso_1.php';  
+        }else {
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            //Llamada al formulario correspondiente de la vista
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }
+    }
+    
+    public function actualizar_modulo_puerta_paso_2(){
+        if(isset($_SESSION['nombre'])){
+            $obj_controlador= new cls_control_acceso();
+            
+            $obj_controlador->setCondicion("");
+            $obj_controlador->obtener_modulos_controlados_completos();
+            $controladores_bd = $obj_controlador->getArreglo();
+            $correo="";
+            $controladores_subidos=$_SESSION['controladores'];
+            $obj_controlador->iniciar_transaccion_sql();
+            
+            //Verificar información de controladores
+            for ($i = 0; $i < count($controladores_subidos); $i++){
+                for ($c = 0; $c < count($controladores_bd); $c++){
+                    //Verifica si el controlador existe en la base de datos
+                    if($controladores_subidos[$i][5]===$controladores_bd[$c]['ID_Modulo_Puerta_Controlada']){
+                        if($controladores_subidos[$i][1]!==$controladores_bd[$c]['Name']){
+                           $correo.="Se actualizó el módulo de la puerta ".$controladores_bd[$c]['Name']." a: ".$controladores_subidos[$i][1]." del controlador".$controladores_subidos[$i][0].".<br>";
+                        }
+                        if($controladores_subidos[$i][3]!=$controladores_bd[$c]['ModuloID']){
+                           $correo.="Se actualizó el ModuloID de la módulo ".$controladores_bd[$c]['name']." del controlador ".$controladores_bd[$c]['Name'].".<br>";
+                           $correo.="ModuloID actualizado ".$controladores_bd[$c]['3']." ModuloID anterior ".$controladores_bd[$c]['ModuloID'].".<br>";
+                        }
+                        $obj_controlador->setOwner($controladores_subidos[$i][0]);
+                        $obj_controlador->setName($controladores_subidos[$i][1]);
+                        $obj_controlador->setIou($controladores_subidos[$i][2]);
+                        $obj_controlador->setModuloid($controladores_subidos[$i][3]);
+                        $obj_controlador->setCommstatus($controladores_subidos[$i][4]);
+                        $obj_controlador->setEstado("1");
+                        $obj_controlador->setCondicion("ID_Modulo_Puerta_Controlada='".$controladores_subidos[$i][5]."'");
+                        
+                        $obj_controlador->edicion_de_modulo_a_transaccion();
+                        //Se asigna 0 al id del controlador para saber que ya se editó la información y separarlo de los nuevo
+                        $controladores_subidos[$i][1]="0";
+                        //Se asigna 0 al id del controlador para saber que ya se editó la información y separarlo de los nuevos
+                        $controladores_bd[$c]['name']="0";
+                    }
+                }
+            }
+            
+            //Verifica los contraladores subido que no fueron encontrados en la base de datos actual
+            for ($i = 0; $i < count($controladores_subidos); $i++){
+                if($controladores_subidos[$i][1]<>"0"){
+                    $correo.="El siguiente mpodulo es nuevo en la base de datos ".$controladores_subidos[$i]['1'].", controlador ".$controladores_subidos[$i]['0'].".<br>";
+                    $obj_controlador->setOwner($controladores_subidos[$i][0]);
+                    $obj_controlador->setName($controladores_subidos[$i][1]);
+                    $obj_controlador->setIou($controladores_subidos[$i][2]);
+                    $obj_controlador->setModuloid($controladores_subidos[$i][3]);
+                    $obj_controlador->setCommstatus($controladores_subidos[$i][4]);
+                    $obj_controlador->setId($controladores_subidos[$i][5]);
+                    $obj_controlador->setEstado(1);
+                    
+                    $obj_controlador->agregar_modulo_a_transaccion();
+                }
+            }
+            
+            for ($i = 0; $i < count($controladores_bd); $i++){
+                if($controladores_bd[$i]['name']<>"0"){
+                    if($controladores_bd[$i]['Estado']==1){
+                        $correo.="El siguiente mpodulo no se encontró en el archivo y fue deshabilitado base de datos ".$controladores_bd[$i]['Name'].", controlador ".$controladores_bd[$i]['Owner'].".<br>";
+                    }
+                    $obj_controlador->setEstado(0);
+                    $obj_controlador->setCondicion("ID_Modulo_Puerta_Controlada='".$controladores_bd[$i]['ID_Modulo_Puerta_Controlada']."'");
+                    $obj_controlador->editar_estado_puerta_a_transaccion();
+                }
+            }
+            
+            $obj_controlador->ejecutar_transaccion_sql();
+            
+            $_SESSION['controladores']="";
+            $tipo="Módulos";
+            $this->correo_actualizacion_contralador($correo, $tipo);
+            
+            header ("location:/ORIEL/index.php?ctl=actualizar_modulo_puerta_inicio");
+        }else {
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            //Llamada al formulario correspondiente de la vista
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }
+    }
+    
+    public function correo_actualizacion_contralador($detalle, $tipo){
+        if(isset($_SESSION['nombre'])){
+            $obj_usuario= new cls_usuarios();
+            $obj_correo= new Mail_Provider();
+            
+            $obj_usuario->setCondicion("ID_Usuario=".$_SESSION['id']);
+            $obj_usuario->obtiene_todos_los_usuarios();
+            $usuario= $obj_usuario->getArreglo();
+            
+            //Asigna correo y nombre de los destinatarios
+            $correo=$usuario[0]['Correo'];
+            $usuario="";
+            $obj_correo->agregar_direccion_de_correo($correo, $usuario);
+            //Asigna copia del correo 
+            //$correo="Coordinacion_Centro_de_Control@bancobcr.com";
+            //$usuario="Coordinacion Centro Control";
+            //$obj_correo->agregar_direccion_de_correo_copia($correo, $usuario);
+            
+            if($detalle=="" || $detalle="''" || $detalle==null){
+                $detalle="Todo se encontró Normal, no se realizaron cambios importante.";
+            }
+                    
+            //Agrega el asunto del correo para envio al usuario realizando la solicitud
+            $obj_correo->agregar_asunto_de_correo("Actualización de información Control de Acceso- ".$tipo);
+            //Agrega detalle de correo
+            $obj_correo->agregar_detalle_de_correo("Gracias por utilizar Oriel</br></br> "
+                . "La actualización de : ".$tipo." se realizó correctamente.</br>"
+                . $detalle."<br><br>"
+                . "Este es un mensaje automático, por favor no reponderlo. Si requiere ayuda, comuníquese con el Centro de Control Ext: 79066.</br></br>"
+                . "<a>http://oriel</a>");
+            //Procede a enviar el correo
+            $obj_correo->enviar_correo();
+        }
+    }
     ////////////////////////////////////////////////////////////////////////////
     ////////////////////////////COMITÉ DE CRISSI////////////////////////////////
     public function comite_crisis(){
