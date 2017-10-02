@@ -11820,13 +11820,12 @@ class Controller{
             $diff="";
             //Contadores sobre ultimas revisiones
             //Revisiones en menos de una hora
-            $revision_0_60=0;
-            //revisiones entre 1 y 2 horas
-            $revision_61_120=0;
-            //Revisiones entre 2 y 3 horas
-            $revision_121_180=0;
-            //Revisiones mas 3 horas
-            $revision_181_mas=0;
+            $revision_0_30=0;
+            $revision_31_60=0;
+            $revision_61_90=0;
+            $revision_91_120=0;
+            $revision_121_150=0;
+            $revision_151_mas=0;
             $tam=  count($ultima_revision);
             for ($i = 0; $i <$tam; $i++) {
                 //asigna da date2 la fecha que trae en el arreglo
@@ -11836,24 +11835,34 @@ class Controller{
                 $suma_tiempos=(intval($diff->d)*1440)+(intval($diff->h)*60)+(intval($diff->i)*1);
                 //$ultima_revision[$i]= array_merge($ultima_revision[$i],array('Total_Tiempo'=>$tiempo_transcurrido));
                 if($suma_tiempos>=0){
-                    if($suma_tiempos>60){
-                        if($suma_tiempos>120){
-                            if($suma_tiempos>180){
-                                $revision_181_mas++;
+                    if($suma_tiempos>30){
+                        if($suma_tiempos>60){
+                            if($suma_tiempos>90){
+                                if($suma_tiempos>120){
+                                    if($suma_tiempos>150){
+                                        $revision_151_mas++;
+                                    } else{
+                                        $revision_121_150++;
+                                    }
+                                }else{
+                                    $revision_91_120++;
+                                }
                             }else{
-                               $revision_121_180++; 
+                               $revision_61_90++; 
                             }
                         }else{
-                            $revision_61_120++;
+                            $revision_31_60++;
                         }
                     }else{
-                        $revision_0_60++;
+                        $revision_0_30++;
                     }
                 }
             }
             //Obtiene el total de la revisión actual
-            $total_suma_revisiones= ($revision_0_60*1)+($revision_61_120*1)+($revision_121_180*10)+($revision_181_mas*50);
-            $convinacion = "menos 1 hr:".$revision_0_60.", entre 1y2 hrs:".$revision_61_120.", entre 2y3 hrs:".$revision_121_180.", mas 3 hrs:".$revision_181_mas;
+            $total_suma_revisiones= ($revision_0_30*1)+($revision_31_60*2)+($revision_61_90*3)+($revision_91_120*4)+
+                    ($revision_121_150*100)+($revision_151_mas*350);
+            $convinacion = "menos 30 min:".$revision_0_30.", entre 30 y 1 hrs:".$revision_31_60.", entre1 y 1:30 min:".$revision_91_120.", entre 1:30 y 2 hrs:".$revision_91_120.
+                    ", entre 2y2:30 hrs:".$revision_121_150.", mas 2:30 hrs:".$revision_151_mas;
             $this->revision_contador($total_suma_revisiones, $convinacion);
             ////////////////////////////////////////////////////////////////////
             //OBTIENE INFORMACIÓN DE APERTURA DE CERRADURAS DE CENCON
@@ -13162,7 +13171,10 @@ class Controller{
                 // Va incrementado el contador
                 $i++;
             }
-            
+            for ($i = 0; $i < count($controladores); $i++){
+                $controladores[$i][0]= str_replace("\\","/",$controladores[$i][0]);
+                $controladores[$i][0]= str_replace(" ","",$controladores[$i][0]);
+            }
             $_SESSION['controladores']=$controladores;   
             
             //Llamada al formulario correspondiente de la vista
@@ -13192,10 +13204,10 @@ class Controller{
                     //Verifica si el controlador existe en la base de datos
                     if($controladores_subidos[$i][11]===$controladores_bd[$c]['ID_Control_Acceso']){
                         if($controladores_subidos[$i][1]!==$controladores_bd[$c]['Name']){
-                           $correo.="Se actualizó el nombre del controlador ".$controladores_bd[$c]['Name']." a: ".$controladores_subidos[$i][1].".<br>";
+                           $correo.="Se actualizó el nombre del controlador ".$controladores_bd[$c]['Name']." a: ".$controladores_subidos[$i][1].".\r\n";
                         }
                         if($controladores_subidos[$i][4]!=$controladores_bd[$c]['CommStatus']){
-                           $correo.="Se actualizó el CommStatus del controlador ".$controladores_bd[$c]['CommStatus']." el controlador ".$controladores_bd[$c]['Name'].".<br>";
+                           $correo.="Se actualizó el CommStatus del controlador ".$controladores_bd[$c]['CommStatus']." el controlador ".$controladores_bd[$c]['Name'].".\r\n";
                         }
                         $obj_controlador->setOwner($controladores_subidos[$i][0]);
                         $obj_controlador->setName($controladores_subidos[$i][1]);
@@ -13223,7 +13235,7 @@ class Controller{
             //Verifica los contraladores subido que no fueron encontrados en la base de datos actual
             for ($i = 0; $i < count($controladores_subidos); $i++){
                 if($controladores_subidos[$i][1]<>"0"){
-                    $correo.="El siguiente controlador es nuevo en la base de datos ".$controladores_subidos[$i]['1'].".<br>";
+                    $correo.="El siguiente controlador es nuevo en la base de datos ".$controladores_subidos[$i]['1'].".\r\n";
                     $obj_controlador->setOwner($controladores_subidos[$i][0]);
                     $obj_controlador->setName($controladores_subidos[$i][1]);
                     $obj_controlador->setNetworkid($controladores_subidos[$i][2]);
@@ -13245,7 +13257,7 @@ class Controller{
             for ($i = 0; $i < count($controladores_bd); $i++){
                 if($controladores_bd[$i]['name']<>"0"){
                     if($controladores_bd[$i]['Estado']==1){
-                        $correo.="El siguiente controlador no se encontró en el archivo y fue deshabilitado base de datos ".$controladores_bd[$i]['Name'].".<br>";
+                        $correo.="El siguiente controlador no se encontró en el archivo y fue deshabilitado base de datos ".$controladores_bd[$i]['Name'].".\r\n";
                     }
                     $obj_controlador->setEstado(0);
                     $obj_controlador->setCondicion("ID_Control_Acceso='".$controladores_bd[$i]['ID_Control_Acceso']."'");
@@ -13254,11 +13266,14 @@ class Controller{
             }
             
             $obj_controlador->ejecutar_transaccion_sql();
-            
+                        
             $_SESSION['controladores']="";
-            
             $tipo="Controladores";
-            $this->correo_actualizacion_contralador($correo, $tipo);
+            
+            
+                
+            
+            $this->correo_actualizacion_controlador($correo, $tipo);
             
             header ("location:/ORIEL/index.php?ctl=actualizar_controladores_inicio");
         }else {
@@ -13316,7 +13331,10 @@ class Controller{
                 // Va incrementado el contador
                 $i++;
             }
-            
+            for ($i = 0; $i < count($controladores); $i++){
+                $controladores[$i][0]= str_replace("\\","/",$controladores[$i][0]);
+                $controladores[$i][0]= str_replace(" ","",$controladores[$i][0]);
+            }
             $_SESSION['controladores']=$controladores;   
             
             //Llamada al formulario correspondiente de la vista
@@ -13346,10 +13364,10 @@ class Controller{
                     //Verifica si el controlador existe en la base de datos
                     if($controladores_subidos[$i][5]===$controladores_bd[$c]['ID_Puerta_Controlada']){
                         if($controladores_subidos[$i][1]!==$controladores_bd[$c]['Name']){
-                           $correo.="Se actualizó el nombre de la puerta ".$controladores_bd[$c]['Name']." a: ".$controladores_subidos[$i][1]." del controlador".$controladores_subidos[$i][0].".<br>";
+                           $correo.="Se actualizó el nombre de la puerta ".$controladores_bd[$c]['Name']." a: ".$controladores_subidos[$i][1]." del controlador".$controladores_subidos[$i][0].".\r\n";
                         }
                         if($controladores_subidos[$i][3]!=$controladores_bd[$c]['DoorSwitch']){
-                           $correo.="Se actualizó el DoorSwitch de la puerta ".$controladores_bd[$c]['DoorSwitch']." el controlador ".$controladores_bd[$c]['Name'].".<br>";
+                           $correo.="Se actualizó el DoorSwitch de la puerta ".$controladores_bd[$c]['DoorSwitch']." el controlador ".$controladores_bd[$c]['Name'].".\r\n";
                         }
                         $obj_controlador->setOwner($controladores_subidos[$i][0]);
                         $obj_controlador->setName($controladores_subidos[$i][1]);
@@ -13371,7 +13389,7 @@ class Controller{
             //Verifica los contraladores subido que no fueron encontrados en la base de datos actual
             for ($i = 0; $i < count($controladores_subidos); $i++){
                 if($controladores_subidos[$i][1]<>"0"){
-                    $correo.="La siguiente Puerta es nueva en la base de datos ".$controladores_subidos[$i]['1'].", controlador ".$controladores_subidos[$i]['0'].".<br>";
+                    $correo.="La siguiente Puerta es nueva en la base de datos ".$controladores_subidos[$i]['1'].", controlador ".$controladores_subidos[$i]['0'].".\r\n";
                     $obj_controlador->setOwner($controladores_subidos[$i][0]);
                     $obj_controlador->setName($controladores_subidos[$i][1]);
                     $obj_controlador->setState($controladores_subidos[$i][2]);
@@ -13387,7 +13405,7 @@ class Controller{
             for ($i = 0; $i < count($controladores_bd); $i++){
                 if($controladores_bd[$i]['name']<>"0"){
                     if($controladores_bd[$i]['Estado']==1){
-                        $correo.="La siguiente puerta no se encontró en el archivo y fue deshabilitado base de datos ".$controladores_bd[$i]['Name'].".<br>";
+                        $correo.="La siguiente puerta no se encontró en el archivo y fue deshabilitado base de datos ".$controladores_bd[$i]['Name'].".\r\n";
                     }
                     $obj_controlador->setEstado(0);
                     $obj_controlador->setCondicion("ID_Puerta_Controlada='".$controladores_bd[$i]['ID_Puerta_Controlada']."'");
@@ -13400,7 +13418,7 @@ class Controller{
             $_SESSION['controladores']="";
             
             $tipo="Puertas";
-            $this->correo_actualizacion_contralador($correo, $tipo);
+            $this->correo_actualizacion_controlador($correo, $tipo);
             
             header ("location:/ORIEL/index.php?ctl=actualizar_puerta_controlada_inicio");
         }else {
@@ -13458,7 +13476,10 @@ class Controller{
                 // Va incrementado el contador
                 $i++;
             }
-            
+            for ($i = 0; $i < count($controladores); $i++){
+                $controladores[$i][0]= str_replace("\\","/",$controladores[$i][0]);
+                $controladores[$i][0]= str_replace(" ","",$controladores[$i][0]);
+            }
             $_SESSION['controladores']=$controladores;   
             
             //Llamada al formulario correspondiente de la vista
@@ -13488,10 +13509,10 @@ class Controller{
                     //Verifica si el controlador existe en la base de datos
                     if($controladores_subidos[$i][5]===$controladores_bd[$c]['ID_Modulo_Puerta_Controlada']){
                         if($controladores_subidos[$i][1]!==$controladores_bd[$c]['Name']){
-                           $correo.="Se actualizó el módulo de la puerta ".$controladores_bd[$c]['Name']." a: ".$controladores_subidos[$i][1]." del controlador".$controladores_subidos[$i][0].".<br>";
+                           $correo.="Se actualizó el módulo de la puerta ".$controladores_bd[$c]['Name']." a: ".$controladores_subidos[$i][1]." del controlador".$controladores_subidos[$i][0].".\r\n";
                         }
                         if($controladores_subidos[$i][3]!=$controladores_bd[$c]['ModuloID']){
-                           $correo.="Se actualizó el ModuloID de la módulo ".$controladores_bd[$c]['name']." del controlador ".$controladores_bd[$c]['Name'].".<br>";
+                           $correo.="Se actualizó el ModuloID de la módulo ".$controladores_bd[$c]['name']." del controlador ".$controladores_bd[$c]['Name'].".\r\n";
                            $correo.="ModuloID actualizado ".$controladores_bd[$c]['3']." ModuloID anterior ".$controladores_bd[$c]['ModuloID'].".<br>";
                         }
                         $obj_controlador->setOwner($controladores_subidos[$i][0]);
@@ -13514,7 +13535,7 @@ class Controller{
             //Verifica los contraladores subido que no fueron encontrados en la base de datos actual
             for ($i = 0; $i < count($controladores_subidos); $i++){
                 if($controladores_subidos[$i][1]<>"0"){
-                    $correo.="El siguiente mpodulo es nuevo en la base de datos ".$controladores_subidos[$i]['1'].", controlador ".$controladores_subidos[$i]['0'].".<br>";
+                    $correo.="El siguiente mpodulo es nuevo en la base de datos ".$controladores_subidos[$i]['1'].", controlador ".$controladores_subidos[$i]['0'].".\r\n";
                     $obj_controlador->setOwner($controladores_subidos[$i][0]);
                     $obj_controlador->setName($controladores_subidos[$i][1]);
                     $obj_controlador->setIou($controladores_subidos[$i][2]);
@@ -13530,7 +13551,7 @@ class Controller{
             for ($i = 0; $i < count($controladores_bd); $i++){
                 if($controladores_bd[$i]['name']<>"0"){
                     if($controladores_bd[$i]['Estado']==1){
-                        $correo.="El siguiente mpodulo no se encontró en el archivo y fue deshabilitado base de datos ".$controladores_bd[$i]['Name'].", controlador ".$controladores_bd[$i]['Owner'].".<br>";
+                        $correo.="El siguiente mpodulo no se encontró en el archivo y fue deshabilitado base de datos ".$controladores_bd[$i]['Name'].", controlador ".$controladores_bd[$i]['Owner'].".\r\n";
                     }
                     $obj_controlador->setEstado(0);
                     $obj_controlador->setCondicion("ID_Modulo_Puerta_Controlada='".$controladores_bd[$i]['ID_Modulo_Puerta_Controlada']."'");
@@ -13542,7 +13563,7 @@ class Controller{
             
             $_SESSION['controladores']="";
             $tipo="Módulos";
-            $this->correo_actualizacion_contralador($correo, $tipo);
+            $this->correo_actualizacion_controlador($correo, $tipo);
             
             header ("location:/ORIEL/index.php?ctl=actualizar_modulo_puerta_inicio");
         }else {
@@ -13553,15 +13574,36 @@ class Controller{
         }
     }
     
-    public function correo_actualizacion_contralador($detalle, $tipo){
+    public function correo_actualizacion_controlador($detalle, $tipo){
         if(isset($_SESSION['nombre'])){
             $obj_usuario= new cls_usuarios();
             $obj_correo= new Mail_Provider();
             
+            if($detalle==""){
+                $detalle="Todo se encontró Normal, no se realizaron cambios importante.";
+            }
+            //Obtiene el directorio raiz donde se encuentra localizado el proyecto ORIEL
+            $raiz=$_SERVER['DOCUMENT_ROOT'];
+            //Obtiene la hora actual del sistema
+            $time = time();
+            //Formatea la ruta del directorio raiz del proyecto ORIEL
+            if (substr($raiz,-1)!="/"){
+                $raiz.="/";
+            }
+            $ruta=  $raiz."Cuenta_Visitas_Oriel/Control_Acceso/".date("Ymd_his", $time)."_".$tipo.".txt";
+            if(!file_exists($ruta)){
+                $fp = fopen($ruta,"a+");
+                //Escribe en el archivo
+                fwrite($fp, $detalle);
+                //Cierra el archivo
+                fclose($fp);
+                //echo ($cadena_oficiales);
+            }
+            
             $obj_usuario->setCondicion("ID_Usuario=".$_SESSION['id']);
             $obj_usuario->obtiene_todos_los_usuarios();
             $usuario= $obj_usuario->getArreglo();
-            
+
             //Asigna correo y nombre de los destinatarios
             $correo=$usuario[0]['Correo'];
             $usuario="";
@@ -13571,19 +13613,16 @@ class Controller{
             //$usuario="Coordinacion Centro Control";
             //$obj_correo->agregar_direccion_de_correo_copia($correo, $usuario);
             
-            if($detalle=="" || $detalle="''" || $detalle==null){
-                $detalle="Todo se encontró Normal, no se realizaron cambios importante.";
-            }
-                    
             //Agrega el asunto del correo para envio al usuario realizando la solicitud
             $obj_correo->agregar_asunto_de_correo("Actualización de información Control de Acceso- ".$tipo);
             //Agrega detalle de correo
             $obj_correo->agregar_detalle_de_correo("Gracias por utilizar Oriel</br></br> "
-                . "La actualización de : ".$tipo." se realizó correctamente.</br>"
-                . $detalle."<br><br>"
+                . "La actualización de : ".$tipo." se realizó correctamente.</br></br>"
+                . "Adjunto encontrará el detalle de los cambios realizados.<br></br>"
                 . "Este es un mensaje automático, por favor no reponderlo. Si requiere ayuda, comuníquese con el Centro de Control Ext: 79066.</br></br>"
                 . "<a>http://oriel</a>");
             //Procede a enviar el correo
+            $obj_correo->adjuntar_archivo_al_correo($ruta,"");
             $obj_correo->enviar_correo();
         }
     }

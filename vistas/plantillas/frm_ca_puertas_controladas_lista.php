@@ -32,6 +32,7 @@
                 <table id="tabla" class="display">
                     <thead>
                         <tr>
+                            <th hidden>ID</th>
                             <th style="text-align:center">Owner</th>
                             <th style="text-align:center">Name</th>
                             <th style="text-align:center">State</th>

@@ -16,7 +16,7 @@ class Mail_Provider{
             //indico a la clase que use SMTP
             $this->mail->isSMTP();
             //permite modo debug para ver mensajes de las cosas que van ocurriendo
-            $this->mail->SMTPDebug=2;
+            //$this->mail->SMTPDebug=2;
             //Debo de hacer autenticación SMTP
             $this->mail->SMTPAuth = true;
             $this->mail->CharSet='UTF-8';
@@ -84,6 +84,13 @@ class Mail_Provider{
         }
     }
     
+    public function adjuntar_archivo_al_correo($path, $name){
+        try{
+        $this->mail->addAttachment($path, $name);
+        }catch (Exception $e){
+           echo 'Hubo un problema al agregar el archivo adjunto';
+        }
+    }
     //Metodo que agrega detalle a la base de datos
     public function enviar_correo(){
         try{
