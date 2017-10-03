@@ -34,8 +34,8 @@
                         <tr>
                             <th style="text-align:center" hidden>ID</th>
                             <th style="text-align:center">Owner</th>
-                            <th style="text-align:center">Name</th>
                             <th style="text-align:center">IOU</th>
+                            <th style="text-align:center">Name</th>
                             <th style="text-align:center">ModuloID</th>
                             <th style="text-align:center">CommStatus</th>
                             <th style="text-align:center">Estado</th>

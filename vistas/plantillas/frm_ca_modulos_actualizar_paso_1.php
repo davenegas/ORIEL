@@ -6,7 +6,7 @@
         <?php require_once 'frm_librerias_head.html'; ?>  
         <script>
             $(document).ready(function () {
-                // Una vez se cargue al completo la página desaparecerá el div "cargando"
+                //Una vez se cargue al completo la página desaparecerá el div "cargando"
                 $('#cargando').hide();
             });
         </script>        
@@ -26,8 +26,8 @@
                 <thead>
                     <tr>
                         <th style="text-align:center">Owner</th>
-                        <th style="text-align:center">Name</th>
                         <th style="text-align:center">IOU</th>
+                        <th style="text-align:center">Name</th>
                         <th style="text-align:center">ModuloID</th>
                         <th style="text-align:center">CommStatus</th>
                         <th style="text-align:center">ID</th>

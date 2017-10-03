@@ -668,9 +668,9 @@
                 <div id="ventana2">
                     <img id="close" src='vistas/Imagenes/cerrar.png' width="25" onclick ="ocultar_elemento()">
                     <h2>Áreas de Apoyo</h2>
-                    <h4>Agregar nueva área de apoyo</h4>
+                    <h3 data-toggle="collapse" data-target="#nueva_area_apoyo">Agregar nueva área de apoyo</h3>
                     <!--Formulario para ingresar areas de apoyo-->
-                    <form class="bordegris" id="nueva_area_apoyo" method="post" name="form" action="index.php?ctl=Area_apoyo_agregar">
+                    <form class="bordegris collapse" id="nueva_area_apoyo" method="post" name="form" action="index.php?ctl=Area_apoyo_agregar">
                         <input hidden id="ID_PuntoBCR" name="ID_PuntoBCR" type="text" value="<?php echo $params[0]['ID_PuntoBCR']; ?>">
                         <div class="col-md-4 espacio-abajo-5">
                             <label for="nombre">Nombre de Área Apoyo</label>
@@ -757,8 +757,7 @@
                     </form>
                     
                     <!--lista de areas de apoyo registradas-->
-                    <h4>Áreas de apoyo registradas en el sistema</h4>
-                    <table id="tabla3" class="display" cellspacing="0" width="100%">
+                    <table id="tabla3" class="display espacio-arriba" cellspacing="0" width="100%">
                         <thead>
                             <tr>
                                 <th style="text-align:center">Área de Apoyo</th>
@@ -781,8 +780,8 @@
                                         Asignar al PuntoBCR</a></td>
                                 </tr>
                             <?php } ?>
-                        </tbody> 
-                    </table>                  
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>

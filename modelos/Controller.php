@@ -7128,14 +7128,17 @@ class Controller{
                 //Valida que el arreglo tenga información
                 if($area_apoyo==""){
                     echo 'Error al traer area de apoyo nueva';
-                }   else    {
+                } else {
                     //Crea el número del area de apoyo nueva
                     $obj_telefono->setId(null);
                     $obj_telefono->setNumero($_POST['numero']);
                     $obj_telefono->setTipo_telefono($_POST['Tipo_Telefono']);
                     $obj_telefono->setId2($area_apoyo[0]['ID_Area_Apoyo']); 
                     $obj_telefono->setObservaciones("");
+                    
+                    $obj_telefono->setCondicion("");
                     $obj_telefono->guardar_telefono();
+                    echo 'numero guardado';
                 }
                 //Asigna el area de apoyo al puntoBCR
                 $obj_area_apoyo = new cls_areasapoyo();
@@ -7154,7 +7157,7 @@ class Controller{
                     echo "El Area de Apoyo ya se encuentra asignada al PuntoBCR";
                 }
 
-                header("location:/ORIEL/index.php?ctl=gestion_punto_bcr&id=".$_POST['ID_PuntoBCR']);
+                //header("location:/ORIEL/index.php?ctl=gestion_punto_bcr&id=".$_POST['ID_PuntoBCR']);
             } else {
                 echo "<script type=\"text/javascript\">alert('Este número en áreas de apoyo ya existe!');history.go(-1);</script>";
             }
@@ -8345,12 +8348,12 @@ class Controller{
             //Obtiene la información completa de la persona según la empresa (externa o Banco==1)
             if($funcionario[0]['ID_Empresa']==1){
                 //Obtiene la información si la persona es BCR
-                $obj_persona->setCondicion("T_Personal.ID_Persona='".$funcionario[0]['ID_Persona']."'");
+                $obj_persona->setCondicion("T_Personal.ID_Persona='".$funcionario[0]['ID_Persona']."' and Estado=1");
                 $obj_persona->obtiene_todo_el_personal();
                 $funcionario= $obj_persona->getArreglo();
             }else{
                 //Obtiene la información en caso de ser otra empresa
-                $obj_externo->setCondicion("T_PersonalExterno.ID_Persona_Externa='".$funcionario[0]['ID_Persona']."'");
+                $obj_externo->setCondicion("T_PersonalExterno.ID_Persona_Externa='".$funcionario[0]['ID_Persona']."' and Estado=1");
                 $obj_externo->obtiene_todo_el_personal_externo();
                 $funcionario= $obj_externo->getArreglo();
             }
@@ -8378,11 +8381,15 @@ class Controller{
         if(isset($_SESSION['nombre'])){
             $obj_cencon = new cls_cencon();
             
-            //Obtiene todas las relaciones buscando por Cedula
-            $obj_cencon->setCondicion("T_Cencon.Cedula_Cencon='".$_POST['id']."'");  
-            $obj_cencon->setEmpresa($_POST['empresa']);
-            $obj_cencon->obtener_todas_relaciones();
-            $cajeros =  $obj_cencon->getArreglo();
+            if($_POST['empresa']<>"" || $_POST['empresa']<>null){
+                //Obtiene todas las relaciones buscando por Cedula
+                $obj_cencon->setCondicion("T_Cencon.Cedula_Cencon='".$_POST['id']."'");  
+                $obj_cencon->setEmpresa($_POST['empresa']);
+                $obj_cencon->obtener_todas_relaciones();
+                $cajeros =  $obj_cencon->getArreglo();
+            } else {
+                $cajeros=null;
+            }
             
             unset($obj_cencon);
             //Convierte la información en un json para enviarlo a JavaScript
@@ -13207,7 +13214,7 @@ class Controller{
                            $correo.="Se actualizó el nombre del controlador ".$controladores_bd[$c]['Name']." a: ".$controladores_subidos[$i][1].".\r\n";
                         }
                         if($controladores_subidos[$i][4]!=$controladores_bd[$c]['CommStatus']){
-                           $correo.="Se actualizó el CommStatus del controlador ".$controladores_bd[$c]['CommStatus']." el controlador ".$controladores_bd[$c]['Name'].".\r\n";
+                           $correo.="Se actualizó el CommStatus del controlador ".$controladores_bd[$c]['name'].", ahora el controlador está ".$controladores_bd[$i][4].".\r\n";
                         }
                         $obj_controlador->setOwner($controladores_subidos[$i][0]);
                         $obj_controlador->setName($controladores_subidos[$i][1]);
@@ -13257,7 +13264,7 @@ class Controller{
             for ($i = 0; $i < count($controladores_bd); $i++){
                 if($controladores_bd[$i]['name']<>"0"){
                     if($controladores_bd[$i]['Estado']==1){
-                        $correo.="El siguiente controlador no se encontró en el archivo y fue deshabilitado base de datos ".$controladores_bd[$i]['Name'].".\r\n";
+                        $correo.="El siguiente controlador no se encontró en el archivo y fue deshabilitado de la base de datos ".$controladores_bd[$i]['Name'].".\r\n";
                     }
                     $obj_controlador->setEstado(0);
                     $obj_controlador->setCondicion("ID_Control_Acceso='".$controladores_bd[$i]['ID_Control_Acceso']."'");
@@ -13269,10 +13276,7 @@ class Controller{
                         
             $_SESSION['controladores']="";
             $tipo="Controladores";
-            
-            
-                
-            
+
             $this->correo_actualizacion_controlador($correo, $tipo);
             
             header ("location:/ORIEL/index.php?ctl=actualizar_controladores_inicio");
@@ -13367,7 +13371,7 @@ class Controller{
                            $correo.="Se actualizó el nombre de la puerta ".$controladores_bd[$c]['Name']." a: ".$controladores_subidos[$i][1]." del controlador".$controladores_subidos[$i][0].".\r\n";
                         }
                         if($controladores_subidos[$i][3]!=$controladores_bd[$c]['DoorSwitch']){
-                           $correo.="Se actualizó el DoorSwitch de la puerta ".$controladores_bd[$c]['DoorSwitch']." el controlador ".$controladores_bd[$c]['Name'].".\r\n";
+                           $correo.="Se actualizó el DoorSwitch de la puerta a ".$controladores_bd[$c]['DoorSwitch']." del controlador ".$controladores_bd[$c]['Name'].".\r\n";
                         }
                         $obj_controlador->setOwner($controladores_subidos[$i][0]);
                         $obj_controlador->setName($controladores_subidos[$i][1]);
@@ -13389,7 +13393,7 @@ class Controller{
             //Verifica los contraladores subido que no fueron encontrados en la base de datos actual
             for ($i = 0; $i < count($controladores_subidos); $i++){
                 if($controladores_subidos[$i][1]<>"0"){
-                    $correo.="La siguiente Puerta es nueva en la base de datos ".$controladores_subidos[$i]['1'].", controlador ".$controladores_subidos[$i]['0'].".\r\n";
+                    $correo.="La siguiente Puerta es nueva en la base de datos ".$controladores_subidos[$i]['1'].", del controlador ".$controladores_subidos[$i]['0'].".\r\n";
                     $obj_controlador->setOwner($controladores_subidos[$i][0]);
                     $obj_controlador->setName($controladores_subidos[$i][1]);
                     $obj_controlador->setState($controladores_subidos[$i][2]);
@@ -13405,7 +13409,7 @@ class Controller{
             for ($i = 0; $i < count($controladores_bd); $i++){
                 if($controladores_bd[$i]['name']<>"0"){
                     if($controladores_bd[$i]['Estado']==1){
-                        $correo.="La siguiente puerta no se encontró en el archivo y fue deshabilitado base de datos ".$controladores_bd[$i]['Name'].".\r\n";
+                        $correo.="La siguiente puerta no se encontró en el archivo y fue deshabilitado base de datos ".$controladores_bd[$i]['Name'].", del controlador ".$controladores_subidos[$i]['0'].".\r\n";
                     }
                     $obj_controlador->setEstado(0);
                     $obj_controlador->setCondicion("ID_Puerta_Controlada='".$controladores_bd[$i]['ID_Puerta_Controlada']."'");
@@ -13509,11 +13513,11 @@ class Controller{
                     //Verifica si el controlador existe en la base de datos
                     if($controladores_subidos[$i][5]===$controladores_bd[$c]['ID_Modulo_Puerta_Controlada']){
                         if($controladores_subidos[$i][1]!==$controladores_bd[$c]['Name']){
-                           $correo.="Se actualizó el módulo de la puerta ".$controladores_bd[$c]['Name']." a: ".$controladores_subidos[$i][1]." del controlador".$controladores_subidos[$i][0].".\r\n";
+                           $correo.="Se actualizó el nombre del módulo ".$controladores_bd[$c]['Name']." a: ".$controladores_subidos[$i][1].", del controlador".$controladores_subidos[$i][0].".\r\n";
                         }
                         if($controladores_subidos[$i][3]!=$controladores_bd[$c]['ModuloID']){
-                           $correo.="Se actualizó el ModuloID de la módulo ".$controladores_bd[$c]['name']." del controlador ".$controladores_bd[$c]['Name'].".\r\n";
-                           $correo.="ModuloID actualizado ".$controladores_bd[$c]['3']." ModuloID anterior ".$controladores_bd[$c]['ModuloID'].".<br>";
+                           $correo.="Se actualizó el ModuloID del módulo ".$controladores_bd[$c]['name'].", del controlador ".$controladores_bd[$c]['Name'].".\r\n";
+                           $correo.="ModuloID actualizado ".$controladores_bd[$c]['3']." ModuloID anterior ".$controladores_bd[$c]['ModuloID'].".\r\n";
                         }
                         $obj_controlador->setOwner($controladores_subidos[$i][0]);
                         $obj_controlador->setName($controladores_subidos[$i][1]);
@@ -13535,7 +13539,7 @@ class Controller{
             //Verifica los contraladores subido que no fueron encontrados en la base de datos actual
             for ($i = 0; $i < count($controladores_subidos); $i++){
                 if($controladores_subidos[$i][1]<>"0"){
-                    $correo.="El siguiente mpodulo es nuevo en la base de datos ".$controladores_subidos[$i]['1'].", controlador ".$controladores_subidos[$i]['0'].".\r\n";
+                    $correo.="El siguiente módulo es nuevo en la base de datos ".$controladores_subidos[$i]['1'].", del controlador ".$controladores_subidos[$i]['0'].".\r\n";
                     $obj_controlador->setOwner($controladores_subidos[$i][0]);
                     $obj_controlador->setName($controladores_subidos[$i][1]);
                     $obj_controlador->setIou($controladores_subidos[$i][2]);
@@ -13551,7 +13555,7 @@ class Controller{
             for ($i = 0; $i < count($controladores_bd); $i++){
                 if($controladores_bd[$i]['name']<>"0"){
                     if($controladores_bd[$i]['Estado']==1){
-                        $correo.="El siguiente mpodulo no se encontró en el archivo y fue deshabilitado base de datos ".$controladores_bd[$i]['Name'].", controlador ".$controladores_bd[$i]['Owner'].".\r\n";
+                        $correo.="El siguiente módulo no se encontró en el archivo y fue deshabilitado base de datos ".$controladores_bd[$i]['Name'].", controlador ".$controladores_bd[$i]['Owner'].".\r\n";
                     }
                     $obj_controlador->setEstado(0);
                     $obj_controlador->setCondicion("ID_Modulo_Puerta_Controlada='".$controladores_bd[$i]['ID_Modulo_Puerta_Controlada']."'");
@@ -13584,7 +13588,7 @@ class Controller{
             }
             //Obtiene el directorio raiz donde se encuentra localizado el proyecto ORIEL
             $raiz=$_SERVER['DOCUMENT_ROOT'];
-            //Obtiene la hora actual del sistema
+            //Obtiene la hora actual del sistemad
             $time = time();
             //Formatea la ruta del directorio raiz del proyecto ORIEL
             if (substr($raiz,-1)!="/"){
@@ -13617,9 +13621,9 @@ class Controller{
             $obj_correo->agregar_asunto_de_correo("Actualización de información Control de Acceso- ".$tipo);
             //Agrega detalle de correo
             $obj_correo->agregar_detalle_de_correo("Gracias por utilizar Oriel</br></br> "
-                . "La actualización de : ".$tipo." se realizó correctamente.</br></br>"
-                . "Adjunto encontrará el detalle de los cambios realizados.<br></br>"
-                . "Este es un mensaje automático, por favor no reponderlo. Si requiere ayuda, comuníquese con el Centro de Control Ext: 79066.</br></br>"
+                . "La actualización de ".$tipo." se realizó correctamente.</br></br>"
+                . "Adjunto encontrará el detalle de los cambios realizados.<br></br></br>"
+                . "Este es un mensaje automático, por favor no reponderlo. Si requiere ayuda, comuníquese con el Centro de Control Ext: 79066.</br>"
                 . "<a>http://oriel</a>");
             //Procede a enviar el correo
             $obj_correo->adjuntar_archivo_al_correo($ruta,"");

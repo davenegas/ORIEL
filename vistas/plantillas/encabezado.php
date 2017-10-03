@@ -69,11 +69,7 @@
 
                             <?php  if ($_SESSION['modulos']['Seguridad-Usuarios']==1){?>
                                 <li><a href="index.php?ctl=listar_usuarios">Usuarios</a></li>
-                            <?php }; ?>   
-
-                            <?php if ($_SESSION['modulos']['Seguridad-Trazabilidad']==1){ ?>
-                                <li><a href="index.php?ctl=principal">Trazabilidad</a></li> 
-                            <?php }; ?>
+                            <?php }; ?> 
 
                         </ul>
                     </li>

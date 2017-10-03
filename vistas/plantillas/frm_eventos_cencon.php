@@ -12,9 +12,6 @@
         
         <?php require_once 'encabezado.php';?>
         <div class="container-fluid text-center">
-            <!-- <pre>
-                <?php print_r($params)?>
-            </pre>-->
             <h2>Bitácora Digital de Cencon</h2> 
             <div class="row content">
                 <!--Se mantienen este div para dejar espacio a la izquierda de la tabla-->    
