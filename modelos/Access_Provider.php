@@ -28,9 +28,20 @@ class Access_Provider{
     private $arreglo;
     //Variable que almacena el string SQL que se va a utilizar
     private $consulta;
+    
+    private $resultado_conexion;
     // Variable controladora del resultado de la operación, si se ejecutó con éxito o no
       
-   
+    
+    function getResultado_conexion() {
+        return $this->resultado_conexion;
+    }
+    
+    function setResultado_conexion($resultado_conexion) {
+        $this->resultado_conexion = $resultado_conexion;
+    }
+
+           
     function getMvc_bd_nombre() {
         return $this->mvc_bd_nombre;
     }
@@ -118,10 +129,12 @@ class Access_Provider{
             
             $this->conexion = new PDO("odbc:DRIVER={Microsoft Access Driver (*.mdb)}; DBQ=".$this->mvc_ruta_archivo_mdb.$this->mvc_bd_nombre.".mdb"."; Uid=".$this->mvc_bd_usuario."; Pwd=".$this->mvc_bd_clave.";");
             //$consulta=$this->conexion->query("SET NAMES 'utf8'");
+            $this->resultado_conexion=true;
                           
         }catch (Exception $e){
             //Notifica de un error al conectarse a la base de datos
-            echo 'Hubo un problema al realizar la conexión a la base de datos';
+            //echo 'Hubo un problema al realizar la conexión a la base de datos';
+            $this->resultado_conexion=false;
           
         }
     }
@@ -137,30 +150,9 @@ class Access_Provider{
     //Método que permite traer información de la base de datos mediante consultas SQL
     //Este metodo recibe el nombre de la tabla, campos de la misma y la condición de búsqueda en caso de que exista
     public function trae_datos($table,$campos,$condicion){
-       
-        //echo "select ".$campos." from ".$table." where ".$condicion.";";
-            //Elimina la instancia del arreglo
+  
         unset($this->arreglo);
-        
-        
-                  //  $result = $db->query($sql);
-//            //echo $result->odb;
-            //$row = $result->fetch();
-//
-//            
-//            
-           // echo $result->columnCount();
-           // while ($row = $result->fetch()) {
-                //$strSiteName        = utf8_encode($row["strSiteName"]);
-               // $strSiteName        = utf8_encode($row[1]);
-                //$strSerialNo = $row["strSerialNo"];
-                //$iRelMajor       = $row["iRelMajor"];
-               // echo "<br>";
-              //  echo $strSiteName;
-          //  }
-        
-       
-            //Verifica si la consulta SQL tiene una condición de búsqueda
+
                
         if ($condicion==""){
             //En caso de no tener condición, agrega campos y nombre de la tabla solamente

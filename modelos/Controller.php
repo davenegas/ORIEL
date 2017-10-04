@@ -2965,6 +2965,72 @@ class Controller{
         }
     }
     
+    public function dibuja_tabla_seguimiento_evento(){
+        if(isset($_POST['id_e'])){
+            //Obtiene el id del evento en cuestión mediante el metodo post del url
+            $ide=$_POST['id_e'];
+            //Crea una instancia de la clase eventos
+            $obj_eventos = new cls_eventos();
+
+            $condicion_seguimientos="T_DetalleEvento.ID_Evento=".$ide;
+            //Obtiene los seguimientos del evento
+            $obj_eventos->setCondicion($condicion_seguimientos." order by T_DetalleEvento.Fecha desc,T_DetalleEvento.Hora desc");
+            //Obtiene los detalles del evento seleccionado
+            $obj_eventos->obtiene_detalle_evento();
+            //Obtiene el arreglo de resultados
+            $params= $obj_eventos->getArreglo();
+            
+            if (count($params)>0){
+                //Establece La cabecera de la tabla
+                $html="<thead>";   
+                //Linea de los titulos de las columnas
+                $html.="<tr>";
+                $html.="<th align='center'>Fecha de Seguimiento</th>";
+                $html.="<th align='center'>Hora de Seguimiento</th>";
+                $html.="<th align='center'>Detalle del seguimiento</th>";
+                $html.="<th align='center'>Ingresado por</th>";
+                //Cierra la fila
+                $html.="</tr>";
+                // Cierre de las cabeceras
+                $html.="</thead>";
+                //Cierre del cuerpo de la tabla
+                $html.="<tbody>";
+
+                //Obtiene el tamaño de la variable parametros que almacena la consulta
+                $tam=count($params);
+
+                //Bucle que permite recorrer el vector que almacena la consulta de registros.
+                for ($i = 0; $i <$tam; $i++) {
+                    //Creacion de una nueva linea en la tabla
+                    $html.="<tr>";
+                    $fecha_evento = date_create($params[$i]['Fecha']);
+                    //Definición de los campos de la tabla, con respecto al vector que almacena los datos.
+                    $html.="<td align='center'>".date_format($fecha_evento, 'd/m/Y')."</td>";
+                    $html.="<td align='center'>".$params[$i]['Hora']."</td>";
+                    $html.="<td align='center'>".$params[$i]['Detalle']."</td>";
+                    $html.="<td align='center'>".$params[$i]['Nombre_Usuario']." ".$params[$i]['Apellido']."</td>";
+                    $html.="</tr>";
+                }
+                //Culmina el cuerpo de la tabla
+                $html.="</tbody>";
+
+                //Imprime en pantalla el html construido
+                echo $html;
+                //sale del metodo
+                exit;
+            }else{
+                // En caso de que no hayan resultados, muestra en pantalla la información
+                $html="<h4>No se encontraron seguimientos para este evento.</h4>";
+                //Imprime la variable html construida
+                echo $html;
+                //Sale del metodo
+                exit;
+            }    
+        }
+    }
+
+    
+    
     //Metodo del contralador que permite listar los eventos cerrados en pantalla de la bitacora digital.
     public function frm_eventos_lista_cerrados(){
         //Validación para verificar si el usuario está logeado en el sistema
@@ -3394,6 +3460,38 @@ class Controller{
                         echo 'SI';
                     }
                 }
+            }else {
+                /*
+                * Esta es la validación contraria a que la sesión de usuario esté definida  y abierta.
+                * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+                * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+                * En la última línea llama a la pagina de inicio de sesión.
+                */
+                $tipo_de_alerta="alert alert-warning";
+                $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+                //Validación para verificar si el usuario está logeado en el sistema
+                require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+            }
+            //En caso de que no estén definidos los parámetros, procede a sacarlo del metodo de ejecución.
+        }   else   {
+            exit;
+        }
+    }
+    
+    
+    public function actualizar_serie_y_descripcion_en_unidad_de_video(){
+
+        //Verifica que los parametros del metodo post estén definidos y hayan sido enviados al metodo
+        if(isset($_POST['id_uni']) && (isset($_POST['nom'])) && (isset($_POST['serie']))){
+            
+            //Validación para verificar si el usuario está logeado en el sistema
+            if(isset($_SESSION['nombre'])){
+                
+                $obj_unidades_de_video= new cls_unidad_video();
+                $obj_unidades_de_video->setCondicion("ID_Unidad_Video=".$_POST['id_uni']);  
+                $obj_unidades_de_video->setCampos_valores("Descripcion='".$_POST['nom']."',Serie='".$_POST['serie']."'");
+                $obj_unidades_de_video->actualizar_campo_unidades_de_video();
+                  
             }else {
                 /*
                 * Esta es la validación contraria a que la sesión de usuario esté definida  y abierta.
@@ -4845,6 +4943,84 @@ class Controller{
         //Cierra el archivo
         fclose($fp);
     }
+       
+    public function subir_bd_rapid_al_servidor(){
+        if(isset($_SESSION['nombre'])){
+            
+            if (!($_FILES['seleccionar_archivo']['name']==="REMCentral4.mdb")){
+                echo "<script type=\"text/javascript\">alert('El nombre del archivo no es correcto (REMCentral4.mdb)!!!!');history.go(-1);</script>";;
+                exit();
+            }
+            
+            if (!($_FILES['seleccionar_archivo']['type']==="application/msaccess")){
+                //En caso de que sea diferente, muestra una advertencia en pantalla para el usario y se sale del paso
+                echo "<script type=\"text/javascript\">alert('Debe Importar un archivo tipo mdb access!!!!');history.go(-1);</script>";;
+                exit();
+            }
+            
+            $recepcion_archivo=$_FILES['seleccionar_archivo']['error'];
+            
+            $raiz=$_SERVER['DOCUMENT_ROOT'];
+                       
+            if (substr($raiz,-1)!="/"){
+                $raiz.="/";
+            }
+            
+            $ruta=  $raiz."Rapid_Eye/".Encrypter::quitar_tildes($_FILES['seleccionar_archivo']['name']);
+          
+            switch ($recepcion_archivo) {
+                case 0:{
+                    //Borra el archivo fisico del disco duro
+                    if(file_exists($ruta)){
+                        unlink($ruta);     
+                    }
+                    if (move_uploaded_file($_FILES['seleccionar_archivo']['tmp_name'], $ruta)){
+                        echo "<script type=\"text/javascript\">alert('Archivo cargado correctamente al servidor!!!!');history.go(-1);</script>";;
+                        break;
+                        header ("location:/ORIEL/index.php?ctl=sincronizacion_base_de_datos_rapid_eye");
+                    }  else {
+                        echo "<script type=\"text/javascript\">alert('No es posible escribir en el disco duro del servidor!!!!');history.go(-1);</script>";;
+                        break;
+                        header ("location:/ORIEL/index.php?ctl=sincronizacion_base_de_datos_rapid_eye");
+                        //echo "<script type=\"text/javascript\">alert('No fue seleccionado ningun archivo!!!!');history.go(-1);</script>";;
+                    }
+                    break;
+                }
+                case 2:{
+                    echo "<script type=\"text/javascript\">alert('El archivo consume mayor espacio del permitido (10 mb) !!!!');history.go(-1);</script>";;
+                    break;
+                }
+                case 4:{ 
+                    echo "<script type=\"text/javascript\">alert('No se adjuntó ningún archivo !!!!');history.go(-1);</script>";;
+                    //header ("location:/ORIEL/index.php?ctl=sincronizacion_base_de_datos_rapid_eye");
+                    break;
+                }
+                 case 6:{
+                    echo "<script type=\"text/javascript\">alert('El servidor no tiene acceso a la carpeta temporal de almacenamiento!!!!');history.go(-1);</script>";
+                    break;
+                 } 
+                case 7:{
+                    echo "<script type=\"text/javascript\">alert('No es posible escribir en el disco duro del servidor!!!!');history.go(-1);</script>";;
+                    break;
+                }  
+                case 8:{
+                    echo "<script type=\"text/javascript\">alert('Fue detenida la carga del archivo debido a una extension de PHP!!!!');history.go(-1);</script>";;
+                    break;
+                }   
+            }
+        }else {
+            /*
+            * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+            * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+            * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+            * En la última línea llama a la pagina de inicio de sesión.
+            */
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            //Llamada al  formulario de la vista.
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        } 
+    }
     
     public function guardar_seguimiento_evento(){
         if(isset($_SESSION['nombre'])){
@@ -5687,8 +5863,15 @@ class Controller{
     
 
     // Permite comparar, la base de datos de Rapid Eye contra la tabla de unidades de video de ORIEL
-    public function revision_automatica_base_de_datos_rapid_eye(){
-        
+    public function sincronizacion_base_de_datos_rapid_eye(){
+    
+        if(isset($_SESSION['nombre'])){
+
+            $obj_unidad_video=new cls_unidad_video();
+            $obj_unidad_video->obtiene_todas_las_unidades_de_video();
+            $vector_unidades_de_video= $obj_unidad_video->getArreglo();
+            
+            
             $obj_base_datos_rapíd = new cls_rapid_eye_db();
             $obj_unidad_de_video= new cls_unidad_video();
 
@@ -5701,22 +5884,29 @@ class Controller{
 
             $cuenta=0;
 
-
             //Variables para revisión
 
-            $estructura_base_de_datos="<br><h2>Carpetas de distribución de tipos de sitios y localización que tiene la base de datos</h2>";
+            $estructura_base_de_datos="<h3>Carpetas de distribución de tipos de sitios y localización que tiene la base de datos</h3>";
 
-            $sitios_rapid_eye_no_encontrados_en_oriel_por_serie="<br><h2>Números de Serie de la bd Rapid Eye no encontrados en la BD de ORIEL</h2>";
+            $estructura_base_de_datos=$estructura_base_de_datos."<p>En caso de que haya alguna inconsistencia en la estructura, favor realizar los cambios directamente en Rapid Eye, ya sea realizar mantenimiento a algún Punto en específico o eliminar carpetas contenedoras de la estructura en el administrador del software.</p>";
 
-            $sitios_rapid_eye_no_encontrados_en_oriel_por_nombre="<br><h2>Nombres de Grabadores de la bd Rapid Eye no encontrados en la BD de ORIEL</h2>";
+            $sitios_rapid_eye_no_encontrados_en_oriel_por_serie="<br><h3>Números de Serie de la bd Rapid Eye no encontrados en la BD de ORIEL</h3>";
 
-            $grabadores_oriel_no_encontrados_en_rapid_por_serie="<br><h2>Números de Serie de ORIEL no encontrados en la BD de Rapid Eye</h2>";
+            $sitios_rapid_eye_no_encontrados_en_oriel_por_nombre="<br><h3>Nombres de Grabadores de la bd Rapid Eye no encontrados en la BD de ORIEL</h3>";
 
-            $grabadores_oriel_no_encontrados_en_rapid_por_nombre="<br><h2>Nombres de Grabadores de ORIEL no encontrados en la BD de Rapid</h2>";
-            
-            $grabadores_oriel_iguales_en_rapid_por_serie="<br><h2>Números de Serie de ORIEL encontrados en la BD de Rapid Eye</h2>";
+            $grabadores_oriel_no_encontrados_en_rapid_por_serie="<br><h3>Números de Serie de ORIEL no encontrados en la BD de Rapid Eye</h3>";
 
-            $grabadores_oriel_iguales_en_rapid_por_nombre="<br><h2>Nombres de Grabadores de ORIEL encontrados en la BD de Rapid</h2>";
+            $grabadores_oriel_no_encontrados_en_rapid_por_nombre="<br><h3>Nombres de Grabadores de ORIEL no encontrados en la BD de Rapid</h3>";
+
+            $grabadores_oriel_iguales_en_rapid_por_serie="<br><h3>Números de Serie de ORIEL encontrados en la BD de Rapid Eye</h3>";
+
+            $grabadores_oriel_iguales_en_rapid_por_nombre="<br><h3>Nombres de Grabadores de ORIEL encontrados en la BD de Rapid</h3>";    
+
+            $vector_series_rapid_no_en_oriel=array();
+
+            $vector_nombres_rapid_no_en_oriel=array();
+
+            $vector_inconsistencia_en_registros=array();
 
             for ($i = 0; $i < count($params); $i++) {
                    $params[$i]['strSiteName']=utf8_encode($params[$i]['strSiteName']);
@@ -5734,27 +5924,30 @@ class Controller{
                        for ($j = 0; $j < count($params2); $j++) {
                            if (strcmp($serie_sin_ceros,$params2[$j]['Serie'])==0){
                                $ban_serie=1;
+                                if (strcmp($nombre_sitio_rapid,$params2[$j]['Descripcion'])!=0){
+                                     $vector_inconsistencia_en_registros[]=array($params[$i]['strSiteName'],$serie_sin_ceros);
+                                }
                            }
                             if (strcmp($nombre_sitio_rapid,$params2[$j]['Descripcion'])==0){
                                $ban_nombre=1;
+                               if (strcmp($serie_sin_ceros,$params2[$j]['Serie'])!=0){
+                                     $vector_inconsistencia_en_registros[]=array($params[$i]['strSiteName'],$serie_sin_ceros);
+                               }
                            }
                        }
 
                        if ($ban_serie==0){
                            $sitios_rapid_eye_no_encontrados_en_oriel_por_serie=$sitios_rapid_eye_no_encontrados_en_oriel_por_serie.$params[$i]['strSiteName'].",Número de Serie en Rapid Eye: ".$params[$i]['strSerialNo']."<br>";
+                           $vector_series_rapid_no_en_oriel[]=array($params[$i]['strSiteName'],$serie_sin_ceros);
                        }
 
                        if ($ban_nombre==0){
                            $sitios_rapid_eye_no_encontrados_en_oriel_por_nombre=$sitios_rapid_eye_no_encontrados_en_oriel_por_nombre.$params[$i]['strSiteName'].",Número de Serie en Rapid Eye: ".$params[$i]['strSerialNo']."<br>";
-                          // $cuenta=$cuenta+1;
+                           $vector_nombres_rapid_no_en_oriel[]=array($params[$i]['strSiteName'],$serie_sin_ceros);
                        }
 
                    }
             }    
-
-           echo $estructura_base_de_datos; 
-           echo $sitios_rapid_eye_no_encontrados_en_oriel_por_serie;
-           echo $sitios_rapid_eye_no_encontrados_en_oriel_por_nombre;
 
            for ($i = 0; $i < count($params2); $i++) {
                $serie_grabador_oriel=$params2[$i]['Serie'];
@@ -5781,9 +5974,9 @@ class Controller{
                 }
            }
 
-           echo $grabadores_oriel_no_encontrados_en_rapid_por_serie;
-           echo $grabadores_oriel_no_encontrados_en_rapid_por_nombre;
-           
+           //echo $grabadores_oriel_no_encontrados_en_rapid_por_serie;
+           //echo $grabadores_oriel_no_encontrados_en_rapid_por_nombre;
+
            for ($i = 0; $i < count($params2); $i++) {
                $serie_grabador_oriel=$params2[$i]['Serie'];
                $nombre_sitio_oriel=$params2[$i]['Descripcion'];
@@ -5808,16 +6001,30 @@ class Controller{
                    //$cuenta=$cuenta+1;
                 }
            }
-
-           echo $grabadores_oriel_iguales_en_rapid_por_serie;
-           echo $grabadores_oriel_iguales_en_rapid_por_nombre;
-           //echo $cuenta;
+       
+                
+           require __DIR__ . '/../vistas/plantillas/frm_sincronizacion_rapid_eye.php';
+           //echo '<pre>';
+           //print_r($vector_nombres_rapid_no_en_oriel);
+           //echo '</pre>';
+           
+        }else{
+             /*
+             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+             * En la última línea llama a la pagina de inicio de sesión.
+             */
+             $tipo_de_alerta="alert alert-warning";
+             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+         }
     }
 
     //////////////////////////
     //Metodos relacionados del area de Empresas de Seguridad del Sistema
-    //////////////////////////
-
+    ///////////////////////// 
+    
     // Metodo que permite actualizar en tiempo real la lista de estado de evento de bitacora dependiendo
     // de la prioridad del tipo de evento y rol de usuario que esté manipulando la información
     public function actualiza_en_vivo_estado_evento(){

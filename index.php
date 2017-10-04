@@ -195,6 +195,10 @@ $map = array(
     'reporte_ultimas_revisiones_video_completo'=>array('controller'=>'Controller', 'action'=>'reporte_ultimas_revisiones_video_completo'),
     'reporte_tiempo_revision_actual'=>array('controller'=>'Controller', 'action'=>'reporte_tiempo_revision_actual'),
     'revision_controles_desatendidos'=>array('controller'=>'Controller', 'action'=>'revision_controles_desatendidos'),
+    'sincronizacion_base_de_datos_rapid_eye'=>array('controller'=>'Controller', 'action'=>'sincronizacion_base_de_datos_rapid_eye'),
+    'actualizar_serie_y_descripcion_en_unidad_de_video'=>array('controller'=>'Controller', 'action'=>'actualizar_serie_y_descripcion_en_unidad_de_video'),
+    'subir_bd_rapid_al_servidor'=>array('controller'=>'Controller', 'action'=>'subir_bd_rapid_al_servidor'),
+    
     
     //Información Proveedor enlaces
     'proveedor_listar'=>array('controller'=>'Controller', 'action'=>'proveedor_listar'),
@@ -302,7 +306,8 @@ $map = array(
     'notas_coordinacion_bitacora_guardar'=>  array('controller'=>'Controller','action'=>  'notas_coordinacion_bitacora_guardar'),
     'mezcla_eventos_bitacora_digital'=>  array('controller'=>'Controller','action'=>  'mezcla_eventos_bitacora_digital'),
     'eliminar_mezcla_eventos_bitacora'=>  array('controller'=>'Controller','action'=>  'eliminar_mezcla_eventos_bitacora'),
-        
+    'dibuja_tabla_seguimiento_evento'=>  array('controller'=>'Controller','action'=>  'dibuja_tabla_seguimiento_evento'),
+    
     //Tipo de eventos
     'tipo_eventos_listar'=>array('controller'=>'Controller','action'=> 'tipo_eventos_listar'),
     'tipo_eventos_guardar'=>array('controller'=>'Controller','action'=> 'tipo_eventos_guardar'),

@@ -52,7 +52,8 @@
             function ocultar_elemento(){
                 document.getElementById('ventana_oculta_1').style.display = "none";
                 document.getElementById('ventana_oculta_2').style.display = "none";
-                location.reload(true);
+                document.getElementById('ventana_oculta_3').style.display = "none";
+                //location.reload(true);
             }
             //Valida informacion completa de formulario de notas de coordinacion
             function check_empty() {
@@ -79,9 +80,15 @@
             }
              //Funcion para editar notas de supervisión
             function mostrar_resumen_de_seguimientos(prueb) {
-                var mydiv= document.getElementById('tabla_seguimientos');
-                mydiv.appendChild(document.getElementById("tbl"+prueb));
-                document.getElementById('ventana_oculta_2').style.display = "block";
+                //var mydiv= document.getElementById('tabla_seguimientos');
+                //mydiv.appendChild(document.getElementById("tbl"+prueb));
+                id_e=prueb;
+                $.post("index.php?ctl=dibuja_tabla_seguimiento_evento", { id_e: id_e}, function(data){
+                    $("#tabla_seguimiento_prueba").html(data); 
+                    //console.log(data);
+                });
+                //document.getElementById('ventana_oculta_1').style.display = "block";
+                document.getElementById('ventana_oculta_3').style.display = "block";
             }
             function tramita_mezcla_de_eventos() {
                 var tbl = document.getElementById('tabla');
@@ -343,6 +350,20 @@
                     <hr>
                 </div>
             </div>
+        </div>
+        
+         <!--Ver seguimiento evento- Ventana oculta-->
+        <div id="ventana_oculta_3"> 
+            <div id="popupventana2" class="animated zoomIn">
+                <!--Formulario para direccionamiento de las ip-->
+                <div id="ventana2">
+                    <img id="close" src='vistas/Imagenes/cerrar.png' width="25" onclick ="ocultar_elemento()">
+                    <h2 align="center">Seguimiento de evento seleccionado</h2>
+                    <br>
+                    <table id='tabla_seguimiento_prueba' class="table ">
+                    </table>
+                </div>
+            </div>      
         </div>
         <!--Cierre agregar teléfono a Punto BCR-->
         

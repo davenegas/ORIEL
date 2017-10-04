@@ -82,7 +82,7 @@ class cls_rapid_eye_db{
         if (substr($raiz,-1)!="/"){
             $raiz.="/";
         }
-        $ruta=  $raiz."ORIEL/temp/";
+        $ruta=  $raiz."Rapid_Eye/";
 
         $this->obj_access_provider=new Access_Provider("REMCentral4","","Rach2Ros",$ruta);
         $this->condicion="";
@@ -93,8 +93,12 @@ class cls_rapid_eye_db{
         if($this->condicion==""){
             $this->obj_access_provider->conectar();
             //Llama al metodo que realiza la consulta a la bd
-            $this->obj_access_provider->trae_datos("tbSites", "*", "");
-            $this->arreglo=$this->obj_access_provider->getArreglo();
+            if ($this->obj_access_provider->getResultado_conexion()==true){
+                $this->obj_access_provider->trae_datos("tbSites", "*", "");
+                $this->arreglo=$this->obj_access_provider->getArreglo();
+            }else{
+                $this->arreglo=null;
+            }
             //$this->obj_data_provider->desconectar();
         } else {
             

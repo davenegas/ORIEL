@@ -148,6 +148,10 @@
                                <li><a href="index.php?ctl=unidades_de_video_listar">Unidades de Video</a></li>
                             <?php  }; ?>
                                
+                            <?php  if ($_SESSION['modulos']['Catálogos-Unidades de Video']==1){?>
+                               <!--<li><a href="index.php?ctl=sincronizacion_base_de_datos_rapid_eye">Rapid Eye</a></li>-->
+                            <?php  }; ?>
+                               
                             <?php  if ($_SESSION['modulos']['Catálogos-Inconsistencias de Video']==1){?>
                                <li><a href="index.php?ctl=inconsistencias_de_video_listar">Inconsistencias de Video</a></li>
                             <?php  }; ?>
