@@ -22,24 +22,14 @@ class Mail_Provider{
             $this->mail->CharSet='UTF-8';
             //$this->mail->SMTPSecure = "ssl";
             $this->mail->SMTPSecure = "tls";
+            
             //indico el servidor de Gmail para SMTP
-            //$this->mail->Host = "smtp.gmail.com";
-            //$this->mail->Host = "smtp.office365.com";
             $this->mail->Host = "10.1.8.1";
             //indico el puerto que usa Gmail
-            //$this->mail->Port = 465;
             $this->mail->Port = 25;
-            //$this->mail->Port = 587;
-
             //indico un usuario / clave de un usuario de gmail
-            //$this->mail->Username = "113100038@bancobcr.com";
             $this->mail->Username = "oriel@bancobcr.com";
-            //$this->mail->Password = "Entoas79.";
             $this->mail->Password = "asdf123.";
-            //$this->mail->SetFrom('orielinforma@gmail.com', 'Oriel Jefatura de Seguridad');
-            //$this->mail->addReplyTo('orielinforma@gmail.com', 'Oriel Jefatura de Seguridad');
-            
-            //$this->mail->SetFrom('113100038@bancobcr.com', 'Oriel');
             $this->mail->SetFrom('oriel@bancobcr.com', 'Oriel');
             $this->mail->addReplyTo('oriel@bancobcr.com', 'Oriel');
 
@@ -94,6 +84,13 @@ class Mail_Provider{
         }
     }
     
+    public function adjuntar_archivo_al_correo($path, $name){
+        try{
+        $this->mail->addAttachment($path, $name);
+        }catch (Exception $e){
+           echo 'Hubo un problema al agregar el archivo adjunto';
+        }
+    }
     //Metodo que agrega detalle a la base de datos
     public function enviar_correo(){
         try{

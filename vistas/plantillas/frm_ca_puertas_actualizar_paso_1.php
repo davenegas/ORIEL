@@ -2,7 +2,7 @@
 <html lang="es">
     <head>
         <meta charset="utf-8"/>
-        <title>Actualizar Controladores paso 1</title>
+        <title>Actualizar puertas paso 1</title>
         <?php require_once 'frm_librerias_head.html'; ?>  
         <script>
             $(document).ready(function () {
@@ -17,9 +17,9 @@
             <center><img align="center" src="vistas/Imagenes/Espere.gif"/></center>
         </div>
         <div class="animated fadeIn">
-            <h2>Listado de Controladores Recibidos:</h2>
+            <h2>Listado de puertas contraladas Recibidas:</h2>
             
-            <a href="index.php?ctl=actualizar_controladores_paso_2" class="btn btn-default espacio-abajo" role="button">Validar información</a>
+            <a href="index.php?ctl=actualizar_puertas_paso_2" class="btn btn-default espacio-abajo" role="button">Validar información</a>
             <a href="index.php?ctl=principal" class="btn btn-default espacio-abajo" role="button">Salir del Asistente</a> 
 
             <table id="tabla" class="display espacio-arriba">
@@ -27,15 +27,9 @@
                     <tr>
                         <th style="text-align:center">Owner</th>
                         <th style="text-align:center">Name</th>
-                        <th style="text-align:center">Netwokid</th>
-                        <th style="text-align:center">IPAdress</th>
-                        <th style="text-align:center">CommStatus</th>
-                        <th style="text-align:center">CreateTime</th>
-                        <th style="text-align:center">CreateBy</th>
-                        <th style="text-align:center">VersionNum</th>
-                        <th style="text-align:center">SerialNum</th>
-                        <th style="text-align:center">SubnetMask</th>
-                        <th style="text-align:center">Model</th>
+                        <th style="text-align:center">State</th>
+                        <th style="text-align:center">DoorSwitch</th>
+                        <th style="text-align:center">value</th>
                         <th style="text-align:center">ID</th>
                     </tr>
                 </thead>
@@ -50,12 +44,6 @@
                             <td style="text-align:center"><?php echo $_SESSION['controladores'][$i][3];?></td>
                             <td style="text-align:center"><?php echo $_SESSION['controladores'][$i][4];?></td>
                             <td style="text-align:center"><?php echo $_SESSION['controladores'][$i][5];?></td>
-                            <td style="text-align:center"><?php echo $_SESSION['controladores'][$i][6];?></td>
-                            <td style="text-align:center"><?php echo $_SESSION['controladores'][$i][7];?></td>
-                            <td style="text-align:center"><?php echo $_SESSION['controladores'][$i][8];?></td>
-                            <td style="text-align:center"><?php echo $_SESSION['controladores'][$i][9];?></td>
-                            <td style="text-align:center"><?php echo $_SESSION['controladores'][$i][10];?></td>
-                            <td style="text-align:center"><?php echo $_SESSION['controladores'][$i][11];?></td>
                         </tr>
                     <?php } ?>
                 </tbody>

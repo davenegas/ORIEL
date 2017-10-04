@@ -14,7 +14,7 @@
             <!--Seleccionar archivo para actualizar controladore automaticamente-->
             <div class="espacio-abajo-10 well">
                 <h3>Seleccionar Archivo para actualizar Puertas:</h3>
-                <form class="form-horizontal" role="form" enctype="multipart/form-data" onSubmit="return enviado()" method="POST" action="index.php?ctl=">
+                <form class="form-horizontal" role="form" enctype="multipart/form-data" onSubmit="return enviado()" method="POST" action="index.php?ctl=actualizar_puertas_paso_1">
                     <div class="col-xs-12 quitar-float espacio-abajo-5">
                         <!--<label for="archivo_adjunto">Adjuntar Archivo: </label>-->
                         <input type="hidden" name="MAX_FILE_SIZE" value="5000000">
@@ -32,6 +32,7 @@
                 <table id="tabla" class="display">
                     <thead>
                         <tr>
+                            <th hidden>ID</th>
                             <th style="text-align:center">Owner</th>
                             <th style="text-align:center">Name</th>
                             <th style="text-align:center">State</th>
@@ -41,7 +42,23 @@
                         </tr>
                     </thead>
                     <tbody>
-
+                        <?php 
+                        $tam=count($params);
+                        for ($i = 0; $i <$tam; $i++) { ?>
+                            <tr>
+                                <td hidden><?php echo $params[$i]['ID_Puerta_Controlada'];?></td>
+                                <td style="text-align:center"><?php echo $params[$i]['Owner'];?></td>
+                                <td style="text-align:center"><?php echo $params[$i]['Name'];?></td>
+                                <td style="text-align:center"><?php echo $params[$i]['State'];?></td>
+                                <td style="text-align:center"><?php echo $params[$i]['DoorSwitch'];?></td>
+                                <td style="text-align:center"><?php echo $params[$i]['Value'];?></td>
+                                <?php if ($params[$i]['Estado']==1){  ?>  
+                                    <td style="text-align:center">Activo</td>
+                                <?php } else {?>  
+                                    <td style="text-align:center">Inactivo</td>
+                                <?php }?>
+                            </tr>
+                        <?php } ?>
                     </tbody>
                 </table>
             </div>

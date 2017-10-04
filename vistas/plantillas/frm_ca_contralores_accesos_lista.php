@@ -27,25 +27,47 @@
             </div>
             
             <!--Lista de Controladores ingresados al sistema-->
-            <div class="well">
+            <div>
                 <h3>Lista de Controladores actuales</h3>
                 <table id="tabla" class="display">
                     <thead>
-                        <tr>
+                        <tr><th hidden>ID_Control_Acceso</th>
                             <th style="text-align:center">Owner</th>
                             <th style="text-align:center">Name</th>
-                            <th style="text-align:center">Netwokid</th>
-                            <th style="text-align:center">IPAdress</th>
+                            <th style="text-align:center">NetworkId</th>
+                            <th style="text-align:center">IPAddress</th>
                             <th style="text-align:center">CommStatus</th>
                             <th style="text-align:center">CreateTime</th>
                             <th style="text-align:center">CreateBy</th>
                             <th style="text-align:center">VersionNum</th>
                             <th style="text-align:center">SubnetMask</th>
                             <th style="text-align:center">Model</th>
+                            <th style="text-align:center">Estado</th>
                         </tr>
                     </thead>
                     <tbody>
-
+                        <?php 
+                        $tam=count($controladores_bd);
+                        for ($i = 0; $i <$tam; $i++) { ?>
+                            <tr>
+                                <td hidden><?php echo $controladores_bd[$i]['ID_Control_Acceso'];?></td>
+                                <td style="text-align:center"><?php echo $controladores_bd[$i]['Owner'];?></td>
+                                <td style="text-align:center"><?php echo $controladores_bd[$i]['Name'];?></td>
+                                <td style="text-align:center"><?php echo $controladores_bd[$i]['NetworkId'];?></td>
+                                <td style="text-align:center"><?php echo $controladores_bd[$i]['IPAddress'];?></td>
+                                <td style="text-align:center"><?php echo $controladores_bd[$i]['CommStatus'];?></td>
+                                <td style="text-align:center"><?php echo $controladores_bd[$i]['CreateTime'];?></td>
+                                <td style="text-align:center"><?php echo $controladores_bd[$i]['CreateBy'];?></td>
+                                <td style="text-align:center"><?php echo $controladores_bd[$i]['VersionNum'];?></td>
+                                <td style="text-align:center"><?php echo $controladores_bd[$i]['SubnetMask'];?></td>
+                                <td style="text-align:center"><?php echo $controladores_bd[$i]['Model'];?></td>
+                                <?php if ($controladores_bd[$i]['Estado']==1){  ?>  
+                                    <td style="text-align:center">Activo</td>
+                                <?php } else {?>  
+                                    <td style="text-align:center">Inactivo</td>
+                                <?php }?>
+                            </tr>
+                        <?php } ?>
                     </tbody>
                 </table>
             </div>

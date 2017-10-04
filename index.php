@@ -88,7 +88,7 @@ require_once __DIR__ . '/controladores/cls_cencon.php';
 require_once __DIR__ . '/controladores/cls_prueba_alarma.php';
 //Libreria de clases --> Control para sistemad de reportes
 require_once __DIR__ . '/controladores/cls_reporteria.php';
-
+require_once __DIR__ . '/controladores/cls_control_acceso.php';
 /*
  * El elemento controller, constituye la base y esencia de toda la lógica del negocio, en este
  * se almacenan cada una de las funcionales de ORIEl. El archivo en sí, se compone de "n" cantidad
@@ -382,10 +382,15 @@ $map = array(
         //Controller
     'actualizar_controladores_inicio'=>array('controller'=>'Controller','action'=> 'actualizar_controladores_inicio'),
     'actualizar_controladores_paso_1'=>array('controller'=>'Controller','action'=> 'actualizar_controladores_paso_1'),
+    'actualizar_controladores_paso_2'=>array('controller'=>'Controller','action'=> 'actualizar_controladores_paso_2'),
         //Puertas controladas
     'actualizar_puerta_controlada_inicio'=>array('controller'=>'Controller','action'=> 'actualizar_puerta_controlada_inicio'),
+    'actualizar_puertas_paso_1'=>array('controller'=>'Controller','action'=> 'actualizar_puertas_paso_1'),
+    'actualizar_puertas_paso_2'=>array('controller'=>'Controller','action'=> 'actualizar_puertas_paso_2'),
         //Módulos de puertas controladas
     'actualizar_modulo_puerta_inicio'=>array('controller'=>'Controller','action'=> 'actualizar_modulo_puerta_inicio'),
+    'actualizar_modulo_puerta_paso_1'=>array('controller'=>'Controller','action'=> 'actualizar_modulo_puerta_paso_1'),
+    'actualizar_modulo_puerta_paso_2'=>array('controller'=>'Controller','action'=> 'actualizar_modulo_puerta_paso_2'),
     
     //Controlador de Personal Externo
     'personal_externo_listar'=>array('controller'=>'Controller','action'=> 'personal_externo_listar'), 

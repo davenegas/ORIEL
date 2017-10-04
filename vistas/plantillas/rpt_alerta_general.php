@@ -102,10 +102,12 @@
         <div class="col-sm-4 sidenav espacio-abajo">
             <div class="well" align="center" >CONTROL DE VIDEO</div>
             <div class="espacio-abajo well">
-                <h5 style="color: red;">Unidades de video, ultima revisión más de 3 horas: <?php echo $revision_181_mas;?></h5>
-                <h5 style="color: orange;">Unidades de video, ultima revisión entre 2 y 3 horas: <?php echo $revision_121_180;?></h5>
-                <h5>Unidades de video, ultima revisión entre 1 y 2 horas: <?php echo $revision_61_120;?></h5>
-                <h5>Unidades de video, ultima revisión en menos de una hora: <?php echo $revision_0_60;?></h5>
+                <h5 style="color: red;">Unidades de video, ultima revisión más de 2:30 horas= <?php echo $revision_151_mas;?></h5>
+                <h5 style="color: orange;">Unidades de video, ultima revisión entre 2 y 2:30 horas= <?php echo $revision_121_150;?></h5>
+                <h5>Unidades de video, ultima revisión entre 1:30 y 2 horas= <?php echo $revision_91_120;?></h5>
+                <h5>Unidades de video, ultima revisión entre 1 hora y 1:30= <?php echo $revision_61_90;?></h5>
+                <h5>Unidades de video, ultima revisión entre 30 minutos y 1 horas= <?php echo $revision_31_60;?></h5>
+                <h5>Unidades de video, ultima revisión en menos de una 30 minutos= <?php echo $revision_0_30;?></h5>
             </div>
             
             <div id="datos_control" style="text-align: justify;" class="espacio-abajo borde-gris"></div>

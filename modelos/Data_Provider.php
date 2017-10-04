@@ -193,7 +193,7 @@ class Data_Provider{
             //$this->mvc_bd_clave    = "eda198319871983oriel";
             //$this->mvc_bd_clave    = "";
             //Es capaz de representar cualquier carácter Unicode a nivel de base de datos
-            $this->consulta="SET NAMES 'utf8'";
+            $this->consulta="SET NAMES 'utf8';";
             $this->conexion_PDO_transacciones=null;
         //Acapara los errores que se puedan presentar y muestra en pantalla lo correspondiente
         }catch (Exception $e){
@@ -257,18 +257,18 @@ class Data_Provider{
     }
     
 
-     public function agregar_edicion_de_datos_a_la_transaccion($table,$campos_valores,$condicion){
-
+    public function agregar_edicion_de_datos_a_la_transaccion($table,$campos_valores,$condicion){
        $this->conexion_PDO_transacciones->exec("update ".$table." set ".$campos_valores." where ".$condicion);
+       $this->consulta=$this->consulta."update ".$table." set ".$campos_valores." where ".$condicion;
     }
     
 
      // Método ABC SQL que permite ingresar información en las tablas de la bd
     public function agregar_inclusion_de_datos_a_la_transaccion($table,$campos,$valores){
-
         // Gestión de insercion del metodo de la clase
         //Arma el insert SQL, de acuerdo a los parámetros recibidos por usuario
         $this->conexion_PDO_transacciones->exec("insert into ".$table."(".$campos.") values(".$valores.")");
+        $this->consulta=$this->consulta."insert into ".$table."(".$campos.") values(".$valores.")";
         //echo ("insert into ".$table."(".$campos.") values(".$valores.");");
         //Establece a true el resultado de operación
         //$this->resultado_operacion=true;
@@ -277,6 +277,7 @@ class Data_Provider{
     public function ejecutar_transaccion_sql(){        
         $this->conexion_PDO_transacciones->commit();
         //$this->conexion_PDO_transacciones->
+        //echo $this->consulta;
         //$this->desconectar();        
     }
     
@@ -326,7 +327,7 @@ class Data_Provider{
 
         //echo "insert into ".$table."(".$campos.") values(".$valores.");";
         $consulta=$this->conexion->query("insert into ".$table."(".$campos.") values(".$valores.");");
-        //echo ("insert into ".$table."(".$campos.") values(".$valores.");");
+        echo ("insert into ".$table."(".$campos.") values(".$valores.");");
         //Establece a true el resultado de operación
         $this->resultado_operacion=$consulta;
         
