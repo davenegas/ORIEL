@@ -153,7 +153,7 @@
                     <div class="row well animated bounceInUp" style="animation-delay:0.6s;" id="Información_Area_Apoyo">
                         <div class="col-md-12">
                             <?php if($_SESSION['modulos']['Editar- Puntos BCR']==1){ ?> 
-                                <h3>Información de Áreas Apoyo<a id="popup" onclick="mostrar_area_apoyo()" class="btn azul" role="button">Agregar Área Apoyo</a></h3>    
+                                <h3>Información de Áreas Apoyo<a id="popup" onclick="mostrar_area_apoyo()" class="btn azul" role="button">Seleccionar Área Apoyo</a></h3>    
                             <?php } else {?>
                                 <h3>Información de Áreas Apoyo</h3>
                             <?php } ?>
@@ -162,9 +162,10 @@
                                     <tr>
                                         <th style="text-align:center">Área de apoyo</th>
                                         <th style="text-align:center">Nombre de área</th>
+                                        <th style="text-align:center">Observaciones área apoyo</th>
                                         <th style="text-align:center">Número teléfono</th>
-                                        <th style="text-align:center">Dirección</th>
-                                        <?php if($_SESSION['modulos']['Editar- Puntos BCR']==1){ ?> 
+                                        <th style="text-align:center">Observaciones teléfono</th> 
+                                            <?php if($_SESSION['modulos']['Editar- Puntos BCR']==1){ ?> 
                                             <th style="text-align:center">Quitar área de apoyo</th>
                                         <?php } ?>
                                     </tr>
@@ -175,9 +176,10 @@
                                     for ($i = 0; $i <$tam; $i++) {  ?>
                                         <tr>
                                             <td style="text-align:center"><?php echo $areas_apoyo[$i]['Nombre_Tipo_Area'];?></td>
-                                            <td style="text-align:center"><?php echo $areas_apoyo[$i]['Nombre_Area'];?></td>
+                                            <td style="text-align:center"><?php echo $areas_apoyo[$i]['Nombre_Area'];?></td> 
+                                            <td style="text-align:center"><?php echo $areas_apoyo[$i]['Observaciones'];?></td>
                                             <td style="text-align:center"><?php echo $areas_apoyo[$i]['Numero'];?></td>
-                                            <td style="text-align:center"><?php echo $areas_apoyo[$i]['Direccion'];?></td>
+                                            <td style="text-align:center"><?php echo $areas_apoyo[$i]['Observaciones_Tel'];?></td>
                                             <?php if($_SESSION['modulos']['Editar- Puntos BCR']==1){ ?> 
                                                 <td style="text-align:center"><a class="btn rojo" role="button" id="eliminar_area" name="eliminar_area" onclick="eliminar_area(<?php echo $areas_apoyo[$i]['ID_Area_Apoyo'];?>);">
                                                 Eliminar</a></td>
@@ -668,7 +670,9 @@
                 <div id="ventana2">
                     <img id="close" src='vistas/Imagenes/cerrar.png' width="25" onclick ="ocultar_elemento()">
                     <h2>Áreas de Apoyo</h2>
-                    <h3 data-toggle="collapse" data-target="#nueva_area_apoyo">Agregar nueva área de apoyo</h3>
+                    <?php if($_SESSION['modulos']['Editar- Áreas Apoyo']==1){ ?>
+                        <!--<h3 data-toggle="collapse" data-target="#nueva_area_apoyo">Agregar nueva área de apoyo</h3>-->
+                    <?php } ?>
                     <!--Formulario para ingresar areas de apoyo-->
                     <form class="bordegris collapse" id="nueva_area_apoyo" method="post" name="form" action="index.php?ctl=Area_apoyo_agregar">
                         <input hidden id="ID_PuntoBCR" name="ID_PuntoBCR" type="text" value="<?php echo $params[0]['ID_PuntoBCR']; ?>">
@@ -730,7 +734,6 @@
                                 <?php }}  ?>
                             </select>
                         </div>
-                        
                         <div class="col-md-12 espacio-abajo-5">
                             <label for="direccion">Dirección</label>
                             <input type="text" class="form-control" id="direccion" name="direccion" placeholder="Dirreción del area de apoyo exacta">

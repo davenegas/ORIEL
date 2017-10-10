@@ -304,7 +304,7 @@
                             <span class="caret"></span></a>
                         <ul class="dropdown-menu">
                             <?php if ($_SESSION['rol']==25||$_SESSION['modulos']['Seguridad-Trazabilidad']==1){?>
-                                <li><a href="http://10.170.5.92:8080/ORIEL-Cajeros/index.php?ctl=inicio">Control y Seguimiento ATM's</a></li> 
+                                <li><a href="https://bcr0209ori01/ORIEL-Cajeros/index.php?ctl=inicio">Control y Seguimiento ATM's</a></li> 
                             <?php }; ?>
                             <?php if ($_SESSION['modulos']['Seguridad-Trazabilidad']==1){?>
                                 <li><a href="index.php?ctl=comite_crisis">Comité de Crisis</a></li> 

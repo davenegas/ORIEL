@@ -108,17 +108,18 @@
                     <!--si el area de apoyo no es nueva-->
                     <?php if($params[0]['ID_Area_Apoyo']!=0) { ?>
                     <div>
-                        <?php if($_SESSION['modulos']['Editar- Personal']==1){ ?>
+                        <?php if($_SESSION['modulos']['Editar- Áreas Apoyo']==1){ ?>
                             <h3 class="quitar-float">Información de teléfonos <a id="popup" onclick="mostrar_agregar_telefono()" class="btn azul" role="button">Agregar número</a></h3> 
                         <?php } else {?>
                             <h3 class="quitar-float">Información de teléfonos</h3>
                         <?php } ?>
                         <table class="display col-md-12 table-striped quitar-float espacio-abajo" id="telefonos">
-                        <thead> 
+                        <thead>
+                            <th style="text-align:center">ID Teléfono</th>
                             <th style="text-align:center">Tipo de Teléfono</th>
                             <th style="text-align:center">Número teléfono</th>
                             <th style="text-align:center">Observaciones</th>
-                            <?php if($_SESSION['modulos']['Editar- Personal']==1){ ?>
+                            <?php if($_SESSION['modulos']['Editar- Áreas Apoyo']==1){ ?>
                             <th style="text-align:center" colspan="2">Opciones número</th>
                             <?php } ?>
                         </thead>
@@ -128,10 +129,11 @@
                             for ($i = 0; $i <$tam; $i++) {
                             ?>
                             <tr>
+                                <td style="text-align:center"><?php echo $params[$i]['ID_Telefono'];?></td>
                                 <td style="text-align:center"><?php echo $params[$i]['Tipo_Telefono'];?></td>
                                 <td style="text-align:center"><?php echo $params[$i]['Numero'];?></td>
                                 <td style="text-align:center"><?php echo $params[$i]['Observaciones_Tel'];?></td>
-                                <?php if($_SESSION['modulos']['Editar- Personal']==1){  ?>
+                                <?php if($_SESSION['modulos']['Editar- Áreas Apoyo']==1){  ?>
                                     <td style="text-align:center"><a class="btn azul" role="button" onclick="Editar_telefono(<?php echo $params[$i]['ID_Telefono'];?>,<?php echo $params[$i]['ID_Tipo_Telefono'];?>,'<?php echo $params[$i]['Numero'];?>','<?php echo $params[$i]['Observaciones_Tel'];?>')">
                                         Editar</a></td> 
                                     <td style="text-align:center"><a class="btn rojo" role="button" onclick="eliminar_telefono(<?php echo $params[$i]['ID_Telefono'];?>);">

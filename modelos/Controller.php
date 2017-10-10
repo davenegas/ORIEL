@@ -9,11 +9,15 @@ class Controller{
      
     //Inicio del sitio web, llamada a la pantalla principal para inicio de sesión
     public function inicio(){
-        //Variables que muestran tipos de advertencia en pantalla según sea necesario
-        $tipo_de_alerta="alert alert-info";
-        $validacion="Verificación de Identidad";
-        //Llamada al formulario correspondiente de la vista
-        require __DIR__ . '/../vistas/plantillas/frm_principal_publica.php';
+        if(isset($_SERVER['HTTPS'])){
+            //Variables que muestran tipos de advertencia en pantalla según sea necesario
+            $tipo_de_alerta="alert alert-info";
+            $validacion="Verificación de Identidad";
+            //Llamada al formulario correspondiente de la vista
+            require __DIR__ . '/../vistas/plantillas/frm_principal_publica.php';
+        } else {
+            header("Location: https://bcr0209ori01/Oriel/index.php?ctl=inicio");
+        }
     }
 
     ////////////////////////////////////////////////////////////////////////////
@@ -21,44 +25,59 @@ class Controller{
     ////////////////////////////////////////////////////////////////////////////
     //Lista el personal con nombre, extensión, teléfono BCR y departamento
     public function personal_listar_publico(){
-        //Creación del objeto personal
-        $obj_personal=new cls_personal();
-        //Trae de la base de datos la lista de personas disponibles
-        $obj_personal->obtiene_todo_el_personal_filtrado();
-        //Inicializa un vector con el total de registros de la base de datos
-        $personas= $obj_personal->getArreglo();
-        //Llamada al formulario correspondiente de la vista
-        require __DIR__ . '/../vistas/plantillas/frm_personal_listar_publico.php';
+        if(isset($_SERVER['HTTPS'])){
+            //Creación del objeto personal
+            $obj_personal=new cls_personal();
+            //Trae de la base de datos la lista de personas disponibles
+            $obj_personal->obtiene_todo_el_personal_filtrado();
+            //Inicializa un vector con el total de registros de la base de datos
+            $personas= $obj_personal->getArreglo();
+            //Llamada al formulario correspondiente de la vista
+            require __DIR__ . '/../vistas/plantillas/frm_personal_listar_publico.php';
+        } else {
+            header("Location: https://bcr0209ori01/Oriel/index.php?ctl=personal_listar_publico");
+        }
     }
     
     //Lista de puntos BCR con información general y pública para vista de todo el conglomerado BCR
     public function puntobcr_listar_publico(){
-        //Creación del objeto puntos BCR
-        $obj_puntobcr= new cls_puntosBCR();
-        //Trae de la base de datos la lista de puntos BCR disponibles
-        $obj_puntobcr->obtiene_todos_los_puntos_bcr_publico();
-        //Inicializa un vector con el total de registros de la base de datos
-        $puntosbcr = $obj_puntobcr->getArreglo();
-        //Llamada al formulario correspondiente de la vista
-
-        require __DIR__ . '/../vistas/plantillas/frm_puntobcr_listar_publico.php';
+        if(isset($_SERVER['HTTPS'])){
+            //Creación del objeto puntos BCR
+            $obj_puntobcr= new cls_puntosBCR();
+            //Trae de la base de datos la lista de puntos BCR disponibles
+            $obj_puntobcr->obtiene_todos_los_puntos_bcr_publico();
+            //Inicializa un vector con el total de registros de la base de datos
+            $puntosbcr = $obj_puntobcr->getArreglo();
+            //Llamada al formulario correspondiente de la vista
+            require __DIR__ . '/../vistas/plantillas/frm_puntobcr_listar_publico.php';
+        } else {
+            header("Location: https://bcr0209ori01/Oriel/index.php?ctl=puntobcr_listar_publico");
+        }
     }
     
     //Muestra formulario de los números de contacto de la Gerencia de Seguridad
     public function frm_contacto_publico(){
-        //Llamada al formulario correspondiente de la vista
-        require __DIR__ . '/../vistas/plantillas/frm_contacto_publico.php';
+        if(isset($_SERVER['HTTPS'])){
+            //Llamada al formulario correspondiente de la vista
+            require __DIR__ . '/../vistas/plantillas/frm_contacto_publico.php';
+        } else {
+            header("Location: https://bcr0209ori01/Oriel/index.php?ctl=frm_contacto_publico");
+        }
     }
     
     public function personal_externo_listar_publico(){
-        //Creación del objeto personal
-        $obj_externo = new cls_personal_externo();
-        //Trae de la base de datos la lista de personas disponibles
-        $obj_externo->obtiene_todo_personal_externo_filtrado();
-        //Inicializa un vector con el total de registros de la base de datos
-        $externo= $obj_externo->getArreglo();
-        //Llamada al formulario correspondiente de la vista
-        require __DIR__ . '/../vistas/plantillas/frm_personal_externo_listar_publico.php';
+        if(isset($_SERVER['HTTPS'])){
+            //Creación del objeto personal
+            $obj_externo = new cls_personal_externo();
+            //Trae de la base de datos la lista de personas disponibles
+            $obj_externo->obtiene_todo_personal_externo_filtrado();
+            //Inicializa un vector con el total de registros de la base de datos
+            $externo= $obj_externo->getArreglo();
+            //Llamada al formulario correspondiente de la vista
+            require __DIR__ . '/../vistas/plantillas/frm_personal_externo_listar_publico.php';
+        } else {
+            header("Location: https://bcr0209ori01/Oriel/index.php?ctl=personal_externo_listar_publico");
+        }
     }
     
     ////////////////////////////////////////////////////////////////////////////
@@ -2565,7 +2584,7 @@ class Controller{
                             //require __DIR__ . '/../vistas/plantillas/frm_principal.php';
                             if($_SESSION['rol']==25){
                                 //echo "Control y Seguimiento de cajeros";
-                                header("Location: http://10.170.5.92:8080/ORIEL-Cajeros/index.php?ctl=inicio");
+                                header("Location: https ://bcr0209ori01/ORIEL-Cajeros/index.php?ctl=inicio");
                             }else {
                                 //Llamada al formulario correspondiente de la vista
                                 header ("location:/ORIEL/index.php?ctl=principal");
@@ -2836,7 +2855,9 @@ class Controller{
             //Vector que almacena un si o uno dependiendo si el evento en cuestion pertenece a alguna mezcla
             $eventos_con_mezcla=array();
             //Creación de una instancia de un objeto de la clase eventos.
-
+            if(!isset($_POST['puesto'])){
+                $_POST['puesto']=0;
+            }
             $obj_eventos = new cls_eventos();
             //Verifica para cual puesto de monitoreo fue realizada la solicitud, esto mediante el metodo post 
             if($_POST['puesto']==1){
@@ -7345,7 +7366,6 @@ class Controller{
                     
                     $obj_telefono->setCondicion("");
                     $obj_telefono->guardar_telefono();
-                    echo 'numero guardado';
                 }
                 //Asigna el area de apoyo al puntoBCR
                 $obj_area_apoyo = new cls_areasapoyo();
@@ -7467,7 +7487,7 @@ class Controller{
                 $obj_telefono->obtiene_telefonos_por_criterio_para_prontuario();
                 $numero_telefono= $obj_telefono->getArreglo();
 
-                if(count($numero_telefono)==0){
+                if(count($numero_telefono)==0 || $_POST['ID_Telefono']>1){
                     $obj_telefono->setId($_POST['ID_Telefono']);
                     $obj_telefono->setId2($_POST['ID_Area_Apoyo']);
                     $obj_telefono->setTipo_telefono($_POST['Tipo_Telefono']);

@@ -11,6 +11,9 @@
     <body>
         <center><img src="vistas/Imagenes/Banner_Centro_de_Control.jpg" alt=""/></center>
         <hr/>
+        <?php if(!isset($_SERVER['HTTPS'])){
+            //header("Location:https://bcr0209ori01/Oriel/index.php?ctl=iniciar_sesion");
+        }?>
         <table style="margin: 0 auto;">
             <tr><h3 class="text-primary" align="center">Inicio de Sesión</h3></tr>
         </table>

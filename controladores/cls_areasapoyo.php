@@ -132,30 +132,14 @@ class cls_areasapoyo{
 			LEFT OUTER JOIN T_TipoAreaApoyo ON T_AreasApoyo.ID_Tipo_Area_Apoyo = T_TipoAreaApoyo.ID_Tipo_Area_Apoyo
 			LEFT OUTER JOIN T_Distrito ON T_AreasApoyo.ID_Distrito = T_Distrito.ID_Distrito
 			LEFT OUTER JOIN T_Telefono ON T_AreasApoyo.ID_Area_Apoyo = T_Telefono.ID
-			LEFT OUTER JOIN T_TipoTelefono ON T_Telefono.ID_Tipo_Telefono = T_TipoTelefono.ID_Tipo_Telefono
-			LEFT OUTER JOIN T_PuntoBCRAreaApoyo ON T_AreasApoyo.ID_Area_Apoyo = T_PuntoBCRAreaApoyo.ID_Area_Apoyo", 
+			LEFT OUTER JOIN T_TipoTelefono ON T_Telefono.ID_Tipo_Telefono = T_TipoTelefono.ID_Tipo_Telefono", 
                     "DISTINCT T_AreasApoyo.ID_Area_Apoyo, T_AreasApoyo.Nombre_Area, T_AreasApoyo.Direccion,
 			T_AreasApoyo.Observaciones, T_AreasApoyo.Estado,
 			T_TipoAreaApoyo.ID_Tipo_Area_Apoyo, T_TipoAreaApoyo.Nombre_Tipo_Area,
 			T_Distrito.ID_Distrito,T_Distrito.Nombre_Distrito,
-			T_Telefono.Numero",
-                    "(T_TipoTelefono.ID_Tipo_Telefono = '10' OR
-                          T_TipoTelefono.ID_Tipo_Telefono = '11' OR 
-			  T_TipoTelefono.ID_Tipo_Telefono = '12' OR 
-			  T_TipoTelefono.ID_Tipo_Telefono = '13' OR
-			  T_TipoTelefono.ID_Tipo_Telefono = '14' OR 
-			  T_TipoTelefono.ID_Tipo_Telefono = '15' OR 
-			  T_TipoTelefono.ID_Tipo_Telefono = '16' OR 
-			  T_TipoTelefono.ID_Tipo_Telefono = '17' OR 
-			  T_TipoTelefono.ID_Tipo_Telefono = '18' OR 
-			  T_TipoTelefono.ID_Tipo_Telefono = '19' OR
-			  T_TipoTelefono.ID_Tipo_Telefono = '20' OR
-                          T_TipoTelefono.ID_Tipo_Telefono = '21' OR
-                          T_TipoTelefono.ID_Tipo_Telefono = '22' OR
-                          T_TipoTelefono.ID_Tipo_Telefono = '23' OR
-                          T_TipoTelefono.ID_Tipo_Telefono = '24' OR
-			  T_TipoTelefono.ID_Tipo_Telefono = '25' OR 
-			  T_TipoTelefono.ID_Tipo_Telefono = '26')");
+			GROUP_CONCAT( T_Telefono.Numero,' ', T_Telefono.Observaciones,'<br> ') as Numero, T_Telefono.ID_Tipo_Telefono",
+                    "(T_TipoTelefono.ID_Tipo_Telefono >='11' AND 
+                          T_TipoTelefono.ID_Tipo_Telefono <= '26') GROUP by T_AreasApoyo.ID_Area_Apoyo, T_Telefono.ID_Tipo_Telefono");
             $this->arreglo=$this->obj_data_provider->getArreglo();
             $this->obj_data_provider->desconectar();
             $this->resultado_operacion=true;
@@ -174,23 +158,8 @@ class cls_areasapoyo{
 			T_Distrito.ID_Distrito,T_Distrito.Nombre_Distrito,
 			T_TipoTelefono.Tipo_Telefono, T_TipoTelefono.ID_Tipo_Telefono,
 			T_Telefono.Numero,T_Telefono.ID_Telefono,T_Telefono.Observaciones as Observaciones_Tel",
-                    $this->condicion." AND (T_TipoTelefono.ID_Tipo_Telefono = '10' OR
-                          T_TipoTelefono.ID_Tipo_Telefono = '11' OR 
-			  T_TipoTelefono.ID_Tipo_Telefono = '12' OR 
-			  T_TipoTelefono.ID_Tipo_Telefono = '13' OR
-			  T_TipoTelefono.ID_Tipo_Telefono = '14' OR 
-			  T_TipoTelefono.ID_Tipo_Telefono = '15' OR 
-			  T_TipoTelefono.ID_Tipo_Telefono = '16' OR 
-			  T_TipoTelefono.ID_Tipo_Telefono = '17' OR 
-			  T_TipoTelefono.ID_Tipo_Telefono = '18' OR 
-			  T_TipoTelefono.ID_Tipo_Telefono = '19' OR
-                          T_TipoTelefono.ID_Tipo_Telefono = '20' OR
-                          T_TipoTelefono.ID_Tipo_Telefono = '21' OR
-                          T_TipoTelefono.ID_Tipo_Telefono = '22' OR
-                          T_TipoTelefono.ID_Tipo_Telefono = '23' OR
-                          T_TipoTelefono.ID_Tipo_Telefono = '24' OR
-			  T_TipoTelefono.ID_Tipo_Telefono = '25' OR 
-			  T_TipoTelefono.ID_Tipo_Telefono = '26')");
+                    $this->condicion." AND (T_TipoTelefono.ID_Tipo_Telefono >='11' AND 
+                          T_TipoTelefono.ID_Tipo_Telefono <= '26')");
             $this->arreglo=$this->obj_data_provider->getArreglo();
             $this->obj_data_provider->desconectar();
             $this->resultado_operacion=true;

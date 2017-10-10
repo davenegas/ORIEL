@@ -26,15 +26,13 @@
             <table id="tabla" class="display" cellspacing="0" width="100%">
                 <thead>
                     <tr>
-                        <!--<th style="text-align:center">ID Area</th>-->
-                        <th style="text-align:center">Tipo de Área</th>
+                        <th hidden style="text-align:center">ID Area</th>
                         <th style="text-align:center">Nombre Área</th>
+                        <th style="text-align:center">Tipo de Área</th>
                         <th style="text-align:center">Observaciones</th>
                         <th style="text-align:center">Dirección</th>
                         <th style="text-align:center">Número</th>
                         <?php if($_SESSION['modulos']['Editar- Áreas Apoyo']==1){ ?>
-                            <th style="text-align:center">Estado</th>
-                            <th style="text-align:center">Cambiar Estado</th>
                             <th style="text-align:center">Mantenimiento</th>
                         <?php } ?>
                     </tr>
@@ -44,21 +42,13 @@
                     $tam=count($params);
                     for ($i = 0; $i <$tam; $i++) { ?>
                         <tr>
-                            <!--<td style="text-align:center"><?php echo $params[$i]['ID_Area_Apoyo'];?></td>-->
-                            <td style="text-align:center"><?php echo $params[$i]['Nombre_Tipo_Area'];?></td>
+                            <td hidden style="text-align:center"><?php echo $params[$i]['ID_Area_Apoyo'];?></td>
                             <td style="text-align:center"><?php echo $params[$i]['Nombre_Area'];?></td>
+                            <td style="text-align:center"><?php echo $params[$i]['Nombre_Tipo_Area'];?></td>
                             <td style="text-align:center"><?php echo $params[$i]['Observaciones'];?></td>
                             <td style="text-align:center"><?php echo $params[$i]['Direccion'];?></td>
                             <td style="text-align:center"><?php echo $params[$i]['Numero'];?></td>
-                            <?php if($_SESSION['modulos']['Editar- Áreas Apoyo']==1){
-                                if ($params[$i]['Estado']==1){ ?>  
-                                    <td>Activo</td>
-                                <?php }else {?>  
-                                    <td>Inactivo</td>
-                                <?php  } ?>
-                                <td style="text-align:center"><a href="index.php?ctl=area_apoyo_cambiar_estado&id=
-                                    <?php echo $params[$i]['ID_Area_Apoyo']?>&estado=<?php echo $params[$i]['Estado']?>">
-                                        Activar/Desactivar</a></td>
+                            <?php if($_SESSION['modulos']['Editar- Áreas Apoyo']==1){?>
                                 <td style="text-align:center"><a href="index.php?ctl=area_apoyo_gestion&id=
                                     <?php echo $params[$i]['ID_Area_Apoyo']?>">
                                         Editar</a></td>
