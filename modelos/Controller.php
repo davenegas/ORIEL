@@ -9,7 +9,8 @@ class Controller{
      
     //Inicio del sitio web, llamada a la pantalla principal para inicio de sesión
     public function inicio(){
-        if(isset($_SERVER['HTTPS'])){
+        if(isset($_SERVER['HTTPS'])||(gethostname()!='BCR0209ORI01')){
+            
             //Variables que muestran tipos de advertencia en pantalla según sea necesario
             $tipo_de_alerta="alert alert-info";
             $validacion="Verificación de Identidad";
@@ -17,6 +18,7 @@ class Controller{
             require __DIR__ . '/../vistas/plantillas/frm_principal_publica.php';
         } else {
             header("Location: https://bcr0209ori01/Oriel/index.php?ctl=inicio");
+            
         }
     }
 
@@ -25,7 +27,7 @@ class Controller{
     ////////////////////////////////////////////////////////////////////////////
     //Lista el personal con nombre, extensión, teléfono BCR y departamento
     public function personal_listar_publico(){
-        if(isset($_SERVER['HTTPS'])){
+        if(isset($_SERVER['HTTPS'])||(gethostname()!='BCR0209ORI01')){
             //Creación del objeto personal
             $obj_personal=new cls_personal();
             //Trae de la base de datos la lista de personas disponibles
@@ -36,12 +38,13 @@ class Controller{
             require __DIR__ . '/../vistas/plantillas/frm_personal_listar_publico.php';
         } else {
             header("Location: https://bcr0209ori01/Oriel/index.php?ctl=personal_listar_publico");
+            
         }
     }
     
     //Lista de puntos BCR con información general y pública para vista de todo el conglomerado BCR
     public function puntobcr_listar_publico(){
-        if(isset($_SERVER['HTTPS'])){
+        if(isset($_SERVER['HTTPS'])||(gethostname()!='BCR0209ORI01')){
             //Creación del objeto puntos BCR
             $obj_puntobcr= new cls_puntosBCR();
             //Trae de la base de datos la lista de puntos BCR disponibles
@@ -52,21 +55,23 @@ class Controller{
             require __DIR__ . '/../vistas/plantillas/frm_puntobcr_listar_publico.php';
         } else {
             header("Location: https://bcr0209ori01/Oriel/index.php?ctl=puntobcr_listar_publico");
+            
         }
     }
     
     //Muestra formulario de los números de contacto de la Gerencia de Seguridad
     public function frm_contacto_publico(){
-        if(isset($_SERVER['HTTPS'])){
+        if(isset($_SERVER['HTTPS'])||(gethostname()!='BCR0209ORI01')){
             //Llamada al formulario correspondiente de la vista
             require __DIR__ . '/../vistas/plantillas/frm_contacto_publico.php';
         } else {
             header("Location: https://bcr0209ori01/Oriel/index.php?ctl=frm_contacto_publico");
+            
         }
     }
     
     public function personal_externo_listar_publico(){
-        if(isset($_SERVER['HTTPS'])){
+        if(isset($_SERVER['HTTPS'])||(gethostname()!='BCR0209ORI01')){
             //Creación del objeto personal
             $obj_externo = new cls_personal_externo();
             //Trae de la base de datos la lista de personas disponibles
@@ -90,7 +95,8 @@ class Controller{
         $tipo_de_alerta="alert alert-info";
         $validacion="Verificación de Identidad";
         //Llamada al formulario correspondiente de la vista   
-        $this->ejecucion_automatico_proceso("Oficiales");        
+        $this->ejecucion_automatico_proceso("Oficiales");     
+        
         require __DIR__ . '/../vistas/plantillas/inicio_sesion.php'; 
     }
     
@@ -3864,8 +3870,9 @@ class Controller{
                         $html.="<td align='center'><a onclick='recuperar_evento(".$params[$i]['ID_Evento'].",".$params[$i]['ID_PuntoBCR'].",".$params[$i]['ID_Tipo_Evento'].")'>Recuperar Evento</a></td>";
                     }   
                     //Link para ver el detalle de un evento
-                    $html.="<td align='center'><a href='index.php?ctl=frm_eventos_editar&accion=consulta_cerrados&id=".$params[$i]['ID_Evento']."'>Ver detalle</a></td>";
-
+                    //$html.="<td align='center'><a href='index.php?ctl=frm_eventos_editar&accion=consulta_cerrados&id=".$params[$i]['ID_Evento']."'>Ver detalle</a></td>";
+                    $html.="<td align='center'><a onclick='mostrar_resumen_de_seguimientos(".$params[$i]['ID_Evento'].")'>Ver detalle</a></td>";
+                    
                     //Saca el tamaño del vector que tiene todos los seguimientos de los eventos
                     $tama=count($todos_los_seguimientos_juntos);
                     //Inicializa la variable cadena

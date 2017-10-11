@@ -14,6 +14,7 @@ session_start();
  * del proyecto ORIEL. La instrucción require_once importa la clase o el componente dentro del proyecto
  * para su futura utilización.
  */
+
 require_once __DIR__ . '/modelos/Data_Provider.php';
 require_once __DIR__ . '/modelos/Access_Provider.php';
 //Libreria de clases --> Control de BD RapidEye

@@ -2,8 +2,9 @@
 <html lang="es">
     <head>
         <meta charset="utf-8"/>
-        <title>Lista de Eventos Cerrados</title>
+        <title>Lista Eventos Cerrados</title>
         <script language="javascript" src="vistas/js/jquery.js"></script>
+        <link rel="stylesheet" href="vistas/css/ventanaoculta.css"> 
         <script language="javascript" src="vistas/js/listas_dependientes_eventos_cerrados.js?1.1.0"></script>
         <?php require_once 'frm_librerias_head.html'; ?>    
         <script>
@@ -40,6 +41,26 @@
                     }
                 });
             }  
+            
+             //Funcion para ocultar ventana de mantenimiento de notas de coordinacion
+            function ocultar_elemento(){
+                
+                document.getElementById('ventana_oculta_3').style.display = "none";
+                //location.reload(true);
+            }
+            
+             //Funcion para editar notas de supervisión
+            function mostrar_resumen_de_seguimientos(prueb) {
+                //var mydiv= document.getElementById('tabla_seguimientos');
+                //mydiv.appendChild(document.getElementById("tbl"+prueb));
+                id_e=prueb;
+                $.post("index.php?ctl=dibuja_tabla_seguimiento_evento", { id_e: id_e}, function(data){
+                    $("#tabla_seguimiento_prueba").html(data); 
+                    //console.log(data);
+                });
+                //document.getElementById('ventana_oculta_1').style.display = "block";
+                document.getElementById('ventana_oculta_3').style.display = "block";
+            }
         </script>
     </head>
     <body>
@@ -169,7 +190,8 @@
                             <?php if ($_SESSION['modulos']['Recuperar Eventos Cerrados']==1){ ?>  
                                 <td align="center"><a onclick="recuperar_evento(<?php echo $params[$i]['ID_Evento'];?>,<?php echo $params[$i]['ID_PuntoBCR'];?>,<?php echo $params[$i]['ID_Tipo_Evento'];?>);">Recuperar Evento</a></td>
                             <?php } ?>
-                            <td align="center"><a href="index.php?ctl=frm_eventos_editar&accion=consulta_cerrados&id=<?php echo $params[$i]['ID_Evento']?>">Ver detalle</a></td>
+                            <!--<td align="center"><a href="index.php?ctl=frm_eventos_editar&accion=consulta_cerrados&id=<?php echo $params[$i]['ID_Evento']?>">Ver detalle</a></td>-->
+                            <td align="center"><a onclick="mostrar_resumen_de_seguimientos('<?php echo $params[$i]['ID_Evento'];?>')">Ver detalles</a></td>
                             
                             <?php 
                             $cadena="";
@@ -192,7 +214,19 @@
             </div>
 
         </div>
-        
+         <!--Ver seguimiento evento- Ventana oculta-->
+        <div id="ventana_oculta_3"> 
+            <div id="popupventana2" class="animated zoomIn">
+                <!--Formulario para direccionamiento de las ip-->
+                <div id="ventana2">
+                    <img id="close" src='vistas/Imagenes/cerrar.png' width="25" onclick ="ocultar_elemento()">
+                    <h2 align="center">Seguimiento de evento seleccionado</h2>
+                    <br>
+                    <table id='tabla_seguimiento_prueba' class="table ">
+                    </table>
+                </div>
+            </div>      
+        </div>
         <?php require 'vistas/plantillas/pie_de_pagina.php' ?>
     </body>
 </html>
