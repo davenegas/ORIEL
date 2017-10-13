@@ -10,7 +10,6 @@ class Controller{
     //Inicio del sitio web, llamada a la pantalla principal para inicio de sesión
     public function inicio(){
         if(isset($_SERVER['HTTPS'])||(gethostname()!='BCR0209ORI01')){
-            
             //Variables que muestran tipos de advertencia en pantalla según sea necesario
             $tipo_de_alerta="alert alert-info";
             $validacion="Verificación de Identidad";
@@ -38,7 +37,6 @@ class Controller{
             require __DIR__ . '/../vistas/plantillas/frm_personal_listar_publico.php';
         } else {
             header("Location: https://bcr0209ori01/Oriel/index.php?ctl=personal_listar_publico");
-            
         }
     }
     
@@ -55,7 +53,6 @@ class Controller{
             require __DIR__ . '/../vistas/plantillas/frm_puntobcr_listar_publico.php';
         } else {
             header("Location: https://bcr0209ori01/Oriel/index.php?ctl=puntobcr_listar_publico");
-            
         }
     }
     
@@ -66,7 +63,6 @@ class Controller{
             require __DIR__ . '/../vistas/plantillas/frm_contacto_publico.php';
         } else {
             header("Location: https://bcr0209ori01/Oriel/index.php?ctl=frm_contacto_publico");
-            
         }
     }
     
@@ -89,7 +85,7 @@ class Controller{
     //Metodos relacionados del area de Modulos de Seguridad del Sistema/////////
     ////////////////////////////////////////////////////////////////////////////
 
-    // Metodo que llama al formulario correspondiente para validación de credenciales por parte del usuario
+    //Metodo que llama al formulario correspondiente para validación de credenciales por parte del usuario
     public function iniciar_sesion(){
         //Variables que muestran tipos de adventencia en pantalla según sea necesario
         $tipo_de_alerta="alert alert-info";
@@ -113,12 +109,12 @@ class Controller{
             $params = $obj_roles->getArreglo();
             require __DIR__.'/../vistas/plantillas/frm_roles_listar.php';
         }else{
-              /*
-             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
-             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
-             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
-             * En la última línea llama a la pagina de inicio de sesión.
-             */
+            /*
+            * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+            * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+            * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+            * En la última línea llama a la pagina de inicio de sesión.
+            */
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
@@ -144,7 +140,7 @@ class Controller{
         }
     }    
 
-     ////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////
     ///Serie de metodos que permiten crear un utilitario de importación de personal BCR ////////
     ////////////////////////////////////////////////////////////////////////////
     
@@ -155,8 +151,6 @@ class Controller{
     public function frm_importar_prontuario_paso_1(){
         //Validación para verificar si el usuario está logeado en el sistema
         if(isset($_SESSION['nombre'])){
-            
-            
             //Llamada al formulario correspondiente de la vista
             //echo $obj_personal->getObservaciones();
             require __DIR__ . '/../vistas/plantillas/frm_importar_prontuario_paso_1.php';
@@ -3056,8 +3050,6 @@ class Controller{
         }
     }
 
-    
-    
     //Metodo del contralador que permite listar los eventos cerrados en pantalla de la bitacora digital.
     public function frm_eventos_lista_cerrados(){
         //Validación para verificar si el usuario está logeado en el sistema
@@ -3504,7 +3496,6 @@ class Controller{
             exit;
         }
     }
-    
     
     public function actualizar_serie_y_descripcion_en_unidad_de_video(){
 
@@ -4974,12 +4965,10 @@ class Controller{
        
     public function subir_bd_rapid_al_servidor(){
         if(isset($_SESSION['nombre'])){
-            
             if (!($_FILES['seleccionar_archivo']['name']==="REMCentral4.mdb")){
                 echo "<script type=\"text/javascript\">alert('El nombre del archivo no es correcto (REMCentral4.mdb)!!!!');history.go(-1);</script>";;
                 exit();
             }
-            
             if (!($_FILES['seleccionar_archivo']['type']==="application/msaccess")){
                 //En caso de que sea diferente, muestra una advertencia en pantalla para el usario y se sale del paso
                 echo "<script type=\"text/javascript\">alert('Debe Importar un archivo tipo mdb access!!!!');history.go(-1);</script>";;
@@ -4987,13 +4976,11 @@ class Controller{
             }
             
             $recepcion_archivo=$_FILES['seleccionar_archivo']['error'];
-            
             $raiz=$_SERVER['DOCUMENT_ROOT'];
                        
             if (substr($raiz,-1)!="/"){
                 $raiz.="/";
             }
-            
             $ruta=  $raiz."Rapid_Eye/".Encrypter::quitar_tildes($_FILES['seleccionar_archivo']['name']);
           
             switch ($recepcion_archivo) {
@@ -5023,7 +5010,7 @@ class Controller{
                     //header ("location:/ORIEL/index.php?ctl=sincronizacion_base_de_datos_rapid_eye");
                     break;
                 }
-                 case 6:{
+                case 6:{
                     echo "<script type=\"text/javascript\">alert('El servidor no tiene acceso a la carpeta temporal de almacenamiento!!!!');history.go(-1);</script>";
                     break;
                  } 
@@ -5888,32 +5875,25 @@ class Controller{
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }
     }
-    
 
     // Permite comparar, la base de datos de Rapid Eye contra la tabla de unidades de video de ORIEL
     public function sincronizacion_base_de_datos_rapid_eye(){
-    
         if(isset($_SESSION['nombre'])){
-
             $obj_unidad_video=new cls_unidad_video();
+            $obj_base_datos_rapíd = new cls_rapid_eye_db();
+            
             $obj_unidad_video->obtiene_todas_las_unidades_de_video();
             $vector_unidades_de_video= $obj_unidad_video->getArreglo();
             
+            $obj_unidad_video->obtiene_todas_las_unidades_de_video();
+            $params2=$obj_unidad_video->getArreglo();
             
-            $obj_base_datos_rapíd = new cls_rapid_eye_db();
-            $obj_unidad_de_video= new cls_unidad_video();
-
-            $obj_unidad_de_video->obtiene_todas_las_unidades_de_video();
-            $params2=$obj_unidad_de_video->getArreglo();
-
             $obj_base_datos_rapíd->obtiene_todos_los_sitios_de_rapid_eye();
-
             $params= $obj_base_datos_rapíd->getArreglo();
 
             $cuenta=0;
 
             //Variables para revisión
-
             $estructura_base_de_datos="<h3>Carpetas de distribución de tipos de sitios y localización que tiene la base de datos</h3>";
 
             $estructura_base_de_datos=$estructura_base_de_datos."<p>En caso de que haya alguna inconsistencia en la estructura, favor realizar los cambios directamente en Rapid Eye, ya sea realizar mantenimiento a algún Punto en específico o eliminar carpetas contenedoras de la estructura en el administrador del software.</p>";
@@ -5937,32 +5917,32 @@ class Controller{
             $vector_inconsistencia_en_registros=array();
 
             for ($i = 0; $i < count($params); $i++) {
-                   $params[$i]['strSiteName']=utf8_encode($params[$i]['strSiteName']);
-                   $params[$i][1]=utf8_encode($params[$i][1]);
+                $params[$i]['strSiteName']=utf8_encode($params[$i]['strSiteName']);
+                $params[$i][1]=utf8_encode($params[$i][1]);
 
-                   if ($params[$i]['strSerialNo']=='(not set)'){
+                    if ($params[$i]['strSerialNo']=='(not set)'){
                        $estructura_base_de_datos= $estructura_base_de_datos.$params[$i]['strSiteName'].'<br>';          
-                   } else{
-                       $serie_sin_ceros = ltrim($params[$i]['strSerialNo'],'0');
-                       $nombre_sitio_rapid=$params[$i]['strSiteName'];
+                    } else{
+                        $serie_sin_ceros = ltrim($params[$i]['strSerialNo'],'0');
+                        $nombre_sitio_rapid=$params[$i]['strSiteName'];
 
-                       $ban_serie=0;
-                       $ban_nombre=0;
+                        $ban_serie=0;
+                        $ban_nombre=0;
 
-                       for ($j = 0; $j < count($params2); $j++) {
-                           if (strcmp($serie_sin_ceros,$params2[$j]['Serie'])==0){
-                               $ban_serie=1;
+                        for ($j = 0; $j < count($params2); $j++) {
+                            if (strcmp($serie_sin_ceros,$params2[$j]['Serie'])==0){
+                                $ban_serie=1;
                                 if (strcmp($nombre_sitio_rapid,$params2[$j]['Descripcion'])!=0){
-                                     $vector_inconsistencia_en_registros[]=array($params[$i]['strSiteName'],$serie_sin_ceros);
+                                    $vector_inconsistencia_en_registros[]=array($params[$i]['strSiteName'],$serie_sin_ceros);
                                 }
-                           }
+                            }
                             if (strcmp($nombre_sitio_rapid,$params2[$j]['Descripcion'])==0){
-                               $ban_nombre=1;
-                               if (strcmp($serie_sin_ceros,$params2[$j]['Serie'])!=0){
-                                     $vector_inconsistencia_en_registros[]=array($params[$i]['strSiteName'],$serie_sin_ceros);
-                               }
-                           }
-                       }
+                                $ban_nombre=1;
+                                if (strcmp($serie_sin_ceros,$params2[$j]['Serie'])!=0){
+                                    $vector_inconsistencia_en_registros[]=array($params[$i]['strSiteName'],$serie_sin_ceros);
+                                }
+                            }
+                        }
 
                        if ($ban_serie==0){
                            $sitios_rapid_eye_no_encontrados_en_oriel_por_serie=$sitios_rapid_eye_no_encontrados_en_oriel_por_serie.$params[$i]['strSiteName'].",Número de Serie en Rapid Eye: ".$params[$i]['strSerialNo']."<br>";
@@ -6921,7 +6901,6 @@ class Controller{
         }
     }
     
-    
     public function telefono_cambiar_estado(){
         if(isset($_SESSION['nombre'])){
             if (isset($_GET['id'])) {
@@ -7013,6 +6992,7 @@ class Controller{
             $obj_enlace->setProveedor($_POST['proveedor_enlace']);
             $obj_enlace->setTipo_enlace($_POST['tipo_enlace']);
             $obj_enlace->setObservaciones($_POST['observaciones_enlace']);
+            $obj_enlace->setEstado(1);
             //Valida si es un enlace nuevo o actualizacion y genera la condicion
             if($_POST['ID_Enlace']=="0"){
                 $obj_enlace->setCondicion("");
@@ -7071,6 +7051,7 @@ class Controller{
             $obj_enlace->setProveedor($_POST['proveedor_enlace']);
             $obj_enlace->setTipo_enlace($_POST['tipo_enlace']);
             $obj_enlace->setObservaciones($_POST['observaciones_enlace']);
+            $obj_enlace->setEstado(1);
             //Valida si es un enlace nuevo o actualizacion y genera la condicion
             if($_POST['ID_Enlace']=="0"){
                 $obj_enlace->setCondicion("");
@@ -7574,7 +7555,6 @@ class Controller{
     ////////////////////////////////////////////////////////////////////////////
 
     //Metodo que permite listar las direcciones ip registradas en la base de datos
-
     public function direcciones_ip_listar(){
        if(isset($_SESSION['nombre'])){
             $obj_direcciones=new cls_direccionIP();
@@ -8582,12 +8562,12 @@ class Controller{
             //Obtiene la información completa de la persona según la empresa (externa o Banco==1)
             if($funcionario[0]['ID_Empresa']==1){
                 //Obtiene la información si la persona es BCR
-                $obj_persona->setCondicion("T_Personal.ID_Persona='".$funcionario[0]['ID_Persona']."' and Estado=1");
+                $obj_persona->setCondicion("T_Personal.ID_Persona='".$funcionario[0]['ID_Persona']."' and T_Personal.Estado=1");
                 $obj_persona->obtiene_todo_el_personal();
                 $funcionario= $obj_persona->getArreglo();
-            }else{
+            } else {
                 //Obtiene la información en caso de ser otra empresa
-                $obj_externo->setCondicion("T_PersonalExterno.ID_Persona_Externa='".$funcionario[0]['ID_Persona']."' and Estado=1");
+                $obj_externo->setCondicion("T_PersonalExterno.ID_Persona_Externa='".$funcionario[0]['ID_Persona']."' and T_PersonalExterno.ID_Estado_Persona=1");
                 $obj_externo->obtiene_todo_el_personal_externo();
                 $funcionario= $obj_externo->getArreglo();
             }
@@ -8636,7 +8616,7 @@ class Controller{
         }
     }
     
-    public function evento_nuevo_guardar() {
+    public function evento_nuevo_guardar(){
         if(isset($_SESSION['nombre'])){
             //Clases necesarias para agregar un evento de cencon
             $obj_cencon = new cls_cencon();
@@ -8934,6 +8914,7 @@ class Controller{
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }
     }
+    
     ////////////////////MANTENIMIENTO DE PERSONAL EXTERNO///////////////////////
     ////////////////////////////////////////////////////////////////////////////
     public function personal_externo_listar(){
@@ -12719,7 +12700,8 @@ class Controller{
             }
         }
     }
-   
+    
+    
     ////////////////////////////////////////////////////////////////////////////
     //////////////////////Funciones para Pruebas de alarma//////////////////////  
     ////////////////////////////////////////////////////////////////////////////
@@ -13864,7 +13846,7 @@ class Controller{
             $obj_correo->enviar_correo();
         }
     }
-    ////////////////////////////////////////////////////////////////////////////
+    
     ////////////////////////////COMITÉ DE CRISSI////////////////////////////////
     public function comite_crisis(){
         if(isset($_SESSION['nombre'])){
@@ -13875,11 +13857,12 @@ class Controller{
             $notas= $obj_general->getArreglo(); 
             
             require __DIR__ . '/../vistas/plantillas/frm_comite_crisis.php';
-        }else {
+        } else {
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
             //Llamada al formulario correspondiente de la vista
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }
     }
+    
 }

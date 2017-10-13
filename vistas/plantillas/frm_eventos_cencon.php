@@ -4,7 +4,7 @@
         <meta charset="UTF-8">
         <title>Bitácora Cencon</title>
         <script language="javascript" src="vistas/js/jquery.js"></script>
-        <script language="javascript" src="vistas/js/listas_dependientes_cencon.js?1.0.3"></script>
+        <script language="javascript" src="vistas/js/listas_dependientes_cencon.js?1.0.4"></script>
         <link rel="stylesheet" href="vistas/css/ventanaoculta.css"> 
         <?php require_once 'frm_librerias_head.html'; ?> 
     </head>

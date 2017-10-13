@@ -170,25 +170,25 @@ function evento_buscar_persona(){
             document.getElementById('unidad_ejecutora').value="";
             document.getElementById('ID_Persona').value="0";
         }
-    });
-    //Busca lista de cajeros con acceso de la persona
-    var cajeros= new Array();
-    var accesos = "";
-    empresa = document.getElementById('ID_Empresa').value;
+        
+        //Busca lista de cajeros con acceso de la persona
+        var cajeros= new Array();
+        var accesos = "";
+        empresa = document.getElementById('ID_Empresa').value;
         $.post("index.php?ctl=evento_buscar_relaciones", { id: id, empresa:empresa}, function(data){
-            //alert (data);
+            //console.log(data);
             var r = data.substring(data.indexOf("{"), data.length);
             cajeros= JSON.parse(r);
             var result=[];
             for (var i in cajeros){
                 result.push([i,cajeros[i]]);
             }
-            //alert (result.length);
             for( var j=0; j<result.length;j++){
                 accesos+=" -"+(cajeros[j]['Codigo']);
             }
             document.getElementById('acceso_atms').value= accesos;
         });
+    });
 }
 
 function agregar_evento_cencon(){

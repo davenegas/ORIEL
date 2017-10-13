@@ -262,8 +262,7 @@ class Data_Provider{
        $this->consulta=$this->consulta."update ".$table." set ".$campos_valores." where ".$condicion;
     }
     
-
-     // Método ABC SQL que permite ingresar información en las tablas de la bd
+    // Método ABC SQL que permite ingresar información en las tablas de la bd
     public function agregar_inclusion_de_datos_a_la_transaccion($table,$campos,$valores){
         // Gestión de insercion del metodo de la clase
         //Arma el insert SQL, de acuerdo a los parámetros recibidos por usuario
@@ -327,7 +326,7 @@ class Data_Provider{
 
         //echo "insert into ".$table."(".$campos.") values(".$valores.");";
         $consulta=$this->conexion->query("insert into ".$table."(".$campos.") values(".$valores.");");
-        echo ("insert into ".$table."(".$campos.") values(".$valores.");");
+        //echo ("insert into ".$table."(".$campos.") values(".$valores.");");
         //Establece a true el resultado de operación
         $this->resultado_operacion=$consulta;
         
