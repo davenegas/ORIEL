@@ -2584,7 +2584,7 @@ class Controller{
                             //require __DIR__ . '/../vistas/plantillas/frm_principal.php';
                             if($_SESSION['rol']==25){
                                 //echo "Control y Seguimiento de cajeros";
-                                header("Location: https ://bcr0209ori01/ORIEL-Cajeros/index.php?ctl=inicio");
+                                header("Location: https://bcr0209ori01/ORIEL-Cajeros/index.php?ctl=inicio");
                             }else {
                                 //Llamada al formulario correspondiente de la vista
                                 header ("location:/ORIEL/index.php?ctl=principal");
@@ -6333,7 +6333,7 @@ class Controller{
 
                 //obtiene las areas de apoyo del sitio
                 $obj_areasapoyo->setCondicion("T_PuntoBCRAreaApoyo.ID_PuntoBCR='".$_GET['id']."'");
-                $obj_areasapoyo->obtiene_todos_las_areas_apoyo();
+                $obj_areasapoyo->obtiene_areas_apoyo_puntobcr();
                 $areas_apoyo =$obj_areasapoyo->getArreglo();
                 
                 //Obtiene la informacion del personal

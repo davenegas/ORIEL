@@ -150,8 +150,7 @@ class cls_areasapoyo{
 			LEFT OUTER JOIN T_TipoAreaApoyo ON T_AreasApoyo.ID_Tipo_Area_Apoyo = T_TipoAreaApoyo.ID_Tipo_Area_Apoyo
 			LEFT OUTER JOIN T_Distrito ON T_AreasApoyo.ID_Distrito = T_Distrito.ID_Distrito
 			LEFT OUTER JOIN T_Telefono ON T_AreasApoyo.ID_Area_Apoyo = T_Telefono.ID
-			LEFT OUTER JOIN T_TipoTelefono ON T_Telefono.ID_Tipo_Telefono = T_TipoTelefono.ID_Tipo_Telefono
-			LEFT OUTER JOIN T_PuntoBCRAreaApoyo ON T_AreasApoyo.ID_Area_Apoyo = T_PuntoBCRAreaApoyo.ID_Area_Apoyo", 
+			LEFT OUTER JOIN T_TipoTelefono ON T_Telefono.ID_Tipo_Telefono = T_TipoTelefono.ID_Tipo_Telefono", 
                     "T_AreasApoyo.ID_Area_Apoyo, T_AreasApoyo.Nombre_Area, T_AreasApoyo.Direccion,
 			T_AreasApoyo.Observaciones, T_AreasApoyo.Estado,T_AreasApoyo.ID_Distrito,
 			T_TipoAreaApoyo.ID_Tipo_Area_Apoyo, T_TipoAreaApoyo.Nombre_Tipo_Area,
@@ -166,6 +165,25 @@ class cls_areasapoyo{
         }
     }
 
+    public function obtiene_areas_apoyo_puntobcr(){
+        $this->obj_data_provider->conectar();
+        $this->arreglo=$this->obj_data_provider->trae_datos(
+            "T_AreasApoyo
+                LEFT OUTER JOIN T_TipoAreaApoyo ON T_AreasApoyo.ID_Tipo_Area_Apoyo = T_TipoAreaApoyo.ID_Tipo_Area_Apoyo
+                LEFT OUTER JOIN T_Telefono ON T_AreasApoyo.ID_Area_Apoyo = T_Telefono.ID
+                LEFT OUTER JOIN T_TipoTelefono ON T_Telefono.ID_Tipo_Telefono = T_TipoTelefono.ID_Tipo_Telefono
+                LEFT OUTER JOIN T_PuntoBCRAreaApoyo ON T_AreasApoyo.ID_Area_Apoyo = T_PuntoBCRAreaApoyo.ID_Area_Apoyo", 
+            "T_AreasApoyo.ID_Area_Apoyo, T_AreasApoyo.Nombre_Area, T_AreasApoyo.Direccion,
+                T_AreasApoyo.Observaciones, T_AreasApoyo.Estado,T_AreasApoyo.ID_Distrito,
+                T_TipoAreaApoyo.ID_Tipo_Area_Apoyo, T_TipoAreaApoyo.Nombre_Tipo_Area,
+                T_TipoTelefono.Tipo_Telefono, T_TipoTelefono.ID_Tipo_Telefono,
+                T_Telefono.Numero,T_Telefono.ID_Telefono,T_Telefono.Observaciones as Observaciones_Tel",
+            $this->condicion." AND (T_TipoTelefono.ID_Tipo_Telefono >='11' AND 
+                  T_TipoTelefono.ID_Tipo_Telefono <= '26')");
+        $this->arreglo=$this->obj_data_provider->getArreglo();
+        $this->obj_data_provider->desconectar();
+    }
+    
     public function obtiene_tipo_area_apoyo(){
         $this->obj_data_provider->conectar();
         $this->arreglo= $this->obj_data_provider->trae_datos("T_TipoAreaApoyo", "*", "");

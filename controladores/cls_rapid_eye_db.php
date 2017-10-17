@@ -83,7 +83,6 @@ class cls_rapid_eye_db{
             $raiz.="/";
         }
         $ruta=  $raiz."Rapid_Eye/";
-
         $this->obj_access_provider=new Access_Provider("REMCentral4","","Rach2Ros",$ruta);
         $this->condicion="";
     }  
