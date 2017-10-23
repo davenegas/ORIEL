@@ -319,7 +319,7 @@ $map = array(
     //Areas de apoyo
     'areas_apoyo_listar'=>array('controller'=>'Controller','action'=> 'areas_apoyo_listar'),
     'Area_apoyo_agregar'=>array('controller'=>'Controller','action'=> 'Area_apoyo_agregar'), //Puntos BCR
-    'Area_apoyo_nueva'=>array('controller'=>'Controller','action'=> 'Area_apoyo_nueva'),
+    'area_apoyo_actualizar'=>array('controller'=>'Controller','action'=> 'area_apoyo_actualizar'),
     'area_apoyo_gestion'=>array('controller'=>'Controller','action'=> 'area_apoyo_gestion'),       
     'area_apoyo_eliminar_telefono'=>array('controller'=>'Controller','action'=> 'area_apoyo_eliminar_telefono'),  
     'area_apoyo_numero_telefono_guardar'=>array('controller'=>'Controller','action'=> 'area_apoyo_numero_telefono_guardar'),  
@@ -392,6 +392,8 @@ $map = array(
     'actualizar_modulo_puerta_inicio'=>array('controller'=>'Controller','action'=> 'actualizar_modulo_puerta_inicio'),
     'actualizar_modulo_puerta_paso_1'=>array('controller'=>'Controller','action'=> 'actualizar_modulo_puerta_paso_1'),
     'actualizar_modulo_puerta_paso_2'=>array('controller'=>'Controller','action'=> 'actualizar_modulo_puerta_paso_2'),
+        //Accesos programados
+    'programacion_accesos'=>array('controller'=>'Controller','action'=> 'programacion_accesos'),
     
     //Controlador de Personal Externo
     'personal_externo_listar'=>array('controller'=>'Controller','action'=> 'personal_externo_listar'), 

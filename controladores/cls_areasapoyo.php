@@ -133,13 +133,13 @@ class cls_areasapoyo{
 			LEFT OUTER JOIN T_Distrito ON T_AreasApoyo.ID_Distrito = T_Distrito.ID_Distrito
 			LEFT OUTER JOIN T_Telefono ON T_AreasApoyo.ID_Area_Apoyo = T_Telefono.ID
 			LEFT OUTER JOIN T_TipoTelefono ON T_Telefono.ID_Tipo_Telefono = T_TipoTelefono.ID_Tipo_Telefono", 
-                    "DISTINCT T_AreasApoyo.ID_Area_Apoyo, T_AreasApoyo.Nombre_Area, T_AreasApoyo.Direccion,
+                    "T_AreasApoyo.ID_Area_Apoyo, T_AreasApoyo.Nombre_Area, T_AreasApoyo.Direccion,
 			T_AreasApoyo.Observaciones, T_AreasApoyo.Estado,
 			T_TipoAreaApoyo.ID_Tipo_Area_Apoyo, T_TipoAreaApoyo.Nombre_Tipo_Area,
 			T_Distrito.ID_Distrito,T_Distrito.Nombre_Distrito,
 			GROUP_CONCAT( T_Telefono.Numero,' ', T_Telefono.Observaciones,'<br> ') as Numero, T_Telefono.ID_Tipo_Telefono",
                     "(T_TipoTelefono.ID_Tipo_Telefono >='11' AND 
-                          T_TipoTelefono.ID_Tipo_Telefono <= '26') GROUP by T_AreasApoyo.ID_Area_Apoyo, T_Telefono.ID_Tipo_Telefono");
+                          T_TipoTelefono.ID_Tipo_Telefono <= '26') GROUP by T_AreasApoyo.ID_Area_Apoyo");
             $this->arreglo=$this->obj_data_provider->getArreglo();
             $this->obj_data_provider->desconectar();
             $this->resultado_operacion=true;
@@ -203,7 +203,6 @@ class cls_areasapoyo{
         $this->obj_data_provider->conectar();
         $this->obj_data_provider->inserta_datos("T_AreasApoyo", "ID_Area_Apoyo, ID_Tipo_Area_Apoyo, ID_Distrito, Nombre_Area, Direccion, Observaciones, Estado",
                 "'".null."','".$this->tipo_area."','".$this->distrito."','".$this->nombre_area."','".$this->direccion."','".$this->observaciones."','1'");
-        
         $this->arreglo= $this->obj_data_provider->trae_datos("t_areasapoyo ORDER BY `ID_Area_Apoyo` DESC LIMIT 1", "*", $this->condicion);
         $this->arreglo=$this->obj_data_provider->getArreglo();
         $this->obj_data_provider->desconectar();
@@ -214,5 +213,14 @@ class cls_areasapoyo{
         $this->obj_data_provider->conectar();
         $this->obj_data_provider->eliminar_datos("T_PuntoBCRAreaApoyo", "ID_PuntoBCR='".$this->id2."' AND ID_Area_Apoyo='".$this->id."'");
         $this->obj_data_provider->desconectar();
+    }
+    
+    public function edita_area_apoyo(){
+        $this->obj_data_provider->conectar();
+        $this->obj_data_provider->edita_datos("T_AreasApoyo", "ID_Tipo_Area_Apoyo='".$this->tipo_area."', ID_Distrito='".$this->distrito.
+                "', Nombre_Area='".$this->nombre_area."', Direccion='".$this->direccion."', Observaciones='".$this->observaciones."', Estado='".$this->estado."'",$this->condicion);
+        $this->arreglo=$this->obj_data_provider->getArreglo();
+        $this->obj_data_provider->desconectar();
+        $this->resultado_operacion=true;
     }
 }?>

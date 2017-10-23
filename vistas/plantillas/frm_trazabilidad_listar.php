@@ -4,7 +4,7 @@
         <meta charset="utf-8"/>
         <title>Lista de Traza del Sistema</title>
         <script language="javascript" src="vistas/js/jquery.js"></script>
-        <script language="javascript" src="vistas/js/listas_dependientes_trazabilidad.js"></script>
+        <script language="javascript" src="vistas/js/listas_dependientes_trazabilidad.js?1.0.3"></script>
         <?php require_once 'frm_librerias_head.html'; ?>     
     </head>
     <body>
@@ -14,16 +14,23 @@
         <div class="container animated fadeIn">
             <h2>Generar Reporte de Trazabilidad del Sistema</h2>    
             <h4 class="espacio-abajo">Escoger parámetros del filtro:</h4>
-            <div class="col-xs-3">
+            <div class="col-xs-2">
                 <label for="fecha_inicial">Fecha Inicial:</label>
                 <input type="date" required=”required” class="form-control" id="fecha_inicial" name="fecha_inicial" value="<?php echo date("Y-m-d");?>">
             </div> 
-            <div class="col-xs-3">
+            <div class="col-xs-2">
                 <label for="fecha_final">Fecha Final:</label>
                 <input type="date" required=”required” class="form-control" id="fecha_final" name="fecha_final" value="<?php echo date("Y-m-d");?>">
             </div> 
-
-            <div class="col-xs-3">
+            <div class="col-xs-2">
+                <label for="hora_inicial">Hora Inicial:</label>
+                <input type="time" required class="form-control" id="hora_inicial" name="hora_inicial" value="<?php echo date("00:00", time());?>">
+            </div> 
+            <div class="col-xs-2">
+                <label for="hora_final">Hora Final:</label>
+                <input type="time" required class="form-control" id="hora_final" name="hora_final" value="<?php echo date("23:59", time());?>">
+            </div> 
+            <div class="col-xs-4">
                 <label for="lista_usuarios">Usuario:</label>
                 <select class="form-control" required=”required” id="lista_usuarios" name="lista_usuarios" > 
                     <option value="0" selected="true">Todos los Usuarios</option>

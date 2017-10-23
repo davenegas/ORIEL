@@ -4,9 +4,8 @@
 class Controller{
      
     //Declaración de métodos que envuelven toda la funcionalidad del sistema
-    // A través del componente index se llaman cada uno de los eventos de la clase 
-    // controller para que sean ejecutados según sea necesario.
-     
+    //A través del componente index se llaman cada uno de los eventos de la clase 
+    //controller para que sean ejecutados según sea necesario.
     //Inicio del sitio web, llamada a la pantalla principal para inicio de sesión
     public function inicio(){
         if(isset($_SERVER['HTTPS'])||(gethostname()!='BCR0209ORI01')){
@@ -16,8 +15,7 @@ class Controller{
             //Llamada al formulario correspondiente de la vista
             require __DIR__ . '/../vistas/plantillas/frm_principal_publica.php';
         } else {
-            header("Location: https://bcr0209ori01/Oriel/index.php?ctl=inicio");
-            
+            header("Location:https://bcr0209ori01/Oriel/index.php?ctl=inicio");
         }
     }
 
@@ -92,7 +90,6 @@ class Controller{
         $validacion="Verificación de Identidad";
         //Llamada al formulario correspondiente de la vista   
         $this->ejecucion_automatico_proceso("Oficiales");     
-        
         require __DIR__ . '/../vistas/plantillas/inicio_sesion.php'; 
     }
     
@@ -667,7 +664,6 @@ class Controller{
                 }
                 
                 //Establece el numero de cedula al objeto
-
                 $obj_personal->setCedula($arreglo_personal[$i][1]);
 
                 //Establece el nombre de la ue
@@ -1136,9 +1132,7 @@ class Controller{
 
                         }else{
                             //De lo contrario asigna valor de 3, indicando que la extensión que viene en el documento no es valida
-
                             $bandera=3;
-
                         }
                     }
                     //Si el numero fijo de contacto al funcionario que trae el prontuario no es valido de acuerdo a los estandares   
@@ -1148,7 +1142,6 @@ class Controller{
                     if (strlen($arreglo_telefonos_extensiones[$i][2])==5){
                                 //asigna valor 4 a la bandera
                                 $bandera=4;
-
                             }
                 }
 
@@ -3572,111 +3565,107 @@ class Controller{
     //parametros de busqueda suministrados por el usuario de consulta. Entre los parametros se encuentran,
     //nombre de usuario, fecha, tabla, etc.
     public function actualiza_en_vivo_reporte_trazabilidad(){
-
-        sleep(2);       
-            //verifica que la variable de sesión nombre esté establecida.
+        //sleep(2);       
+        //verifica que la variable de sesión nombre esté establecida.
         if(isset($_SESSION['nombre'])){
-                //Toma la fecha inicial para establecer los parametros de busqueda
-                $fecha_inicial=$_POST['fecha_inicial'];
-                //Toma la fecha final para establecer los parametros de busqueda
-                $fecha_final=$_POST['fecha_final'];
-                //Recibe el usuario en caso de que se haya definido dentro de los parametros de busqueda
-                $usuario=$_POST['usuario'];
-                //Recibe la tabla de base de datos que se requiere consultar.
-                $tabla_afectada=$_POST['tabla'];
-                //Estable la sintaxis del sql para definir los parametros de fecha
-                $condicion="bd_Registro_Trazabilidad.t_traza.Fecha between '".$fecha_inicial."' AND '".$fecha_final."' ";
-                
-                /*
-                 * verifica si se eligió un usuario en especifico para filtrar la información del reporte.
-                 */
-                if (!$usuario=="0"){
-                    $condicion.="AND bd_Registro_Trazabilidad.t_traza.ID_Usuario=".$usuario." ";
-                }
-                
-                /*
-                 * Verifica si se eligió alguna tabla en específico o si por el contrario la búsqueda se realizará sobre todas las tablas
-                 */
-                if ($tabla_afectada!="todas"){
-                    $condicion.="AND bd_Registro_Trazabilidad.t_traza.Tabla_Afectada='".$tabla_afectada."'";
-                }
-                  
-                // Crea un objeto de tipo trazabilidad
-                $obj_trazabilidad= new cls_trazabilidad();
-                //Establece la condición de búsqueda de registros de trazabilidad
-                $obj_trazabilidad->setCondicion($condicion);
-                //Ejecuta la sentecia SQL
-                $obj_trazabilidad->obtiene_trazabilidad();
-                //Asigna el resultado de la búsqueda a una variable de tipo vector
-                $params=$obj_trazabilidad->getArreglo();
+            //Toma la fecha inicial para establecer los parametros de busqueda
+            $fecha_inicial=$_POST['fecha_inicial'];
+            //Toma la fecha final para establecer los parametros de busqueda
+            $fecha_final=$_POST['fecha_final'];
+            //Toma la fecha inicial para establecer los parametros de busqueda
+            $hora_inicial=$_POST['hora_inicial'];
+            //Toma la fecha final para establecer los parametros de busqueda
+            $hora_final=$_POST['hora_final'];
+            //Recibe el usuario en caso de que se haya definido dentro de los parametros de busqueda
+            $usuario=$_POST['usuario'];
+            //Recibe la tabla de base de datos que se requiere consultar.
+            $tabla_afectada=$_POST['tabla'];
+            //Estable la sintaxis del sql para definir los parametros de fecha
+            $condicion="bd_Registro_Trazabilidad.t_traza.Fecha between '".$fecha_inicial."' AND '".$fecha_final."' and bd_Registro_Trazabilidad.t_traza.Hora between '".$hora_inicial."' AND '".$hora_final."'";
 
-                //Verifica que hayan resultados
-                if (count($params)>0){
-                    
-                    //Dibuja desde PHP mediante una variable cadena, el resultado de datos en formato HTML que se mostrará en pantalla
-                    //Tabla HTML
-                    $html="<table id='tabla' class='display2'>";
-                    //Cuerpo de la tabla
-                    $html.="<thead>";   
-                    //Fila
+            //verifica si se eligió un usuario en especifico para filtrar la información del reporte.
+            if (!$usuario=="0"){
+                $condicion.="AND bd_Registro_Trazabilidad.t_traza.ID_Usuario=".$usuario." ";
+            }
+            
+            //Verifica si se eligió alguna tabla en específico o si por el contrario la búsqueda se realizará sobre todas las tablas
+            if ($tabla_afectada!="todas"){
+                $condicion.="AND bd_Registro_Trazabilidad.t_traza.Tabla_Afectada='".$tabla_afectada."'";
+            }
+
+            // Crea un objeto de tipo trazabilidad
+            $obj_trazabilidad= new cls_trazabilidad();
+            //Establece la condición de búsqueda de registros de trazabilidad
+            $obj_trazabilidad->setCondicion($condicion);
+            //Ejecuta la sentecia SQL
+            $obj_trazabilidad->obtiene_trazabilidad();
+            //Asigna el resultado de la búsqueda a una variable de tipo vector
+            $params=$obj_trazabilidad->getArreglo();
+
+            //Verifica que hayan resultados
+            if (count($params)>0){
+                //Dibuja desde PHP mediante una variable cadena, el resultado de datos en formato HTML que se mostrará en pantalla
+                //Tabla HTML
+                $html="<table id='tabla' class='display2'>";
+                //Cuerpo de la tabla
+                $html.="<thead>";   
+                //Fila
+                $html.="<tr>";
+                //Columnas o cabeceras
+                $html.="<th>ID_Traza</th>";
+                $html.="<th>Fecha</th>";
+                $html.="<th>Hora</th>";
+                $html.="<th>Antiguedad Dias</th>";
+                $html.="<th>Usuario</th>";
+                $html.="<th>Tabla Afectada</th>";
+                $html.="<th>Dato Actualizado</th>";
+                $html.="<th>Dato Anterior</th>";
+                //Finaliza la linea
+                $html.="</tr>";
+                //Finalizan las cabeceras
+                $html.="</thead>";
+
+                //Cuerpo de la tabla
+                $html.="<tbody id='cuerpo'>";
+                //Tamaño del vector de resultados
+                $tam=count($params);
+                //Ciclo que permite recorrer cada registro
+                for ($i = 0; $i <$tam; $i++) {
+                    //Establece líneas de registros de información
                     $html.="<tr>";
-                    //Columnas o cabeceras
-                    $html.="<th>ID_Traza</th>";
-                    $html.="<th>Fecha</th>";
-                    $html.="<th>Hora</th>";
-                    $html.="<th>Antiguedad Dias</th>";
-                    $html.="<th>Usuario</th>";
-                    $html.="<th>Tabla Afectada</th>";
-                    $html.="<th>Dato Actualizado</th>";
-                    $html.="<th>Dato Anterior</th>";
-                    //Finaliza la linea
+
+                    //Establece una variable fecha para almacenar el campo del vector
+                    $fecha_evento = date_create($params[$i]['Fecha']);
+                    //Fecha del día
+                    $fecha_actual = date_create(date("d-m-Y"));
+                    //Establece diferencia en días entre ambas fechas
+                    $dias_abierto= date_diff($fecha_evento, $fecha_actual);
+
+                    //Pinta cada uno de los campos del vector
+                    $html.="<td>".$params[$i]['ID_Traza']."</td>";
+                    $html.="<td>".date_format($fecha_evento, 'd/m/Y')."</td>";
+                    $html.="<td>".$params[$i]['Hora']."</td>";
+                    $html.="<td align='center'>".$dias_abierto->format('%a')."</td>";
+                    $html.="<td>".$params[$i]['Nombre']." ".$params[$i]['Apellido']."</td>";
+                    $html.="<td>".$params[$i]['Tabla_Afectada']."</td>";
+                    $html.="<td>".$params[$i]['Dato_Actualizado']."</td>";
+                    $html.="<td>".$params[$i]['Dato_Anterior']."</td>";
+
+                    //Cierra la línea
                     $html.="</tr>";
-                    //Finalizan las cabeceras
-                    $html.="</thead>";
+                }
+                //Cierra el cuerpor la tabla
+                $html.="</tbody>";
 
-                    //Cuerpo de la tabla
-                    $html.="<tbody id='cuerpo'>";
-                    //Tamaño del vector de resultados
-                    $tam=count($params);
-                    //Ciclo que permite recorrer cada registro
-                    for ($i = 0; $i <$tam; $i++) {
+                //Cierra la tabla
+                $html.=" </table>";
 
-                        //Establece líneas de registros de información
-                        $html.="<tr>";
-
-                        //Establece una variable fecha para almacenar el campo del vector
-                        $fecha_evento = date_create($params[$i]['Fecha']);
-                        //Fecha del día
-                        $fecha_actual = date_create(date("d-m-Y"));
-                        //Establece diferencia en días entre ambas fechas
-                        $dias_abierto= date_diff($fecha_evento, $fecha_actual);
-
-                        //Pinta cada uno de los campos del vector
-                        $html.="<td>".$params[$i]['ID_Traza']."</td>";
-                        $html.="<td>".date_format($fecha_evento, 'd/m/Y')."</td>";
-                        $html.="<td>".$params[$i]['Hora']."</td>";
-                        $html.="<td align='center'>".$dias_abierto->format('%a')."</td>";
-                        $html.="<td>".$params[$i]['Nombre']." ".$params[$i]['Apellido']."</td>";
-                        $html.="<td>".$params[$i]['Tabla_Afectada']."</td>";
-                        $html.="<td>".$params[$i]['Dato_Actualizado']."</td>";
-                        $html.="<td>".$params[$i]['Dato_Anterior']."</td>";
-
-                        //Cierra la línea
-                        $html.="</tr>";
-                    }
-                    //Cierra el cuerpor la tabla
-                    $html.="</tbody>";
-
-                    //Cierra la tabla
-                    $html.=" </table>";
-
-                    //Manda a pintar la tabla completa al formulario
-                    echo $html;
-                    //Sale del metodo de la clase
-                    exit;
-                    //En caso de que la consulta no devuelva registros, muestra en pantalla un mensaje informativo
+                //Manda a pintar la tabla completa al formulario
+                echo $html;
+                //Sale del metodo de la clase
+                exit;
+                //En caso de que la consulta no devuelva registros, muestra en pantalla un mensaje informativo
             }else{
-                //
                 $html="<h4>No se encontraron eventos para este filtro.</h4>";
                 echo $html;
                 //Sale del metodo de la clase
@@ -3695,8 +3684,7 @@ class Controller{
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
             //Llamada al formulario correspondiente de la vista
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
-        } 
-        
+        }
     }
     
     //Muestra en pantalla un reportes de eventos cerrados, de acuerdo a parametros de busqueda específicos, como fecha, sitio, etc.
@@ -7299,10 +7287,37 @@ class Controller{
     public function areas_apoyo_listar(){
         if(isset($_SESSION['nombre'])){
             $obj_areasApoyo=new cls_areasapoyo();
+            $obj_Puntobcr = new cls_puntosBCR();
+            $obj_telefono = new cls_telefono();
+            
             $obj_areasApoyo->setCondicion("");
             $obj_areasApoyo->obtiene_todos_las_areas_apoyo();
             $params= $obj_areasApoyo->getArreglo();
             
+            //Obtiene Distrito->Cantón->Provincia
+                //Distritos
+            $obj_Puntobcr->setCondicion("");
+            $obj_Puntobcr->obtiene_distritos();
+            $distritos = array_merge(array(array('ID_Distrito'=>0,'Nombre_Distrito'=>"")),$obj_Puntobcr->getArreglo());
+                //Cantones
+            $obj_Puntobcr->setCondicion("");
+            $obj_Puntobcr->obtiene_cantones();
+            $cantones   = array_merge(array(array('ID_Canton'=>0,'Nombre_Canton'=>"")),$obj_Puntobcr->getArreglo());
+                //Provincias
+            $obj_Puntobcr->setCondicion("");
+            $obj_Puntobcr->obtiene_provincias();
+            $provincias = array_merge(array(array("ID_Provincia"=>"0","Nombre_Provincia"=>"")),$obj_Puntobcr->getArreglo());
+            
+            //Obtiene los tipos de area de apoyo
+            $obj_areasApoyo->setCondicion("");
+            $obj_areasApoyo->obtiene_tipo_area_apoyo();
+            $tipos_areas_apoyo= $obj_areasApoyo->getArreglo();
+            
+            //Obtiene los tipos de telefono
+            $obj_telefono->setCondicion("");
+            $obj_telefono->obtiene_tipo_telefonos();
+            $tipo_telefono= $obj_telefono->getArreglo();
+                
             require __DIR__ . '/../vistas/plantillas/frm_areas_apoyo_listar.php';
         }else{
             /*
@@ -7332,7 +7347,7 @@ class Controller{
                 $obj_area_apoyo->setId(null);
                 $obj_area_apoyo->setTipo_area($_POST['Tipo_Area_Apoyo']);
                 echo ($_POST['Tipo_Area_Apoyo']);
-                $obj_area_apoyo->setDistrito($_POST['distrito2']);
+                $obj_area_apoyo->setDistrito($_POST['Distrito']);
                 $obj_area_apoyo->setNombre_area($_POST['nombre']);
                 $obj_area_apoyo->setDireccion($_POST['direccion']);
                 $obj_area_apoyo->setObservaciones($_POST['observaciones']);
@@ -7350,29 +7365,14 @@ class Controller{
                     $obj_telefono->setNumero($_POST['numero']);
                     $obj_telefono->setTipo_telefono($_POST['Tipo_Telefono']);
                     $obj_telefono->setId2($area_apoyo[0]['ID_Area_Apoyo']); 
-                    $obj_telefono->setObservaciones("");
+                    $obj_telefono->setObservaciones($_POST['observaciones_tel']);
+                    $obj_telefono->setEstado(1);
                     
                     $obj_telefono->setCondicion("");
                     $obj_telefono->guardar_telefono();
                 }
-                //Asigna el area de apoyo al puntoBCR
-                $obj_area_apoyo = new cls_areasapoyo();
-                $obj_area_apoyo->setId($area_apoyo[0]['ID_Area_Apoyo']);
-                $obj_area_apoyo->setId2($_POST['ID_PuntoBCR']);
 
-                //Establece la condicion para buscar si el area de apoyo ya está asignada al punto bcr
-                $obj_area_apoyo->setCondicion("T_PuntoBCRAreaApoyo.ID_PuntoBCR='".$_POST['ID_PuntoBCR']."' AND T_PuntoBCRAreaApoyo.ID_Area_Apoyo='".$area_apoyo[0]['ID_Area_Apoyo']."'");
-                //Ejecuta la consulta sobre la bd
-
-                $obj_area_apoyo->obtiene_todos_las_areas_apoyo();
-                $areas_apoyo =$obj_area_apoyo->getArreglo();
-                if($areas_apoyo==""){
-                    $obj_area_apoyo->agregar_PuntoBCR_AreaApoyo();
-                }   else    {
-                    echo "El Area de Apoyo ya se encuentra asignada al PuntoBCR";
-                }
-
-                //header("location:/ORIEL/index.php?ctl=gestion_punto_bcr&id=".$_POST['ID_PuntoBCR']);
+                header("location:/ORIEL/index.php?ctl=areas_apoyo_listar");
             } else {
                 echo "<script type=\"text/javascript\">alert('Este número en áreas de apoyo ya existe!');history.go(-1);</script>";
             }
@@ -7452,7 +7452,6 @@ class Controller{
             $obj_telefono->setId($_POST['id_telefono']);
             $obj_telefono->setCondicion("ID_Telefono='".$_POST['id_telefono']."'");
             $obj_telefono->eliminar_telefono();
-
         }else{
             /*
             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
@@ -7481,7 +7480,9 @@ class Controller{
                     $obj_telefono->setTipo_telefono($_POST['Tipo_Telefono']);
                     $obj_telefono->setNumero($_POST['numero']);
                     $obj_telefono->setObservaciones($_POST['observaciones_tel']);
+                    
                     if($_POST['ID_Telefono']==0){
+                        $obj_telefono->setCondicion("");
                         $obj_telefono->guardar_telefono();
                     }
                     else{
@@ -7506,35 +7507,20 @@ class Controller{
         }
     }
     
-    public function Area_apoyo_nueva(){
+    public function area_apoyo_actualizar(){
         if(isset($_SESSION['nombre'])){
             $obj_area_apoyo= new cls_areasapoyo();
             $obj_telefono = new cls_telefono();
             //Obtiene la información enviada por el formulario POST
-            $obj_area_apoyo->setId(null);
             $obj_area_apoyo->setTipo_area($_POST['tipo_area']);
             $obj_area_apoyo->setDistrito($_POST['Distrito']);
             $obj_area_apoyo->setNombre_area($_POST['Nombre']);
             $obj_area_apoyo->setDireccion($_POST['direccion']);
             $obj_area_apoyo->setObservaciones($_POST['observaciones']);
+            $obj_area_apoyo->setEstado(1);
             //agrega el area de apoyo nueva
-            $obj_area_apoyo->setCondicion("");
-            $obj_area_apoyo->agregar_area_apoyo();
-            //Luego de agregar el area de apoyo devuelve el ID del area agregada
-            $area_apoyo = $obj_area_apoyo->getArreglo();
-            //Valida que el arreglo tenga información
-            if($area_apoyo==""){
-                echo 'Error al traer area de apoyo nueva';
-            }   else    {
-                //Crea el número del area de apoyo nueva
-                $obj_telefono->setId(null);
-                $obj_telefono->setNumero($_POST['numero']);
-                $obj_telefono->setTipo_telefono($_POST['Tipo_Telefono']);
-                $obj_telefono->setId2($area_apoyo[0]['ID_Area_Apoyo']); 
-                $obj_telefono->setObservaciones("");
-                $obj_telefono->guardar_telefono();
-            }
-            
+            $obj_area_apoyo->setCondicion("ID_Area_Apoyo=".$_GET['id']);
+            $obj_area_apoyo->edita_area_apoyo();
             header("location:/ORIEL/index.php?ctl=areas_apoyo_listar");
         }else{
             /*
@@ -7548,7 +7534,7 @@ class Controller{
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }
     }
-    
+            
     
     ////////////////////////////////////////////////////////////////////////////
     /////////////Funciones para Direeciones IP's////////////////////////////////
@@ -8038,16 +8024,19 @@ class Controller{
     /////////////////////FUNCIONES PARA EVENTOS/////////////////////////////////
     public function frm_trazabilidad_listar(){
         if(isset($_SESSION['nombre'])){
-            /*$obj_traza = new cls_trazabilidad();
-            $obj_traza->setCondicion("bd_Registro_Trazabilidad.t_traza.Fecha='".date("Y-m-d")."'");
-            $obj_traza ->obtiene_trazabilidad(); 
-            $params= $obj_traza->getArreglo();
+            $obj_traza = new cls_trazabilidad();
+//            $obj_traza->setCondicion("bd_Registro_Trazabilidad.t_traza.Fecha='".date("Y-m-d")."'");
+//            $obj_traza ->obtiene_trazabilidad(); 
+//            $params= $obj_traza->getArreglo();
+            
             $obj_traza->setCondicion("");
             $obj_traza->obtiene_lista_usuarios_que_han_modificado_base_de_datos();
             $lista_de_usuarios=$obj_traza->getArreglo();
+            
             $obj_traza->setCondicion("");
             $obj_traza->obtiene_lista_tablas_afectadas_en_el_sistema();
-            $lista_tablas_afectadas=$obj_traza->getArreglo();*/
+            $lista_tablas_afectadas=$obj_traza->getArreglo();
+            
             require __DIR__.'/../vistas/plantillas/frm_trazabilidad_listar.php';
         } else {
             /*
@@ -12717,11 +12706,12 @@ class Controller{
             $personas= $obj_persona->getArreglo();
             
             //Obtiene informacion básica del Personal Externo
-            $obj_externo->obtiene_todo_el_personal_externo_prueba_alarma();
-            $externos = $obj_externo->getArreglo();
+            //$obj_externo->obtiene_todo_el_personal_externo_prueba_alarma();
+            //$externos = $obj_externo->getArreglo();
             
             //Une la informacion de las personas 
-            $params = array_merge($personas,$externos);
+            //$params = array_merge($personas,$externos);
+            $params = $personas;
             
             //Obtiene información del Punto BCR
             $obj_Puntosbcr->setCondicion("(T_PuntoBCR.ID_Tipo_Punto IN (1,5,9,10,11)) AND T_PuntoBCR.Estado=1");
@@ -13033,24 +13023,24 @@ class Controller{
                         $persona = $obj_personal->getArreglo();
                         $pruebas_anteriores[$i] = array_merge(array('Nombre_Persona_Apertura' =>($persona[0]['Apellido_Nombre'])),array('Cedula'=> ($persona[0]['Cedula'])),array('Empresa'=> ($persona[0]['Empresa'])),$pruebas_anteriores[$i]);
                     } 
-                    if($pruebas_anteriores[$i]['ID_Empresa_Persona_Apertura']!=1){
-                        $obj_externo->setCondicion("T_PersonalExterno.ID_Persona_Externa='".$pruebas_anteriores[$i]['ID_Persona_Reporta_Apertura']."'");
-                        $obj_externo->obtiene_todo_el_personal_externo();
-                        $persona = $obj_externo->getArreglo();
-                        $pruebas_anteriores[$i] = array_merge(array('Nombre_Persona_Apertura' =>($persona[0]['Apellido']." ".$persona[0]['Nombre'])),array('Cedula'=> ($persona[0]['Identificacion'])),array('Empresa'=> ($persona[0]['Empresa'])), $pruebas_anteriores[$i]);
-                    }
+//                    if($pruebas_anteriores[$i]['ID_Empresa_Persona_Apertura']!=1){
+//                        $obj_externo->setCondicion("T_PersonalExterno.ID_Persona_Externa='".$pruebas_anteriores[$i]['ID_Persona_Reporta_Apertura']."'");
+//                        $obj_externo->obtiene_todo_el_personal_externo();
+//                        $persona = $obj_externo->getArreglo();
+//                        $pruebas_anteriores[$i] = array_merge(array('Nombre_Persona_Apertura' =>($persona[0]['Apellido']." ".$persona[0]['Nombre'])),array('Cedula'=> ($persona[0]['Identificacion'])),array('Empresa'=> ($persona[0]['Empresa'])), $pruebas_anteriores[$i]);
+//                    }
                     if($pruebas_anteriores[$i]['ID_Empresa_Persona_Cierra']==1){
                         $obj_personal->setCondicion("T_Personal.ID_Persona='".$pruebas_anteriores[$i]['ID_Persona_Reporta_Apertura']."'");
                         $obj_personal->obtiene_todo_el_personal();
                         $persona = $obj_personal->getArreglo();
                         $pruebas_anteriores[$i] = array_merge(array('Nombre_Persona_Cierre' =>($persona[0]['Apellido_Nombre'])),array('Cedula_Cierre'=> ($persona[0]['Cedula'])),array('Empresa_Cierre'=> ($persona[0]['Empresa'])),$pruebas_anteriores[$i]);
                     } 
-                    if($pruebas_anteriores[$i]['ID_Empresa_Persona_Cierra']!=1){
-                        $obj_externo->setCondicion("T_PersonalExterno.ID_Persona_Externa='".$pruebas_anteriores[$i]['ID_Persona_Reporta_Apertura']."'");
-                        $obj_externo->obtiene_todo_el_personal_externo();
-                        $persona = $obj_externo->getArreglo();
-                        $pruebas_anteriores[$i] = array_merge(array('Nombre_Persona_Cierre' =>($persona[0]['Apellido']." ".$persona[0]['Nombre'])),array('Cedula_Cierre'=> ($persona[0]['Identificacion'])),array('Empresa_Cierre'=> ($persona[0]['Empresa'])), $pruebas_anteriores[$i]);
-                    }
+//                    if($pruebas_anteriores[$i]['ID_Empresa_Persona_Cierra']!=1){
+//                        $obj_externo->setCondicion("T_PersonalExterno.ID_Persona_Externa='".$pruebas_anteriores[$i]['ID_Persona_Reporta_Apertura']."'");
+//                        $obj_externo->obtiene_todo_el_personal_externo();
+//                        $persona = $obj_externo->getArreglo();
+//                        $pruebas_anteriores[$i] = array_merge(array('Nombre_Persona_Cierre' =>($persona[0]['Apellido']." ".$persona[0]['Nombre'])),array('Cedula_Cierre'=> ($persona[0]['Identificacion'])),array('Empresa_Cierre'=> ($persona[0]['Empresa'])), $pruebas_anteriores[$i]);
+//                    }
                 }
                 
                 $time= time();
@@ -13844,6 +13834,18 @@ class Controller{
             //Procede a enviar el correo
             $obj_correo->adjuntar_archivo_al_correo($ruta,"");
             $obj_correo->enviar_correo();
+        }
+    }
+    
+    public function programacion_accesos(){
+        if(isset($_SESSION['nombre'])){
+
+            require __DIR__ . '/../vistas/plantillas/frm_ca_accesos_programados.php';
+        } else {
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            //Llamada al formulario correspondiente de la vista
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }
     }
     

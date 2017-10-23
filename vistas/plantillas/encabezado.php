@@ -217,6 +217,10 @@
                                 <li><a href="index.php?ctl=personal_externo_listar">Personal Externo</a></li>
                             <?php }; ?>
                                 
+                            <?php if ($_SESSION['modulos']['Módulo-Áreas de Apoyo']==1){ ?>
+                                <li><a href="index.php?ctl=programacion_accesos">Programaciones</a></li>
+                            <?php }; ?>
+                                
                             <?php if ($_SESSION['modulos']['Módulo-Pruebas alarma']==1){?>
                                 <li><a href="index.php?ctl=pruebas_alarma">Pruebas alarma</a></li> 
                             <?php }; ?>

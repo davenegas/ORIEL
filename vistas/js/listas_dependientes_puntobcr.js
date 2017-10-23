@@ -157,12 +157,12 @@ function eliminar_telefono(ide){
         confirm: function(){
             id_telefono= ide;
             $.post("index.php?ctl=puntobcr_desligar_telefono", { id_telefono: id_telefono}, function(data){
-                location.reload();
-                //alert (data);
-              });
+            location.reload();
+            //alert (data);
+            });
         },
         cancel: function(){
-                //$.alert('Canceled!')
+            //$.alert('Canceled!')
         }
     });
 }

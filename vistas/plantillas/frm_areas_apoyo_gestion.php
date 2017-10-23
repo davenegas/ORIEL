@@ -14,7 +14,7 @@
             <h2>Gestión de Áreas de Apoyo del Sistema</h2>
             <p>Mediante esta pantalla, podrá agregar o editar Áreas de Apoyo del sistema:</p>
             <div class="container">
-                <form class="form-horizontal" role="form" method="POST" action="index.php?ctl=Area_apoyo_nueva&id=<?php echo $params[0]['ID_Area_Apoyo'];?>">
+                <form class="form-horizontal" role="form" method="POST" action="index.php?ctl=area_apoyo_actualizar&id=<?php echo $params[0]['ID_Area_Apoyo'];?>">
                     <div class="col-md-6 espacio-abajo">
                         <label for="Nombre">Nombre Área</label>
                         <input type="text" required="required" class="form-control" id="Nombre" name="Nombre" value="<?php echo $params[0]['Nombre_Area'];?>">
@@ -82,17 +82,17 @@
                         </select>
                     </div>
 
-                    <div class="col-md-4 espacio-abajo">
+                    <div class="col-md-6 espacio-abajo">
                         <label for="direccion">Dirección</label>
                         <input type="text" class="form-control" id="direccion" name="direccion" value="<?php echo $params[0]['Direccion'];?>">
                     </div>
 
-                    <div class="col-md-4 espacio-abajo">
+                    <div class="col-md-6 espacio-abajo">
                         <label for="observaciones">Observaciones</label>
                         <input type="text" class="form-control" id="observaciones" name="observaciones" value="<?php echo $params[0]['Observaciones'];?>">
                     </div>  
 
-                    <div class="col-md-4 espacio-abajo">
+                    <div hidden class="col-md-4 espacio-abajo">
                         <label for="Estado">Estado</label>
                         <select class="form-control" id="Estado" name="Estado" >
                             <?php if ($params[0]['Estado']==1){ ?>

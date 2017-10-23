@@ -87,7 +87,8 @@
                             <th style="text-align:center">Tipo Prueba</th>
                             <th style="text-align:center">Nombre Persona Cierre</th>
                             <th style="text-align:center">Partición Secundaria Cierre</th>
-                            <th style="text-align:center">Partición Principal Cierre</th>  
+                            <th style="text-align:center">Partición Principal Cierre</th>
+                            <th style="text-align:center">Observaciones</th>  
                         </tr>
                     </thead>
                     <tbody id="cuerpo">
@@ -109,6 +110,7 @@
                                 <td style="text-align:center"><?php echo $prueba[$i]['Nombre_Persona_Cierre'];?></td>
                                 <td style="text-align:center"><?php echo $prueba[$i]['Particion_Secundaria_Cierre'];?></td>
                                 <td style="text-align:center"><?php echo $prueba[$i]['Particion_Principal_Cierre'];?></td>
+                                <td style="text-align:center"><?php echo $prueba[$i]['Observaciones'];?></td>
                             </tr>
                         <?php } ?>
                     </tbody>

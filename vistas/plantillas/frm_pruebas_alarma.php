@@ -43,6 +43,7 @@
                     }
                 }
             }
+            
             function agregar_persona_prueba(id,cedula, nombre, depart, id_empresa){
                 //alert (depart);
                 var variable= <?php echo $_SESSION['modulos']['Editar- Pruebas de Alarma']?>;
