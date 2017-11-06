@@ -44,9 +44,8 @@
                         <tbody>
                             <?php 
                             $tam=count($params);
-                            for ($i = 0; $i <$tam; $i++) {
-                                $estado=0;
-                                ?>
+                            for ($i = 0; $i <$tam; $i++){
+                                $estado=0; ?>
                                 <tr>
                                     <td><?php echo $params[$i]['ID_Modulo'];?></td>
                                     <td><?php echo $params[$i]['Descripcion'];?></td>
@@ -63,7 +62,7 @@
                                         </td>  
                                     <?php } else { ?>
                                         <td>
-                                            <label class="checkbox-inline"><input type="checkbox" accept=""name="lista[]" checked value="<?php echo $params[$i]['ID_Modulo'];?>" ></label>
+                                            <label class="checkbox-inline"><input type="checkbox" accept="" name="lista[]" checked value="<?php echo $params[$i]['ID_Modulo'];?>" ></label>
                                         </td> 
                                     <?php } ?>
                                 </tr>

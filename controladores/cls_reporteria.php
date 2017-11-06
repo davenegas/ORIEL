@@ -163,6 +163,7 @@ class cls_reporteria{
                 MAX(IF(t.ID_Tipo_IP=2,d.Direccion_IP,null))AS 'Video',
                 MAX(IF(t.ID_Tipo_IP=3,d.Direccion_IP,null))AS 'Alarma',
                 MAX(IF(t.ID_Tipo_IP=4,d.Direccion_IP,null))AS 'Control_Acceso',
+                MAX(IF(t.ID_Tipo_IP=5,d.Direccion_IP,null))AS 'Transaccional',
                 MAX(IF(t.ID_Tipo_IP=6,d.Direccion_IP,null))AS 'Mascara'", 
             "p.Estado=1 GROUP By p.Nombre");
         $this->arreglo=$this->obj_data_provider->getArreglo();

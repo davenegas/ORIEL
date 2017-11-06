@@ -89,7 +89,10 @@ require_once __DIR__ . '/controladores/cls_cencon.php';
 require_once __DIR__ . '/controladores/cls_prueba_alarma.php';
 //Libreria de clases --> Control para sistemad de reportes
 require_once __DIR__ . '/controladores/cls_reporteria.php';
+//
 require_once __DIR__ . '/controladores/cls_control_acceso.php';
+//
+require_once __DIR__ . '/controladores/cls_programacion.php';
 /*
  * El elemento controller, constituye la base y esencia de toda la lógica del negocio, en este
  * se almacenan cada una de las funcionales de ORIEl. El archivo en sí, se compone de "n" cantidad
@@ -154,6 +157,8 @@ $map = array(
     'reporte_inconsistencias_pruebas'=>array('controller'=>'Controller', 'action'=>'reporte_inconsistencias_pruebas'),
     'enlace_reporte'=>array('controller'=>'Controller', 'action'=>'enlace_reporte'),
     'reporte_tl300_en_puntos_bcr_listar'=>array('controller'=>'Controller', 'action'=>'reporte_tl300_en_puntos_bcr_listar'),
+    'reporte_eventos_bitacora_digital'=>  array('controller'=>'Controller','action'=>  'reporte_eventos_bitacora_digital'),
+    'actualiza_en_vivo_reporte_eventos'=>  array('controller'=>'Controller','action'=>  'actualiza_en_vivo_reporte_eventos'),
     
     //Información pública
     'personal_listar_publico'=>array('controller'=>'Controller', 'action'=>'personal_listar_publico'),
@@ -394,6 +399,9 @@ $map = array(
     'actualizar_modulo_puerta_paso_2'=>array('controller'=>'Controller','action'=> 'actualizar_modulo_puerta_paso_2'),
         //Accesos programados
     'programacion_accesos'=>array('controller'=>'Controller','action'=> 'programacion_accesos'),
+    'programacion_guardar'=>array('controller'=>'Controller','action'=> 'programacion_guardar'),
+    'actualiza_en_vivo_reporte_programaciones'=>array('controller'=>'Controller','action'=> 'actualiza_en_vivo_reporte_programaciones'),
+    'dibuja_tabla_modulos_programados'=>array('controller'=>'Controller','action'=> 'dibuja_tabla_modulos_programados'),
     
     //Controlador de Personal Externo
     'personal_externo_listar'=>array('controller'=>'Controller','action'=> 'personal_externo_listar'), 

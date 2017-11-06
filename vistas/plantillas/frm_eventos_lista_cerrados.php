@@ -49,7 +49,7 @@
                 //location.reload(true);
             }
             
-             //Funcion para editar notas de supervisión
+            //Funcion para editar notas de supervisión
             function mostrar_resumen_de_seguimientos(prueb) {
                 //var mydiv= document.getElementById('tabla_seguimientos');
                 //mydiv.appendChild(document.getElementById("tbl"+prueb));
@@ -214,7 +214,7 @@
             </div>
 
         </div>
-         <!--Ver seguimiento evento- Ventana oculta-->
+        <!--Ver seguimiento evento- Ventana oculta-->
         <div id="ventana_oculta_3"> 
             <div id="popupventana2" class="animated zoomIn">
                 <!--Formulario para direccionamiento de las ip-->

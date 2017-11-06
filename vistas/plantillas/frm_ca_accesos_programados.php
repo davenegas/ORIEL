@@ -5,48 +5,54 @@
         <title>Accesos programados</title>
         <?php require_once 'frm_librerias_head.html';?>
         <script language="javascript" src="vistas/js/valida_un_solo_click_en_formulario.js"></script>  
+        <script language="javascript" src="vistas/js/lista_dependientes_programacion.js?0.2.1"></script>
+        <link rel="stylesheet" href="vistas/css/ventanaoculta.css"> 
     </head>
     <body>
         <?php require_once 'encabezado.php';?>
         <div class="container animated fadeIn">
-            <h1>Programaciones: Acceso-Alarma-CCTV</h1>
-            <!--Seleccionar archivo para actualizar controladore automaticamente-->
-            <div class="espacio-abajo-10 well">
-                <!--<h3>Seleccionar Archivo para actualizar controladores:</h3>-->
-                <form class="form-horizontal" role="form" enctype="multipart/form-data" onSubmit="return enviado()" method="POST" action="index.php?ctl=">
-                    <div class="row">
-                        <div class="col-md-4 espacio-abajo">
-                            <label for="fecha">Fecha</label>
-                            <input type="date" required="required" class="form-control" id="fecha" name="fecha" value="<?php echo date("Y-m-d");?>">
+            <!--<pre><?php print_r($params);?></pre>-->
+            <h2>Programaciones: Acceso-Alarma-CCTV</h2>
+            <div class="espacio-abajo-6 well">
+                <form class="form-horizontal" id="nueva_programacion" method="POST" enctype="multipart/form-data" action="index.php?ctl=programacion_guardar">
+                    <div class="row espacio-abajo">
+                        <div class="col-md-4">
+                            <label for="Fecha">Fecha</label>
+                            <input type="date" required class="form-control" id="Fecha" name="Fecha" value="<?php echo date("Y-m-d");?>">
                         </div>
-                        <div class="col-md-4 espacio-abajo">
-                            <label for="hora">Hora</label>
-                            <input type="time" required="required" class="form-control" id="hora" name="hora" value="<?php echo date("H:i", time());?>">
+                        <div class="col-md-4">
+                            <label for="Hora">Hora</label>
+                            <input type="time" required class="form-control" id="Hora" name="Hora" value="<?php echo date("H:i", time());?>">
                         </div>
-                        <div class="col-md-4 espacio-abajo">
+                        <div class="col-md-4">
                             <label for="usuario">Usuario</label>
                             <input type="text" hidden id="ID_Usuario" name="ID_Usuario" value="<?php echo $_SESSION['id'];?>">
                             <input type="text" required="required" class="form-control" id="usuario" name="usuario" value="<?php echo $_SESSION['name'].' '.$_SESSION['apellido'];?>">
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-md-4 espacio-abajo">
-                            <label for="solicitante">Funcionario que solicita</label>
-                            <input type="text" required="required" class="form-control" id="solicitante" name="solicitante">
+                    <div class="row espacio-abajo">
+                        <div class="col-md-4">
+                            <label for="solicitante">Persona al que se programa</label>
+                            <input type="text" hidden id="ID_Persona" name="ID_Persona">
+                            <input type="text" hidden id="ID_Empresa" name="ID_Empresa">
+                            <input type="text" required class="form-control" id="solicitante" name="solicitante" onclick="buscar_persona();">
                         </div>
-                        <div class="col-md-4 espacio-abajo">
+                        <div class="col-md-4">
                             <label for="autoriza">Funcionario que autoriza</label>
-                            <input type="text" required="required" class="form-control" id="autoriza" name="autoriza">
+                            <input type="text" hidden id="ID_Persona_Autoriza" name="ID_Persona_Autoriza">
+                            <input type="text" required class="form-control" id="autoriza" name="autoriza" onclick="buscar_persona();">
                         </div>
-                        <div class="col-md-4 espacio-abajo">
-                            <label for="unidad_ejecutora">Unidad Ejecutora del solicitante</label>
-                            <input type="text" required="required" class="form-control" id="unidad_ejecutora" name="unidad_ejecutora">
+                        <div class="col-md-4">
+                            <label for="unidad_ejecutora">Unidad Ejecutora del funcionario</label>
+                            <input type="text" hidden id="ID_Unidad_Ejecutora" name="ID_Unidad_Ejecutora" value="0">
+                            <input type="text" class="form-control" id="unidad_ejecutora" name="unidad_ejecutora">
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-md-4 espacio-abajo">
+                    <div class="row espacio-abajo">
+                        <div class="col-md-4">
                             <label for="tipo_solicitud">Tipo de Solicitud</label>
-                            <select class="form-control" id="confirmacion" name="confirmacion" > 
+                            <select class="form-control" id="tipo_solicitud" name="tipo_solicitud"> 
+                                <option value="0"></option>
                                 <option value="Activar gafete">Activar gafete</option>
                                 <option value="Desactivar gafete">Desactivar gafete</option>
                                 <option value="Agregar areas">Agregar áreas</option>
@@ -56,47 +62,242 @@
                                 <option value="Horario especial">Horario especial</option>
                                 <option value="Modificar horario">Modificar horario</option>
                                 <option value="Modificar Continuum">Modificar Continuum</option>
-                                <option value="">Activar carnet</option>
+                                <option value="Agregar alarma">Agregar clave alarma</option>
+                                <option value="Agregar video">Agregar acceso Rapid-Eye</option>
                             </select>
                         </div>
-                        <div class="col-md-4 espacio-abajo">
-                            <label for="gafete">Número de gafete</label>
-                            <input type="text" required="required" class="form-control" id="gafete" name="gafete">
-                        </div>
-                        <div class="col-md-4 espacio-abajo">
+                        <div class="col-md-4">
                             <label for="fecha_vencimiento">Fecha de vencimiento de la solicitud</label>
                             <input type="date" required class="form-control" id="fecha_vencimiento" name="fecha_vencimiento"  value="<?php echo date("Y-m-d");?>">
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-4 espacio-abajo">
-                            <label for="detalle">Detalle</label>
-                            <input type="text" required="required" class="form-control" id="detalle" name="detalle">
-                        </div>
-                        <div class="col-md-4 espacio-abajo">
-                            <label for="confirmacion">Confirmación</label>
+                        <div class="col-md-4">
+                            <label for="confirmacion">Estado</label>
                             <select class="form-control" id="confirmacion" name="confirmacion" > 
                                 <option value="Pendiente">Pendiente</option>
                                 <option value="Confirmado">Confirmado</option>
                             </select>
                         </div>
-                        <div class="col-md-4 espacio-abajo">
+                    </div>
+                    <div class="row espacio-abajo">
+                        <div class="col-md-8">
+                            <label for="Detalle">Detalle u observaciones</label>
+                            <input type="text" class="form-control" id="Detalle" name="Detalle">
+                        </div>
+                        <div class="col-md-4">
                             <label for="archivo_adjunto">Adjuntar Archivo</label>
                             <input type="hidden" name="MAX_FILE_SIZE" value="1000000">
                             <input type="file" name="archivo_adjunto" id="seleccionar_archivo" class="btn btn-default">
                         </div> 
                     </div>
-                    <div class="row">
-                        <div class="col-md-4 espacio-abajo">
+                    <div class="row espacio-abajo">
+                        <div class="col-md-4">
                             <label for="detalle">Seleccionar areas asignadas/eliminadas</label>
-                            <input type="text" required="required" class="form-control" id="detalle" name="detalle">
+                            <input type="text" class="form-control" onclick="seleccionar_modulos();" id="detalle" name="detalle">
+                        </div>
+                        <div class="col-md-4">
+                            <label for="gafete">Número de gafete</label>
+                            <input type="text" class="form-control" id="gafete" name="gafete">
+                        </div>
+                        <div class="col-md-4">
+                            <label for="puntobcr">Oficina</label>
+                            <input type="text" class="form-control" id="puntobcr" name="puntobcr">
                         </div>
                     </div>
-                    <button class="btn btn-default"><a href="javascript:%20validar_enlace()" id="submit">Guardar</a></button>
+                    <div id="ventana_oculta_2">
+                        <div id="popupventana2">
+                            <div id="ventana2">
+                                <img id="close" src='vistas/Imagenes/cerrar.png' width="25" onclick ="ocultar_elemento()"> 
+                                <h2>Listado de Módulos controlados</h2>
+                                <table class="tabla_modulo" border="1" id="tabla_modulo">
+                                    <thead>
+                                        <tr>
+                                            <!--<th>Owner</th>-->
+                                            <th>Name</th>
+                                            <th>IOU</th>
+                                            <th>Estado</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php 
+                                        $tam=count($modulos);
+                                        for ($i = 0; $i <$tam; $i++){?>
+                                            <tr>
+                                                <!--<td><?php echo $modulos[$i]['Owner'];?></td>-->
+                                                <td><?php echo $modulos[$i]['Name'];?></td>
+                                                <td><?php echo $modulos[$i]['IOU'];?></td>
+                                                <td><input type="checkbox" 
+                                                    name="lista[]" value="<?php echo $modulos[$i]['ID_Modulo_Puerta_Controlada'];?>">
+                                                </td> 
+                                            </tr>
+                                        <?php } ?>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="btn btn-default"><a href="javascript:%20validar_programacion()" >Guardar</a></button>
                     <a href="index.php?ctl=principal" class="btn btn-default" role="button">Salir</a> 
                 </form>
             </div>
+            <div class="espacio-abajo-6">
+                <h3 class="icon-caret-right" data-toggle="collapse" data-target="#reporte_programaciones">Lista de programaciones</h3>
+                <div id="reporte_programaciones" class="collapse">
+                    <div class="row espacio-abajo">
+                        <h4 class="espacio-arriba">Seleccionar parámetros del filtro:</h4>
+                        <div class="col-xs-2">
+                            <label for="fecha_inicial_reporte">Fecha Inicial:</label>
+                            <input type="date" required=”required” class="form-control" id="fecha_inicial_reporte" name="fecha_inicial_reporte" value="<?php echo date("Y-m-d");?>">
+                        </div> 
+                        <div class="col-xs-2">
+                            <label for="fecha_final_reporte">Fecha Final:</label>
+                            <input type="date" required=”required” class="form-control" id="fecha_final_reporte" name="fecha_final_reporte" value="<?php echo date("Y-m-d");?>">
+                        </div>
+                        <div class="col-xs-3">
+                            <label for="tipo_solicitud_reporte">Tipo de Solicitud</label>
+                            <select class="form-control" id="tipo_solicitud_reporte" name="tipo_solicitud_reporte"> 
+                                <option value="0">Todas</option>
+                                <option value="Activar gafete">Activar gafete</option>
+                                <option value="Desactivar gafete">Desactivar gafete</option>
+                                <option value="Agregar areas">Agregar áreas</option>
+                                <option value="Eliminar areas">Eliminar áreas</option>
+                                <option value="Ampliar fecha">Ampliar fecha</option>
+                                <option value="Reporte">Reporte</option>
+                                <option value="Horario especial">Horario especial</option>
+                                <option value="Modificar horario">Modificar horario</option>
+                                <option value="Modificar Continuum">Modificar Continuum</option>
+                                <option value="Agregar alarma">Agregar clave alarma</option>
+                                <option value="Agregar video">Agregar acceso Rapid-Eye</option>
+                            </select>
+                        </div>
+                        <a class="btn btn-default espacio-arriba" role="button" id="prueba" name="prueba" onclick="generar_reporte()">Generar Reporte</a>
+                    </div>
+                    <div class="row espacio-abajo">
+                        <table id="tabla3" class="display" cellspacing="0" width="100%">
+                            <thead>
+                                <tr>
+                                    <th style="text-align:center">Fecha</th>
+                                    <th style="text-align:center">Hora</th>
+                                    <th style="text-align:center">Usuario</th>
+                                    <th style="text-align:center">Persona</th>
+                                    <th style="text-align:center">Autoriza</th>
+                                    <th style="text-align:center">Tipo solicitud</th>
+                                    <th style="text-align:center">Fecha vencimiento</th>
+                                    <th style="text-align:center">Detalle</th>
+                                    <th style="text-align:center">Estado</th>
+                                    <th style="text-align:center">Adjunto</th>
+                                    <th style="text-align:center">Gafete</th>
+                                    <th style="text-align:center">Módulos</th>
+                                </tr>
+                            </thead>  
+                            <tbody id="cuerpo_tabla"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
         </div>
         <?php require 'vistas/plantillas/pie_de_pagina.php'?>
+        
+        <!--Asignar Persona para programar y autorizar -->
+        <div id="ventana_oculta_1">
+            <div id="popupventana2">
+                <div id="ventana2">
+                    <img id="close" src='vistas/Imagenes/cerrar.png' width="25" onclick ="ocultar_elemento()"> 
+                    <!--Tabla con la lista de Unidades Ejecutoras-->
+                    <h4>Lista de Personal</h4>
+                    <br>
+                    <table id="tabla2" class="display espacio-arriba borde-gris" cellspacing="0" width="100%">
+                        <thead>
+                            <tr>
+                                <th style="text-align:center">Cedula</th>
+                                <th style="text-align:center">Apellidos Nombre</th>
+                                <th style="text-align:center">Departamento</th>
+                                <th style="text-align:center">Opciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php 
+                            $tam=count($params);
+                            for ($i = 0; $i <$tam; $i++) { ?>  
+                                <tr>
+                                    <td style="text-align:center"><?php echo $params[$i]['Cedula'];?></td>
+                                    <td style="text-align:center"><?php echo $params[$i]['Apellido_Nombre'];?></td>
+                                    <td style="text-align:center"><?php echo $params[$i]['Empresa'];?></td>
+                                    <td style="text-align:center">
+                                        <a class="btn" role="button" onclick="agregar_persona(<?php echo $params[$i]['ID_Persona'];?>,'<?php echo $params[$i]['Cedula'];?>',
+                                        '<?php echo $params[$i]['Apellido_Nombre'];?>','<?php echo $params[$i]['Empresa'];?>',<?php echo $params[$i]['ID_Empresa'];?>);">
+                                            Personal solicitud</a>
+                                        <?php if(isset($params[$i]['Departamento'])){?>
+                                            <a class="btn" role="button" onclick="agregar_persona_autoriza(<?php echo $params[$i]['ID_Persona'];?>,'<?php echo $params[$i]['Cedula'];?>',
+                                            '<?php echo $params[$i]['Apellido_Nombre'];?>','<?php echo $params[$i]['Departamento'];?>',<?php echo $params[$i]['ID_Empresa'];?>,'<?php echo $params[$i]['ID_Unidad_Ejecutora'];?>');">
+                                                Autoriza solicitud</a>
+                                        <?php } ?>
+                                    </td>
+                                </tr>
+                            <?php } ?>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        <!--Cierre Asignar Personal-->
+        </div>
+        
+        <!--Lista de módulos programados -->
+        <div id="ventana_oculta_3">
+            <div id="popupventana">
+                <div id="ventana">
+                    <img id="close" src='vistas/Imagenes/cerrar.png' width="25" onclick ="ocultar_elemento()"> 
+                    <!--Tabla con la lista de Unidades Ejecutoras-->
+                    <h4>Lista de módulos programados</h4>
+                    <br>
+                    <table id="tabla_modulos" border="1" cellspacing="0" width="100%">
+                    </table>
+                </div>
+            </div>
+        <!--Cierre Asignar Personal-->
+        </div>
+        
+        <!---->
+        <div id="ventana_oculta_1">
+            <div id="popupventana2">
+                <div id="ventana2">
+                    <img id="close" src='vistas/Imagenes/cerrar.png' width="25" onclick ="ocultar_elemento()"> 
+                    <!--Tabla con la lista de Unidades Ejecutoras-->
+                    <h4>Lista de Personal</h4>
+                    <br>
+                    <table id="tabla2" class="display espacio-arriba borde-gris" cellspacing="0" width="100%">
+                        <thead>
+                            <tr>
+                                <th style="text-align:center">Cedula</th>
+                                <th style="text-align:center">Apellidos Nombre</th>
+                                <th style="text-align:center">Departamento</th>
+                                <th style="text-align:center">Opciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php 
+                            $tam=count($params);
+                            for ($i = 0; $i <$tam; $i++) { ?>  
+                                <tr>
+                                    <td style="text-align:center"><?php echo $params[$i]['Cedula'];?></td>
+                                    <td style="text-align:center"><?php echo $params[$i]['Apellido_Nombre'];?></td>
+                                    <td style="text-align:center"><?php echo $params[$i]['Empresa'];?></td>
+                                    <td style="text-align:center">
+                                        <a class="btn" role="button" onclick="agregar_persona(<?php echo $params[$i]['ID_Persona'];?>,'<?php echo $params[$i]['Cedula'];?>',
+                                        '<?php echo $params[$i]['Apellido_Nombre'];?>','<?php echo $params[$i]['Empresa'];?>',<?php echo $params[$i]['ID_Empresa'];?>);">
+                                            Personal solicitud</a>
+                                        <?php if(isset($params[$i]['Departamento'])){?>
+                                            <a class="btn" role="button" onclick="agregar_persona_autoriza(<?php echo $params[$i]['ID_Persona'];?>,'<?php echo $params[$i]['Cedula'];?>',
+                                            '<?php echo $params[$i]['Apellido_Nombre'];?>','<?php echo $params[$i]['Departamento'];?>',<?php echo $params[$i]['ID_Empresa'];?>,'<?php echo $params[$i]['ID_Unidad_Ejecutora'];?>');">
+                                                Autoriza solicitud</a>
+                                        <?php } ?>
+                                    </td>
+                                </tr>
+                            <?php } ?>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        <!--Cierre Asignar Personal-->
+        </div>
     </body>
 </html>

@@ -4,7 +4,7 @@
         <meta charset="UTF-8">
         <title>Pruebas Alarma</title>
         <script language="javascript" src="vistas/js/jquery.js"></script>
-        <script language="javascript" src="vistas/js/listas_dependientes_pruebas.js?1.2"></script>
+        <script language="javascript" src="vistas/js/listas_dependientes_pruebas.js?1.2.4"></script>
         <link rel="stylesheet" href="vistas/css/ventanaoculta.css"> 
         <?php require_once 'frm_librerias_head.html'; ?>
         <script>
@@ -104,100 +104,108 @@
                     <input type="text" hidden id="tipo_punto" name="tipo_punto">
                     <input type="time" hidden id="Hora_Apertura_Agencia" name="Hora_Apertura_Agencia">
                     <input type="time" hidden id="Hora_Cierre_Agencia" name="Hora_Cierre_Agencia">
-                    
-                    <div class="col-sm-4 espacio-abajo-5">
-                        <label for="numero_punto" id="codigo_agencia">Código de agencia</label>
-                        <input type="text" class="form-control" style="color: mediumblue"id="numero_punto" name="numero_punto" onblur="evento_buscar_puntobcr();" onfocus="borrar_datos();" onkeydown="if(event.keyCode==13)evento_buscar_puntobcr();" placeholder="Digite el código de la agencia">
+                    <div class="row espacio-abajo">
+                        <div class="col-sm-4">
+                            <label for="numero_punto" id="codigo_agencia">Código de agencia</label>
+                            <input type="text" class="form-control" style="color: mediumblue"id="numero_punto" name="numero_punto" onblur="evento_buscar_puntobcr();" onfocus="borrar_datos();" onkeydown="if(event.keyCode==13)evento_buscar_puntobcr();" placeholder="Digite el código de la agencia">
+                        </div>
+                        <div class="col-sm-4">
+                            <label for="nombre_punto">Nombre de la agencia</label>
+                            <input type="text" class="form-control" disabled id="nombre_punto" name="nombre_punto" placeholder="">
+                        </div>
+                        <div class="col-sm-2">
+                            <label for="tipo_punto">Apertura público</label>
+                            <input type="time" class="form-control" disabled id="Hora_Apertura_Publico" name="Hora_Apertura_Publico">
+                        </div>
+                        <div class="col-sm-2">
+                            <label for="tipo_punto">Cierre público</label>
+                            <input type="time" class="form-control" disabled id="Hora_Cierre_Publico" name="Hora_Cierre_Publico">
+                        </div>
                     </div>
-                    <div class="col-sm-4 espacio-abajo-5">
-                        <label for="nombre_punto">Nombre de la agencia</label>
-                        <input type="text" class="form-control" disabled id="nombre_punto" name="nombre_punto" placeholder="">
+                    <div class="row espacio-abajo">
+                        <div class="col-sm-4">
+                            <label for="nombre_persona_prueba">Persona reporta prueba alarma</label>
+                            <input type="text" class="form-control" id="nombre_persona_prueba" readonly onclick="buscar_persona_prueba();" name="nombre_persona" placeholder="Click para buscar la persona" title="Usuario no Disponible">
+                        </div>
+                        <div class="col-sm-4">
+                            <label for="empresa_persona">Empresa de la persona</label>
+                            <input type="text" class="form-control" disabled id="empresa_persona" name="empresa_persona" placeholder="">
+                        </div>
+                        <div class="col-sm-2">
+                            <label for="tipo_prueba">Tipo Prueba</label>
+                            <select class="form-control" id="tipo_prueba" name="tipo_prueba" onchange="guardar_registro_prueba('Tipo_Prueba');">
+                                <option value="Pánico">Pánico</option>
+                                <option value="Intrusion">Intrusión</option>
+                                <option value="Fuego">Fuego</option>
+                            </select>
+                        </div>
+                        <div class="col-sm-2">
+                            <label for="revision_atm">Revisión cajero</label>
+                            <select class="form-control" id="revision_atm" name="revision_atm" onchange="guardar_registro_prueba('Tipo_Prueba');">
+                                <option value="NO">No</option>
+                                <option value="SI">Si</option>
+                                <option value="NA">NA</option>
+                            </select>
+                        </div>
                     </div>
-                    <div class="col-sm-2 espacio-abajo-5">
-                        <label for="tipo_punto">Apertura público</label>
-                        <input type="time" class="form-control" disabled id="Hora_Apertura_Publico" name="Hora_Apertura_Publico">
+                    <div class="row espacio-abajo">
+                        <div class="col-sm-4">
+                            <label for="hora_apertura">Hora apertura agencia SIS</label>
+                            <input type="time"  class="form-control" id="hora_apertura" name="hora_apertura" value="" onblur="guardar_apertura();" title="Usuario no Disponible">
+                        </div>
+                        <div class="col-sm-4">
+                            <label for="hora_prueba">Hora prueba de alarma</label>
+                            <input type="time"  class="form-control" id="hora_prueba" name="hora_prueba" value="" onblur="guardar_prueba_alarma();">
+                        </div>
+                        <div class="col-sm-4">
+                            <label for="zona_prueba">Número de zona prueba</label>
+                            <input type="number" class="form-control" id="zona_prueba" name="zona_prueba" onchange="guardar_prueba_alarma();">
+                        </div>
                     </div>
-                    <div class="col-sm-2 espacio-abajo-5">
-                        <label for="tipo_punto">Cierre público</label>
-                        <input type="time" class="form-control" disabled id="Hora_Cierre_Publico" name="Hora_Cierre_Publico">
+                    <div class="row espacio-abajo">
+                        <div class="col-sm-4">
+                            <label for="nombre_persona_cierre">Persona consulta cierre alarma</label>
+                            <input type="text" class="form-control" id="nombre_persona_cierre" readonly onchange="buscar_persona_prueba();" onclick="buscar_persona_prueba();" name="nombre_persona_cierre" placeholder="Click para buscar la persona" title="Usuario no Disponible">
+                        </div>
+                        <div class="col-sm-4">
+                            <label for="cuentas_secundarias">Cierre cuenta(s) secundaria(s)</label>
+                            <select class="form-control" id="cuentas_secundarias" name="cuentas_secundarias" onchange="guarda_reporte_cuenta();">
+                                <option value=""></option>
+                                <option value="Se confirman los cierres">Se confirman los cierres</option>
+                                <option value="Partición(es) abierta(s)">Partición(es) abierta(s)</option>
+                            </select>
+                        </div>
+                        <div class="col-sm-4">
+                            <label for="cuenta_principal">Cierre cuenta principal</label>
+                            <select class="form-control" id="cuenta_principal" name="cuenta_principal" onchange="guarda_reporte_cuenta();">
+                                <option value=""></option>
+                                <option value="Se confirma el cierre">Se confirma el cierre</option>
+                                <option value="Partición abierta">Partición abierta</option>
+                            </select>
+                        </div>
                     </div>
-                    <div class="col-sm-4 espacio-abajo">
-                        <label for="nombre_persona_prueba">Persona reporta prueba alarma</label>
-                        <input type="text" class="form-control" id="nombre_persona_prueba" readonly onclick="buscar_persona_prueba();" name="nombre_persona" placeholder="Click para buscar la persona" title="Usuario no Disponible">
-                    </div>
-                    <div class="col-sm-4 espacio-abajo">
-                        <label for="empresa_persona">Empresa de la persona</label>
-                        <input type="text" class="form-control" disabled id="empresa_persona" name="empresa_persona" placeholder="">
-                    </div>
-                    <div class="col-sm-2 espacio-abajo">
-                        <label for="tipo_prueba">Tipo Prueba</label>
-                        <select class="form-control" id="tipo_prueba" name="tipo_prueba" onchange="guardar_registro_prueba('Tipo_Prueba');">
-                            <option value="Pánico">Pánico</option>
-                            <option value="Intrusion">Intrusión</option>
-                            <option value="Fuego">Fuego</option>
-                        </select>
-                    </div>
-                    <div class="col-sm-2 espacio-abajo">
-                        <label for="revision_atm">Revisión cajero</label>
-                        <select class="form-control" id="revision_atm" name="revision_atm" onchange="guardar_registro_prueba('Tipo_Prueba');">
-                            <option value="NO">No</option>
-                            <option value="SI">Si</option>
-                            <option value="NA">NA</option>
-                        </select>
-                    </div>
-                    <div class="col-sm-4 espacio-abajo">
-                        <label for="hora_apertura">Hora apertura agencia SIS</label>
-                        <input type="time"  class="form-control" id="hora_apertura" name="hora_apertura" value="" onblur="guardar_apertura();" title="Usuario no Disponible">
-                    </div>
-                    <div class="col-sm-4 espacio-abajo">
-                        <label for="hora_prueba">Hora prueba de alarma</label>
-                        <input type="time"  class="form-control" id="hora_prueba" name="hora_prueba" value="" onblur="guardar_prueba_alarma();">
-                    </div>
-                    <div class="col-sm-4 espacio-abajo">
-                        <label for="zona_prueba">Número de zona prueba</label>
-                        <input type="number" class="form-control" id="zona_prueba" name="zona_prueba" onchange="guardar_prueba_alarma();">
-                    </div>
-                    <div class="col-sm-4 espacio-abajo-5">
-                        <label for="nombre_persona_cierre">Persona consulta cierre alarma</label>
-                        <input type="text" class="form-control" id="nombre_persona_cierre" readonly onchange="buscar_persona_prueba();" onclick="buscar_persona_prueba();" name="nombre_persona_cierre" placeholder="Click para buscar la persona" title="Usuario no Disponible">
-                    </div>
-                    <div class="col-sm-4 espacio-abajo-5">
-                        <label for="cuentas_secundarias">Cierre cuenta(s) secundaria(s)</label>
-                        <select class="form-control" id="cuentas_secundarias" name="cuentas_secundarias" onchange="guarda_reporte_cuenta();">
-                            <option value=""></option>
-                            <option value="Se confirman los cierres">Se confirman los cierres</option>
-                            <option value="Partición(es) abierta(s)">Partición(es) abierta(s)</option>
-                        </select>
-                    </div>
-                    <div class="col-sm-4 espacio-abajo-5">
-                        <label for="cuenta_principal">Cierre cuenta principal</label>
-                        <select class="form-control" id="cuenta_principal" name="cuenta_principal" onchange="guarda_reporte_cuenta();">
-                            <option value=""></option>
-                            <option value="Se confirma el cierre">Se confirma el cierre</option>
-                            <option value="Partición abierta">Partición abierta</option>
-                        </select>
-                    </div>
-                    <div class="col-sm-4 espacio-abajo-5">
-                        <label for="hora_cierre">Hora cierre agencia SIS</label>
-                        <input type="time"  class="form-control" id="hora_cierre" name="hora_cierre" onblur="guardar_cierre();" title="Usuario no Disponible">
-                    </div>
-                    <div class="col-sm-4 espacio-abajo-5">
-                        <label for="seguimiento">Seguimiento</label>
-                        <select class="form-control" id="seguimiento" name="seguimiento" onchange="guarda_seguimiento();">
-                            <option value="0"></option>
-                            <option value="Se solicitó la prueba">Se solicitó la prueba</option>
-                            <option value="Oficina en Asueto">Oficina en Asueto</option>
-                            <option value="Oficina con trabajos">Oficina con Trabajos</option>
-                            <option value="Alarma abierta 24 horas">Alarma abierta 24 horas</option>
-                            <option value="Falla de alarma">Falla de alarma</option>
-                        </select>
-                    </div>  
-                    <div class="col-md-4 espacio-abajo-5">
-                        <label for="observaciones">Observaciones</label>
-                        <input type="text"  class="form-control" id="observaciones" name="observaciones" onchange="guardar_observaciones();" placeholder="Observaciones o comentarios de la prueba de alarma">
+                    <div class="row espacio-abajo">
+                        <div class="col-sm-4">
+                            <label for="hora_cierre">Hora cierre agencia SIS</label>
+                            <input type="time"  class="form-control" id="hora_cierre" name="hora_cierre" onblur="guardar_cierre();" title="Usuario no Disponible">
+                        </div>
+                        <div class="col-sm-4">
+                            <label for="seguimiento">Seguimiento</label>
+                            <select class="form-control" id="seguimiento" name="seguimiento" onchange="guarda_seguimiento();">
+                                <option value="0"></option>
+                                <option value="Se solicitó la prueba">Se solicitó la prueba</option>
+                                <option value="Oficina en Asueto">Oficina en Asueto</option>
+                                <option value="Oficina con trabajos">Oficina con Trabajos</option>
+                                <option value="Alarma abierta 24 horas">Alarma abierta 24 horas</option>
+                                <option value="Falla de alarma">Falla de alarma</option>
+                            </select>
+                        </div>  
+                        <div class="col-md-4">
+                            <label for="observaciones">Observaciones</label>
+                            <input type="text"  class="form-control" id="observaciones" name="observaciones" onchange="guardar_observaciones();" placeholder="Observaciones o comentarios de la prueba de alarma">
+                        </div>
                     </div>
                 </div>
-
                 <div class="col-sm-3 sidenav">
                     <?php if(isset($datos['pruebas_pendientes'])){?>
                         <div class="well" align="left">

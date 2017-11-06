@@ -253,11 +253,11 @@ class cls_control_acceso {
     public function obtener_puertas_controladas_completos(){
        $this->obj_data_provider->conectar();
         if($this->condicion==""){
-            $this->arreglo=$this->obj_data_provider->trae_datos("T_Puerta_Controlada", 
+            $this->arreglo=$this->obj_data_provider->trae_datos("T_PuertaControlada", 
                 "*", 
                 "");
         }else{
-            $this->arreglo=$this->obj_data_provider->trae_datos("T_Puerta_Controlada", 
+            $this->arreglo=$this->obj_data_provider->trae_datos("T_PuertaControlada", 
                 "*",
                 $this->condicion);
         }
@@ -267,32 +267,32 @@ class cls_control_acceso {
     }
     
     function edicion_de_puerta_a_transaccion(){
-        $this->obj_data_provider->agregar_edicion_de_datos_a_la_transaccion("T_Puerta_Controlada",
+        $this->obj_data_provider->agregar_edicion_de_datos_a_la_transaccion("T_PuertaControlada",
             "Owner='".$this->owner."',Name='".$this->name."',State='".$this->state.
             "',DoorSwitch='".$this->doorswitch."',value='".$this->value."',Estado='".$this->estado."'",
             $this->condicion);
     }
      
     function agregar_puerta_a_transaccion(){
-        $this->obj_data_provider->agregar_inclusion_de_datos_a_la_transaccion("T_Puerta_Controlada", 
+        $this->obj_data_provider->agregar_inclusion_de_datos_a_la_transaccion("T_PuertaControlada", 
             "ID_Puerta_Controlada, Owner, Name, State, DoorSwitch, value, Estado", 
             "'".$this->id."','".$this->owner."','".$this->name."','".$this->state."','".$this->doorswitch."','".$this->value."','".$this->estado."'");
     }
     
     function editar_estado_puerta_a_transaccion(){
-        $this->obj_data_provider->agregar_edicion_de_datos_a_la_transaccion("T_Puerta_Controlada","Estado='".$this->estado."'",$this->condicion);
+        $this->obj_data_provider->agregar_edicion_de_datos_a_la_transaccion("T_PuertaControlada","Estado='".$this->estado."'",$this->condicion);
     }
     ///////////////////// FUNCIONES PARA MODULOS CONTROLADOS////////////////////
     public function obtener_modulos_controlados_completos(){
         $this->obj_data_provider->conectar();
         if($this->condicion==""){
-            $this->arreglo=$this->obj_data_provider->trae_datos("T_Modulo_Puerta_Controlada", 
+            $this->arreglo=$this->obj_data_provider->trae_datos("T_ModuloPuertaControlada order by Name", 
                 "*", 
                 "");
         }else{
-            $this->arreglo=$this->obj_data_provider->trae_datos("T_Modulo_Puerta_Controlada", 
+            $this->arreglo=$this->obj_data_provider->trae_datos("T_ModuloPuertaControlada", 
                 "*",
-                $this->condicion);
+                $this->condicion. "order by Name");
         }
         $this->arreglo=$this->obj_data_provider->getArreglo();
         $this->obj_data_provider->desconectar();
@@ -300,20 +300,20 @@ class cls_control_acceso {
     }
     
     function edicion_de_modulo_a_transaccion(){
-        $this->obj_data_provider->agregar_edicion_de_datos_a_la_transaccion("T_Modulo_Puerta_Controlada",
+        $this->obj_data_provider->agregar_edicion_de_datos_a_la_transaccion("T_ModuloPuertaControlada",
             "Owner='".$this->owner."',Name='".$this->name."',IOU='".$this->iou.
             "',ModuloID='".$this->moduloid."',CommStatus='".$this->commstatus."',Estado='".$this->estado."'",
             $this->condicion);
     }
      
     function agregar_modulo_a_transaccion(){
-        $this->obj_data_provider->agregar_inclusion_de_datos_a_la_transaccion("T_Modulo_Puerta_Controlada", 
+        $this->obj_data_provider->agregar_inclusion_de_datos_a_la_transaccion("T_ModuloPuertaControlada", 
             "ID_Modulo_Puerta_Controlada, Owner, Name, IOU, ModuloID, CommStatus, Estado", 
             "'".$this->id."','".$this->owner."','".$this->name."','".$this->iou."','".$this->moduloid."','".$this->commstatus."','".$this->estado."'");
     }
     
     function editar_estado_modulo_a_transaccion(){
-        $this->obj_data_provider->agregar_edicion_de_datos_a_la_transaccion("T_Modulo_Puerta_Controlada","Estado='".$this->estado."'",$this->condicion);
+        $this->obj_data_provider->agregar_edicion_de_datos_a_la_transaccion("T_ModuloPuertaControlada","Estado='".$this->estado."'",$this->condicion);
     }
     
     ///////////////////////////// FUNCIONES GENERALES///////////////////////////

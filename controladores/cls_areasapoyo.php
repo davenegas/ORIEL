@@ -201,8 +201,8 @@ class cls_areasapoyo{
     
     public function agregar_area_apoyo(){
         $this->obj_data_provider->conectar();
-        $this->obj_data_provider->inserta_datos("T_AreasApoyo", "ID_Area_Apoyo, ID_Tipo_Area_Apoyo, ID_Distrito, Nombre_Area, Direccion, Observaciones, Estado",
-                "'".null."','".$this->tipo_area."','".$this->distrito."','".$this->nombre_area."','".$this->direccion."','".$this->observaciones."','1'");
+        $this->obj_data_provider->inserta_datos("T_AreasApoyo", "ID_Tipo_Area_Apoyo, ID_Distrito, Nombre_Area, Direccion, Observaciones, Estado",
+            "'".$this->tipo_area."','".$this->distrito."','".$this->nombre_area."','".$this->direccion."','".$this->observaciones."','1'");
         $this->arreglo= $this->obj_data_provider->trae_datos("t_areasapoyo ORDER BY `ID_Area_Apoyo` DESC LIMIT 1", "*", $this->condicion);
         $this->arreglo=$this->obj_data_provider->getArreglo();
         $this->obj_data_provider->desconectar();

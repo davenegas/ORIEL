@@ -20,7 +20,7 @@ function evento_buscar_puntobcr(){
         document.getElementById('Hora_Cierre_Agencia').value=datos['Hora_Cierre_Agencia'];
         buscar_pruebas_alarma(datos['ID_PuntoBCR']);
         
-        if(document.getElementById('Hora_Apertura_Publico').value==""){
+        if(document.getElementById('Hora_Apertura_Agencia').value=="" && document.getElementById('Hora_Apertura_Publico').value==""){
             //alert("hoy no abre");
             document.getElementById("codigo_agencia").innerHTML="Código de agencia- NO ABRE";
             document.getElementById("numero_punto").style.border="2px solid red";
@@ -238,8 +238,8 @@ function guardar_apertura(){
                 var fecha1 = new Date("2017/01/01 "+document.getElementById('hora_apertura').value);
                 var fecha2= new Date("2017/01/01 "+document.getElementById('Hora_Apertura_Publico').value);
                 var diff2= ((fecha2-fecha1)/60000);
-                
-                if(diff2<0){
+                //console.log(diff2);
+                if(document.getElementById('Hora_Apertura_Publico').value!="" && diff2<0){
                     $.confirm({title: 'Confirmación!', content: 'La apertura es posterior a la apertura a público, si continua debera ingresar un evento para justificar la apertura tardía.', 
                     confirm: function(){
                         document.getElementById("hora_apertura").removeAttribute("style");

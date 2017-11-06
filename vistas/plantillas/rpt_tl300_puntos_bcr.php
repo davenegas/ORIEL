@@ -36,6 +36,7 @@
                         <th style="text-align:center">Video</th>
                         <th style="text-align:center">TL300</th>
                         <th style="text-align:center">Control Acceso</th>
+                        <th style="text-align:center">Transaccional</th>
                         <th style="text-align:center">Mascara</th>
                     </tr>
                 </thead>
@@ -66,6 +67,11 @@
                                 <td style="text-align:center">NA</td> 
                             <?php } else { ?>
                                 <td style="text-align:center"><?php echo $params[$i]['Control_Acceso']; ?></td> 
+                            <?php } ?>
+                            <?php if ($params[$i]['Transaccional']==null){?>
+                                <td style="text-align:center">NA</td> 
+                            <?php } else { ?>
+                                <td style="text-align:center"><?php echo $params[$i]['Transaccional']; ?></td> 
                             <?php } ?>
                             <?php if ($params[$i]['Mascara']==null){?>
                                 <td style="text-align:center">NA</td> 

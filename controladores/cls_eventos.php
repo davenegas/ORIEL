@@ -640,5 +640,24 @@ class cls_eventos{
             echo $exc->getTraceAsString();
         }
     }
+    
+    public function obtiene_eventos_seguimiento_reporte(){
+        $this->obj_data_provider->conectar();
+        $this->arreglo=$this->obj_data_provider->trae_datos(
+                "T_Evento 
+                    LEFT OUTER JOIN T_Provincia ON T_Evento.ID_Provincia = T_Provincia.ID_Provincia
+                    LEFT OUTER JOIN T_TipoPuntoBCR ON T_Evento.ID_Tipo_Punto = T_TipoPuntoBCR.ID_Tipo_Punto
+                    LEFT OUTER JOIN T_PuntoBCR ON T_Evento.ID_PuntoBCR = T_PuntoBCR.ID_PuntoBCR
+                    LEFT OUTER JOIN T_TipoEvento ON T_Evento.ID_Tipo_Evento = T_TipoEvento.ID_Tipo_Evento
+                    LEFT OUTER JOIN T_DetalleEvento ON T_DetalleEvento.ID_Evento = T_Evento.ID_Evento", 
+                "T_Evento.ID_Evento, T_Evento.Fecha, T_Evento.Hora, 
+                    T_Provincia.Nombre_Provincia, T_TipoPuntoBCR.Tipo_Punto,
+                    T_PuntoBCR.Nombre, T_TipoEvento.Evento, T_DetalleEvento.Fecha as Fecha_Detalle,
+                    T_DetalleEvento.Hora as Hora_Detalle, T_DetalleEvento.Detalle",
+                $this->condicion);
+            $this->arreglo=$this->obj_data_provider->getArreglo();
+            $this->obj_data_provider->desconectar();
+            $this->resultado_operacion=true;
+    }
 }
 

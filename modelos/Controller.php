@@ -3710,6 +3710,9 @@ class Controller{
             $id_provincia=$_POST['provincia'];
             //Establece la condición SQL para definir el rango de fechas del reporte
             $condicion="(T_Evento.Fecha between '".$fecha_inicial."' AND '".$fecha_final."') AND (T_Evento.ID_EstadoEvento=3 OR T_Evento.ID_EstadoEvento=5)";
+            if(isset($_POST['Todos'])){
+                $condicion="(T_Evento.Fecha between '".$fecha_inicial."' AND '".$fecha_final."') AND (T_Evento.ID_EstadoEvento<>5)";
+            }
             if($id_punto_bcr!=0){
                 $condicion.=" AND T_Evento.ID_PuntoBCR=".$id_punto_bcr;
             } if($id_tipo_evento!=0){
@@ -3733,7 +3736,6 @@ class Controller{
 
             //Verifica que la consulta haya encontrado algo
             if (count($params)>0){
-
                 //Bucle que recorre la cantidad de registros de la consulta uno por uno
                 for ($x = 0; $x <$tamano; $x++) {
                     //Esta condicion trae los seguimientos del evento en cuestion, para pintarlos ocultos en el HTML
@@ -3790,21 +3792,23 @@ class Controller{
                 //Columna id evento, la cual está oculta en la tabla
                 $html.="<th hidden='true'>ID_Evento</th>";
                 //Resto de columnas de la tabla, de acuerdo a lo requerido en la consulta SQL
-                $html.="<th>Fecha</th>";
-                $html.="<th>Hora</th>";
-                $html.="<th>Provincia</th>";
-                $html.="<th>Tipo Punto</th>";
-                $html.="<th>Punto BCR</th>";
-                $html.="<th>Codigo</th>";
-                $html.="<th>Tipo de Evento</th>";
-                $html.="<th>Estado del Evento</th>";
-                $html.="<th>Cerrado Por</th>";
+                $html.="<th style='text-align:center'>Fecha</th>";
+                $html.="<th style='text-align:center'>Hora</th>";
+                $html.="<th style='text-align:center'>Provincia</th>";
+                $html.="<th style='text-align:center'>Tipo Punto</th>";
+                $html.="<th style='text-align:center'>Punto BCR</th>";
+                $html.="<th style='text-align:center'>Codigo</th>";
+                $html.="<th style='text-align:center'>Tipo de Evento</th>";
+                $html.="<th style='text-align:center'>Estado del Evento</th>";
+                if(!isset($_POST['Todos'])){
+                    $html.="<th style='text-align:center'>Cerrado Por</th>";
+                }
                 //Dependiendo del rol del usuario en cuestión, mostrará el botón de gestión de los eventos.
-                if ($_SESSION['modulos']['Recuperar Eventos Cerrados']==1){  
-                    $html.="<th>Gestión</th>";
+                if ($_SESSION['modulos']['Recuperar Eventos Cerrados']==1 && !isset($_POST['Todos'])){  
+                    $html.="<th style='text-align:center'>Gestión</th>";
                 }
                 //Resto de columnas
-                $html.="<th>Consulta</th>";
+                $html.="<th style='text-align:center'>Consulta</th>";
                 //Columna para agregar la tabla de seguimientos de cada evento
                 $html.="<th hidden='true'>Seguimientos</th> ";
                 //termina la fila de cabeceras
@@ -3832,19 +3836,20 @@ class Controller{
                     //Pinta y oculta el id del evento 
                     $html.="<td hidden='true'>".$params[$i]['ID_Evento']."</td>";
                     //Pinta las columnas correspondientes al reporte de eventos
-                    $html.="<td>".date_format($fecha_evento, 'd/m/Y')."</td>";   
-                    $html.="<td>".$params[$i]['Hora']."</td>";
-                    $html.="<td>".$params[$i]['Nombre_Provincia']."</td>";
-                    $html.="<td>".$params[$i]['Tipo_Punto']."</td>";
-                    $html.="<td>".$params[$i]['Nombre']."</td>";
-                    $html.="<td>".$params[$i]['Codigo']."</td>";
-                    $html.="<td>".$params[$i]['Evento']."</td>";
-                    $html.="<td>".$params[$i]['Estado_Evento']."</td>";       
+                    $html.="<td style='text-align:center'>".date_format($fecha_evento, 'd/m/Y')."</td>";   
+                    $html.="<td style='text-align:center'>".$params[$i]['Hora']."</td>";
+                    $html.="<td style='text-align:center'>".$params[$i]['Nombre_Provincia']."</td>";
+                    $html.="<td style='text-align:center'>".$params[$i]['Tipo_Punto']."</td>";
+                    $html.="<td style='text-align:center'>".$params[$i]['Nombre']."</td>";
+                    $html.="<td style='text-align:center'>".$params[$i]['Codigo']."</td>";
+                    $html.="<td style='text-align:center'>".$params[$i]['Evento']."</td>";
+                    $html.="<td style='text-align:center'>".$params[$i]['Estado_Evento']."</td>";       
                     //Muestra el último usuario que realizó seguimiento en el evento
-                    $html.="<td>".$detalle_y_ultimo_usuario[$i]['Usuario']."</td>";
-
+                    if(!isset($_POST['Todos'])){
+                        $html.="<td>".$detalle_y_ultimo_usuario[$i]['Usuario']."</td>";
+                    }
                     //Dependiendo del rol del usuario, muestra en pantalla la opción de recuperar eventos
-                    if ($_SESSION['modulos']['Recuperar Eventos Cerrados']==1){  
+                    if ($_SESSION['modulos']['Recuperar Eventos Cerrados']==1 && !isset($_POST['Todos'])){  
                         //Asigna la función de javascript que ejecuta la recuperación en vivo del evento, para que sea reabierto
                         $html.="<td align='center'><a onclick='recuperar_evento(".$params[$i]['ID_Evento'].",".$params[$i]['ID_PuntoBCR'].",".$params[$i]['ID_Tipo_Evento'].")'>Recuperar Evento</a></td>";
                     }   
@@ -8439,9 +8444,9 @@ class Controller{
                 //asigna da date2 la fecha que trae en el arreglo
                 $fecha2 = new DateTime($params[$i]['Fecha_Apertura'].' '.$params[$i]['Hora_Apertura']);
                 $diff = $fecha1->diff($fecha2);
-                //print_r($diff);
-                $vencidos[$i]['tiempo']=(intval($diff->d)*1440)+(intval($diff->h)*60)+(intval($diff->i)*1);
-                $vencidos[$i]['mensaje']= ("ATM #".$params[$i]['Codigo']." | D:". $diff->d." | Hr:". $diff->h." | Min:". $diff->i." \n "); 
+                
+                $vencidos[$i]['tiempo']=(intval($diff->days)*1440)+(intval($diff->h)*60)+(intval($diff->i)*1);
+                $vencidos[$i]['mensaje']= ("ATM #".$params[$i]['Codigo']." | D:". $diff->days." | Hr:". $diff->h." | Min:". $diff->i." \n "); 
                 
                 //Obtiene la hora actual del sistema
                 $hora_actual= getdate();
@@ -12690,6 +12695,168 @@ class Controller{
         }
     }
     
+    public function reporte_eventos_bitacora_digital(){
+        //Validación para verificar si el usuario está logeado en el sistema
+        if(isset($_SESSION['nombre'])){
+            //Creación de un objeto de clase eventos
+            $obj_eventos = new cls_eventos();
+
+            //Metodo de la clase que permite obtener todas las provincias que se encuentran listadas en el sistema.
+            $obj_eventos->obtener_todas_las_provincias();
+            //Asigna el resultado a un vector
+            $lista_provincias=$obj_eventos->getArreglo();
+            
+            //Obtiene todos lps tipos de puntos BCR que se encuentran activos en la base de datos
+            $obj_eventos->obtener_todos_los_tipos_de_puntos_BCR();
+            //Asigna el resultado de la consulta a un vector
+            $lista_tipos_de_puntos_bcr=$obj_eventos->getArreglo();
+            
+            //Obtiene las oficinas de san jose
+            $obj_eventos->setTipo_punto("1");
+            $obj_eventos->setProvincia("1");
+            
+            $obj_eventos->setCondicion("ID_Tipo_Punto=1 AND t_Provincia.ID_Provincia= 1");
+            //Metodo que filtra los puntos BCR para uso de la bitacora digital
+            $obj_eventos->filtra_sitios_bcr_bitacora();
+            //Obtiene el resultado de la consulta en una variable vector.
+            $lista_puntos_bcr_oficinas_sj=$obj_eventos->getArreglo(); 
+            
+            //Obtiene todos los tipos de eventos
+            $obj_eventos->setCondicion("");
+            $obj_eventos->obtener_todos_los_tipos_eventos();   
+            $tipo_evento = $obj_eventos->getArreglo();
+            
+            //Llamada al formulario correspondiente de la vista
+            require __DIR__.'/../vistas/plantillas/rpt_eventos_bitacora_digital.php';
+        }
+        else {
+            /*
+            * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+            * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+            * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+            * En la última línea llama a la pagina de inicio de sesión.
+            */
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            //Llamada al formulario correspondiente de la vista
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }
+    }
+    
+    public function actualiza_en_vivo_reporte_eventos(){
+        //Validación para verificar si el usuario está logeado en el sistema
+        if(isset($_SESSION['nombre'])){
+            //Creación de un nuevo objeto de la clase eventos
+            $obj_eventos = new cls_eventos();
+
+            //Recibe la fecha inicial del reporte
+            $fecha_inicial=$_POST['fecha_inicial'];
+            //Recibe la fecha final del reporte
+            $fecha_final=$_POST['fecha_final'];
+            //Obtiene el id del punto bcr a consultar
+            $id_punto_bcr=$_POST['id_punto_bcr'];
+            //Obtiene el tipo de punto a consultar
+            $id_tipo_evento=$_POST['tipo_evento'];
+            //Obtiene el tipo de punto a consultar
+            $id_tipo_punto=$_POST['tipo_punto'];
+            //Obtiene el tipo de punto a consultar
+            $id_provincia=$_POST['provincia'];
+            //Establece la condición SQL para definir el rango de fechas del reporte
+            $condicion="(T_Evento.Fecha between '".$fecha_inicial."' AND '".$fecha_final."') AND (T_Evento.ID_EstadoEvento<>5)";
+            if($id_punto_bcr!=0){
+                $condicion.=" AND T_Evento.ID_PuntoBCR=".$id_punto_bcr;
+            } if($id_tipo_evento!=0){
+                $condicion.=" AND T_Evento.ID_Tipo_Evento=".$id_tipo_evento;
+            } if($id_tipo_punto!=0){
+                $condicion.=" AND T_Evento.ID_Tipo_Punto=".$id_tipo_punto;
+            } if($id_provincia!=0){
+                $condicion.=" AND T_Evento.ID_Provincia=".$id_provincia;
+            }
+
+            //Establece la condicion de la consulta
+            $obj_eventos->setCondicion($condicion);
+            //Obtiene los eventos de acuerdo a la condicion.
+            $obj_eventos ->obtiene_eventos_seguimiento_reporte(); 
+            //Obtiene el arreglo de resultados
+            $params= $obj_eventos->getArreglo();
+            //echo "<pre>";print_r($params);echo "</pre>";
+            //verifica que hayan resultados en la consulta, para empezar a pintar la tabla HTML que se mostrará en pantalla al formulario
+            
+            if (count($params)>0){
+                //Creación de la tabla
+                $html="<table id='eventos_seguimiento' class='display' cellspacing='0' width='100%' border='2px'>";
+                //Creación de la cabecera de la tabla
+                $html.="<thead>";
+                //Creación de la fila de títulos de la tabla
+                $html.="<tr bgcolor='#58ACFA'>";
+                //Columna id evento, la cual está oculta en la tabla
+                $html.="<th style='text-align:center'>Número de evento</th>";
+                //Resto de columnas de la tabla, de acuerdo a lo requerido en la consulta SQL
+                $html.="<th style='text-align:center'>Fecha y Hora</th>";
+                $html.="<th style='text-align:center'>Provincia</th>";
+                $html.="<th style='text-align:center'>Tipo Punto</th>";
+                $html.="<th style='text-align:center'>Punto BCR</th>";
+                $html.="<th style='text-align:center'>Tipo de Evento</th>";
+                $html.="<th style='text-align:center'>Fecha y Hora seguimiento</th>";
+                $html.="<th style='text-align:center'>Detalle seguimiento</th>";
+                //termina la fila de cabeceras
+                $html.="</tr>";
+                //termina la cabecera de la tabla
+                $html.="</thead>";
+
+                //Inicializa el cuerpo de la tabla
+                $html.="<tbody>";
+                //Retorna el tamaño del vector que almacena la consulta sql
+                $tam=count($params);
+
+                //Vector que recorre registro por registros de la consulta SQL
+                for ($i = 0; $i <$tam; $i++) {
+                    //Agrega a la fila de cada evento, un comentario interno con el detalle del último seguimiento
+                    $html.="<tr>"; 
+                    $html.="<td style='text-align:center'>".$params[$i]['ID_Evento']."</td>";
+                    $html.="<td style='text-align:center'>".$params[$i]['Fecha']." ".$params[$i]['Hora']."</td>";
+                    $html.="<td style='text-align:center'>".$params[$i]['Nombre_Provincia']."</td>";
+                    $html.="<td style='text-align:center'>".$params[$i]['Tipo_Punto']."</td>";
+                    $html.="<td style='text-align:center'>".$params[$i]['Nombre']."</td>";
+                    $html.="<td style='text-align:center'>".$params[$i]['Evento']."</td>";
+                    $html.="<td style='text-align:center'>".$params[$i]['Fecha_Detalle']." ".$params[$i]['Hora_Detalle']."</td>";
+                    $html.="<td style='text-align:center'>".$params[$i]['Detalle']."</td>";
+                    $html.="</tr>";
+                }
+
+                //Finaliza el cuerpo de la tabla
+                $html.="</tbody>";
+
+                //Culmina la tabla
+                $html.=" </table>";
+
+                //Imprime en pantalla el codigo html estructurado en este metodo
+                echo $html;
+                //Sale del metodo
+                exit;
+            }else{
+                //En caso de que no hayan resultados, muestra la información correspondiente.
+                $html="<h4>No se encontraron eventos para este filtro.</h4>";
+                //Imprime la variable html
+                echo $html;
+                //Sale del metodo
+                exit;
+            } 
+            //Imprime la variable html y sale del metodo
+            echo $html;
+        }else {
+            /*
+            * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+            * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+            * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+            * En la última línea llama a la pagina de inicio de sesión.
+            */
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            //Llamada al formulario correspondiente de la vista
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }
+    }
     
     ////////////////////////////////////////////////////////////////////////////
     //////////////////////Funciones para Pruebas de alarma//////////////////////  
@@ -13726,8 +13893,8 @@ class Controller{
                            $correo.="ModuloID actualizado ".$controladores_bd[$c]['3']." ModuloID anterior ".$controladores_bd[$c]['ModuloID'].".\r\n";
                         }
                         $obj_controlador->setOwner($controladores_subidos[$i][0]);
-                        $obj_controlador->setName($controladores_subidos[$i][1]);
-                        $obj_controlador->setIou($controladores_subidos[$i][2]);
+                        $obj_controlador->setIou($controladores_subidos[$i][1]);
+                        $obj_controlador->setName($controladores_subidos[$i][2]);
                         $obj_controlador->setModuloid($controladores_subidos[$i][3]);
                         $obj_controlador->setCommstatus($controladores_subidos[$i][4]);
                         $obj_controlador->setEstado("1");
@@ -13747,8 +13914,8 @@ class Controller{
                 if($controladores_subidos[$i][1]<>"0"){
                     $correo.="El siguiente módulo es nuevo en la base de datos ".$controladores_subidos[$i]['1'].", del controlador ".$controladores_subidos[$i]['0'].".\r\n";
                     $obj_controlador->setOwner($controladores_subidos[$i][0]);
-                    $obj_controlador->setName($controladores_subidos[$i][1]);
-                    $obj_controlador->setIou($controladores_subidos[$i][2]);
+                    $obj_controlador->setIou($controladores_subidos[$i][1]);
+                    $obj_controlador->setName($controladores_subidos[$i][2]);
                     $obj_controlador->setModuloid($controladores_subidos[$i][3]);
                     $obj_controlador->setCommstatus($controladores_subidos[$i][4]);
                     $obj_controlador->setId($controladores_subidos[$i][5]);
@@ -13839,7 +14006,31 @@ class Controller{
     
     public function programacion_accesos(){
         if(isset($_SESSION['nombre'])){
-
+            $obj_persona = new cls_personal();
+            $obj_externo = new cls_personal_externo();
+            $obj_controlador= new cls_control_acceso();
+            $obj_puntobcr = new cls_puntosBCR();
+            
+            //Obtiene informacion básica del Personal BCR
+            $obj_persona->obtiene_todo_el_personal_pruebas_alarma();
+            $personas= $obj_persona->getArreglo();
+            
+            //Obtiene informacion básica del Personal Externo
+            $obj_externo->obtiene_todo_el_personal_externo_prueba_alarma();
+            $externos = $obj_externo->getArreglo();
+            
+            //Une la informacion de las personas 
+            $params = array_merge($personas,$externos);
+            //$params = $personas;
+            
+            $obj_controlador->setCondicion("");
+            $obj_controlador->obtener_modulos_controlados_completos();
+            $modulos = $obj_controlador->getArreglo();
+            
+            $obj_puntobcr->setCondicion("");
+            $obj_puntobcr->obtiene_todos_los_puntos_bcr();
+            $puntosbcr = $obj_puntobcr->getArreglo();
+            
             require __DIR__ . '/../vistas/plantillas/frm_ca_accesos_programados.php';
         } else {
             $tipo_de_alerta="alert alert-warning";
@@ -13849,7 +14040,315 @@ class Controller{
         }
     }
     
-    ////////////////////////////COMITÉ DE CRISSI////////////////////////////////
+    public function programacion_guardar(){
+        if(isset($_SESSION['nombre'])){
+            //Verificar si la solicitud trae información por el metodo post del formulario HTML
+            if ($_SERVER['REQUEST_METHOD'] == 'POST'){
+                $obj_programacion = new cls_programacion();
+                
+                $fecha_programacion = strtotime($_POST['Fecha']);
+                $fecha_programacion = date("Y-m-d", $fecha_programacion);
+
+                if ($fecha_programacion >  date("Y-m-d")){
+                    echo "<script type=\"text/javascript\">alert('No es posible ingresar programaciones futuros!!!!');history.go(-1);</script>";;
+                    exit();
+                }if($fecha_programacion == date("Y-m-d")){
+                    $hora_programacion = strtotime($_POST['Hora']);
+                    $hora_programacion = date("H:i", $hora_programacion);
+
+                    if ($hora_programacion >  date("H:i", time())){
+                       echo "<script type=\"text/javascript\">alert('No es posible ingresar programaciones futuros!!!!');history.go(-1);</script>";;
+                       exit();
+                    }
+                }
+                //Valida que la persona que solicita y autoriza no sea el mismo
+                if($_POST['ID_Empresa']==1 && ($_POST['ID_Persona'] ==  $_POST['ID_Persona_Autoriza'])){
+                    echo "<script type=\"text/javascript\">alert('La solicitud no puede ser autorizada por la misma persona!!!!');history.go(-1);</script>";;
+                    exit();
+                }
+                //Valida la fecha de vencimiento, debe ser mayor a hoy
+                $fecha_vencimiento = strtotime($_POST['fecha_vencimiento']);
+                $fecha_vencimiento = date("Y-m-d", $fecha_vencimiento);
+
+                if ($fecha_vencimiento <  $fecha_programacion){
+                    echo "<script type=\"text/javascript\">alert('La fecha de vencimiento debe ser mayor a hoy!!!!');history.go(-1);</script>";;
+                    exit();
+                }
+                $obj_programacion->setFecha($fecha_programacion);
+                $obj_programacion->setHora($hora_programacion);
+                $obj_programacion->setUsuario($_SESSION['id']);
+                $obj_programacion->setPersona($_POST['ID_Persona']);
+                $obj_programacion->setEmpresa($_POST['ID_Empresa']);
+                $obj_programacion->setAutoriza($_POST['ID_Persona_Autoriza']);
+                $obj_programacion->setUe($_POST['ID_Unidad_Ejecutora']);
+                $obj_programacion->setTipo($_POST['tipo_solicitud']);
+                $obj_programacion->setVencimiento($fecha_vencimiento);
+                $obj_programacion->setGafete($_POST['gafete']);
+                $obj_programacion->setDetalle($_POST['Detalle']);
+                $obj_programacion->setConfirmacion($_POST['confirmacion']);
+                
+                $recepcion_archivo=$_FILES['archivo_adjunto']['error'];
+            
+                $date=new DateTime();
+                $result = $date->format('Y-m-d-H-i-s');
+                //echo $result;
+                $krr = explode('-',$result);
+                $result = implode("",$krr);
+
+                $raiz=$_SERVER['DOCUMENT_ROOT'];
+
+                if (substr($raiz,-1)!="/"){
+                    $raiz.="/";
+                }
+
+                $ruta=  $raiz."Adjuntos_Programacion/".Encrypter::quitar_tildes($result.$_FILES['archivo_adjunto']['name']);
+                //$ruta=  $_SERVER['DOCUMENT_ROOT']."Adjuntos_Bitacora/".$result.$_FILES['archivo_adjunto']['name'];
+
+                switch ($recepcion_archivo) {
+                    case 0:{
+                        if (move_uploaded_file($_FILES['archivo_adjunto']['tmp_name'], $ruta)){
+                            $obj_programacion->setAdjunto(Encrypter::quitar_tildes($result.$_FILES['archivo_adjunto']['name'])); 
+                            $obj_programacion->guardar_programacion();
+                            //header ("location:/ORIEL/index.php?ctl=programacion_accesos");
+                        }  else {
+                            $obj_programacion->setAdjunto("N/A");
+                            $obj_programacion->guardar_programacion();
+                            //header ("location:/ORIEL/index.php?ctl=programacion_accesos");
+                        }
+                        break;
+                    }
+                    case 2:{
+                        echo "<script type=\"text/javascript\">alert('El archivo consume mayor espacio del permitido (1 mb) !!!!');history.go(-1);</script>";;
+                        break;
+                    }
+                    case 4:{ 
+                        $obj_programacion->setAdjunto("N/A");
+                        $obj_programacion->guardar_programacion();
+                        //header ("location:/ORIEL/index.php?ctl=programacion_accesos");
+                        break;
+                    }
+                     case 6:{
+                        echo "<script type=\"text/javascript\">alert('El servidor no tiene acceso a la carpeta temporal de almacenamiento!!!!');history.go(-1);</script>";
+                        break;
+                     } 
+                    case 7:{
+                        echo "<script type=\"text/javascript\">alert('No es posible escribir en el disco duro del servidor!!!!');history.go(-1);</script>";;
+                        break;
+                    }  
+                    case 8:{
+                        echo "<script type=\"text/javascript\">alert('Fue detenida la carga del archivo debido a una extension de PHP!!!!');history.go(-1);</script>";;
+                        break;
+                    }   
+                }
+
+                if(isset($_POST['lista'])){
+                    $id= $obj_programacion->getArreglo();
+                    //print_r($_POST['lista']);
+                    $id=$id[0]['ID_Programacion'];
+                    $obj_programacion->guardar_programacion_modulo($id, $_POST['lista']);
+                } 
+                header("location:/ORIEL/index.php?ctl=programacion_accesos");
+            } 
+        }else{
+            /* Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+            * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+            * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+            * En la última línea llama a la pagina de inicio de sesión. */
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            //Llamada al formulario correspondiente de la vista
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }
+    }
+    
+    public function actualiza_en_vivo_reporte_programaciones(){
+        if(isset($_SESSION['nombre'])){
+            //Creación de un nuevo objeto de la clase eventos
+            $obj_programacion= new cls_programacion();
+            $obj_personal = new cls_personal();
+            $obj_externo = new cls_personal_externo();
+            
+            //Recibe la fecha inicial del reporte
+            $fecha_inicial=$_POST['fecha_inicial_reporte'];
+            //Recibe la fecha final del reporte
+            $fecha_final=$_POST['fecha_final_reporte'];
+            //Obtiene el tipo de punto a consultar
+            $tipo_solicitud=$_POST['tipo_solicitud_reporte'];
+            
+            //Establece la condición SQL para definir el rango de fechas del reporte
+            $condicion="(T_Programacion.Fecha between '".$fecha_inicial."' AND '".$fecha_final."')";
+            if($tipo_solicitud<>"0"){
+                $condicion.=" AND T_Programacion.Tipo_Solicitud='".$tipo_solicitud."'";
+            }
+            //Establece la condicion de la consulta
+            $obj_programacion->setCondicion($condicion);
+            //Obtiene los eventos de acuerdo a la condicion.
+            $obj_programacion->obtiene_programaciones();
+            //Obtiene el arreglo de resultados
+            $params= $obj_programacion->getArreglo();
+
+
+            $tam=count($params);
+            for($i=0;$i<$tam;$i++){
+                if($params[$i]['ID_Empresa']==1){
+                    $obj_personal->setCondicion("ID_Persona='".$params[$i]['ID_Persona']."'");
+                    $obj_personal->obtener_personas_prontuario();
+                    $persona = $obj_personal->getArreglo();
+                    $params[$i] = array_merge((array('Nombre_Persona' =>($persona[0]['Apellido_Nombre']))),$params[$i]);
+                } else{
+                    $obj_externo->setCondicion("T_PersonalExterno.ID_Persona_Externa='".$params[$i]['ID_Persona']."'");
+                    $obj_externo->obtiene_todo_el_personal_externo();
+                    $persona = $obj_externo->getArreglo();
+                    $params[$i] = array_merge((array('Nombre_Persona' =>($persona[0]['Apellido']." ".$persona[0]['Nombre']))),$params[$i]);
+                }
+            }
+            //verifica que hayan resultados en la consulta, para empezar a pintar la tabla HTML que se mostrará en pantalla al formulario
+            if (count($params)>0){
+                //Creación de la tabla
+                $html="<table id='tabla' class='display2'>";
+                //Creación de la cabecera de la tabla
+                $html.="<thead>";
+                //Creación de la fila de títulos de la tabla
+                $html.="<tr>";
+                //Columna id evento, la cual está oculta en la tabla
+                $html.="<th hidden='true'>ID_Evento</th>";
+                //Resto de columnas de la tabla, de acuerdo a lo requerido en la consulta SQL
+                $html.="<th hidden>ID</th>";
+                $html.="<th style='text-align:center'>Fecha</th>";
+                $html.="<th style='text-align:center'>Hora</th>";
+                $html.="<th style='text-align:center'>Usuario</th>";
+                $html.="<th style='text-align:center'>Persona</th>";
+                $html.="<th style='text-align:center'>Autoriza</th>";
+                $html.="<th style='text-align:center'>Tipo Solicitud</th>";
+                $html.="<th style='text-align:center'>Fecha Vencimiento</th>";
+                $html.="<th style='text-align:center'>Detalle</th>";
+                $html.="<th style='text-align:center'>Estado</th>";
+                $html.="<th style='text-align:center'>Adjunto</th>";
+                $html.="<th style='text-align:center'>Gafete</th>";
+                $html.="<th style='text-align:center'>Módulos</th>";
+                //termina la fila de cabeceras
+                $html.="</tr>";
+                //termina la cabecera de la tabla
+                $html.="</thead>";
+
+                //Inicializa el cuerpo de la tabla
+                $html.="<tbody id='cuerpo'>";
+                //Retorna el tamaño del vector que almacena la consulta sql
+                $tam=count($params);
+
+                //Vector que recorre registro por registros de la consulta SQL
+                for ($i = 0; $i <$tam; $i++) {
+                    //Agrega a la fila de cada evento, un comentario interno con el detalle del último seguimiento
+                    $html.="<tr>";
+                    $html.="<td  hidden>".$params[$i]['ID_Programacion']."</td>";
+                    $html.="<td  style='text-align:center'>".$params[$i]['Fecha']."</td>";
+                    $html.="<td  style='text-align:center'>".$params[$i]['Hora']."</td>";
+                    $html.="<td  style='text-align:center'>".$params[$i]['Nombre'].$params[$i]['Apellido']."</td>";
+                    $html.="<td  style='text-align:center'>".$params[$i]['Nombre_Persona']."</td>";
+                    $html.="<td  style='text-align:center'>".$params[$i]['Apellido_Nombre']."</td>";
+                    $html.="<td  style='text-align:center'>".$params[$i]['Tipo_Solicitud']."</td>";
+                    $html.="<td  style='text-align:center'>".$params[$i]['Fecha_Vencimiento']."</td>";
+                    $html.="<td  style='text-align:center'>".$params[$i]['Detalle']."</td>";
+                    $html.="<td  style='text-align:center'>".$params[$i]['Confirmacion']."</td>";
+                    if (strlen($params[$i]['Adjunto'])==3){
+                        $html.="<td style='text-align:center'>NA</td>";
+                    }else {
+                        $html.="<td style='text-align:center'><a href='../../../Adjuntos_Programacion/".$params[$i]['Adjunto']."' download=".$params[$i]['Adjunto']."><img src='vistas/Imagenes/Descargar.png' class='img-rounded' alt='Cinque Terre' width='15' height='15'></a></td>";
+                    }
+                    if($params[$i]['Numero_Gafete']==null || $params[$i]['Numero_Gafete']=='0'){
+                        $html.="<td  style='text-align:center'>NA</td>";
+                        $html.="<td  style='text-align:center'>NA</td>";
+                    }else {
+                        $html.="<td  style='text-align:center'>".$params[$i]['Numero_Gafete']."</td>";
+                        $html.="<td  style='text-align:center'><a onclick='mostrar_lista_modulos(".$params[$i]['ID_Programacion'].")'>Ver lista módulos</a></td>";
+                    }
+                    //Cierra la fila del registro del evento en cuestión.
+                    $html.="</tr>";
+                }
+
+                //Finaliza el cuerpo de la tabla
+                $html.="</tbody>";
+
+                //Culmina la tabla
+                $html.=" </table>";
+
+                //Imprime en pantalla el codigo html estructurado en este metodo
+                echo $html;
+                //Sale del metodo
+                exit;
+            }else{
+                //En caso de que no hayan resultados, muestra la información correspondiente.
+                $html="<h4>No se encontraron eventos para este filtro.</h4>";
+                //Imprime la variable html
+                echo $html;
+                //Sale del metodo
+                exit;
+            }    
+            //Imprime la variable html y sale del metodo
+            echo $html;
+        }else {
+            /*
+            * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+            * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+            * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+            * En la última línea llama a la pagina de inicio de sesión.
+            */
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            //Llamada al formulario correspondiente de la vista
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }
+    }
+    
+    public function dibuja_tabla_modulos_programados(){
+        if(isset($_POST['id'])){
+            //Crea una instancia de la clase eventos
+            $obj_programado = new cls_programacion();
+
+            $obj_programado->setCondicion("T_ProgramacionModulo.ID_Programacion=".$_POST['id']);
+            $obj_programado->obtiene_modulos_programados();
+            $params= $obj_programado->getArreglo();
+            
+            if (count($params)>0){
+                //Establece La cabecera de la tabla
+                $html="<thead>";   
+                //Linea de los titulos de las columnas
+                $html.="<tr>";
+                $html.="<th hidden>ID_Modulo</th>";
+                $html.="<th style='text-align:center'>Name</th>";
+                //Cierra la fila
+                $html.="</tr>";
+                // Cierre de las cabeceras
+                $html.="</thead>";
+                //Cierre del cuerpo de la tabla
+                $html.="<tbody>";
+
+                //Bucle que permite recorrer el vector que almacena la consulta de registros.
+                for ($i = 0; $i <count($params); $i++) {
+                    //Creacion de una nueva linea en la tabla
+                    $html.="<tr>";
+                    $html.="<td hidden>".$params[$i]['ID_Modulo_Puerta_Controlada']."</td>";
+                    $html.="<td style='text-align:center'>".$params[$i]['Name']."</td>";
+                    $html.="</tr>";
+                }
+                //Culmina el cuerpo de la tabla
+                $html.="</tbody>";
+
+                //Imprime en pantalla el html construido
+                echo $html;
+                //sale del metodo
+                exit;
+            }else{
+                // En caso de que no hayan resultados, muestra en pantalla la información
+                $html="<h4>No se encontraron seguimientos para este evento.</h4>";
+                //Imprime la variable html construida
+                echo $html;
+                //Sale del metodo
+                exit;
+            }    
+        }
+    }
+    ////////////////////////////COMITÉ DE CRISIS////////////////////////////////
     public function comite_crisis(){
         if(isset($_SESSION['nombre'])){
             $obj_general = new cls_general();

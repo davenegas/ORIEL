@@ -48,8 +48,8 @@
                             <tr>
                                 <td hidden><?php echo $params[$i]['ID_Puerta_Controlada'];?></td>
                                 <td style="text-align:center"><?php echo $params[$i]['Owner'];?></td>
-                                <td style="text-align:center"><?php echo $params[$i]['Name'];?></td>
                                 <td style="text-align:center"><?php echo $params[$i]['IOU'];?></td>
+                                <td style="text-align:center"><?php echo $params[$i]['Name'];?></td>
                                 <td style="text-align:center"><?php echo $params[$i]['ModuloID'];?></td>
                                 <td style="text-align:center"><?php echo $params[$i]['CommStatus'];?></td>
                                 <?php if ($params[$i]['Estado']==1){  ?>  
