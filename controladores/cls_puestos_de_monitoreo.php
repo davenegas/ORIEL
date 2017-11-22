@@ -764,6 +764,18 @@ class cls_puestos_de_monitoreo{
        $this->obj_data_provider->desconectar();
         
     }        
+    
+    public function obtiene_unidades_no_revisadas(){
+        
+        $this->obj_data_provider->conectar();
+        
+        //Trae unidades en producción que no han sido revisadas y las asigna con prioridad 1 para el monitoreo
+        $this->arreglo=$this->obj_data_provider->trae_datos("t_unidadvideo left join t_bitacorarevisionesvideo on t_unidadvideo.ID_Unidad_Video=t_bitacorarevisionesvideo.ID_Unidad_Video where t_unidadvideo.Estado=0 and t_bitacorarevisionesvideo.ID_Bitacora_Revision_Video is null and t_unidadvideo.ID_Unidad_Video not in (512,180,262)",
+            "DISTINCT t_unidadvideo.ID_Unidad_Video","");
+        
+       $this->obj_data_provider->desconectar();
+        
+    }
    
     public function obtiene_inconsistencias_de_video(){
         $this->obj_data_provider->conectar();

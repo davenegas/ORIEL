@@ -122,6 +122,11 @@
                         estado_temp_num=3;
                         estado_nuevo_valor="Si";
                     }
+                    
+                     if (estado_temp=="En Producción/Fuera de Control de Video"){
+                        estado_temp_num=4;
+                        estado_nuevo_valor="Si";
+                    }
                  
                     if (document.getElementById('Estado_Unidad_Video').value!=estado_temp_num){
                         var combo = document.getElementById('Estado_Unidad_Video');
@@ -399,6 +404,10 @@
                             <?php } ?>   
                             <?php  if ($params[$i]['Estad']==3){  ?>  
                                 <td style="text-align:center" id="<?php echo $params[$i]['ID_Unidad_Video'].'-Estado';?>" onclick="edita_dato('<?php echo $params[$i]['ID_Unidad_Video'];?>','<?php echo $params[$i]['Estad'];?>','Estado','Estado')">Obsoleto-Descontinuado</td>
+                            <?php } ?>  
+                            
+                            <?php  if ($params[$i]['Estad']==4){  ?>  
+                                <td style="text-align:center" id="<?php echo $params[$i]['ID_Unidad_Video'].'-Estado';?>" onclick="edita_dato('<?php echo $params[$i]['ID_Unidad_Video'];?>','<?php echo $params[$i]['Estad'];?>','Estado','Estado')">En Producción/Fuera de Control de Video</td>
                             <?php } ?>  
                     </tr>     
                     <?php } ?>
