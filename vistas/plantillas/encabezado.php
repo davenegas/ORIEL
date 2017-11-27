@@ -186,7 +186,7 @@
                         ($_SESSION['modulos']['Módulo-Control de Video']==1)||($_SESSION['modulos']['Módulo-PuntosBCR']==1)||
                         ($_SESSION['modulos']['Módulo-Personal']==1)||($_SESSION['modulos']['Módulo-Áreas de Apoyo']==1)||
                         ($_SESSION['modulos']['Módulo-Personal Externo']==1)||($_SESSION['modulos']['Módulo-Cencon']==1)||
-                        ($_SESSION['modulos']['Módulo-Pruebas alarma']==1)){?>
+                        ($_SESSION['modulos']['Módulo-Pruebas alarma']==1 || $_SESSION['modulos']['Módulo-Programaciones']==1)){?>
 
                     <li class="dropdown">
                         <a class="dropdown-toggle" data-toggle="dropdown" href="#">Módulos
@@ -217,7 +217,7 @@
                                 <li><a href="index.php?ctl=personal_externo_listar">Personal Externo</a></li>
                             <?php }; ?>
                                 
-                            <?php if ($_SESSION['modulos']['Módulo-Áreas de Apoyo']==1){ ?>
+                            <?php if ($_SESSION['modulos']['Módulo-Programaciones']==1){ ?>
                                 <li><a href="index.php?ctl=programacion_accesos">Programaciones</a></li>
                             <?php }; ?>
                                 
@@ -290,7 +290,7 @@
                                 <li><a href="index.php?ctl=reporte_eventos_bitacora_digital">Reporte Eventos</a></li> 
                             <?php }; ?>
                                 
-                            <?php if ($_SESSION['modulos']['Reportes-Cencon']==1){ ?>
+                            <?php if ($_SESSION['modulos']['Reportes-Eventos']==1){ ?>
                                 <li><a href="index.php?ctl=reporte_cencon">Reporte Cencon</a></li> 
                             <?php }; ?>
    

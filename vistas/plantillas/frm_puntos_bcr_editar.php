@@ -87,11 +87,11 @@
                         </div>
                     </div>
                     <div class="row espacio-abajo-10">
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <label for="Nombre">Nombre</label>
                             <input type="text" required="required" readonly class="form-control" id="Nombre" name="Nombre" value="<?php echo $params[0]['Nombre'];?>">
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <label for="Tipo_Punto">Tipo de Punto</label>
                             <select class="form-control" id="Tipo_Punto" disabled name="Tipo_Punto" > 
                                 <?php
@@ -103,6 +103,19 @@
                                         <option value="<?php echo $tipo_puntos[$i]['ID_Tipo_Punto']?>" ><?php echo $tipo_puntos[$i]['Tipo_Punto']?></option>   
                                     <?php }
                                 } ?>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="Tipo_Panel">Tipo de Panel</label>
+                            <select class="form-control" id="Tipo_Panel" disabled name="Tipo_Panel" > 
+                                <option value="NA">NA</option>
+                                <option value="Vista 10">Vista 10</option>
+                                <option value="Vista 128BP">Vista 128BP-3</option>
+                                <option value="Vista 20P">Vista 20P</option>
+                                <option value="Vista 20SE">Vista 20SE</option>
+                                <option value="Vista 250FBP">Vista 250FBP</option>
+                                <option value="Vista 48LA">Vista 48LA</option>
+                                <option value="Vista 50P">Vista 50P</option>
                             </select>
                         </div>
                     </div>

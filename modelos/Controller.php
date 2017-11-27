@@ -8451,7 +8451,7 @@ class Controller{
                 //Obtiene la hora actual del sistema
                 $hora_actual= getdate();
                 $hora_actual=$hora_actual['hours'];
-                if($hora_actual<19){
+                /*if($hora_actual<19){
                     if($vencidos[$i]['tiempo']<'300'){
                         if(!($params[$i]['Seguimiento']=="Arqueo de ATM" ||$params[$i]['Seguimiento']=="ATM en Mantenimiento"||
                             $params[$i]['Seguimiento']=="Apertura con llave Azul"||$params[$i]['Seguimiento']=="Permiso Especial")){
@@ -8490,7 +8490,18 @@ class Controller{
                     }
                 }else{
                     $vencidos[$i]['color']="color: red";
-                }    
+                }  */  
+                
+                if(!($params[$i]['Seguimiento']=="Arqueo de ATM" ||$params[$i]['Seguimiento']=="ATM en Mantenimiento"||
+                    $params[$i]['Seguimiento']=="Apertura con llave Azul"||$params[$i]['Seguimiento']=="Permiso Especial")){
+                    if($vencidos[$i]['tiempo']>'40'){
+                        $vencidos[$i]['color']="color: orange";
+                    } else{
+                        $vencidos[$i]['color']="color: black";
+                    }
+                } else{
+                    $vencidos[$i]['color']="color:blueviolet; text-decoration: underline;";
+                }
             }
             
             if(isset ($vencidos)){
@@ -12268,6 +12279,7 @@ class Controller{
             $obj_prueba = new cls_prueba_alarma();
             $obj_eventos = new cls_eventos();
             $obj_reporteria = new cls_reporteria();
+            $obj_correo= new Mail_Provider();
             
             ////////////////////////////////////////////////////////////////////
             //OBTIENE INFORMACIÓN DE PRUEBAS, APERTURAS Y CIERRES DE ALARMA
@@ -12489,7 +12501,7 @@ class Controller{
                 //Obtiene la hora actual del sistema
                 $hora_actual= getdate();
                 $hora_actual=$hora_actual['hours'];
-                if($hora_actual<19){
+                /*if($hora_actual<19){
                     if($vencidos[$i]['tiempo']<'300'){
                         if(!($params[$i]['Seguimiento']=="Arqueo de ATM" ||$params[$i]['Seguimiento']=="ATM en Mantenimiento"||
                             $params[$i]['Seguimiento']=="Apertura con llave Azul"||$params[$i]['Seguimiento']=="Permiso Especial")){
@@ -12557,7 +12569,97 @@ class Controller{
                     $vencidos[$i]['color']="color: red";
                     $cajero_rojo++;
                     //echo "Hora vencida 19".$params[$i]['Codigo']."\n||||";
-                }    
+                }    */
+                //Módulo para prueba de Cencon
+                //Enviar correo automático al funcionario y al Coordinador BCR
+                if(!($params[$i]['Seguimiento']=="Arqueo de ATM" ||$params[$i]['Seguimiento']=="ATM en Mantenimiento"||
+                    $params[$i]['Seguimiento']=="Apertura con llave Azul"||$params[$i]['Seguimiento']=="Permiso Especial")){
+                    if($vencidos[$i]['tiempo']>'40'){
+                        $vencidos[$i]['color']="color: orange";
+                        if($params[$i]['Seguimiento']=="Se envió correo al funcionario"||$params[$i]['Seguimiento']=="Se le informó al coordinador"){
+                            if($vencidos[$i]['tiempo']>'70' && $params[$i]['Seguimiento']=="Se envió correo al funcionario"){
+                                //Cambiar estado= Se envió correo al funcionario
+                                //$obj_cencon->setCondicion("T_EventoCencon.ID_Evento_Cencon=".$params[$i]['ID_Evento_Cencon']);
+                                //$obj_cencon->setSeguimiento("Se le informó al coordinador");
+                                //$obj_cencon->editar_seguimiento_evento();
+
+                                //enviar correo
+                                //Asigna copia del correo 
+                                /*///Comentado para pruebas////////////////////*/
+                                //$correo="Coordinacion_Centro_de_Control@bancobcr.com";
+                                //$usuario="Coordinacion Centro Control";
+                                //$obj_correo->agregar_direccion_de_correo_copia($correo, $usuario);
+                                //Correo de pruebas
+                                $correo="davenegas@bancobcr.com ";
+                                $usuario="";
+                                $obj_correo->agregar_direccion_de_correo($correo, $usuario);
+
+                                //Agrega el asunto del correo para envio al usuario realizando la solicitud
+                                $obj_correo->agregar_asunto_de_correo("Solicitud 2 de cierre Cencon: ATM #".$params[$i]['Codigo']);
+                                //Agrega detalle de correo
+                                $obj_correo->agregar_detalle_de_correo("Buenas</br>"
+                                    . "El código de cierre del ATM#".$params[$i]['Codigo']." ".$params[$i]['Nombre']." se encuentra pendiente.<br>"
+                                    . "Por favor, comunicarse al Centro de Control a las extensiones 79149, 79150 o 79151.<br><br>"
+                                    . "Si requiere ayuda, comuníquese con el Coordinador del Centro de Control, Ext: 79066.</br>"
+                                    . "Este es un mensaje automático, por favor no reponderlo.</br>"
+                                    . "<a>https://bcr0209ori01/Oriel</a>");
+                                //Procede a enviar el correo
+                                //$obj_correo->enviar_correo();
+                                $cajero_violeta++;
+                            }
+                            if($vencidos[$i]['tiempo']>'70' && $params[$i]['Seguimiento']=="Se le informó al coordinador"){
+                                $cajero_violeta++;
+                            } else {
+                                $cajero_naranja++;
+                            }
+                        }else{
+                            //Cambiar estado= Se envió correo al funcionario
+                            //$obj_cencon->setCondicion("T_EventoCencon.ID_Evento_Cencon=".$params[$i]['ID_Evento_Cencon']);
+                            //$obj_cencon->setSeguimiento("Se envió correo al funcionario");
+                            //$obj_cencon->editar_seguimiento_evento();
+                            
+                            //enviar correo
+                            //Correo a funcionario BCR
+                            /*if($params[$i]['ID_Empresa']==1){
+                                $obj_personal->setCondicion("T_Personal.ID_Persona=".$params[$i]['ID_Persona']);
+                                $obj_personal->obtiene_todo_el_personal_filtrado();
+                                $persona= $obj_personal->getArreglo();
+
+                                $correo=$persona[0]['Correo'];
+                                $usuario="";
+                                $obj_correo->agregar_direccion_de_correo($correo, $usuario);
+                            }
+                            //Asigna copia del correo 
+                            $correo="Coordinacion_Centro_de_Control@bancobcr.com";
+                            $usuario="Coordinacion Centro Control";
+                            $obj_correo->agregar_direccion_de_correo_copia($correo, $usuario);
+                            */
+                            $correo="davenegas@bancobcr.com ";
+                            $usuario="";
+                            $obj_correo->agregar_direccion_de_correo($correo, $usuario);
+
+                            //Agrega el asunto del correo para envio al usuario realizando la solicitud
+                            $obj_correo->agregar_asunto_de_correo("Solicitud de cierre Cencon: ATM #".$params[$i]['Codigo']);
+                            //Agrega detalle de correo
+                            $obj_correo->agregar_detalle_de_correo("Buenas</br>"
+                                . "El código de cierre del ATM#".$params[$i]['Codigo']." ".$params[$i]['Nombre']." se encuentra pendiente.<br>"
+                                . "Por favor, comunicarse al Centro de Control a las extensiones 79149, 79150 o 79151.<br><br>"
+                                . "Si requiere ayuda, comuníquese con el Coordinador del Centro de Control, Ext: 79066.</br>"
+                                . "Este es un mensaje automático, por favor no reponderlo.</br>"
+                                . "<a>https://bcr0209ori01/Oriel</a>");
+                            //Procede a enviar el correo
+                            //$obj_correo->enviar_correo();
+                            $cajero_naranja++;
+                        }
+                        
+                    } else{
+                        $vencidos[$i]['color']="color: black";
+                        $cajero_negro++;
+                    }
+                } else{
+                    $vencidos[$i]['color']="color:blueviolet; text-decoration: underline;";
+                    $cajero_especial++;
+                }
             }
             
             if(isset ($vencidos)){
@@ -13087,7 +13189,7 @@ class Controller{
             $obj_eventos->setTipo_punto("1");
             $obj_eventos->setProvincia("1");
             
-            $obj_eventos->setCondicion("ID_Tipo_Punto=1 AND t_Provincia.ID_Provincia= 1");
+            $obj_eventos->setCondicion("ID_Tipo_Punto=1 AND T_Provincia.ID_Provincia= 1");
             //Metodo que filtra los puntos BCR para uso de la bitacora digital
             $obj_eventos->filtra_sitios_bcr_bitacora();
             //Obtiene el resultado de la consulta en una variable vector.
@@ -14382,6 +14484,7 @@ class Controller{
             $obj_externo = new cls_personal_externo();
             $obj_controlador= new cls_control_acceso();
             $obj_puntobcr = new cls_puntosBCR();
+            $obj_programacion= new cls_programacion();
             
             //Obtiene informacion básica del Personal BCR
             $obj_persona->obtiene_todo_el_personal_pruebas_alarma();
@@ -14403,6 +14506,15 @@ class Controller{
             $obj_puntobcr->obtiene_todos_los_puntos_bcr();
             $puntosbcr = $obj_puntobcr->getArreglo();
             
+            //Obtiene la fecha actual
+            $fecha_actual= getdate();
+            $fecha_actual= $fecha_actual['year']."-".$fecha_actual['mon']."-".$fecha_actual['mday'];
+            
+            //Busca solicitudes vencidas
+            $obj_programacion->setCondicion("(T_Programacion.Fecha_Vencimiento <'".$fecha_actual."')and T_Programacion.Estado=0");
+            $obj_programacion->obtiene_programaciones();
+            $vencidos= $obj_programacion->getArreglo();
+            
             require __DIR__ . '/../vistas/plantillas/frm_ca_accesos_programados.php';
         } else {
             $tipo_de_alerta="alert alert-warning";
@@ -14412,33 +14524,73 @@ class Controller{
         }
     }
     
+    public function programacion_completar(){
+        if(isset($_SESSION['nombre'])&& $_SESSION['modulos']['Editar-Programaciones']==1){
+            $obj_programacion = new cls_programacion();
+
+            //Obtiene la fecha actual
+            $fecha_actual= getdate();
+            $fecha_actual= $fecha_actual['year']."-".$fecha_actual['mon']."-".$fecha_actual['mday'];
+
+            //Obtiene la información de la Programación
+            $obj_programacion->setCondicion("ID_Programacion=".$_POST['id']);
+            $obj_programacion->obtiene_programaciones();
+            $params= $obj_programacion->getArreglo();
+
+            //Valida que la programación se encuentre vencida para cambiar el estado
+            if($params[0]['Fecha_Vencimiento']>=$fecha_actual){
+                echo "La solicitud no se encuentra vencida!!!!";
+                exit();
+            }
+            if($params[0]['Estado']=="1"){
+                echo "La solicitud ya se encuentra completa!!!!";
+                exit();
+            }
+
+            $obj_programacion->setCondicion("ID_Programacion=".$_POST['id']);
+            $obj_programacion->setEstado(1);
+            $obj_programacion->setSeguimiento(date("Y-m-d").' '.date("H:i:s", time()).' '.$_SESSION['name'].' '.$_SESSION['apellido'].'. Cambio el estado a Completado');
+            $obj_programacion->editar_estado_programacion();
+            echo "La solicitud se completó correctamente!!!!";
+            exit(); 
+        }else {
+            echo "No cuenta con los permisos para realizar esta acción!!!";
+            exit(); 
+        }
+    }
+    
     public function programacion_guardar(){
-        if(isset($_SESSION['nombre'])){
+        if(isset($_SESSION['nombre'])&& $_SESSION['modulos']['Editar-Programaciones']==1){
             //Verificar si la solicitud trae información por el metodo post del formulario HTML
             if ($_SERVER['REQUEST_METHOD'] == 'POST'){
                 $obj_programacion = new cls_programacion();
+                $obj_usuario = new cls_usuarios();
+                $obj_personal = new cls_personal();
                 
                 $fecha_programacion = strtotime($_POST['Fecha']);
                 $fecha_programacion = date("Y-m-d", $fecha_programacion);
-
-                if ($fecha_programacion >  date("Y-m-d")){
-                    echo "<script type=\"text/javascript\">alert('No es posible ingresar programaciones futuros!!!!');history.go(-1);</script>";;
-                    exit();
-                }if($fecha_programacion == date("Y-m-d")){
-                    $hora_programacion = strtotime($_POST['Hora']);
-                    $hora_programacion = date("H:i", $hora_programacion);
-
-                    if ($hora_programacion >  date("H:i", time())){
-                       echo "<script type=\"text/javascript\">alert('No es posible ingresar programaciones futuros!!!!');history.go(-1);</script>";;
-                       exit();
+                $hora_programacion = strtotime($_POST['Hora']);
+                $hora_programacion = date("H:i", $hora_programacion);
+                
+                //Valida que la programación no sea futura, a menos que sea un horario especial
+                if($_POST['tipo_solicitud']!="Horario especial"){
+                    if ($fecha_programacion >  date("Y-m-d")){
+                        echo "<script type=\"text/javascript\">alert('No es posible ingresar programaciones futuros!!!!');history.go(-1);</script>";;
+                        exit();
+                    }if($fecha_programacion == date("Y-m-d")){
+                        if ($hora_programacion >  date("H:i", time())){
+                           echo "<script type=\"text/javascript\">alert('No es posible ingresar programaciones futuros!!!!');history.go(-1);</script>";;
+                           exit();
+                        }
                     }
                 }
+                
                 //Valida que la persona que solicita y autoriza no sea el mismo
                 if($_POST['ID_Empresa']==1 && ($_POST['ID_Persona'] ==  $_POST['ID_Persona_Autoriza'])){
                     echo "<script type=\"text/javascript\">alert('La solicitud no puede ser autorizada por la misma persona!!!!');history.go(-1);</script>";;
                     exit();
                 }
-                //Valida la fecha de vencimiento, debe ser mayor a hoy
+                //Valida la fecha de vencimiento, debe ser mayor o igual a hoy
                 $fecha_vencimiento = strtotime($_POST['fecha_vencimiento']);
                 $fecha_vencimiento = date("Y-m-d", $fecha_vencimiento);
 
@@ -14446,6 +14598,29 @@ class Controller{
                     echo "<script type=\"text/javascript\">alert('La fecha de vencimiento debe ser mayor a hoy!!!!');history.go(-1);</script>";;
                     exit();
                 }
+                //Valida si la solicitud es por Horario y solicita la agencia en caso positivo a asigna 0 en negativo
+                if($_POST['tipo_solicitud']=="Horario especial" || $_POST['tipo_solicitud']=="Modificar horario"){
+                    $_POST['gafete']="0";
+                    unset($_POST['lista']);
+                    if($_POST['ID_PuntoBCR']=="" || $_POST['ID_PuntoBCR']==null){
+                        echo "<script type=\"text/javascript\">alert('Se debe indicar el Punto BCR!!!!');history.go(-1);</script>";;
+                        exit();
+                    }
+                }
+                
+                //Valida si la solicitud es por areas y solicita valida el número de gafete y las areas
+                if($_POST['tipo_solicitud']=="Agregar areas" || $_POST['tipo_solicitud']=="Eliminar areas"){
+                    $_POST['ID_PuntoBCR']==0;
+                    if($_POST['gafete']=="" || $_POST['gafete']==null){
+                        echo "<script type=\"text/javascript\">alert('Se debe indicar el número de gafete!!!!');history.go(-1);</script>";;
+                        exit();
+                    }
+                    if(!isset($_POST['lista'])){
+                        echo "<script type=\"text/javascript\">alert('Se deben seleccionar las áreas!!!!');history.go(-1);</script>";;
+                        exit();
+                    }
+                } 
+                
                 $obj_programacion->setFecha($fecha_programacion);
                 $obj_programacion->setHora($hora_programacion);
                 $obj_programacion->setUsuario($_SESSION['id']);
@@ -14457,7 +14632,8 @@ class Controller{
                 $obj_programacion->setVencimiento($fecha_vencimiento);
                 $obj_programacion->setGafete($_POST['gafete']);
                 $obj_programacion->setDetalle($_POST['Detalle']);
-                $obj_programacion->setConfirmacion($_POST['confirmacion']);
+                $obj_programacion->setPuntobcr($_POST['ID_PuntoBCR']);
+                $obj_programacion->setEstado(0);
                 
                 $recepcion_archivo=$_FILES['archivo_adjunto']['error'];
             
@@ -14472,7 +14648,7 @@ class Controller{
                 if (substr($raiz,-1)!="/"){
                     $raiz.="/";
                 }
-
+                
                 $ruta=  $raiz."Adjuntos_Programacion/".Encrypter::quitar_tildes($result.$_FILES['archivo_adjunto']['name']);
                 //$ruta=  $_SERVER['DOCUMENT_ROOT']."Adjuntos_Bitacora/".$result.$_FILES['archivo_adjunto']['name'];
 
@@ -14499,7 +14675,7 @@ class Controller{
                         //header ("location:/ORIEL/index.php?ctl=programacion_accesos");
                         break;
                     }
-                     case 6:{
+                    case 6:{
                         echo "<script type=\"text/javascript\">alert('El servidor no tiene acceso a la carpeta temporal de almacenamiento!!!!');history.go(-1);</script>";
                         break;
                      } 
@@ -14519,6 +14695,57 @@ class Controller{
                     $id=$id[0]['ID_Programacion'];
                     $obj_programacion->guardar_programacion_modulo($id, $_POST['lista']);
                 } 
+                
+                /***Enviar correo***/
+                //Verifica si la persona que se programó es del Banco
+                /*if($obj_programacion->getEmpresa()==1){
+                    $obj_personal->setCondicion("T_Personal.ID_Persona=".$obj_programacion->getUsuario());
+                    $obj_personal->obtiene_todo_el_personal_filtrado();
+                    $persona= $obj_personal->getArreglo();
+                    
+                    $correo=$persona[0]['Correo'];
+                    $usuario="";
+                    $obj_correo->agregar_direccion_de_correo($correo, $usuario);
+                }
+                
+                //Asigna correo y nombre de los destinatarios
+                $obj_personal->setCondicion("T_Personal.ID_Persona=".$obj_programacion->getAutoriza());
+                $obj_personal->obtiene_todo_el_personal_filtrado();
+                $persona= $obj_personal->getArreglo();
+                
+                $correo=$persona[0]['Correo'];
+                $usuario="";
+                $obj_correo->agregar_direccion_de_correo($correo, $usuario);
+                //Asigna copia del correo 
+                $correo="Coordinacion_Centro_de_Control@bancobcr.com";
+                $usuario="Coordinacion Centro Control";
+                $obj_correo->agregar_direccion_de_correo_copia($correo, $usuario);*/
+                
+                $obj_usuario->setCondicion("ID_Usuario=".$_SESSION['id']);
+                $obj_usuario->obtiene_todos_los_usuarios();
+                $usuario= $obj_usuario->getArreglo();
+                //Asigna correo y nombre de los destinatarios
+                $correo=$usuario[0]['Correo'];
+                $usuario="";
+                $obj_correo->agregar_direccion_de_correo($correo, $usuario);
+                //Envia a Diego Venegas
+                $correo="davenegas@bancobcr.com";
+                $usuario="";
+                $obj_correo->agregar_direccion_de_correo($correo, $usuario);
+                
+                //Agrega el asunto del correo para envio al usuario realizando la solicitud
+                $obj_correo->agregar_asunto_de_correo("Programación Centro de Control");
+                //Agrega detalle de correo
+                $obj_correo->agregar_detalle_de_correo("Buenas</br>"
+                    . "La solicitud: ".$obj_programacion->getTipo()." fue tramitada correctamente."
+                    . "Si requiere ayuda, comuníquese con el Centro de Control, Ext: 79066.</br>"
+                    . "Este es un mensaje automático, por favor no reponderlo.</br>"
+                    . "<a>https://bcr0209ori01/Oriel</a>");
+                //Procede a enviar el correo
+                if($obj_programacion->getAdjunto()<>"N/A"){
+                    $obj_correo->adjuntar_archivo_al_correo($ruta,"");
+                }
+                $obj_correo->enviar_correo();
                 header("location:/ORIEL/index.php?ctl=programacion_accesos");
             } 
         }else{
@@ -14539,6 +14766,7 @@ class Controller{
             $obj_programacion= new cls_programacion();
             $obj_personal = new cls_personal();
             $obj_externo = new cls_personal_externo();
+            $obj_punto= new cls_puntosBCR();
             
             //Recibe la fecha inicial del reporte
             $fecha_inicial=$_POST['fecha_inicial_reporte'];
@@ -14546,11 +14774,20 @@ class Controller{
             $fecha_final=$_POST['fecha_final_reporte'];
             //Obtiene el tipo de punto a consultar
             $tipo_solicitud=$_POST['tipo_solicitud_reporte'];
+            //Obtiene la fecha actual
+            $fecha_actual= getdate();
+            $fecha_actual= $fecha_actual['year']."-".$fecha_actual['mon']."-".$fecha_actual['mday'];
+            
             
             //Establece la condición SQL para definir el rango de fechas del reporte
             $condicion="(T_Programacion.Fecha between '".$fecha_inicial."' AND '".$fecha_final."')";
             if($tipo_solicitud<>"0"){
                 $condicion.=" AND T_Programacion.Tipo_Solicitud='".$tipo_solicitud."'";
+            }if($tipo_solicitud=="Vencidos"){
+                $condicion="(T_Programacion.Fecha between '".$fecha_inicial."' AND '".$fecha_final."') and (T_Programacion.Fecha_Vencimiento <'".$fecha_actual."')";
+            }
+            if($_POST['numero_evento']>0){
+                $condicion="T_Programacion.ID_Programacion= ".$_POST['numero_evento'];
             }
             //Establece la condicion de la consulta
             $obj_programacion->setCondicion($condicion);
@@ -14558,7 +14795,6 @@ class Controller{
             $obj_programacion->obtiene_programaciones();
             //Obtiene el arreglo de resultados
             $params= $obj_programacion->getArreglo();
-
 
             $tam=count($params);
             for($i=0;$i<$tam;$i++){
@@ -14585,7 +14821,7 @@ class Controller{
                 //Columna id evento, la cual está oculta en la tabla
                 $html.="<th hidden='true'>ID_Evento</th>";
                 //Resto de columnas de la tabla, de acuerdo a lo requerido en la consulta SQL
-                $html.="<th hidden>ID</th>";
+                $html.="<th style='text-align:center'>Número</th>";
                 $html.="<th style='text-align:center'>Fecha</th>";
                 $html.="<th style='text-align:center'>Hora</th>";
                 $html.="<th style='text-align:center'>Usuario</th>";
@@ -14596,6 +14832,7 @@ class Controller{
                 $html.="<th style='text-align:center'>Detalle</th>";
                 $html.="<th style='text-align:center'>Estado</th>";
                 $html.="<th style='text-align:center'>Adjunto</th>";
+                $html.="<th style='text-align:center'>PuntoBCR</th>";
                 $html.="<th style='text-align:center'>Gafete</th>";
                 $html.="<th style='text-align:center'>Módulos</th>";
                 //termina la fila de cabeceras
@@ -14612,7 +14849,7 @@ class Controller{
                 for ($i = 0; $i <$tam; $i++) {
                     //Agrega a la fila de cada evento, un comentario interno con el detalle del último seguimiento
                     $html.="<tr>";
-                    $html.="<td  hidden>".$params[$i]['ID_Programacion']."</td>";
+                    $html.="<td  style='text-align:center'>".$params[$i]['ID_Programacion']."</td>";
                     $html.="<td  style='text-align:center'>".$params[$i]['Fecha']."</td>";
                     $html.="<td  style='text-align:center'>".$params[$i]['Hora']."</td>";
                     $html.="<td  style='text-align:center'>".$params[$i]['Nombre'].$params[$i]['Apellido']."</td>";
@@ -14621,12 +14858,21 @@ class Controller{
                     $html.="<td  style='text-align:center'>".$params[$i]['Tipo_Solicitud']."</td>";
                     $html.="<td  style='text-align:center'>".$params[$i]['Fecha_Vencimiento']."</td>";
                     $html.="<td  style='text-align:center'>".$params[$i]['Detalle']."</td>";
-                    $html.="<td  style='text-align:center'>".$params[$i]['Confirmacion']."</td>";
-                    if (strlen($params[$i]['Adjunto'])==3){
-                        $html.="<td style='text-align:center'>NA</td>";
-                    }else {
-                        $html.="<td style='text-align:center'><a href='../../../Adjuntos_Programacion/".$params[$i]['Adjunto']."' download=".$params[$i]['Adjunto']."><img src='vistas/Imagenes/Descargar.png' class='img-rounded' alt='Cinque Terre' width='15' height='15'></a></td>";
+                    if($params[$i]['Estado']==1){
+                        $html.="<td style='text-align:center'>Finalizada</td>";
+                    } else {
+                        $html.="<td style='text-align:center' onclick='confirmar_programacion(".$params[$i]['ID_Programacion'].");'>Programado</td>";
                     }
+                    
+                    if($params[$i]['ID_PuntoBCR']=='0'){
+                        $html.="<td  style='text-align:center'>NA</td>";
+                    }else {
+                        $obj_punto->setCondicion("ID_PuntoBCR=".$params[$i]['ID_PuntoBCR']);
+                        $obj_punto->obtiene_solo_los_puntos_bcr();
+                        $punto = $obj_punto->getArreglo();
+                        $html.="<td  style='text-align:center'>".$punto[0]['Nombre']."</td>";
+                    }
+                    
                     if($params[$i]['Numero_Gafete']==null || $params[$i]['Numero_Gafete']=='0'){
                         $html.="<td  style='text-align:center'>NA</td>";
                         $html.="<td  style='text-align:center'>NA</td>";
@@ -14634,6 +14880,12 @@ class Controller{
                         $html.="<td  style='text-align:center'>".$params[$i]['Numero_Gafete']."</td>";
                         $html.="<td  style='text-align:center'><a onclick='mostrar_lista_modulos(".$params[$i]['ID_Programacion'].")'>Ver lista módulos</a></td>";
                     }
+                    if (strlen($params[$i]['Adjunto'])==3){
+                        $html.="<td style='text-align:center'>NA</td>";
+                    }else {
+                        $html.="<td style='text-align:center'><a href='../../../Adjuntos_Programacion/".$params[$i]['Adjunto']."' download=".$params[$i]['Adjunto']."><img src='vistas/Imagenes/Descargar.png' class='img-rounded' alt='Cinque Terre' width='15' height='15'></a></td>";
+                    }
+                    
                     //Cierra la fila del registro del evento en cuestión.
                     $html.="</tr>";
                 }
@@ -14720,6 +14972,7 @@ class Controller{
             }    
         }
     }
+    
     ////////////////////////////COMITÉ DE CRISIS////////////////////////////////
     public function comite_crisis(){
         if(isset($_SESSION['nombre'])){

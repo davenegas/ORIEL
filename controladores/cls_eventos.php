@@ -650,7 +650,7 @@ class cls_eventos{
                     LEFT OUTER JOIN T_PuntoBCR ON T_Evento.ID_PuntoBCR = T_PuntoBCR.ID_PuntoBCR
                     LEFT OUTER JOIN T_TipoEvento ON T_Evento.ID_Tipo_Evento = T_TipoEvento.ID_Tipo_Evento
                     LEFT OUTER JOIN T_DetalleEvento ON T_DetalleEvento.ID_Evento = T_Evento.ID_Evento", 
-                "T_Evento.ID_Evento, T_Evento.Fecha, T_Evento.Hora, 
+                "T_Evento.ID_Evento, T_Evento.Fecha, T_Evento.Hora,
                     T_Provincia.Nombre_Provincia, T_TipoPuntoBCR.Tipo_Punto,
                     T_PuntoBCR.Nombre, T_TipoEvento.Evento, T_DetalleEvento.Fecha as Fecha_Detalle,
                     T_DetalleEvento.Hora as Hora_Detalle, T_DetalleEvento.Detalle",

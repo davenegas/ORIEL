@@ -402,6 +402,7 @@ $map = array(
     'programacion_guardar'=>array('controller'=>'Controller','action'=> 'programacion_guardar'),
     'actualiza_en_vivo_reporte_programaciones'=>array('controller'=>'Controller','action'=> 'actualiza_en_vivo_reporte_programaciones'),
     'dibuja_tabla_modulos_programados'=>array('controller'=>'Controller','action'=> 'dibuja_tabla_modulos_programados'),
+    'programacion_completar'=>array('controller'=>'Controller','action'=> 'programacion_completar'),
     
     //Controlador de Personal Externo
     'personal_externo_listar'=>array('controller'=>'Controller','action'=> 'personal_externo_listar'), 

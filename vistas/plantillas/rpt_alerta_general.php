@@ -88,7 +88,6 @@
             <?php if(isset($vencidos)){ ?>
                 <div style="text-align: justify;" >
                     <h5 style="color: blueviolet">Cajero(s) informado al coordinador BCR= <?php echo $cajero_violeta;?></h5> 
-                    <h5 style="color: red">Cajero(s) tiempo agotado= <?php echo $cajero_rojo;?></h5>
                     <h5 style="color: orange">Cajero(s) con seguimiento= <?php echo $cajero_naranja;?></h5>
                     <h5 style="color: black">Cajero(s) abierto normales= <?php echo $cajero_negro;?></h5>
                     <h5 style="color: mediumblue;text-decoration: underline;">Cajero(s) con apertura especial= <?php echo $cajero_especial;?></h5>

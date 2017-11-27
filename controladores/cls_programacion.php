@@ -10,12 +10,13 @@ class cls_programacion{
     private $ue;
     private $tipo;
     private $vencimiento;
-    private $confirmacion;
+    private $estado;
     private $detalle;
     private $seguimiento;
     private $adjunto;
     private $gafete;
     private $empresa;
+    private $puntobcr;
     private $condicion; 
     public $obj_data_provider;
     public $arreglo;
@@ -31,18 +32,27 @@ class cls_programacion{
         $this->ue="";
         $this->tipo="";
         $this->vencimiento="";
-        $this->confirmacion="";
+        $this->estado="";
         $this->detalle="";
         $this->seguimiento="";
         $this->adjunto="";
         $this->gafete="";
         $this->empresa="";
+        $this->puntobcr="";
         $this->condicion=""; 
         $this->arreglo="";
         $this->obj_data_provider=new Data_Provider();
         $this->condicion="";
     }  
-  
+    
+    function getPuntobcr() {
+        return $this->puntobcr;
+    }
+
+    function setPuntobcr($puntobcr) {
+        $this->puntobcr = $puntobcr;
+    }
+
     function getEmpresa() {
         return $this->empresa;
     }
@@ -87,8 +97,8 @@ class cls_programacion{
         return $this->vencimiento;
     }
 
-    function getConfirmacion() {
-        return $this->confirmacion;
+    function getEstado() {
+        return $this->estado;
     }
 
     function getDetalle() {
@@ -155,9 +165,10 @@ class cls_programacion{
         $this->vencimiento = $vencimiento;
     }
 
-    function setConfirmacion($confirmacion) {
-        $this->confirmacion = $confirmacion;
+    function setEstado($estado) {
+        $this->estado = $estado;
     }
+
 
     function setDetalle($detalle) {
         $this->detalle = $detalle;
@@ -196,9 +207,9 @@ class cls_programacion{
                 INNER JOIN t_usuario on t_usuario.ID_Usuario = t_programacion.ID_Usuario
                 INNER JOIN t_personal on t_personal.ID_Persona = t_programacion.ID_Persona_Autoriza
                 INNER JOIN t_unidadejecutora ON t_unidadejecutora.ID_Unidad_Ejecutora = t_programacion.ID_Unidad_Ejecutora", 
-                    "t_programacion.*,t_usuario.Nombre, t_usuario.Apellido, 
-                    t_unidadejecutora.Departamento, T_Personal.Apellido_Nombre",
-                    "");
+                "t_programacion.*,t_usuario.Nombre, t_usuario.Apellido, 
+                t_unidadejecutora.Departamento, T_Personal.Apellido_Nombre",
+                "");
             $this->arreglo=$this->obj_data_provider->getArreglo();
             $this->obj_data_provider->desconectar();
             $this->resultado_operacion=true;
@@ -209,9 +220,9 @@ class cls_programacion{
                 INNER JOIN t_usuario on t_usuario.ID_Usuario = t_programacion.ID_Usuario
                 INNER JOIN t_personal on t_personal.ID_Persona = t_programacion.ID_Persona_Autoriza
                 INNER JOIN t_unidadejecutora ON t_unidadejecutora.ID_Unidad_Ejecutora = t_programacion.ID_Unidad_Ejecutora", 
-                    "t_programacion.*,t_usuario.Nombre, t_usuario.Apellido, 
+                "t_programacion.*,t_usuario.Nombre, t_usuario.Apellido, 
                     t_unidadejecutora.Departamento, T_Personal.Apellido_Nombre",
-                    $this->condicion);
+                $this->condicion);
             $this->arreglo=$this->obj_data_provider->getArreglo();
             $this->obj_data_provider->desconectar();
             $this->resultado_operacion=true;
@@ -238,9 +249,9 @@ class cls_programacion{
     function guardar_programacion(){
         $this->obj_data_provider->conectar();
         $this->obj_data_provider->inserta_datos("T_Programacion", "Fecha,Hora, ID_Usuario, ID_Persona, ID_Empresa, ID_Persona_Autoriza,
-                ID_Unidad_Ejecutora, Tipo_Solicitud, Numero_Gafete, Fecha_Vencimiento, Detalle, Confirmacion, Adjunto, Seguimiento", 
+                ID_Unidad_Ejecutora, ID_PuntoBCR, Tipo_Solicitud, Numero_Gafete, Fecha_Vencimiento, Detalle, Estado, Adjunto, Seguimiento", 
                 "'".$this->fecha."','".$this->hora."','".$this->usuario."','".$this->persona."','".$this->empresa."','".$this->autoriza."','".
-                $this->ue."','".$this->tipo."','".$this->gafete."','".$this->vencimiento."','".$this->detalle."','".$this->confirmacion."','".$this->adjunto."','".$this->seguimiento."'");
+                $this->ue."','".$this->puntobcr."','".$this->tipo."','".$this->gafete."','".$this->vencimiento."','".$this->detalle."','".$this->estado."','".$this->adjunto."','".$this->seguimiento."'");
         $this->obj_data_provider->trae_datos("T_Programacion","Max(ID_Programacion) as ID_Programacion","");
         $this->arreglo=$this->obj_data_provider->getArreglo();
         $this->obj_data_provider->desconectar();
@@ -270,4 +281,10 @@ class cls_programacion{
         $this->resultado_operacion=true;
     }
     
+    function editar_estado_programacion(){
+        $this->obj_data_provider->conectar();
+        $this->obj_data_provider->edita_datos("T_Programacion", "Seguimiento='".$this->seguimiento."', Estado='".$this->estado."'", $this->condicion);
+        $this->obj_data_provider->desconectar();
+        $this->resultado_operacion=true;
+    }
 }
