@@ -248,10 +248,11 @@ class cls_programacion{
     
     function guardar_programacion(){
         $this->obj_data_provider->conectar();
+        $sql_datos= "'".$this->fecha."','".$this->hora."','".$this->usuario."','".$this->persona."','".$this->empresa."','".$this->autoriza."','".$this->ue."'";
+        if($this->puntobcr==''|| $this->puntobcr=='0'){$sql_datos.=",null";}else{$sql_datos.=",'".$this->puntobcr."'";}
+        $sql_datos.= ",'".$this->tipo."','".$this->gafete."','".$this->vencimiento."','".$this->detalle."','".$this->estado."','".$this->adjunto."','".$this->seguimiento."'";
         $this->obj_data_provider->inserta_datos("T_Programacion", "Fecha,Hora, ID_Usuario, ID_Persona, ID_Empresa, ID_Persona_Autoriza,
-                ID_Unidad_Ejecutora, ID_PuntoBCR, Tipo_Solicitud, Numero_Gafete, Fecha_Vencimiento, Detalle, Estado, Adjunto, Seguimiento", 
-                "'".$this->fecha."','".$this->hora."','".$this->usuario."','".$this->persona."','".$this->empresa."','".$this->autoriza."','".
-                $this->ue."','".$this->puntobcr."','".$this->tipo."','".$this->gafete."','".$this->vencimiento."','".$this->detalle."','".$this->estado."','".$this->adjunto."','".$this->seguimiento."'");
+                ID_Unidad_Ejecutora, ID_PuntoBCR, Tipo_Solicitud, Numero_Gafete, Fecha_Vencimiento, Detalle, Estado, Adjunto, Seguimiento",$sql_datos);
         $this->obj_data_provider->trae_datos("T_Programacion","Max(ID_Programacion) as ID_Programacion","");
         $this->arreglo=$this->obj_data_provider->getArreglo();
         $this->obj_data_provider->desconectar();

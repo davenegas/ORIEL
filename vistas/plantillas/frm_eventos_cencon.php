@@ -70,10 +70,10 @@
                             <div class="col-sm-6 espacio-abajo-5">
                                 <label for="seguimiento">Seguimiento</label>
                                 <select class="form-control" id="seguimiento" name="seguimiento" >
-                                    <option value="" selected="selected"></option>
-                                    <option value="Se envió correo al funcionario">Se envió correo al funcionario</option>
+                                    <option value="Apertura Normal" selected>Apertura Normal</option>
+                                    <!--<option value="Se envió correo al funcionario">Se envió correo al funcionario</option>
                                     <option value="Se envió correo al encargado">Se envió correo al encargado</option>
-                                    <option value="Se le informó al coordinador">Se le informó al coordinador</option>
+                                    <option value="Se le informó al coordinador">Se le informó al coordinador</option>-->
                                     <option value="Arqueo de ATM">Arqueo de ATM</option>
                                     <option value="ATM en Mantenimiento">ATM en Mantenimiento</option>
                                     <option value="Apertura con llave Azul">Apertura con llave Azul</option>
@@ -191,10 +191,10 @@
                     <!--<input hidden id="ID_Evento_Cencon" name="ID_Evento_Cencon" type="text" value="">-->
                     <label for="seguimiento_evento">Seguimiento</label>
                         <select class="form-control" id="seguimiento_evento" name="seguimiento_evento" >
-                            <option value=""></option>
-                            <option value="Se envió correo al funcionario">Se envió correo al funcionario</option>
+                            <option value="Apertura Normal">Apertura Normal</option>
+                            <!--<option value="Se envió correo al funcionario">Se envió correo al funcionario</option>
                             <option value="Se envió correo al encargado">Se envió correo al encargado</option>
-                            <option value="Se le informó al coordinador">Se le informó al coordinador</option>
+                            <option value="Se le informó al coordinador">Se le informó al coordinador</option>-->
                             <option value="Arqueo de ATM">Arqueo de ATM</option>
                             <option value="ATM en Mantenimiento">ATM en Mantenimiento</option>
                             <option value="Apertura con llave Azul">Apertura con llave Azul</option>

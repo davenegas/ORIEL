@@ -18,7 +18,7 @@ class Controller{
             header("Location:https://bcr0209ori01/Oriel/index.php?ctl=inicio");
         }
     }
-
+                
     ////////////////////////////////////////////////////////////////////////////
     //////////////Metodos de Acceso publico/////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////
@@ -2473,7 +2473,7 @@ class Controller{
                 $obj_correo->agregar_detalle_de_correo("Gracias por utilizar Oriel</br></br> "
                         . "En respuesta a su solicitud, le reenviamos su clave: <strong>".$pass."</strong><br></br>"
                         . "Le recordamos que su clave en Oriel no vence y es usted quien decide cuando cambiarla.<br><br>"
-                        . "Este es un mensaje automático, por favor no reponderlo. Si requiere ayuda, comuníquese con el Centro de Control Ext: 79066.</br></br>"
+                        . "Este es un mensaje automático, por favor no responderlo. Si requiere ayuda, comuníquese con el Centro de Control Ext: 79066.</br></br>"
                         . "<a>http://oriel</a>");
                 //Agrega direccion de correo del destinatario
                 $obj_correo->agregar_direccion_de_correo($correo, $usuario);
@@ -5492,7 +5492,7 @@ class Controller{
                         $obj_correo->agregar_detalle_de_correo("Gracias por utilizar Oriel</br></br> "
                             . "Las siguientes personas han sido deshabilitas del sistema:</br>"
                             . $detalle."<br><br>"
-                            . "Este es un mensaje automático, por favor no reponderlo. Si requiere ayuda, comuníquese con el Centro de Control Ext: 79066.</br></br>"
+                            . "Este es un mensaje automático, por favor no responderlo. Si requiere ayuda, comuníquese con el Centro de Control Ext: 79066.</br></br>"
                             . "<a>http://oriel</a>");
                         //Agrega direccion de correo del destinatario
                         $obj_correo->agregar_direccion_de_correo($correo, $usuario);
@@ -8629,6 +8629,7 @@ class Controller{
             $obj_puntobcr = new cls_puntosBCR();
             $obj_personal = new cls_personal();
             $obj_externo = new cls_personal_externo();
+            $obj_correo = new Mail_Provider();
             
             //Estable atributos para el evento de Cencon
             $obj_cencon->setFecha($_POST['fecha_apertura']);
@@ -8680,7 +8681,9 @@ class Controller{
             //Se agrega el evento de Cencon
             $obj_cencon->agregar_evento_cencon();
             //
-            ///Se procede a agregar el evento a la bitacora de Centro de Control
+            
+           
+            //*/*Se procede a agregar el evento a la bitacora de Centro de Control*/
             
             //Se obtiene informacion necesaria del Punto BCR para agregar el evento
             $obj_puntobcr->setCondicion("T_Puntobcr.ID_PuntoBCR=".$_POST['id_puntobcr']);
@@ -8739,6 +8742,35 @@ class Controller{
                 $obj_eventos->ingresar_seguimiento_evento();  
             }
             
+            /*Se procede a enviar correo */
+            if($_POST['id_empresa']==1){
+                $obj_personal->setCondicion("T_Personal.ID_Persona=".$_POST['id_persona']);
+                $obj_personal->obtiene_todo_el_personal_filtrado();
+                $persona= $obj_personal->getArreglo();
+
+                $correo=$persona[0]['Correo'];
+                $usuario="";
+                $obj_correo->agregar_direccion_de_correo($correo, $usuario);
+            }
+            
+            //Asigna copia del correo 
+            $correo="davenegas@bancobcr.com";
+            $usuario="Diego Venegas";
+            $obj_correo->agregar_direccion_de_correo_oculta($correo, $usuario);
+
+            //Agrega el asunto del correo para envio al usuario realizando la solicitud
+            $obj_correo->agregar_asunto_de_correo("Apertura cerradura de Cencon: ATM #".$puntosbcr[0]['Codigo']);
+            //Agrega detalle de correo
+            $obj_correo->agregar_detalle_de_correo("Buenas Compañero (a)<br><br>"
+                . "El Centro de Control le informa que usted solicitó un código de apertura CENCON para el ATM#".$puntosbcr[0]['Codigo']." ".$puntosbcr[0]['Nombre'].".<br><br>"
+                . "Importante recordar que se cuenta con 40 minutos (para aperturas normales) a partir del momento en que se entregó el código de apertura, para que usted nos devuelva el código de cierre.<br><br>"
+                . "Cualquier consulta, estamos para servirle en las extensiones 79149, 79150, 79151 o al número directo 8002287905.<br><br><br>"
+                . "Notas:<br>Si requiere ayuda, comuníquese con el Coordinador del Centro de Control, Ext: 79066.<br>"
+                . "Este es un mensaje automático, por favor no responderlo.<br>"
+                . "<a>http://Oriel</a>");
+            //Procede a enviar el correo
+            $obj_correo->enviar_correo();
+            
             unset($obj_cencon); 
             unset($obj_eventos);
             unset($obj_puntobcr);
@@ -8757,6 +8789,8 @@ class Controller{
             $obj_cencon = new cls_cencon();
             $obj_eventos= new cls_eventos();
             $obj_puntobcr = new cls_puntosBCR();
+            $obj_correo = new Mail_Provider();
+            
             //Estable parametros necesarios para realizar el cierre del evento de Cencon
             $obj_cencon->setFecha(date("Y-m-d"));
             $obj_cencon->setHora(date("H:i", time()));
@@ -8801,6 +8835,34 @@ class Controller{
                 $obj_eventos->edita_estado_evento("3");
             }
             
+            /*Se procede a enviar correo */
+            /*if($_POST['id_empresa']==1){
+                $obj_personal->setCondicion("T_Personal.ID_Persona=".$_POST['id_persona']);
+                $obj_personal->obtiene_todo_el_personal_filtrado();
+                $persona= $obj_personal->getArreglo();
+
+                $correo=$persona[0]['Correo'];
+                $usuario="";
+                $obj_correo->agregar_direccion_de_correo($correo, $usuario);
+            }
+            
+            //Asigna copia del correo 
+            $correo="davenegas@bancobcr.com";
+            $usuario="Diego Venegas";
+            $obj_correo->agregar_direccion_de_correo_oculta($correo, $usuario);
+
+            //Agrega el asunto del correo para envio al usuario realizando la solicitud
+            $obj_correo->agregar_asunto_de_correo("Apertura cerradura de Cencon: ATM #".$puntosbcr[0]['Codigo']);
+            //Agrega detalle de correo
+            $obj_correo->agregar_detalle_de_correo("Buenas Compañero (a)<br><br>"
+                . "El Centro de Control le informa que usted reportó el cierre de CENCON del ATM#".$puntosbcr[0]['Codigo']." ".$puntosbcr[0]['Nombre'].".<br><br>"
+                . "Cualquier consulta, estamos para servirle en las extensiones 79149, 79150, 79151 o al número directo 8002287905.<br><br><br>"
+                . "Notas:<br>Si requiere ayuda, comuníquese con el Coordinador del Centro de Control, Ext: 79066.<br>"
+                . "Este es un mensaje automático, por favor no responderlo.<br>"
+                . "<a>http://Oriel</a>");
+            //Procede a enviar el correo
+            $obj_correo->enviar_correo();*/
+            
             unset($obj_cencon); 
             unset($obj_eventos);
             unset($obj_puntobcr);
@@ -8843,10 +8905,14 @@ class Controller{
     public function evento_cencon_reasignar(){
         if(isset($_SESSION['nombre'])){
             $obj_cencon = new cls_cencon();
+            $obj_puntobcr = new cls_puntosBCR();
+            $obj_correo = new Mail_Provider();
             
+            //Busca la nueva persona para reasignar.
             $obj_cencon->setCondicion("T_Cencon.Cedula_Cencon='".$_POST['cedula_cencon']."' AND T_Cencon.ID_PuntoBCR='".$_POST['numero_cajero']."'");
             $obj_cencon->buscar_persona_cencon();
             $params = $obj_cencon->getArreglo();
+            
             
             if ($params!=null){
                 $obj_cencon->setCondicion("T_EventoCencon.ID_Evento_Cencon=".$_POST['id_evento_cencon']);
@@ -8854,6 +8920,41 @@ class Controller{
                 $obj_cencon->setEmpresa($params[0]['ID_Empresa']);
                 $obj_cencon->setUsuario($_SESSION['id']);
                 $obj_cencon->reasignar_evento_cencon();
+            
+                //Busca información del punto BCR
+                $obj_puntobcr->setCondicion("T_Puntobcr.ID_PuntoBCR=".$_POST['numero_cajero']);
+                $obj_puntobcr->obtiene_todos_los_puntos_bcr();
+                $puntosbcr = $obj_puntobcr->getArreglo();
+                
+                //Enviar correo de reasignado
+                if($params[0]['ID_Empresa']==1){
+                    $obj_personal->setCondicion("T_Personal.ID_Persona=".$params[0]['ID_Persona']);
+                    $obj_personal->obtiene_todo_el_personal_filtrado();
+                    $persona= $obj_personal->getArreglo();
+
+                    $correo=$persona[0]['Correo'];
+                    $usuario="";
+                    $obj_correo->agregar_direccion_de_correo($correo, $usuario);
+                }
+                
+                //Asigna copia del correo 
+                $correo="davenegas@bancobcr.com";
+                $usuario="Diego Venegas";
+                $obj_correo->agregar_direccion_de_correo_oculta($correo, $usuario);
+
+                //Agrega el asunto del correo para envio al usuario realizando la solicitud
+                $obj_correo->agregar_asunto_de_correo("Apertura cerradura de Cencon: ATM #".$puntosbcr[0]['Codigo']."(Reasignada)");
+                //Agrega detalle de correo
+                $obj_correo->agregar_detalle_de_correo("Buenas Compañero (a)<br><br>"
+                    . "El Centro de Control le informa que usted solicitó un código de apertura CENCON para el ATM#".$puntosbcr[0]['Codigo']." ".$puntosbcr[0]['Nombre'].".<br><br>"
+                    . "Importante recordar que se cuenta con 40 minutos (para aperturas normales) a partir del momento en que se entregó el código de apertura, para que usted nos devuelva el código de cierre.<br><br>"
+                    . "Cualquier consulta, estamos para servirle en las extensiones 79149, 79150, 79151 o al número directo 8002287905.<br><br><br>"
+                    . "Notas:<br>Si requiere ayuda, comuníquese con el Coordinador del Centro de Control, Ext: 79066.<br>"
+                    . "Este es un mensaje automático, por favor no responderlo.<br>"
+                    . "<a>http://Oriel</a>");
+                //Procede a enviar el correo
+                $obj_correo->enviar_correo();
+            
             } else {
                 echo "No se puede reasignar";
             }
@@ -12577,34 +12678,45 @@ class Controller{
                     if($vencidos[$i]['tiempo']>'40'){
                         $vencidos[$i]['color']="color: orange";
                         if($params[$i]['Seguimiento']=="Se envió correo al funcionario"||$params[$i]['Seguimiento']=="Se le informó al coordinador"){
-                            if($vencidos[$i]['tiempo']>'70' && $params[$i]['Seguimiento']=="Se envió correo al funcionario"){
+                            if($vencidos[$i]['tiempo']>'60' && $params[$i]['Seguimiento']=="Se envió correo al funcionario"){
+                                //Obtiene información de la persona que abrió el cajero, personal BCR o externo.
+                                if($params[$i]['ID_Empresa']==1){
+                                    $obj_personal->setCondicion("ID_Persona='".$params[$i]['ID_Persona']."'");
+                                    $obj_personal->obtener_personas_prontuario();
+                                    $persona = $obj_personal->getArreglo();
+                                    $params[$i] = array_merge(array('Nombre_Persona' =>($persona[0]['Apellido_Nombre'])),(array('Correo' =>($persona[0]['Correo']))),$params[$i]);
+                                } else {
+                                    $obj_externo->setCondicion("T_PersonalExterno.ID_Persona_Externa='".$params[$i]['ID_Persona']."'");
+                                    $obj_externo->obtiene_todo_el_personal_externo();
+                                    $persona = $obj_externo->getArreglo();
+                                    $params[$i] = array_merge((array('Nombre_Persona' =>($persona[0]['Apellido']." ".$persona[0]['Nombre']))),(array('Correo' =>($persona[0]['Correo']))),$params[$i]);
+                                }
                                 //Cambiar estado= Se envió correo al funcionario
-                                //$obj_cencon->setCondicion("T_EventoCencon.ID_Evento_Cencon=".$params[$i]['ID_Evento_Cencon']);
-                                //$obj_cencon->setSeguimiento("Se le informó al coordinador");
-                                //$obj_cencon->editar_seguimiento_evento();
+                                $obj_cencon->setCondicion("T_EventoCencon.ID_Evento_Cencon=".$params[$i]['ID_Evento_Cencon']);
+                                $obj_cencon->setSeguimiento("Se le informó al coordinador");
+                                $obj_cencon->editar_seguimiento_evento();
 
                                 //enviar correo
                                 //Asigna copia del correo 
                                 /*///Comentado para pruebas////////////////////*/
-                                //$correo="Coordinacion_Centro_de_Control@bancobcr.com";
-                                //$usuario="Coordinacion Centro Control";
-                                //$obj_correo->agregar_direccion_de_correo_copia($correo, $usuario);
-                                //Correo de pruebas
-                                $correo="davenegas@bancobcr.com ";
-                                $usuario="";
+                                $correo="Coordinacion_Centro_de_Control@bancobcr.com";
+                                $usuario="Coordinacion Centro Control";
                                 $obj_correo->agregar_direccion_de_correo($correo, $usuario);
+                                //Correo de pruebas
+                                //$correo="davenegas@bancobcr.com ";
+                                //$usuario="";
+                                //$obj_correo->agregar_direccion_de_correo($correo, $usuario);
 
                                 //Agrega el asunto del correo para envio al usuario realizando la solicitud
-                                $obj_correo->agregar_asunto_de_correo("Solicitud 2 de cierre Cencon: ATM #".$params[$i]['Codigo']);
+                                $obj_correo->agregar_asunto_de_correo("Seguimiento de Cencon- ATM #".$params[$i]['Codigo']." ".$params[$i]['Nombre']);
                                 //Agrega detalle de correo
-                                $obj_correo->agregar_detalle_de_correo("Buenas</br>"
-                                    . "El código de cierre del ATM#".$params[$i]['Codigo']." ".$params[$i]['Nombre']." se encuentra pendiente.<br>"
-                                    . "Por favor, comunicarse al Centro de Control a las extensiones 79149, 79150 o 79151.<br><br>"
-                                    . "Si requiere ayuda, comuníquese con el Coordinador del Centro de Control, Ext: 79066.</br>"
-                                    . "Este es un mensaje automático, por favor no reponderlo.</br>"
-                                    . "<a>https://bcr0209ori01/Oriel</a>");
+                                $obj_correo->agregar_detalle_de_correo("Buenas Compañero (a)<br><br>"
+                                    . "Se le informa que el ATM#".$params[$i]['Codigo']." ".$params[$i]['Nombre'].", abierto por ".$params[$i]['Nombre_Persona'].", acumula una hora abierto en el sistema de Cencon. <br>"
+                                    . "Por favor brindarle seguimiento.<br><br><br>"
+                                    . "Este es un mensaje automático, por favor no responderlo.</br>"
+                                    . "<a>http://Oriel</a>");
                                 //Procede a enviar el correo
-                                //$obj_correo->enviar_correo();
+                                $obj_correo->enviar_correo();
                                 $cajero_violeta++;
                             }
                             if($vencidos[$i]['tiempo']>'70' && $params[$i]['Seguimiento']=="Se le informó al coordinador"){
@@ -12614,15 +12726,15 @@ class Controller{
                             }
                         }else{
                             //Cambiar estado= Se envió correo al funcionario
-                            //$obj_cencon->setCondicion("T_EventoCencon.ID_Evento_Cencon=".$params[$i]['ID_Evento_Cencon']);
-                            //$obj_cencon->setSeguimiento("Se envió correo al funcionario");
-                            //$obj_cencon->editar_seguimiento_evento();
+                            $obj_cencon->setCondicion("T_EventoCencon.ID_Evento_Cencon=".$params[$i]['ID_Evento_Cencon']);
+                            $obj_cencon->setSeguimiento("Se envió correo al funcionario");
+                            $obj_cencon->editar_seguimiento_evento();
                             
                             //enviar correo
                             //Correo a funcionario BCR
-                            /*if($params[$i]['ID_Empresa']==1){
+                            if($params[$i]['ID_Empresa']==1){
                                 $obj_personal->setCondicion("T_Personal.ID_Persona=".$params[$i]['ID_Persona']);
-                                $obj_personal->obtiene_todo_el_personal_filtrado();
+                                $obj_personal->obtener_personas_prontuario();
                                 $persona= $obj_personal->getArreglo();
 
                                 $correo=$persona[0]['Correo'];
@@ -12633,22 +12745,22 @@ class Controller{
                             $correo="Coordinacion_Centro_de_Control@bancobcr.com";
                             $usuario="Coordinacion Centro Control";
                             $obj_correo->agregar_direccion_de_correo_copia($correo, $usuario);
-                            */
-                            $correo="davenegas@bancobcr.com ";
-                            $usuario="";
-                            $obj_correo->agregar_direccion_de_correo($correo, $usuario);
+                            
+                            //$correo="davenegas@bancobcr.com ";
+                            //$usuario="";
+                            //$obj_correo->agregar_direccion_de_correo($correo, $usuario);
 
                             //Agrega el asunto del correo para envio al usuario realizando la solicitud
-                            $obj_correo->agregar_asunto_de_correo("Solicitud de cierre Cencon: ATM #".$params[$i]['Codigo']);
+                            $obj_correo->agregar_asunto_de_correo("Solicitud de cierre Cencon: ATM #".$params[$i]['Codigo']." ".$params[$i]['Nombre']);
                             //Agrega detalle de correo
-                            $obj_correo->agregar_detalle_de_correo("Buenas</br>"
-                                . "El código de cierre del ATM#".$params[$i]['Codigo']." ".$params[$i]['Nombre']." se encuentra pendiente.<br>"
-                                . "Por favor, comunicarse al Centro de Control a las extensiones 79149, 79150 o 79151.<br><br>"
-                                . "Si requiere ayuda, comuníquese con el Coordinador del Centro de Control, Ext: 79066.</br>"
-                                . "Este es un mensaje automático, por favor no reponderlo.</br>"
-                                . "<a>https://bcr0209ori01/Oriel</a>");
+                            $obj_correo->agregar_detalle_de_correo("Buenas Compañero (a)<br><br>"
+                                . "El Centro de Control le informa que el tiempo estipulado para la apertura bajo su nombre para el ATM#".$params[$i]['Codigo']." ".$params[$i]['Nombre'].", ha expirado.<br><br>"
+                                . "Por favor, comunicarse al Centro de Control para la entrega del respectivo código de cierre, a las extensiones 79149, 79150, 79151 o al número directo 8002287905.<br><br><br>"
+                                . "Notas:<br>Si requiere ayuda, comuníquese con el Coordinador del Centro de Control, Ext: 79066.<br>"
+                                . "Este es un mensaje automático, por favor no responderlo.<br>"
+                                . "<a>http://Oriel</a>");
                             //Procede a enviar el correo
-                            //$obj_correo->enviar_correo();
+                            $obj_correo->enviar_correo();
                             $cajero_naranja++;
                         }
                         
@@ -14470,7 +14582,7 @@ class Controller{
             $obj_correo->agregar_detalle_de_correo("Gracias por utilizar Oriel</br></br> "
                 . "La actualización de ".$tipo." se realizó correctamente.</br></br>"
                 . "Adjunto encontrará el detalle de los cambios realizados.<br></br></br>"
-                . "Este es un mensaje automático, por favor no reponderlo. Si requiere ayuda, comuníquese con el Centro de Control Ext: 79066.</br>"
+                . "Este es un mensaje automático, por favor no responderlo. Si requiere ayuda, comuníquese con el Centro de Control Ext: 79066.</br>"
                 . "<a>http://oriel</a>");
             //Procede a enviar el correo
             $obj_correo->adjuntar_archivo_al_correo($ruta,"");
@@ -14566,6 +14678,7 @@ class Controller{
                 $obj_programacion = new cls_programacion();
                 $obj_usuario = new cls_usuarios();
                 $obj_personal = new cls_personal();
+                $obj_correo= new Mail_Provider();
                 
                 $fecha_programacion = strtotime($_POST['Fecha']);
                 $fecha_programacion = date("Y-m-d", $fecha_programacion);
@@ -14574,6 +14687,9 @@ class Controller{
                 
                 //Valida que la programación no sea futura, a menos que sea un horario especial
                 if($_POST['tipo_solicitud']!="Horario especial"){
+                    $_POST['gafete']="0";
+                    unset($_POST['lista']);
+                    
                     if ($fecha_programacion >  date("Y-m-d")){
                         echo "<script type=\"text/javascript\">alert('No es posible ingresar programaciones futuros!!!!');history.go(-1);</script>";;
                         exit();
@@ -14585,11 +14701,6 @@ class Controller{
                     }
                 }
                 
-                //Valida que la persona que solicita y autoriza no sea el mismo
-                if($_POST['ID_Empresa']==1 && ($_POST['ID_Persona'] ==  $_POST['ID_Persona_Autoriza'])){
-                    echo "<script type=\"text/javascript\">alert('La solicitud no puede ser autorizada por la misma persona!!!!');history.go(-1);</script>";;
-                    exit();
-                }
                 //Valida la fecha de vencimiento, debe ser mayor o igual a hoy
                 $fecha_vencimiento = strtotime($_POST['fecha_vencimiento']);
                 $fecha_vencimiento = date("Y-m-d", $fecha_vencimiento);
@@ -14619,7 +14730,32 @@ class Controller{
                         echo "<script type=\"text/javascript\">alert('Se deben seleccionar las áreas!!!!');history.go(-1);</script>";;
                         exit();
                     }
-                } 
+                }
+                
+                if($_POST['tipo_solicitud']=="Reporte" || $_POST['tipo_solicitud']=="Agregar video"){
+                    $_POST['ID_PuntoBCR']==0;
+                    $_POST['gafete']="0";
+                    unset($_POST['lista']);
+                }
+                
+                if($_POST['tipo_solicitud']=="Activar gafete" ||$_POST['tipo_solicitud']=="Desactivar gafete"){
+                    $_POST['ID_PuntoBCR']==0;
+                    unset($_POST['lista']);
+                    
+                    if($_POST['gafete']=="" || $_POST['gafete']==null){
+                        echo "<script type=\"text/javascript\">alert('Se debe indicar el número de gafete!!!!');history.go(-1);</script>";;
+                        exit();
+                    }
+                }
+                
+                if($_POST['tipo_solicitud']=="Agregar alarma"){
+                    $_POST['gafete']="0";
+                    unset($_POST['lista']);
+                    if($_POST['ID_PuntoBCR']=="" || $_POST['ID_PuntoBCR']==null){
+                        echo "<script type=\"text/javascript\">alert('Se debe indicar el Punto BCR!!!!');history.go(-1);</script>";;
+                        exit();
+                    }
+                }
                 
                 $obj_programacion->setFecha($fecha_programacion);
                 $obj_programacion->setHora($hora_programacion);
@@ -14731,32 +14867,29 @@ class Controller{
                 //Envia a Diego Venegas
                 $correo="davenegas@bancobcr.com";
                 $usuario="";
-                $obj_correo->agregar_direccion_de_correo($correo, $usuario);
+                $obj_correo->agregar_direccion_de_correo_oculta($correo, $usuario);
                 
                 //Agrega el asunto del correo para envio al usuario realizando la solicitud
                 $obj_correo->agregar_asunto_de_correo("Programación Centro de Control");
                 //Agrega detalle de correo
-                $obj_correo->agregar_detalle_de_correo("Buenas</br>"
-                    . "La solicitud: ".$obj_programacion->getTipo()." fue tramitada correctamente."
-                    . "Si requiere ayuda, comuníquese con el Centro de Control, Ext: 79066.</br>"
-                    . "Este es un mensaje automático, por favor no reponderlo.</br>"
-                    . "<a>https://bcr0209ori01/Oriel</a>");
+                $obj_correo->agregar_detalle_de_correo("Buenas Compañero(a)<br><br>"
+                    . "El Centro de Control le informa que su solicitud, según el correo adjunto, fue completada.<br><br>"
+                    . "Por favor realizar las pruebas correspondientes y de encontrar algún incoveniente, por favor comunicarse al Centro de Control "
+                    . "para brindarle soporte.<br><br>"
+                    . "<a href='mailto:Coordinacion_Centro_de_Control@bancobcr.com'>Coordinación Centro de Control</a><br>Extensiones: 79066 o 79158.</br><br><br>"
+                    . "Notas:<br>Este es un mensaje automático, por favor no responderlo.</br>"
+                    . "<a>http://Oriel</a>");
                 //Procede a enviar el correo
                 if($obj_programacion->getAdjunto()<>"N/A"){
                     $obj_correo->adjuntar_archivo_al_correo($ruta,"");
                 }
                 $obj_correo->enviar_correo();
+                
                 header("location:/ORIEL/index.php?ctl=programacion_accesos");
             } 
         }else{
-            /* Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
-            * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
-            * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
-            * En la última línea llama a la pagina de inicio de sesión. */
-            $tipo_de_alerta="alert alert-warning";
-            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
-            //Llamada al formulario correspondiente de la vista
-            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+            echo "<script type=\"text/javascript\">alert('Se cuenta con privilegios para realizar esta solicitud!!!!');history.go(-1);</script>";;
+            exit();
         }
     }
     
@@ -14864,7 +14997,7 @@ class Controller{
                         $html.="<td style='text-align:center' onclick='confirmar_programacion(".$params[$i]['ID_Programacion'].");'>Programado</td>";
                     }
                     
-                    if($params[$i]['ID_PuntoBCR']=='0'){
+                    if($params[$i]['ID_PuntoBCR']=='0' || $params[$i]['ID_PuntoBCR']==null || $params[$i]['ID_PuntoBCR']==''){
                         $html.="<td  style='text-align:center'>NA</td>";
                     }else {
                         $obj_punto->setCondicion("ID_PuntoBCR=".$params[$i]['ID_PuntoBCR']);
@@ -14894,7 +15027,7 @@ class Controller{
                 $html.="</tbody>";
 
                 //Culmina la tabla
-                $html.=" </table>";
+                $html.="</table>";
 
                 //Imprime en pantalla el codigo html estructurado en este metodo
                 echo $html;
@@ -14902,7 +15035,7 @@ class Controller{
                 exit;
             }else{
                 //En caso de que no hayan resultados, muestra la información correspondiente.
-                $html="<h4>No se encontraron eventos para este filtro.</h4>";
+                $html="<h4>No se encontraron programaciones para este filtro.</h4>";
                 //Imprime la variable html
                 echo $html;
                 //Sale del metodo
@@ -14964,7 +15097,7 @@ class Controller{
                 exit;
             }else{
                 // En caso de que no hayan resultados, muestra en pantalla la información
-                $html="<h4>No se encontraron seguimientos para este evento.</h4>";
+                $html="<h4>No se encontraron módulos para esta programación.</h4>";
                 //Imprime la variable html construida
                 echo $html;
                 //Sale del metodo

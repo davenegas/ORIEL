@@ -5,7 +5,7 @@
         <title>Accesos programados</title>
         <?php require_once 'frm_librerias_head.html';?>
         <script language="javascript" src="vistas/js/valida_un_solo_click_en_formulario.js"></script>  
-        <script language="javascript" src="vistas/js/lista_dependientes_programacion.js?0.4.3"></script>
+        <script language="javascript" src="vistas/js/lista_dependientes_programacion.js?1.0.1"></script>
         <link rel="stylesheet" href="vistas/css/ventanaoculta.css">
     </head>
     <body>
@@ -87,8 +87,8 @@
                                 <input type="text" disabled class="form-control" id="gafete" name="gafete">
                             </div>
                             <div class="col-md-4">
-                                <label for="detalle">Seleccionar áreas asignadas/eliminadas</label>
-                                <input type="text" disabled class="form-control" onclick="seleccionar_modulos();" id="detalle" name="detalle">
+                                <label for="detalle_areas">Seleccionar áreas asignadas/eliminadas</label>
+                                <input type="text" disabled class="form-control" onclick="seleccionar_modulos();" id="detalle_areas" name="detalle_areas">
                             </div>
                         </div>
                         <div class="row espacio-abajo">

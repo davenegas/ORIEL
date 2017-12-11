@@ -290,7 +290,7 @@
                                 <li><a href="index.php?ctl=reporte_eventos_bitacora_digital">Reporte Eventos</a></li> 
                             <?php }; ?>
                                 
-                            <?php if ($_SESSION['modulos']['Reportes-Eventos']==1){ ?>
+                            <?php if ($_SESSION['modulos']['Reportes-Cencon']==1){ ?>
                                 <li><a href="index.php?ctl=reporte_cencon">Reporte Cencon</a></li> 
                             <?php }; ?>
    

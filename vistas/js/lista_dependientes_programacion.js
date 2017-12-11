@@ -6,33 +6,36 @@ $(document).ready(function(){
                 case "Activar gafete":
                 case "Desactivar gafete":
                     document.getElementById('puntobcr').disabled=true;
+                    document.getElementById('gafete').value="";
                     document.getElementById('gafete').removeAttribute("disabled");
-                    document.getElementById('detalle').disabled=true;
+                    document.getElementById('detalle_areas').disabled=true;
                     break;
                 case "Agregar areas":
                 case "Eliminar areas":
                     document.getElementById('puntobcr').disabled=true;
+                    document.getElementById('gafete').value="";
                     document.getElementById('gafete').removeAttribute("disabled");
-                    document.getElementById('detalle').removeAttribute("disabled");
+                    document.getElementById('detalle_areas').value="";
+                    document.getElementById('detalle_areas').removeAttribute("disabled");
                     break;
                 case "Reporte":
                 case "Modificar Continuum":
                 case "Agregar video":    
                     document.getElementById('puntobcr').disabled=true;
                     document.getElementById('gafete').disabled=true;
-                    document.getElementById('detalle').disabled=true;
+                    document.getElementById('detalle_areas').disabled=true;
                     break;
                 case "Horario especial":
                 case "Modificar horario":
                 case "Agregar alarma":
                     document.getElementById('puntobcr').removeAttribute("disabled");
                     document.getElementById('gafete').disabled=true;
-                    document.getElementById('detalle').disabled=true;
+                    document.getElementById('detalle_areas').disabled=true;
                     break;    
                 default:
                     document.getElementById('puntobcr').disabled=true;
                     document.getElementById('gafete').disabled=true;
-                    document.getElementById('detalle').disabled=true;
+                    document.getElementById('detalle_areas').disabled=true;
                     break;
             }    
         });
