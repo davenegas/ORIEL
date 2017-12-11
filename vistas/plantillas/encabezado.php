@@ -286,7 +286,7 @@
                                 <li><a href="index.php?ctl=reporte_prueba_alarma">Pruebas alarma reportadas</a></li> 
                             <?php }; ?>
                                 
-                            <?php if ($_SESSION['modulos']['Reportes-Cencon']==1){ ?>
+                            <?php if ($_SESSION['modulos']['Reportes-Eventos']==1){ ?>
                                 <li><a href="index.php?ctl=reporte_eventos_bitacora_digital">Reporte Eventos</a></li> 
                             <?php }; ?>
                                 
@@ -306,7 +306,10 @@
                                    
                 <?php 
                 //************************************************Pinta Menu de Proyectos***************************************************************
-                if (($_SESSION['modulos']['Seguridad-Trazabilidad']==1|| $_SESSION['rol']==25)){ ?>
+                //Rol 2= Operador Z1    //Rol 3= Coordinador Empresa      //Rol 6= Operador Cencon        //Rol 11= Coordinador Z1
+                //Rol 14= Operador Z2      //Rol 25= Control y seguimiento ATM's
+                if (($_SESSION['modulos']['Seguridad-Trazabilidad']==1|| $_SESSION['rol']==25 || $_SESSION['rol']==2 || 
+                        $_SESSION['rol']==3 || $_SESSION['rol']==6 || $_SESSION['rol']==11 || $_SESSION['rol']==14)){ ?>
                     <li class="dropdown">
                         <a class="dropdown-toggle" data-toggle="dropdown" href="#">Proyectos
                             <span class="caret"></span></a>
@@ -314,10 +317,33 @@
                             <?php if ($_SESSION['rol']==25||$_SESSION['modulos']['Seguridad-Trazabilidad']==1){?>
                                 <li><a href="https://bcr0209ori01/ORIEL-Cajeros/index.php?ctl=inicio">Control y Seguimiento ATM's</a></li> 
                             <?php }; ?>
+                                
                             <?php if ($_SESSION['modulos']['Seguridad-Trazabilidad']==1){?>
                                 <li><a href="index.php?ctl=comite_crisis">Comité de Crisis</a></li> 
                             <?php }; ?>
                                 
+                            <?php if ($_SESSION['modulos']['Seguridad-Trazabilidad']==1 || $_SESSION['rol']==2 || 
+                                $_SESSION['rol']==3 || $_SESSION['rol']==6 || $_SESSION['rol']==11 || $_SESSION['rol']==14){?>
+                                <li><a href="https://bcrcartracktotal:28000/Cartrack/Login.aspx"><span class="glyphicon glyphicon-globe"></span> Cartrack</a></li> 
+                            <?php }; ?>
+                            
+                            <?php if ($_SESSION['modulos']['Seguridad-Trazabilidad']==1 || $_SESSION['rol']==2 || 
+                                $_SESSION['rol']==3 || $_SESSION['rol']==6 || $_SESSION['rol']==11 || $_SESSION['rol']==14){?>
+                                <li><a href="http://bcr0106mft02:8080/console/page/cxlxlglwsg"><span class="glyphicon glyphicon-globe"></span> Foglight Z1</a></li> 
+                            <?php }; ?>
+                                
+                            <?php if ($_SESSION['modulos']['Seguridad-Trazabilidad']==1 || $_SESSION['rol']==11){?>
+                                <li><a href="http://172.20.7.14/desktop/#deviceGroups"><span class="glyphicon glyphicon-globe"></span> Monitoreo UPS</a></li> 
+                            <?php }; ?>
+                                
+                            <?php if ($_SESSION['modulos']['Seguridad-Trazabilidad']==1|| $_SESSION['rol']==2 || 
+                                $_SESSION['rol']==3 || $_SESSION['rol']==6 || $_SESSION['rol']==11 || $_SESSION['rol']==14){?>
+                                <li><a href="https://10.170.5.81/check_mk/view.py?is_host_scheduled_downtime_depth=0&search=Search&filled_in=filter&is_host_acknowledged=-1&hst2=on&hst1=on&hst0=on&is_summary_host=0&hstp=on&opthostgroup=&selection=2b67b425-e2d2-422f-af1b-bd107d680baf&limit=hard&is_host_in_notification_period=-1&host=&view_name=hostproblems&sort=-hoststate%2Choststate%2Chost_state_age"><span class="glyphicon glyphicon-globe"></span> Griedshield</a></li> 
+                            <?php }; ?>
+                                
+                            <?php if ($_SESSION['modulos']['Seguridad-Trazabilidad']==1 || $_SESSION['rol']==11){?>
+                                <li><a href="https://monitoreoatm:43/LOGIN_USER"><span class="glyphicon glyphicon-globe"></span> TS Monitor</a></li> 
+                            <?php }; ?>
                         </ul>
                     </li>
                 <?php  };    ?>
