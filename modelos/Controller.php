@@ -14238,6 +14238,7 @@ class Controller{
 
             $this->correo_actualizacion_controlador($correo, $tipo);
             
+            //echo $correo;
             header ("location:/ORIEL/index.php?ctl=actualizar_controladores_inicio");
         }else {
             $tipo_de_alerta="alert alert-warning";
@@ -14383,6 +14384,7 @@ class Controller{
             $tipo="Puertas";
             $this->correo_actualizacion_controlador($correo, $tipo);
             
+            //echo $correo;
             header ("location:/ORIEL/index.php?ctl=actualizar_puerta_controlada_inicio");
         }else {
             $tipo_de_alerta="alert alert-warning";
@@ -14471,12 +14473,12 @@ class Controller{
                 for ($c = 0; $c < count($controladores_bd); $c++){
                     //Verifica si el controlador existe en la base de datos
                     if($controladores_subidos[$i][5]===$controladores_bd[$c]['ID_Modulo_Puerta_Controlada']){
-                        if($controladores_subidos[$i][1]!==$controladores_bd[$c]['Name']){
-                           $correo.="Se actualizó el nombre del módulo ".$controladores_bd[$c]['Name']." a: ".$controladores_subidos[$i][1].", del controlador".$controladores_subidos[$i][0].".\r\n";
+                        if($controladores_subidos[$i][2]!==$controladores_bd[$c]['Name']){
+                           $correo.="Se actualizó el nombre del módulo ".$controladores_bd[$c]['Name']." a: ".$controladores_subidos[$i][2].", del controlador".$controladores_subidos[$i][0].".\r\n";
                         }
                         if($controladores_subidos[$i][3]!=$controladores_bd[$c]['ModuloID']){
-                           $correo.="Se actualizó el ModuloID del módulo ".$controladores_bd[$c]['name'].", del controlador ".$controladores_bd[$c]['Name'].".\r\n";
-                           $correo.="ModuloID actualizado ".$controladores_bd[$c]['3']." ModuloID anterior ".$controladores_bd[$c]['ModuloID'].".\r\n";
+                           $correo.="Se actualizó el ModuloID del módulo ".$controladores_bd[$c]['Name'].", del controlador ".$controladores_bd[$c]['Owner'].".\r\n";
+                           $correo.="ModuloID actualizado ".$controladores_subidos[$c][3]." ModuloID anterior ".$controladores_bd[$c]['ModuloID'].".\r\n";
                         }
                         $obj_controlador->setOwner($controladores_subidos[$i][0]);
                         $obj_controlador->setIou($controladores_subidos[$i][1]);
@@ -14498,7 +14500,7 @@ class Controller{
             //Verifica los contraladores subido que no fueron encontrados en la base de datos actual
             for ($i = 0; $i < count($controladores_subidos); $i++){
                 if($controladores_subidos[$i][1]<>"0"){
-                    $correo.="El siguiente módulo es nuevo en la base de datos ".$controladores_subidos[$i]['1'].", del controlador ".$controladores_subidos[$i]['0'].".\r\n";
+                    $correo.="El siguiente módulo es nuevo en la base de datos ".$controladores_subidos[$i][1].", del controlador ".$controladores_subidos[$i][0].".\r\n";
                     $obj_controlador->setOwner($controladores_subidos[$i][0]);
                     $obj_controlador->setIou($controladores_subidos[$i][1]);
                     $obj_controlador->setName($controladores_subidos[$i][2]);
@@ -14511,6 +14513,7 @@ class Controller{
                 }
             }
             
+            //
             for ($i = 0; $i < count($controladores_bd); $i++){
                 if($controladores_bd[$i]['name']<>"0"){
                     if($controladores_bd[$i]['Estado']==1){
@@ -14528,6 +14531,7 @@ class Controller{
             $tipo="Módulos";
             $this->correo_actualizacion_controlador($correo, $tipo);
             
+            //echo $correo;
             header ("location:/ORIEL/index.php?ctl=actualizar_modulo_puerta_inicio");
         }else {
             $tipo_de_alerta="alert alert-warning";
@@ -14586,10 +14590,11 @@ class Controller{
                 . "<a>http://oriel</a>");
             //Procede a enviar el correo
             $obj_correo->adjuntar_archivo_al_correo($ruta,"");
-            $obj_correo->enviar_correo();
+            //$obj_correo->enviar_correo();
+            
         }
     }
-    
+    ///////////////////Módulo de Programaciones///////////////////////////////
     public function programacion_accesos(){
         if(isset($_SESSION['nombre'])){
             $obj_persona = new cls_personal();
@@ -14686,7 +14691,7 @@ class Controller{
                 $hora_programacion = date("H:i", $hora_programacion);
                 
                 //Valida que la programación no sea futura, a menos que sea un horario especial
-                if($_POST['tipo_solicitud']!="Horario especial"){
+                if($_POST['tipo_solicitud']=="Horario especial"){
                     $_POST['gafete']="0";
                     unset($_POST['lista']);
                     
@@ -15123,5 +15128,135 @@ class Controller{
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }
     }
+    
+    ////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////Botones RF////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////
+    
+    public function botones_listar(){
+        if(isset($_SESSION['nombre'])){
+            $obj_zona = new cls_botones();
+            //Procede a ejecutar la consulta SQL para traer todas las notas contenidas en la bd.
+            $obj_zona->setCondicion("");
+            //Obtener el vector de la consulta
+            $obj_zona->obtener_botones_listar();
+            $zona=$obj_zona->getArreglo();
+            //Obtener el vector de la consulta
+            $obj_zona->obtener_puntobcr();
+            $params= $obj_zona->getArreglo(); 
+            
+            require __DIR__ . '/../vistas/plantillas/frm_botones_RF.php';
+			
+        } else {
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            //Llamada al formulario correspondiente de la vista
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }
+    }
+    
+    //Funcion para seleccionar la informacion del punto bcr 
+    public function botones_selec_guardar(){
+        if(isset($_SESSION['nombre'])){
+            $obj_params = new cls_botones();
+            $obj_params->setCondicion("T_PuntoBCR.ID_PuntoBCR='".$_GET['id_puntobcr']."'");
+            $obj_params->obtener_puntobcr();
+            $params= $obj_params->getArreglo();
+            $obj_params->setCondicion("");
+            $obj_params->obtener_responsable_boton();
+            $nombre= $obj_params->getArreglo();
+                            
+            require __DIR__ . '/../vistas/plantillas/frm_botones_RF_guardar.php';
+            
+        } else {
+             
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesiÃ³n para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }
+    }
+    
+    //Funcion para guardar zonas nuevas al panel ya seleccionado
+    public function botones_guardar(){
+        if(isset($_SESSION['nombre'])){
+            if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+                $obj_zona = new cls_botones();
+                $obj_zona->setID_Boton($_POST['id_boton']);
+                $obj_zona->setID_PuntoBCR($_POST['id_puntobcr']);
+                $obj_zona->setID_Persona($_POST['id_persona']);
+                $obj_zona->setTipo_Respuesta($_POST['tipo_respuesta']);
+                $obj_zona->setNumero_Zona($_POST['numero_zona']);
+                $obj_zona->setTipo_Entrada($_POST['tipo_entrada']);
+                $obj_zona->setNumero_Serie($_POST['numero_serie']);
+                $obj_zona->setObservaciones($_POST['observaciones']);
+                $obj_zona->setEstado($_POST['estado']);
+
+                $obj_zona->botones_guardar();
+
+                header("location:/ORIEL/index.php?ctl=botones_listar");
+
+            } else {
+                $tipo_de_alerta="alert alert-warning";
+                $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+                require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+            }  
+        } 
+    } 
+    
+    //Funcion para editar la informacion del boton seleccionado
+    public function botones_selec_editar(){
+        if(isset($_SESSION['nombre'])){
+            $obj_botones = new cls_botones();
+            $obj_personal= new cls_personal();
+            $obj_puntos= new cls_puntosBCR();
+            //Procede a ejecutar la consulta SQL para traer todas las notas contenidas en la bd.
+            $obj_botones->setCondicion("T_Botones.ID_Boton='".$_GET['id_boton']."'");
+            $obj_botones->obtener_botones_listar();
+            $botones_rf = $obj_botones->getArreglo();
+            //Trae todos los datos del personal
+            $obj_personal->setCondicion("");
+            $obj_personal->obtiene_todo_el_personal();
+            $personal_bcr = $obj_personal->getArreglo();
+            //Trae todos los datos del punto bcr
+            $obj_puntos->setCondicion("");
+            $obj_puntos->obtiene_todos_los_puntos_bcr();
+            $puntos_bcr = $obj_puntos->getArreglo();
+
+            require __DIR__ . '/../vistas/plantillas/frm_botones_RF_editar.php';	
+        } else {
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            //Llamada al formulario correspondiente de la vista
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }
+    }
+    
+    public function botones_editar(){
+        if(isset($_SESSION['nombre'])){
+            if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+                $obj_botones_rf = new cls_botones();
+                $obj_botones_rf->setID_Boton($_GET['ID_Boton']);
+                $obj_botones_rf->setID_PuntoBCR($_POST['ID_PuntoBCR']);
+                $obj_botones_rf->setID_Persona($_POST['ID_Persona']);
+                $obj_botones_rf->setTipo_Respuesta($_POST['tipo_respuesta']);
+                $obj_botones_rf->setNumero_Zona($_POST['numero_zona']);
+                $obj_botones_rf->setTipo_Entrada($_POST['tipo_entrada']);
+                $obj_botones_rf->setNumero_Serie($_POST['numero_serie']);
+                $obj_botones_rf->setObservaciones($_POST['observaciones']);
+                $obj_botones_rf->setEstado($_POST['estado']);
+
+                if ($_GET['ID_Boton']>=1){
+                    $obj_botones_rf->setCondicion("ID_Boton='".$_GET['ID_Boton']."'");
+                    $obj_botones_rf->editar_botones();
+                }   
+                
+                header ("location:/ORIEL/index.php?ctl=botones_listar"); 
+            } else {
+                $tipo_de_alerta="alert alert-warning";
+                $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+                require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+            }  
+        } 
+    }  
     
 }

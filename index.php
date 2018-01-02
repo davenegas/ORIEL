@@ -93,6 +93,8 @@ require_once __DIR__ . '/controladores/cls_reporteria.php';
 require_once __DIR__ . '/controladores/cls_control_acceso.php';
 //
 require_once __DIR__ . '/controladores/cls_programacion.php';
+//Libreria de clases --> Control para Botones RF
+require_once __DIR__ . '/controladores/cls_botones.php';
 /*
  * El elemento controller, constituye la base y esencia de toda la lógica del negocio, en este
  * se almacenan cada una de las funcionales de ORIEl. El archivo en sí, se compone de "n" cantidad
@@ -431,6 +433,13 @@ $map = array(
     //Solicitud de Permisos
     'solicitud_permiso'=>array('controller'=>'Controller','action'=> 'solicitud_permiso'),
  
+    //Botones RF
+    'botones_listar'=> array('controller'=>'Controller','action'=>'botones_listar'),
+    'botones_selec_guardar'=> array('controller'=>'Controller','action'=>'botones_selec_guardar'),
+    'botones_guardar'=> array('controller'=>'Controller','action'=>'botones_guardar'),
+    'botones_selec_editar'=> array('controller'=>'Controller','action'=>'botones_selec_editar'),
+    'botones_editar'=> array('controller'=>'Controller','action'=>'botones_editar'),
+    
     //Controlador de Usuarios 
     'listar_usuarios'=> array('controller'=>'Controller','action'=>'listar_usuarios'),
     'gestion_usuarios' => array('controller'=> 'Controller','action'=>'gestion_usuarios'),

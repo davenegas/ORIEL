@@ -216,11 +216,11 @@ class cls_control_acceso {
     public function obtener_controladores_completos(){
        $this->obj_data_provider->conectar();
         if($this->condicion==""){
-            $this->arreglo=$this->obj_data_provider->trae_datos("T_Control_Acceso", 
+            $this->arreglo=$this->obj_data_provider->trae_datos("T_ControlAcceso", 
                 "*", 
                 "");
         }else{
-            $this->arreglo=$this->obj_data_provider->trae_datos("T_Control_Acceso", 
+            $this->arreglo=$this->obj_data_provider->trae_datos("T_ControlAcceso", 
                 "*",
                 $this->condicion);
         }
@@ -230,7 +230,7 @@ class cls_control_acceso {
     }
     
     function edicion_de_controlador_a_transaccion(){
-        $this->obj_data_provider->agregar_edicion_de_datos_a_la_transaccion("T_Control_Acceso",
+        $this->obj_data_provider->agregar_edicion_de_datos_a_la_transaccion("T_ControlAcceso",
             "Owner='".$this->owner."',Name='".$this->name."',NetworkId='".$this->networkid.
             "',IPAddress='".$this->ipaddress."',CommStatus='".$this->commstatus."',CreateTime='".$this->createtime."',CreateBy='".$this->createby.
             "',VersionNum='".$this->versionnum."',SerialNum='".$this->serialnum."',SubnetMask='".$this->subnetmask.
@@ -239,14 +239,14 @@ class cls_control_acceso {
     }
      
     function agregar_controlador_a_transaccion(){
-        $this->obj_data_provider->agregar_inclusion_de_datos_a_la_transaccion("T_Control_Acceso", 
+        $this->obj_data_provider->agregar_inclusion_de_datos_a_la_transaccion("T_ControlAcceso", 
             "ID_Control_Acceso, Owner, Name, NetworkId, IPAddress, CommStatus, CreateTime, CreateBy, VersionNum, SerialNum, SubnetMask, Model, Estado", 
             "'".$this->id."','".$this->owner."','".$this->name."','".$this->networkid."','".$this->ipaddress."','".$this->commstatus."','".$this->createtime.
             "','".$this->createby."','".$this->versionnum."','".$this->serialnum."','".$this->subnetmask."','".$this->model."','".$this->estado."'");
     }
     
     function editar_estado_controlador_a_transaccion(){
-        $this->obj_data_provider->agregar_edicion_de_datos_a_la_transaccion("T_Control_Acceso","Estado='".$this->estado."'",$this->condicion);
+        $this->obj_data_provider->agregar_edicion_de_datos_a_la_transaccion("T_ControlAcceso","Estado='".$this->estado."'",$this->condicion);
     }
     
     ///////////////////// FUNCIONES PARA PUERTAS CONTROLADAS////////////////////

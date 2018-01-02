@@ -85,13 +85,17 @@
                        $_SESSION['modulos']['Catálogos-Proveedor enlaces']==1||$_SESSION['modulos']['Catálogos-Tipo enlaces']==1||
                        $_SESSION['modulos']['Catálogos-Medio enlaces']==1|| $_SESSION['modulos']['Catálogos-Unidades de Video']==1||
                        $_SESSION['modulos']['Catálogos-Cencon']==1 || $_SESSION['modulos']['Catálogos-Puestos de Monitoreo']==1
-                        || $_SESSION['modulos']['Catálogos-Inconsistencias de Video']==1)){  ?>
+                        || $_SESSION['modulos']['Catálogos-Inconsistencias de Video']==1 ||$_SESSION['modulos']['Catálogos-Botones']==1)){  ?>
 
                     <li class="dropdown">
                         <a class="dropdown-toggle" data-toggle="dropdown" href="#">Catálogos
                         <span class="caret"></span></a>
                         <ul class="dropdown-menu">
-
+                            
+                            <?php if ($_SESSION['modulos']['Catálogos-Botones']==1){?>  
+                                <li><a href="index.php?ctl=botones_listar">Botones RF</a></li> 
+                            <?php  }; ?>     
+                                
                             <?php if ($_SESSION['modulos']['Catálogos-Inconsistencias de Video']==1){ ?>
                                 <li class="dropdown-submenu">
                                     <a class="multilevel" tabindex="-1" href="#">Control de acceso<span class="caret"></span></a>
@@ -324,25 +328,25 @@
                                 
                             <?php if ($_SESSION['modulos']['Seguridad-Trazabilidad']==1 || $_SESSION['rol']==2 || 
                                 $_SESSION['rol']==3 || $_SESSION['rol']==6 || $_SESSION['rol']==11 || $_SESSION['rol']==14){?>
-                                <li><a href="https://bcrcartracktotal:28000/Cartrack/Login.aspx"><span class="glyphicon glyphicon-globe"></span> Cartrack</a></li> 
+                                <li><a href="https://bcrcartracktotal:28000/Cartrack/Login.aspx" target="_blank"><span class="glyphicon glyphicon-globe"></span> Cartrack</a></li> 
                             <?php }; ?>
                             
                             <?php if ($_SESSION['modulos']['Seguridad-Trazabilidad']==1 || $_SESSION['rol']==2 || 
                                 $_SESSION['rol']==3 || $_SESSION['rol']==6 || $_SESSION['rol']==11 || $_SESSION['rol']==14){?>
-                                <li><a href="http://bcr0106mft02:8080/console/page/cxlxlglwsg"><span class="glyphicon glyphicon-globe"></span> Foglight Z1</a></li> 
+                                <li><a href="http://bcr0106mft02:8080/console/page/cxlxlglwsg" target="_blank"><span class="glyphicon glyphicon-globe"></span> Foglight Z1</a></li> 
                             <?php }; ?>
                                 
                             <?php if ($_SESSION['modulos']['Seguridad-Trazabilidad']==1 || $_SESSION['rol']==11){?>
-                                <li><a href="http://172.20.7.14/desktop/#deviceGroups"><span class="glyphicon glyphicon-globe"></span> Monitoreo UPS</a></li> 
+                                <li><a href="http://172.20.7.14/desktop/#deviceGroups" target="_blank"><span class="glyphicon glyphicon-globe"></span> Monitoreo UPS</a></li> 
                             <?php }; ?>
                                 
                             <?php if ($_SESSION['modulos']['Seguridad-Trazabilidad']==1|| $_SESSION['rol']==2 || 
                                 $_SESSION['rol']==3 || $_SESSION['rol']==6 || $_SESSION['rol']==11 || $_SESSION['rol']==14){?>
-                                <li><a href="https://10.170.5.81/check_mk/view.py?is_host_scheduled_downtime_depth=0&search=Search&filled_in=filter&is_host_acknowledged=-1&hst2=on&hst1=on&hst0=on&is_summary_host=0&hstp=on&opthostgroup=&selection=2b67b425-e2d2-422f-af1b-bd107d680baf&limit=hard&is_host_in_notification_period=-1&host=&view_name=hostproblems&sort=-hoststate%2Choststate%2Chost_state_age"><span class="glyphicon glyphicon-globe"></span> Griedshield</a></li> 
+                                <li><a href="https://10.170.5.81/check_mk/view.py?is_host_scheduled_downtime_depth=0&search=Search&filled_in=filter&is_host_acknowledged=-1&hst2=on&hst1=on&hst0=on&is_summary_host=0&hstp=on&opthostgroup=&selection=2b67b425-e2d2-422f-af1b-bd107d680baf&limit=hard&is_host_in_notification_period=-1&host=&view_name=hostproblems&sort=-hoststate%2Choststate%2Chost_state_age" target="_blank"><span class="glyphicon glyphicon-globe"></span> Griedshield</a></li> 
                             <?php }; ?>
                                 
                             <?php if ($_SESSION['modulos']['Seguridad-Trazabilidad']==1 || $_SESSION['rol']==11){?>
-                                <li><a href="https://monitoreoatm:43/LOGIN_USER"><span class="glyphicon glyphicon-globe"></span> TS Monitor</a></li> 
+                                <li><a href="https://monitoreoatm:43/LOGIN_USER" target="_blank"><span class="glyphicon glyphicon-globe"></span> TS Monitor</a></li> 
                             <?php }; ?>
                         </ul>
                     </li>
