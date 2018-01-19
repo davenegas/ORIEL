@@ -13444,6 +13444,83 @@ class Controller{
         }
     }
     
+    public function reporte_seguimiento_cencon(){
+        if(isset($_SESSION['nombre'])){
+            $obj_reporte = new cls_reporteria();
+            //Verifica si se envió una fecha especifica de busqueda
+            if(isset($_POST['fecha_inicial'])){
+                $fecha_inicio = $_POST['fecha_inicial'];
+                $fecha_fin= $_POST['fecha_final'];
+                //TOP 20 Personal BCR que se envia correo
+                $titulo = "TOP 20 Seguimientos de correo enviados";
+                $obj_reporte->setCondicion("T_EventoCencon.ID_Empresa=1 and T_EventoCencon.Fecha_Apertura between '".$fecha_inicio."' AND '".$fecha_fin."' and 
+                    (Seguimiento ='Se le informó al coordinador' OR Seguimiento='Se envió correo al funcionario' 
+                    or Seguimiento='Se envió correo al encargado') group by T_EventoCencon.ID_Persona ORDER BY `Cantidad`  DESC limit 20");
+                $obj_reporte->obtener_seguimiento_cencon();
+                $params= $obj_reporte->getArreglo();
+                //TOP 20 en Arqueo o Mantenimiento
+                $titulo2="TOP 20 Cajeros en Arqueo o Seguimiento";
+                $obj_reporte->setCondicion("T_EventoCencon.Fecha_Apertura between '".$fecha_inicio."' AND '".$fecha_fin."' and 
+                    (Seguimiento ='Arqueo de ATM' OR Seguimiento='ATM en Mantenimiento') 
+                    group by T_EventoCencon.ID_PuntoBCR ORDER BY Cantidad  DESC limit 20");
+                $obj_reporte->obtener_seguimiento_cencon_especiales();
+                $params_especial= $obj_reporte->getArreglo();
+                
+            } else{
+                $fecha_inicio = date("Y-m-d");
+                $fecha_fin= date("Y-m-d");
+                //TOP 20 Personal BCR que se envia correo
+                $titulo = "TOP 20 Seguimientos de correo enviados";
+                $obj_reporte->setCondicion("T_EventoCencon.ID_Empresa=1 and T_EventoCencon.Fecha_Apertura between '".$fecha_inicio."' AND '".$fecha_fin."' and 
+                    (Seguimiento ='Se le informó al coordinador' OR Seguimiento='Se envió correo al funcionario' 
+                    or Seguimiento='Se envió correo al encargado') group by T_EventoCencon.ID_Persona ORDER BY Cantidad  DESC limit 20");
+                $obj_reporte->obtener_seguimiento_cencon();
+                $params= $obj_reporte->getArreglo();
+                //TOP 20 en Arqueo o Mantenimiento
+                $titulo2="TOP 20 Cajeros en Arqueo o Seguimiento";
+                $obj_reporte->setCondicion("T_EventoCencon.Fecha_Apertura between '".$fecha_inicio."' AND '".$fecha_fin."' and 
+                    (Seguimiento ='Arqueo de ATM' OR Seguimiento='ATM en Mantenimiento') 
+                    group by T_EventoCencon.ID_PuntoBCR ORDER BY Cantidad  DESC limit 20");
+                $obj_reporte->obtener_seguimiento_cencon_especiales();
+                $params_especial= $obj_reporte->getArreglo();
+               
+            }
+            
+            require __DIR__ . '/../vistas/plantillas/rpt_cencon_seguimiento.php';
+        } else {
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }
+    }
+    
+    public function reporte_contador_video(){
+        if(isset($_SESSION['nombre'])){
+            $obj_reporte = new cls_reporteria();
+            //Verifica si se envió una fecha especifica de busqueda
+            if(isset($_POST['fecha_inicial'])){
+                $fecha_inicio = $_POST['fecha_inicial'];
+                $fecha_fin= $_POST['fecha_final'];
+                //TOP 20 Personal BCR que se envia correo
+                $obj_reporte->setCondicion("T_Revision_Contador.Fecha_Hora between '".$fecha_inicio." 00:00' AND '".$fecha_fin." 23:59'");
+                $obj_reporte->obtener_revision_contador();
+                $params= $obj_reporte->getArreglo();
+            } else{
+                $fecha_inicio = date("Y-m-d");
+                $fecha_fin= date("Y-m-d");
+                //TOP 20 Personal BCR que se envia correo
+                $obj_reporte->setCondicion("T_Revision_Contador.Fecha_Hora between '".$fecha_inicio." 00:00' AND '".$fecha_fin." 23:59'");
+                $obj_reporte->obtener_revision_contador();
+                $params= $obj_reporte->getArreglo();
+            }
+            
+            require __DIR__ . '/../vistas/plantillas/rpt_contador_video.php';
+        } else {
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }
+    }
     ////////////////////////////////////////////////////////////////////////////
     //////////////////////Funciones para Pruebas de alarma//////////////////////  
     ////////////////////////////////////////////////////////////////////////////
@@ -15257,6 +15334,6 @@ class Controller{
                 require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
             }  
         } 
-    }  
+    }
     
 }

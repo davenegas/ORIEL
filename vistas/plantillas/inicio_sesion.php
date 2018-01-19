@@ -22,7 +22,7 @@
                 <table style="margin: 0 auto;">
                     <tr>
                         <td><h4>Nombre de Usuario:</h4></td>
-                        <td><input type="text" name="nombre" id="nombre" class="form-control"><br></td>
+                        <td><input type="text" name="nombre" id="nombre" class="form-control" autofocus><br></td>
                     </tr>
                     <tr>
                         <td><h4>Contraseña:</h4></td>

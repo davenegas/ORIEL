@@ -287,6 +287,8 @@ $map = array(
     'actualiza_en_vivo_reporte_cencon'=>array('controller'=>'Controller', 'action'=>'actualiza_en_vivo_reporte_cencon'),
     'todos_cajero_relacion'=>array('controller'=>'Controller', 'action'=>'todos_cajero_relacion'),
     'cencon_lista_sin_coordinar'=>array('controller'=>'Controller', 'action'=>'cencon_lista_sin_coordinar'),
+    'reporte_seguimiento_cencon'=>array('controller'=>'Controller', 'action'=>'reporte_seguimiento_cencon'),
+    'reporte_contador_video'=>array('controller'=>'Controller', 'action'=>'reporte_contador_video'),
     
     //Controlador de pruebas de alarma
     'pruebas_alarma'=>array('controller'=>'Controller', 'action'=>'pruebas_alarma'),

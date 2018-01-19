@@ -157,7 +157,7 @@
                         <option value="4">Validada para Reportar a Mantenimiento</option> 
                     </select>
                     
-                     <label for="tipo_inconsistencia">Tipo Inconsistencia</label>
+                    <label for="tipo_inconsistencia">Tipo Inconsistencia</label>
                     <select class="form-control" id="tipo_inconsistencia" name="tipo_inconsistencia" > 
                         <option value="0">Cámara(s) Movida(s)</option>
                         <option value="1">Falla Color</option>
@@ -165,8 +165,9 @@
                         <option value="3">Cámara Desenfocada</option> 
                         <option value="4">Diferencia Cantidad Cámaras</option> 
                         <option value="5">Falla Grabador de Video</option> 
-                        <option value="6">No Video</option> 
-                        <option value="7">Sin Problemas</option> 
+                        <option value="6">No Video</option>
+                        <option value="7">Sin Problemas</option>
+                        <option value="8">Iluminación</option> 
                     </select>
             
                     <label for="observaciones_validacion">Observaciones</label>
@@ -206,7 +207,7 @@
                     <label for="observaciones_reporte">Observaciones</label>
                     <input type="text" class="form-control espacio-abajo" id="observaciones_reporte" name="observaciones_reporte" placeholder="Observaciones del Reporte a SE">
                                      
-                   <button><a href="javascript:%20check_empty_re()" id="submit">Guardar</a></button>
+                    <button><a href="javascript:%20check_empty_re()" id="submit">Guardar</a></button>
                 </form>
                 </div>
             </div>

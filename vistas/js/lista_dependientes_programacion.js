@@ -15,7 +15,7 @@ $(document).ready(function(){
                     document.getElementById('puntobcr').disabled=true;
                     document.getElementById('gafete').value="";
                     document.getElementById('gafete').removeAttribute("disabled");
-                    document.getElementById('detalle_areas').value="";
+                    //document.getElementById('detalle_areas').value="";
                     document.getElementById('detalle_areas').removeAttribute("disabled");
                     break;
                 case "Reporte":

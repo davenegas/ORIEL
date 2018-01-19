@@ -269,5 +269,35 @@ class cls_reporteria{
         $this->obj_data_provider->desconectar();
     }
     
+    public function obtener_seguimiento_cencon(){
+        $this->obj_data_provider->conectar();
+        $this->arreglo=$this->obj_data_provider->trae_datos("T_EventoCencon
+                LEFT OUTER JOIN T_Personal on T_Personal.ID_Persona =T_EventoCencon.ID_Persona
+                LEFT OUTER JOIN T_UnidadEjecutora ON T_UnidadEjecutora.ID_Unidad_Ejecutora = T_Personal.ID_Unidad_Ejecutora",
+            "count(concat(T_EventoCencon.ID_Persona)) Cantidad, T_EventoCencon.ID_Persona, 
+                T_EventoCencon.ID_Empresa, T_Personal.Apellido_Nombre, T_UnidadEjecutora.Departamento",
+            $this->condicion);
+        $this->arreglo=$this->obj_data_provider->getArreglo();
+        $this->obj_data_provider->desconectar();
+    }
+    
+    public function obtener_seguimiento_cencon_especiales(){
+        $this->obj_data_provider->conectar();
+        $this->arreglo=$this->obj_data_provider->trae_datos("T_EventoCencon
+            LEFT OUTER JOIN T_PuntoBCR on T_PuntoBCR.ID_PuntoBCR =T_EventoCencon.ID_PuntoBCR",
+            "count(T_EventoCencon.Fecha_Apertura) Cantidad, T_EventoCencon.ID_PuntoBCR, T_PuntoBCR.Nombre, T_PuntoBCR.Codigo",
+            $this->condicion);
+        $this->arreglo=$this->obj_data_provider->getArreglo();
+        $this->obj_data_provider->desconectar();
+    }
+    
+    public function obtener_revision_contador(){
+        $this->obj_data_provider->conectar();
+        $this->arreglo=$this->obj_data_provider->trae_datos("T_Revision_Contador",
+            "*",
+            $this->condicion);
+        $this->arreglo=$this->obj_data_provider->getArreglo();
+        $this->obj_data_provider->desconectar();
+    }
     
 }?>

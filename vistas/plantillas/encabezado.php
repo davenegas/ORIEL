@@ -266,6 +266,7 @@
                                       <li><a tabindex="-1" href="index.php?ctl=reporte_revisiones_video">Historial de revisiones</a></li>
                                       <li><a tabindex="-1" href="index.php?ctl=reporte_controles_de_video_listar">Estadisticas</a></li>
                                       <li><a tabindex="-1" href="index.php?ctl=reporte_ultimas_revisiones_video">Últimas revisiones</a></li>
+                                      <li><a tabindex="-1" href="index.php?ctl=reporte_contador_video">Contador Control</a></li>
                                     </ul>
                                 </li>
                             <?php }; ?> 
@@ -298,6 +299,10 @@
                                 <li><a href="index.php?ctl=reporte_cencon">Reporte Cencon</a></li> 
                             <?php }; ?>
    
+                            <?php if ($_SESSION['modulos']['Reportes-Cencon']==1){ ?>
+                                <li><a href="index.php?ctl=reporte_seguimiento_cencon">Reporte Cencon Seguimientos</a></li> 
+                            <?php }; ?> 
+                                
                             <?php if ($_SESSION['modulos']['Reportes-Trazabilidad']==1){ ?>
                                 <li><a href="index.php?ctl=frm_trazabilidad_listar">Trazabilidad</a></li> 
                             <?php }; ?>   
@@ -343,6 +348,10 @@
                             <?php if ($_SESSION['modulos']['Seguridad-Trazabilidad']==1|| $_SESSION['rol']==2 || 
                                 $_SESSION['rol']==3 || $_SESSION['rol']==6 || $_SESSION['rol']==11 || $_SESSION['rol']==14){?>
                                 <li><a href="https://10.170.5.81/check_mk/view.py?is_host_scheduled_downtime_depth=0&search=Search&filled_in=filter&is_host_acknowledged=-1&hst2=on&hst1=on&hst0=on&is_summary_host=0&hstp=on&opthostgroup=&selection=2b67b425-e2d2-422f-af1b-bd107d680baf&limit=hard&is_host_in_notification_period=-1&host=&view_name=hostproblems&sort=-hoststate%2Choststate%2Chost_state_age" target="_blank"><span class="glyphicon glyphicon-globe"></span> Griedshield</a></li> 
+                            <?php }; ?>
+                                
+                            <?php if ($_SESSION['modulos']['Seguridad-Trazabilidad']==1 || $_SESSION['rol']==11){ ?>
+                                <li><a href="https://bcr.service-now.com" target="_blank"><span class="glyphicon glyphicon-globe"></span> Service-now</a></li> 
                             <?php }; ?>
                                 
                             <?php if ($_SESSION['modulos']['Seguridad-Trazabilidad']==1 || $_SESSION['rol']==11){?>
