@@ -324,6 +324,7 @@ $map = array(
     'tipo_eventos_gestion'=>array('controller'=>'Controller','action'=> 'tipo_eventos_gestion'),
     'tipo_eventos_cambiar_estado'=>array('controller'=>'Controller','action'=> 'tipo_eventos_cambiar_estado'),
     'actualiza_en_vivo_estado_evento'=>array('controller'=>'Controller','action'=> 'actualiza_en_vivo_estado_evento'),
+    'tipo_evento_cierre_guardar'=>array('controller'=>'Controller','action'=> 'tipo_evento_cierre_guardar'),
 
     //Areas de apoyo
     'areas_apoyo_listar'=>array('controller'=>'Controller','action'=> 'areas_apoyo_listar'),

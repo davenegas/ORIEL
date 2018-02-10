@@ -24,7 +24,16 @@ class cls_eventos{
     public $referencia_mezcla;
     public $observaciones_supervision;
     public $fecha_notas_supervision;
+    public $id_cierre;
     
+    function getId_cierre() {
+        return $this->id_cierre;
+    }
+
+    function setId_cierre($id_cierre) {
+        $this->id_cierre = $id_cierre;
+    }
+
     function getReferencia_mezcla() {
         return $this->referencia_mezcla;
     }
@@ -601,7 +610,11 @@ class cls_eventos{
     public function obtener_los_tipos_de_eventos(){
         try{
             $this->obj_data_provider->conectar();
-            $this->arreglo= $this->obj_data_provider->trae_datos("T_TipoEvento","*","");
+            if($this->condicion==""){
+                $this->arreglo= $this->obj_data_provider->trae_datos("T_TipoEvento","*","");
+            } else {
+                $this->arreglo= $this->obj_data_provider->trae_datos("T_TipoEvento","*",$this->condicion);
+            }
             $this->arreglo=$this->obj_data_provider->getArreglo();
             $this->obj_data_provider->desconectar();
             $this->resultado_operacion=true;
@@ -659,5 +672,36 @@ class cls_eventos{
             $this->obj_data_provider->desconectar();
             $this->resultado_operacion=true;
     }
+    
+    ////////////////EVENTOS DE CIERRE///////////////////////////////////////////
+    public function obtiene_tipo_eventos_cierre(){
+        $this->obj_data_provider->conectar();
+        $this->arreglo=$this->obj_data_provider->trae_datos(
+            "T_TipoEventoCierre", 
+            "*",
+            $this->condicion);
+        $this->arreglo=$this->obj_data_provider->getArreglo();
+        $this->obj_data_provider->desconectar();
+        $this->resultado_operacion=true;
+    }
+    
+    public function guardar_tipo_evento_cierre(){
+        $this->obj_data_provider->conectar();
+        if($this->id==0){
+            $this->obj_data_provider->inserta_datos("T_TipoEventoCierre","ID_Tipo_Evento,Descripcion,Estado","'".$this->id2."','".$this->detalle."','".$this->estado."'");     
+        } else {
+            $this->obj_data_provider->edita_datos("T_TipoEventoCierre", "Descripcion='".$this->detalle."', Estado=".$this->estado, "ID_Tipo_Evento_Cierre=".$this->id);
+        }
+        $this->obj_data_provider->desconectar();
+        $this->resultado_operacion=true;
+    }
+    
+    public function guardar_evento_cierre_para_evento(){
+        $this->obj_data_provider->conectar();
+        $this->obj_data_provider->inserta_datos("T_TipoEventoCierreEvento","ID_Tipo_Evento_Cierre,ID_Evento,ID_Usuario","'".$this->id_cierre."','".$this->id."','".$this->id_usuario."'");     
+        $this->obj_data_provider->desconectar();
+        $this->resultado_operacion=true;
+    }
+    
 }
 

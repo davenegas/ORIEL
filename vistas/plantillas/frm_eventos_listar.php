@@ -162,7 +162,7 @@
     </head>
     <body>
         <?php require_once 'encabezado.php';?>
-        <?php if($_SESSION['modulos']['Notas Importantes']==1){ ?>
+        <?php /*if($_SESSION['modulos']['Notas Importantes']==1){ ?>
             <!--Ventana de Notas Pendientes, deslizable-->
             <div class="esthela" style="right: -400px;">
                 <div style="color: rgb(255, 255, 255); padding: 8px 5px 0pt 50px;">
@@ -173,7 +173,7 @@
                     </div>
                 </div>
             </div>
-         <?php } ?>
+         <?php } */?>
         <div class="container animated fadeIn col-xs-10 quitar-float">
             <div class="col-md-5">
                 <h2>Listado de Eventos</h2>
@@ -211,11 +211,11 @@
                 <thead>
                     <tr>
                         <th hidden="true">ID_Evento</th>
-                        <?php 
-                        //Solamente los coordinadores ven esta columna
+                        <?php /*
+                        //Solamente los coordinadores ven esta columna - NOTAS DE SUPERVISION
                         if($_SESSION['modulos']['Módulo-Bitácora Digital-Notas de Supervisión']==1){ ?>
                             <th style="text-align:center">Notas de Coordinación</th>
-                        <?php } ?>
+                        <?php } */?>
                         <th style="text-align:center">Fecha</th>
                         <th style="text-align:center">Hora</th>
                         <th style="text-align:center">Lapso</th>
@@ -243,8 +243,8 @@
                             $dias_abierto= date_diff($fecha_evento, $fecha_actual);
                             ?>
                             <td style="text-align:center" hidden="true"><?php echo $params[$i]['ID_Evento'];?></td>
-                            <?php 
-                            //Solamente los coordinadores ven esta columna
+                            <?php /*
+                            //Solamente los coordinadores ven esta columna - NOTAS DE SUPERVISION
                             if($_SESSION['modulos']['Módulo-Bitácora Digital-Notas de Supervisión']==1){ ?>
                                 <?php if (strcmp($params[$i]['Fecha_Observaciones'], "1983-04-09")==0) { ?>
                                     <td style="text-align:center" data-toggle="tooltip" title="<?php echo $params[$i]['Observaciones_Evento'];?>"><a href="javascript:void(null)" style="color:#FFFFFF">3<img src="vistas/Imagenes/Agregar Nota.jpg" class="img-rounded" alt="Cinque Terre" width="25" height="25" onClick="editar_notas_supervision('<?php echo $params[$i]['ID_Evento'];?>','<?php echo $params[$i]['Observaciones_Evento'];?>')"></a></td>
@@ -255,7 +255,7 @@
                                         <td style="text-align:center" data-toggle="tooltip" title="<?php echo $params[$i]['Observaciones_Evento'];?>"><a href="javascript:void(null)" style="color:#FFFFFF">2<img src="vistas/Imagenes/Editar Nota.png" class="img-rounded" alt="Cinque Terre" width="25" height="25" onClick="editar_notas_supervision('<?php echo $params[$i]['ID_Evento'];?>','<?php echo $params[$i]['Observaciones_Evento'];?>')"></a></td>
                                     <?php }
                                 } ?>
-                            <?php }  ?>
+                            <?php } */ ?>
                             <td style="text-align:center"><?php echo date_format($fecha_evento, 'Y/m/d');?></td>
                             <td style="text-align:center"><?php echo $params[$i]['Hora'];?></td>
                             <td style="text-align:center"><?php echo $dias_abierto->format('%a');?></td>

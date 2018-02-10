@@ -2747,6 +2747,7 @@ class Controller{
             
             $this->ejecucion_automatico_proceso("Pruebas");
             $this->ejecucion_automatico_proceso("Respaldo_Bitacora_Revisiones");
+            $this->ejecucion_automatico_proceso("Se_solicito_prueba");
             //Creacion de objeto de clase eventos
             $obj_eventos = new cls_eventos();
             
@@ -4372,6 +4373,11 @@ class Controller{
                 //Obtiene el arreglo de resultados
                 $params2= $obj_eventos->getArreglo();
                 
+                //Obtiene los eventos de cierre
+                $obj_eventos->setCondicion("ID_Tipo_Evento=".$params2[0]['ID_Tipo_Evento']." and Estado=1");
+                $obj_eventos->obtiene_tipo_eventos_cierre();
+                $eventos_cierre= $obj_eventos->getArreglo();
+                
                 require __DIR__ . '/../vistas/plantillas/frm_eventos_editar.php';
                 //Controlador de errores.
             } catch (Exception $exc) {
@@ -5061,6 +5067,13 @@ class Controller{
             $obj_eventos->setDetalle($detalle);
             $obj_eventos->setId_usuario($_SESSION['id']);
           
+            //Si el formulario envió un evento de cierre y un estado cerrado-> asigna el evento de cierre al evento
+            if($_POST['ID_Tipo_Evento_Cierre']>0 && $_POST['estado_del_evento']==3 ){
+                //ID_Tipo_Evento_Cierre
+                $obj_eventos->setId_cierre($_POST['ID_Tipo_Evento_Cierre']);
+                $obj_eventos->guardar_evento_cierre_para_evento();
+            }
+            
             $recepcion_archivo=$_FILES['archivo_adjunto']['error'];
             
             $date=new DateTime(); //this returns the current date time
@@ -5120,6 +5133,7 @@ class Controller{
                     break;
                 }   
             }
+            
         }else {
             /*
             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
@@ -5674,6 +5688,75 @@ class Controller{
                     //echo ($cadena_oficiales);
                 }
                 break;
+            case "Se_solicito_prueba":
+                $fecha_actual= getdate();
+                if($fecha_actual['weekday']=="Monday"){
+                    $ruta=  $raiz."Cuenta_Visitas_Oriel/Ejecucion_Procesos/".date("Ymd", $time)." Solicito_prueba.txt";
+                    if(!file_exists($ruta)){
+                        //Abre el archivo , lo crea si no lo encuentra
+                        $fp = fopen($ruta,"a+");
+                        //Cierra el archivo
+                        fclose($fp);
+                        $cadena="";
+                        $detalle="";
+                        $obj_pruebas = new cls_prueba_alarma();
+                        $obj_correo = new Mail_Provider();
+                        
+                        $fecha_hoy = date('Y-m-j');
+                        $fecha_semana = strtotime ( '-7 day' , strtotime ( $fecha_hoy ) ) ;
+                        $fecha_semana = date ('Y-m-j', $fecha_semana);
+
+                        $obj_pruebas->setCondicion("(T_PruebaAlarma.Fecha between '".$fecha_semana."' and '".$fecha_hoy."') and (T_PruebaAlarma.Seguimiento='Se solicitó la prueba') Order by T_PuntoBCR.Codigo");
+                        $obj_pruebas->obtener_pruebas_oficina_gerente();
+                        $params= $obj_pruebas->getArreglo();
+
+                        // Recorre la información del vector 
+                        for ($i = 0; $i < count($params); $i++) {
+                            //Toma la información de cada visita en una variable cadena
+                            //$cadena_oficiales.='Identificacion: '.$params[$i]['Identificacion'].";\r\n";
+                            $sql = http_build_query($params[$i],null,', ');
+                            $cadena.= $sql.";\r\n\r\n";
+                            $detalle.="<tr><td>Código: ".$params[$i]['Codigo']."</td>".
+                                    "<td>Agencia: ".$params[$i]['Nombre']."</td>".
+                                    "<td>Gerente Zona: ".$params[$i]['Apellido_Nombre']."</td>".
+                                    "<td>Fecha: ".$params[$i]['Fecha']."</td>".
+                                    "<td>Seguimiento: ".$params[$i]['Seguimiento']."</td>".
+                                    "<td>Observaciones: ".$params[$i]['Observaciones']."</td></tr>";
+                        }
+                        //Abre el archivo para escribirle 
+                        $fp = fopen($ruta,"w+"); //no olvidar crear al archivo visitantes.txt y poner el path correcto
+                        //Escribe en el archivo
+                        fwrite($fp, $cadena);
+                        //Cierra el archivo
+                        fclose($fp);
+                        //echo ($cadena_oficiales);
+                        if(count($params)>0){
+                            //Asigna correo y nombre de los destinatarios
+                            //$correo="Coordinacion_Centro_de_Control@bancobcr.com";
+                            //$usuario="Coordinacion Centro Control";
+                            //$obj_correo->agregar_direccion_de_correo($correo, $usuario);
+                            //Agregar direccion de correo oculta
+                            $correo="davenegas@bancobcr.com";
+                            $usuario="Diego Venegas";
+                            $obj_correo->agregar_direccion_de_correo_oculta($correo, $usuario);
+
+
+                            //Agrega el asunto del correo para envio al usuario realizando la solicitud
+                            $obj_correo->agregar_asunto_de_correo("Pruebas solicitadas por el Centro de Control");
+                            //Agrega detalle de correo
+                            $obj_correo->agregar_detalle_de_correo("Gracias por utilizar Oriel</br></br> "
+                                . "Las siguientes pruebas fueron solicitadas por el Centro de Control:</br>"
+                                . $detalle."<br><br>"
+                                . "Este es un mensaje automático, por favor no responderlo. Si requiere ayuda, comuníquese con el Centro de Control Ext: 79066.</br></br>"
+                                . "<a>http://oriel</a>");
+                            //Agrega direccion de correo del destinatario
+                            $obj_correo->agregar_direccion_de_correo($correo, $usuario);
+                            //Procede a enviar el correo
+                            $obj_correo->enviar_correo();
+                        }
+                    }
+                }
+                break;
         }
         //Establece la ruta del archivo txt que lleva el control de visitas  a la pagina
     }
@@ -5755,18 +5838,27 @@ class Controller{
     
     public function tipo_eventos_gestion(){
         if(isset($_SESSION['nombre'])){
+            $obj_eventos = new cls_eventos();
             if ($_GET['id']==0){
                 $observaciones="";
                 $estado=1;
                 $ide=$_GET['id'];
                 $evento="";
-            }   else   {
+            } else {
                 $ide=$_GET['id'];
-                $evento=$_GET['evento'];
-                $observaciones=$_GET['observaciones'];
-                $prioridad = $_GET['prioridad'];
-                $estado=$_GET['estado'];
+                $obj_eventos->setCondicion("ID_Tipo_Evento=".$ide);
+                $obj_eventos->obtener_los_tipos_de_eventos();
+                $tipo_evento=$obj_eventos->getArreglo();
+                
+                $evento=$tipo_evento[0]['Evento'];
+                $observaciones=$tipo_evento[0]['Observaciones'];
+                $prioridad = $tipo_evento[0]['Prioridad'];
+                $estado=$tipo_evento[0]['Estado'];
             }
+            $obj_eventos->setCondicion('ID_Tipo_Evento='.$ide);
+            $obj_eventos->obtiene_tipo_eventos_cierre();
+            $params= $obj_eventos->getArreglo();
+            
             require __DIR__ . '/../vistas/plantillas/frm_tipo_eventos_gestion.php';
         }   else    {
             /*
@@ -5835,7 +5927,26 @@ class Controller{
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }  
     }
-       
+    
+    public function tipo_evento_cierre_guardar(){
+        if(isset($_SESSION['nombre'])){
+            $obj_eventos = new cls_eventos();
+            
+            $obj_eventos->setId($_POST['ID_Tipo_Evento_Cierre']);
+            $obj_eventos->setId2($_POST['ID_Evento']);
+            $obj_eventos->setDetalle($_POST['Descripcion']);
+            $obj_eventos->setEstado($_POST['estado']);
+            
+            $obj_eventos->guardar_tipo_evento_cierre();
+            header ("location:/ORIEL/index.php?ctl=tipo_eventos_gestion&id=".$_POST['ID_Evento']);
+            //$this->tipo_eventos_listar();
+        } else {
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }
+    }
+    
     public function unidades_de_video_listar(){
         if(isset($_SESSION['nombre'])){
             $obj_unidad_video=new cls_unidad_video();
@@ -12602,75 +12713,6 @@ class Controller{
                 //Obtiene la hora actual del sistema
                 $hora_actual= getdate();
                 $hora_actual=$hora_actual['hours'];
-                /*if($hora_actual<19){
-                    if($vencidos[$i]['tiempo']<'300'){
-                        if(!($params[$i]['Seguimiento']=="Arqueo de ATM" ||$params[$i]['Seguimiento']=="ATM en Mantenimiento"||
-                            $params[$i]['Seguimiento']=="Apertura con llave Azul"||$params[$i]['Seguimiento']=="Permiso Especial")){
-                            if($vencidos[$i]['tiempo']>'40'){
-                                if($params[$i]['Seguimiento']=="Se envió correo al funcionario"||$params[$i]['Seguimiento']=="Se envió correo al encargado"||
-                                    $params[$i]['Seguimiento']=="Se le informó al coordinador"){
-                                    if($vencidos[$i]['tiempo']>'70'){
-                                        if($params[$i]['Seguimiento']=="Se envió correo al encargado"||
-                                            $params[$i]['Seguimiento']=="Se le informó al coordinador"){
-                                            if($vencidos[$i]['tiempo']>'100'){
-                                                if($params[$i]['Seguimiento']=="Se le informó al coordinador"){
-                                                    $vencidos[$i]['color']="color: blueviolet";
-                                                    $cajero_violeta++;
-                                                    //echo "blueviolet +100 informó".$params[$i]['Codigo']."\n||||";
-                                                }else{
-                                                    if($vencidos[$i]['tiempo']>'115'){
-                                                        $this->cencon_sin_coordinar($params[$i], $vencidos[$i]['tiempo']);
-                                                    }
-                                                    $vencidos[$i]['color']="color: red";
-                                                    $cajero_rojo++;
-                                                    //echo "rojo +100 sin informar".$params[$i]['Codigo']."\n||||";
-                                                } 
-                                            }else{
-                                                $vencidos[$i]['color']="color: orange";
-                                                $cajero_naranja++;
-                                                //echo "naranja -110".$params[$i]['Codigo']."\n|||||";
-                                            }
-                                        }else{
-                                            if($vencidos[$i]['tiempo']>'85'){
-                                                $this->cencon_sin_coordinar($params[$i], $vencidos[$i]['tiempo']);
-                                            }
-                                            $vencidos[$i]['color']="color: red";
-                                            $cajero_rojo++;
-                                            //echo "rojo -correo encargado".$params[$i]['Codigo']."\n|||||";
-                                        }
-                                    }else{
-                                        $vencidos[$i]['color']="color: orange";
-                                        $cajero_naranja++;
-                                        //echo "naranja -70 y correo".$params[$i]['Codigo']."\n|||||";
-                                    }
-                                }else{
-                                    if($vencidos[$i]['tiempo']>'55'){
-                                        $this->cencon_sin_coordinar($params[$i], $vencidos[$i]['tiempo']);
-                                    }
-                                    $vencidos[$i]['color']="color: red";
-                                    $cajero_rojo++;
-                                    //echo "rojo +40 sin correo".$params[$i]['Codigo']."\n||||";
-                                }
-                            } else{
-                                $vencidos[$i]['color']="color: black";
-                                $cajero_negro++;
-                                //echo "nada".$params[$i]['Codigo']."\n||||";
-                            }
-                        } else{
-                            $vencidos[$i]['color']="color:mediumblue; text-decoration: underline;";
-                            $cajero_especial++;
-                            //echo "nada".$params[$i]['Codigo']."\n||||";
-                        }    
-                    }else{
-                        $vencidos[$i]['color']="color: red";
-                        $cajero_rojo++;
-                        //echo "rojo +300 minutos ".$params[$i]['Codigo']."\n||||";
-                    }
-                }else{
-                    $vencidos[$i]['color']="color: red";
-                    $cajero_rojo++;
-                    //echo "Hora vencida 19".$params[$i]['Codigo']."\n||||";
-                }    */
                 //Módulo para prueba de Cencon
                 //Enviar correo automático al funcionario y al Coordinador BCR
                 if(!($params[$i]['Seguimiento']=="Arqueo de ATM" ||$params[$i]['Seguimiento']=="ATM en Mantenimiento"||
@@ -12717,6 +12759,8 @@ class Controller{
                                     . "<a>http://Oriel</a>");
                                 //Procede a enviar el correo
                                 $obj_correo->enviar_correo();
+                                unset($obj_correo);
+                                $obj_correo= new Mail_Provider();
                                 $cajero_violeta++;
                             }
                             if($vencidos[$i]['tiempo']>'70' && $params[$i]['Seguimiento']=="Se le informó al coordinador"){
@@ -12762,13 +12806,59 @@ class Controller{
                             //Procede a enviar el correo
                             $obj_correo->enviar_correo();
                             $cajero_naranja++;
+                            //Destruye el objeto del correo y lo vuelve a crear 
+                            unset($obj_correo);
+                            $obj_correo= new Mail_Provider();
                         }
                         
                     } else{
                         $vencidos[$i]['color']="color: black";
                         $cajero_negro++;
-                    }
+                    } 
                 } else{
+                    $informacion = strpos($params[$i]['Observaciones'],'correo');
+                    if ($vencidos[$i]['tiempo']>'300' && $informacion==0){
+                        //Cambiar estado= Se le informó al coordinador
+                        $obj_cencon->setCondicion("T_EventoCencon.ID_Evento_Cencon=".$params[$i]['ID_Evento_Cencon']);
+                        $obj_cencon->setObservaciones("Se le envió correo al coordinador- ".$params[$i]['Observaciones']);
+                        $obj_cencon->editar_observaciones_evento();
+
+                        //enviar correo
+                        //Correo a funcionario BCR
+                        if($params[$i]['ID_Empresa']==1){
+                            $obj_personal->setCondicion("T_Personal.ID_Persona=".$params[$i]['ID_Persona']);
+                            $obj_personal->obtener_personas_prontuario();
+                            $persona= $obj_personal->getArreglo();
+
+                            $correo=$persona[0]['Correo'];
+                            $usuario="";
+                            $obj_correo->agregar_direccion_de_correo($correo, $usuario);
+                        }
+                        //Asigna copia del correo 
+                        $correo="Coordinacion_Centro_de_Control@bancobcr.com";
+                        $usuario="Coordinacion Centro Control";
+                        $obj_correo->agregar_direccion_de_correo_copia($correo, $usuario);
+
+                        //$correo="davenegas@bancobcr.com ";
+                        //$usuario="";
+                        //$obj_correo->agregar_direccion_de_correo($correo, $usuario);
+
+                        //Agrega el asunto del correo para envio al usuario realizando la solicitud
+                        $obj_correo->agregar_asunto_de_correo("Seguimiento de Cencon- ATM #".$params[$i]['Codigo']." ".$params[$i]['Nombre']);
+                        //Agrega detalle de correo
+                        $obj_correo->agregar_detalle_de_correo("Buenas Compañero (a)<br><br>"
+                            . "El Centro de Control le informa que el tiempo estipulado para la apertura bajo su nombre para el ATM#".$params[$i]['Codigo']." ".$params[$i]['Nombre'].", ha expirado.<br><br>"
+                            . "Por favor, comunicarse al Centro de Control para la entrega del respectivo código de cierre, a las extensiones 79149, 79150, 79151 o al número directo 8002287905.<br><br><br>"
+                            . "Notas:<br>Si requiere ayuda, comuníquese con el Coordinador del Centro de Control, Ext: 79066.<br>"
+                            . "Este es un mensaje automático, por favor no responderlo.<br>"
+                            . "<a>http://Oriel</a>");
+                        //Procede a enviar el correo
+                        $obj_correo->enviar_correo();
+                        $cajero_naranja++;
+                        //Destruye el objeto del correo y lo vuelve a crear
+                        unset($obj_correo);
+                        $obj_correo= new Mail_Provider();
+                    }
                     $vencidos[$i]['color']="color:blueviolet; text-decoration: underline;";
                     $cajero_especial++;
                 }
@@ -13860,7 +13950,7 @@ class Controller{
 //                        $pruebas_anteriores[$i] = array_merge(array('Nombre_Persona_Apertura' =>($persona[0]['Apellido']." ".$persona[0]['Nombre'])),array('Cedula'=> ($persona[0]['Identificacion'])),array('Empresa'=> ($persona[0]['Empresa'])), $pruebas_anteriores[$i]);
 //                    }
                     if($pruebas_anteriores[$i]['ID_Empresa_Persona_Cierra']==1){
-                        $obj_personal->setCondicion("T_Personal.ID_Persona='".$pruebas_anteriores[$i]['ID_Persona_Reporta_Apertura']."'");
+                        $obj_personal->setCondicion("T_Personal.ID_Persona='".$pruebas_anteriores[$i]['ID_Persona_Reporta_Cierre']."'");
                         $obj_personal->obtiene_todo_el_personal();
                         $persona = $obj_personal->getArreglo();
                         $pruebas_anteriores[$i] = array_merge(array('Nombre_Persona_Cierre' =>($persona[0]['Apellido_Nombre'])),array('Cedula_Cierre'=> ($persona[0]['Cedula'])),array('Empresa_Cierre'=> ($persona[0]['Empresa'])),$pruebas_anteriores[$i]);
@@ -13885,31 +13975,35 @@ class Controller{
                         <tbody>';
                 for($i=0; $i<$tam;$i++){
                     if(date("H:i:s", $time)>='00:00:00' && date("H:i:s", $time)<='14:00:00'){
-                        $html .='<tr>'; 
-                        $html .='<td style="text-align:center">'.$pruebas_anteriores[$i]['Cedula'].'</td>';
-                        $html .='<td style="text-align:center">'.$pruebas_anteriores[$i]['Nombre_Persona_Apertura'].'</td>';
-                        $html .='<td style="text-align:center">'.$pruebas_anteriores[$i]['Empresa'].'</td>';
-                        $html .='<td style="text-align:center" '
-                                . 'onclick="agregar_persona_prueba('.$pruebas_anteriores[$i]['ID_Persona_Reporta_Apertura'].','
-                                . '&#39;'.$pruebas_anteriores[$i]['Cedula'].'&#39,'
-                                . '&#39;'.$pruebas_anteriores[$i]['Nombre_Persona_Apertura'].'&#39,'
-                                . '&#39;'.$pruebas_anteriores[$i]['Empresa'].'&#39,'
-                                . '&#39;'.$pruebas_anteriores[$i]['ID_Empresa_Persona_Apertura'].'&#39;)">'
-                                . '<a>Reporta Prueba</a></td>';
-                        $html .='</tr>'; 
+                        if(isset($pruebas_anteriores[$i]['Cedula'])){
+                            $html .='<tr>'; 
+                            $html .='<td style="text-align:center">'.$pruebas_anteriores[$i]['Cedula'].'</td>';
+                            $html .='<td style="text-align:center">'.$pruebas_anteriores[$i]['Nombre_Persona_Apertura'].'</td>';
+                            $html .='<td style="text-align:center">'.$pruebas_anteriores[$i]['Empresa'].'</td>';
+                            $html .='<td style="text-align:center" '
+                                    . 'onclick="agregar_persona_prueba('.$pruebas_anteriores[$i]['ID_Persona_Reporta_Apertura'].','
+                                    . '&#39;'.$pruebas_anteriores[$i]['Cedula'].'&#39,'
+                                    . '&#39;'.$pruebas_anteriores[$i]['Nombre_Persona_Apertura'].'&#39,'
+                                    . '&#39;'.$pruebas_anteriores[$i]['Empresa'].'&#39,'
+                                    . '&#39;'.$pruebas_anteriores[$i]['ID_Empresa_Persona_Apertura'].'&#39;)">'
+                                    . '<a>Reporta Prueba</a></td>';
+                            $html .='</tr>'; 
+                        }
                     } else {
-                        $html .='<tr>'; 
-                        $html .='<td style="text-align:center">'.$pruebas_anteriores[$i]['Cedula_Cierre'].'</td>';
-                        $html .='<td style="text-align:center">'.$pruebas_anteriores[$i]['Nombre_Persona_Cierre'].'</td>';
-                        $html .='<td style="text-align:center">'.$pruebas_anteriores[$i]['Empresa_Cierre'].'</td>';
-                        $html .='<td style="text-align:center" '
-                                . 'onclick="agregar_persona_cierre('.$pruebas_anteriores[$i]['ID_Persona_Reporta_Cierre'].','
-                                . '&#39;'.$pruebas_anteriores[$i]['Cedula_Cierre'].'&#39,'
-                                . '&#39;'.$pruebas_anteriores[$i]['Nombre_Persona_Cierre'].'&#39,'
-                                . '&#39;'.$pruebas_anteriores[$i]['Empresa_Cierre'].'&#39,'
-                                . '&#39;'.$pruebas_anteriores[$i]['ID_Empresa_Persona_Cierra'].'&#39;)">'
-                                . '<a>Reporta Cierre</a></td>';
-                        $html .='</tr>'; 
+                        if(isset($pruebas_anteriores[$i]['Cedula_Cierre'])){
+                            $html .='<tr>'; 
+                            $html .='<td style="text-align:center">'.$pruebas_anteriores[$i]['Cedula_Cierre'].'</td>';
+                            $html .='<td style="text-align:center">'.$pruebas_anteriores[$i]['Nombre_Persona_Cierre'].'</td>';
+                            $html .='<td style="text-align:center">'.$pruebas_anteriores[$i]['Empresa_Cierre'].'</td>';
+                            $html .='<td style="text-align:center" '
+                                    . 'onclick="agregar_persona_cierre('.$pruebas_anteriores[$i]['ID_Persona_Reporta_Cierre'].','
+                                    . '&#39;'.$pruebas_anteriores[$i]['Cedula_Cierre'].'&#39,'
+                                    . '&#39;'.$pruebas_anteriores[$i]['Nombre_Persona_Cierre'].'&#39,'
+                                    . '&#39;'.$pruebas_anteriores[$i]['Empresa_Cierre'].'&#39,'
+                                    . '&#39;'.$pruebas_anteriores[$i]['ID_Empresa_Persona_Cierra'].'&#39;)">'
+                                    . '<a>Reporta Cierre</a></td>';
+                            $html .='</tr>'; 
+                        }
                     }
                 }  
                 $html.='</tbody> 
@@ -14668,6 +14762,7 @@ class Controller{
             //Procede a enviar el correo
             $obj_correo->adjuntar_archivo_al_correo($ruta,"");
             //$obj_correo->enviar_correo();
+            unset($obj_correo);
             
         }
     }
@@ -14966,6 +15061,8 @@ class Controller{
                     $obj_correo->adjuntar_archivo_al_correo($ruta,"");
                 }
                 $obj_correo->enviar_correo();
+                unset($obj_correo);
+                $obj_correo = new Mail_Provider();
                 
                 header("location:/ORIEL/index.php?ctl=programacion_accesos");
             } 

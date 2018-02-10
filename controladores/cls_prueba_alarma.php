@@ -270,6 +270,7 @@ class cls_prueba_alarma{
             $this->obj_data_provider->desconectar();
         }
     }
+    
     public function guardar_apertura_alarma(){
         if($this->id_prueba==0){
             $this->obj_data_provider->conectar();
@@ -350,6 +351,7 @@ class cls_prueba_alarma{
             $this->obj_data_provider->desconectar();
         }
     }
+    
     public function guardar_observaciones(){
         if($this->id_prueba==0){
             $this->obj_data_provider->conectar();
@@ -398,5 +400,20 @@ class cls_prueba_alarma{
         $this->obj_data_provider->desconectar();
         $this->resultado_operacion=true;
     }
+    
+    public function obtener_pruebas_oficina_gerente(){
+        $this->obj_data_provider->conectar();
+        $this->arreglo=$this->obj_data_provider->trae_datos("T_PruebaAlarma 
+            LEFT OUTER JOIN t_puntobcr on t_puntobcr.ID_PuntoBCR = t_pruebaalarma.ID_PuntoBCR
+            LEFT OUTER JOIN t_gerentezonabcr on t_puntobcr.ID_Gerente_Zona = t_gerentezonabcr.ID_Gerente_Zona
+            LEFT OUTER JOIN t_personal on t_personal.ID_Persona = t_gerentezonabcr.ID_Persona", 
+            "t_pruebaalarma.Fecha,t_pruebaalarma.Seguimiento, t_pruebaalarma.Observaciones,
+            t_puntobcr.Nombre,t_puntobcr.Codigo,t_personal.Apellido_Nombre",
+            $this->condicion);
+        $this->arreglo=$this->obj_data_provider->getArreglo();
+        $this->obj_data_provider->desconectar();
+        $this->resultado_operacion=true;
+    }
+    
 } ?>
 

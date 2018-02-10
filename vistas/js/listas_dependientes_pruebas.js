@@ -18,6 +18,7 @@ function evento_buscar_puntobcr(){
         document.getElementById('Hora_Cierre_Publico').value=datos['Hora_Cierre_Publico'];
         document.getElementById('Hora_Apertura_Agencia').value=datos['Hora_Apertura_Agencia'];
         document.getElementById('Hora_Cierre_Agencia').value=datos['Hora_Cierre_Agencia'];
+        //Busca pruebas recibida para aplicar la seguridad
         buscar_pruebas_alarma(datos['ID_PuntoBCR']);
         
         if(document.getElementById('Hora_Apertura_Agencia').value=="" && document.getElementById('Hora_Apertura_Publico').value==""){
@@ -27,6 +28,7 @@ function evento_buscar_puntobcr(){
             //animated bounceInUp
             //$('#codigo_agencia').html("Código de agencia- hoy no abre");
         }
+        //Verifica si tiene una apertura temprana o evento pendiente
         if(datos['Evento_Pendiente']==1){
             document.getElementById("codigo_agencia").innerHTML="Código de agencia- Apertura temprana";
             document.getElementById("numero_punto").style.border="2px solid red";
@@ -37,8 +39,9 @@ function evento_buscar_puntobcr(){
             setInterval(blink, 1000);
         }
         
+        //Verifica el número de zona de pruebas de alarma anteriores
         id_tipo = datos['ID_Tipo_Punto'];
-        id_puntobcr=document.getElementById('ID_PuntoBCR').value;
+        id_puntobcr=datos['ID_PuntoBCR'];
         $.post("index.php?ctl=numero_zona_prueba_realizadas", { id_puntobcr: id_puntobcr, id_tipo: id_tipo}, function(data){
             //console.log(data);
             $("#pruebas_anteriores").html(data);
@@ -96,7 +99,7 @@ function listas_desplegables(){
     $('#cuenta_principal').html(cuenta_principal);
     
     //Lista de Seguimiento
-    var seguimiento='<option value=value=""></option>';
+    var seguimiento='<option value=""></option>';
     var seguimiento=seguimiento+'<option value="Se solicitó la prueba">Se solicitó la prueba</option>';
     var seguimiento=seguimiento+'<option value="Oficina en Asueto">Oficina en Asueto</option>';
     var seguimiento=seguimiento+'<option value="Oficina con trabajos">Oficina con Trabajos</option>';
@@ -171,6 +174,7 @@ function buscar_pruebas_alarma(id_puntobcr){
         
         //Busca información de pruebas realizadas en días anteriores
         $.post("index.php?ctl=pruebas_alarma_anteriores", { id_puntobcr: id_puntobcr}, function(data){
+            console.log(data);
             $("#personas_anteriores").html(data);
         });
     });
