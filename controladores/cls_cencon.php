@@ -334,4 +334,12 @@ class cls_cencon {
         $this->obj_data_provider->desconectar();
         $this->resultado_operacion=true;  
     }
+    
+    public function total_registros_cencon_dia(){
+        $this->obj_data_provider->conectar();
+        $this->arreglo=$this->obj_data_provider->trae_datos("t_eventocencon", "COUNT(ID_Evento_Cencon) Total", $this->condicion);
+        $this->arreglo=$this->obj_data_provider->getArreglo();
+        $this->obj_data_provider->desconectar();
+        $this->resultado_operacion=true; 
+    }
 }?>

@@ -100,10 +100,12 @@
                 tipo_evento = document.getElementById('tipo_evento').value;
                 provincia = document.getElementById('nombre_provincia').value;
                 tipo_punto = document.getElementById('tipo_punto').value;
+                evento_cierre = document.getElementById('evento_cierre').value;
                 Todos="Todos";
 
                 $.post("index.php?ctl=actualiza_en_vivo_reporte_cerrados", {fecha_inicial: fecha_inicial,fecha_final:fecha_final,
-                    id_punto_bcr:id_punto_bcr, tipo_evento:tipo_evento, provincia:provincia, tipo_punto:tipo_punto, Todos: Todos}, function(data){
+                    id_punto_bcr:id_punto_bcr, tipo_evento:tipo_evento, provincia:provincia, tipo_punto:tipo_punto, Todos: Todos,evento_cierre:evento_cierre}, function(data){
+                        //console.log(data);
                         $("#titulo").html("Eventos de acuerdo a parámetros:");  
                         $("#tabla").html(data);   
                         $("#tabla").dataTable().fnDestroy();
@@ -132,15 +134,15 @@
             <div class="row">
                 <div class="col-xs-2">
                     <label for="fecha_inicial">Fecha Inicial:</label>
-                    <input type="date" required=”required” class="form-control" id="fecha_inicial" name="fecha_inicial" value="<?php echo date("Y-m-d");?>">
+                    <input type="date" required class="form-control" id="fecha_inicial" name="fecha_inicial" value="<?php echo date("Y-m-d");?>">
                 </div> 
                 <div class="col-xs-2">
                     <label for="fecha_final">Fecha Final:</label>
-                    <input type="date" required=”required” class="form-control" id="fecha_final" name="fecha_final" value="<?php echo date("Y-m-d");?>">
+                    <input type="date" required class="form-control" id="fecha_final" name="fecha_final" value="<?php echo date("Y-m-d");?>">
                 </div> 
                 <div class="col-xs-2">
                     <label for="nombre_provincia">Provincia</label>
-                    <select class="form-control" required=”required” id="nombre_provincia" name="nombre_provincia" >
+                    <select class="form-control" required id="nombre_provincia" name="nombre_provincia" >
                         <option value="0">Todas</option>
                         <?php
                         $tam_provincias = count($lista_provincias);
@@ -155,7 +157,7 @@
                 </div>
                 <div class="col-xs-2">
                     <label for="tipo_punto">Tipo Punto</label>
-                    <select class="form-control" required=”required” id="tipo_punto" name="tipo_punto" >
+                    <select class="form-control" required id="tipo_punto" name="tipo_punto" >
                         <option value="0">Todos</option>
                         <?php
                         $tam_tipo_punto_bcr = count($lista_tipos_de_puntos_bcr);
@@ -170,7 +172,7 @@
                 </div>
                 <div class="col-xs-2">
                     <label for="punto_bcr">Punto BCR</label>
-                    <select class="form-control" required=”required” id="punto_bcr" name="punto_bcr" >
+                    <select class="form-control" required id="punto_bcr" name="punto_bcr" >
                         <option value="0">Todos</option>
                         <?php  if($params[0]['ID_PuntoBCR']!=0){ ?>
                             <option value="<?php echo $params[0]['ID_PuntoBCR']?>"><?php echo $params[0]['Nombre']?></option>
@@ -185,7 +187,7 @@
                 </div>
                 <div class="col-xs-2">
                     <label for="tipo_evento">Tipo Evento</label>
-                    <select class="form-control" required=”required” id="tipo_evento" name="tipo_evento" >
+                    <select class="form-control" required id="tipo_evento" name="tipo_evento" >
                         <option value="0">Todos</option>                        
                         <?php 
                         if(isset($tipo_evento)){
@@ -197,7 +199,20 @@
                     </select>
                 </div>
             </div>
-            <div class="row">
+            <div class="row espacio-abajo">
+                <div class="col-xs-2">
+                    <label for="evento_cierre">Evento Cierre</label>
+                    <select class="form-control" required id="evento_cierre" name="evento_cierre" >
+                        <option value="0">Cualquiera</option>                        
+                        <?php 
+                        if(isset($evento_cierre)){
+                            $tam=count($evento_cierre);
+                            for($i=0; $i<$tam;$i++){ ?>
+                                <option value="<?php echo $evento_cierre[$i]['ID_Tipo_Evento_Cierre']?>"><?php echo $evento_cierre[$i]['Evento'].'- '.$evento_cierre[$i]['Descripcion'] ?></option>                           
+                            <?php }  
+                        } ?>
+                    </select>
+                </div>
                 <a class="btn btn-default espacio-arriba" role="button" id="prueba" name="prueba" onclick="buscar_informacion()">Generar Reporte</a>
                 <a class="btn btn-default espacio-arriba" role="button" id="prueba" name="prueba" onclick="hacer_click()">Exportar Reporte</a>
                 <a href="index.php?ctl=principal" class="btn btn-default espacio-arriba" role="button">Cancelar</a>

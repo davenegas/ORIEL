@@ -300,4 +300,14 @@ class cls_reporteria{
         $this->obj_data_provider->desconectar();
     }
     
+    public function obtener_eventos_cierre(){
+        $this->obj_data_provider->conectar();
+        $this->arreglo=$this->obj_data_provider->trae_datos("t_tipoeventocierre 
+                LEFT OUTER JOIN t_tipoevento on t_tipoevento.ID_Tipo_Evento = t_tipoeventocierre.ID_Tipo_Evento",
+            "t_tipoeventocierre.*, t_tipoevento.Evento",
+            $this->condicion);
+        $this->arreglo=$this->obj_data_provider->getArreglo();
+        $this->obj_data_provider->desconectar();
+    }
+    
 }?>

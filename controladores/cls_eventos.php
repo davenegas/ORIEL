@@ -359,14 +359,16 @@ class cls_eventos{
                     LEFT OUTER JOIN T_PuntoBCR ON T_Evento.ID_PuntoBCR = T_PuntoBCR.ID_PuntoBCR
                     LEFT OUTER JOIN T_Usuario ON T_Evento.ID_Usuario = T_Usuario.ID_Usuario
                     LEFT OUTER JOIN T_TipoEvento ON T_Evento.ID_Tipo_Evento = T_TipoEvento.ID_Tipo_Evento
-                    LEFT OUTER JOIN T_EstadoEvento ON T_Evento.ID_EstadoEvento = T_EstadoEvento.ID_EstadoEvento", 
+                    LEFT OUTER JOIN T_EstadoEvento ON T_Evento.ID_EstadoEvento = T_EstadoEvento.ID_EstadoEvento
+                    LEFT OUTER JOIN t_tipoeventocierreevento ON T_Evento.ID_Evento = t_tipoeventocierreevento.ID_Evento", 
                 "T_Evento.ID_Evento, T_Evento.Fecha, T_Evento.Hora, T_Evento.Observaciones_Evento, T_Evento.Fecha_Observaciones,
                     T_Provincia.Nombre_Provincia, T_Provincia.ID_Provincia,
                     T_TipoPuntoBCR.Tipo_Punto, T_TipoPuntoBCR.ID_Tipo_Punto ,
                     T_PuntoBCR.Nombre, T_PuntoBCR.ID_PuntoBCR,T_PuntoBCR.Codigo,
                     T_TipoEvento.Evento, T_TipoEvento.ID_Tipo_Evento,
                     T_EstadoEvento.ID_EstadoEvento, T_EstadoEvento.Estado_Evento, T_Usuario.ID_Usuario,
-                    T_Usuario.Nombre Nombre_Usuario,T_Usuario.Apellido",
+                    T_Usuario.Nombre Nombre_Usuario,T_Usuario.Apellido,
+                    t_tipoeventocierreevento.ID_Tipo_Evento_Cierre",
                 "");
             $this->arreglo=$this->obj_data_provider->getArreglo();
             $this->obj_data_provider->desconectar();
@@ -380,14 +382,16 @@ class cls_eventos{
                     LEFT OUTER JOIN T_PuntoBCR ON T_Evento.ID_PuntoBCR = T_PuntoBCR.ID_PuntoBCR
                     LEFT OUTER JOIN T_Usuario ON T_Evento.ID_Usuario = T_Usuario.ID_Usuario
                     LEFT OUTER JOIN T_TipoEvento ON T_Evento.ID_Tipo_Evento = T_TipoEvento.ID_Tipo_Evento
-                    LEFT OUTER JOIN T_EstadoEvento ON T_Evento.ID_EstadoEvento = T_EstadoEvento.ID_EstadoEvento", 
+                    LEFT OUTER JOIN T_EstadoEvento ON T_Evento.ID_EstadoEvento = T_EstadoEvento.ID_EstadoEvento
+                    LEFT OUTER JOIN t_tipoeventocierreevento ON T_Evento.ID_Evento = t_tipoeventocierreevento.ID_Evento", 
                 "T_Evento.ID_Evento, T_Evento.Fecha, T_Evento.Hora, T_Evento.Observaciones_Evento, T_Evento.Fecha_Observaciones,
                     T_Provincia.Nombre_Provincia, T_Provincia.ID_Provincia,
                     T_TipoPuntoBCR.Tipo_Punto, T_TipoPuntoBCR.ID_Tipo_Punto ,
                     T_PuntoBCR.Nombre, T_PuntoBCR.ID_PuntoBCR,T_PuntoBCR.Codigo,
                     T_TipoEvento.Evento, T_TipoEvento.ID_Tipo_Evento,
                     T_EstadoEvento.ID_EstadoEvento, T_EstadoEvento.Estado_Evento, T_Usuario.ID_Usuario,
-                    T_Usuario.Nombre Nombre_Usuario,T_Usuario.Apellido",
+                    T_Usuario.Nombre Nombre_Usuario,T_Usuario.Apellido,
+                    t_tipoeventocierreevento.ID_Tipo_Evento_Cierre",
                 $this->condicion);
             $this->arreglo=$this->obj_data_provider->getArreglo();
             $this->obj_data_provider->desconectar();

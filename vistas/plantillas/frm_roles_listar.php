@@ -14,6 +14,7 @@
             <table id="tabla" class="display" cellspacing="0" width="100%">
                 <thead>
                     <tr>
+                        <th>ID</th>
                         <th>Descripción</th>
                         <th>Estado</th>
                         <th>Gestión Estado</th>
@@ -25,6 +26,7 @@
                     $tam=count($params);
                     for ($i = 0; $i <$tam; $i++) { ?>
                         <tr>
+                            <td><?php echo $params[$i]['ID_Rol'];?></td>
                             <td><?php echo $params[$i]['Descripcion'];?></td>
                             <?php if ($params[$i]['Estado']==1){ ?>  
                                 <td>Activo</td>

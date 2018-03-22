@@ -124,13 +124,7 @@
 
                 <div class="col-sm-3 sidenav">
                     <div class="well">
-                        <?php if(isset($sin_coordinar[0]['Total'])){ 
-                            if($_SESSION['modulos']['Editar- Puntos BCR']==1){?>
-                                <p onclick="obtener_info_sin_coordinar();">Cantidad de aperturas sin coordinar en tiempo establecido: <?php echo $sin_coordinar[0]['Total']?></p>
-                            <?php } else {?>
-                                <p>Cantidad de aperturas sin coordinar en tiempo establecido: <?php echo $sin_coordinar[0]['Total']?></p>
-                            <?php }
-                        }?>
+                        <p>Total de aperturas registradas en Cencon: <?php echo $total_aperturas[0]['Total'];?>, aperturas pendientes: <?php echo count($vencidos);?></p>
                     </div>
                     <?php if(isset($vencidos)){ ?>
                         <div class="well" align="left">
@@ -202,21 +196,6 @@
                         </select>          
                     <hr>
                     <button onclick="guardar_seguimiento_evento();">Guardar</a></button>
-                </div>
-            </div>
-        </div>
-        
-        <div id="ventana_oculta_4"> 
-            <div id="popupventana2">
-                <div id="ventana2">
-                    <img id="close" src='vistas/Imagenes/cerrar.png' width="25" onclick ="ocultar_elemento()"> 
-                    <h2 align="center" id="titulo_ventana_oculta">Evento Cencon sin coordinar</h2>
-                    <table class="table table-striped" id="info_cencon_sin_coordinar" class="col-md-12">
-                        <thead> 
-                        </thead>
-                        <tbody>
-                        </tbody> 
-                    </table>
                 </div>
             </div>
         </div>

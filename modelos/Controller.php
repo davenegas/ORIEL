@@ -3691,7 +3691,7 @@ class Controller{
     //Muestra en pantalla un reportes de eventos cerrados, de acuerdo a parametros de busqueda específicos, como fecha, sitio, etc.
     public function actualiza_en_vivo_reporte_cerrados(){
         //Espera 1 segundos antes de iniciar la ejecución del método, para mostrar un gift de espera en pantalla
-        sleep(1);       
+        //sleep(1);       
         //Validación para verificar si el usuario está logeado en el sistema
         if(isset($_SESSION['nombre'])){
             //Creación de un nuevo objeto de la clase eventos
@@ -3709,6 +3709,12 @@ class Controller{
             $id_tipo_punto=$_POST['tipo_punto'];
             //Obtiene el tipo de punto a consultar
             $id_provincia=$_POST['provincia'];
+            //Obtiene el tipo de evento de cierre
+            if(isset($_POST['evento_cierre'])){
+                $id_evento_cierre=$_POST['evento_cierre'];
+            } else {
+                $id_evento_cierre=0;
+            }
             //Establece la condición SQL para definir el rango de fechas del reporte
             $condicion="(T_Evento.Fecha between '".$fecha_inicial."' AND '".$fecha_final."') AND (T_Evento.ID_EstadoEvento=3 OR T_Evento.ID_EstadoEvento=5)";
             if(isset($_POST['Todos'])){
@@ -3716,12 +3722,18 @@ class Controller{
             }
             if($id_punto_bcr!=0){
                 $condicion.=" AND T_Evento.ID_PuntoBCR=".$id_punto_bcr;
-            } if($id_tipo_evento!=0){
+            } 
+            if($id_tipo_evento!=0){
                 $condicion.=" AND T_Evento.ID_Tipo_Evento=".$id_tipo_evento;
-            } if($id_tipo_punto!=0){
+            } 
+            if($id_tipo_punto!=0){
                 $condicion.=" AND T_Evento.ID_Tipo_Punto=".$id_tipo_punto;
-            } if($id_provincia!=0){
+            } 
+            if($id_provincia!=0){
                 $condicion.=" AND T_Evento.ID_Provincia=".$id_provincia;
+            } 
+            if($id_evento_cierre!=0){
+                $condicion.=" AND t_tipoeventocierreevento.ID_Tipo_Evento_Cierre=".$id_evento_cierre;
             }
 
             //Establece la condicion de la consulta
@@ -5703,26 +5715,36 @@ class Controller{
                         $obj_correo = new Mail_Provider();
                         
                         $fecha_hoy = date('Y-m-j');
-                        $fecha_semana = strtotime ( '-7 day' , strtotime ( $fecha_hoy ) ) ;
+                        $fecha_hoy = strtotime ( '-1 day' , strtotime ( $fecha_hoy ) ) ;
+                        $fecha_hoy = date ('Y-m-j', $fecha_hoy);
+                        $fecha_semana = strtotime ( '-6 day' , strtotime ( $fecha_hoy ) ) ;
                         $fecha_semana = date ('Y-m-j', $fecha_semana);
 
-                        $obj_pruebas->setCondicion("(T_PruebaAlarma.Fecha between '".$fecha_semana."' and '".$fecha_hoy."') and (T_PruebaAlarma.Seguimiento='Se solicitó la prueba') Order by T_PuntoBCR.Codigo");
+                        $obj_pruebas->setCondicion("(T_PruebaAlarma.Fecha between '".$fecha_semana."' and '".$fecha_hoy."') and (T_PruebaAlarma.Seguimiento='Se solicitó la prueba') Order by T_PuntoBCR.Codigo, T_PruebaAlarma.Fecha");
                         $obj_pruebas->obtener_pruebas_oficina_gerente();
                         $params= $obj_pruebas->getArreglo();
 
                         // Recorre la información del vector 
+                        $detalle.="<table border='2'>";
+                        $detalle.="<th>Código</th>";
+                        $detalle.="<th>Agencia</th>";
+                        $detalle.="<th>Fecha</th>";
+                        $detalle.="<th>Gerente zona</th>";
+                        $detalle.="<th>Seguimiento</th>";
+                        $detalle.="<th>Observaciones</th>";
                         for ($i = 0; $i < count($params); $i++) {
                             //Toma la información de cada visita en una variable cadena
                             //$cadena_oficiales.='Identificacion: '.$params[$i]['Identificacion'].";\r\n";
                             $sql = http_build_query($params[$i],null,', ');
                             $cadena.= $sql.";\r\n\r\n";
-                            $detalle.="<tr><td>Código: ".$params[$i]['Codigo']."</td>".
-                                    "<td>Agencia: ".$params[$i]['Nombre']."</td>".
-                                    "<td>Gerente Zona: ".$params[$i]['Apellido_Nombre']."</td>".
-                                    "<td>Fecha: ".$params[$i]['Fecha']."</td>".
-                                    "<td>Seguimiento: ".$params[$i]['Seguimiento']."</td>".
-                                    "<td>Observaciones: ".$params[$i]['Observaciones']."</td></tr>";
+                            $detalle.="<tr><td>".$params[$i]['Codigo']."</td>".
+                                    "<td>".$params[$i]['Nombre']."</td>".
+                                    "<td>".$params[$i]['Fecha']."</td>".
+                                    "<td>".$params[$i]['Apellido_Nombre']."</td>".
+                                    "<td>".$params[$i]['Seguimiento']."</td>".
+                                    "<td>".$params[$i]['Observaciones']."</td></tr>";
                         }
+                        $detalle.="</table>";
                         //Abre el archivo para escribirle 
                         $fp = fopen($ruta,"w+"); //no olvidar crear al archivo visitantes.txt y poner el path correcto
                         //Escribe en el archivo
@@ -5745,7 +5767,7 @@ class Controller{
                             $obj_correo->agregar_asunto_de_correo("Pruebas solicitadas por el Centro de Control");
                             //Agrega detalle de correo
                             $obj_correo->agregar_detalle_de_correo("Gracias por utilizar Oriel</br></br> "
-                                . "Las siguientes pruebas fueron solicitadas por el Centro de Control:</br>"
+                                . "Las siguientes pruebas fueron solicitadas por el Centro de Control, del día ".$fecha_semana." al ".$fecha_hoy."</br>"
                                 . $detalle."<br><br>"
                                 . "Este es un mensaje automático, por favor no responderlo. Si requiere ayuda, comuníquese con el Centro de Control Ext: 79066.</br></br>"
                                 . "<a>http://oriel</a>");
@@ -8562,46 +8584,6 @@ class Controller{
                 //Obtiene la hora actual del sistema
                 $hora_actual= getdate();
                 $hora_actual=$hora_actual['hours'];
-                /*if($hora_actual<19){
-                    if($vencidos[$i]['tiempo']<'300'){
-                        if(!($params[$i]['Seguimiento']=="Arqueo de ATM" ||$params[$i]['Seguimiento']=="ATM en Mantenimiento"||
-                            $params[$i]['Seguimiento']=="Apertura con llave Azul"||$params[$i]['Seguimiento']=="Permiso Especial")){
-                            if($vencidos[$i]['tiempo']>'40'){
-                                if($params[$i]['Seguimiento']=="Se envió correo al funcionario"||$params[$i]['Seguimiento']=="Se envió correo al encargado"||
-                                    $params[$i]['Seguimiento']=="Se le informó al coordinador"){
-                                    if($vencidos[$i]['tiempo']>'70'){
-                                        if($params[$i]['Seguimiento']=="Se envió correo al encargado"||
-                                            $params[$i]['Seguimiento']=="Se le informó al coordinador"){
-                                            if($vencidos[$i]['tiempo']>'100'){
-                                                if($params[$i]['Seguimiento']=="Se le informó al coordinador"){
-                                                    $vencidos[$i]['color']="color: blueviolet";
-                                                }else{
-                                                    $vencidos[$i]['color']="color: red";
-                                                } 
-                                            }else{
-                                                $vencidos[$i]['color']="color: orange";
-                                            }
-                                        }else{
-                                            $vencidos[$i]['color']="color: red";
-                                        }
-                                    }else{
-                                        $vencidos[$i]['color']="color: orange";
-                                    }
-                                }else{
-                                    $vencidos[$i]['color']="color: red";
-                                }
-                            } else{
-                                $vencidos[$i]['color']="color: black";
-                            }
-                        } else{
-                            $vencidos[$i]['color']="color:mediumblue; text-decoration: underline;";
-                        }    
-                    }else{
-                        $vencidos[$i]['color']="color: red";
-                    }
-                }else{
-                    $vencidos[$i]['color']="color: red";
-                }  */  
                 
                 if(!($params[$i]['Seguimiento']=="Arqueo de ATM" ||$params[$i]['Seguimiento']=="ATM en Mantenimiento"||
                     $params[$i]['Seguimiento']=="Apertura con llave Azul"||$params[$i]['Seguimiento']=="Permiso Especial")){
@@ -8618,10 +8600,13 @@ class Controller{
             if(isset ($vencidos)){
                 rsort($vencidos);
             }
-           
-            $obj_cencon->setCondicion("Fecha='".date('Y-m-j')."'");
-            $obj_cencon->obtener_sin_coordinar_dia();
-            $sin_coordinar= $obj_cencon->getArreglo();
+
+            //Cuenta la cantidad de aperturas de Cencon en Oriel
+            $fecha_inicio = date("Y-m-d");
+            $fecha_fin= date("Y-m-d");
+            $obj_cencon->setCondicion("(T_EventoCencon.Fecha_Apertura between '".$fecha_inicio."' AND '".$fecha_fin."')");
+            $obj_cencon->total_registros_cencon_dia();
+            $total_aperturas=$obj_cencon->getArreglo();
             
             unset($obj_cencon); 
             unset($obj_personal);
@@ -12333,12 +12318,10 @@ class Controller{
             if(isset($_POST['fecha_inicial'])){
                 $fecha_inicio = $_POST['fecha_inicial'];
                 $fecha_fin= $_POST['fecha_final'];
-                $obj_cencon->setCondicion("(T_EventoCencon.Fecha_Apertura between '".$fecha_inicio."' AND '".$fecha_fin."')");
                 $titulo = "Eventos de Cencon del ".$fecha_inicio." al ".$fecha_fin;
             } else{
                 $fecha_inicio = date("Y-m-d");
                 $fecha_fin= date("Y-m-d");
-                $obj_cencon->setCondicion("(T_EventoCencon.Fecha_Apertura between '".$fecha_inicio."' AND '".$fecha_fin."')");
                 $titulo = "Eventos de Cencon de hoy: ".$fecha_inicio;
             }
             //Obtiene la información de apertura de Cencon del Personal BCR
@@ -13376,6 +13359,8 @@ class Controller{
         if(isset($_SESSION['nombre'])){
             //Creación de un objeto de clase eventos
             $obj_eventos = new cls_eventos();
+            $obj_reporteria = new cls_reporteria();
+
 
             //Metodo de la clase que permite obtener todas las provincias que se encuentran listadas en el sistema.
             $obj_eventos->obtener_todas_las_provincias();
@@ -13401,6 +13386,11 @@ class Controller{
             $obj_eventos->setCondicion("");
             $obj_eventos->obtener_todos_los_tipos_eventos();   
             $tipo_evento = $obj_eventos->getArreglo();
+            
+            //Obtiene los eventos de cierre
+            $obj_reporteria->setCondicion("t_tipoeventocierre.Estado=1");
+            $obj_reporteria->obtener_eventos_cierre();
+            $evento_cierre= $obj_reporteria->getArreglo();
             
             //Llamada al formulario correspondiente de la vista
             require __DIR__.'/../vistas/plantillas/rpt_eventos_bitacora_digital.php';

@@ -97,7 +97,7 @@
                 if (mezcla.checked==true){
                     if (tbl.rows.length-1==<?php echo count($params);?>){
                         for (var i=0;i < tbl.rows.length; i++){
-                            tbl.rows[i].cells[5].hidden=false;
+                            tbl.rows[i].cells[4].hidden=false;
                         }
                     }else{
                         mezcla.checked=false;
@@ -138,7 +138,7 @@
                             alert ("Es necesario mezclar al menos dos eventos!!! Por favor repita el procedimiento.");
                         }
                         for (var i=0;i < tbl.rows.length; i++){                  
-                            tbl.rows[i].cells[5].hidden=true;
+                            tbl.rows[i].cells[4].hidden=true;
                         }
                         location.reload();  
                     }else{
@@ -237,7 +237,7 @@
                     $tam=count($params);
                     for ($i = 0; $i <$tam; $i++) { ?>
                         <tr data-toggle="tooltip" title="<?php echo $detalle_y_ultimo_usuario[$i]['Detalle'];?>">
-                            <?php
+                            <?php 
                             $fecha_evento = date_create($params[$i]['Fecha']);
                             $fecha_actual = date_create(date("d-m-Y"));
                             $dias_abierto= date_diff($fecha_evento, $fecha_actual);
@@ -255,7 +255,7 @@
                                         <td style="text-align:center" data-toggle="tooltip" title="<?php echo $params[$i]['Observaciones_Evento'];?>"><a href="javascript:void(null)" style="color:#FFFFFF">2<img src="vistas/Imagenes/Editar Nota.png" class="img-rounded" alt="Cinque Terre" width="25" height="25" onClick="editar_notas_supervision('<?php echo $params[$i]['ID_Evento'];?>','<?php echo $params[$i]['Observaciones_Evento'];?>')"></a></td>
                                     <?php }
                                 } ?>
-                            <?php } */ ?>
+                            <?php } */?>
                             <td style="text-align:center"><?php echo date_format($fecha_evento, 'Y/m/d');?></td>
                             <td style="text-align:center"><?php echo $params[$i]['Hora'];?></td>
                             <td style="text-align:center"><?php echo $dias_abierto->format('%a');?></td>
