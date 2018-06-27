@@ -10,6 +10,7 @@
     <body>
         <?php require_once 'encabezado.php';?>
         <div class="container animated fadeIn quitar-float">
+            <!--<pre><?php //print_r($bitacora_revision_video);?></pre>-->
             <h3>Generar Reporte de revisiones de video</h3> 
             <div class="espacio-abajo">
                 <form class="form-horizontal" role="form" method="POST" action="index.php?ctl=reporte_revisiones_video">
@@ -74,6 +75,9 @@
                                 <th style="text-align:center">Puesto</th>
                                 <th style="text-align:center">Duración revisión</th>
                                 <th style="text-align:center">Justificación</th>
+                                <th style="text-align:center">Estado Conexión</th>
+                                <th style="text-align:center">Mantenimiento</th>
+                                <th style="text-align:center">Reporta situación</th>
                             </tr>
                         </thead>
                         <tbody id="cuerpo">
@@ -89,6 +93,47 @@
                                     <td style="text-align:center"><?php echo $bitacora_revision_video[$i]['Nombre'];?></td>
                                     <td style="text-align:center"><?php echo $bitacora_revision_video[$i]['Duracion_Revision']." excedido por: ".$bitacora_revision_video[$i]['Retraso_Segundos'];?></td>
                                     <td style="text-align:center"><?php echo $bitacora_revision_video[$i]['Justificacion_Retraso'];?></td>
+                                    <?php if($bitacora_revision_video[$i]['Resultado_Conexion']==0){?>
+                                        <td style="text-align:center">Positiva</td>
+                                    <?php } if($bitacora_revision_video[$i]['Resultado_Conexion']==1){?>
+                                        <td style="text-align:center">Negativa</td>
+                                    <?php } if($bitacora_revision_video[$i]['Resultado_Conexion']==2) { ?>
+                                        <td style="text-align:center">No Despliega</td>
+                                    <?php } ?>
+                                    <?php if($bitacora_revision_video[$i]['Requirio_Mantenimiento']==0){?>
+                                        <td style="text-align:center">No</td>
+                                    <?php } else { ?>
+                                        <td style="text-align:center">Si</td>
+                                    <?php } ?>
+                                    <td style="text-align:center"><?php echo $bitacora_revision_video[$i]['Reporta_Situacion'];?></td>
+                                </tr>
+                            <?php } ?>
+                        </tbody>
+                    </table>
+                <?php }?>
+            </div>
+            <div class="container animated fadeIn" style="margin-top: 50px;">
+                <?php if(isset($cantidad_revisiones_puesto)){?>
+                    <table id="tabla2" class="display2">
+                        <thead>   
+                            <tr>
+                                <th hidden style="text-align:center">ID Puesto</th>
+                                <th style="text-align:center">Puesto</th>
+                                <th style="text-align:center">Cantidad de revisiones</th>
+                                <th style="text-align:center">Tiempo en puesto</th>
+                                <th style="text-align:center">Segundos en puesto</th>
+                            </tr>
+                        </thead>
+                        <tbody id="cuerpo">
+                            <?php 
+                            $tam=count($cantidad_revisiones_puesto);
+                            for ($i = 0; $i <$tam; $i++) { ?>
+                                <tr>
+                                    <td hidden style="text-align:center"><?php echo $cantidad_revisiones_puesto[$i]['ID_Puesto'];?></td>
+                                    <td style="text-align:center"><?php echo $cantidad_revisiones_puesto[$i]['Puesto'];?></td>
+                                    <td style="text-align:center"><?php echo $cantidad_revisiones_puesto[$i]['Cantidad'];?></td>
+                                    <td style="text-align:center"><?php echo $cantidad_revisiones_puesto[$i]['Tiempo_Puesto'];?></td>
+                                    <td style="text-align:center"><?php echo $cantidad_revisiones_puesto[$i]['Total_Tiempo'];?></td>
                                 </tr>
                             <?php } ?>
                         </tbody>

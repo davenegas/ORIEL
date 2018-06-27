@@ -103,7 +103,9 @@ class cls_modulos{
 
     public function obtiene_lista_de_modulos_por_rol($rol){
         $this->obj_data_provider->conectar();
-        $this->arreglo=$this->obj_data_provider->trae_datos("T_RolSubModulo inner join T_Rol on T_RolSubModulo.ID_Rol=T_Rol.ID_Rol inner join T_Modulo on T_RolSubModulo.ID_Modulo=T_Modulo.ID_Modulo", "T_Modulo.Descripcion", "T_Rol.ID_Rol=".$rol);
+        $this->arreglo=$this->obj_data_provider->trae_datos("T_RolSubModulo "
+                . "inner join T_Rol on T_RolSubModulo.ID_Rol=T_Rol.ID_Rol "
+                . "inner join T_Modulo on T_RolSubModulo.ID_Modulo=T_Modulo.ID_Modulo", "T_Modulo.Descripcion", "T_Rol.ID_Rol=".$rol);
         $this->arreglo_modulos=$this->obj_data_provider->getArreglo();
         $this->obj_data_provider->desconectar();
         $this->resultado_operacion=true;

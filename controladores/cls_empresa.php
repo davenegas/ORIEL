@@ -168,7 +168,8 @@ class cls_empresa{
         if($this->condicion==""){
             $this->obj_data_provider->conectar();
             //Llama al metodo que realiza la consulta a la bd
-            $this->obj_data_provider->trae_datos("T_Empresa LEFT OUTER JOIN T_PersonalExterno ON T_PersonalExterno.ID_Persona_Externa = T_Empresa.ID_Persona_Externa
+            $this->obj_data_provider->trae_datos("T_Empresa 
+                LEFT OUTER JOIN T_PersonalExterno ON T_PersonalExterno.ID_Persona_Externa = T_Empresa.ID_Persona_Externa
                 LEFT OUTER JOIN T_Personal ON T_Personal.ID_Persona = T_Empresa.ID_Persona
                 LEFT OUTER JOIN T_UnidadEjecutora ON T_UnidadEjecutora.ID_Unidad_Ejecutora = T_Empresa.ID_Unidad_Ejecutora", 
                 "T_Empresa.*, T_PersonalExterno.Nombre as Nombre_Externo, T_PersonalExterno.Apellido as Apellido_Externo, 
@@ -198,8 +199,6 @@ class cls_empresa{
         if ($this->id==0){
             $this->obj_data_provider->inserta_datos("T_Empresa","Empresa, Observaciones, Estado, Cedula_Juridica, ID_Persona_Externa, Telefono_Empresa, Direccion, Tipo_Empresa, ID_Unidad_Ejecutora, ID_Persona, Fecha_Inicio, Fecha_Final",
                     "'".$this->empresa."','".$this->observaciones."','".$this->estado."','".$this->cedula_juridica."','".$this->id_externo."','".$this->telefono."','".$this->direccion."','".$this->tipo_empresa."','".$this->id_ue."','".$this->id_persona."','".$this->fecha_inicio."','".$this->fecha_final."'");
-        
-            
         }else{
             $this->obj_data_provider->edita_datos("T_Empresa", "Empresa='".$this->empresa."', Observaciones='".$this->observaciones
                 ."', Estado='".$this->estado."', Cedula_Juridica='".$this->cedula_juridica."', ID_Persona_Externa='".$this->id_externo.

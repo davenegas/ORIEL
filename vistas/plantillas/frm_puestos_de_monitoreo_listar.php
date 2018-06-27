@@ -133,6 +133,7 @@
                         content: 'Desea liberar el puesto de monitoreo: '+nom+' ?',
                         confirm: function(){
                             $.post("index.php?ctl=liberar_puesto_de_monitoreo", {id_puesto: id_puesto},function(data){
+                                //console.log(data);
                                 var srt = data;
                                 var n= srt.search("liberado");
 

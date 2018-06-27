@@ -220,14 +220,16 @@ class cls_prueba_alarma{
         if($this->condicion==""){
             $this->arreglo=$this->obj_data_provider->trae_datos("T_PruebaAlarma 
                 LEFT OUTER JOIN T_PuntoBCR ON T_PuntoBCR.ID_PuntoBCR = T_PruebaAlarma.ID_PuntoBCR 
-                LEFT OUTER JOIN T_Empresa ON T_Empresa.ID_Empresa = T_PruebaAlarma.ID_Empresa_Persona_Apertura", 
-                "T_PruebaAlarma.*, T_PuntoBCR.Nombre, T_PuntoBCR.Codigo,T_Empresa.Empresa", 
+                LEFT OUTER JOIN T_Empresa ON T_Empresa.ID_Empresa = T_PruebaAlarma.ID_Empresa_Persona_Apertura
+                LEFT OUTER JOIN T_Personal ON T_Personal.ID_Persona = T_PruebaAlarma.ID_Persona_Reporta_Apertura", 
+                "T_PruebaAlarma.*, T_PuntoBCR.Nombre, T_PuntoBCR.Codigo,T_Empresa.Empresa, T_Personal.Apellido_Nombre as Nombre_Persona_Apertura", 
                 "");
         }else{
             $this->arreglo=$this->obj_data_provider->trae_datos("T_PruebaAlarma 
                 LEFT OUTER JOIN T_PuntoBCR ON T_PuntoBCR.ID_PuntoBCR = T_PruebaAlarma.ID_PuntoBCR 
-                LEFT OUTER JOIN T_Empresa ON T_Empresa.ID_Empresa = T_PruebaAlarma.ID_Empresa_Persona_Apertura", 
-                "T_PruebaAlarma.*, T_PuntoBCR.Nombre, T_PuntoBCR.Codigo,T_Empresa.Empresa",
+                LEFT OUTER JOIN T_Empresa ON T_Empresa.ID_Empresa = T_PruebaAlarma.ID_Empresa_Persona_Apertura
+                LEFT OUTER JOIN T_Personal ON T_Personal.ID_Persona = T_PruebaAlarma.ID_Persona_Reporta_Apertura", 
+                "T_PruebaAlarma.*, T_PuntoBCR.Nombre, T_PuntoBCR.Codigo,T_Empresa.Empresa, T_Personal.Apellido_Nombre as Nombre_Persona_Apertura",
                 $this->condicion);
         }
         $this->arreglo=$this->obj_data_provider->getArreglo();
@@ -407,7 +409,7 @@ class cls_prueba_alarma{
             LEFT OUTER JOIN t_puntobcr on t_puntobcr.ID_PuntoBCR = t_pruebaalarma.ID_PuntoBCR
             LEFT OUTER JOIN t_gerentezonabcr on t_puntobcr.ID_Gerente_Zona = t_gerentezonabcr.ID_Gerente_Zona
             LEFT OUTER JOIN t_personal on t_personal.ID_Persona = t_gerentezonabcr.ID_Persona", 
-            "t_pruebaalarma.Fecha,t_pruebaalarma.Seguimiento, t_pruebaalarma.Observaciones,
+            "t_pruebaalarma.Fecha,t_pruebaalarma.Seguimiento, t_pruebaalarma.Observaciones,t_pruebaalarma.Hora_Prueba_Alarma,
             t_puntobcr.Nombre,t_puntobcr.Codigo,t_personal.Apellido_Nombre",
             $this->condicion);
         $this->arreglo=$this->obj_data_provider->getArreglo();

@@ -200,6 +200,10 @@
                             <?php if ($_SESSION['modulos']['Módulo-Áreas de Apoyo']==1){ ?>
                                 <li><a href="index.php?ctl=areas_apoyo_listar">Áreas de Apoyo</a></li>
                             <?php }; ?>
+
+                            <?php if ($_SESSION['modulos']['Módulo-Bitácora Digital']==1){ ?>
+                                <li><a href="index.php?ctl=biblioteca_listar">Biblioteca</a></li>
+                            <?php }; ?> 
                                 
                             <?php if ($_SESSION['modulos']['Módulo-Bitácora Digital']==1){ ?>
                                 <li><a href="index.php?ctl=frm_eventos_listar">Bitácora Digital</a></li>
@@ -302,6 +306,10 @@
                             <?php if ($_SESSION['modulos']['Reportes-Cencon']==1){ ?>
                                 <li><a href="index.php?ctl=reporte_seguimiento_cencon">Reporte Cencon Seguimientos</a></li> 
                             <?php }; ?> 
+                            
+                            <?php if ($_SESSION['modulos']['Reportes-Cencon']==1){ ?>
+                                <li><a href="index.php?ctl=reporte_aperturas_cierres">Reporte aperturas y cierre</a></li> 
+                            <?php }; ?>
                                 
                             <?php if ($_SESSION['modulos']['Reportes-Trazabilidad']==1){ ?>
                                 <li><a href="index.php?ctl=frm_trazabilidad_listar">Trazabilidad</a></li> 
@@ -372,8 +380,8 @@
                             
                             <?php if ($_SESSION['modulos']['Módulo-Bitácora Digital']==1){ ?>
                                 <li><a href="index.php?ctl=manual_ayuda_privado&manual=Bitacora_Digital">Manual Bitácora Digital</a></li>
-                            <?php }; ?>    
-                                
+                            <?php }; ?>
+                                                          
                             <?php if ($_SESSION['modulos']['Módulo-PuntosBCR']==1){ ?>
                                 <li><a href="index.php?ctl=manual_ayuda_privado&manual=Puntos_BCR">Manual Puntos BCR</a></li>
                             <?php }; ?>

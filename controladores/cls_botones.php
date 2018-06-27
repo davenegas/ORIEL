@@ -135,8 +135,11 @@ class cls_botones {
         if($this->condicion==""){
             $this->obj_data_provider->conectar();
             //Llama al metodo que realiza la insercion a la bd
-            $this->obj_data_provider->trae_datos("T_Botones LEFT OUTER JOIN T_PuntoBCR ON T_PuntoBCR.ID_PuntoBCR = T_Botones.ID_PuntoBCR
-            LEFT OUTER JOIN T_Personal ON T_Personal.ID_Persona = T_Botones.ID_Persona", "T_Botones.*, T_Personal.Apellido_Nombre , T_PuntoBCR.Nombre , T_PuntoBCR.Tipo_Panel", "");
+            $this->obj_data_provider->trae_datos("T_Botones 
+                LEFT OUTER JOIN T_PuntoBCR ON T_PuntoBCR.ID_PuntoBCR = T_Botones.ID_PuntoBCR
+                LEFT OUTER JOIN T_Personal ON T_Personal.ID_Persona = T_Botones.ID_Persona", 
+                "T_Botones.*, T_Personal.Apellido_Nombre , T_PuntoBCR.Nombre , T_PuntoBCR.Tipo_Panel", 
+                    "");
             $this->arreglo=$this->obj_data_provider->getArreglo();
             //Metodo de la clase data provider que desconecta la sesion con la base de datos 
             $this->obj_data_provider->desconectar();
@@ -144,7 +147,8 @@ class cls_botones {
         }else{
             $this->obj_data_provider->conectar();
             //Llama al metodo que realiza la insercion a la bd
-            $this->obj_data_provider->trae_datos("T_Botones LEFT OUTER JOIN T_PuntoBCR ON T_PuntoBCR.ID_PuntoBCR = T_Botones.ID_PuntoBCR
+            $this->obj_data_provider->trae_datos("T_Botones 
+                LEFT OUTER JOIN T_PuntoBCR ON T_PuntoBCR.ID_PuntoBCR = T_Botones.ID_PuntoBCR
             LEFT OUTER JOIN T_Personal ON T_Personal.ID_Persona = T_Botones.ID_Persona", "T_Botones.*, T_Personal.Apellido_Nombre , T_PuntoBCR.Nombre , T_PuntoBCR.Tipo_Panel",$this->condicion);
             $this->arreglo=$this->obj_data_provider->getArreglo();
             //Metodo de la clase data provider que desconecta la sesion con la base de datos 
@@ -152,6 +156,7 @@ class cls_botones {
             $this->resultado_operacion=true;
         }
     } 
+    
     public function obtener_responsable_boton(){
         if($this->condicion==""){
             $this->obj_data_provider->conectar();
@@ -171,6 +176,7 @@ class cls_botones {
             $this->resultado_operacion=true;
         }
     } 
+    
     public function obtener_puntobcr(){
         $this->obj_data_provider->conectar();
         //Llama al metodo que realiza la insercion a la bd
@@ -180,6 +186,7 @@ class cls_botones {
         $this->obj_data_provider->desconectar();
         $this->resultado_operacion=true;    
     }
+    
     public function botones_guardar() {
         if($this->condicion==""){
             $this->obj_data_provider->conectar();
@@ -190,7 +197,8 @@ class cls_botones {
             $this->obj_data_provider->desconectar();
             $this->resultado_operacion=true;
         }  
-    }   
+    } 
+    
     public function editar_botones() {
         $this->obj_data_provider->conectar();
         //Llama al metodo que realiza la insercion a la bd

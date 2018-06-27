@@ -127,7 +127,7 @@ class cls_areasapoyo{
     public function obtiene_todos_las_areas_apoyo(){
         $this->obj_data_provider->conectar();
         if($this->condicion==""){
-            $this->arreglo=$this->obj_data_provider->trae_datos(
+            $this->arreglo= $this->obj_data_provider->trae_datos(
                     "T_AreasApoyo
 			LEFT OUTER JOIN T_TipoAreaApoyo ON T_AreasApoyo.ID_Tipo_Area_Apoyo = T_TipoAreaApoyo.ID_Tipo_Area_Apoyo
 			LEFT OUTER JOIN T_Distrito ON T_AreasApoyo.ID_Distrito = T_Distrito.ID_Distrito
@@ -145,7 +145,7 @@ class cls_areasapoyo{
             $this->resultado_operacion=true;
         }
         else{
-            $this->arreglo=$this->obj_data_provider->trae_datos(
+            $this->arreglo= $this->obj_data_provider->trae_datos(
                     "T_AreasApoyo
 			LEFT OUTER JOIN T_TipoAreaApoyo ON T_AreasApoyo.ID_Tipo_Area_Apoyo = T_TipoAreaApoyo.ID_Tipo_Area_Apoyo
 			LEFT OUTER JOIN T_Distrito ON T_AreasApoyo.ID_Distrito = T_Distrito.ID_Distrito

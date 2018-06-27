@@ -22,7 +22,9 @@
                         <th style="text-align:center">Viernes</th>
                         <th style="text-align:center">Sábado</th>
                         <th style="text-align:center">Observaciones</th>
-                        <th style="text-align:center">Opciones</th>
+                        <?php if ($_SESSION['modulos']['Seguridad-Módulos']==1){ ?>
+                            <th style="text-align:center">Opciones</th>
+                        <?php } ?>
                     </tr>
                 </thead>
                 <tbody>
@@ -42,9 +44,10 @@
                             <td style="text-align:center"><?php echo $horarios[$i]['Hora_Apertura_Viernes']." - ".$horarios[$i]['Hora_Cierre_Viernes'];?></td>
                             <td style="text-align:center"><?php echo $horarios[$i]['Hora_Apertura_Sabado']." - ".$horarios[$i]['Hora_Cierre_Sabado'];?></td>
                             <td style="text-align:center"><?php echo $horarios[$i]['Observaciones'];?></td>
-                            <td style="text-align:center"><a href="index.php?ctl=horario_gestion&ide=
-                                <?php echo $horarios[$i]['ID_Horario']?>">
+                            <?php if ($_SESSION['modulos']['Seguridad-Módulos']==1){ ?>
+                                <td style="text-align:center"><a href="index.php?ctl=horario_gestion&ide=<?php echo $horarios[$i]['ID_Horario']?>">
                                     Editar Horario</a></td>
+                            <?php } ?>
                         </tr>
                     <?php } ?>
                 </tbody> 

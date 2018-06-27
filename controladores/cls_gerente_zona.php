@@ -88,7 +88,8 @@ class cls_gerente_zona{
     public function obtiene_gerente_zona(){
         $this->obj_data_provider->conectar();
         if($this->condicion==""){
-            $this->arreglo=$this->obj_data_provider->trae_datos("T_GerenteZonaBCR LEFT OUTER JOIN T_Personal ON T_GerenteZonaBCR.ID_Persona = T_Personal.ID_Persona", 
+            $this->arreglo=$this->obj_data_provider->trae_datos("T_GerenteZonaBCR "
+                    . "LEFT OUTER JOIN T_Personal ON T_GerenteZonaBCR.ID_Persona = T_Personal.ID_Persona", 
             "DISTINCT T_GerenteZonaBCR.*, T_Personal.ID_Persona, T_Personal.Apellido_Nombre ","");
             $this->arreglo=$this->obj_data_provider->getArreglo();
             $this->obj_data_provider->desconectar();

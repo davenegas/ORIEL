@@ -58,9 +58,11 @@
                     </div>
                     <div class="col-xs-2">
                         <label for="tipo_seguimiento">Tipo Seguimiento</label>
-                        <select class="form-control" required=”required” id="tipo_seguimiento" name="tipo_seguimiento" >
+                        <select class="form-control" required=”required” id="tipo_seguimiento" name="tipo_seguimiento">
                             <option value="0">Todos</option>
                             <option value="Se solicitó la prueba">Se solicitó la prueba</option>
+                            <option value="Prueba no reportada">Prueba no reportada</option>
+                            <option value="Prueba reportada, se solicitó nuevamente">Prueba reportada, se solicitó nuevamente</option>
                             <option value="Oficina en Asueto">Oficina en Asueto</option>
                             <option value="Oficina con trabajos">Oficina con Trabajos</option>
                             <option value="Alarma abierta 24 horas">Alarma abierta 24 horas</option>
@@ -70,7 +72,6 @@
                 </form>
             </div>
             <div class="container animated fadeIn">
-               
                 <table id="tabla" class="display2">
                     <thead>   
                         <tr>

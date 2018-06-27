@@ -106,7 +106,6 @@ class cls_padron_fotografico_puntosbcr{
     }
     
     public function obtener_imagenes_puntosbcr(){
-        
         if($this->condicion==""){
             $this->obj_data_provider->conectar();
             //Llama al metodo que realiza la consulta a la bd

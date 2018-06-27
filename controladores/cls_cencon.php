@@ -290,51 +290,6 @@ class cls_cencon {
         $this->resultado_operacion=true;
     }
     
-    public function informacion_reporte(){
-        $this->obj_data_provider->conectar();
-        $this->arreglo=$this->obj_data_provider->trae_datos("T_EventoCencon", 
-            "COUNT(*) TOTAL",
-            $this->condicion);
-        $this->arreglo=$this->obj_data_provider->getArreglo();
-        $this->obj_data_provider->desconectar();
-        $this->resultado_operacion=true;
-    }
-    
-    public function informacion_cencon_sin_coordinar(){
-        $this->obj_data_provider->conectar();
-        $this->arreglo=$this->obj_data_provider->trae_datos("t_cencon_sin_coordinar", "*", $this->condicion);
-        $this->arreglo=$this->obj_data_provider->getArreglo();
-        $this->obj_data_provider->desconectar();
-        $this->resultado_operacion=true;
-    }
-    
-    public function agregar__cencon_sin_coordinar(){
-        $this->obj_data_provider->conectar();
-        $this->obj_data_provider->inserta_datos("t_cencon_sin_coordinar", "ID_Evento_Cencon, Tiempo, Fecha, Hora","'".$this->id."','".$this->id2."','".$this->fecha."','".$this->hora."'");
-        $this->obj_data_provider->desconectar();
-        $this->resultado_operacion=true;
-    }
-    
-    public function obtener_sin_coordinar_dia(){
-        $this->obj_data_provider->conectar();
-        $this->arreglo=$this->obj_data_provider->trae_datos("t_cencon_sin_coordinar", "Fecha, COUNT(Fecha) as Total", $this->condicion);
-        $this->arreglo=$this->obj_data_provider->getArreglo();
-        $this->obj_data_provider->desconectar();
-        $this->resultado_operacion=true;
-    }
-    
-    public function obtener_info_sin_coordinar(){
-        $this->obj_data_provider->conectar();
-        $this->arreglo=$this->obj_data_provider->trae_datos("t_cencon_sin_coordinar
-                LEFT OUTER JOIN t_eventocencon on t_eventocencon.ID_Evento_Cencon = t_cencon_sin_coordinar.ID_Evento_Cencon 
-                LEFT OUTER JOIN t_puntobcr on t_puntobcr.ID_PuntoBCR = t_eventocencon.ID_PuntoBCR ", 
-            "t_cencon_sin_coordinar.*,  t_eventocencon.Observaciones, t_eventocencon.Seguimiento, t_puntobcr.Nombre",
-            $this->condicion);
-        $this->arreglo=$this->obj_data_provider->getArreglo();
-        $this->obj_data_provider->desconectar();
-        $this->resultado_operacion=true;  
-    }
-    
     public function total_registros_cencon_dia(){
         $this->obj_data_provider->conectar();
         $this->arreglo=$this->obj_data_provider->trae_datos("t_eventocencon", "COUNT(ID_Evento_Cencon) Total", $this->condicion);

@@ -293,7 +293,7 @@ class cls_reporteria{
     
     public function obtener_revision_contador(){
         $this->obj_data_provider->conectar();
-        $this->arreglo=$this->obj_data_provider->trae_datos("T_Revision_Contador",
+        $this->arreglo=$this->obj_data_provider->trae_datos("T_RevisionContador",
             "*",
             $this->condicion);
         $this->arreglo=$this->obj_data_provider->getArreglo();
@@ -305,6 +305,28 @@ class cls_reporteria{
         $this->arreglo=$this->obj_data_provider->trae_datos("t_tipoeventocierre 
                 LEFT OUTER JOIN t_tipoevento on t_tipoevento.ID_Tipo_Evento = t_tipoeventocierre.ID_Tipo_Evento",
             "t_tipoeventocierre.*, t_tipoevento.Evento",
+            $this->condicion);
+        $this->arreglo=$this->obj_data_provider->getArreglo();
+        $this->obj_data_provider->desconectar();
+    }
+    
+    public function obtener_aperturas_cierres(){
+        $this->obj_data_provider->conectar();
+        $this->arreglo=$this->obj_data_provider->trae_datos("t_pruebaalarma
+            LEFT OUTER JOIN t_puntobcr on t_puntobcr.ID_PuntoBCR = t_pruebaalarma.ID_PuntoBCR
+            LEFT OUTER JOIN t_horario t_h1 on t_h1.ID_Horario = t_puntobcr.ID_Horario 
+            LEFT OUTER JOIN t_horario t_h2 on t_h2.ID_Horario = t_puntobcr.ID_Horario_Apertura ",
+            "t_puntobcr.Nombre, t_puntobcr.Codigo, t_pruebaalarma.ID_PuntoBCR, t_pruebaalarma.Fecha,t_pruebaalarma.Hora_Apertura_Alarma, t_pruebaalarma.Hora_Cierre_Alarma, 
+                t_h1.Observaciones as Horario_Publico,t_h2.Observaciones as Horario_Entrada",
+            $this->condicion);
+        $this->arreglo=$this->obj_data_provider->getArreglo();
+        $this->obj_data_provider->desconectar();
+    }
+    
+    public function obtener_bitacora_puesto_monitoreo(){
+        $this->obj_data_provider->conectar();
+        $this->arreglo=$this->obj_data_provider->trae_datos(" t_bitacoracontrolpuestomonitoreo",
+            "*",
             $this->condicion);
         $this->arreglo=$this->obj_data_provider->getArreglo();
         $this->obj_data_provider->desconectar();

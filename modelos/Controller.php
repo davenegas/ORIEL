@@ -8,14 +8,14 @@ class Controller{
     //controller para que sean ejecutados según sea necesario.
     //Inicio del sitio web, llamada a la pantalla principal para inicio de sesión
     public function inicio(){
-        if(isset($_SERVER['HTTPS'])||(gethostname()!='BCR0209ORI01')){
+        if(!isset($_SERVER['HTTPS'])||(gethostname()!='BCR0209ORI01')){
             //Variables que muestran tipos de advertencia en pantalla según sea necesario
             $tipo_de_alerta="alert alert-info";
             $validacion="Verificación de Identidad";
             //Llamada al formulario correspondiente de la vista
             require __DIR__ . '/../vistas/plantillas/frm_principal_publica.php';
         } else {
-            header("Location:https://bcr0209ori01/Oriel/index.php?ctl=inicio");
+            header("Location:http://bcr0209ori01/Oriel/index.php?ctl=inicio");
         }
     }
                 
@@ -24,7 +24,7 @@ class Controller{
     ////////////////////////////////////////////////////////////////////////////
     //Lista el personal con nombre, extensión, teléfono BCR y departamento
     public function personal_listar_publico(){
-        if(isset($_SERVER['HTTPS'])||(gethostname()!='BCR0209ORI01')){
+        if(!isset($_SERVER['HTTPS'])||(gethostname()!='BCR0209ORI01')){
             //Creación del objeto personal
             $obj_personal=new cls_personal();
             //Trae de la base de datos la lista de personas disponibles
@@ -40,7 +40,7 @@ class Controller{
     
     //Lista de puntos BCR con información general y pública para vista de todo el conglomerado BCR
     public function puntobcr_listar_publico(){
-        if(isset($_SERVER['HTTPS'])||(gethostname()!='BCR0209ORI01')){
+        if(!isset($_SERVER['HTTPS'])||(gethostname()!='BCR0209ORI01')){
             //Creación del objeto puntos BCR
             $obj_puntobcr= new cls_puntosBCR();
             //Trae de la base de datos la lista de puntos BCR disponibles
@@ -50,22 +50,22 @@ class Controller{
             //Llamada al formulario correspondiente de la vista
             require __DIR__ . '/../vistas/plantillas/frm_puntobcr_listar_publico.php';
         } else {
-            header("Location: https://bcr0209ori01/Oriel/index.php?ctl=puntobcr_listar_publico");
+            header("Location: http://bcr0209ori01/Oriel/index.php?ctl=puntobcr_listar_publico");
         }
     }
     
     //Muestra formulario de los números de contacto de la Gerencia de Seguridad
     public function frm_contacto_publico(){
-        if(isset($_SERVER['HTTPS'])||(gethostname()!='BCR0209ORI01')){
+        if(!isset($_SERVER['HTTPS'])||(gethostname()!='BCR0209ORI01')){
             //Llamada al formulario correspondiente de la vista
             require __DIR__ . '/../vistas/plantillas/frm_contacto_publico.php';
         } else {
-            header("Location: https://bcr0209ori01/Oriel/index.php?ctl=frm_contacto_publico");
+            header("Location: http://bcr0209ori01/Oriel/index.php?ctl=frm_contacto_publico");
         }
     }
     
     public function personal_externo_listar_publico(){
-        if(isset($_SERVER['HTTPS'])||(gethostname()!='BCR0209ORI01')){
+        if(!isset($_SERVER['HTTPS'])||(gethostname()!='BCR0209ORI01')){
             //Creación del objeto personal
             $obj_externo = new cls_personal_externo();
             //Trae de la base de datos la lista de personas disponibles
@@ -75,7 +75,7 @@ class Controller{
             //Llamada al formulario correspondiente de la vista
             require __DIR__ . '/../vistas/plantillas/frm_personal_externo_listar_publico.php';
         } else {
-            header("Location: https://bcr0209ori01/Oriel/index.php?ctl=personal_externo_listar_publico");
+            header("Location: http://bcr0209ori01/Oriel/index.php?ctl=personal_externo_listar_publico");
         }
     }
     
@@ -430,10 +430,8 @@ class Controller{
     public function frm_importar_prontuario_paso_4(){
         //Validación para verificar si el usuario está logeado en el sistema
         if(isset($_SESSION['nombre'])){
-            
             //Crea objeto de tipo puestos para administración de la tabla
             $obj_puestos = new cls_puestos();
- 
             // Crea vector para almacenar los puestos que vienen en el prontuario pero en modo disctinct
             $arreglo_puestos=array();
             
@@ -457,7 +455,6 @@ class Controller{
             }
             
             // Mediante este ciclo se edita la tabla puestos completamente, nuevos, duplicados, modificados
-            
             $nuevos=0;
             $editados=0;
             
@@ -469,16 +466,15 @@ class Controller{
                 $obj_puestos->obtener_puestos();
             
                 //Establece el valor del puesto en cuestion
-                 $obj_puestos->setPuesto($arreglo_puestos[$i]);
-                 //Establece las observaciones
-                 $obj_puestos->setObservaciones("");
-                 //Establece el estado, 1 como activo
-                 $obj_puestos->setEstado("1");
+                $obj_puestos->setPuesto($arreglo_puestos[$i]);
+                //Establece las observaciones
+                $obj_puestos->setObservaciones("");
+                //Establece el estado, 1 como activo
+                $obj_puestos->setEstado("1");
                     
                 // Verifica que la consulta haya devuelto algún resultado, en caso de haber varios 
                 //registros, se procede a agregar uno nuevo y borrar los duplicados, además reasigna personas al puesto nuevo
                 if (count($obj_puestos->getArreglo())>1){
-                   
                     //Agrega el puesto en cuestión
                     $obj_puestos->agregar_nuevo_puesto_para_prontuario();
                     //Obtiene el id del puesto agregado
@@ -502,7 +498,6 @@ class Controller{
                     $temp=$obj_puestos->getArreglo();
                     //Si el nombre del puesto varia en el nombre, procede a editarlo
                     if (!($temp[0]['Puesto']==$arreglo_puestos[$i])){
-                        
                         //Establece la condicion y edita el nombre con el que tiene el documento actual
                         $obj_puestos->setCondicion("ID_Puesto=".$temp[0]['ID_Puesto']);
                         
@@ -514,7 +509,6 @@ class Controller{
                 }
                 //En caso de que la consulta no retorne resultados, procede a agregar un puesto nuevo en la bd.
                 if ($obj_puestos->getArreglo()==null){
-                    
                     //Inserción mediante el objeto de clase
                     $obj_puestos->agregar_nuevo_puesto_para_prontuario();
                     //Contabiliza los nuevos registros.
@@ -535,9 +529,8 @@ class Controller{
             }
             
             // Variables para pintar resultados en pantalla al usuarios
-            /*
-            * Resumen de total de puestos, nuevos puestos, puestos inactivos y editados.
-            */
+            // Resumen de total de puestos, nuevos puestos, puestos inactivos y editados.
+            
             $total_puestos="Se identificaron un total de ".count($arreglo_puestos)." puestos en el prontuario adjunto.";
             $nuevos_puestos="Se agregaron un total de ".$nuevos." puestos nuevos al sistema.";
             $puestos_inactivos="Se identificaron un total de ".$cuenta_puestos_inactivos." puestos no ligados a ninguna persona.";
@@ -771,7 +764,6 @@ class Controller{
             
             //Llamada al formulario correspondiente de la vista
             require __DIR__ . '/../vistas/plantillas/frm_importar_prontuario_paso_5.php';
-     
         }else {
             /*
             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
@@ -3710,11 +3702,11 @@ class Controller{
             //Obtiene el tipo de punto a consultar
             $id_provincia=$_POST['provincia'];
             //Obtiene el tipo de evento de cierre
-            if(isset($_POST['evento_cierre'])){
+            /*if(isset($_POST['evento_cierre'])){
                 $id_evento_cierre=$_POST['evento_cierre'];
-            } else {
+            } else {*/
                 $id_evento_cierre=0;
-            }
+            //}
             //Establece la condición SQL para definir el rango de fechas del reporte
             $condicion="(T_Evento.Fecha between '".$fecha_inicial."' AND '".$fecha_final."') AND (T_Evento.ID_EstadoEvento=3 OR T_Evento.ID_EstadoEvento=5)";
             if(isset($_POST['Todos'])){
@@ -3740,6 +3732,245 @@ class Controller{
             $obj_eventos->setCondicion($condicion);
             //Obtiene los eventos de acuerdo a la condicion.
             $obj_eventos ->obtiene_todos_los_eventos(); 
+            //Obtiene el arreglo de resultados
+            $params= $obj_eventos->getArreglo();
+            //Define una variable cadena a vacio
+            $todos_los_seguimientos_juntos="";
+            //Obtiene el tamaño del vector de resultados
+            $tamano=count($params);
+
+            //Verifica que la consulta haya encontrado algo
+            if (count($params)>0){
+                //Bucle que recorre la cantidad de registros de la consulta uno por uno
+                for ($x = 0; $x <$tamano; $x++) {
+                    //Esta condicion trae los seguimientos del evento en cuestion, para pintarlos ocultos en el HTML
+                    $obj_eventos->setCondicion("T_DetalleEvento.ID_Evento=".$params[$x]['ID_Evento']." order by T_DetalleEvento.Fecha desc,T_DetalleEvento.Hora desc");
+                    //Obtiene los seguimientos del evento seleccionado, si los hubiere
+                    $obj_eventos->obtiene_detalle_evento();
+
+                    //Verifica que la consulta haya traido resultados
+                    if(count($obj_eventos->getArreglo())>0){
+                        if ($x==0){
+                            //Va concatenando los resultados de la consulta de seguimientos, en una variable 
+                            $todos_los_seguimientos_juntos=$obj_eventos->getArreglo();
+                        }else{
+                            //En caso de que ya tenga datos, adjunta el vector con lo que tenga actualmente
+                            $todos_los_seguimientos_juntos = array_merge($todos_los_seguimientos_juntos,$obj_eventos->getArreglo());
+                        }
+                    }
+                    //Obtiene la fecha y usuario del ultimo seguimiento que tenga el evento
+                    $obj_eventos->setCondicion("T_DetalleEvento.ID_Evento=".$params[$x]['ID_Evento']." order by T_DetalleEvento.Fecha desc,T_DetalleEvento.Hora desc limit 0,1");
+                    //Obtiene los seguimientos del evento seleccionado, si los hubiere
+                    $obj_eventos->obtiene_detalle_evento();
+                    //Obtiene los datos del ultimo seguimiento asociado
+                    $ultimo_seguimiento_asociado= $obj_eventos->getArreglo();
+
+                    //Verifica si existen seguimientos asociados al evento actual
+                    if(count($ultimo_seguimiento_asociado)>0){
+                        if ($x==0){
+                            //Agrega el resultado de la consulta a una variable específica
+                            $detalle_y_ultimo_usuario= array(array('Detalle'=>"Fecha: ".date_format(date_create($ultimo_seguimiento_asociado[0]['Fecha']), 'd/m/Y').".Hora: ".$ultimo_seguimiento_asociado[0]['Hora'].". ".$ultimo_seguimiento_asociado[0]['Detalle'],'Usuario'=>$ultimo_seguimiento_asociado[0]['Nombre_Usuario']." ".$ultimo_seguimiento_asociado[0]['Apellido']));
+                        }else{
+                            //En caso de que la variable ya contenga datos, procede a concatenar el resultado obtenido
+                            $detalle_y_ultimo_usuario = array_merge($detalle_y_ultimo_usuario,array(array('Detalle'=>"Fecha: ".date_format(date_create($ultimo_seguimiento_asociado[0]['Fecha']), 'd/m/Y').".Hora: ".$ultimo_seguimiento_asociado[0]['Hora'].". ".$ultimo_seguimiento_asociado[0]['Detalle'], 'Usuario'=>$ultimo_seguimiento_asociado[0]['Nombre_Usuario']." ".$ultimo_seguimiento_asociado[0]['Apellido'])));   
+                        }
+                    }else{
+                        //En caso de que no existan registros, agrega la validación correspondiente y un mensaje informativo al respecto para el usuario
+                        if ($x==0){
+                            $detalle_y_ultimo_usuario= array(array('Detalle'=>"No hay seguimientos asociados a este evento. Para agregar uno oprima el link:'Gestionar Seguimiento de la fila respectiva.'",'Usuario'=>$params[$x]['Nombre_Usuario']." ".$params[$x]['Apellido']));
+                        }else{
+                            //En caso de que la variable ya contenga información, procede a concatenar el vector de resultados
+                            $detalle_y_ultimo_usuario = array_merge($detalle_y_ultimo_usuario,array(array('Detalle'=>"No hay seguimientos asociados a este evento. Para agregar uno oprima el link:'Gestionar Seguimiento de la fila respectiva.'",'Usuario'=>$params[$x]['Nombre_Usuario']." ".$params[$x]['Apellido'])));
+                        }
+                    }   
+
+                }
+            }
+            //verifica que hayan resultados en la consulta, para empezar a pintar la tabla HTML que se mostrará en pantalla al formulario
+            if (count($params)>0){
+                //Creación de la tabla
+                $html="<table id='tabla' class='display2'>";
+                //Creación de la cabecera de la tabla
+                $html.="<thead>";
+                //Creación de la fila de títulos de la tabla
+                $html.="<tr>";
+                //Columna id evento, la cual está oculta en la tabla
+                $html.="<th hidden='true'>ID_Evento</th>";
+                //Resto de columnas de la tabla, de acuerdo a lo requerido en la consulta SQL
+                $html.="<th style='text-align:center'>Fecha</th>";
+                $html.="<th style='text-align:center'>Hora</th>";
+                $html.="<th style='text-align:center'>Provincia</th>";
+                $html.="<th style='text-align:center'>Tipo Punto</th>";
+                $html.="<th style='text-align:center'>Punto BCR</th>";
+                $html.="<th style='text-align:center'>Codigo</th>";
+                $html.="<th style='text-align:center'>Tipo de Evento</th>";
+                $html.="<th style='text-align:center'>Estado del Evento</th>";
+                if(!isset($_POST['Todos'])){
+                    $html.="<th style='text-align:center'>Cerrado Por</th>";
+                }
+                //Dependiendo del rol del usuario en cuestión, mostrará el botón de gestión de los eventos.
+                if ($_SESSION['modulos']['Recuperar Eventos Cerrados']==1 && !isset($_POST['Todos'])){  
+                    $html.="<th style='text-align:center'>Gestión</th>";
+                }
+                //Resto de columnas
+                $html.="<th style='text-align:center'>Consulta</th>";
+                //Columna para agregar la tabla de seguimientos de cada evento
+                $html.="<th hidden='true'>Seguimientos</th> ";
+                //termina la fila de cabeceras
+                $html.="</tr>";
+                //termina la cabecera de la tabla
+                $html.="</thead>";
+
+                //Inicializa el cuerpo de la tabla
+                $html.="<tbody id='cuerpo'>";
+                //Retorna el tamaño del vector que almacena la consulta sql
+                $tam=count($params);
+
+                //Vector que recorre registro por registros de la consulta SQL
+                for ($i = 0; $i <$tam; $i++) {
+                    //Agrega a la fila de cada evento, un comentario interno con el detalle del último seguimiento
+                    $html.="<tr data-toggle='tooltip' title='".$detalle_y_ultimo_usuario[$i]['Detalle']."'>";
+
+                    //Establece la fecha del evento
+                    $fecha_evento = date_create($params[$i]['Fecha']);
+                    //Establece la fecha actual
+                    $fecha_actual = date_create(date("d-m-Y"));
+                    //Establece la diferencia en dias entre ambas fechas
+                    $dias_abierto= date_diff($fecha_evento, $fecha_actual);
+
+                    //Pinta y oculta el id del evento 
+                    $html.="<td hidden='true'>".$params[$i]['ID_Evento']."</td>";
+                    //Pinta las columnas correspondientes al reporte de eventos
+                    $html.="<td style='text-align:center'>".date_format($fecha_evento, 'd/m/Y')."</td>";   
+                    $html.="<td style='text-align:center'>".$params[$i]['Hora']."</td>";
+                    $html.="<td style='text-align:center'>".$params[$i]['Nombre_Provincia']."</td>";
+                    $html.="<td style='text-align:center'>".$params[$i]['Tipo_Punto']."</td>";
+                    $html.="<td style='text-align:center'>".$params[$i]['Nombre']."</td>";
+                    $html.="<td style='text-align:center'>".$params[$i]['Codigo']."</td>";
+                    $html.="<td style='text-align:center'>".$params[$i]['Evento']."</td>";
+                    $html.="<td style='text-align:center'>".$params[$i]['Estado_Evento']."</td>";       
+                    //Muestra el último usuario que realizó seguimiento en el evento
+                    if(!isset($_POST['Todos'])){
+                        $html.="<td>".$detalle_y_ultimo_usuario[$i]['Usuario']."</td>";
+                    }
+                    //Dependiendo del rol del usuario, muestra en pantalla la opción de recuperar eventos
+                    if ($_SESSION['modulos']['Recuperar Eventos Cerrados']==1 && !isset($_POST['Todos'])){  
+                        //Asigna la función de javascript que ejecuta la recuperación en vivo del evento, para que sea reabierto
+                        $html.="<td align='center'><a onclick='recuperar_evento(".$params[$i]['ID_Evento'].",".$params[$i]['ID_PuntoBCR'].",".$params[$i]['ID_Tipo_Evento'].")'>Recuperar Evento</a></td>";
+                    }   
+                    //Link para ver el detalle de un evento
+                    //$html.="<td align='center'><a href='index.php?ctl=frm_eventos_editar&accion=consulta_cerrados&id=".$params[$i]['ID_Evento']."'>Ver detalle</a></td>";
+                    $html.="<td align='center'><a onclick='mostrar_resumen_de_seguimientos(".$params[$i]['ID_Evento'].")'>Ver detalle</a></td>";
+                    
+                    //Saca el tamaño del vector que tiene todos los seguimientos de los eventos
+                    $tama=count($todos_los_seguimientos_juntos);
+                    //Inicializa la variable cadena
+                    $cadena="";
+                    //Bucle que recorre el vector de seguimientos
+                    for ($j = 0; $j <$tama; $j++) {
+
+                        //Extrae la fecha del evento
+                        $fecha_evento = date_create($todos_los_seguimientos_juntos[$j]['Fecha']);
+                        //Extrae la fecha actual
+                        $fecha_actual = date_create(date("d-m-Y"));
+                        // Define los días abiertos que tiene el evento
+                        $dias_abierto= date_diff($fecha_evento, $fecha_actual);
+                        //extrae los seguimiento por cada evento, y los concatena en una variable para colocarlos en una de las columnas de la tabla
+                        if ($params[$i]['ID_Evento']==$todos_los_seguimientos_juntos[$j]['ID_Evento']){
+                            //va concatenando cada seguimiento en una variable
+                            $cadena.=date_format($fecha_evento, 'd/m/Y')." ".$todos_los_seguimientos_juntos[$j]['Detalle']."\n";
+                        }
+                    }
+                    //Esconde y pinta la columna correspondiente
+                    $html.="<td hidden='true'>".$cadena."</td>";
+
+                    //Cierra la fila del registro del evento en cuestión.
+                    $html.="</tr>";
+                }
+
+                //Finaliza el cuerpo de la tabla
+                $html.="</tbody>";
+
+                //Culmina la tabla
+                $html.=" </table>";
+
+                //Imprime en pantalla el codigo html estructurado en este metodo
+                echo $html;
+                //Sale del metodo
+                exit;
+            }else{
+                //En caso de que no hayan resultados, muestra la información correspondiente.
+                $html="<h4>No se encontraron eventos para este filtro.</h4>";
+                //Imprime la variable html
+                echo $html;
+                //Sale del metodo
+                exit;
+            }    
+            //Imprime la variable html y sale del metodo
+            echo $html;
+        }else {
+            /*
+            * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+            * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+            * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+            * En la última línea llama a la pagina de inicio de sesión.
+            */
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            //Llamada al formulario correspondiente de la vista
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }
+    }
+    
+//Muestra en pantalla un reportes de eventos cerrados, de acuerdo a parametros de busqueda específicos, como fecha, sitio, etc.
+    public function actualiza_en_vivo_reporte_eventos_cerrados(){
+        //Espera 1 segundos antes de iniciar la ejecución del método, para mostrar un gift de espera en pantalla
+        //sleep(1);       
+        //Validación para verificar si el usuario está logeado en el sistema
+        if(isset($_SESSION['nombre'])){
+            //Creación de un nuevo objeto de la clase eventos
+            $obj_eventos = new cls_eventos();
+
+            //Recibe la fecha inicial del reporte
+            $fecha_inicial=$_POST['fecha_inicial'];
+            //Recibe la fecha final del reporte
+            $fecha_final=$_POST['fecha_final'];
+            //Obtiene el id del punto bcr a consultar
+            $id_punto_bcr=$_POST['id_punto_bcr'];
+            //Obtiene el tipo de punto a consultar
+            $id_tipo_evento=$_POST['tipo_evento'];
+            //Obtiene el tipo de punto a consultar
+            $id_tipo_punto=$_POST['tipo_punto'];
+            //Obtiene el tipo de punto a consultar
+            $id_provincia=$_POST['provincia'];
+            //Obtiene el tipo de evento de cierre
+            if(isset($_POST['evento_cierre'])){
+                $id_evento_cierre=$_POST['evento_cierre'];
+            } else {
+                $id_evento_cierre=0;
+            }
+            //Establece la condición SQL para definir el rango de fechas del reporte
+            $condicion="(T_Evento.Fecha between '".$fecha_inicial."' AND '".$fecha_final."') AND (T_Evento.ID_EstadoEvento=3)";
+            if($id_punto_bcr!=0){
+                $condicion.=" AND T_Evento.ID_PuntoBCR=".$id_punto_bcr;
+            } 
+            if($id_tipo_evento!=0){
+                $condicion.=" AND T_Evento.ID_Tipo_Evento=".$id_tipo_evento;
+            } 
+            if($id_tipo_punto!=0){
+                $condicion.=" AND T_Evento.ID_Tipo_Punto=".$id_tipo_punto;
+            } 
+            if($id_provincia!=0){
+                $condicion.=" AND T_Evento.ID_Provincia=".$id_provincia;
+            } 
+            if($id_evento_cierre!=0){
+                $condicion.=" AND t_tipoeventocierreevento.ID_Tipo_Evento_Cierre=".$id_evento_cierre;
+            }
+
+            //Establece la condicion de la consulta
+            $obj_eventos->setCondicion($condicion);
+            //Obtiene los eventos de acuerdo a la condicion.
+            $obj_eventos ->obtiene_todos_los_eventos_general(); 
             //Obtiene el arreglo de resultados
             $params= $obj_eventos->getArreglo();
             //Define una variable cadena a vacio
@@ -5720,7 +5951,9 @@ class Controller{
                         $fecha_semana = strtotime ( '-6 day' , strtotime ( $fecha_hoy ) ) ;
                         $fecha_semana = date ('Y-m-j', $fecha_semana);
 
-                        $obj_pruebas->setCondicion("(T_PruebaAlarma.Fecha between '".$fecha_semana."' and '".$fecha_hoy."') and (T_PruebaAlarma.Seguimiento='Se solicitó la prueba') Order by T_PuntoBCR.Codigo, T_PruebaAlarma.Fecha");
+                        $obj_pruebas->setCondicion("(T_PruebaAlarma.Fecha between '".$fecha_semana."' and '".$fecha_hoy."') and "
+                            . "(T_PruebaAlarma.Seguimiento='Se solicitó la prueba' or T_PruebaAlarma.Seguimiento='Prueba no reportada' or T_PruebaAlarma.Seguimiento='Prueba reportada, se solicitó nuevamente') "
+                            . "Order by T_PuntoBCR.Codigo, T_PruebaAlarma.Fecha");
                         $obj_pruebas->obtener_pruebas_oficina_gerente();
                         $params= $obj_pruebas->getArreglo();
 
@@ -5731,6 +5964,7 @@ class Controller{
                         $detalle.="<th>Fecha</th>";
                         $detalle.="<th>Gerente zona</th>";
                         $detalle.="<th>Seguimiento</th>";
+                        $detalle.="<th>Hora Prueba</th>";
                         $detalle.="<th>Observaciones</th>";
                         for ($i = 0; $i < count($params); $i++) {
                             //Toma la información de cada visita en una variable cadena
@@ -5742,6 +5976,7 @@ class Controller{
                                     "<td>".$params[$i]['Fecha']."</td>".
                                     "<td>".$params[$i]['Apellido_Nombre']."</td>".
                                     "<td>".$params[$i]['Seguimiento']."</td>".
+                                    "<td>".$params[$i]['Hora_Prueba_Alarma']."</td>".
                                     "<td>".$params[$i]['Observaciones']."</td></tr>";
                         }
                         $detalle.="</table>";
@@ -5754,9 +5989,9 @@ class Controller{
                         //echo ($cadena_oficiales);
                         if(count($params)>0){
                             //Asigna correo y nombre de los destinatarios
-                            //$correo="Coordinacion_Centro_de_Control@bancobcr.com";
-                            //$usuario="Coordinacion Centro Control";
-                            //$obj_correo->agregar_direccion_de_correo($correo, $usuario);
+                            $correo="Coordinacion_Centro_de_Control@bancobcr.com";
+                            $usuario="Coordinacion Centro Control";
+                            $obj_correo->agregar_direccion_de_correo($correo, $usuario);
                             //Agregar direccion de correo oculta
                             $correo="davenegas@bancobcr.com";
                             $usuario="Diego Venegas";
@@ -6468,7 +6703,7 @@ class Controller{
                 $tam=count($unidad_ejecutora);
                 if($tam>0){
                     for ($i = 0; $i <$tam; $i++) {
-                        $condicion=$condicion."T_UnidadEjecutora.Numero_UE='".$unidad_ejecutora[$i]['Numero_UE']."'";
+                        $condicion=$condicion."T_UnidadEjecutora.Numero_UE='".$unidad_ejecutora[$i]['Numero_UE']."' and T_Personal.Estado=1";
                         if($tam>$i && $tam-1<>$i){
                             $condicion=$condicion." OR ";
                         }
@@ -9062,61 +9297,6 @@ class Controller{
         }
     }
     
-    public function cencon_sin_coordinar($params,$tiempo){
-        $obj_cencon = new cls_cencon();
-        $obj_cencon->setCondicion('ID_Evento_Cencon='.$params['ID_Evento_Cencon']);
-        $obj_cencon->informacion_cencon_sin_coordinar();
-        if (count($obj_cencon->getArreglo())<1){
-            $obj_cencon->setId($params['ID_Evento_Cencon']);
-            $obj_cencon->setId2($tiempo);
-            $obj_cencon->setFecha($params['Fecha_Apertura']);
-            $obj_cencon->setHora($params['Hora_Apertura']);
-            $obj_cencon->agregar__cencon_sin_coordinar();
-        }
-    }
-    
-    public function cencon_lista_sin_coordinar(){
-        if(isset($_SESSION['nombre'])){
-            $obj_cencon = new cls_cencon();
-            
-            $obj_cencon->setCondicion("Fecha='".date('Y-m-j')."'");
-            $obj_cencon->obtener_info_sin_coordinar();
-            $sin_coordinar= $obj_cencon->getArreglo();
-            
-            //Procedimiento para crear la tabla y enviarla al html
-            $tam = count($sin_coordinar);
-            $html="";
-            $html.='<thead> 
-                        <th style="text-align:center">Fecha</th>
-                        <th style="text-align:center">Hora</th>
-                        <th style="text-align:center">ATM</th>
-                        <th style="text-align:center">Tiempo</th>
-                        <th style="text-align:center">Observaciones</th>
-                        <th style="text-align:center">Seguimiento</th>
-                    </thead>
-                    <tbody>';
-            for($i=0; $i<$tam;$i++){
-                $html .='<tr>'; 
-                $html .='<td style="text-align:center">'.$sin_coordinar[$i]['Fecha'].'</td>';
-                $html .='<td style="text-align:center">'.$sin_coordinar[$i]['Hora'].'</td>';
-                $html .='<td style="text-align:center">'.$sin_coordinar[$i]['Nombre'].'</td>';
-                $html .='<td style="text-align:center">'.$sin_coordinar[$i]['Tiempo'].'</td>';
-                $html .='<td style="text-align:center">'.$sin_coordinar[$i]['Observaciones'].'</td>';
-                $html .='<td style="text-align:center">'.$sin_coordinar[$i]['Seguimiento'].'</td>';
-                $html .='</tr>'; 
-            }  
-            $html.='</tbody> 
-                    </table>';
-            unset($obj_cencon);
-            echo $html;
-        }
-        else {
-            $tipo_de_alerta="alert alert-warning";
-            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
-            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
-        }
-    }
-    
     ////////////////////MANTENIMIENTO DE PERSONAL EXTERNO///////////////////////
     ////////////////////////////////////////////////////////////////////////////
     public function personal_externo_listar(){
@@ -10930,7 +11110,8 @@ class Controller{
     public function liberar_puesto_de_monitoreo() {
         if(isset($_SESSION['nombre'])){
             $obj_puesto_monitoreo = new cls_puestos_de_monitoreo();
-            $obj_puesto_monitoreo->setCondicion("ID_Puesto_Monitoreo=".$_POST['id_puesto']);
+            $obj_puesto_monitoreo->setId_puesto_monitoreo($_POST['id_puesto']);
+            $obj_puesto_monitoreo->setCondicion("ID_Puesto_Monitoreo=".$_POST['id_puesto']." and Fecha_Libera_Control is null");
             $obj_puesto_monitoreo->setFecha_libera_control(date("Y-m-d"));
             $obj_puesto_monitoreo->setHora_libera_control(date("H:i:s", time()));
             $obj_puesto_monitoreo->setEstado("0");
@@ -11558,15 +11739,11 @@ class Controller{
             $lista_de_operadores=$obj_pm->getArreglo();
 
             if((isset($_POST['fecha_inicial']))&&(isset($_POST['fecha_final']))){
-                
-                
                 $fecha_actual = date("Y-m-d");
                 $fecha_actual = strtotime ( '-2 day' , strtotime ( $fecha_actual ) ) ;
                 $fecha_actual = date ( 'Y-m-d' , $fecha_actual );
 
-                if(($_POST['fecha_inicial'] < $fecha_actual)&&(($_POST['fecha_final'] < $fecha_actual)))
-                {
-
+                if(($_POST['fecha_inicial'] < $fecha_actual)&&(($_POST['fecha_final'] < $fecha_actual))){
                     $fecha_inicio = $_POST['fecha_inicial'];
                     $fecha_fin= $_POST['fecha_final'];
                     $operador=$_POST['lista_operadores'];
@@ -11764,47 +11941,47 @@ class Controller{
                         }
                     }
 
-                     if (($operador=="0")&&($turno!="0")){
-                         if ($turno=="1"){
-                             $turno_Monitoreo=" and (bd_registro_trazabilidad.t_bitacorarevisionesvideo.Hora_Inicia_Revision BETWEEN '05:54:00' and '13:56:00') "; 
-                             $nombre_turno="mañana";
-                             $esperado_grupal=array("mes"=>"Esperado Grupal Mensual","numFilas"=>"48608");
-                             $esperado_individual=array("Nombre"=>"Esperado Individual","TOTAL"=>"7840","Apellido"=>" Mensual");
-                         }
-                         if ($turno=="2"){
-                             $turno_Monitoreo=" and (bd_registro_trazabilidad.t_bitacorarevisionesvideo.Hora_Inicia_Revision BETWEEN '13:54:00' and '21:56:00') ";                          
-                             $nombre_turno="tarde";
-                             $esperado_grupal=array("mes"=>"Esperado Grupal Mensual","numFilas"=>"48608");
-                             $esperado_individual=array("Nombre"=>"Esperado Individual","TOTAL"=>"7840","Apellido"=>" Mensual");
-                         }
-                         if ($turno=="3"){
-                             $turno_Monitoreo=" and ((bd_registro_trazabilidad.t_bitacorarevisionesvideo.Hora_Inicia_Revision BETWEEN '21:54:00' and '23:59:00') or (bd_registro_trazabilidad.t_bitacorarevisionesvideo.Hora_Inicia_Revision BETWEEN '00:00:00' and '05:56:00')) ";                                                   
-                             $nombre_turno="noche";
-                             $esperado_grupal=array("mes"=>"Esperado Grupal Mensual","numFilas"=>"60760");
-                             //$$esperado_individual=array();
-                             $esperado_individual=array("Nombre"=>"Esperado Individual","TOTAL"=>"9800","Apellido"=>" Mensual");
-                         }
-                         $obj_reporte->setCondicion("(bd_registro_trazabilidad.t_bitacorarevisionesvideo.Fecha_Inicia_Revision BETWEEN '".$fecha_inicio."' AND '".$fecha_fin."')". $turno_Monitoreo);
-                         $titulo = "Cantidad de Revisiones por Equipo de Trabajo en Modulo de Control de Video (un turno específico(".$nombre_turno.")".", ordenado por mes).";
-                         $subtitulo = "Del ".date('d-m-Y',strtotime($fecha_inicio))." al ".date('d-m-Y',strtotime($fecha_fin)).".";
-                         $tipo_grafico=3;
-                         $obj_reporte->revisiones_de_video_por_operador_historicos();
-                         $params= $obj_reporte->getArreglo();
-                         $params[]=$esperado_grupal;
+                    if (($operador=="0")&&($turno!="0")){
+                        if ($turno=="1"){
+                            $turno_Monitoreo=" and (bd_registro_trazabilidad.t_bitacorarevisionesvideo.Hora_Inicia_Revision BETWEEN '05:54:00' and '13:56:00') "; 
+                            $nombre_turno="mañana";
+                            $esperado_grupal=array("mes"=>"Esperado Grupal Mensual","numFilas"=>"48608");
+                            $esperado_individual=array("Nombre"=>"Esperado Individual","TOTAL"=>"7840","Apellido"=>" Mensual");
+                        }
+                        if ($turno=="2"){
+                            $turno_Monitoreo=" and (bd_registro_trazabilidad.t_bitacorarevisionesvideo.Hora_Inicia_Revision BETWEEN '13:54:00' and '21:56:00') ";                          
+                            $nombre_turno="tarde";
+                            $esperado_grupal=array("mes"=>"Esperado Grupal Mensual","numFilas"=>"48608");
+                            $esperado_individual=array("Nombre"=>"Esperado Individual","TOTAL"=>"7840","Apellido"=>" Mensual");
+                        }
+                        if ($turno=="3"){
+                            $turno_Monitoreo=" and ((bd_registro_trazabilidad.t_bitacorarevisionesvideo.Hora_Inicia_Revision BETWEEN '21:54:00' and '23:59:00') or (bd_registro_trazabilidad.t_bitacorarevisionesvideo.Hora_Inicia_Revision BETWEEN '00:00:00' and '05:56:00')) ";                                                   
+                            $nombre_turno="noche";
+                            $esperado_grupal=array("mes"=>"Esperado Grupal Mensual","numFilas"=>"60760");
+                            //$$esperado_individual=array();
+                            $esperado_individual=array("Nombre"=>"Esperado Individual","TOTAL"=>"9800","Apellido"=>" Mensual");
+                        }
+                        $obj_reporte->setCondicion("(bd_registro_trazabilidad.t_bitacorarevisionesvideo.Fecha_Inicia_Revision BETWEEN '".$fecha_inicio."' AND '".$fecha_fin."')". $turno_Monitoreo);
+                        $titulo = "Cantidad de Revisiones por Equipo de Trabajo en Modulo de Control de Video (un turno específico(".$nombre_turno.")".", ordenado por mes).";
+                        $subtitulo = "Del ".date('d-m-Y',strtotime($fecha_inicio))." al ".date('d-m-Y',strtotime($fecha_fin)).".";
+                        $tipo_grafico=3;
+                        $obj_reporte->revisiones_de_video_por_operador_historicos();
+                        $params= $obj_reporte->getArreglo();
+                        $params[]=$esperado_grupal;
 
-                         $titulo3 = "Gráfica Gerenal Comparativa de Sitios Revisados por Operador en Control de Video (".$nombre_turno.").";
-                         $subtitulo3 = "Del ".date('d-m-Y',strtotime($fecha_inicio))." al ".date('d-m-Y',strtotime($fecha_fin)).".";
-                         $obj_reporte->revisiones_de_video_todos_los_operadores_todos_los_puestos_historicos();
-                         $params3= $obj_reporte->getArreglo();
+                        $titulo3 = "Gráfica Gerenal Comparativa de Sitios Revisados por Operador en Control de Video (".$nombre_turno.").";
+                        $subtitulo3 = "Del ".date('d-m-Y',strtotime($fecha_inicio))." al ".date('d-m-Y',strtotime($fecha_fin)).".";
+                        $obj_reporte->revisiones_de_video_todos_los_operadores_todos_los_puestos_historicos();
+                        $params3= $obj_reporte->getArreglo();
 
-                         $vector_temporal=array();
-                         $vector_temporal[]=$esperado_individual;
+                        $vector_temporal=array();
+                        $vector_temporal[]=$esperado_individual;
 
-                         for ($i = 0; $i < count($params3); $i++) {
-                             $vector_temporal[]=$params3[$i];
-                         }
+                        for ($i = 0; $i < count($params3); $i++) {
+                            $vector_temporal[]=$params3[$i];
+                        }
 
-                         $params3=$vector_temporal;
+                        $params3=$vector_temporal;
                         // $params3= array_merge($esperado_individual,$params3 );
 
                         $suma_revisiones2=0;
@@ -12175,54 +12352,54 @@ class Controller{
                     }
                 }
             }else{
-                    //$fecha_inicio = '2016-01-01';
-                    $fecha_inicio = date("Y-m-d");
-                    $fecha_fin= date("Y-m-d");
-                    $obj_reporte->setCondicion("t_bitacorarevisionesvideo.Fecha_Inicia_Revision BETWEEN '".$fecha_inicio."' AND '".$fecha_fin."'");
-                    $titulo = "Gráfica Gerenal de Sitios Revisados por Operador en Control de Video (todos los puestos de monitoreo).";
-                    $subtitulo = "Del ".date('d-m-Y',strtotime($fecha_inicio))." al ".date('d-m-Y',strtotime($fecha_fin)).".";
-                    $tipo_grafico=1;
-                    $obj_reporte->revisiones_de_video_todos_los_operadores_todos_los_puestos();
-                    $params= $obj_reporte->getArreglo();
+                //$fecha_inicio = '2016-01-01';
+                $fecha_inicio = date("Y-m-d");
+                $fecha_fin= date("Y-m-d");
+                $obj_reporte->setCondicion("t_bitacorarevisionesvideo.Fecha_Inicia_Revision BETWEEN '".$fecha_inicio."' AND '".$fecha_fin."'");
+                $titulo = "Gráfica Gerenal de Sitios Revisados por Operador en Control de Video (todos los puestos de monitoreo).";
+                $subtitulo = "Del ".date('d-m-Y',strtotime($fecha_inicio))." al ".date('d-m-Y',strtotime($fecha_fin)).".";
+                $tipo_grafico=1;
+                $obj_reporte->revisiones_de_video_todos_los_operadores_todos_los_puestos();
+                $params= $obj_reporte->getArreglo();
 
-                    $params2=array();
-                    $obj_reporte->setCondicion("(Fecha_Inicia_Revision BETWEEN '".$fecha_inicio."' AND '".$fecha_fin."') and Justificacion_Retraso LIKE 'JUSTIFICADO%' and Retraso_Segundos>0");
-                    $obj_reporte->inconsistencias_en_revisiones_de_video();
-                    $justificaciones = $obj_reporte->getArreglo();
-                    if (count($justificaciones)>0){
-                        $params2[]=$justificaciones[0];
-                    }else{
-                        $params2[]=array("Total"=>"0");
-                    }
+                $params2=array();
+                $obj_reporte->setCondicion("(Fecha_Inicia_Revision BETWEEN '".$fecha_inicio."' AND '".$fecha_fin."') and Justificacion_Retraso LIKE 'JUSTIFICADO%' and Retraso_Segundos>0");
+                $obj_reporte->inconsistencias_en_revisiones_de_video();
+                $justificaciones = $obj_reporte->getArreglo();
+                if (count($justificaciones)>0){
+                    $params2[]=$justificaciones[0];
+                }else{
+                    $params2[]=array("Total"=>"0");
+                }
 
-                    $obj_reporte->setCondicion("(Fecha_Inicia_Revision BETWEEN '".$fecha_inicio."' AND '".$fecha_fin."') and (Justificacion_Retraso NOT LIKE 'JUSTIFICADO%' and Justificacion_Retraso NOT LIKE 'INJUSTIFICADO%') and Retraso_Segundos>0");
-                    $obj_reporte->inconsistencias_en_revisiones_de_video();
-                    $justificaciones = $obj_reporte->getArreglo();
-                    if (count($justificaciones)>0){
-                        $params2[]=$justificaciones[0];
-                    }else{
-                        $params2[]=array("Total"=>"0");
-                    }
+                $obj_reporte->setCondicion("(Fecha_Inicia_Revision BETWEEN '".$fecha_inicio."' AND '".$fecha_fin."') and (Justificacion_Retraso NOT LIKE 'JUSTIFICADO%' and Justificacion_Retraso NOT LIKE 'INJUSTIFICADO%') and Retraso_Segundos>0");
+                $obj_reporte->inconsistencias_en_revisiones_de_video();
+                $justificaciones = $obj_reporte->getArreglo();
+                if (count($justificaciones)>0){
+                    $params2[]=$justificaciones[0];
+                }else{
+                    $params2[]=array("Total"=>"0");
+                }
 
-                    $obj_reporte->setCondicion("(Fecha_Inicia_Revision BETWEEN '".$fecha_inicio."' AND '".$fecha_fin."') and Justificacion_Retraso LIKE 'INJUSTIFICADO%' and Retraso_Segundos>0");
-                    $obj_reporte->inconsistencias_en_revisiones_de_video();
-                    $justificaciones = $obj_reporte->getArreglo();
-                    if (count($justificaciones)>0){
-                        $params2[]=$justificaciones[0];
-                    }else{
-                        $params2[]=array("Total"=>"0");
-                    }
+                $obj_reporte->setCondicion("(Fecha_Inicia_Revision BETWEEN '".$fecha_inicio."' AND '".$fecha_fin."') and Justificacion_Retraso LIKE 'INJUSTIFICADO%' and Retraso_Segundos>0");
+                $obj_reporte->inconsistencias_en_revisiones_de_video();
+                $justificaciones = $obj_reporte->getArreglo();
+                if (count($justificaciones)>0){
+                    $params2[]=$justificaciones[0];
+                }else{
+                    $params2[]=array("Total"=>"0");
+                }
 
-                    $suma_revisiones=0;
-                    for ($i = 0; $i < count($params); $i++) {
-                        $suma_revisiones=$suma_revisiones+$params[$i]['TOTAL'];
-                    }
-                    $suma_inconsistencias=0;
-                    for ($i = 0; $i < count($params2); $i++) {
-                        $suma_inconsistencias=$suma_inconsistencias+$params2[$i]['Total'];
-                    }
+                $suma_revisiones=0;
+                for ($i = 0; $i < count($params); $i++) {
+                    $suma_revisiones=$suma_revisiones+$params[$i]['TOTAL'];
+                }
+                $suma_inconsistencias=0;
+                for ($i = 0; $i < count($params2); $i++) {
+                    $suma_inconsistencias=$suma_inconsistencias+$params2[$i]['Total'];
+                }
 
-                    $titulo2 = "Retrasos en Revisiones de Video (todos los puestos).";
+                $titulo2 = "Retrasos en Revisiones de Video (todos los puestos).";
 
             }
             require __DIR__ . '/../vistas/plantillas/rpt_controles_de_video.php';
@@ -12349,7 +12526,7 @@ class Controller{
                 $hora_inicio=$i.':00';
                 $hora_final= ($i+1).':00';
                 $obj_cencon->setCondicion("(Hora_Apertura>'".$hora_inicio."' AND Hora_Apertura<'".$hora_final."') AND Fecha_Apertura between '".$fecha_inicio."' AND '".$fecha_fin."'");
-                $obj_cencon->informacion_reporte();
+                $obj_cencon->total_registros_cencon_dia();
                 $total= $obj_cencon->getArreglo();
                 $reporte_aperturas[$i] = array_merge((array('Horas' =>($hora_inicio.'-'.$hora_final))),$total[0]);
             }
@@ -12394,8 +12571,9 @@ class Controller{
             
             $tam=count($prueba);
             for($i=0;$i<$tam;$i++){
-                if($prueba[$i]['ID_Empresa_Persona_Apertura']==1){
-                    $obj_personal->setCondicion("ID_Persona='".$prueba[$i]['ID_Persona_Reporta_Apertura']."'");
+                //Obtiene la información de la persona que reportó la prueba de alarma
+                /*if($prueba[$i]['ID_Empresa_Persona_Apertura']==1){
+                    $obj_personal->setCondicion("T_Personal.ID_Persona='".$prueba[$i]['ID_Persona_Reporta_Apertura']."'");
                     $obj_personal->obtener_personas_prontuario();
                     $persona = $obj_personal->getArreglo();
                     $prueba[$i] = array_merge((array('Nombre_Persona_Apertura' =>($persona[0]['Apellido_Nombre']))),$prueba[$i]);
@@ -12404,20 +12582,21 @@ class Controller{
                     $obj_externo->obtiene_todo_el_personal_externo();
                     $persona = $obj_externo->getArreglo();
                     $prueba[$i] = array_merge((array('Nombre_Persona_Apertura' =>($persona[0]['Apellido']." ".$persona[0]['Nombre']))),$prueba[$i]);
-                }
-                if($prueba[$i]['ID_Empresa_Persona_Cierra']==1){
-                    $obj_personal->setCondicion("ID_Persona='".$prueba[$i]['ID_Persona_Reporta_Cierre']."'");
+                }*/
+                //Obtiene la información de la persona que reportó el cierre de las particiones
+                //if($prueba[$i]['ID_Empresa_Persona_Cierra']==1){
+                    $obj_personal->setCondicion("T_Personal.ID_Persona='".$prueba[$i]['ID_Persona_Reporta_Cierre']."'");
                     $obj_personal->obtener_personas_prontuario();
                     $persona = $obj_personal->getArreglo();
                     $prueba[$i] = array_merge((array('Nombre_Persona_Cierre' =>($persona[0]['Apellido_Nombre']))),$prueba[$i]);
-                } else{
+                /*} else{
                     $obj_externo->setCondicion("T_PersonalExterno.ID_Persona_Externa='".$prueba[$i]['ID_Persona_Reporta_Cierre']."'");
                     $obj_externo->obtiene_todo_el_personal_externo();
                     $persona = $obj_externo->getArreglo();
                     $prueba[$i] = array_merge((array('Nombre_Persona_Cierre' =>($persona[0]['Apellido']." ".$persona[0]['Nombre']))),$prueba[$i]);
-                }
+                }*/
                 //Obtiene la información de los Usuarios que ingresan la información a la tabla
-                if($prueba[$i]['ID_Usuario_reporte']!=null){
+                /*if($prueba[$i]['ID_Usuario_reporte']!=null){
                     $obj_usuario->setCondicion("ID_Usuario=".$prueba[$i]['ID_Usuario_reporte']);
                     $obj_usuario->obtiene_todos_los_usuarios();
                     $persona = $obj_usuario->getArreglo();
@@ -12448,13 +12627,14 @@ class Controller{
                     $prueba[$i] = array_merge((array('Nombre_Usuario_Cierra' =>($persona[0]['Apellido']." ".$persona[0]['Nombre']))),$prueba[$i ]);
                 }else{
                     $prueba[$i] = array_merge((array('Nombre_Usuario_Cierra' =>"")),$prueba[$i]);
-                }
+                }*/
             }
             //Obtiene los puntosbcr
             $obj_Puntosbcr->setCondicion("(T_PuntoBCR.ID_Tipo_Punto=1 OR T_PuntoBCR.ID_Tipo_Punto=5 OR T_PuntoBCR.ID_Tipo_Punto=9 OR
                 T_PuntoBCR.ID_Tipo_Punto=10 OR T_PuntoBCR.ID_Tipo_Punto=11) AND T_PuntoBCR.Estado=1 ORDER BY T_PuntoBCR.Nombre");
             $obj_Puntosbcr->obtiene_solo_los_puntos_bcr();
             $Oficinas = $obj_Puntosbcr->getArreglo();
+            
             require __DIR__.'/../vistas/plantillas/rpt_prueba_alarma.php';
         } else {
             $tipo_de_alerta="alert alert-warning";
@@ -12656,9 +12836,9 @@ class Controller{
             //Obtiene el total de la revisión actual
             $total_suma_revisiones= ($revision_0_30*1)+($revision_31_60*2)+($revision_61_90*3)+($revision_91_120*4)+
                     ($revision_121_150*100)+($revision_151_mas*350);
-            $convinacion = "menos 30 min:".$revision_0_30.", entre 30 y 1 hrs:".$revision_31_60.", entre1 y 1:30 min:".$revision_91_120.", entre 1:30 y 2 hrs:".$revision_91_120.
+            $descripcion = "menos 30 min:".$revision_0_30.", entre 30 y 1 hrs:".$revision_31_60.", entre1 y 1:30 min:".$revision_91_120.", entre 1:30 y 2 hrs:".$revision_91_120.
                     ", entre 2y2:30 hrs:".$revision_121_150.", mas 2:30 hrs:".$revision_151_mas;
-            $this->revision_contador($total_suma_revisiones, $convinacion);
+            $this->revision_contador($total_suma_revisiones, $descripcion);
             ////////////////////////////////////////////////////////////////////
             //OBTIENE INFORMACIÓN DE APERTURA DE CERRADURAS DE CENCON
             $obj_cencon->setCondicion("Hora_Cierre is null");
@@ -12851,11 +13031,6 @@ class Controller{
                 rsort($vencidos);
             }
             
-            //Información de cantidad de cajero sin coordinar en tiempo establecido
-            $obj_cencon->setCondicion("Fecha='".date('Y-m-j')."'");
-            $obj_cencon->obtener_sin_coordinar_dia();
-            $sin_coordinar= $obj_cencon->getArreglo();
-            
             ////////////////////////////////////////////////////////////////////
             ///////////PENDIENTES DE CADA PUESTO DE MONITOREO
             $pendiente_puesto1[0]['Contador']=0;
@@ -12984,6 +13159,7 @@ class Controller{
             if(isset($_POST['fecha_inicial'])){
                 $fecha_inicio = $_POST['fecha_inicial'];
                 $fecha_fin= $_POST['fecha_final'];
+                $usuario_especifico=0;
                 
                 $condicion="(t_bitacorarevisionesvideo.Fecha_Inicia_Revision between '".$fecha_inicio."' AND '".$fecha_fin."')";
                 if(isset($_POST['unidad_video']) || isset($_POST['puesto_monitoreo'])|| isset($_POST['usuario_revision'])){
@@ -12993,6 +13169,7 @@ class Controller{
                         $condicion.= " AND t_bitacorarevisionesvideo.ID_Puesto_Monitoreo='".$_POST['puesto_monitoreo']."'";
                     }if($_POST['usuario_revision']!="0"){
                         $condicion.= " AND t_bitacorarevisionesvideo.ID_Usuario='".$_POST['usuario_revision']."'";
+                        $usuario_especifico=1;
                     }if(isset($_POST['retrasos'])){
                         if($_POST['retrasos']!="0"){
                             $condicion.= " AND t_bitacorarevisionesvideo.Retraso_Segundos>0";
@@ -13016,6 +13193,87 @@ class Controller{
                         $bitacora_revision_video=$bitacora_revision_video_original;
                     }
                 }
+                //PRUEBA PARA CONTAR REVISIONES DE OPERADORES POR PUESTO
+                if($usuario_especifico==1){
+                    $revision=0;
+                    for($i=0;$i<count($bitacora_revision_video);$i++){
+                        if($i==0){
+                            $cantidad_revisiones_puesto[0]['ID_Puesto']=$bitacora_revision_video[$i]['ID_Puesto_Monitoreo'];
+                            $cantidad_revisiones_puesto[0]['Cantidad']=1;
+                            $cantidad_revisiones_puesto[0]['Puesto']=$bitacora_revision_video[$i]['Nombre'];
+                        } else {
+                            for($j=0; $j<count($cantidad_revisiones_puesto);$j++){
+                                if($cantidad_revisiones_puesto[$j]['ID_Puesto']==$bitacora_revision_video[$i]['ID_Puesto_Monitoreo']){
+                                    $cantidad_revisiones_puesto[$j]['Cantidad']++;
+                                    $cantidad_revisiones_puesto[$j]['Puesto']=$bitacora_revision_video[$i]['Nombre'];
+                                    $revision=1;
+                                }
+                            }
+                            if($revision==0){
+                                $cantidad_revisiones_puesto[$j]['ID_Puesto']=$bitacora_revision_video[$i]['ID_Puesto_Monitoreo'];
+                                $cantidad_revisiones_puesto[$j]['Cantidad']=1;
+                                $cantidad_revisiones_puesto[$j]['Puesto']=$bitacora_revision_video[$i]['Nombre'];
+                            }
+                            $revision=0;
+                        }
+                    }
+                    //Obtiene la bitacora de puesto de monitoreo
+                    $obj_reporteria->setCondicion("(Fecha_Toma_Control between '".$fecha_inicio."' AND '".$fecha_fin."') and ID_Usuario='".$_POST['usuario_revision']."'");
+                    $obj_reporteria->obtener_bitacora_puesto_monitoreo();
+                    $bitacora_puesto_monitoreo=$obj_reporteria->getArreglo();
+                    
+                    //Calcula el tiempo en cada puesto
+                    for ($i = 0; $i <  count($bitacora_puesto_monitoreo); $i++) {
+                        if($bitacora_puesto_monitoreo[$i]['Fecha_Libera_Control']<>null){
+                            $fecha2 = new DateTime($bitacora_puesto_monitoreo[$i]['Fecha_Toma_Control'].$bitacora_puesto_monitoreo[$i]['Hora_Toma_Control']);
+                            $fecha1 = new DateTime($bitacora_puesto_monitoreo[$i]['Fecha_Libera_Control'].$bitacora_puesto_monitoreo[$i]['Hora_Libera_Control']);
+                            $diff = $fecha1->diff($fecha2);
+                            $total_tiempo_puesto=(intval($diff->d)*86400)+(intval($diff->h)*3600)+(intval($diff->i)*60)+(intval($diff->s)*1);
+
+                            for($j=0; $j<count($cantidad_revisiones_puesto);$j++){
+                                if($cantidad_revisiones_puesto[$j]['ID_Puesto']==$bitacora_puesto_monitoreo[$i]['ID_Puesto_Monitoreo']){
+                                    if(isset($cantidad_revisiones_puesto[$j]['Total_Tiempo'])){
+                                        $cantidad_revisiones_puesto[$j]['Total_Tiempo']+=$total_tiempo_puesto;
+                                    } else {
+                                        $cantidad_revisiones_puesto[$j]['Total_Tiempo']=$total_tiempo_puesto;
+                                    }
+                                    $revision=1;
+                                }
+                            }
+                            if($revision==0){
+                                $cantidad_revisiones_puesto[$j]['ID_Puesto']=$bitacora_puesto_monitoreo[$i]['ID_Puesto_Monitoreo'];
+                                $cantidad_revisiones_puesto[$j]['Cantidad']=$total_tiempo_puesto;
+                            }
+                            $revision=0;
+                        }
+                    }
+                    for($j=0; $j<count($cantidad_revisiones_puesto);$j++){
+                        if(isset($cantidad_revisiones_puesto[$j]['Total_Tiempo'])){
+                            $hora_texto = "";
+                            $total_tiempo_revisiones=$cantidad_revisiones_puesto[$j]['Total_Tiempo'];
+                            /*if($total_tiempo_revisiones>86400){
+                                $hora_texto .= 1 . "d ";
+                                $total_tiempo_revisiones=$total_tiempo_revisiones-86400;
+                            }*/
+                            $horas = floor($total_tiempo_revisiones / 3600);
+                            $minutos = floor(($total_tiempo_revisiones - ($horas * 3600)) / 60);
+                            $segundos = $total_tiempo_revisiones - ($horas * 3600) - ($minutos * 60);
+                            if ($horas > 0 ) {
+                                $hora_texto .= $horas . "h ";
+                            }
+                            if ($minutos > 0 ) {
+                                $hora_texto .= $minutos . "m ";
+                            }
+                            if ($segundos > 0 ) {
+                                $hora_texto .= round($segundos) . "s";
+                            }
+                            $cantidad_revisiones_puesto[$j]['Tiempo_Puesto']= $hora_texto;
+                        } else {
+                            $cantidad_revisiones_puesto[$j]['Total_Tiempo']="N/A";
+                            $cantidad_revisiones_puesto[$j]['Tiempo_Puesto']= "Activo";
+                        }
+                    }
+                }
             } else{
                 $fecha_inicio = date("Y-m-d");
                 $fecha_fin= date("Y-m-d");
@@ -13036,8 +13294,7 @@ class Controller{
             $puestos_monitoreo= $obj_puesto_monitoreo->getArreglo();
             
             require __DIR__.'/../vistas/plantillas/rpt_revision_video.php';
-        }
-        else {
+        } else {
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
@@ -13324,7 +13581,7 @@ class Controller{
         echo $data;
     }
     
-    public function revision_contador($suma, $convinacion){
+    public function revision_contador($suma, $descripcion){
         $time = time();
         $obj_monitoreo = new cls_puestos_de_monitoreo();
         if(date("i", $time)>='00' && date("i", $time)<='05'){
@@ -13335,7 +13592,7 @@ class Controller{
                 $obj_monitoreo->setFecha_validacion(date('Y-m-j')." ".date("H", $time).":00:00");
                 $obj_monitoreo->setHora_reporta(date("H", $time));
                 $obj_monitoreo->setCampos_valores($suma);
-                $obj_monitoreo->setDescripcion($convinacion);
+                $obj_monitoreo->setDescripcion($descripcion);
                 
                 $obj_monitoreo->agregar_revision_contador();
             }
@@ -13347,7 +13604,7 @@ class Controller{
                 $obj_monitoreo->setFecha_validacion(date('Y-m-j')." ".date("H", $time).":30:00");
                 $obj_monitoreo->setHora_reporta(date("H", $time).".5");
                 $obj_monitoreo->setCampos_valores($suma);
-                $obj_monitoreo->setDescripcion($convinacion);
+                $obj_monitoreo->setDescripcion($descripcion);
                 
                 $obj_monitoreo->agregar_revision_contador();
             }
@@ -13360,7 +13617,6 @@ class Controller{
             //Creación de un objeto de clase eventos
             $obj_eventos = new cls_eventos();
             $obj_reporteria = new cls_reporteria();
-
 
             //Metodo de la clase que permite obtener todas las provincias que se encuentran listadas en el sistema.
             $obj_eventos->obtener_todas_las_provincias();
@@ -13582,14 +13838,14 @@ class Controller{
                 $fecha_inicio = $_POST['fecha_inicial'];
                 $fecha_fin= $_POST['fecha_final'];
                 //TOP 20 Personal BCR que se envia correo
-                $obj_reporte->setCondicion("T_Revision_Contador.Fecha_Hora between '".$fecha_inicio." 00:00' AND '".$fecha_fin." 23:59'");
+                $obj_reporte->setCondicion("T_RevisionContador.Fecha_Hora between '".$fecha_inicio." 00:00' AND '".$fecha_fin." 23:59'");
                 $obj_reporte->obtener_revision_contador();
                 $params= $obj_reporte->getArreglo();
             } else{
                 $fecha_inicio = date("Y-m-d");
                 $fecha_fin= date("Y-m-d");
                 //TOP 20 Personal BCR que se envia correo
-                $obj_reporte->setCondicion("T_Revision_Contador.Fecha_Hora between '".$fecha_inicio." 00:00' AND '".$fecha_fin." 23:59'");
+                $obj_reporte->setCondicion("T_RevisionContador.Fecha_Hora between '".$fecha_inicio." 00:00' AND '".$fecha_fin." 23:59'");
                 $obj_reporte->obtener_revision_contador();
                 $params= $obj_reporte->getArreglo();
             }
@@ -13601,6 +13857,151 @@ class Controller{
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }
     }
+    
+    public function reporte_aperturas_cierres(){
+        //Validación para verificar si el usuario está logeado en el sistema
+        if(isset($_SESSION['nombre'])){
+            //Creación de un objeto de clase eventos
+            $obj_eventos = new cls_eventos();
+            $obj_reporteria = new cls_reporteria();
+
+            //Metodo de la clase que permite obtener todas las provincias que se encuentran listadas en el sistema.
+            $obj_eventos->obtener_todas_las_provincias();
+            //Asigna el resultado a un vector
+            $lista_provincias=$obj_eventos->getArreglo();
+            
+            //Obtiene todos lps tipos de puntos BCR que se encuentran activos en la base de datos
+            $obj_eventos->obtener_todos_los_tipos_de_puntos_BCR();
+            //Asigna el resultado de la consulta a un vector
+            $lista_tipos_de_puntos_bcr=$obj_eventos->getArreglo();
+            
+            //Obtiene las oficinas de san jose
+            $obj_eventos->setTipo_punto("1");
+            $obj_eventos->setProvincia("1");
+            
+            $obj_eventos->setCondicion("ID_Tipo_Punto=1 AND T_Provincia.ID_Provincia= 1");
+            //Metodo que filtra los puntos BCR para uso de la bitacora digital
+            $obj_eventos->filtra_sitios_bcr_bitacora();
+            //Obtiene el resultado de la consulta en una variable vector.
+            $lista_puntos_bcr_oficinas_sj=$obj_eventos->getArreglo(); 
+            
+            //Llamada al formulario correspondiente de la vista
+            require __DIR__.'/../vistas/plantillas/rpt_aperturas_cierres.php';
+        }
+        else {
+            /*
+            * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+            * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+            * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+            * En la última línea llama a la pagina de inicio de sesión.
+            */
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            //Llamada al formulario correspondiente de la vista
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }
+    }
+    
+    public function actualiza_en_vivo_reporte_aperturas_cierres(){    
+        //Validación para verificar si el usuario está logeado en el sistema
+        if(isset($_SESSION['nombre'])){
+            $obj_reporteria  = new cls_reporteria();
+            
+            //Recibe la fecha inicial del reporte
+            $fecha_inicial=$_POST['fecha_inicial'];
+            //Recibe la fecha final del reporte
+            $fecha_final=$_POST['fecha_final'];
+            //Obtiene el id del punto bcr a consultar
+            $id_punto_bcr=$_POST['id_punto_bcr'];
+            
+            //Establece la condición SQL para definir el rango de fechas del reporte
+            $obj_reporteria->setCondicion("(t_pruebaalarma.Fecha between '".$fecha_inicial."' AND '".$fecha_final."') AND t_pruebaalarma.ID_PuntoBCR=".$id_punto_bcr);
+            //Obtiene los eventos de acuerdo a la condicion.
+            $obj_reporteria->obtener_aperturas_cierres();
+            //Obtiene el arreglo de resultados
+            $params= $obj_reporteria->getArreglo();
+            
+            //Obtiene el tamaño del vector de resultados
+            $tamano=count($params);
+
+            //verifica que hayan resultados en la consulta, para empezar a pintar la tabla HTML que se mostrará en pantalla al formulario
+            if (count($params)>0){
+                //Creación de la tabla
+                $html="<table id='tabla' class='display2'>";
+                //Creación de la cabecera de la tabla
+                $html.="<thead>";
+                //Creación de la fila de títulos de la tabla
+                $html.="<tr>";
+                //Columna id evento, la cual está oculta en la tabla
+                $html.="<th hidden='true'>ID Punto</th>";
+                //Resto de columnas de la tabla, de acuerdo a lo requerido en la consulta SQL
+                $html.="<th style='text-align:center'>Código</th>";
+                $html.="<th style='text-align:center'>Nombre</th>";
+                $html.="<th style='text-align:center'>Fecha</th>";
+                $html.="<th style='text-align:center'>Hora apertura</th>";
+                $html.="<th style='text-align:center'>Hora cierre</th>";
+                $html.="<th style='text-align:center'>Horario Entrada</th>";
+                $html.="<th style='text-align:center'>Horario público</th>";
+                //termina la fila de cabeceras
+                $html.="</tr>";
+                //termina la cabecera de la tabla
+                $html.="</thead>";
+
+                //Inicializa el cuerpo de la tabla
+                $html.="<tbody id='cuerpo'>";
+                //Retorna el tamaño del vector que almacena la consulta sql
+                $tam=count($params);
+
+                //Vector que recorre registro por registros de la consulta SQL
+                for ($i = 0; $i <$tam; $i++) {
+                    //Pinta y oculta el id del evento 
+                    $html.="<td hidden='true'>".$params[$i]['ID_PuntoBCR']."</td>";
+                    //Pinta las columnas correspondientes al reporte de eventos
+                    $html.="<td style='text-align:center'>".$params[$i]['Codigo']."</td>";
+                    $html.="<td style='text-align:center'>".$params[$i]['Nombre']."</td>";
+                    $html.="<td style='text-align:center'>".$params[$i]['Fecha']."</td>";
+                    $html.="<td style='text-align:center'>".$params[$i]['Hora_Apertura_Alarma']."</td>";
+                    $html.="<td style='text-align:center'>".$params[$i]['Hora_Cierre_Alarma']."</td>";
+                    $html.="<td style='text-align:center'>".$params[$i]['Horario_Entrada']."</td>";
+                    $html.="<td style='text-align:center'>".$params[$i]['Horario_Publico']."</td>";    
+                    //Cierra la fila del registro del evento en cuestión.
+                    $html.="</tr>";
+                }
+
+                //Finaliza el cuerpo de la tabla
+                $html.="</tbody>";
+
+                //Culmina la tabla
+                $html.=" </table>";
+
+                //Imprime en pantalla el codigo html estructurado en este metodo
+                echo $html;
+                //Sale del metodo
+                exit;
+            }else{
+                //En caso de que no hayan resultados, muestra la información correspondiente.
+                $html="<h4>No se encontraron eventos para este filtro.</h4>";
+                //Imprime la variable html
+                echo $html;
+                //Sale del metodo
+                exit;
+            }    
+            //Imprime la variable html y sale del metodo
+            echo $html;
+        }else {
+            /*
+            * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+            * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+            * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+            * En la última línea llama a la pagina de inicio de sesión.
+            */
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            //Llamada al formulario correspondiente de la vista
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }
+    }
+    
     ////////////////////////////////////////////////////////////////////////////
     //////////////////////Funciones para Pruebas de alarma//////////////////////  
     ////////////////////////////////////////////////////////////////////////////
@@ -14856,11 +15257,11 @@ class Controller{
                 if($_POST['tipo_solicitud']=="Horario especial"){
                     $_POST['gafete']="0";
                     unset($_POST['lista']);
-                    
+                } else {
                     if ($fecha_programacion >  date("Y-m-d")){
                         echo "<script type=\"text/javascript\">alert('No es posible ingresar programaciones futuros!!!!');history.go(-1);</script>";;
                         exit();
-                    }if($fecha_programacion == date("Y-m-d")){
+                    } if($fecha_programacion == date("Y-m-d")){
                         if ($hora_programacion >  date("H:i", time())){
                            echo "<script type=\"text/javascript\">alert('No es posible ingresar programaciones futuros!!!!');history.go(-1);</script>";;
                            exit();
@@ -14905,16 +15306,21 @@ class Controller{
                     unset($_POST['lista']);
                 }
                 
-                if($_POST['tipo_solicitud']=="Activar gafete" ||$_POST['tipo_solicitud']=="Desactivar gafete"){
+                if($_POST['tipo_solicitud']=="Desactivar gafete"){
                     $_POST['ID_PuntoBCR']==0;
                     unset($_POST['lista']);
-                    
                     if($_POST['gafete']=="" || $_POST['gafete']==null){
                         echo "<script type=\"text/javascript\">alert('Se debe indicar el número de gafete!!!!');history.go(-1);</script>";;
                         exit();
                     }
                 }
-                
+                if($_POST['tipo_solicitud']=="Activar gafete"){
+                    unset($_POST['lista']);
+                    if($_POST['gafete']=="" || $_POST['gafete']==null){
+                        echo "<script type=\"text/javascript\">alert('Se debe indicar el número de gafete!!!!');history.go(-1);</script>";;
+                        exit();
+                    }
+                }
                 if($_POST['tipo_solicitud']=="Agregar alarma"){
                     $_POST['gafete']="0";
                     unset($_POST['lista']);
@@ -15031,7 +15437,7 @@ class Controller{
                 $correo=$usuario[0]['Correo'];
                 $usuario="";
                 $obj_correo->agregar_direccion_de_correo($correo, $usuario);
-                //Envia a Diego Venegas
+                //Envia a Diego Venegas M.
                 $correo="davenegas@bancobcr.com";
                 $usuario="";
                 $obj_correo->agregar_direccion_de_correo_oculta($correo, $usuario);
@@ -15423,4 +15829,108 @@ class Controller{
         } 
     }
     
+    ////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////Bibliotecas///////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////
+    public function biblioteca_listar(){
+        if(isset($_SESSION['nombre'])){
+            $obj_biblioteca = new cls_biblioteca();
+            //Procede a ejecutar la consulta SQL para traer todas las notas contenidas en la bd.
+            $obj_biblioteca->setCondicion("");
+            //Obtener el vector de la consulta
+            $obj_biblioteca->obtener_estado_Biblioteca_Todos();
+            $biblioteca=$obj_biblioteca->getArreglo();
+            
+            require __DIR__ . '/../vistas/plantillas/frm_biblioteca.php';
+			
+        } else {
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            //Llamada al formulario correspondiente de la vista
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }
+    }
+    
+    public function guardar_Biblioteca(){
+        if(isset($_SESSION['nombre'])){
+            if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+
+                $obj_biblioteca_rf = new cls_biblioteca();
+                
+                $obj_biblioteca_rf->setNombre($_POST['Nombre']);
+                $obj_biblioteca_rf->setTipo_Documento($_POST['Tipo_Documento']);                
+                $obj_biblioteca_rf->setLink($_POST['Link']);
+                $obj_biblioteca_rf->setFecha_Hora(date("Y-m-d"));
+                $obj_biblioteca_rf->setID_Usuario($_SESSION['id']);
+                $obj_biblioteca_rf->setDescripcion($_POST['Descripcion']);
+                $obj_biblioteca_rf->setSeguridad($_POST['Seguridad']);
+                $obj_biblioteca_rf->setEstado(1);
+                
+                $recepcion_archivo=$_FILES['archivo_adjunto']['error'];
+
+                $date=new DateTime(); //this returns the current date time
+                $result = $date->format('Y-m-d-H-i-s');
+                
+                $krr = explode('-',$result);
+                $result = implode("",$krr);
+                
+                $raiz=$_SERVER['DOCUMENT_ROOT'];
+
+                if (substr($raiz,-1)!="/"){
+                    $raiz.="/";
+                }
+            
+                $ruta=  $raiz."Adjuntos_Bitacora/".Encrypter::quitar_tildes($result.$_FILES['archivo_adjunto']['name']);
+            
+                switch ($recepcion_archivo) {                
+                    case 0:{
+                        echo '1a';
+                        if (move_uploaded_file($_FILES['archivo_adjunto']['tmp_name'], $ruta)){
+                        
+                            echo '2b';
+                            
+                            $obj_biblioteca_rf->setArchivo(Encrypter::quitar_tildes($result.$_FILES['archivo_adjunto']['name']));
+                            $obj_biblioteca_rf->guardar_Biblioteca();                    
+
+                            header ("location:/ORIEL/index.php?ctl=biblioteca_listar");                            
+                       }  else {                        
+                        echo '3b';
+                            
+                            $obj_biblioteca_rf->setArchivo("N/A");
+                            $obj_biblioteca_rf->guardar_Biblioteca();
+                            header ("location:/ORIEL/index.php?ctl=biblioteca_listar");
+                        }
+                        break;
+                    }
+                    case 2:{
+                        echo "<script type=\"text/javascript\">alert('El archivo consume mayor espacio del permitido (1 mb) !!!!');history.go(-1);</script>";
+                        break;
+                    }
+                    case 4:{ 
+                            $obj_biblioteca_rf->setArchivo("N/A");
+                            $obj_biblioteca_rf->guardar_Biblioteca();
+                            header ("location:/ORIEL/index.php?ctl=biblioteca_listar");
+                        //echo "<script type=\"text/javascript\">alert('No fue seleccionado ningun archivo!!!!');history.go(-1);</script>";
+                        break;
+                    }
+                    case 6:{
+                        echo "<script type=\"text/javascript\">alert('El servidor no tiene acceso a la carpeta temporal de almacenamiento!!!!');history.go(-1);</script>";
+                        break;
+                    } 
+                    case 7:{
+                        echo "<script type=\"text/javascript\">alert('No es posible escribir en el disco duro del servidor!!!!');history.go(-1);</script>";
+                        break;
+                    }  
+                    case 8:{
+                        echo "<script type=\"text/javascript\">alert('Fue detenida la carga del archivo debido a una extension de PHP!!!!');history.go(-1);</script>";
+                        break;
+                    }   
+                }                
+            } else {
+                $tipo_de_alerta="alert alert-warning";
+                $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+                require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';                    
+            }                
+        } 
+    }
 }

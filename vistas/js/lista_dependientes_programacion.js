@@ -1,9 +1,16 @@
 $(document).ready(function(){
+    var arreglo=[];
+    
     $("#tipo_solicitud").change(function () {
         $("#tipo_solicitud option:selected").each(function () {
             tipo_solicitud = $(this).val();
             switch(tipo_solicitud){
                 case "Activar gafete":
+                    document.getElementById('puntobcr').disabled=true;
+                    document.getElementById('gafete').value="";
+                    document.getElementById('gafete').removeAttribute("disabled");
+                    document.getElementById('detalle_areas').removeAttribute("disabled");
+                    break;
                 case "Desactivar gafete":
                     document.getElementById('puntobcr').disabled=true;
                     document.getElementById('gafete').value="";
@@ -84,7 +91,7 @@ function validar_programacion(){
         } else {
             if(document.getElementById('tipo_solicitud').value == "Agregar areas" || document.getElementById('tipo_solicitud').value == "Eliminar areas" ){
                 if(document.getElementById('gafete').value=="" ){
-                    alert("Se debe indicar las areas y gafete");
+                    alert("Se debe indicar las áreas y gafete");
                 }else{
                     document.getElementById('nueva_programacion').submit();
                 }

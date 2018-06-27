@@ -65,7 +65,7 @@
                             </div>
                             <div class="col-sm-6 espacio-abajo-5">
                                 <label for="observaciones">Observaciones</label>
-                                <input type="text"  class="form-control" id="observaciones" name="observaciones" placeholder="Observaciones o comentarios de la apertura">
+                                <input type="text"  class="form-control" id="observaciones" maxlength="150" name="observaciones" placeholder="Observaciones o comentarios de la apertura">
                             </div>
                             <div class="col-sm-6 espacio-abajo-5">
                                 <label for="seguimiento">Seguimiento</label>
@@ -152,7 +152,7 @@
                     <input hidden id="ID_Evento_Cencon" name="ID_Evento_Cencon" type="text" value="">
 
                     <label for="observaciones_evento">Observaciones</label>
-                    <input class="form-control" id="observaciones_evento" name="observaciones_evento" type="text">            
+                    <input class="form-control" id="observaciones_evento" maxlength="150" name="observaciones_evento" type="text">            
                     <hr>
                     <button onclick="guardar_observaciones_evento();">Guardar</a></button>
                 </div>

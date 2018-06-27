@@ -42,7 +42,7 @@
                                 <td hidden style="text-align:center"><?php echo $params[$i]['ID_Revision_Contador'];?></td>
                                 <td style="text-align:center"><?php echo $params[$i]['Fecha_Hora'];?></td>
                                 <td style="text-align:center"><?php echo $params[$i]['Suma_Revisiones'];?></td>
-                                <td style="text-align:center"><?php echo $params[$i]['Convinacion'];?></td>
+                                <td style="text-align:center"><?php echo $params[$i]['Descripcion'];?></td>
                             </tr>
                         <?php } ?>
                     </tbody>

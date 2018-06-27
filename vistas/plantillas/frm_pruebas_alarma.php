@@ -4,7 +4,7 @@
         <meta charset="UTF-8">
         <title>Pruebas Alarma</title>
         <script language="javascript" src="vistas/js/jquery.js"></script>
-        <script language="javascript" src="vistas/js/listas_dependientes_pruebas.js?1.2.5"></script>
+        <script language="javascript" src="vistas/js/listas_dependientes_pruebas.js?1.2.6"></script>
         <link rel="stylesheet" href="vistas/css/ventanaoculta.css"> 
         <?php require_once 'frm_librerias_head.html'; ?>
         <script>
@@ -193,7 +193,8 @@
                             <label for="seguimiento">Seguimiento</label>
                             <select class="form-control" id="seguimiento" name="seguimiento" onchange="guarda_seguimiento();">
                                 <option value="0"></option>
-                                <option value="Se solicitó la prueba">Se solicitó la prueba</option>
+                                <option value="Prueba no reportada">Prueba no reportada</option>
+                                <option value="Prueba reportada, se solicitó nuevamente">Prueba reportada, se solicitó nuevamente</option>
                                 <option value="Oficina en Asueto">Oficina en Asueto</option>
                                 <option value="Oficina con trabajos">Oficina con Trabajos</option>
                                 <option value="Alarma abierta 24 horas">Alarma abierta 24 horas</option>

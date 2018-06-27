@@ -93,43 +93,49 @@ require_once __DIR__ . '/controladores/cls_reporteria.php';
 require_once __DIR__ . '/controladores/cls_control_acceso.php';
 //
 require_once __DIR__ . '/controladores/cls_programacion.php';
+
 //Libreria de clases --> Control para Botones RF
 require_once __DIR__ . '/controladores/cls_botones.php';
+
+//Libreria de clases --> Control para Botones RF
+require_once __DIR__ . '/controladores/cls_biblioteca.php';
+
+
 /*
- * El elemento controller, constituye la base y esencia de toda la lógica del negocio, en este
- * se almacenan cada una de las funcionales de ORIEl. El archivo en sí, se compone de "n" cantidad
- * de eventos de clase que son llamados según las necesidades del usuario y el sistema en si.
- */
+* El elemento controller, constituye la base y esencia de toda la lógica del negocio, en este
+* se almacenan cada una de las funcionales de ORIEl. El archivo en sí, se compone de "n" cantidad
+* de eventos de clase que son llamados según las necesidades del usuario y el sistema en si.
+*/
 
 require_once __DIR__ . '/modelos/Controller.php';
 /*
- * Componente que permite realizar funciones especiales dentro del sistema, dentro de las cuales
- * están: encriptar información sensible, quitar tíldes, caracteres especiales, etc.
- */
+* Componente que permite realizar funciones especiales dentro del sistema, dentro de las cuales
+* están: encriptar información sensible, quitar tíldes, caracteres especiales, etc.
+*/
 require_once __DIR__ . '/modelos/Encrypter.php';
 // Librería open source para el manejo y transacción de correos electrónicos.
 require_once __DIR__ . '/modelos/PHPMailerAutoload.php';
 /*
- * // Librería open source para el manejo y transacción de correos electrónicos. Trabaja en conjunto con
- * la anterior.
- */
+* Librería open source para el manejo y transacción de correos electrónicos. Trabaja en conjunto con
+* la anterior.
+*/
 require_once __DIR__ . '/modelos/class.phpmailer.php';
 /*
- * // Librería open source para el manejo y transacción de correos electrónicos. Trabaja en conjunto con
- * la anterior.
- */
+* Librería open source para el manejo y transacción de correos electrónicos. Trabaja en conjunto con
+* la anterior.
+*/
 require_once __DIR__ . '/modelos/class.smtp.php';
 /*
- * Librería de clase, para el manejo y envío de correos electrónicos, hecha exclusivamente para el proyecto
- * ORIEL. Integra las tres librerías OPEN SOURCE anteriormente citadas.
- */
+* Librería de clase, para el manejo y envío de correos electrónicos, hecha exclusivamente para el proyecto
+* ORIEL. Integra las tres librerías OPEN SOURCE anteriormente citadas.
+*/
 require_once __DIR__ . '/modelos/Mail_Provider.php';
 
 /*
- * Dentro del concepto de modelo vista controlador, se maneja el siguiente vector de nombres  de eventos de la clase controlador.
- * Permite declarar cada funcionalidad definida en el controlador para su correcta utilización. Si no se declara el nombre del evento
- * en este vector, no será posible utilizar su definición dentro del sistema ORIEL. 
- */
+* Dentro del concepto de modelo vista controlador, se maneja el siguiente vector de nombres  de eventos de la clase controlador.
+* Permite declarar cada funcionalidad definida en el controlador para su correcta utilización. Si no se declara el nombre del evento
+* en este vector, no será posible utilizar su definición dentro del sistema ORIEL. 
+*/
 // enrutamiento, se enlistan cada una de las funcionalidades del controller entre comillas, tanto al inicio como al final de la línea (deben de coincidir)
 $map = array(
     //Controlador General
@@ -161,6 +167,9 @@ $map = array(
     'reporte_tl300_en_puntos_bcr_listar'=>array('controller'=>'Controller', 'action'=>'reporte_tl300_en_puntos_bcr_listar'),
     'reporte_eventos_bitacora_digital'=>  array('controller'=>'Controller','action'=>  'reporte_eventos_bitacora_digital'),
     'actualiza_en_vivo_reporte_eventos'=>  array('controller'=>'Controller','action'=>  'actualiza_en_vivo_reporte_eventos'),
+    'actualiza_en_vivo_reporte_eventos_cerrados'=>  array('controller'=>'Controller','action'=>  'actualiza_en_vivo_reporte_eventos_cerrados'),
+    'reporte_aperturas_cierres'=>  array('controller'=>'Controller','action'=>  'reporte_aperturas_cierres'),
+    'actualiza_en_vivo_reporte_aperturas_cierres'=>  array('controller'=>'Controller','action'=>  'actualiza_en_vivo_reporte_aperturas_cierres'),
     
     //Información pública
     'personal_listar_publico'=>array('controller'=>'Controller', 'action'=>'personal_listar_publico'),
@@ -435,7 +444,11 @@ $map = array(
     
     //Solicitud de Permisos
     'solicitud_permiso'=>array('controller'=>'Controller','action'=> 'solicitud_permiso'),
- 
+    
+    //Biblioteca
+    'biblioteca_listar'=>array('controller'=>'Controller','action'=> 'biblioteca_listar'),
+    'guardar_Biblioteca'=>array('controller'=>'Controller','action'=> 'guardar_Biblioteca'),
+    
     //Botones RF
     'botones_listar'=> array('controller'=>'Controller','action'=>'botones_listar'),
     'botones_selec_guardar'=> array('controller'=>'Controller','action'=>'botones_selec_guardar'),
@@ -453,6 +466,7 @@ $map = array(
     'recordar_password'=>array('controller'=>'Controller', 'action'=>'recordar_password'),
     'iniciar_sistema_cambiando_clave'=>array('controller'=>'Controller', 'action'=>'iniciar_sistema_cambiando_clave'),
     'cambia_clave_usuario_post'=>array('controller'=>'Controller', 'action'=>'cambia_clave_usuario_post')
+    
     
     //Pruebas y nuevas implementaciones
     

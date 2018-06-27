@@ -96,33 +96,33 @@
                             <!-- Wrapper for slides -->
                             <div class="carousel-inner" role="listbox">
                                 <div class="item active">
-                                  <img src="vistas/Imagenes/Foto1.jpg" alt="Chania" width="460" height="345">
-                                  <div class="carousel-caption">
-                                  </div>
+                                    <img src="vistas/Imagenes/Foto1.jpg" alt="Chania" width="460" height="345">
+                                    <div class="carousel-caption">
+                                    </div>
                                 </div>
 
                                 <div class="item">
-                                  <img src="vistas/Imagenes/Foto2.jpg" alt="Chania" width="460" height="345">
-                                  <div class="carousel-caption">
-                                  </div>
+                                    <img src="vistas/Imagenes/Foto2.jpg" alt="Chania" width="460" height="345">
+                                    <div class="carousel-caption">
+                                    </div>
                                 </div>
 
                                 <div class="item">
-                                  <img src="vistas/Imagenes/Foto3.jpg" alt="Flower" width="460" height="345">
-                                  <div class="carousel-caption">
-                                  </div>
+                                    <img src="vistas/Imagenes/Foto3.jpg" alt="Flower" width="460" height="345">
+                                    <div class="carousel-caption">
+                                    </div>
                                 </div>
 
                                 <div class="item">
-                                  <img src="vistas/Imagenes/Foto4.jpg" alt="Flower" width="460" height="345">
-                                  <div class="carousel-caption">
-                                  </div>
+                                    <img src="vistas/Imagenes/Foto4.jpg" alt="Flower" width="460" height="345">
+                                    <div class="carousel-caption">
+                                    </div>
                                 </div>
 
                                 <div class="item">
-                                  <img src="vistas/Imagenes/Foto5.jpg" alt="Flower" width="460" height="345">
-                                  <div class="carousel-caption">
-                                  </div>
+                                    <img src="vistas/Imagenes/Foto5.jpg" alt="Flower" width="460" height="345">
+                                    <div class="carousel-caption">
+                                    </div>
                                 </div>
                             </div>
 
@@ -137,7 +137,6 @@
                             </a>
                         </div>
                     </div>
-
                 </div>
                 
                 <!--DIV de navegación lado derecho de la ventana-->

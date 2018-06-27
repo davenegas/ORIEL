@@ -100,7 +100,8 @@ function listas_desplegables(){
     
     //Lista de Seguimiento
     var seguimiento='<option value=""></option>';
-    var seguimiento=seguimiento+'<option value="Se solicitó la prueba">Se solicitó la prueba</option>';
+    var seguimiento=seguimiento+'<option value="Prueba no reportada">Prueba no reportada</option>';
+    var seguimiento=seguimiento+'<option value="Prueba reportada, se solicitó nuevamente">Prueba reportada, se solicitó nuevamente</option>';
     var seguimiento=seguimiento+'<option value="Oficina en Asueto">Oficina en Asueto</option>';
     var seguimiento=seguimiento+'<option value="Oficina con trabajos">Oficina con Trabajos</option>';
     var seguimiento=seguimiento+'<option value="Alarma abierta 24 horas">Alarma abierta 24 horas</option>';

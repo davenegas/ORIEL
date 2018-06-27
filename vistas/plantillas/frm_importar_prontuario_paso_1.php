@@ -18,7 +18,7 @@
                     <!--<label for="archivo_adjunto">Adjuntar Archivo: </label>-->
                     <input type="hidden" name="MAX_FILE_SIZE" value="5000000">
                     <input type="file" name="seleccionar_archivo" id="seleccionar_archivo" class="btn btn-default">
-                </div>   
+                </div>
                
                 <button type="submit" class="btn btn-default">Enviar Información</button>
                 <td><a href="index.php?ctl=principal" class="btn btn-default" role="button">Salir del Asistente</a></td> 

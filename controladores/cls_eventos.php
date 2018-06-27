@@ -359,6 +359,52 @@ class cls_eventos{
                     LEFT OUTER JOIN T_PuntoBCR ON T_Evento.ID_PuntoBCR = T_PuntoBCR.ID_PuntoBCR
                     LEFT OUTER JOIN T_Usuario ON T_Evento.ID_Usuario = T_Usuario.ID_Usuario
                     LEFT OUTER JOIN T_TipoEvento ON T_Evento.ID_Tipo_Evento = T_TipoEvento.ID_Tipo_Evento
+                    LEFT OUTER JOIN T_EstadoEvento ON T_Evento.ID_EstadoEvento = T_EstadoEvento.ID_EstadoEvento", 
+                "T_Evento.ID_Evento, T_Evento.Fecha, T_Evento.Hora, T_Evento.Observaciones_Evento, T_Evento.Fecha_Observaciones,
+                    T_Provincia.Nombre_Provincia, T_Provincia.ID_Provincia,
+                    T_TipoPuntoBCR.Tipo_Punto, T_TipoPuntoBCR.ID_Tipo_Punto ,
+                    T_PuntoBCR.Nombre, T_PuntoBCR.ID_PuntoBCR,T_PuntoBCR.Codigo,
+                    T_TipoEvento.Evento, T_TipoEvento.ID_Tipo_Evento,
+                    T_EstadoEvento.ID_EstadoEvento, T_EstadoEvento.Estado_Evento, T_Usuario.ID_Usuario,
+                    T_Usuario.Nombre Nombre_Usuario,T_Usuario.Apellido",
+                "");
+            $this->arreglo=$this->obj_data_provider->getArreglo();
+            $this->obj_data_provider->desconectar();
+            $this->resultado_operacion=true;
+        }
+        else{
+            $this->arreglo=$this->obj_data_provider->trae_datos(
+                "T_Evento 
+                    LEFT OUTER JOIN T_Provincia ON T_Evento.ID_Provincia = T_Provincia.ID_Provincia
+                    LEFT OUTER JOIN T_TipoPuntoBCR ON T_Evento.ID_Tipo_Punto = T_TipoPuntoBCR.ID_Tipo_Punto
+                    LEFT OUTER JOIN T_PuntoBCR ON T_Evento.ID_PuntoBCR = T_PuntoBCR.ID_PuntoBCR
+                    LEFT OUTER JOIN T_Usuario ON T_Evento.ID_Usuario = T_Usuario.ID_Usuario
+                    LEFT OUTER JOIN T_TipoEvento ON T_Evento.ID_Tipo_Evento = T_TipoEvento.ID_Tipo_Evento
+                    LEFT OUTER JOIN T_EstadoEvento ON T_Evento.ID_EstadoEvento = T_EstadoEvento.ID_EstadoEvento", 
+                "T_Evento.ID_Evento, T_Evento.Fecha, T_Evento.Hora, T_Evento.Observaciones_Evento, T_Evento.Fecha_Observaciones,
+                    T_Provincia.Nombre_Provincia, T_Provincia.ID_Provincia,
+                    T_TipoPuntoBCR.Tipo_Punto, T_TipoPuntoBCR.ID_Tipo_Punto ,
+                    T_PuntoBCR.Nombre, T_PuntoBCR.ID_PuntoBCR,T_PuntoBCR.Codigo,
+                    T_TipoEvento.Evento, T_TipoEvento.ID_Tipo_Evento,
+                    T_EstadoEvento.ID_EstadoEvento, T_EstadoEvento.Estado_Evento, T_Usuario.ID_Usuario,
+                    T_Usuario.Nombre Nombre_Usuario,T_Usuario.Apellido",
+                $this->condicion);
+            $this->arreglo=$this->obj_data_provider->getArreglo();
+            $this->obj_data_provider->desconectar();
+            $this->resultado_operacion=true;
+        }
+    }
+    
+     public function obtiene_todos_los_eventos_general(){
+        $this->obj_data_provider->conectar();
+        if($this->condicion==""){
+            $this->arreglo=$this->obj_data_provider->trae_datos(
+                "T_Evento 
+                    LEFT OUTER JOIN T_Provincia ON T_Evento.ID_Provincia = T_Provincia.ID_Provincia
+                    LEFT OUTER JOIN T_TipoPuntoBCR ON T_Evento.ID_Tipo_Punto = T_TipoPuntoBCR.ID_Tipo_Punto
+                    LEFT OUTER JOIN T_PuntoBCR ON T_Evento.ID_PuntoBCR = T_PuntoBCR.ID_PuntoBCR
+                    LEFT OUTER JOIN T_Usuario ON T_Evento.ID_Usuario = T_Usuario.ID_Usuario
+                    LEFT OUTER JOIN T_TipoEvento ON T_Evento.ID_Tipo_Evento = T_TipoEvento.ID_Tipo_Evento
                     LEFT OUTER JOIN T_EstadoEvento ON T_Evento.ID_EstadoEvento = T_EstadoEvento.ID_EstadoEvento
                     LEFT OUTER JOIN t_tipoeventocierreevento ON T_Evento.ID_Evento = t_tipoeventocierreevento.ID_Evento", 
                 "T_Evento.ID_Evento, T_Evento.Fecha, T_Evento.Hora, T_Evento.Observaciones_Evento, T_Evento.Fecha_Observaciones,
@@ -404,7 +450,11 @@ class cls_eventos{
         try{
         $this->obj_data_provider->conectar();
             $this->arreglo=$this->obj_data_provider->trae_datos(
-                "T_DetalleEvento left outer join T_Usuario on T_DetalleEvento.ID_Usuario=T_Usuario.ID_Usuario inner join T_Evento on T_Evento.ID_Evento=T_DetalleEvento.ID_Evento inner join T_PuntoBCR on T_PuntoBCR.ID_PuntoBCR=T_Evento.ID_PuntoBCR inner join T_TipoEvento on T_TipoEvento.ID_Tipo_Evento=T_Evento.ID_Tipo_Evento", 
+                "T_DetalleEvento "
+                    . "left outer join T_Usuario on T_DetalleEvento.ID_Usuario=T_Usuario.ID_Usuario "
+                    . "inner join T_Evento on T_Evento.ID_Evento=T_DetalleEvento.ID_Evento "
+                    . "inner join T_PuntoBCR on T_PuntoBCR.ID_PuntoBCR=T_Evento.ID_PuntoBCR "
+                    . "inner join T_TipoEvento on T_TipoEvento.ID_Tipo_Evento=T_Evento.ID_Tipo_Evento", 
                 "T_DetalleEvento.*,T_Usuario.Nombre Nombre_Usuario,T_Usuario.Apellido,concat(concat(concat(T_PuntoBCR.Nombre,' ['),T_TipoEvento.Evento),']') as PuntoBCR_TipoEvento",
                 $this->condicion);
             $this->arreglo=$this->obj_data_provider->getArreglo();
@@ -418,7 +468,10 @@ class cls_eventos{
         try{
         $this->obj_data_provider->conectar();
             $this->arreglo=$this->obj_data_provider->trae_datos(
-                "t_puntobcr INNER JOIN t_Distrito ON t_PuntoBCR.ID_Distrito=t_Distrito.ID_Distrito INNER JOIN t_Canton ON t_Distrito.ID_Canton=t_Canton.ID_Canton INNER JOIN t_Provincia ON t_Canton.ID_Provincia=t_Provincia.ID_Provincia", 
+                "t_puntobcr "
+                    . "INNER JOIN t_Distrito ON t_PuntoBCR.ID_Distrito=t_Distrito.ID_Distrito "
+                    . "INNER JOIN t_Canton ON t_Distrito.ID_Canton=t_Canton.ID_Canton "
+                    . "INNER JOIN t_Provincia ON t_Canton.ID_Provincia=t_Provincia.ID_Provincia", 
                 "t_PuntoBCR.ID_PuntoBCR, t_PuntoBCR.Nombre",
                 $this->condicion." ORDER BY t_PuntoBCR.Nombre ASC");
             $this->arreglo=$this->obj_data_provider->getArreglo();
@@ -637,7 +690,8 @@ class cls_eventos{
     public function obtener_informacion_general_de_la_mezcla(){
         try{
             $this->obj_data_provider->conectar();
-            $this->arreglo= $this->obj_data_provider->trae_datos("T_MezclaEvento inner join T_Usuario on T_Usuario.ID_Usuario=T_MezclaEvento.ID_Usuario","T_MezclaEvento.*,concat(concat(T_Usuario.Nombre,' '),T_Usuario.Apellido) as Nombre_Completo",$this->condicion);
+            $this->arreglo= $this->obj_data_provider->trae_datos("T_MezclaEvento "
+                    . "inner join T_Usuario on T_Usuario.ID_Usuario=T_MezclaEvento.ID_Usuario","T_MezclaEvento.*,concat(concat(T_Usuario.Nombre,' '),T_Usuario.Apellido) as Nombre_Completo",$this->condicion);
             $this->arreglo=$this->obj_data_provider->getArreglo();
             $this->obj_data_provider->desconectar();
             $this->resultado_operacion=true;
@@ -649,7 +703,10 @@ class cls_eventos{
     public function obtener_listado_de_eventos_de_una_mezcla(){
         try{
             $this->obj_data_provider->conectar();
-            $this->arreglo= $this->obj_data_provider->trae_datos("T_MezclaEvento inner join T_Evento on T_Evento.ID_Evento=T_MezclaEvento.ID_Evento inner join T_PuntoBCR on T_PuntoBCR.ID_PuntoBCR=T_Evento.ID_PuntoBCR inner join T_TipoEvento on T_TipoEvento.ID_Tipo_Evento=T_Evento.ID_Tipo_Evento","ID_Mezcla_Evento,Referencia_Mezcla,T_MezclaEvento.ID_Evento,concat(concat(concat(T_PuntoBCR.Nombre,' ('),T_TipoEvento.Evento),')') as PuntoBCR_TipoEvento,T_Evento.Fecha,T_Evento.Hora",$this->condicion." order by T_Evento.Fecha,T_Evento.Hora");
+            $this->arreglo= $this->obj_data_provider->trae_datos("T_MezclaEvento "
+                    . "inner join T_Evento on T_Evento.ID_Evento=T_MezclaEvento.ID_Evento "
+                    . "inner join T_PuntoBCR on T_PuntoBCR.ID_PuntoBCR=T_Evento.ID_PuntoBCR "
+                    . "inner join T_TipoEvento on T_TipoEvento.ID_Tipo_Evento=T_Evento.ID_Tipo_Evento","ID_Mezcla_Evento,Referencia_Mezcla,T_MezclaEvento.ID_Evento,concat(concat(concat(T_PuntoBCR.Nombre,' ('),T_TipoEvento.Evento),')') as PuntoBCR_TipoEvento,T_Evento.Fecha,T_Evento.Hora",$this->condicion." order by T_Evento.Fecha,T_Evento.Hora");
             $this->arreglo=$this->obj_data_provider->getArreglo();
             $this->obj_data_provider->desconectar();
             $this->resultado_operacion=true;

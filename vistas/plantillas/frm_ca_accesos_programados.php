@@ -5,8 +5,44 @@
         <title>Programaciones</title>
         <?php require_once 'frm_librerias_head.html';?>
         <script language="javascript" src="vistas/js/valida_un_solo_click_en_formulario.js"></script>  
-        <script language="javascript" src="vistas/js/lista_dependientes_programacion.js?1.0.2"></script>
+        <script language="javascript" src="vistas/js/lista_dependientes_programacion.js?1.0.3"></script>
         <link rel="stylesheet" href="vistas/css/ventanaoculta.css">
+        <script>
+            $(document).keyup(function(e) {
+                if (e.keyCode == 27) {
+                   document.getElementById('ventana_oculta_1').style.display = "none";
+                document.getElementById('ventana_oculta_2').style.display = "none";
+                document.getElementById('ventana_oculta_3').style.display = "none";
+                document.getElementById('ventana_oculta_4').style.display = "none";
+                }
+            });
+            
+            var arreglo2=[];
+            
+            function ItemCheck(checkbox){
+                //alert("hola");
+                //console.log(arreglo2);
+                
+                if(checkbox.checked){
+                    arreglo2.push(checkbox.id);
+                } else {
+                    for(var i=arreglo2.length; i--;){
+                        if(arreglo2[i]===checkbox.id){
+                            arreglo2.splice(i,1);
+                        }
+                    }
+                }
+                text_arreglo="";
+                for(var i=arreglo2.length; i--;){
+                    text_arreglo+=arreglo2[i]+",";
+                }
+                console.log(text_arreglo);
+                document.getElementById('modulos_lista').value=arreglo2;
+                
+            }
+            
+            //window.onload=function (){arreglo=[];}
+        </script>
     </head>
     <body>
         <?php require_once 'encabezado.php';?>
@@ -17,6 +53,9 @@
                 <h2>Programaciones: Acceso-Alarma-CCTV</h2>
                 <div class="espacio-abajo-6 well">
                     <form class="form-horizontal" id="nueva_programacion" method="POST" enctype="multipart/form-data" action="index.php?ctl=programacion_guardar">
+                        
+                        <input type="text" class="form-control" id="modulos_lista" name="modulos_lista" value="">
+                        
                         <div class="row espacio-abajo">
                             <div class="col-md-4">
                                 <label for="Fecha">Fecha</label>
@@ -98,31 +137,32 @@
                                 <input type="file" name="archivo_adjunto" id="seleccionar_archivo" class="btn btn-default">
                             </div> 
                         </div>
-                        <!--Lista de módulos- Ventana oculta-->
+                        <!--Lista de módulos- Ventana oculta/ parte del fomulario-->
                         <div id="ventana_oculta_2">
                             <div id="popupventana2">
                                 <div id="ventana2">
                                     <img id="close" src='vistas/Imagenes/cerrar.png' width="25" onclick ="ocultar_elemento()"> 
                                     <h2>Listado de Módulos controlados</h2>
-                                    <table class="tabla_modulo" border="1" id="tabla_modulo">
+                                    <table id="tabla2">
                                         <thead>
                                             <tr>
                                                 <!--<th>Owner</th>-->
                                                 <th>Name</th>
-                                                <th>IOU</th>
+                                                <th hidden>IOU</th>
                                                 <th>Estado</th>
                                             </tr>
                                         </thead>
                                         <tbody>
+                                            
                                             <?php 
                                             $tam=count($modulos);
                                             for ($i = 0; $i <$tam; $i++){?>
                                                 <tr>
                                                     <!--<td><?php echo $modulos[$i]['Owner'];?></td>-->
                                                     <td><?php echo $modulos[$i]['Name'];?></td>
-                                                    <td><?php echo $modulos[$i]['IOU'];?></td>
-                                                    <td><input type="checkbox" 
-                                                        name="lista[]" value="<?php echo $modulos[$i]['ID_Modulo_Puerta_Controlada'];?>">
+                                                    <td hidden><?php echo $modulos[$i]['IOU'];?></td>
+                                                    <td class="text-center"><input id="<?php echo $modulos[$i]['ID_Modulo_Puerta_Controlada'];?>"  onclick="ItemCheck(this);" type="checkbox" 
+                                                        value="<?php echo $modulos[$i]['ID_Modulo_Puerta_Controlada'];?>">
                                                     </td> 
                                                 </tr>
                                             <?php } ?>
@@ -151,7 +191,7 @@
         <div class="row">
             <div class="espacio-abajo-6 container">
                 <h3 class="icon-caret-right" data-toggle="collapse" data-target="#reporte_programaciones">Lista de programaciones</h3>
-                <div id="reporte_programaciones" class="collapse">
+                <div id="reporte_programaciones">
                     <div class="row espacio-abajo">
                         <h4 class="espacio-arriba">Seleccionar parámetros del filtro:</h4>
                         <div class="row espacio-abajo">
@@ -186,26 +226,26 @@
                         </div>
                         <div class="row">
                             <table id="tabla3" class="display" cellspacing="0" width="100%">
-                            <thead>
-                                <tr>
-                                    <th style="text-align:center">Número</th>
-                                    <th style="text-align:center">Fecha</th>
-                                    <th style="text-align:center">Hora</th>
-                                    <th style="text-align:center">Usuario</th>
-                                    <th style="text-align:center">Persona</th>
-                                    <th style="text-align:center">Autoriza</th>
-                                    <th style="text-align:center">Tipo solicitud</th>
-                                    <th style="text-align:center">Fecha vencimiento</th>
-                                    <th style="text-align:center">Detalle</th>
-                                    <th style="text-align:center">Estado</th>
-                                    <th style="text-align:center">PuntoBCR</th>
-                                    <th style="text-align:center">Gafete</th>
-                                    <th style="text-align:center">Módulos</th>
-                                    <th style="text-align:center">Adjunto</th>
-                                </tr>
-                            </thead>  
+                                <thead>
+                                    <tr>
+                                        <th style="text-align:center">Número</th>
+                                        <th style="text-align:center">Fecha</th>
+                                        <th style="text-align:center">Hora</th>
+                                        <th style="text-align:center">Usuario</th>
+                                        <th style="text-align:center">Persona</th>
+                                        <th style="text-align:center">Autoriza</th>
+                                        <th style="text-align:center">Tipo solicitud</th>
+                                        <th style="text-align:center">Fecha vencimiento</th>
+                                        <th style="text-align:center">Detalle</th>
+                                        <th style="text-align:center">Estado</th>
+                                        <th style="text-align:center">PuntoBCR</th>
+                                        <th style="text-align:center">Gafete</th>
+                                        <th style="text-align:center">Módulos</th>
+                                        <th style="text-align:center">Adjunto</th>
+                                    </tr>
+                                </thead>  
                             <tbody id="cuerpo_tabla"></tbody>
-                        </table>
+                            </table>
                         </div>
                     </div>
                 </div>
