@@ -15857,6 +15857,10 @@ class Controller{
 
                 $obj_biblioteca_rf = new cls_biblioteca();
                 
+                if (isset($_POST['ID_Biblioteca'])){                    
+                    $obj_biblioteca_rf->setID_Biblioteca($_POST['ID_Biblioteca']);
+                    $obj_biblioteca_rf->setCondicion("ID_Biblioteca='".$_POST['ID_Biblioteca']."'");
+                }                
                 $obj_biblioteca_rf->setNombre($_POST['Nombre']);
                 $obj_biblioteca_rf->setTipo_Documento($_POST['Tipo_Documento']);                
                 $obj_biblioteca_rf->setLink($_POST['Link']);
@@ -15865,7 +15869,8 @@ class Controller{
                 $obj_biblioteca_rf->setDescripcion($_POST['Descripcion']);
                 $obj_biblioteca_rf->setSeguridad($_POST['Seguridad']);
                 $obj_biblioteca_rf->setEstado(1);
-                
+                $obj_biblioteca_rf->setArchivo($_POST['Archivo']);
+                                echo $_POST['Archivo'];
                 $recepcion_archivo=$_FILES['archivo_adjunto']['error'];
 
                 $date=new DateTime(); //this returns the current date time
@@ -15880,57 +15885,85 @@ class Controller{
                     $raiz.="/";
                 }
             
-                $ruta=  $raiz."Adjuntos_Bitacora/".Encrypter::quitar_tildes($result.$_FILES['archivo_adjunto']['name']);
-            
-                switch ($recepcion_archivo) {                
-                    case 0:{
-                        echo '1a';
-                        if (move_uploaded_file($_FILES['archivo_adjunto']['tmp_name'], $ruta)){
-                        
-                            echo '2b';
-                            
-                            $obj_biblioteca_rf->setArchivo(Encrypter::quitar_tildes($result.$_FILES['archivo_adjunto']['name']));
-                            $obj_biblioteca_rf->guardar_Biblioteca();                    
+                $ruta=  $raiz."Biblioteca_Archivos/".Encrypter::quitar_tildes($result.$_FILES['archivo_adjunto']['name']);
+                
+                if (isset($_POST['mod_file'])){
+                    echo $_POST['mod_file'];
+                    echo 'sdf';
+                    if($_POST['mod_file']=="1"){
+                        if(isset($_POST['ruta2'])){
+                            $rutaDel = $_SERVER['DOCUMENT_ROOT'];
+                            if (substr($rutaDel,-1)!="/"){
+                                $rutaDel.="/";                        
+                            }
+                            $rutaDel=  $rutaDel."Biblioteca_Archivos/".Encrypter::quitar_tildes($_POST['ruta2']); 
 
-                            header ("location:/ORIEL/index.php?ctl=biblioteca_listar");                            
-                       }  else {                        
-                        echo '3b';
-                            
-                            $obj_biblioteca_rf->setArchivo("N/A");
-                            $obj_biblioteca_rf->guardar_Biblioteca();
-                            header ("location:/ORIEL/index.php?ctl=biblioteca_listar");
+                            if(file_exists($rutaDel)){                    
+                                unlink($rutaDel);                        
+                            }
                         }
-                        break;
+                        switch ($recepcion_archivo) {
+                            case 0:{
+                                if (move_uploaded_file($_FILES['archivo_adjunto']['tmp_name'], $ruta)){
+                                    $obj_biblioteca_rf->setArchivo(Encrypter::quitar_tildes($result.$_FILES['archivo_adjunto']['name']));
+                                    }  else {
+                                        $obj_biblioteca_rf->setArchivo("N/A");
+                                }
+                                break;                                
+                            }
+                            case 2:{
+                                echo "<script type=\"text/javascript\">alert('El archivo consume mayor espacio del permitido (1 mb) !!!!');history.go(-1);</script>";
+                                break;
+                            }
+                            case 4:{ 
+                                    $obj_biblioteca_rf->setArchivo("N/A");
+                                //echo "<script type=\"text/javascript\">alert('No fue seleccionado ningun archivo!!!!');history.go(-1);</script>";
+                                break;
+                            }
+                            case 6:{
+                                echo "<script type=\"text/javascript\">alert('El servidor no tiene acceso a la carpeta temporal de almacenamiento!!!!');history.go(-1);</script>";
+                                break;
+                            } 
+                            case 7:{
+                                echo "<script type=\"text/javascript\">alert('No es posible escribir en el disco duro del servidor!!!!');history.go(-1);</script>";
+                                break;
+                            }  
+                            case 8:{
+                                echo "<script type=\"text/javascript\">alert('Fue detenida la carga del archivo debido a una extension de PHP!!!!');history.go(-1);</script>";
+                                break;
+                            }
+                        }
+                        
                     }
-                    case 2:{
-                        echo "<script type=\"text/javascript\">alert('El archivo consume mayor espacio del permitido (1 mb) !!!!');history.go(-1);</script>";
-                        break;
-                    }
-                    case 4:{ 
-                            $obj_biblioteca_rf->setArchivo("N/A");
-                            $obj_biblioteca_rf->guardar_Biblioteca();
-                            header ("location:/ORIEL/index.php?ctl=biblioteca_listar");
-                        //echo "<script type=\"text/javascript\">alert('No fue seleccionado ningun archivo!!!!');history.go(-1);</script>";
-                        break;
-                    }
-                    case 6:{
-                        echo "<script type=\"text/javascript\">alert('El servidor no tiene acceso a la carpeta temporal de almacenamiento!!!!');history.go(-1);</script>";
-                        break;
-                    } 
-                    case 7:{
-                        echo "<script type=\"text/javascript\">alert('No es posible escribir en el disco duro del servidor!!!!');history.go(-1);</script>";
-                        break;
-                    }  
-                    case 8:{
-                        echo "<script type=\"text/javascript\">alert('Fue detenida la carga del archivo debido a una extension de PHP!!!!');history.go(-1);</script>";
-                        break;
-                    }   
-                }                
+                }
+                
+                $obj_biblioteca_rf->guardar_Biblioteca();
+                header ("location:/ORIEL/index.php?ctl=biblioteca_listar");
             } else {
                 $tipo_de_alerta="alert alert-warning";
                 $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
                 require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';                    
             }                
         } 
+    }
+    public function biblioteca_cambiar_estado() {        
+        if(isset($_SESSION['nombre'])){
+            $obj_biblioteca = new cls_biblioteca();
+            if ($_GET['Estado']==1){
+                $obj_biblioteca->setEstado("0");
+            }else {
+                $obj_biblioteca->setEstado("1");
+            }
+            $obj_biblioteca->setCondicion("ID_Biblioteca='".$_GET['ID_Biblioteca']."'");
+            $obj_biblioteca->cambiar_estado_biblioteca();
+            $obj_biblioteca->setCondicion("");
+            $obj_biblioteca->obtener_biblioteca();
+            $biblioteca =$obj_biblioteca->getArreglo();
+            require __DIR__.'/../vistas/plantillas/frm_biblioteca.php';
+        } else {
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';            
+        }            
     }
 }

@@ -155,15 +155,15 @@ class cls_biblioteca {
     }
     
     public function guardar_Biblioteca() {
-        $this->obj_data_provider->conectar();
-        if ($this->id==0){
+        $this->obj_data_provider->conectar();        
+        if ($this->ID_Biblioteca==0){
             $this->obj_data_provider->inserta_datos("T_Biblioteca","Nombre, Tipo_Documento, Archivo, Link, Fecha_Hora, ID_Usuario, Descripcion, Seguridad, Estado",
                     "'".$this->Nombre."','".$this->Tipo_Documento."','".$this->Archivo."','".$this->Link."','".$this->Fecha_Hora."','".$this->ID_Usuario."','".$this->Descripcion."','".$this->Seguridad."','".$this->Estado."'");
-        }else{
+        }else{            
             $this->obj_data_provider->edita_datos("T_Biblioteca", "Nombre='".$this->Nombre."', Tipo_Documento='".$this->Tipo_Documento
                 ."', Archivo='".$this->Archivo."', Link='".$this->Link."', Fecha_Hora='".$this->Fecha_Hora.
                 "', ID_Usuario='".$this->ID_Usuario."', Descripcion='".$this->Descripcion."', Seguridad='".$this->Seguridad.
-                "', Estado='".$this->Estado, $this->condicion);
+                "', Estado='".$this->Estado."'", $this->condicion);
         }
         $this->obj_data_provider->desconectar();
         $this->resultado_operacion=true;

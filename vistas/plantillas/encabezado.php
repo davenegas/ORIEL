@@ -190,7 +190,8 @@
                         ($_SESSION['modulos']['Módulo-Control de Video']==1)||($_SESSION['modulos']['Módulo-PuntosBCR']==1)||
                         ($_SESSION['modulos']['Módulo-Personal']==1)||($_SESSION['modulos']['Módulo-Áreas de Apoyo']==1)||
                         ($_SESSION['modulos']['Módulo-Personal Externo']==1)||($_SESSION['modulos']['Módulo-Cencon']==1)||
-                        ($_SESSION['modulos']['Módulo-Pruebas alarma']==1 || $_SESSION['modulos']['Módulo-Programaciones']==1)){?>
+                        ($_SESSION['modulos']['Módulo-Pruebas alarma']==1 || $_SESSION['modulos']['Módulo-Programaciones']==1|| 
+                         $_SESSION['modulos']['Módulo-Biblioteca']==1)){?>
 
                     <li class="dropdown">
                         <a class="dropdown-toggle" data-toggle="dropdown" href="#">Módulos
@@ -201,7 +202,7 @@
                                 <li><a href="index.php?ctl=areas_apoyo_listar">Áreas de Apoyo</a></li>
                             <?php }; ?>
 
-                            <?php if ($_SESSION['modulos']['Módulo-Bitácora Digital']==1){ ?>
+                            <?php if ($_SESSION['modulos']['Módulo-Biblioteca']==1){ ?>
                                 <li><a href="index.php?ctl=biblioteca_listar">Biblioteca</a></li>
                             <?php }; ?> 
                                 
@@ -307,7 +308,7 @@
                                 <li><a href="index.php?ctl=reporte_seguimiento_cencon">Reporte Cencon Seguimientos</a></li> 
                             <?php }; ?> 
                             
-                            <?php if ($_SESSION['modulos']['Reportes-Cencon']==1){ ?>
+                            <?php if ($_SESSION['modulos']['Reportes-Aperturas y cierre']==1){ ?>
                                 <li><a href="index.php?ctl=reporte_aperturas_cierres">Reporte aperturas y cierre</a></li> 
                             <?php }; ?>
                                 

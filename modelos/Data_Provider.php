@@ -364,7 +364,7 @@ class Data_Provider{
         
         //Ejecuta la edición de datos en la tabla correspondiente.
         $consulta=$this->conexion->query("update ".$table." set ".$campos_valores." where ".$condicion.";");
-        //echo("update ".$table." set ".$campos_valores." where ".$condicion.";");
+        echo("update ".$table." set ".$campos_valores." where ".$condicion.";");
         //Estable a true la variable de control
         $this->resultado_operacion=true;
         
