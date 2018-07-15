@@ -15,6 +15,8 @@ class Data_Provider{
     //Nombre de usuario del motor de base de datos
     private $mvc_bd_nombre_trazabilidad="";
     //Nombre de usuario del motor de base de datos
+    private $mvc_bd_nombre_correos="";
+    //Nombre de usuario del motor de base de datos
     private $mvc_bd_usuario;
     //Clave del usuario
     private $mvc_bd_clave;
@@ -24,6 +26,8 @@ class Data_Provider{
     private $conexion_PDO_transacciones;
     //Variable contenedora de los parámetros de la conexión con la bd
     private $conexion_trazabilidad;
+    //Variable contenedora de los parámetros de la conexión con la bd
+    private $conexion_correos;
     //Variable contenedora de resultados de tipo SELECT en SQL, almacenadora de registros de datos
     private $arreglo;
     //Variable que almacena el string SQL que se va a utilizar
@@ -66,6 +70,10 @@ class Data_Provider{
 
     function setConexion_trazabilidad($conexion_trazabilidad) {
         $this->conexion_trazabilidad = $conexion_trazabilidad;
+    }
+    
+    function setConexion_correos($conexion_correos) {
+        $this->conexion_correos = $conexion_correos;
     }
     
     //Método que retorna el valor del último ID ingresado
@@ -186,6 +194,8 @@ class Data_Provider{
             $this->mvc_bd_nombre   = "bd_Gerencia_Seguridad";
             //Inicializa el nombre de la base de datos
             $this->mvc_bd_nombre_trazabilidad   = "bd_Registro_Trazabilidad";
+            //Inicializa el nombre de la base de datos
+            $this->mvc_bd_nombre_correos = "bd_correos";
             //Inicializa el nombre del usuario que puede acceder la base de datos
             $this->mvc_bd_usuario  = "root";
             //Inicializa la clave de acceso a la base de datos
@@ -215,7 +225,11 @@ class Data_Provider{
             $this->conexion_trazabilidad=new mysqli($this->mvc_bd_hostname,$this->mvc_bd_usuario,$this->mvc_bd_clave, $this->mvc_bd_nombre_trazabilidad);
             //Permite ejecutar una consulta debntro de la base de datos
             $this->conexion_trazabilidad->query($this->consulta);
-                        
+            // Crea un objeto conexión con los parámetros necesarios de enlace a la base de datos Gerencia_Seguridad 
+            $this->conexion_correos=new mysqli($this->mvc_bd_hostname,$this->mvc_bd_usuario,$this->mvc_bd_clave, $this->mvc_bd_nombre_correos);
+            //Permite ejecutar una consulta debntro de la base de datos
+            $this->conexion_correos->query($this->consulta);
+            
             // Lleva el control del resultado de la operación ejecuta en la bd
             $this->resultado_operacion=true;
         } catch (Exception $e){
@@ -430,6 +444,16 @@ class Data_Provider{
     }
       
     // Método ABC SQL que permite ingresar información en las tablas de la bd
+    public function inserta_datos_para_correos($table,$campos,$valores){
+        // Gestión de insercion del metodo de la clase
+        //Arma el insert SQL, de acuerdo a los parámetros recibidos por usuario
+        $consulta=$this->conexion_correos->query("insert into ".$table."(".$campos.") values(".$valores.");");
+        //echo ("insert into ".$table."(".$campos.") values(".$valores.");");
+        //Establece a true el resultado de operación
+        $this->resultado_operacion=true;
+    }    
+    
+        // Método ABC SQL que permite ingresar información en las tablas de la bd
     public function inserta_datos_para_prontuario($table,$campos,$valores){
         // Gestión de insercion del metodo de la clase
         //Arma el insert SQL, de acuerdo a los parámetros recibidos por usuario
@@ -437,7 +461,7 @@ class Data_Provider{
         //echo ("insert into ".$table."(".$campos.") values(".$valores.");");
         //Establece a true el resultado de operación
         $this->resultado_operacion=true;
-    }    
+    }   
     
     // Método ABC SQL que permite ingresar información en las tablas de la bd
     public function inserta_datos_para_prontuario_especial($table,$campos,$valores){

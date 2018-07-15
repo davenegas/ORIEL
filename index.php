@@ -100,6 +100,8 @@ require_once __DIR__ . '/controladores/cls_botones.php';
 //Libreria de clases --> Control para Botones RF
 require_once __DIR__ . '/controladores/cls_biblioteca.php';
 
+//Libreria de clases --> Control para correos
+require_once __DIR__ . '/controladores/cls_correos.php';
 
 /*
 * El elemento controller, constituye la base y esencia de toda la lógica del negocio, en este
