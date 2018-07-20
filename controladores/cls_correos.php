@@ -187,7 +187,9 @@ class cls_correos{
         $this->dblc = "\"";
     }
     
-    public function guardar_correos() {        
+    public function guardar_correos() {
+        $this->Fecha_Creado= date('Y/m/d H:i');
+        $this->Fecha_Actualiza= date('Y/m/d H:i');
         $this->obj_data_provider->conectar();
         if ($this->ID_correo==0){
             $this->obj_data_provider->inserta_datos_para_correos("t_correos","ID_Cuenta, Para, CCopia, CCOculta, Asunto, Adjunto, Cuerpo, OrielHead, Enviado, Estado, Fecha_Creado, Fecha_Actualiza, Usuario_Crea, Usuario_Actualiza","'".$this->ID_Cuenta."','".$this->Para."','".$this->CCopia."','".$this->CCOculta."','".$this->Asunto."','".$this->Adjunto."','".$this->Cuerpo."','".$this->OrielHead."','".$this->Enviado."','".$this->Estado."','".$this->Fecha_Creado."','".$this->Fecha_Actualiza."','".$this->Usuario_Crea."','".$this->Usuario_Actualiza."'");
@@ -282,6 +284,8 @@ class cls_correos{
 /*
 //ejemplo de como crear un correo con una tabla html
 $MailGen = new cls_correos();
+$MailGen->setUsuario_Crea($_SESSION['id']);
+$MailGen->setUsuario_Actualiza($_SESSION['id']);
  //limpio la variable y creo los encabezados de la tabla
 $MailGen->setCuerpo("");
 $MailGen->ATable();

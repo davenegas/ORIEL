@@ -168,5 +168,12 @@ class cls_biblioteca {
         $this->obj_data_provider->desconectar();
         $this->resultado_operacion=true;
     }
+    
+    /*Método actualiza el Estado */
+    public function cambiar_estado_biblioteca(){
+        $this->obj_data_provider->conectar();
+        $this->obj_data_provider->edita_datos("t_biblioteca","Estado='".$this->Estado."'",$this->condicion);
+        $this->obj_data_provider->desconectar();
+    }
 }
 ?>

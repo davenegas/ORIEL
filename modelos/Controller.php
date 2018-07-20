@@ -15835,8 +15835,20 @@ class Controller{
     public function biblioteca_listar(){
         if(isset($_SESSION['nombre'])){
             $obj_biblioteca = new cls_biblioteca();
-            //Procede a ejecutar la consulta SQL para traer todas las notas contenidas en la bd.
-            $obj_biblioteca->setCondicion("");
+            if($_SESSION['rol']==2 || $_SESSION['rol']=5 || $_SESSION['rol']==6|| $_SESSION['rol']==14){
+                $obj_biblioteca->setCondicion("(T_Biblioteca.Seguridad=4 or T_Biblioteca.ID_Usuario=".$_SESSION['id'].") and T_Biblioteca.Estado=1");
+            } 
+            if($_SESSION['rol']==3){
+                $obj_biblioteca->setCondicion("T_Biblioteca.Seguridad=4 or T_Biblioteca.Seguridad=3 or T_Biblioteca.ID_Usuario=".$_SESSION['id'].") and T_Biblioteca.Estado=1");
+            }
+            if($_SESSION['rol']==11){
+                $obj_biblioteca->setCondicion("T_Biblioteca.Seguridad in (4,3,2) or T_Biblioteca.ID_Usuario=".$_SESSION['id'].") and T_Biblioteca.Estado=1");
+            }
+            if($_SESSION['rol']=1){
+                $obj_biblioteca->setCondicion("");
+            } else {
+                $obj_biblioteca->setCondicion("T_Biblioteca.ID_Usuario=".$_SESSION['id'].") and T_Biblioteca.Estado=1");
+            }
             //Obtener el vector de la consulta
             $obj_biblioteca->obtener_estado_Biblioteca_Todos();
             $biblioteca=$obj_biblioteca->getArreglo();
@@ -15868,7 +15880,7 @@ class Controller{
                 $obj_biblioteca_rf->setID_Usuario($_SESSION['id']);
                 $obj_biblioteca_rf->setDescripcion($_POST['Descripcion']);
                 $obj_biblioteca_rf->setSeguridad($_POST['Seguridad']);
-                $obj_biblioteca_rf->setEstado(1);
+                $obj_biblioteca_rf->setEstado($_POST['Estado']);
                 $obj_biblioteca_rf->setArchivo($_POST['Archivo']);
                                 echo $_POST['Archivo'];
                 $recepcion_archivo=$_FILES['archivo_adjunto']['error'];

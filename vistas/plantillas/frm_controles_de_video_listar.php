@@ -64,9 +64,12 @@
             
              //Valida informacion completa de formulario de proveedor
             function check_empty() {
+                document.getElementById("msgAviso").innerHTML ="";
                 var str=document.getElementById('txt_retraso').value.trim();
                 if (str =="") {
-                    alert("Una justificación del retraso es requerida para continuar!!!");
+                    //alert("Una justificación del retraso es requerida para continuar!!!");
+                    document.getElementById("msgAviso").style.color="blue";
+                    document.getElementById("msgAviso").innerHTML ="Una justificación del retraso es requerida para continuar!!!";
                 } else {
                     if (str.length >14) {
                         //alert (document.getElementById('txt_retraso').value + document.getElementById('id_bitacora_revision_actual').value);
@@ -74,7 +77,9 @@
                         document.getElementById('ventana_oculta_1').style.display = "none";                        
                         //document.location.href="index.php?ctl=controles_de_video_listar";
                     }else{
-                        alert("Debe detallar correctamente la justificación del retraso!!!");
+                        //alert("Debe detallar correctamente la justificación del retraso!!!");
+                        document.getElementById("msgAviso").style.color="red";
+                        document.getElementById("msgAviso").innerHTML ="Debe detallar correctamente la justificación del retraso!!!";
                     }
                 }
             }
@@ -471,7 +476,7 @@
                     
                     <label for="txt_retraso">Detalle</label>
                     <input class="form-control espacio-abajo" required minlength="15" id="txt_retraso" name="txt_retraso" placeholder="Justifique el Retraso (Minimo 15 caracteres)" type="text">
-                    
+                    <p style="color:red;" id="msgAviso" name="msgAviso" ></p>
                     <button><a href="javascript:%20check_empty()" id="submit">Guardar</a></button>
                     <button><a href="javascript:%20no_justificar()" id="nojustifica">No Justificar</a></button>
                 </form>
