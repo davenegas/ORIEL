@@ -89,7 +89,7 @@ class Controller{
         $tipo_de_alerta="alert alert-info";
         $validacion="Verificación de Identidad";
         //Llamada al formulario correspondiente de la vista   
-        $this->ejecucion_automatico_proceso("Oficiales");     
+        //$this->ejecucion_automatico_proceso("Oficiales");     
         require __DIR__ . '/../vistas/plantillas/inicio_sesion.php'; 
     }
     

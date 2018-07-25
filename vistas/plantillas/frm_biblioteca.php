@@ -97,7 +97,7 @@
                                     <td><a href="../../../Biblioteca_Archivos/<?php echo $biblioteca[$i]['Archivo'];?>" download="<?php echo $biblioteca[$i]['Archivo'];?>"><img src="vistas/Imagenes/Descargar.png" class="img-rounded" alt="Cinque Terre" width="15" height="15"></a></td>                                    
                                 <?php } ?>                            
                             
-                            <td style="text-align:center"><?php echo $biblioteca[$i]['Link'];?></td>                            
+                            <td style="text-align:center"><a href="<?php echo $biblioteca[$i]['Link'];?>"><?php echo $biblioteca[$i]['Nombre'];?></a></td>                            
                             <td style="text-align:center"><?php echo date_format($fecha_biblioteca , 'Y/m/d');?></td>
                             <td style="text-align:center"><?php echo $biblioteca[$i]['Descripcion'];?></td>
                             <?php if ($biblioteca[$i]['Estado']==1){?>
@@ -146,8 +146,8 @@
                             <select class="form-control" id="Seguridad" name="Seguridad">
                                 <option selected="true" value="4">General</option>
                                 <option value="1">Privado</option>
-                                <option value="2">Coordinación BCR</option>
-                                <option value="3">Coordinación Empresa</option>                                
+                                <option value="2">Coordinador BCR</option>
+                                <option value="3">Coordinador Empresa</option>                                
                             </select>
                         </div>
                         <div class="col-md-4 espacio-abajo-5">
