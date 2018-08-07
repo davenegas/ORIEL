@@ -254,6 +254,26 @@ class cls_correos{
     {
         $this->Cuerpo .= "<td style=".$this->dblc."text-align: center; color: white;background-color: #4b6b9e".$this->dblc.">";
     }
+    
+    /*
+     * Método que crea todos los encabezados con el parametro de entrada
+     * cada columna debe ir separado por *
+     */
+    public function ATdAddHeads($pEncabezados)
+    {
+        $strHtml="";
+        $ArrayEncabezados = explode("*",$pEncabezados);
+        $tam = count($ArrayEncabezados);        
+        if ($tam>0){
+            $this->ATr();
+            for($i=0; $i<$tam;$i++){
+                $this->ATdHead();
+                $this->setTexto($ArrayEncabezados[i]);
+                $this->CTd();
+            }
+            $this->CTd();
+        }
+    }
 
     // Método que retorna la etiqueta de cierre <td> en html        
     public function ATd()
@@ -273,6 +293,12 @@ class cls_correos{
     public function ATdCenter()
     {
         $this->Cuerpo .= "<td style=".$this->dblc."text-align: center;".$this->dblc.">";
+    }
+    
+    /// Método que retorna la etiqueta de apertura <td> alineado a la izquierda en html
+    public function ATdLeft()
+    {
+        $this->Cuerpo .= "<td style=".$this->dblc."text-align: left;".$this->dblc.">";
     }
 
     // Método que retorna la etiqueta de cierre <td> en html

@@ -210,6 +210,7 @@ function agregar_evento_cencon(){
             }
 
             for( var j=0; j<result.length;j++){
+                
                 if(document.getElementById('numero_atm').value==cajeros[j]['Codigo']){
                     fecha_apertura= document.getElementById('fecha').value;
                     hora_apertura= document.getElementById('hora').value;
@@ -222,7 +223,7 @@ function agregar_evento_cencon(){
                     $.post("index.php?ctl=evento_nuevo_guardar", { fecha_apertura: fecha_apertura, hora_apertura:hora_apertura,
                     id_puntobcr:id_puntobcr, id_persona:id_persona, id_empresa:id_empresa, observaciones:observaciones, seguimiento:seguimiento}, function(data){
                         //alert (data);
-                        //console.log(data);
+                        //console.log(data);                        
                         var srt = data;
                         var n= srt.search("No es posible");
                         if(n!=-1){
@@ -259,6 +260,7 @@ function evento_cencon_cerrar(ide, numero){
             id_evento_cencon= ide;
             $.post("index.php?ctl=evento_cencon_cerrar", { id_evento_cencon: id_evento_cencon}, function(data){
                 location.reload();
+                //console.log(data);                
                 //alert (data);
             });
         },
@@ -314,7 +316,8 @@ function reasignar_apertura_cencon(){
             id_evento_cencon= document.getElementById('ID_Evento_Cencon').value;
             numero_cajero=document.getElementById('numero_cajero').value;
             cedula_cencon = document.getElementById('Cedula_persona').value;
-            $.post("index.php?ctl=evento_cencon_reasignar", { id_evento_cencon: id_evento_cencon, numero_cajero:numero_cajero, cedula_cencon:cedula_cencon}, function(data){
+            $.post("index.php?ctl=evento_cencon_reasignar", { id_evento_cencon: id_evento_cencon, numero_cajero:numero_cajero, cedula_cencon:cedula_cencon}, function(data){                
+                //console.log(data);                
                 location.reload();
                 //alert (data);
             });

@@ -2569,7 +2569,7 @@ class Controller{
                             //require __DIR__ . '/../vistas/plantillas/frm_principal.php';
                             if($_SESSION['rol']==25){
                                 //echo "Control y Seguimiento de cajeros";
-                                header("Location: https://bcr0209ori01/ORIEL-Cajeros/index.php?ctl=inicio");
+                                header("Location: http://bcr0209ori01/ORIEL-Cajeros/index.php?ctl=inicio");
                             }else {
                                 //Llamada al formulario correspondiente de la vista
                                 header ("location:/ORIEL/index.php?ctl=principal");
@@ -8953,6 +8953,7 @@ class Controller{
     }
     
     public function evento_nuevo_guardar(){
+
         if(isset($_SESSION['nombre'])){
             //Clases necesarias para agregar un evento de cencon
             $obj_cencon = new cls_cencon();
@@ -8960,7 +8961,8 @@ class Controller{
             $obj_puntobcr = new cls_puntosBCR();
             $obj_personal = new cls_personal();
             $obj_externo = new cls_personal_externo();
-            $obj_correo = new Mail_Provider();
+            //$obj_correo = new Mail_Provider();
+            $MailGen = new cls_correos();
             
             //Estable atributos para el evento de Cencon
             $obj_cencon->setFecha($_POST['fecha_apertura']);
@@ -9072,7 +9074,7 @@ class Controller{
                 //Ingresa el seguimiento
                 $obj_eventos->ingresar_seguimiento_evento();  
             }
-            
+                        
             /*Se procede a enviar correo */
             if($_POST['id_empresa']==1){
                 $obj_personal->setCondicion("T_Personal.ID_Persona=".$_POST['id_persona']);
@@ -9081,12 +9083,33 @@ class Controller{
 
                 $correo=$persona[0]['Correo'];
                 $usuario="";
-                $obj_correo->agregar_direccion_de_correo($correo, $usuario);
+                //$obj_correo->agregar_direccion_de_correo($correo, $usuario);
+                $MailGen->setPara($correo);
             }
             
+            $dblc = "\"";
+            $MailGen->setCCOculta("jcbenavides@bancobcr.com");
+            $MailGen->setAsunto("Apertura cerradura de Cencon: ATM #".$puntosbcr[0]['Codigo']);
+            
+            $MailGen->ATable();
+            $MailGen->ATr();
+            $MailGen->ATd();
+            $MailGen->setTexto("<br><span style=".$dblc."text-indent: 12px;".$dblc.">");
+            $MailGen->setTexto("<p>Buenas Compañero (a)</p>");
+            $MailGen->setTexto("<p>El Centro de Control le informa que usted solicitó un código de apertura CENCON para el ATM#".$puntosbcr[0]['Codigo']." ".$puntosbcr[0]['Nombre'].".</p>");
+            $MailGen->setTexto("<p>Importante recordar que se cuenta con <span style=".$dblc."font-weight: bold;".$dblc.">40 minutos</span> (para aperturas normales) a partir del momento en que se entregó el código de apertura, para que usted nos devuelva el código de cierre.</p>");
+            $MailGen->setTexto("<p>Cualquier consulta, estamos para servirle en las extensiones 79149, 79150, 79151 o al número directo 8002287905.</p>");
+            $MailGen->setTexto("<br></span>");
+            $MailGen->CTd();            
+            $MailGen->CTr();
+            $MailGen->CTable();
+            
+            $MailGen->generar_cuerpo("Apertura cerradura de Cencon: ATM #".$puntosbcr[0]['Codigo'],"Correo generado: ".date("Y-m-d")." ".date("H:i:s", time()));
+            $MailGen->guardar_correos();
+            /*
             //Asigna copia del correo 
-            $correo="davenegas@bancobcr.com";
-            $usuario="Diego Venegas";
+            $correo="jcbenavides@bancobcr.com";
+            $usuario="Jean Carlo Benavides";
             $obj_correo->agregar_direccion_de_correo_oculta($correo, $usuario);
 
             //Agrega el asunto del correo para envio al usuario realizando la solicitud
@@ -9101,6 +9124,7 @@ class Controller{
                 . "<a>http://Oriel</a>");
             //Procede a enviar el correo
             $obj_correo->enviar_correo();
+            */
             
             unset($obj_cencon); 
             unset($obj_eventos);
@@ -9120,7 +9144,9 @@ class Controller{
             $obj_cencon = new cls_cencon();
             $obj_eventos= new cls_eventos();
             $obj_puntobcr = new cls_puntosBCR();
-            $obj_correo = new Mail_Provider();
+            $obj_personal = new cls_personal();
+            //$obj_correo = new Mail_Provider();
+            $MailGen = new cls_correos();
             
             //Estable parametros necesarios para realizar el cierre del evento de Cencon
             $obj_cencon->setFecha(date("Y-m-d"));
@@ -9150,6 +9176,7 @@ class Controller{
             //Obtiene evento para agregar seguimiento
             $obj_eventos->existe_abierto_este_tipo_de_evento_en_este_sitio();
             $id_evento= $obj_eventos->getArreglo();
+
             $obj_eventos->setDetalle("Se realiza cierre de la cerradura de Cencon");
             $obj_eventos->setId2(0);
             $obj_eventos->setId($id_evento[0]['ID_Evento']);
@@ -9165,6 +9192,39 @@ class Controller{
             if($tam==2){
                 $obj_eventos->edita_estado_evento("3");
             }
+            
+            /*Se procede a enviar correo */
+            if(count($cencon_cerrado[0])>0){
+                if($cencon_cerrado[0]['ID_Empresa']==1){                
+                    $obj_personal->setCondicion("T_Personal.ID_Persona=".$cencon_cerrado[0]['ID_Persona']);
+                    $obj_personal->obtener_personas_prontuario();
+                    $persona= $obj_personal->getArreglo();
+
+                    $correo=$persona[0]['Correo'];
+                    $usuario="";
+                    $MailGen->setPara($correo);
+                }
+            }
+            
+            $dblc = "\"";
+            $MailGen->setCCOculta("jcbenavides@bancobcr.com");
+            $MailGen->setAsunto("Cierre de cerradura de Cencon: ATM #".$puntosbcr[0]['Codigo']);
+            
+            $MailGen->ATable();
+            $MailGen->ATr();
+            $MailGen->ATd();
+            $MailGen->setTexto("<br><span style=".$dblc."text-indent: 12px;".$dblc.">");
+            $MailGen->setTexto("<p>Buenas Compañero (a)</p>");
+            $MailGen->setTexto("<p>El Centro de Control le informa que usted reportó el cierre de CENCON del ATM#".$puntosbcr[0]['Codigo']." ".$puntosbcr[0]['Nombre'].".</p>");            
+            $MailGen->setTexto("<p>Cualquier consulta, estamos para servirle en las extensiones 79149, 79150, 79151 o al número directo 8002287905.</p>");
+            $MailGen->setTexto("<br></span>");
+            $MailGen->CTd();            
+            $MailGen->CTr();
+            $MailGen->CTable();
+            
+            $MailGen->generar_cuerpo("Cierre de cerradura Cencon: ATM #".$puntosbcr[0]['Codigo'],"Correo generado: ".date("Y-m-d")." ".date("H:i:s", time()));
+            $MailGen->guardar_correos();
+            
             
             /*Se procede a enviar correo */
             /*if($_POST['id_empresa']==1){
@@ -9193,7 +9253,7 @@ class Controller{
                 . "<a>http://Oriel</a>");
             //Procede a enviar el correo
             $obj_correo->enviar_correo();*/
-            
+            unset($MailGen); 
             unset($obj_cencon); 
             unset($obj_eventos);
             unset($obj_puntobcr);
@@ -9237,7 +9297,9 @@ class Controller{
         if(isset($_SESSION['nombre'])){
             $obj_cencon = new cls_cencon();
             $obj_puntobcr = new cls_puntosBCR();
-            $obj_correo = new Mail_Provider();
+            $obj_personal = new cls_personal();
+            //$obj_correo = new Mail_Provider();
+            $MailGen = new cls_correos();
             
             //Busca la nueva persona para reasignar.
             $obj_cencon->setCondicion("T_Cencon.Cedula_Cencon='".$_POST['cedula_cencon']."' AND T_Cencon.ID_PuntoBCR='".$_POST['numero_cajero']."'");
@@ -9260,14 +9322,36 @@ class Controller{
                 //Enviar correo de reasignado
                 if($params[0]['ID_Empresa']==1){
                     $obj_personal->setCondicion("T_Personal.ID_Persona=".$params[0]['ID_Persona']);
-                    $obj_personal->obtiene_todo_el_personal_filtrado();
+                    $obj_personal->obtener_personas_prontuario();
                     $persona= $obj_personal->getArreglo();
 
                     $correo=$persona[0]['Correo'];
                     $usuario="";
-                    $obj_correo->agregar_direccion_de_correo($correo, $usuario);
+                    //$obj_correo->agregar_direccion_de_correo($correo, $usuario);                
+                    $MailGen->setPara($correo);
                 }
                 
+                $dblc = "\"";
+                $MailGen->setCCOculta("jcbenavides@bancobcr.com");
+                $MailGen->setAsunto("Apertura cerradura de Cencon: ATM #".$puntosbcr[0]['Codigo']."(Reasignada)");
+
+                $MailGen->ATable();
+                $MailGen->ATr();
+                $MailGen->ATd();
+                $MailGen->setTexto("<br><span style=".$dblc."text-indent: 12px;".$dblc.">");
+                $MailGen->setTexto("<p>Buenas Compañero (a)</p>");
+                $MailGen->setTexto("<p>El Centro de Control le informa que usted solicitó un código de apertura CENCON para el ATM#".$puntosbcr[0]['Codigo']." ".$puntosbcr[0]['Nombre'].".</p>");
+                $MailGen->setTexto("<p>Importante recordar que se cuenta con <span style=".$dblc."font-weight: bold;".$dblc.">40 minutos</span> (para aperturas normales) a partir del momento en que se entregó el código de apertura, para que usted nos devuelva el código de cierre.</p>");
+                $MailGen->setTexto("<p>Cualquier consulta, estamos para servirle en las extensiones 79149, 79150, 79151 o al número directo 8002287905.</p>");
+                $MailGen->setTexto("<br></span>");
+                $MailGen->CTd();            
+                $MailGen->CTr();
+                $MailGen->CTable();
+
+                $MailGen->generar_cuerpo("Apertura cerradura de Cencon: ATM #".$puntosbcr[0]['Codigo']."(Reasignada)","Correo generado: ".date("Y-m-d")." ".date("H:i:s", time()));
+                $MailGen->guardar_correos();
+                
+                /*
                 //Asigna copia del correo 
                 $correo="davenegas@bancobcr.com";
                 $usuario="Diego Venegas";
@@ -9285,7 +9369,7 @@ class Controller{
                     . "<a>http://Oriel</a>");
                 //Procede a enviar el correo
                 $obj_correo->enviar_correo();
-            
+            */
             } else {
                 echo "No se puede reasignar";
             }
@@ -15835,6 +15919,7 @@ class Controller{
     public function biblioteca_listar(){
         if(isset($_SESSION['nombre'])){
             $obj_biblioteca = new cls_biblioteca();
+            //Procede a ejecutar la consulta SQL para traer todas las notas contenidas en la bd.
             if($_SESSION['rol']==2 || $_SESSION['rol']=5 || $_SESSION['rol']==6|| $_SESSION['rol']==14){
                 $obj_biblioteca->setCondicion("(T_Biblioteca.Seguridad=4 or T_Biblioteca.ID_Usuario=".$_SESSION['id'].") and T_Biblioteca.Estado=1");
             } 

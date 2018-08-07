@@ -196,6 +196,7 @@ class Data_Provider{
             $this->mvc_bd_nombre_trazabilidad   = "bd_Registro_Trazabilidad";
             //Inicializa el nombre de la base de datos
             $this->mvc_bd_nombre_correos = "bd_correos";
+			
             //Inicializa el nombre del usuario que puede acceder la base de datos
             $this->mvc_bd_usuario  = "root";
             //Inicializa la clave de acceso a la base de datos
@@ -378,7 +379,7 @@ class Data_Provider{
         
         //Ejecuta la edición de datos en la tabla correspondiente.
         $consulta=$this->conexion->query("update ".$table." set ".$campos_valores." where ".$condicion.";");
-        echo("update ".$table." set ".$campos_valores." where ".$condicion.";");
+        //echo("update ".$table." set ".$campos_valores." where ".$condicion.";");
         //Estable a true la variable de control
         $this->resultado_operacion=true;
         
@@ -448,7 +449,7 @@ class Data_Provider{
         // Gestión de insercion del metodo de la clase
         //Arma el insert SQL, de acuerdo a los parámetros recibidos por usuario
         $consulta=$this->conexion_correos->query("insert into ".$table."(".$campos.") values(".$valores.");");
-        //echo ("insert into ".$table."(".$campos.") values(".$valores.");");
+        echo ("insert into ".$table."(".$campos.") values(".$valores.");");
         //Establece a true el resultado de operación
         $this->resultado_operacion=true;
     }    
