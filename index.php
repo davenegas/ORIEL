@@ -1,3 +1,4 @@
+//pruebas
 <?php
 //Inicio de sesión de usuario para el control de la seguridad
 /*
@@ -102,6 +103,23 @@ require_once __DIR__ . '/controladores/cls_biblioteca.php';
 
 //Libreria de clases --> Control para correos
 require_once __DIR__ . '/controladores/cls_correos.php';
+
+//Libreria de clases --> Control para andru_preguntas
+require_once __DIR__ . '/controladores/cls_andru_preguntas.php';
+//Libreria de clases --> Control para andru_fases
+require_once __DIR__ . '/controladores/cls_andru_fases.php';
+//Libreria de clases --> Control para andru_categoria
+require_once __DIR__ . '/controladores/cls_andru_categoria.php';
+//Libreria de clases --> Control para andru_tipos_porcentajes
+require_once __DIR__ . '/controladores/cls_andru_tipos_porcentajes.php';
+//Libreria de clases --> Control para andru_preguntas_porcentajes
+require_once __DIR__ . '/controladores/cls_andru_preguntas_porcentajes.php';
+//Libreria de clases --> Control para andru_preguntas_respuestas
+require_once __DIR__ . '/controladores/cls_andru_preguntas_respuestas.php';
+//Libreria de clases --> Control para andru_cuestionario
+require_once __DIR__ . '/controladores/cls_andru_cuestionario.php';
+//Libreria de clases --> Control para andru_cuestionario_respuestas
+require_once __DIR__ . '/controladores/cls_andru_cuestionario_respuestas.php';
 
 /*
 * El elemento controller, constituye la base y esencia de toda la lógica del negocio, en este
@@ -450,6 +468,34 @@ $map = array(
     //Biblioteca
     'biblioteca_listar'=>array('controller'=>'Controller','action'=> 'biblioteca_listar'),
     'guardar_Biblioteca'=>array('controller'=>'Controller','action'=> 'guardar_Biblioteca'),
+    
+    //Agregar los action al controler de la clase cls_andru_preguntas
+    'andru_preguntas_listar'=>array('controller'=>'Controller','action'=> 'andru_preguntas_listar'),
+    'andru_preguntas_guardar'=>array('controller'=>'Controller','action'=> 'andru_preguntas_guardar'),
+    'andru_preguntas_cambiar_estado'=>array('controller'=>'Controller','action'=> 'andru_preguntas_cambiar_estado'),
+    
+    //Agregar los action al controler de la clase cls_andru_cuestionario
+    'andru_cuestionario'=>array('controller'=>'Controller','action'=> 'andru_cuestionario'),
+    'andru_cuestionario_listar'=>array('controller'=>'Controller','action'=> 'andru_cuestionario_listar'),
+    'andru_cuestionario_guardar'=>array('controller'=>'Controller','action'=> 'andru_cuestionario_guardar'),
+    'andru_cuestionario_cambiar_estado'=>array('controller'=>'Controller','action'=> 'andru_cuestionario_cambiar_estado'),
+    
+    //Agregar los action al controler de la clase cls_andru_fases
+    'andru_fases_listar'=>array('controller'=>'Controller','action'=> 'andru_fases_listar'),
+    'andru_fases_guardar'=>array('controller'=>'Controller','action'=> 'andru_fases_guardar'),
+    'andru_fases_cambiar_estado'=>array('controller'=>'Controller','action'=> 'andru_fases_cambiar_estado'),
+
+    //Agregar los action al controler de la clase cls_andru_categoria
+    'andru_categoria_listar'=>array('controller'=>'Controller','action'=> 'andru_categoria_listar'),
+    'andru_categoria_guardar'=>array('controller'=>'Controller','action'=> 'andru_categoria_guardar'),
+    'andru_categoria_cambiar_estado'=>array('controller'=>'Controller','action'=> 'andru_categoria_cambiar_estado'),
+    
+    //Agregar los action al controler de la clase cls_andru_tipos_porcentajes
+    'andru_tipos_porcentajes_listar'=>array('controller'=>'Controller','action'=> 'andru_tipos_porcentajes_listar'),
+    'andru_tipos_porcentajes_guardar'=>array('controller'=>'Controller','action'=> 'andru_tipos_porcentajes_guardar'),
+    'andru_tipos_porcentajes_cambiar_estado'=>array('controller'=>'Controller','action'=> 'andru_tipos_porcentajes_cambiar_estado'),
+    'andru_preguntas_porcentajes_trae'=>array('controller'=>'Controller','action'=> 'andru_preguntas_porcentajes_trae'),
+    'andru_preguntas_respuestas_trae'=>array('controller'=>'Controller','action'=> 'andru_preguntas_respuestas_trae'),
     
     //Botones RF
     'botones_listar'=> array('controller'=>'Controller','action'=>'botones_listar'),

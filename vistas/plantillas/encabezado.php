@@ -95,7 +95,17 @@
                             <?php if ($_SESSION['modulos']['Catálogos-Botones']==1){?>  
                                 <li><a href="index.php?ctl=botones_listar">Botones RF</a></li> 
                             <?php  }; ?>     
-                                
+                            <?php if ($_SESSION['modulos']['Módulo-Áreas de Apoyo']==1){ ?>
+                            <li class="dropdown-submenu">
+                                <a class="multilevel" tabindex="-1" href="#">Andru<span class="caret"></span></a>
+                                <ul class="dropdown-menu">
+                                    <li><a tabindex="-1" href="index.php?ctl=andru_preguntas_listar">Preguntas</a></li>
+                                    <li><a tabindex="-1" href="index.php?ctl=andru_fases_listar">Fases</a></li>
+                                    <li><a tabindex="-1" href="index.php?ctl=andru_categoria_listar">Categorías</a></li>
+                                    <li><a tabindex="-1" href="index.php?ctl=andru_tipos_porcentajes_listar">Tipos Porcentajes</a></li>
+                                </ul>
+                                </li>
+                            <?php }; ?>
                             <?php if ($_SESSION['modulos']['Catálogos-Inconsistencias de Video']==1){ ?>
                                 <li class="dropdown-submenu">
                                     <a class="multilevel" tabindex="-1" href="#">Control de acceso<span class="caret"></span></a>
@@ -197,7 +207,14 @@
                         <a class="dropdown-toggle" data-toggle="dropdown" href="#">Módulos
                         <span class="caret"></span></a>
                         <ul class="dropdown-menu">
-                            
+                            <?php if ($_SESSION['modulos']['Módulo-Áreas de Apoyo']==1){ ?>
+                            <li class="dropdown-submenu">
+                                <a class="multilevel" tabindex="-1" href="#">Andru<span class="caret"></span></a>
+                                <ul class="dropdown-menu">
+                                    <li><a tabindex="-1" href="index.php?ctl=andru_cuestionario_listar">Cuestionario</a></li>                                    
+                                </ul>
+                                </li>
+                            <?php }; ?>
                             <?php if ($_SESSION['modulos']['Módulo-Áreas de Apoyo']==1){ ?>
                                 <li><a href="index.php?ctl=areas_apoyo_listar">Áreas de Apoyo</a></li>
                             <?php }; ?>

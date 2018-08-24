@@ -160,3 +160,18 @@ footer {
     margin-top:50px;
 }
 /***********************************************/
+/*Estilo para mostrar texto vertical */
+.divVertical {
+    width: 2px;
+    -webkit-transform: rotateZ(270deg); /* Safari */
+    transform: rotateZ(270deg); /* Standard syntax */
+}
+.table-striped2>tbody>tr:nth-child(odd)>td, 
+.table-striped2>tbody>tr:nth-child(odd)>th {
+   background-color: lightgray;   
+ }
+
+.table-striped2>tbody>tr:nth-child(even)>td, 
+.table-striped2>tbody>tr:nth-child(even)>th {
+   background-color: white;
+ }

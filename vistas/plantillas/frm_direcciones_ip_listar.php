@@ -30,7 +30,7 @@
                 document.getElementById('numero').value=null;
                 document.getElementById('observaciones').value=null;
                 document.getElementById('ventana_oculta_1').style.display = "block";
-            }
+             }
             //Funcion para editar informacion de tipo ip
             function edita_ip(id_ip,nombre,num,obser){
                 document.getElementById('ID_Direccion_IP').value=id_ip;
