@@ -284,6 +284,12 @@
                             <input type="text" readonly class="form-control" id="tel_supervisor" name="tel_supervisor" value="<?php echo $supervisor_zona_externo[$ubicacionpersona]['Numero'];?>">
                         </div>
                     </div>
+                    <div class="row espacio-abajo-10">
+                        <div class="col-md-4">
+                            <label for="correo_oficina">Correo Oficina</label>
+                            <input type="email" readonly class="form-control" id="correo_oficina" name="correo_oficina" value="<?php echo $correoOficina;?>">
+                        </div>
+                    </div>
                 </div>
                 <!--Horarios asociados (entrada y público)-->
                 <div class="row well  animated bounceInUp" style="animation-delay:1s;" id="Horarios apertura y público">

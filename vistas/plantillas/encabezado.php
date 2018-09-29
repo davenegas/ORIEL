@@ -218,10 +218,10 @@
                             <?php if ($_SESSION['modulos']['Módulo-Áreas de Apoyo']==1){ ?>
                                 <li><a href="index.php?ctl=areas_apoyo_listar">Áreas de Apoyo</a></li>
                             <?php }; ?>
-
+                                
                             <?php if ($_SESSION['modulos']['Módulo-Biblioteca']==1){ ?>
                                 <li><a href="index.php?ctl=biblioteca_listar">Biblioteca</a></li>
-                            <?php }; ?> 
+                            <?php }; ?>
                                 
                             <?php if ($_SESSION['modulos']['Módulo-Bitácora Digital']==1){ ?>
                                 <li><a href="index.php?ctl=frm_eventos_listar">Bitácora Digital</a></li>
@@ -272,7 +272,9 @@
                         <a class="dropdown-toggle" data-toggle="dropdown" href="#">Reportes
                         <span class="caret"></span></a>
                         <ul class="dropdown-menu multi-level" role="menu">
-
+                            <?php if ($_SESSION['modulos']['Reportes-Activaciones provincia']==1){ ?>
+                                <li><a href="index.php?ctl=reporte_general_detalle_listar">Historico Alerta Video</a></li> 
+                            <?php }; ?>
                             <?php if ($_SESSION['modulos']['Reportes-Activaciones provincia']==1){ ?>
                                 <li><a href="index.php?ctl=reporte_eventos_provincia">Activaciones por Provincia</a></li> 
                             <?php }; ?>
@@ -356,7 +358,10 @@
                             <?php if ($_SESSION['modulos']['Seguridad-Trazabilidad']==1){?>
                                 <li><a href="index.php?ctl=comite_crisis">Comité de Crisis</a></li> 
                             <?php }; ?>
-                                
+							<?php if ($_SESSION['modulos']['Seguridad-Trazabilidad']==1 || $_SESSION['rol']==2 || 
+                                $_SESSION['rol']==3 || $_SESSION['rol']==6 || $_SESSION['rol']==11 || $_SESSION['rol']==14){?>
+                                <li><a href="https://bcrreportessvc/reports/report/Moviles/Monitoreo/Transerver/ATM/MontoCajerosMoneda" target="_blank"><span class="glyphicon glyphicon-globe"></span> Montos Cajeros</a></li> 
+                            <?php }; ?>
                             <?php if ($_SESSION['modulos']['Seguridad-Trazabilidad']==1 || $_SESSION['rol']==2 || 
                                 $_SESSION['rol']==3 || $_SESSION['rol']==6 || $_SESSION['rol']==11 || $_SESSION['rol']==14){?>
                                 <li><a href="https://bcrcartracktotal:28000/Cartrack/Login.aspx" target="_blank"><span class="glyphicon glyphicon-globe"></span> Cartrack</a></li> 
@@ -398,7 +403,7 @@
                             
                             <?php if ($_SESSION['modulos']['Módulo-Bitácora Digital']==1){ ?>
                                 <li><a href="index.php?ctl=manual_ayuda_privado&manual=Bitacora_Digital">Manual Bitácora Digital</a></li>
-                            <?php }; ?>
+                            <?php }; ?>    
                                                           
                             <?php if ($_SESSION['modulos']['Módulo-PuntosBCR']==1){ ?>
                                 <li><a href="index.php?ctl=manual_ayuda_privado&manual=Puntos_BCR">Manual Puntos BCR</a></li>

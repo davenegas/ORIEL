@@ -130,7 +130,34 @@ class cls_trazabilidad{
         $this->apellido_usuario="";
         
     }
-
+    /*
+     * Consulta que utiliza un inner join vs t_usuario, se hace para mejorar el tiempo de respuesta en control de video
+     * es necesario cargar la propiedad setID_Usuario antes de llamar este método
+     */
+    public function obtiene_trazabilidad_Usuario() {
+        $this->obj_data_provider->conectar();
+        if($this->condicion==""){
+            $this->arreglo=$this->obj_data_provider->trae_datos(
+                "bd_Registro_Trazabilidad.t_traza inner join bd_gerencia_seguridad.t_usuario on bd_Registro_Trazabilidad.t_traza.ID_Usuario=bd_gerencia_seguridad.t_usuario.ID_usuario "
+                    . " AND (t_traza.ID_Usuario='" . $this->getId_usuario() . "') ",
+                "bd_Registro_Trazabilidad.t_traza.*,bd_gerencia_seguridad.t_usuario.Nombre,bd_gerencia_seguridad.t_usuario.Apellido",
+                "");
+            $this->arreglo=$this->obj_data_provider->getArreglo();
+            $this->obj_data_provider->desconectar();
+            $this->resultado_operacion=true;
+        }
+        else{
+            $this->arreglo=$this->obj_data_provider->trae_datos(
+                "bd_Registro_Trazabilidad.t_traza inner join bd_gerencia_seguridad.t_usuario on bd_Registro_Trazabilidad.t_traza.ID_Usuario=bd_gerencia_seguridad.t_usuario.ID_usuario "
+                    . " AND (t_traza.ID_Usuario='" . $this->getId_usuario() . "') ",
+                "bd_Registro_Trazabilidad.t_traza.*,bd_gerencia_seguridad.t_usuario.Nombre,bd_gerencia_seguridad.t_usuario.Apellido",
+                $this->condicion);
+            $this->arreglo=$this->obj_data_provider->getArreglo();
+            $this->obj_data_provider->desconectar();
+            $this->resultado_operacion=true;
+        }  
+    }
+    
     public function obtiene_trazabilidad() {
         $this->obj_data_provider->conectar();
         if($this->condicion==""){

@@ -1,34 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
-    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="29">
+    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="42">
         <file>
             <url>vistas/plantillas/frm_controles_de_video_listar.php</url>
-            <bookmark id="13">
+            <bookmark id="34">
                 <name/>
-                <line>65</line>
+                <line>191</line>
                 <key/>
             </bookmark>
-            <bookmark id="12">
+            <bookmark id="33">
                 <name/>
-                <line>88</line>
-                <key/>
-            </bookmark>
-            <bookmark id="14">
-                <name/>
-                <line>364</line>
+                <line>465</line>
                 <key/>
             </bookmark>
         </file>
         <file>
-            <url>modelos/Controller.php</url>
-            <bookmark id="29">
+            <url>vistas/plantillas/frm_pruebas_alarma.php</url>
+            <bookmark id="39">
                 <name/>
-                <line>16434</line>
+                <line>210</line>
                 <key/>
             </bookmark>
-            <bookmark id="28">
+            <bookmark id="32">
                 <name/>
-                <line>16554</line>
+                <line>216</line>
                 <key/>
             </bookmark>
         </file>
@@ -41,7 +36,7 @@
             </bookmark>
             <bookmark id="25">
                 <name/>
-                <line>206</line>
+                <line>210</line>
                 <key/>
             </bookmark>
         </file>
@@ -49,9 +44,6 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
             <file>file:/C:/xampp/htdocs/ORIEL/modelos/Controller.php</file>
-            <file>file:/C:/xampp/htdocs/ORIEL/vistas/plantillas/frm_andru_cuestionario.php</file>
-            <file>file:/C:/xampp/htdocs/ORIEL/controladores/cls_andru_cuestionario.php</file>
-            <file>file:/C:/xampp/htdocs/ORIEL/modelos/Data_Provider.php</file>
         </group>
     </open-files>
 </project-private>

@@ -413,7 +413,7 @@ class Controller {
         } else {
             /*
              * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
-             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitu0d
              * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
              * En la última línea llama a la pagina de inicio de sesión.
              */
@@ -6588,6 +6588,7 @@ class Controller {
             $obj_medio_enlace = new cls_medio_enlace();
             $obj_proveedor_enlace = new cls_proveedor_enlace();
             $obj_tipo_enlace = new cls_tipo_enlace();
+            $obj_correo = new cls_puntobcr_correo();
 
             if ($_GET['id'] == 0) {
                 $ide = 0;
@@ -6631,6 +6632,21 @@ class Controller {
                 $obj_Puntobcr->setCondicion("T_PuntoBCR.ID_PuntoBCR='" . $_GET['id'] . "'");
                 $obj_Puntobcr->obtiene_todos_los_puntos_bcr();
                 $params = $obj_Puntobcr->getArreglo();
+                
+                //Obtiene el correo de la oficina
+                $obj_correo->setCondicion("ID_PuntoBCR='" . $_GET['id'] . "' LIMIT 1 ");
+                $obj_correo->obtener_puntobcr_correo();
+                $correo = $obj_correo->getArreglo();
+                if(count($correo)>0){
+                    $correoOficina = $correo[0]["Correo"];
+                }else{
+                    $obj_correo->setCondicion('');
+                    $obj_correo->setID_PuntoBCR($_GET['id']);
+                    $obj_correo->setCorreo('');
+                    $obj_correo->setEstado(1);                    
+                    $obj_correo->guardar_puntobcr_correo();
+                    $correoOficina='';
+                }
 
                 //Obtiene todos los tipos de puntos BCR para listarlos
                 $obj_Puntobcr->setCondicion("");
@@ -7178,6 +7194,8 @@ class Controller {
     public function PuntoBCR_actualiza_informacion_adicional() {
         if (isset($_SESSION['nombre'])) {
             $obj_puntobcr = new cls_puntosBCR();
+            $obj_correo = new cls_puntobcr_correo();
+            
             $obj_puntobcr->setCondicion("ID_PuntoBCR='" . $_POST['id_puntobcr'] . "'");
 
             $obj_puntobcr->setEmpresa($_POST['id_empresa']);
@@ -7185,6 +7203,11 @@ class Controller {
             $obj_puntobcr->setGerente($_POST['id_gerente']);
             $obj_puntobcr->setSupervisor($_POST['id_supervisor']);
             $obj_puntobcr->actualizar_informacion_adicional_puntobcr();
+            
+            $obj_correo->setCondicion("ID_PuntoBCR='" . $_POST['id_puntobcr'] . "'");
+            $obj_correo->setCorreo($_POST['correoOfi']);
+            $obj_correo->guardar_puntobcr_correo();
+            
             //echo 'Se actualizó la ubicacion del PuntoBCR';
         } else {
             /*
@@ -10395,8 +10418,9 @@ class Controller {
                     } else {
                         $diferenciasegundos = $diferenciasegundos - $tiempo_maximo_revision;
                         $obj_puesto_monitoreo->setRetraso_segundos($diferenciasegundos);
+                        $obj_traza->setId_usuario($_SESSION['id']);
                         $obj_traza->setCondicion("(bd_Registro_Trazabilidad.t_traza.ID_Usuario=" . $_SESSION['id'] . ") AND (bd_Registro_Trazabilidad.t_traza.Tabla_Afectada='T_Evento' OR bd_Registro_Trazabilidad.t_traza.Tabla_Afectada='T_detalleEvento' OR bd_Registro_Trazabilidad.t_traza.Tabla_Afectada='T_EventoCencon' OR bd_Registro_Trazabilidad.t_traza.Tabla_Afectada='T_PruebaAlarma') AND (bd_Registro_Trazabilidad.t_traza.Fecha between '" . $_POST['fecha_ini'] . "' AND '" . date("Y-m-d") . "') AND (bd_Registro_Trazabilidad.t_traza.Hora between '" . $_POST['hora_ini'] . "' AND '" . date("H:i:s", time()) . "')");
-                        $obj_traza->obtiene_trazabilidad();
+                        $obj_traza->obtiene_trazabilidad_Usuario();
                         if (count($obj_traza->getArreglo()) > 0) {
                             $obj_puesto_monitoreo->setJustificacion_retraso("JUSTIFICADO. Usuario: " . $_SESSION['name'] . " " . $_SESSION['apellido'] . " Cédula: " . $_SESSION['nombre'] . " Id:" . $_SESSION['id'] . " con retraso justificado de " . $diferenciasegundos . " segundos, en la revisión de video actual. Atendiendo procesos del centro de control (bitácora, cencon y pruebas de alarma).");
                             $resultado = 'justificado';
@@ -13153,9 +13177,12 @@ class Controller {
             if (isset($_POST['fecha_inicial'])) {
                 $fecha_inicio = $_POST['fecha_inicial'];
                 $fecha_fin = $_POST['fecha_final'];
+                $hora_inicio = $_POST['hora_inicial'];
+                $hora_fin = $_POST['hora_final'];
                 $usuario_especifico = 0;
 
-                $condicion = "(t_bitacorarevisionesvideo.Fecha_Inicia_Revision between '" . $fecha_inicio . "' AND '" . $fecha_fin . "')";
+                $condicion = "(CONCAT(t_bitacorarevisionesvideo.Fecha_Inicia_Revision,' ',TIME_FORMAT( t_bitacorarevisionesvideo.Hora_Inicia_Revision,'%H:%i')) between ";
+                $condicion .=" '". $fecha_inicio. ' '.$hora_inicio . "' AND '" . $fecha_fin .' '.$hora_fin. "')";
                 if (isset($_POST['unidad_video']) || isset($_POST['puesto_monitoreo']) || isset($_POST['usuario_revision'])) {
                     if ($_POST['unidad_video'] != "0") {
                         $condicion .= " AND t_bitacorarevisionesvideo.ID_Unidad_Video=" . $_POST['unidad_video'];
@@ -13172,9 +13199,9 @@ class Controller {
                 }
                 //Obtiene la información de las revisiones según los parametros
                 $obj_reporteria->setCondicion($condicion);
-                $obj_reporteria->obtiene_bitacora_puestos_de_monitoreo_completo_traza();
+                $obj_reporteria->bitacora_puestos_de_monitoreo_completo_trazaH();
                 $bitacora_revision_video_traza = $obj_reporteria->getArreglo();
-                $obj_reporteria->obtiene_bitacora_puestos_de_monitoreo_completo();
+                $obj_reporteria->bitacora_puestos_de_monitoreo_completoH();
                 $bitacora_revision_video_original = $obj_reporteria->getArreglo();
 
                 $bitacora_revision_video = null;
@@ -13271,6 +13298,8 @@ class Controller {
             } else {
                 $fecha_inicio = date("Y-m-d");
                 $fecha_fin = date("Y-m-d");
+                $hora_inicio = date("00:00", time());
+                $hora_fin = date("23:59", time());
             }
             //Obtiene la lista de operadores que han revisado video
             $obj_puesto_monitoreo->setCondicion("");
@@ -13424,7 +13453,7 @@ class Controller {
     public function reporte_tiempo_revision_actual() {
         $obj_reporteria = new cls_reporteria();
 
-        $obj_reporteria->setCondicion("t_bitacorarevisionesvideo.Estado=0 and t_puestomonitoreo.Estado=1");
+        $obj_reporteria->setCondicion("t_bitacorarevisionesvideo.Estado=0 and t_puestomonitoreo.Estado=1 ");
         $obj_reporteria->obtiene_bitacora_puestos_de_monitoreo_completo();
         $bitacora_revision_video = $obj_reporteria->getArreglo();
         $data = "";
@@ -14066,7 +14095,10 @@ class Controller {
                 //Busca si el Punto BCR tiene prueba reportada
                 for ($x = 0; $x < count($prueba_completas); $x++) {
                     if ($prueba_completas[$x]['ID_PuntoBCR'] == $Oficinas[$i]['ID_PuntoBCR']) {
-                        $prueba[0] = $prueba_completas[$x];
+
+                        if ($prueba_completas[$x]['Numero_Zona_Prueba'] != NULL) {
+                            $prueba[0] = $prueba_completas[$x];
+                        }
                     }
                 }
                 //Valida si como seguimiento del Punto BCR esta en asueto de esta forma no la cuenta como pendiente
@@ -16482,7 +16514,8 @@ class Controller {
                     $condicion = "ID_Tipo_Punto = 1 AND Estado = 1 AND ID_PuntoBCR= " . $idpuntobcr . " LIMIT 1";
                     $obj_andru_puntobcr->setCondicion($condicion);
                     $obj_andru_puntobcr->obtiene_solo_los_puntos_bcr();
-                    $nom_puntobcr = $obj_andru_puntobcr->getArreglo()[0]["Codigo"] . " - " . $obj_andru_puntobcr->getArreglo()[0]["Nombre"];
+                    $nom_puntobcr2 = $obj_andru_puntobcr->getArreglo();
+                    $nom_puntobcr = $nom_puntobcr2[0]["Codigo"] . " - " . $nom_puntobcr2[0]["Nombre"];
                 }
             }
 
@@ -16493,7 +16526,8 @@ class Controller {
                     $condicion = "Estado = 1 AND ID_Fase = " . $idfase . " LIMIT 1";
                     $obj_andru_fase->setCondicion($condicion);
                     $obj_andru_fase->obtener_andru_fases();
-                    $nom_fase = $obj_andru_fase->getArreglo()[0]["Descripcion"];
+                    $nom_puntobcr2 = $obj_andru_fase->getArreglo();
+                    $nom_fase = $nom_puntobcr2[0]["Descripcion"];
                 }
             }
 
@@ -16509,15 +16543,15 @@ class Controller {
                 $obj_andru_preguntas->setCondicion($condicion);
                 $obj_andru_preguntas->obtener_andru_cuestionario_fase();
                 $preguntas = $obj_andru_preguntas->getArreglo();
-                
+
                 $tam4 = count($preguntas);
                 //resultado total de promedios según las respuestas guardadas
-                $condicion = " cr.Estado = 1 AND pr.Estado = 1 AND cr.ID_Cuestionario = ".$idcuestionario;
+                $condicion = " cr.Estado = 1 AND pr.Estado = 1 AND cr.ID_Cuestionario = " . $idcuestionario;
                 $condicion .= " GROUP BY cr.ID_Cuestionario,pp.ID_Tipo_Porcentaje";
-                $obj_andru_preguntas->setCondicion($condicion);                
+                $obj_andru_preguntas->setCondicion($condicion);
                 $obj_andru_preguntas->obtener_andru_cuestionario_promedios($tam4);
                 $cuestionariopromedios = $obj_andru_preguntas->getArreglo();
-                
+
                 //Obtengo las respuetas
                 $condicion = " p.ID_Fase = " . $idfase . " AND p.Estado = 1 AND r.Estado = 1 ORDER BY p.ID_Pregunta ,r.Nivel ASC;";
                 $obj_andru_preguntas->setCondicion($condicion);
@@ -16533,13 +16567,13 @@ class Controller {
                 $obj_andru_preguntas->setCondicion($condicion);
                 $obj_andru_preguntas->obtener_andru_respuesta_porcentaje();
                 $respuestasporcentaje = $obj_andru_preguntas->getArreglo();
-                
+
                 $tam3 = count($respuestas);
-                
+
                 for ($i3 = 0; $i3 < $tam3; $i3++) {
                     if ($respuestas[$i3]["IdSelec"] == "1") {
                         array_push($id_preguntasvec, $respuestas[$i3]["ID_Pregunta"]);
-                        array_push($id_respuestasvec, $respuestas[$i3]["ID_Respuesta"]);                        
+                        array_push($id_respuestasvec, $respuestas[$i3]["ID_Respuesta"]);
                     }
                 }
             }
@@ -16612,19 +16646,23 @@ class Controller {
                 $respuestasvec = explode(',', $respuestas);
 
                 //marco con estado 0 todos los registros según el cuestionario
-                $obj_andru_cuestionario_respts->setID_Cuestionario($obj_andru_cuestionario->getID_Cuestionario());                
-                $obj_andru_cuestionario_respts->setCondicion("ID_Cuestionario = ".$obj_andru_cuestionario_respts->getID_Cuestionario());
+                $obj_andru_cuestionario_respts->setID_Cuestionario($obj_andru_cuestionario->getID_Cuestionario());
+                $obj_andru_cuestionario_respts->setCondicion("ID_Cuestionario = " . $obj_andru_cuestionario_respts->getID_Cuestionario());
                 $obj_andru_cuestionario_respts->setEstado(0);
                 $obj_andru_cuestionario_respts->guardar_andru_cuestionario_Actualiza();
-                
+
                 $obj_andru_cuestionario_respts->setCondicion("");
                 $obj_andru_cuestionario_respts->setEstado(1);
-                        
+
                 $tam = count($preguntasvec);
+                
+                $fechaUpd = date('Y/m/d H:i');
 
                 for ($i = 0; $i < $tam; $i++) {
                     $obj_andru_cuestionario_respts->setID_Pregunta($preguntasvec[$i]);
                     $obj_andru_cuestionario_respts->setID_Respuesta($respuestasvec[$i]);
+                    $obj_andru_cuestionario_respts->setID_Usuario_Upd($_SESSION['id']);
+                    $obj_andru_cuestionario_respts->setFecha_Actualiza($fechaUpd);
 
                     $condicion = "ID_Cuestionario = " . $obj_andru_cuestionario_respts->getID_Cuestionario() . " AND ";
                     $condicion = "ID_Pregunta = " . $obj_andru_cuestionario_respts->getID_Pregunta() . " ";
@@ -16634,9 +16672,16 @@ class Controller {
 
                     if (count($obj_andru_cuestionario_respts->getArreglo()) == 0) {
                         $obj_andru_cuestionario_respts->setCondicion("");
+                        $obj_andru_cuestionario_respts->guardar_andru_cuestionario_respuestas();
+                    }else{
+                        $respuestas = $obj_andru_cuestionario_respts->getArreglo();
+                        
+                        if($respuestas[0]['ID_Respuesta'] != $respuestasvec[$i]){
+                            $obj_andru_cuestionario_respts->guardar_andru_cuestionario_respuestas();
+                        }else{
+                            $obj_andru_cuestionario_respts->guardar_andru_cuestionario_Actualiza();
+                        }
                     }
-
-                    $obj_andru_cuestionario_respts->guardar_andru_cuestionario_respuestas();
                 }
             }
 
@@ -16663,8 +16708,10 @@ class Controller {
         $obj_cuestionario->obtener_andru_cuestionario();
 
         if (count($obj_cuestionario->getArreglo()) > 0) {
-            $idCuestionario = $obj_cuestionario->getArreglo()[0]["ID_Cuestionario"];
-            $fechaCrea = $obj_cuestionario->getArreglo()[0]["Fecha_Crea"];
+            $idCuestionario2 = $obj_cuestionario->getArreglo();
+            $idCuestionario = $idCuestionario2[0]["ID_Cuestionario"];
+            $fechaCrea2 = $obj_cuestionario->getArreglo();
+            $fechaCrea = $fechaCrea2 [0]["Fecha_Crea"];
         }
         unset($obj_cuestionario);
         return array($idCuestionario, $fechaCrea, $UsuarioCrea);
@@ -16688,6 +16735,69 @@ class Controller {
         } else {
             $tipo_de_alerta = "alert alert-warning";
             $validacion = "Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }
+    }
+
+    ////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////alerta_general_detalle
+    ////////////////////////////////////////////////////////////////////////////
+    /**
+     * Método que retorna un arreglo de los registros que existen en base de datos
+     */
+    public function reporte_general_detalle_listar() {
+        if (isset($_SESSION['nombre'])) {
+            $obj_alerta_general_detalle = new cls_alerta_general_detalle();
+            $codincion="";
+            //inicializa con la fecha del servidor
+            $fecha_inicial = date("Y-m-d");            
+            $fecha_final=$fecha_inicial;
+            
+            //valida si las fechas vienen de un formulario por evento post
+            if ($_SERVER['REQUEST_METHOD'] == 'POST') {                
+                $fecha_inicial = $_POST['fecha_inicial'];
+                $fecha_final = $_POST['fecha_final'];
+            }
+
+            for ($i = 1; $i < 7; $i++) {
+                $codincion = " ID_Alerta = '" . $i . "' ";
+                $codincion .=" AND DATE_FORMAT(Fecha, '%Y-%m-%d') >='".$fecha_inicial."' ";
+                $codincion .=" AND DATE_FORMAT(Fecha, '%Y-%m-%d') <='".$fecha_final."' ORDER BY ID_Alerta,fecha ASC";
+                //Procede a ejecutar la consulta SQL para traer todo según el filtro.
+                $obj_alerta_general_detalle->setCondicion($codincion);
+                //Obtener el vector de la consulta
+                $obj_alerta_general_detalle->obtener_alerta_general_grafico();
+                $alerta_general_detalle = $obj_alerta_general_detalle->getArreglo();
+
+                switch ($i) {
+                    case 1:
+                        $revision1 = $obj_alerta_general_detalle->getArreglo();
+                        break;
+                    case 2:
+                        $revision2 = $obj_alerta_general_detalle->getArreglo();
+                        break;
+                    case 3:
+                        $revision3 = $obj_alerta_general_detalle->getArreglo();
+                        break;
+                    case 4:
+                        $revision4 = $obj_alerta_general_detalle->getArreglo();
+                        break;
+                    case 5:
+                        $revision5 = $obj_alerta_general_detalle->getArreglo();
+                        break;
+                    case 6:
+                        $revision6 = $obj_alerta_general_detalle->getArreglo();
+                        break;
+                }
+            }
+
+            unset($obj_alerta_general_detalle);
+
+            require __DIR__ . '/../vistas/plantillas/rpt_alerta_general_detalle.php';
+        } else {
+            $tipo_de_alerta = "alert alert-warning";
+            $validacion = "Es necesario volver a iniciar sesión para consultar el sistema";
+            //Llamada al formulario correspondiente de la vista
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }
     }

@@ -289,8 +289,9 @@ class cls_andru_cuestionario {
     public function obtener_andru_cuestionario_respuesta() {
         $this->obj_data_provider->conectar();
         $this->arreglo=$this->obj_data_provider->trae_datos("t_andru_preguntas p INNER JOIN t_andru_preguntas_respuestas r ON p.ID_Pregunta = r.ID_Pregunta "
-                . "LEFT JOIN t_andru_cuestionario_respuestas re ON r.ID_Pregunta = re.ID_Pregunta AND r.ID_Respuesta = re.ID_Respuesta AND re.Estado =1 AND re.ID_Cuestionario = ". $this->ID_Cuestionario, 
-                "p.ID_Pregunta,r.ID_Respuesta ,r.Descripcion Respuesta,r.Nivel, CASE WHEN IFNULL(re.ID_Respuesta,0) >0 THEN 1 ELSE 0 END IdSelec ",
+                . "LEFT JOIN t_andru_cuestionario_respuestas re ON r.ID_Pregunta = re.ID_Pregunta AND r.ID_Respuesta = re.ID_Respuesta AND re.Estado =1 AND re.ID_Cuestionario = ". $this->ID_Cuestionario
+                ." LEFT JOIN t_usuario u ON re.ID_Usuario_Upd = u.ID_Usuario ", 
+                "p.ID_Pregunta,r.ID_Respuesta ,r.Descripcion Respuesta,r.Nivel, CASE WHEN IFNULL(re.ID_Respuesta,0) >0 THEN 1 ELSE 0 END IdSelec,CONCAT(u.nombre,' ',u.Apellido) Nombre,re.Fecha_Actualiza ",
                 $this->condicion);
         $this->arreglo=$this->obj_data_provider->getArreglo();
         $this->obj_data_provider->desconectar();

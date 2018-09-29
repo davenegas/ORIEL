@@ -74,7 +74,7 @@
         </script>
     </head>
     <body>
-        <?php require_once 'encabezado.php';?>
+        <?php require_once 'encabezado.php';echo var_dump( getdate()['weekday']);?>
         <div class="container-fluid text-center">
             <h2>Pruebas de Alarma</h2> 
             <div class="row content">
@@ -210,7 +210,7 @@
                 <div class="col-sm-3 sidenav">
                     <?php if(isset($datos['pruebas_pendientes'])){?>
                         <div class="well" align="left">
-                            <p><b>Pruebas pendientes</b></p>
+                            <p><b>Pruebas pendientes<a href="javascript:refrescar_pruebas_alarma()">  <span class="glyphicon glyphicon-refresh"></span></a></b></p>
                             <?php 
                             $tam=count($datos['pruebas_pendientes']);
                             for ($i = 0; $i <$tam; $i++) {?>
@@ -221,7 +221,7 @@
                     
                     <?php if(isset($datos['aperturas_pendietes'])){?>
                         <div class="well" align="left">
-                            <p><b>Aperturas pendientes</b></p>
+                            <p><b>Aperturas pendientes<a href="javascript:refrescar_pruebas_alarma()">  <span class="glyphicon glyphicon-refresh"></span></a></b></p>
                             <?php 
                             $tam=$tam=count($datos['aperturas_pendietes']);
                             for ($i = 0; $i <$tam; $i++) {?>

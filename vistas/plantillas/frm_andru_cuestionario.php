@@ -78,7 +78,7 @@
                 var v_idcuestionario = document.getElementById('ID_Cuestionario').value;
                 var v_idpunto = document.getElementById('ID_PuntoBCR').value;
                 var v_idfase = document.getElementById('ID_Fase').value;
-                window.location.replace("http://localhost/ORIEL/index.php?ctl=andru_cuestionario&idcues=" + v_idcuestionario + "&idpunto=" + v_idpunto + "&idfase=" + v_idfase);
+                window.location.replace("index.php?ctl=andru_cuestionario&idcues=" + v_idcuestionario + "&idpunto=" + v_idpunto + "&idfase=" + v_idfase);
             }
             function recalcular(idpregunta) {
                 var v_cantitipoporcentaje = document.getElementById('canttipoporcentaje').value;
@@ -110,8 +110,8 @@
                             vid_preguntas = document.getElementById('UsuarioPreguntas').value;
                             vid_respuestas = document.getElementById('UsuarioRespuestas').value;
                             $.post("index.php?ctl=andru_cuestionario_guardar", {ID_Cuestionario: vid_cuestionario, ID_PuntoBCR: vid_punto, ID_Fase: vid_fase, id_preguntas: vid_preguntas, id_respuestas: vid_respuestas}, function (data) {
-                                console.log(data);
-                                //location.reload();
+                                //console.log(data);
+                                location.reload();
                                 //alert (data);
                             });
                         },
@@ -147,65 +147,56 @@
                             <th style="text-align:center">Pregunta</th> 
                             <?php
                             $tam = count($tipos_porcentajes);
-                            for ($i = 0; $i < $tam; $i++) {
-                                ?>
+                            for ($i = 0; $i < $tam; $i++) { ?>
                                 <th style="text-align:center">%Asig. <?php echo $tipos_porcentajes[$i]['Descripcion']; ?></th>
                             <?php } ?>
                             <th style="text-align:center">Respuesta</th>
-                            <?php
-                            $tam = count($tipos_porcentajes);
-                            for ($i = 0; $i < $tam; $i++) {
-                                ?>
+                            <th style="text-align:center">Usuario Act.</th>
+                            <th style="text-align:center">Fecha Act.</th>
+                            <?php $tam = count($tipos_porcentajes);
+                            for ($i = 0; $i < $tam; $i++) { ?>
                                 <th style="text-align:center">%Cal. <?php echo $tipos_porcentajes[$i]['Descripcion']; ?></th>
                             <?php } ?>
                         </tr>
                     </thead>
                     <tbody>
-                        <?php
-                        $tam = count($preguntas);
-                        for ($i = 0; $i < $tam; $i++) {
-                            ?>
+                        <?php $tam = count($preguntas);
+                        for ($i = 0; $i < $tam; $i++) { ?>
                             <tr>
                                 <td  hidden style="text-align:center"><?php echo $preguntas[$i]['ID_Pregunta']; ?></td>                        
                                 <td class="col-md-1"><?php echo $preguntas[$i]['Fase']; ?></td>
                                 <td class="col-md-5"><?php echo $preguntas[$i]['Pregunta']; ?></td>
-                                <?php
-                                $tam4 = count($preguntasporcentaje);
+                                <?php $tam4 = count($preguntasporcentaje);
                                 for ($i4 = 0; $i4 < $tam4; $i4++) {
-                                    if ($preguntas[$i]['ID_Pregunta'] == $preguntasporcentaje[$i4]['ID_Pregunta']) {
-                                        ?>
-                                        <td><h3><span id="<?php echo "porcentaje" . $preguntas[$i]['ID_Pregunta'] . "p" . $preguntasporcentaje[$i4]["ID_Tipo_Porcentaje"]; ?>" class="label label-defaul" style="color: gray;"><?php echo $preguntasporcentaje[$i4]['Valor']; ?></span></h3></td><?php
-                                    }
-                                }
-                                ?><td>
+                                    if ($preguntas[$i]['ID_Pregunta'] == $preguntasporcentaje[$i4]['ID_Pregunta']) { ?>
+                                        <td><h3><span id="<?php echo "porcentaje" . $preguntas[$i]['ID_Pregunta'] . "p" . $preguntasporcentaje[$i4]["ID_Tipo_Porcentaje"]; ?>" class="label label-defaul" style="color: gray;"><?php echo $preguntasporcentaje[$i4]['Valor']; ?></span></h3></td>
+                                <?php } } ?>
+                                   <td>
                                     <select onchange="recalcular(<?php echo $preguntas[$i]['ID_Pregunta']; ?>)" class="form-control" id="idrespuesta<?php echo $preguntas[$i]['ID_Pregunta']; ?>" name="idrespuesta<?php echo $preguntas[$i]['ID_Pregunta']; ?>">
                                         <option  data-nivel="0" value="-1">Seleccione una opción</option>
-                                        <?php
-                                        $tam2 = count($respuestas);
+                                        <?php $tam2 = count($respuestas);
                                         for ($i2 = 0; $i2 < $tam2; $i2++) {
-                                            if ($preguntas[$i]['ID_Pregunta'] == $respuestas[$i2]['ID_Pregunta']) {
-                                                ?>
-                                                <option <?php
-                                                if ($respuestas[$i2]["IdSelec"] > 0) {
-                                                    echo 'Selected';
-                                                }
-                                                ?> data-nivel="<?php echo $respuestas[$i2]['Nivel']; ?>" value="<?php echo $respuestas[$i2]['ID_Respuesta']; ?>"><?php echo $respuestas[$i2]['Respuesta']; ?></option>
-                                                    <?php
-                                                }
-                                            }
-                                            ?>
+                                            if ($preguntas[$i]['ID_Pregunta'] == $respuestas[$i2]['ID_Pregunta']) { ?>
+                                                <option <?php if ($respuestas[$i2]["IdSelec"] > 0) { echo 'Selected';} ?> data-nivel="<?php echo $respuestas[$i2]['Nivel']; ?>" value="<?php echo $respuestas[$i2]['ID_Respuesta']; ?>"><?php echo $respuestas[$i2]['Respuesta']; ?></option>
+                                                <?php } } ?>
                                     </select>
                                 </td>
+                                <?php   $tam2 = count($respuestas); $userActualiza = false;
+                                for ($i2 = 0; $i2 < $tam2; $i2++) {
+                                    if (($preguntas[$i]['ID_Pregunta'] == $respuestas[$i2]['ID_Pregunta'])&&($respuestas[$i2]["IdSelec"] > 0)) { $userActualiza = true; ?>
+                                        <td class="col-md-1"><?php echo $respuestas[$i2]['Nombre']; ?></td>
+                                        <td class="col-md-1"><?php echo $respuestas[$i2]['Fecha_Actualiza']; ?></td>
+                                   <?php }}
+                                   if($userActualiza ==false){ ?>
+                                       <td class="col-md-1"></td>
+                                       <td class="col-md-1"></td>
+                                   <?php } ?>
                                 <?php
                                 $tam3 = count($respuestasporcentaje);
                                 for ($i3 = 0; $i3 < $tam3; $i3++) {
-                                    if ($preguntas[$i]['ID_Pregunta'] == $respuestasporcentaje[$i3]['ID_Pregunta']) {
-                                        ?>
+                                    if ($preguntas[$i]['ID_Pregunta'] == $respuestasporcentaje[$i3]['ID_Pregunta']) { ?>
                                         <td><h3><span id="<?php echo "pregunta" . $preguntas[$i]['ID_Pregunta'] . "p" . $respuestasporcentaje[$i3]["ID_Tipo_Porcentaje"]; ?>" class="label label-defaul" style="color: gray;"><?php echo $respuestasporcentaje[$i3]["Calculo"]; ?></span></h3></td>
-                                        <?php
-                                    }
-                                }
-                                ?>
+                                        <?php } } ?>
                             </tr>
                         <?php } ?>
                     </tbody>

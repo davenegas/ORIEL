@@ -23,6 +23,14 @@
                         <label for="fecha_final">Fecha Final:</label>
                         <input type="date" required class="form-control" id="fecha_final" name="fecha_final" value="<?php echo $fecha_fin;?>">
                     </div>
+                    <div class="col-xs-2">
+                        <label for="hora_inicial">Hora Inicial:</label>
+                        <input type="time" required class="form-control" id="hora_inicial" name="hora_inicial" value="<?php echo $hora_inicio;?>">
+                    </div> 
+                    <div class="col-xs-2">
+                        <label for="hora_final">Hora Final:</label>
+                        <input type="time" required class="form-control" id="hora_final" name="hora_final" value="<?php echo $hora_fin;?>">
+                    </div> 
                     <div class="col-xs-3">
                         <label for="unidad_video">Unidad de Video</label>
                         <select class="form-control" required id="unidad_video" name="unidad_video" >

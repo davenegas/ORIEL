@@ -96,23 +96,26 @@ $(document).ready(function(){
     $("#chk_info_adicional").change(function(){
         if (document.getElementById('Observaciones_generales').readOnly==true){
             document.getElementById('Observaciones_generales').readOnly=false;
+            document.getElementById('correo_oficina').readOnly=false;
             $("#Empresa").attr("disabled",false);
             $("#zonas_gerente").attr("disabled",false);
             $("#zonas_supervisores").attr("disabled",false);
         }else{
             document.getElementById('Observaciones_generales').readOnly=true;
+            document.getElementById('correo_oficina').readOnly=true;
             $("#Empresa").attr("disabled",true);
             $("#zonas_gerente").attr("disabled",true);
-            $("#zonas_supervisores").attr("disabled",true);
+            $("#zonas_supervisores").attr("disabled",true);            
             //Guarda Distrito y dirección en tabla  T_PuntoBCR
             id_puntobcr = document.getElementById('ID_PuntoBCR').value;
             id_empresa = document.getElementById('Empresa').value;
             observaciones = document.getElementById('Observaciones_generales').value;
             id_gerente = document.getElementById('zonas_gerente').value;
             id_supervisor = document.getElementById('zonas_supervisores').value;
-            
+            correoOfi = document.getElementById('correo_oficina').value;
+            console.log(correoOfi);
             $.post("index.php?ctl=PuntoBCR_actualiza_informacion_adicional", {id_puntobcr:id_puntobcr, id_empresa:id_empresa,
-                observaciones:observaciones, id_gerente:id_gerente,id_supervisor:id_supervisor }, function(data){
+                observaciones:observaciones, id_gerente:id_gerente,id_supervisor:id_supervisor,correoOfi:correoOfi }, function(data){
                 //alert (data);
                 location.reload();    
             });   

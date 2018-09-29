@@ -56,7 +56,7 @@
             $(document).ready(function () {
                 val=0;
                 cctv();
-                setInterval(cctv,10000);
+                setInterval(cctv,30000);
             });
             
             function cctv(){

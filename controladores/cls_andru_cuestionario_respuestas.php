@@ -1,8 +1,8 @@
-   <?php
+<?php
 
 /** 
  * Esta clase maneja todos los métodos relacionados con t_andru_cuestionario_respuestas
- * Clase generada automáticamente el 2018-08-21 13:44
+ * Clase generada automáticamente el 2018-09-07 13:08
  * Base de datos: bd_gerencia_seguridad
  * Generada por:  
  */ 
@@ -22,6 +22,16 @@ class cls_andru_cuestionario_respuestas {
      * Llave foranea con la tabla t_andru_preguntas_respuestas 
      */
     public $ID_Respuesta;
+    /**
+     * Columna [ID_Usuario_Upd] de la tabla [t_andru_cuestionario_respuestas] en la clase [cls_andru_cuestionario_respuestas] 
+     * Usuario que actualiza 
+     */
+    public $ID_Usuario_Upd;
+    /**
+     * Columna [Fecha_Actualiza] de la tabla [t_andru_cuestionario_respuestas] en la clase [cls_andru_cuestionario_respuestas] 
+     * Fecha Actualiza 
+     */
+    public $Fecha_Actualiza;
     /**
      * Columna [Estado] de la tabla [t_andru_cuestionario_respuestas] en la clase [cls_andru_cuestionario_respuestas] 
      * Estado de la columna 1= Activo 0= Negativo 
@@ -59,6 +69,20 @@ class cls_andru_cuestionario_respuestas {
      */
     function getID_Respuesta() {
         return $this->ID_Respuesta;
+    }
+
+    /**
+     *Retorna el valor de la propiedad ID_Usuario_Upd
+     */
+    function getID_Usuario_Upd() {
+        return $this->ID_Usuario_Upd;
+    }
+
+    /**
+     *Retorna el valor de la propiedad Fecha_Actualiza
+     */
+    function getFecha_Actualiza() {
+        return $this->Fecha_Actualiza;
     }
 
     /**
@@ -111,6 +135,20 @@ class cls_andru_cuestionario_respuestas {
     }
 
     /**
+     * Retorna el valor de la propiedad ID_Usuario_Upd
+     */
+    function setID_Usuario_Upd($ID_Usuario_Upd) {
+        $this->ID_Usuario_Upd = $ID_Usuario_Upd;
+    }
+
+    /**
+     * Retorna el valor de la propiedad Fecha_Actualiza
+     */
+    function setFecha_Actualiza($Fecha_Actualiza) {
+        $this->Fecha_Actualiza = $Fecha_Actualiza;
+    }
+
+    /**
      * Retorna el valor de la propiedad Estado
      */
     function setEstado($Estado) {
@@ -145,12 +183,13 @@ class cls_andru_cuestionario_respuestas {
         $this->ID_Cuestionario="";
         $this->ID_Pregunta="";
         $this->ID_Respuesta="";
+        $this->ID_Usuario_Upd="";
+        $this->Fecha_Actualiza="";
         $this->Estado="";
         $this->arreglo="";
         $this->condicion="";
         $this->obj_data_provider=new Data_Provider();
     }
-
     /**
      * Método que almacena en la propiedad arreglo el resultado de la consulta, 
      * utiliza la propiedad condicion para filtrar en el WHERE 
@@ -180,9 +219,9 @@ class cls_andru_cuestionario_respuestas {
     public function guardar_andru_cuestionario_respuestas() {
         $this->obj_data_provider->conectar();
         if ($this->condicion==""){
-            $this->obj_data_provider->inserta_datos("t_andru_cuestionario_respuestas","ID_Cuestionario,ID_Pregunta, ID_Respuesta, Estado","'".$this->ID_Cuestionario."','".$this->ID_Pregunta."','".$this->ID_Respuesta."','".$this->Estado."'");
+            $this->obj_data_provider->inserta_datos("t_andru_cuestionario_respuestas","ID_Cuestionario,ID_Pregunta, ID_Respuesta, ID_Usuario_Upd, Fecha_Actualiza, Estado","'".$this->ID_Cuestionario."','".$this->ID_Pregunta."','".$this->ID_Respuesta."','".$this->ID_Usuario_Upd."','".$this->Fecha_Actualiza."','".$this->Estado."'");
         }else{
-            $this->obj_data_provider->edita_datos("t_andru_cuestionario_respuestas","ID_Pregunta='".$this->ID_Pregunta."',ID_Respuesta='".$this->ID_Respuesta."',Estado='".$this->Estado."'",$this->condicion);
+            $this->obj_data_provider->edita_datos("t_andru_cuestionario_respuestas","ID_Pregunta='".$this->ID_Pregunta."',ID_Respuesta='".$this->ID_Respuesta."',ID_Usuario_Upd='".$this->ID_Usuario_Upd."',Fecha_Actualiza='".$this->Fecha_Actualiza."',Estado='".$this->Estado."'",$this->condicion);
         }
         $this->obj_data_provider->desconectar();
         $this->resultado_operacion=true;

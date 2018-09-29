@@ -94,13 +94,10 @@ require_once __DIR__ . '/controladores/cls_reporteria.php';
 require_once __DIR__ . '/controladores/cls_control_acceso.php';
 //
 require_once __DIR__ . '/controladores/cls_programacion.php';
-
+//Libreria de clases --> Control para sistema de biblioteca
+require_once __DIR__ . '/controladores/cls_biblioteca.php';
 //Libreria de clases --> Control para Botones RF
 require_once __DIR__ . '/controladores/cls_botones.php';
-
-//Libreria de clases --> Control para Botones RF
-require_once __DIR__ . '/controladores/cls_biblioteca.php';
-
 //Libreria de clases --> Control para correos
 require_once __DIR__ . '/controladores/cls_correos.php';
 
@@ -120,6 +117,10 @@ require_once __DIR__ . '/controladores/cls_andru_preguntas_respuestas.php';
 require_once __DIR__ . '/controladores/cls_andru_cuestionario.php';
 //Libreria de clases --> Control para andru_cuestionario_respuestas
 require_once __DIR__ . '/controladores/cls_andru_cuestionario_respuestas.php';
+//Libreria de clases --> Control para alerta_general_detalle
+require_once __DIR__ . '/controladores/cls_alerta_general_detalle.php';
+//Libreria de clases --> Control para puntobcr_correo
+require_once __DIR__ . '/controladores/cls_puntobcr_correo.php';
 
 /*
 * El elemento controller, constituye la base y esencia de toda la lógica del negocio, en este
@@ -497,6 +498,8 @@ $map = array(
     'andru_preguntas_porcentajes_trae'=>array('controller'=>'Controller','action'=> 'andru_preguntas_porcentajes_trae'),
     'andru_preguntas_respuestas_trae'=>array('controller'=>'Controller','action'=> 'andru_preguntas_respuestas_trae'),
     
+    //Agregar los action al controler de la clase cls_alerta_general_detalle
+    'reporte_general_detalle_listar'=>array('controller'=>'Controller','action'=> 'reporte_general_detalle_listar'),
     //Botones RF
     'botones_listar'=> array('controller'=>'Controller','action'=>'botones_listar'),
     'botones_selec_guardar'=> array('controller'=>'Controller','action'=>'botones_selec_guardar'),
@@ -514,7 +517,6 @@ $map = array(
     'recordar_password'=>array('controller'=>'Controller', 'action'=>'recordar_password'),
     'iniciar_sistema_cambiando_clave'=>array('controller'=>'Controller', 'action'=>'iniciar_sistema_cambiando_clave'),
     'cambia_clave_usuario_post'=>array('controller'=>'Controller', 'action'=>'cambia_clave_usuario_post')
-    
     
     //Pruebas y nuevas implementaciones
     

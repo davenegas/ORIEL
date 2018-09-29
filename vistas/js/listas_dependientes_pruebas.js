@@ -483,3 +483,7 @@ function guarda_seguimiento(){
         });
     }
 }
+
+function refrescar_pruebas_alarma() {    
+    window.location.replace("index.php?ctl=pruebas_alarma");
+}

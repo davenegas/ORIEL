@@ -139,7 +139,7 @@ class cls_biblioteca {
         if($this->condicion==""){
             $this->obj_data_provider->conectar();
             //Llama al metodo que realiza la consulta a la bd
-            $this->obj_data_provider->trae_datos("T_Biblioteca", "ID_Biblioteca,(CASE Seguridad WHEN 1 THEN 'Privado' WHEN 2 THEN 'Coordinador BCR' WHEN 3 THEN 'Coordinador. Empresa' WHEN 4 THEN 'General' END) AS 'SeguridadDes' ,(CASE Tipo_Documento WHEN 1 THEN 'Normativa' WHEN 2 THEN 'Manuales' WHEN 3 THEN 'Noticias' WHEN 4 THEN 'Otros' END) AS 'Tipo_DocumentoDes' ,Nombre, Tipo_Documento, Archivo, Link, Fecha_Hora, ID_Usuario, Descripcion, Seguridad, Estado", "");
+            $this->obj_data_provider->trae_datos("T_Biblioteca", "ID_Biblioteca,(CASE Seguridad WHEN 1 THEN 'Privado' WHEN 2 THEN 'Coordinador BCR' WHEN 3 THEN 'Coordinador Empresa' WHEN 4 THEN 'General' END) AS 'SeguridadDes' ,(CASE Tipo_Documento WHEN 1 THEN 'Normativa' WHEN 2 THEN 'Manuales' WHEN 3 THEN 'Noticias' WHEN 4 THEN 'Otros' END) AS 'Tipo_DocumentoDes' ,Nombre, Tipo_Documento, Archivo, Link, Fecha_Hora, ID_Usuario, Descripcion, Seguridad, Estado", "");
             $this->arreglo=$this->obj_data_provider->getArreglo();
             $this->obj_data_provider->desconectar();
             $this->resultado_operacion=true;
