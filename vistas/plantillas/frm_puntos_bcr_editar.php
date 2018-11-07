@@ -108,14 +108,14 @@
                         <div class="col-md-4">
                             <label for="Tipo_Panel">Tipo de Panel</label>
                             <select class="form-control" id="Tipo_Panel" disabled name="Tipo_Panel" > 
-                                <option value="NA">NA</option>
-                                <option value="Vista 10">Vista 10</option>
-                                <option value="Vista 128BP">Vista 128BP-3</option>
-                                <option value="Vista 20P">Vista 20P</option>
-                                <option value="Vista 20SE">Vista 20SE</option>
-                                <option value="Vista 250FBP">Vista 250FBP</option>
-                                <option value="Vista 48LA">Vista 48LA</option>
-                                <option value="Vista 50P">Vista 50P</option>
+                                <option <?php if($params[0]['Tipo_Panel']=="NA"){ echo 'selected';} ?> value="NA">NA</option>
+                                <option <?php if($params[0]['Tipo_Panel']=="Vista 10"){ echo 'selected';} ?> value="Vista 10">Vista 10</option>
+                                <option <?php if($params[0]['Tipo_Panel']=="Vista 128BP"){ echo 'selected';} ?> value="Vista 128BP">Vista 128BP-3</option>
+                                <option <?php if($params[0]['Tipo_Panel']=="Vista 20P"){ echo 'selected';} ?> value="Vista 20P">Vista 20P</option>
+                                <option <?php if($params[0]['Tipo_Panel']=="Vista 20SE"){ echo 'selected';} ?> value="Vista 20SE">Vista 20SE</option>
+                                <option <?php if($params[0]['Tipo_Panel']=="Vista 250FBP"){ echo 'selected';} ?> value="Vista 250FBP">Vista 250FBP</option>
+                                <option <?php if($params[0]['Tipo_Panel']=="Vista 48LA"){ echo 'selected';} ?> value="Vista 48LA">Vista 48LA</option>
+                                <option <?php if($params[0]['Tipo_Panel']=="Vista 50P"){ echo 'selected';} ?> value="Vista 50P">Vista 50P</option>
                             </select>
                         </div>
                     </div>

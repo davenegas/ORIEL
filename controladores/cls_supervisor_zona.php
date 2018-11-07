@@ -129,4 +129,21 @@ class cls_supervisor_zona{
         $this->obj_data_provider->edita_datos("T_SupervisorZona","Estado='".$this->estado."'",$this->condicion);
         $this->obj_data_provider->desconectar();
     }
+    public function obtiene_supervisores(){
+        $this->obj_data_provider->conectar();
+        if($this->condicion==""){
+            $this->arreglo=$this->obj_data_provider->trae_datos("t_supervisorzona s INNER JOIN t_personalexterno p ON s.ID_Persona_Externa = p.ID_Persona_Externa AND s.Estado = 1 ORDER BY p.apellido", 
+                "s.ID_Supervisor_Zona, p.ID_Persona_Externa, CONCAT( p.Apellido,' ',p.Nombre) Nombre ","");
+            $this->arreglo=$this->obj_data_provider->getArreglo();
+            $this->obj_data_provider->desconectar();
+            $this->resultado_operacion=true;
+        }
+        else{
+            $this->arreglo=$this->obj_data_provider->trae_datos("t_supervisorzona s INNER JOIN t_personalexterno p ON s.ID_Persona_Externa = p.ID_Persona_Externa ORDER BY p.apellido", 
+                "p.ID_Persona_Externa, CONCAT( p.Apellido,' ',p.Nombre) Nombre ","");
+            $this->arreglo=$this->obj_data_provider->getArreglo();
+            $this->obj_data_provider->desconectar();
+            $this->resultado_operacion=true;
+        }
+    }
 }?>

@@ -24,7 +24,7 @@
         </div>
         <div class="col-sm-10 container espacio-abajo">
             <div>
-                <h3 id="titulo">Listado de Eventos Cencon del día de hoy:</h3>
+                <h3 id="titulo">Listado del Contador del día de hoy:</h3>
                 <table id="tabla" class="display2">
                     <thead>   
                         <tr>

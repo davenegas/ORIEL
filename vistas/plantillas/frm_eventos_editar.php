@@ -197,7 +197,7 @@
                         <?php if ($_SESSION['modulos']['Adjuntar archivos- Seguimientos Bitácora']==1){ ?>
                             <div class="col-xs-12 quitar-float espacio-abajo">
                                 <label for="archivo_adjunto">Adjuntar Archivo: </label>
-                                <input type="hidden" name="MAX_FILE_SIZE" value="1000000">
+                                <input type="hidden" name="MAX_FILE_SIZE" value="5000000">
                                 <input type="file" name="archivo_adjunto" id="seleccionar_archivo" class="btn btn-default">
                             </div>
                         <?php } ?>   

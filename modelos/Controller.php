@@ -5187,12 +5187,12 @@ class Controller {
                         }
                         if (move_uploaded_file($_FILES['seleccionar_archivo']['tmp_name'], $ruta)) {
                             echo "<script type=\"text/javascript\">alert('Archivo cargado correctamente al servidor!!!!');history.go(-1);</script>";
-                            ;
+                            
                             break;
                             header("location:/ORIEL/index.php?ctl=sincronizacion_base_de_datos_rapid_eye");
                         } else {
                             echo "<script type=\"text/javascript\">alert('No es posible escribir en el disco duro del servidor!!!!');history.go(-1);</script>";
-                            ;
+                            
                             break;
                             header("location:/ORIEL/index.php?ctl=sincronizacion_base_de_datos_rapid_eye");
                             //echo "<script type=\"text/javascript\">alert('No fue seleccionado ningun archivo!!!!');history.go(-1);</script>";;
@@ -5314,7 +5314,7 @@ class Controller {
                         break;
                     }
                 case 2: {
-                        echo "<script type=\"text/javascript\">alert('El archivo consume mayor espacio del permitido (1 mb) !!!!');history.go(-1);</script>";
+                        echo "<script type=\"text/javascript\">alert('El archivo consume mayor espacio del permitido (5 mb) !!!!');history.go(-1);</script>";
                         ;
                         break;
                     }
@@ -6985,6 +6985,7 @@ class Controller {
             $obj_puntobcr->setCuentasis($_POST['cuenta']);
             $obj_puntobcr->setNombre($_POST['nombre']);
             $obj_puntobcr->setId($_POST['tipo_punto']);
+            $obj_puntobcr->setTipo_Panel($_POST['tipo_panel']);
             $obj_puntobcr->actualizar_informacion_general_puntobcr();
             //echo 'Se actualizó la ubicacion del PuntoBCR';
         } else {
@@ -16539,7 +16540,7 @@ class Controller {
 
                 $obj_andru_preguntas->setID_Cuestionario($idcuestionario);
 
-                $condicion = " p.ID_Fase = " . $idfase . " AND p.Estado = 1 ORDER BY c.ID_Categoria ";
+                $condicion = " p.ID_Fase = " . $idfase . " AND p.Estado = 1 AND c.Estado = 1 ORDER BY c.ID_Categoria ";
                 $obj_andru_preguntas->setCondicion($condicion);
                 $obj_andru_preguntas->obtener_andru_cuestionario_fase();
                 $preguntas = $obj_andru_preguntas->getArreglo();
@@ -16801,5 +16802,429 @@ class Controller {
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }
     }
+    
+    ////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////alerta_general_detalle
+    ////////////////////////////////////////////////////////////////////////////
+    /**
+     * Método que retorna un arreglo supervisores y puntos bcr
+     */
+    public function supervisor_por_zona_listar() {
+          if (isset($_SESSION['nombre'])) {
+            $obj_supervisor = new cls_supervisor_zona();
+            $obj_puntobcr = new cls_puntosBCR();
+            //Procede a ejecutar la consulta SQL para traer todo de t_supervisoreszona en la bd.
+            $obj_supervisor->setCondicion("");
+            //Obtener el vector de la consulta
+            $obj_supervisor->obtiene_supervisores();
+            $objsupervisor = $obj_supervisor->getArreglo();
+            
+            //Procede a ejecutar la consulta SQL para traer todo de t_puntobcr en la bd.
+            $obj_puntobcr->setCondicion("p.Estado = 1 AND p.Id_Tipo_Punto = 1 OR p.Id_Tipo_Punto = 10");
+            //Obtener el vector de la consulta
+            $obj_puntobcr->obtiene_puntos_bcr_supervisor();
+            $objpuntobcr = $obj_puntobcr->getArreglo();
+            unset($obj_puntobcr);
+            unset($obj_supervisor);
 
+            require __DIR__ . '/../vistas/plantillas/frm_asigna_supervisor.php';
+        } else {
+            $tipo_de_alerta = "alert alert-warning";
+            $validacion = "Es necesario volver a iniciar sesión para consultar el sistema";
+            //Llamada al formulario correspondiente de la vista
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }
+    }
+    
+    public function supervisor_por_zona_guardar(){
+        if (isset($_SESSION['nombre'])) {
+            $obj_supervisor = new cls_puntosBCR();
+            
+            $supervisorid = $_POST['id_supervisor'];
+            $idpuntosbcr = $_POST['id_puntos'];
+
+            $idpuntosbcrvec = explode(',', $idpuntosbcr);
+            
+            $tam = count($idpuntosbcrvec);
+            
+            $obj_supervisor->setSupervisor($supervisorid);
+            
+            for ($i = 0; $i < $tam; $i++) {
+                $obj_supervisor->setCondicion("ID_PuntoBCR = ". $idpuntosbcrvec[$i] );
+                $obj_supervisor->actualizar_supervisor_puntobcr();
+            }
+            echo 'Listo';
+            
+        } else {
+            $tipo_de_alerta = "alert alert-warning";
+            $validacion = "Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }
+    }
+    
+    ////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////personas_as
+    ////////////////////////////////////////////////////////////////////////////
+    /**
+     * Método que retorna un arreglo de los registros que existen en base de datos
+     */
+    public function personas_as_listar() {
+        if(isset($_SESSION['nombre'])){
+            $obj_personas_as = new cls_personas_as();
+            //Procede a ejecutar la consulta SQL para traer todo de t_personas_as en la bd.
+            $obj_personas_as->setCondicion("");
+            //Obtener el vector de la consulta
+            $obj_personas_as->obtener_personas_as();
+            $personas_as=$obj_personas_as->getArreglo();
+            unset($obj_personas_as);
+            
+            require __DIR__.'/../vistas/plantillas/frm_personas_as.php';
+            
+        } else {
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            //Llamada al formulario correspondiente de la vista
+            require __DIR__.'/../vistas/plantillas/inicio_sesion.php';
+        }
+    }
+
+    /**
+     * Método que guarda en base datos cuando la propiedad ID_Personas esta en cero 
+     * Caso contrario actualiza en base datos el registros según el valor de ID_Personas 
+     */
+    public function personas_as_guardar() {
+        if(isset($_SESSION['nombre'])){
+            $obj_personas_as = new cls_personas_as();
+            $obj_personas_as->setNombre($_POST['Nombre']); 
+            $obj_personas_as->setApellidos($_POST['Apellidos']); 
+            $obj_personas_as->setIdentificacion($_POST['Identificacion']); 
+            $obj_personas_as->setAlias($_POST['Alias']); 
+            $obj_personas_as->setDescripcion($_POST['Descripcion']); 
+
+            $obj_personas_as->setEstado($_POST['Estado']);
+            if ($_POST['ID_Personas']!=0){
+                $obj_personas_as->setID_Personas($_POST['ID_Personas']); 
+                $obj_personas_as->setCondicion("ID_Personas='".$_POST['ID_Personas']."'");
+            }
+            $obj_personas_as->guardar_personas_as();
+            unset($obj_personas_as);
+            header("location:/ORIEL/index.php?ctl=personas_as_listar");
+        } else {
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__.'/../vistas/plantillas/inicio_sesion.php';
+        }
+    }
+
+    /**
+     * Método que se utiliza para cambiar el estado del registro según el campo llave 
+     */
+    public function personas_as_cambiar_estado() {
+        if(isset($_SESSION['nombre'])){
+            $obj_personas_as = new cls_personas_as();
+            if ($_GET['Estado']==1){
+                $obj_personas_as->setEstado("0");
+            }else {
+                $obj_personas_as->setEstado("1");
+            }
+            $obj_personas_as->setCondicion("ID_Personas='".$_GET['ID_Personas']."'");
+            $obj_personas_as->cambiar_estado_personas_as();
+            unset($obj_personas_as);
+            header("location:/ORIEL/index.php?ctl=personas_as_listar");
+        } else {
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__. '/../vistas/plantillas/inicio_sesion.php';
+        }
+    }
+    
+        ////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////niveles_as
+    ////////////////////////////////////////////////////////////////////////////
+    /**
+     * Método que retorna un arreglo de los registros que existen en base de datos
+     */
+    public function niveles_as_listar() {
+        if(isset($_SESSION['nombre'])){
+            $obj_niveles_as = new cls_niveles_as();
+            //Procede a ejecutar la consulta SQL para traer todo de t_niveles_as en la bd.
+            $obj_niveles_as->setCondicion("");
+            //Obtener el vector de la consulta
+            $obj_niveles_as->obtener_niveles_as();
+            $niveles_as=$obj_niveles_as->getArreglo();
+            unset($obj_niveles_as);
+            
+            require __DIR__.'/../vistas/plantillas/frm_niveles_as.php';
+            
+        } else {
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            //Llamada al formulario correspondiente de la vista
+            require __DIR__.'/../vistas/plantillas/inicio_sesion.php';
+        }
+    }
+
+    /**
+     * Método que guarda en base datos cuando la propiedad ID_Nivel esta en cero 
+     * Caso contrario actualiza en base datos el registros según el valor de ID_Nivel 
+     */
+    public function niveles_as_guardar() {
+        if(isset($_SESSION['nombre'])){
+            $obj_niveles_as = new cls_niveles_as();
+            $obj_niveles_as->setDescripcion($_POST['Descripcion']); 
+
+            $obj_niveles_as->setEstado($_POST['Estado']);
+            if ($_POST['ID_Nivel']!=0){
+                $obj_niveles_as->setID_Nivel($_POST['ID_Nivel']); 
+                $obj_niveles_as->setCondicion("ID_Nivel='".$_POST['ID_Nivel']."'");
+            }
+            $obj_niveles_as->guardar_niveles_as();
+            unset($obj_niveles_as);
+            header("location:/ORIEL/index.php?ctl=niveles_as_listar");
+        } else {
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__.'/../vistas/plantillas/inicio_sesion.php';
+        }
+    }
+
+    /**
+     * Método que se utiliza para cambiar el estado del registro según el campo llave 
+     */
+    public function niveles_as_cambiar_estado() {
+        if(isset($_SESSION['nombre'])){
+            $obj_niveles_as = new cls_niveles_as();
+            if ($_GET['Estado']==1){
+                $obj_niveles_as->setEstado("0");
+            }else {
+                $obj_niveles_as->setEstado("1");
+            }
+            $obj_niveles_as->setCondicion("ID_Nivel='".$_GET['ID_Nivel']."'");
+            $obj_niveles_as->cambiar_estado_niveles_as();
+            unset($obj_niveles_as);
+            header("location:/ORIEL/index.php?ctl=niveles_as_listar");
+        } else {
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__. '/../vistas/plantillas/inicio_sesion.php';
+        }
+                }
+                
+    ////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////correos_as
+    ////////////////////////////////////////////////////////////////////////////
+    /**
+     * Método que retorna un arreglo de los registros que existen en base de datos
+     */
+    public function correos_as_listar() {
+        if(isset($_SESSION['nombre'])){
+            $obj_correos_as = new cls_correos_as();
+            //Procede a ejecutar la consulta SQL para traer todo de t_correos_as en la bd.
+            $obj_correos_as->setCondicion("");
+            //Obtener el vector de la consulta
+            $obj_correos_as->obtener_correos_as();
+            $correos_as=$obj_correos_as->getArreglo();
+            unset($obj_correos_as);
+            
+            require __DIR__.'/../vistas/plantillas/frm_correos_as.php';
+            
+        } else {
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            //Llamada al formulario correspondiente de la vista
+            require __DIR__.'/../vistas/plantillas/inicio_sesion.php';
+        }
+    }
+
+    /**
+     * Método que guarda en base datos cuando la propiedad ID_Correo esta en cero 
+     * Caso contrario actualiza en base datos el registros según el valor de ID_Correo 
+     */
+    public function correos_as_guardar() {
+        if(isset($_SESSION['nombre'])){
+            $obj_correos_as = new cls_correos_as();
+            $obj_correos_as->setDescripcion($_POST['Descripcion']); 
+
+            $obj_correos_as->setEstado($_POST['Estado']);
+            if ($_POST['ID_Correo']!=0){
+                $obj_correos_as->setID_Correo($_POST['ID_Correo']); 
+                $obj_correos_as->setCondicion("ID_Correo='".$_POST['ID_Correo']."'");
+            }
+            $obj_correos_as->guardar_correos_as();
+            unset($obj_correos_as);
+            header("location:/ORIEL/index.php?ctl=correos_as_listar");
+        } else {
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__.'/../vistas/plantillas/inicio_sesion.php';
+        }
+    }
+
+    /**
+     * Método que se utiliza para cambiar el estado del registro según el campo llave 
+     */
+    public function correos_as_cambiar_estado() {
+        if(isset($_SESSION['nombre'])){
+            $obj_correos_as = new cls_correos_as();
+            if ($_GET['Estado']==1){
+                $obj_correos_as->setEstado("0");
+            }else {
+                $obj_correos_as->setEstado("1");
+            }
+            $obj_correos_as->setCondicion("ID_Correo='".$_GET['ID_Correo']."'");
+            $obj_correos_as->cambiar_estado_correos_as();
+            unset($obj_correos_as);
+            header("location:/ORIEL/index.php?ctl=correos_as_listar");
+        } else {
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__. '/../vistas/plantillas/inicio_sesion.php';
+        }
+         }
+              ////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////direcciones_as
+    ////////////////////////////////////////////////////////////////////////////
+    /**
+     * Método que retorna un arreglo de los registros que existen en base de datos
+     */
+    public function direcciones_as_listar() {
+        if(isset($_SESSION['nombre'])){
+            $obj_direcciones_as = new cls_direcciones_as();
+            //Procede a ejecutar la consulta SQL para traer todo de t_direcciones_as en la bd.
+            $obj_direcciones_as->setCondicion("");
+            //Obtener el vector de la consulta
+            $obj_direcciones_as->obtener_direcciones_as();
+            $direcciones_as=$obj_direcciones_as->getArreglo();
+            unset($obj_direcciones_as);
+            
+            require __DIR__.'/../vistas/plantillas/frm_direcciones_as.php';
+            
+        } else {
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            //Llamada al formulario correspondiente de la vista
+            require __DIR__.'/../vistas/plantillas/inicio_sesion.php';
+        }
+    }
+
+    /**
+     * Método que guarda en base datos cuando la propiedad ID_Direccion esta en cero 
+     * Caso contrario actualiza en base datos el registros según el valor de ID_Direccion 
+     */
+    public function direcciones_as_guardar() {
+        if(isset($_SESSION['nombre'])){
+            $obj_direcciones_as = new cls_direcciones_as();
+            $obj_direcciones_as->setDescripcion($_POST['Descripcion']); 
+
+            $obj_direcciones_as->setEstado($_POST['Estado']);
+            if ($_POST['ID_Direccion']!=0){
+                $obj_direcciones_as->setID_Direccion($_POST['ID_Direccion']); 
+                $obj_direcciones_as->setCondicion("ID_Direccion='".$_POST['ID_Direccion']."'");
+            }
+            $obj_direcciones_as->guardar_direcciones_as();
+            unset($obj_direcciones_as);
+            header("location:/ORIEL/index.php?ctl=direcciones_as_listar");
+        } else {
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__.'/../vistas/plantillas/inicio_sesion.php';
+        }
+    }
+
+    /**
+     * Método que se utiliza para cambiar el estado del registro según el campo llave 
+     */
+    public function direcciones_as_cambiar_estado() {
+        if(isset($_SESSION['nombre'])){
+            $obj_direcciones_as = new cls_direcciones_as();
+            if ($_GET['Estado']==1){
+                $obj_direcciones_as->setEstado("0");
+            }else {
+                $obj_direcciones_as->setEstado("1");
+            }
+            $obj_direcciones_as->setCondicion("ID_Direccion='".$_GET['ID_Direccion']."'");
+            $obj_direcciones_as->cambiar_estado_direcciones_as();
+            unset($obj_direcciones_as);
+            header("location:/ORIEL/index.php?ctl=direcciones_as_listar");
+        } else {
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__. '/../vistas/plantillas/inicio_sesion.php';
+        }
+         }
+      ////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////personas_vehiculos_as
+    ////////////////////////////////////////////////////////////////////////////
+    /**
+     * Método que retorna un arreglo de los registros que existen en base de datos
+     */
+    public function personas_vehiculos_as_listar() {
+        if(isset($_SESSION['nombre'])){
+            $obj_personas_vehiculos_as = new cls_personas_vehiculos_as();
+            //Procede a ejecutar la consulta SQL para traer todo de t_direcciones_as en la bd.
+            $obj_personas_vehiculos_as->setCondicion("");
+            //Obtener el vector de la consulta
+            $obj_personas_vehiculos_as->obtener_personas_vehiculos_as();
+            $personas_vehiculos_as = $obj_personas_vehiculos_as->getArreglo();
+            unset($obj_personas_vehiculos_as);
+            
+            require __DIR__.'/../vistas/plantillas/frm_personas_vehiculos_as_listar_as.php';
+            
+        } else {
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            //Llamada al formulario correspondiente de la vista
+            require __DIR__.'/../vistas/plantillas/inicio_sesion.php';
+        }
+    }
+
+    /**
+     * Método que guarda en base datos cuando la propiedad ID_Direccion esta en cero 
+     * Caso contrario actualiza en base datos el registros según el valor de ID_Direccion 
+     */
+    public function personas_vehiculos_as_agregar() {
+        if(isset($_SESSION['nombre'])){
+            $obj_personas_vehiculos_as = new cls_personas_vehiculos_as();
+            $obj_personas_vehiculos_as->setDescripcion($_POST['Descripcion']); 
+
+            $obj_personas_vehiculos_as->setEstado($_POST['Estado']);
+            if ($_POST['ID_Direccion']!=0){
+                $obj_personas_vehiculos_as->setID_Direccion($_POST['ID_Direccion']); 
+                $obj_personas_vehiculos_as->setCondicion("ID_Direccion='".$_POST['ID_Direccion']."'");
+            }
+            $obj_personas_vehiculos_as->guardar_personas_vehiculos__as();
+            unset($obj_personas_vehiculos_as);
+            header("location:/ORIEL/index.php?ctl=personas_vehiculos_as_listar");
+        } else {
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__.'/../vistas/plantillas/inicio_sesion.php';
+        }
+    }
+
+    /**
+     * Método que se utiliza para cambiar el estado del registro según el campo llave 
+     */
+    public function personas_vehiculos_as_cambiar_estado() {
+        if(isset($_SESSION['nombre'])){
+            $obj_personas_vehiculos_as = new cls_direcciones_as();
+            if ($_GET['Estado']==1){
+                $$obj_personas_vehiculos_as->setEstado("0");
+            }else {
+                $obj_personas_vehiculos_as->setEstado("1");
+            }
+            $obj_personas_vehiculos_as->setCondicion("ID_Direccion='".$_GET['ID_Direccion']."'");
+            $obj_personas_vehiculos_as->cambiar_estado_direcciones_as();
+            unset($obj_personas_vehiculos_as);
+            header("location:/ORIEL/index.php?ctl=personas_vehiculos_as_listar");
+        } else {
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__. '/../vistas/plantillas/inicio_sesion.php';
+        }
+         }
+    
+
+    
 }
+

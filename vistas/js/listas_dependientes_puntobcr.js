@@ -46,14 +46,18 @@ $(document).ready(function(){
     $("#chk_informacion_general").change(function(){
         if (document.getElementById('Cuenta_SIS').readOnly==true){
             document.getElementById('Cuenta_SIS').readOnly =false;
-            $("#Tipo_Punto").attr("disabled",false);
-            //document.getElementById('Codigo').readOnly=false;
-            //document.getElementById('Nombre').readOnly =false;
+            $("#Tipo_Punto").attr("disabled",false);                        
+            $("#Tipo_Panel").attr("disabled",false);  
+            document.getElementById('Codigo').readOnly=false;
+            document.getElementById('Nombre').readOnly =false;
+            
         }else{
             document.getElementById('Cuenta_SIS').readOnly =true;
             $("#Tipo_Punto").attr("disabled",true);
-            //document.getElementById('Codigo').readOnly=true;
-            //document.getElementById('Nombre').readOnly =true;
+            $("#Tipo_Panel").attr("disabled",true);
+            document.getElementById('Nombre').readOnly =true;            
+            document.getElementById('Codigo').readOnly=true;
+            
             
             //Guarda codigo, cuenta_SIS, Nombre y tipo de punto en tabla  T_PuntoBCR
             id_puntobcr = document.getElementById('ID_PuntoBCR').value;
@@ -61,7 +65,9 @@ $(document).ready(function(){
             cuenta=document.getElementById('Cuenta_SIS').value;
             nombre=document.getElementById('Nombre').value;
             tipo_punto= document.getElementById('Tipo_Punto').value;
-            $.post("index.php?ctl=puntoBCR_guardar_informacion_general", { id_puntobcr:id_puntobcr, codigo: codigo, cuenta:cuenta, nombre:nombre,tipo_punto:tipo_punto}, function(data){
+            tipo_panel= document.getElementById('Tipo_Panel').value;
+            
+            $.post("index.php?ctl=puntoBCR_guardar_informacion_general", { id_puntobcr:id_puntobcr, codigo: codigo, cuenta:cuenta, nombre:nombre,tipo_punto:tipo_punto,tipo_panel:tipo_panel}, function(data){
                 //alert (data);
             });   
         }

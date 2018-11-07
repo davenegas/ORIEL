@@ -19,6 +19,11 @@ class cls_puntosBCR{
     public $gerente;
     public $supervisor;
     public $horario;
+    public $tipo_panel;
+    
+    function getTipo_Panel() {
+        return $this->tipo_panel;
+    }
     
     function getHorario() {
         return $this->horario;
@@ -36,6 +41,10 @@ class cls_puntosBCR{
         return $this->supervisor;
     }
 
+    function setTipo_Panel($tipo_panel) {
+        $this->tipo_panel = $tipo_panel;
+    }
+    
     function setGerente($gerente) {
         $this->gerente = $gerente;
     }
@@ -192,6 +201,7 @@ class cls_puntosBCR{
         $this->gerente="";
         $this->supervisor="";
         $this->horario="";
+        $this->tipo_panel="";
     }
     
     public function obtiene_todos_los_puntos_bcr(){
@@ -222,7 +232,7 @@ class cls_puntosBCR{
                     T_Distrito.ID_Distrito, T_Distrito.Nombre_Distrito,
                     T_UnidadEjecutora.ID_Unidad_Ejecutora, T_UnidadEjecutora.Departamento,
                     GROUP_CONCAT(char(10),T_EnlaceTelecomunicaciones.Numero_Linea) as Numero_Linea,
-                    GROUP_CONCAT(char(10),T_DireccionIP.Direccion_IP) as Direccion_IP ",
+                    GROUP_CONCAT(char(10),T_DireccionIP.Direccion_IP) as Direccion_IP, T_PuntoBCR.Tipo_Panel  ",
                 "");
             $this->arreglo=$this->obj_data_provider->getArreglo();
             $this->obj_data_provider->desconectar();
@@ -253,7 +263,7 @@ class cls_puntosBCR{
                     T_Distrito.ID_Distrito, T_Distrito.Nombre_Distrito,
                     T_UnidadEjecutora.ID_Unidad_Ejecutora, T_UnidadEjecutora.Departamento,
                     GROUP_CONCAT(char(10),T_EnlaceTelecomunicaciones.Numero_Linea) as Numero_Linea,
-                    GROUP_CONCAT(char(10),T_DireccionIP.Direccion_IP) as Direccion_IP ",
+                    GROUP_CONCAT(char(10),T_DireccionIP.Direccion_IP) as Direccion_IP , T_PuntoBCR.Tipo_Panel  ",
                 $this->condicion." GROUP by T_PuntoBCR.ID_PuntoBCR  order by T_TipoPuntoBCR.Tipo_Punto");
             $this->arreglo=$this->obj_data_provider->getArreglo();
             $this->obj_data_provider->desconectar();
@@ -341,7 +351,7 @@ class cls_puntosBCR{
     
     public function actualizar_informacion_general_puntobcr(){
         $this->obj_data_provider->conectar();
-        $this->arreglo=$this->obj_data_provider->edita_datos("T_PuntoBCR", "Codigo='".$this->codigo."', ". "Cuenta_SIS='".$this->cuentasis."', "."Nombre='".$this->nombre."', "."ID_Tipo_Punto='".$this->id."'",$this->condicion);
+        $this->arreglo=$this->obj_data_provider->edita_datos("T_PuntoBCR", "Codigo='".$this->codigo."', ". "Cuenta_SIS='".$this->cuentasis."', "."Nombre='".$this->nombre."', "."Tipo_Panel='".$this->tipo_panel."', "."ID_Tipo_Punto='".$this->id."'",$this->condicion);
         $this->arreglo=$this->obj_data_provider->getArreglo();
         $this->obj_data_provider->desconectar();
         $this->resultado_operacion=true;
@@ -366,6 +376,13 @@ class cls_puntosBCR{
     public function actualizar_estado_puntobcr(){
         $this->obj_data_provider->conectar();
         $this->obj_data_provider->edita_datos("T_PuntoBCR", "Estado='".$this->estado."'",$this->condicion);
+        $this->obj_data_provider->desconectar();
+        $this->resultado_operacion=true;
+    }
+    
+    public function actualizar_supervisor_puntobcr(){
+        $this->obj_data_provider->conectar();
+        $this->obj_data_provider->edita_datos("T_PuntoBCR", "ID_Supervisor_Zona='".$this->supervisor."'",$this->condicion);
         $this->obj_data_provider->desconectar();
         $this->resultado_operacion=true;
     }
@@ -418,7 +435,6 @@ class cls_puntosBCR{
             $this->resultado_operacion=true;
         }
     }
-    
     public function obtiene_solo_los_puntos_bcr(){
         $this->obj_data_provider->conectar();
         if($this->condicion==""){
@@ -434,6 +450,30 @@ class cls_puntosBCR{
             $this->arreglo=$this->obj_data_provider->trae_datos(
                 "T_PuntoBCR", 
                 "*",
+                $this->condicion);
+            $this->arreglo=$this->obj_data_provider->getArreglo();
+            $this->obj_data_provider->desconectar();
+            $this->resultado_operacion=true;
+        }
+    }
+
+    public function obtiene_puntos_bcr_supervisor(){
+        $this->obj_data_provider->conectar();
+        if($this->condicion==""){
+            $this->arreglo=$this->obj_data_provider->trae_datos(
+                "T_PuntoBCR p INNER JOIN t_supervisorzona z on p.ID_Supervisor_Zona = z.ID_Supervisor_Zona ".
+                "INNER JOIN T_PersonalExterno e on e.ID_Persona_Externa = z.ID_Persona_Externa ", 
+                "p.ID_PuntoBCR, p.Nombre, CONCAT(e.Apellido,' ',e.Nombre) Supervisor ",
+                "");
+            $this->arreglo=$this->obj_data_provider->getArreglo();
+            $this->obj_data_provider->desconectar();
+            $this->resultado_operacion=true;
+        }
+        else{
+            $this->arreglo=$this->obj_data_provider->trae_datos(
+                "T_PuntoBCR p INNER JOIN t_supervisorzona z on p.ID_Supervisor_Zona = z.ID_Supervisor_Zona ".
+                "INNER JOIN T_PersonalExterno e on e.ID_Persona_Externa = z.ID_Persona_Externa ", 
+                "p.ID_PuntoBCR, p.Nombre, CONCAT(e.Apellido,' ',e.Nombre) Supervisor ",
                 $this->condicion);
             $this->arreglo=$this->obj_data_provider->getArreglo();
             $this->obj_data_provider->desconectar();

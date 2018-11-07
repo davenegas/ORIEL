@@ -84,7 +84,7 @@
             <h3>Seleccionar Archivo:</h3>
             <form class="form-horizontal" role="form" enctype="multipart/form-data" onSubmit="return enviado()" method="POST" action="index.php?ctl=subir_bd_rapid_al_servidor">
                 <div class="col-xs-12 quitar-float espacio-abajo">
-                    <input type="hidden" name="MAX_FILE_SIZE" value="10000000">
+                    <input type="hidden" name="MAX_FILE_SIZE" value="20000000">
                     <input type="file" name="seleccionar_archivo" id="seleccionar_archivo" class="btn btn-default">
                 </div>   
                
