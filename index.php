@@ -1,4 +1,3 @@
-//pruebas
 <?php
 //Inicio de sesión de usuario para el control de la seguridad
 /*
@@ -410,6 +409,7 @@ $map = array(
     'eliminar_imagen_padron_puntobcr'=>array('controller'=>'Controller','action'=> 'eliminar_imagen_padron_puntobcr'), 
     'puntobcr_eliminar_horario'=>array('controller'=>'Controller','action'=> 'puntobcr_eliminar_horario'), 
     'enlace_guardar'=>array('controller'=>'Controller','action'=> 'enlace_guardar'), 
+    'enlace_exportar'=>array('controller'=>'Controller','action'=> 'enlace_exportar'), 
    
     //Empresas
     'empresas_listar'=>array('controller'=>'Controller','action'=> 'empresas_listar'),

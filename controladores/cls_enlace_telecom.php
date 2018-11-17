@@ -245,7 +245,7 @@ class cls_enlace_telecom{
             LEFT OUTER JOIN T_MedioEnlace ON T_MedioEnlace.ID_Medio_Enlace = T_EnlaceTelecomunicaciones.ID_Medio_Enlace
             LEFT OUTER JOIN T_Proveedor ON T_Proveedor.ID_Proveedor = T_EnlaceTelecomunicaciones.ID_Proveedor
             LEFT OUTER JOIN T_TipoEnlace ON T_TipoEnlace.ID_Tipo_Enlace = T_EnlaceTelecomunicaciones.ID_Tipo_Enlace
-            ORDER BY  T_PuntoBCR.Nombre, T_EnlaceTelecomunicaciones.Enlace", 
+            ORDER BY  T_PuntoBCR.Nombre, T_EnlaceTelecomunicaciones.Enlace limit 600", 
 
                 "T_PuntoBCR.ID_PuntoBCR, T_PuntoBCR.Nombre, T_PuntoBCR.Codigo, T_PuntoBCR.Estado Estado_Oficina,
             T_UnidadEjecutora.ID_Unidad_Ejecutora, T_UnidadEjecutora.Departamento, T_UnidadEjecutora.Numero_UE,
@@ -253,6 +253,44 @@ class cls_enlace_telecom{
             T_MedioEnlace.ID_Medio_Enlace, T_MedioEnlace.Medio_Enlace,
             T_Proveedor.ID_Proveedor, T_Proveedor.Nombre_Proveedor,
             T_TipoEnlace.ID_Tipo_Enlace, T_TipoEnlace.Tipo_Enlace",   
+            "");
+        $this->arreglo=$this->obj_data_provider->getArreglo();
+        $this->obj_data_provider->desconectar();
+        $this->resultado_operacion=true;
+    }
+
+    public function enlaces_reporteCSV(){
+        $this->obj_data_provider->conectar();
+        //Llama al metodo que realiza la consulta a la bd
+        $this->obj_data_provider->trae_datos("T_EnlaceTelecomunicaciones e 
+            INNER JOIN T_PuntoBCREnlace p ON p.ID_Enlace = e.ID_Enlace
+            INNER JOIN T_PuntoBCR pbcr ON pbcr.ID_PuntoBCR = p.ID_PuntoBCR
+            INNER JOIN T_Proveedor pr ON pr.ID_Proveedor = e.ID_Proveedor
+            INNER JOIN T_TipoEnlace te ON te.ID_Tipo_Enlace = e.ID_Tipo_Enlace
+            INNER JOIN T_MedioEnlace m ON m.ID_Medio_Enlace = e.ID_Medio_Enlace
+            LEFT JOIN T_UE_PuntoBCR uebcr ON pbcr.ID_PuntoBCR= uebcr.ID_PuntoBCR
+            LEFT JOIN T_UnidadEjecutora ue ON uebcr.ID_Unidad_Ejecutora = ue.ID_Unidad_Ejecutora
+            LEFT JOIN (
+                SELECT DISTINCT  t_puntobcrdireccionip.ID_PuntoBCR,T_TipoIP.Tipo_IP,T_DireccionIP.Direccion_IP
+                FROM T_DireccionIP
+                INNER JOIN T_TipoIP ON T_DireccionIP.ID_Tipo_IP = T_TipoIP.ID_Tipo_IP
+                INNER JOIN T_PuntoBCRDireccionIP ON T_DireccionIP.ID_Direccion_IP = T_PuntoBCRDireccionIP.ID_Direccion_IP
+                WHERE (T_TipoIP.ID_Tipo_IP = '7') 
+            ) AS t ON t.ID_PuntoBCR = pbcr.ID_PuntoBCR
+            LEFT JOIN (
+                SELECT DISTINCT  t_puntobcrdireccionip.ID_PuntoBCR,T_TipoIP.Tipo_IP,T_DireccionIP.Direccion_IP
+                FROM T_DireccionIP
+                INNER JOIN T_TipoIP ON T_DireccionIP.ID_Tipo_IP = T_TipoIP.ID_Tipo_IP
+                INNER JOIN T_PuntoBCRDireccionIP ON T_DireccionIP.ID_Direccion_IP = T_PuntoBCRDireccionIP.ID_Direccion_IP
+                WHERE (T_TipoIP.ID_Tipo_IP = '8') 
+            ) AS t2 ON t2.ID_PuntoBCR = pbcr.ID_PuntoBCR
+            ORDER BY  pbcr.Nombre, e.Enlace", 
+            "DISTINCT 
+                pbcr.ID_PuntoBCR, pbcr.Codigo, pbcr.Nombre,
+                ue.Numero_UE, e.Enlace, e.Interface_Enlace,
+                e.Numero_Linea, t.Direccion_IP Principal, t2.Direccion_IP Loopback,
+                pr.Nombre_Proveedor, te.Tipo_Enlace, e.Bandwidth,
+                m.Medio_Enlace, e.Observaciones",
             "");
         $this->arreglo=$this->obj_data_provider->getArreglo();
         $this->obj_data_provider->desconectar();

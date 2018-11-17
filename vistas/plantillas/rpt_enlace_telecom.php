@@ -31,11 +31,11 @@
                 var tabla_html = tabla_html.replace(/Ú/g, '&Uacute;');
                 var tabla_html = tabla_html.replace(/ñ/g, '&ntilde;');
                 var tabla_html = tabla_html.replace(/Ñ/g, '&Ntilde;');
-                tmpElemento.href = data_type + ', ' + tabla_html;
+                tmpElemento.href = data_type + ', ' + tabla_html;				
                 //Asignamos el nombre a nuestro EXCEL
                 var f = new Date( )
 
-                tmpElemento.download = 'Enlaces Telecomunicaciones-Reporte Actualizado '+f.getDate() + "/" + (f.getMonth() +1) + "/" + f.getFullYear()+'.xls';
+                tmpElemento.download = 'Líneas Actualizadas-Reporte Actualizado '+f.getDate() + "/" + (f.getMonth() +1) + "/" + f.getFullYear()+'.xls';
                 // Simulamos el click al elemento creado para descargarlo
                 tmpElemento.click(); 
             }
@@ -164,8 +164,14 @@
                             <?php } ?>
                         </tbody> 
                     </table>
+                    
+                    <div>
+                        <form id="frm_enlace_guardar" method="POST" name="form" action="index.php?ctl=enlace_exportar">                            
+                            <button type="submit" id="export_csv_data" name='export_csv_data' value="Generar Reporte" class="btn btn-default espacio-abajo">Generar Reporte</button>
+                        </form>
+                    </div>
 
-                    <table hidden id="enlaces_telecom" class="display" cellspacing="0" width="100%" border='2px'>   
+                    <!--<table hidden id="enlaces_telecom" class="display" cellspacing="0" width="100%" border='2px'>
                         <thead> 
                             <tr bgcolor="#58ACFA">
                                 <th style="text-align:center">Nombre</th>
@@ -182,9 +188,9 @@
                                 <th style="text-align:center">Observaciones</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody>-->   
                             <?php 
-                            $tam=count($telecom);
+                          /*  $tam=count($telecom);
                             for ($i = 0; $i <$tam; $i++) { ?>
                                 <tr>
                                     <td style="text-align:center"><?php echo $params[$i]['Nombre'];?></td>
@@ -214,11 +220,11 @@
                                     <td style="text-align:center"><?php echo $params[$i]['Medio_Enlace'];?></td>
                                     <td style="text-align:center"><?php echo $params[$i]['Observaciones'];?></td>
                                 </tr>
-                            <?php } ?>
-                        </tbody> 
-                    </table>
+                            <?php } */ ?>
+                        <!--</tbody>
+                    </table>--> 
                 </div>
-                <a class="btn btn-default espacio-abajo" role="button" onclick="generar_reporte();">Generar Reporte</a>
+                <!--<a class="btn btn-default espacio-abajo" role="button" onclick="generar_reporte();">Generar Reporte</a>-->
             </div>
         </div>
         <?php require 'vistas/plantillas/pie_de_pagina.php' ?>

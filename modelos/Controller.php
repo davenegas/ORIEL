@@ -17222,9 +17222,89 @@ class Controller {
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
             require __DIR__. '/../vistas/plantillas/inicio_sesion.php';
         }
-         }
+    }
     
+    /**
+     * Método para exportar el Reporte de Enlaces Telecom
+     */
+    public function enlace_exportar() {
+        if(isset($_SESSION['nombre'])){
+            $obj_enlace = new cls_enlace_telecom();
+            $obj_enlace->enlaces_reporteCSV();
+            $telecom = $obj_enlace->getArreglo();
+            unset($obj_enlace);
+            
+            $fecha = date('d') . "_".date('n')."_" . date('Y');
 
+            header('Content-Type: application/xls; charset=utf-8');
+            header('Content-Disposition: attachment; filename=Enlaces Telecomunicaciones-Reporte Actualizado '.$fecha.'.xls');
+            $output = fopen("php://output", "w");
+            echo '<table hidden="" id="enlaces_telecom" class="display" cellspacing="0" width="100%" border="2px">';
+            echo '<thead><tr bgcolor="#58ACFA">';
+            echo '<th style="text-align:center">Nombre</th>';
+            echo '<th style="text-align:center">C&oacute;digo</th>';
+            echo '<th style="text-align:center">Gateway</th>';
+            echo '<th style="text-align:center">Loopback</th>';
+            echo '<th style="text-align:center">Enlace</th>';
+            echo '<th style="text-align:center">Interface</th>';
+            echo '<th style="text-align:center">L&iacute;nea</th>';
+            echo '<th style="text-align:center">Proveedor</th>';
+            echo '<th style="text-align:center">Tipo enlace</th>';
+            echo '<th style="text-align:center">Bandwidth(kbps)</th>';
+            echo '<th style="text-align:center">Medio enlace</th>';
+            echo '<th style="text-align:center">Observaciones</th>';
+            echo '</tr></thead><tbody>';
+
+            $tam2=count($telecom);
+
+            for ($i = 0; $i <$tam2; $i++) { 
+                echo '<tr>';
+                echo '<td style="text-align:center">'. $this->limpiarStr($telecom[$i]["Nombre"]).'</td>';
+                if($telecom[$i]['Codigo']>=1000 or $telecom[$i]['Codigo']=="X41" or $telecom[$i]['Codigo']=="X45" or $telecom[$i]['Codigo']=="X56"){
+                    echo '<td style="text-align:center">UE: '.$this->limpiarStr($telecom[$i]["Numero_UE"]).'</td>';
+                }else{
+                    echo '<td style="text-align:center">ATM: '.$this->limpiarStr($telecom[$i]['Codigo']).'</td>';
+                }
+                if(isset($telecom[$i]['Principal'])){
+                    echo '<td style="text-align:center">'.$this->limpiarStr($telecom[$i]["Principal"]).'</td>';
+                }else{
+                    echo '<td style="text-align:center">NA</td>';
+                }
+                if(isset($telecom[$i]['Loopback'])){
+                    echo '<td style="text-align:center">'.$this->limpiarStr($telecom[$i]["Loopback"]).'</td>';
+                }else{
+                    echo '<td style="text-align:center">NA</td>';
+                }
+                echo '<td style="text-align:center">'.$this->limpiarStr($telecom[$i]["Enlace"]).'</td>';
+                echo '<td style="text-align:center">'.$this->limpiarStr($telecom[$i]["Interface_Enlace"]).'</td>';
+                echo '<td style="text-align:center">'.$this->limpiarStr($telecom[$i]["Numero_Linea"]).'</td>';
+                echo '<td style="text-align:center">'.$this->limpiarStr($telecom[$i]["Nombre_Proveedor"]).'</td>';
+                echo '<td style="text-align:center">'.$this->limpiarStr($telecom[$i]["Tipo_Enlace"]).'</td>';
+                echo '<td style="text-align:center">'.$this->limpiarStr($telecom[$i]["Bandwidth"]).'</td>';
+                echo '<td style="text-align:center">'.$this->limpiarStr($telecom[$i]["Medio_Enlace"]).'</td>';
+                echo '<td style="text-align:center">'.$this->limpiarStr($telecom[$i]["Observaciones"]).'</td>';
+                echo '</tr>';               
+            }
+            fclose($output);            
+        }
+    }
+    
+    private function limpiarStr($texto){
+        $texto = str_replace("á","&aacute;",$texto);
+        $texto = str_replace("é","&eacute;",$texto);
+        $texto = str_replace("í","&iacute;",$texto);
+        $texto = str_replace("ó","&oacute;",$texto);
+        $texto = str_replace("ú","&uacute;",$texto);
+        $texto = str_replace("Á","&Aacute;",$texto);
+        $texto = str_replace("É","&Eacute;",$texto);
+        $texto = str_replace("Í","&Iacute;",$texto);
+        $texto = str_replace("Ó","&Oacute;",$texto);
+        $texto = str_replace("Ó","&Oacute;",$texto);
+        $texto = str_replace("Ú","&Uacute;",$texto);
+        $texto = str_replace("ñ","&ntilde;",$texto);
+        $texto = str_replace("Ñ","&Ntilde;",$texto);        
+        return $texto;
+    }
     
 }
 
