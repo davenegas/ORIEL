@@ -11233,6 +11233,17 @@ class Controller {
             $obj_puesto_monitoreo = new cls_puestos_de_monitoreo();
             $obj_unidad_video = new cls_unidad_video();
             $obj_puntos_bcr = new cls_puntosBCR();
+            $obj_reporteria = new cls_reporteria();
+            
+            //Arreglo para control del progress bar
+            $progressbar = array(
+                "Negro"=>"0",
+                "NegroP"=>"0",
+                "Naranja"=>"0",
+                "NaranjaP"=>"0",
+                "Rojo"=>"0",
+                "RojoP"=>"0"
+            );
 
             //echo $_SESSION['vector_temp_revision_video_dinamico'][0]['Contador']."<br>";
             //echo $_SESSION['vector_temp_revision_video_dinamico'][0]['ID_Unidad_Video'];
@@ -11576,8 +11587,20 @@ class Controller {
                     }
 
                     $obj_puesto_monitoreo->setCondicion("i.Estado not in (1,8,9,10) and b.ID_Unidad_Video=" . $vector_informacion_unidad_video[0]['ID_Unidad_Video']);
-                    $obj_puesto_monitoreo->obtiene_inconsistencias_para_control_de_video();
+                    $obj_puesto_monitoreo->obtiene_inconsistencias_para_control_de_video();                    
                     $inconsistencias_reportadas = $obj_puesto_monitoreo->getArreglo();
+                    
+                    $obj_reporteria->obtener_sitio_color();
+                    $dat_progressbar= $obj_reporteria->getArreglo();
+                    
+                    $progressbar["Negro"] = $dat_progressbar[0]["Normal"];
+                    $progressbar["NegroP"] = ($dat_progressbar[0]["Normal"]/$dat_progressbar[0]["Total"])*100;
+                    $progressbar["Naranja"] = $dat_progressbar[0]["Naranja"];
+                    $progressbar["NaranjaP"] = ($dat_progressbar[0]["Naranja"]/$dat_progressbar[0]["Total"])*100;
+                    $progressbar["Rojo"] = $dat_progressbar[0]["Rojo"];
+                    $progressbar["RojoP"] = ($dat_progressbar[0]["Rojo"]/$dat_progressbar[0]["Total"])*100;
+
+                    unset($obj_reporteria);
 
                     require __DIR__ . '/../vistas/plantillas/frm_controles_de_video_listar.php';
                 }
@@ -13117,7 +13140,7 @@ class Controller {
         }
     }
 
-    public function enlace_reporte() {
+        public function enlace_reporte() {
         if (isset($_SESSION['nombre'])) {
             $obj_enlace = new cls_enlace_telecom();
             $obj_ip = new cls_direccionIP();

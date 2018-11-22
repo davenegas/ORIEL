@@ -347,6 +347,17 @@
     <!--<body onfocus='javascript:location.reload()'>-->
     <body onfocus="actualiza_segundero_en_pantalla();">
         <?php require_once 'encabezado.php';?> 
+        <div class="progress">
+            <div class="progress-bar progress-bar-success" role="progressbar" style="width:<?php echo $progressbar["NegroP"]?>%">
+               <?php echo $progressbar["NegroP"] ."% (". $progressbar["Negro"] ." Sitios)";?>
+            </div>
+            <div class="progress-bar progress-bar-warning" role="progressbar" style="width:<?php echo $progressbar["NaranjaP"]?>%">
+                <?php echo $progressbar["NaranjaP"] ."% (". $progressbar["Naranja"] ." Sitios)";?>
+            </div>
+            <div class="progress-bar progress-bar-danger" role="progressbar" style="width:<?php echo $progressbar["RojoP"]?>%">
+                <?php echo $progressbar["RojoP"] ."% (". $progressbar["Rojo"] ." Sitios)";?>
+            </div>                
+        </div>
         <div class="container animated fadeIn col-xs-10 quitar-float" style="text-align:center">
             <h2 style="text-align:center">Control de Video <?php echo $vector_puesto_de_monitoreo_actual[0]['Nombre'];?></h2>
             <h4 style="text-align:center">Unidad de Video Actual: <?php echo $vector_informacion_unidad_video[0]['Descripcion'];?> (<?php echo $vector_punto_bcr[0]['Codigo'];?>)</h4>

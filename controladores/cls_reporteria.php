@@ -384,4 +384,17 @@ class cls_reporteria{
         $this->obj_data_provider->desconectar();
     }
     
+        public function obtener_sitio_color(){
+        $this->obj_data_provider->conectar();
+        $this->arreglo=$this->obj_data_provider->trae_datos(" (SELECT p.`ID_Unidad_Video`, TIMESTAMPDIFF(Minute, MAX(concat(p.`Fecha_Termina_Revision`,' ',p.`Hora_Termina_Revision`)),NOW()) MinDiff
+            FROM t_bitacorarevisionesvideo p 
+            INNER JOIN t_unidadvideo u ON u.ID_Unidad_Video = p.ID_Unidad_Video 
+            WHERE u.Estado=0 GROUP by p.`ID_Unidad_Video`) as t",
+            "IFNULL(CASE WHEN MinDiff <= 120 THEN SUM(1) END,0) Normal,
+             IFNULL(CASE WHEN MinDiff >= 121 AND MinDiff <= 150 THEN SUM(1) END,0) Naranja,
+             IFNULL(CASE WHEN MinDiff >= 151 THEN SUM(1) END,0) Rojo, SUM(1) Total",
+            $this->condicion);
+        $this->arreglo=$this->obj_data_provider->getArreglo();
+        $this->obj_data_provider->desconectar();
+    }
 }?>
