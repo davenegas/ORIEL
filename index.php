@@ -120,16 +120,6 @@ require_once __DIR__ . '/controladores/cls_andru_cuestionario_respuestas.php';
 require_once __DIR__ . '/controladores/cls_alerta_general_detalle.php';
 //Libreria de clases --> Control para puntobcr_correo
 require_once __DIR__ . '/controladores/cls_puntobcr_correo.php';
-//Libreria de clases --> Control para personas_as
-require_once __DIR__ . '/controladores/cls_personas_as.php';
-  //Libreria de clases --> Control para niveles_as
-require_once __DIR__ . '/controladores/cls_niveles_as.php';
- //Libreria de clases --> Control para correos_as
-require_once __DIR__ . '/controladores/cls_correos_as.php';
- //Libreria de clases --> Control para direcciones_as
-require_once __DIR__ . '/controladores/cls_direcciones_as.php';
-//Libreria de clases --> Control para personas_vehiculos_as
-require_once __DIR__ . '/controladores/cls_personas_vehiculos_as.php';
 
 /*
 * El elemento controller, constituye la base y esencia de toda la lógica del negocio, en este
@@ -530,28 +520,7 @@ $map = array(
     
     'supervisor_por_zona_listar'=>array('controller'=>'Controller', 'action'=>'supervisor_por_zona_listar'),
     'supervisor_por_zona_guardar'=>array('controller'=>'Controller', 'action'=>'supervisor_por_zona_guardar'),
-    
-   //Agregar los action al controler de la clase cls_personas_as
-    'personas_as_listar'=>array('controller'=>'Controller','action'=> 'personas_as_listar'),
-    'personas_as_guardar'=>array('controller'=>'Controller','action'=> 'personas_as_guardar'),
-    'personas_as_cambiar_estado'=>array('controller'=>'Controller','action'=> 'personas_as_cambiar_estado'),
-     //Agregar los action al controler de la clase cls_niveles_as
-    'niveles_as_listar'=>array('controller'=>'Controller','action'=> 'niveles_as_listar'),
-    'niveles_as_guardar'=>array('controller'=>'Controller','action'=> 'niveles_as_guardar'),
-    'niveles_as_cambiar_estado'=>array('controller'=>'Controller','action'=> 'niveles_as_cambiar_estado'),
-    //Agregar los action al controler de la clase cls_correos_as
-    'correos_as_listar'=>array('controller'=>'Controller','action'=> 'correos_as_listar'),
-    'correos_as_guardar'=>array('controller'=>'Controller','action'=> 'correos_as_guardar'),
-    'correos_as_cambiar_estado'=>array('controller'=>'Controller','action'=> 'correos_as_cambiar_estado'),
-     //Agregar los action al controler de la clase cls_direcciones_as
-    'direcciones_as_listar'=>array('controller'=>'Controller','action'=> 'direcciones_as_listar'),
-    'direcciones_as_guardar'=>array('controller'=>'Controller','action'=> 'direcciones_as_guardar'),
-    'direcciones_as_cambiar_estado'=>array('controller'=>'Controller','action'=> 'direcciones_as_cambiar_estado'),
-   //Agregar los action al controler de la clase cls_personas_vehiculos_as
-    'personas_vehiculos_as_listar'=>array('controller'=>'Controller','action'=> 'personas_vehiculos_as_listar'),
-    'personas_vehiculos_as_guardar'=>array('controller'=>'Controller','action'=> 'personas_vehiculos_as_guardar'),
-    'personas_vehiculos_as_cambiar_estado'=>array('controller'=>'Controller','action'=> 'personas_vehiculos_as_cambiar_estado'),
-    'personas_vehiculos_as_agregar'=>array('controller'=>'Controller','action'=> 'personas_vehiculos_as_agregar'),
+  
     //Pruebas y nuevas implementaciones
     
     

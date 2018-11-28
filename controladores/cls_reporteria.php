@@ -390,9 +390,10 @@ class cls_reporteria{
             FROM t_bitacorarevisionesvideo p 
             INNER JOIN t_unidadvideo u ON u.ID_Unidad_Video = p.ID_Unidad_Video 
             WHERE u.Estado=0 GROUP by p.`ID_Unidad_Video`) as t",
-            "IFNULL(CASE WHEN MinDiff <= 120 THEN SUM(1) END,0) Normal,
-             IFNULL(CASE WHEN MinDiff >= 121 AND MinDiff <= 150 THEN SUM(1) END,0) Naranja,
-             IFNULL(CASE WHEN MinDiff >= 151 THEN SUM(1) END,0) Rojo, SUM(1) Total",
+            "SUM(CASE WHEN IFNULL( t.MinDiff, 0 ) <=120 THEN 1 ELSE 0 END ) Normal,
+			 SUM(CASE WHEN IFNULL( MinDiff, 0) >120 AND MinDiff <=150 THEN  1 ELSE 0 END) Naranja,
+			 SUM(CASE WHEN IFNULL( MinDiff, 0) >150 THEN 1 ELSE 0 END ) Rojo, 
+			 SUM( 1 ) Total",
             $this->condicion);
         $this->arreglo=$this->obj_data_provider->getArreglo();
         $this->obj_data_provider->desconectar();

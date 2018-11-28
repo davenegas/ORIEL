@@ -11594,11 +11594,11 @@ class Controller {
                     $dat_progressbar= $obj_reporteria->getArreglo();
                     
                     $progressbar["Negro"] = $dat_progressbar[0]["Normal"];
-                    $progressbar["NegroP"] = ($dat_progressbar[0]["Normal"]/$dat_progressbar[0]["Total"])*100;
+                    $progressbar["NegroP"] = Round((($dat_progressbar[0]["Normal"]/$dat_progressbar[0]["Total"])*100),1);
                     $progressbar["Naranja"] = $dat_progressbar[0]["Naranja"];
-                    $progressbar["NaranjaP"] = ($dat_progressbar[0]["Naranja"]/$dat_progressbar[0]["Total"])*100;
+                    $progressbar["NaranjaP"] = Round((($dat_progressbar[0]["Naranja"]/$dat_progressbar[0]["Total"])*100),1);
                     $progressbar["Rojo"] = $dat_progressbar[0]["Rojo"];
-                    $progressbar["RojoP"] = ($dat_progressbar[0]["Rojo"]/$dat_progressbar[0]["Total"])*100;
+                    $progressbar["RojoP"] = Round((($dat_progressbar[0]["Rojo"]/$dat_progressbar[0]["Total"])*100),1);
 
                     unset($obj_reporteria);
 
@@ -16469,12 +16469,19 @@ class Controller {
     public function andru_cuestionario_listar() {
         if (isset($_SESSION['nombre'])) {
             $obj_andru_cuestionario = new cls_andru_cuestionario();
+            $obj_andru_fases = new cls_andru_fases();
             //Procede a ejecutar la consulta SQL para traer todo de t_andru_cuestionario en la bd.
             $obj_andru_cuestionario->setCondicion("");
             //Obtener el vector de la consulta
             $obj_andru_cuestionario->obtener_andru_cuestionario();
             $andru_cuestionario = $obj_andru_cuestionario->getArreglo();
+            
+            $obj_andru_fases->setCondicion("");
+            $obj_andru_fases->obtener_andru_fases();
+            $andru_fases= $obj_andru_fases->getArreglo();
+            
             unset($obj_andru_cuestionario);
+            unset($obj_andru_fases);
 
             require __DIR__ . '/../vistas/plantillas/frm_andru_cuestionario_listar.php';
         } else {
@@ -16484,7 +16491,71 @@ class Controller {
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }
     }
-
+    /**
+     * Método que asigna las respuestas andru de un puntobcr a otros puntosbcr (Copiar respuestas)
+     */
+    public function andru_cuestionario_copiar() {
+        if (isset($_SESSION['nombre'])) {
+            $obj_andru_cuestionario = new cls_andru_cuestionario();
+            $obj_andru_respuestas = new cls_andru_cuestionario();
+            
+            
+            //Obtengo las respuestas del cuestionario inicial
+            $obj_andru_cuestionario->setCondicion("ID_PuntoBCR='" . $_POST['ID_PtsBcr'] . "' AND ID_Fase='" . $_POST['ID_FaseBcr'] . "'");
+            $obj_andru_cuestionario->obtener_andru_cuestionario();
+            $CuestionarioIni = $obj_andru_cuestionario->getArreglo();
+            
+            //Reviso sí existe el cuestionario
+            if(count($CuestionarioIni)> 0)
+            {
+                $fechaUpd = date('Y/m/d H:i');
+                
+                //Obtengo el ID del cuestionario
+                $IdCuestionario = $CuestionarioIni[0]["ID_Cuestionario"];
+                
+                //Creo el vector del listado del html
+                $lstPts = $_POST['lstPts'];
+                $lstPtsvec = explode(',', $lstPts);
+                
+                //Recorro el vector
+                $tam = count($lstPtsvec);                
+                for ($i = 0; $i < $tam; $i++) {
+                    //Busco el Id del cuestionario en donde voy a copiar las repuestas
+                    $obj_andru_cuestionario->setCondicion("ID_PuntoBCR='" . $lstPtsvec[$i] . "' AND ID_Fase='" . $_POST['ID_FaseBcr'] . "'");
+                    $obj_andru_cuestionario->obtener_andru_cuestionario(); 
+                    $CuestionarioFin = $obj_andru_cuestionario->getArreglo();
+                    
+                    //Evaluo si existe el cuestionario
+                    if(count($CuestionarioFin)> 0){
+                        $IdCuestionarioFin = $CuestionarioFin[0]["ID_Cuestionario"];
+                    }else{
+                        $obj_andru_cuestionario->setID_PuntoBCR($lstPtsvec[$i]);
+                        $obj_andru_cuestionario->setID_Fase($_POST['ID_FaseBcr']);
+                        $obj_andru_cuestionario->setUsuario_Crea($_SESSION['id']);
+                        $obj_andru_cuestionario->setFecha_Crea($fechaUpd);
+                        $obj_andru_cuestionario->setUsuario_Modifica($_SESSION['id']);
+                        $obj_andru_cuestionario->setFecha_Modifica($fechaUpd);
+                        $obj_andru_cuestionario->setEstado(1);
+                        $obj_andru_cuestionario->setCondicion("");
+                        $obj_andru_cuestionario->guardar_andru_cuestionario();
+                    }
+                    
+                    //Busco el Id del cuestionario en donde voy a copiar las repuestas
+                    $obj_andru_cuestionario->setCondicion("ID_PuntoBCR='" . $lstPtsvec[$i] . "' AND ID_Fase='" . $_POST['ID_FaseBcr'] . "'");
+                    $obj_andru_cuestionario->obtener_andru_cuestionario(); 
+                    $CuestionarioFin = $obj_andru_cuestionario->getArreglo();
+                }
+            }
+            
+            unset($obj_andru_cuestionario);
+            unset($obj_andru_respuestas);
+            header("location:/ORIEL/index.php?ctl=andru_cuestionario_listar");
+        } else {
+            $tipo_de_alerta = "alert alert-warning";
+            $validacion = "Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }
+    }
     /**
      * Método que guarda el cuestionario por punto bcr
      */
