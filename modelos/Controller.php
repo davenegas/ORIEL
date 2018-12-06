@@ -16496,22 +16496,24 @@ class Controller {
      */
     public function andru_cuestionario_copiar() {
         if (isset($_SESSION['nombre'])) {
+            //Declaración de variables
             $obj_andru_cuestionario = new cls_andru_cuestionario();
-            $obj_andru_respuestas = new cls_andru_cuestionario();
-            
-            
-            //Obtengo las respuestas del cuestionario inicial
+            $obj_andru_respuestas = new cls_andru_cuestionario_respuestas();
+                        
+            //Obtengo el Id del cuestionario Inicial
             $obj_andru_cuestionario->setCondicion("ID_PuntoBCR='" . $_POST['ID_PtsBcr'] . "' AND ID_Fase='" . $_POST['ID_FaseBcr'] . "'");
             $obj_andru_cuestionario->obtener_andru_cuestionario();
             $CuestionarioIni = $obj_andru_cuestionario->getArreglo();
-            
+
             //Reviso sí existe el cuestionario
             if(count($CuestionarioIni)> 0)
             {
-                $fechaUpd = date('Y/m/d H:i');
-                
-                //Obtengo el ID del cuestionario
-                $IdCuestionario = $CuestionarioIni[0]["ID_Cuestionario"];
+                //Obtengo las respuestas del cuestionario inicial               
+                $obj_andru_respuestas->setCondicion("ID_Cuestionario = '" . $CuestionarioIni[0]["ID_Cuestionario"] ."'");
+                $obj_andru_respuestas->obtener_andru_cuestionario_respuestas();
+                $CuestionarioIniRespuestas= $obj_andru_respuestas->getArreglo();
+            
+                $fechaUpd = date('Y/m/d H:i');                
                 
                 //Creo el vector del listado del html
                 $lstPts = $_POST['lstPts'];
@@ -16544,12 +16546,31 @@ class Controller {
                     $obj_andru_cuestionario->setCondicion("ID_PuntoBCR='" . $lstPtsvec[$i] . "' AND ID_Fase='" . $_POST['ID_FaseBcr'] . "'");
                     $obj_andru_cuestionario->obtener_andru_cuestionario(); 
                     $CuestionarioFin = $obj_andru_cuestionario->getArreglo();
+                    
+                    $IdCuestionarioFin = $CuestionarioFin[0]["ID_Cuestionario"];
+                    
+                    //Borro las respuestas del cuestionario secundario
+                    $obj_andru_respuestas->setCondicion("ID_Cuestionario = '" . $IdCuestionarioFin ."'");
+                    $obj_andru_respuestas->borrar_andru_cuestionario_respuestas();
+                    
+                    $obj_andru_respuestas->setID_Cuestionario($IdCuestionarioFin);
+                    $obj_andru_respuestas->setCondicion("");                    
+                                        
+                    $tam2 = count($CuestionarioIniRespuestas);  
+                    for ($i2 = 0; $i2 < $tam2; $i2++) {
+                        $obj_andru_respuestas->setID_Pregunta($CuestionarioIniRespuestas[$i2]["ID_Pregunta"]);
+                        $obj_andru_respuestas->setID_Respuesta($CuestionarioIniRespuestas[$i2]["ID_Respuesta"]);
+                        $obj_andru_respuestas->setID_Usuario_Upd($_SESSION['id']);
+                        $obj_andru_respuestas->setFecha_Actualiza($fechaUpd);
+                        $obj_andru_respuestas->setEstado($CuestionarioIniRespuestas[$i2]["Estado"]);
+                        $obj_andru_respuestas->guardar_andru_cuestionario_respuestas();
+                    }                    
                 }
             }
             
             unset($obj_andru_cuestionario);
             unset($obj_andru_respuestas);
-            header("location:/ORIEL/index.php?ctl=andru_cuestionario_listar");
+            //header("location:/ORIEL/index.php?ctl=andru_cuestionario_listar");
         } else {
             $tipo_de_alerta = "alert alert-warning";
             $validacion = "Es necesario volver a iniciar sesión para consultar el sistema";
@@ -16620,8 +16641,8 @@ class Controller {
                 if ($idfase > 0) {
                     $condicion = "Estado = 1 AND ID_Fase = " . $idfase . " LIMIT 1";
                     $obj_andru_fase->setCondicion($condicion);
-                    $obj_andru_fase->obtener_andru_fases();
-                    $nom_puntobcr2 = $obj_andru_fase->getArreglo();
+                    $obj_andru_fase->obtener_andru_fases();                    
+					$nom_puntobcr2 =$obj_andru_fase->getArreglo();
                     $nom_fase = $nom_puntobcr2[0]["Descripcion"];
                 }
             }
@@ -16638,15 +16659,15 @@ class Controller {
                 $obj_andru_preguntas->setCondicion($condicion);
                 $obj_andru_preguntas->obtener_andru_cuestionario_fase();
                 $preguntas = $obj_andru_preguntas->getArreglo();
-
+                
                 $tam4 = count($preguntas);
                 //resultado total de promedios según las respuestas guardadas
-                $condicion = " cr.Estado = 1 AND pr.Estado = 1 AND cr.ID_Cuestionario = " . $idcuestionario;
+                $condicion = " cr.Estado = 1 AND pr.Estado = 1 AND cr.ID_Cuestionario = ".$idcuestionario;
                 $condicion .= " GROUP BY cr.ID_Cuestionario,pp.ID_Tipo_Porcentaje";
-                $obj_andru_preguntas->setCondicion($condicion);
+                $obj_andru_preguntas->setCondicion($condicion);                
                 $obj_andru_preguntas->obtener_andru_cuestionario_promedios($tam4);
                 $cuestionariopromedios = $obj_andru_preguntas->getArreglo();
-
+                
                 //Obtengo las respuetas
                 $condicion = " p.ID_Fase = " . $idfase . " AND p.Estado = 1 AND r.Estado = 1 ORDER BY p.ID_Pregunta ,r.Nivel ASC;";
                 $obj_andru_preguntas->setCondicion($condicion);
@@ -16662,13 +16683,13 @@ class Controller {
                 $obj_andru_preguntas->setCondicion($condicion);
                 $obj_andru_preguntas->obtener_andru_respuesta_porcentaje();
                 $respuestasporcentaje = $obj_andru_preguntas->getArreglo();
-
+                
                 $tam3 = count($respuestas);
-
+                
                 for ($i3 = 0; $i3 < $tam3; $i3++) {
                     if ($respuestas[$i3]["IdSelec"] == "1") {
                         array_push($id_preguntasvec, $respuestas[$i3]["ID_Pregunta"]);
-                        array_push($id_respuestasvec, $respuestas[$i3]["ID_Respuesta"]);
+                        array_push($id_respuestasvec, $respuestas[$i3]["ID_Respuesta"]);                        
                     }
                 }
             }
@@ -16741,14 +16762,14 @@ class Controller {
                 $respuestasvec = explode(',', $respuestas);
 
                 //marco con estado 0 todos los registros según el cuestionario
-                $obj_andru_cuestionario_respts->setID_Cuestionario($obj_andru_cuestionario->getID_Cuestionario());
-                $obj_andru_cuestionario_respts->setCondicion("ID_Cuestionario = " . $obj_andru_cuestionario_respts->getID_Cuestionario());
+                $obj_andru_cuestionario_respts->setID_Cuestionario($obj_andru_cuestionario->getID_Cuestionario());                
+                $obj_andru_cuestionario_respts->setCondicion("ID_Cuestionario = ".$obj_andru_cuestionario_respts->getID_Cuestionario());
                 $obj_andru_cuestionario_respts->setEstado(0);
                 $obj_andru_cuestionario_respts->guardar_andru_cuestionario_Actualiza();
-
+                
                 $obj_andru_cuestionario_respts->setCondicion("");
                 $obj_andru_cuestionario_respts->setEstado(1);
-
+                        
                 $tam = count($preguntasvec);
                 
                 $fechaUpd = date('Y/m/d H:i');
@@ -16760,7 +16781,7 @@ class Controller {
                     $obj_andru_cuestionario_respts->setFecha_Actualiza($fechaUpd);
 
                     $condicion = "ID_Cuestionario = " . $obj_andru_cuestionario_respts->getID_Cuestionario() . " AND ";
-                    $condicion = "ID_Pregunta = " . $obj_andru_cuestionario_respts->getID_Pregunta() . " ";
+                    $condicion .= "ID_Pregunta = " . $obj_andru_cuestionario_respts->getID_Pregunta() . " ";
 
                     $obj_andru_cuestionario_respts->setCondicion($condicion);
                     $obj_andru_cuestionario_respts->obtener_andru_cuestionario_respuestas();
@@ -17212,7 +17233,7 @@ class Controller {
 
             $obj_direcciones_as->setEstado($_POST['Estado']);
             if ($_POST['ID_Direccion']!=0){
-                $obj_direcciones_as->setID_Direccion($_POST['ID_Direccion']); 
+                $obj_direcciones_as->setID_Direccion($_POST['ID_Direccion']);
                 $obj_direcciones_as->setCondicion("ID_Direccion='".$_POST['ID_Direccion']."'");
             }
             $obj_direcciones_as->guardar_direcciones_as();
@@ -17382,7 +17403,9 @@ class Controller {
             fclose($output);            
         }
     }
-    
+    /**
+     * Reemplaza el texto parametro con texto html para caracteres especiales
+     */
     private function limpiarStr($texto){
         $texto = str_replace("á","&aacute;",$texto);
         $texto = str_replace("é","&eacute;",$texto);
@@ -17398,6 +17421,23 @@ class Controller {
         $texto = str_replace("ñ","&ntilde;",$texto);
         $texto = str_replace("Ñ","&Ntilde;",$texto);        
         return $texto;
+    }
+    /**
+     * Método para exportar el Reporte de Enlaces Telecom
+     */
+    public function forzar_puesto_de_monitoreo() {
+        $obj_puestomonitoreo = new cls_puestos_de_monitoreo();
+        
+        $obj_puestomonitoreo->setCondicion("ID_Puesto_Monitoreo='".$_POST['id_puesto']."'");
+        $obj_puestomonitoreo->setId_usuario('5');
+        $resultado = $obj_puestomonitoreo->edita_usuairo_puestomonitoreo();
+        
+        if ($resultado){
+            echo 'Listo';
+        }else{
+            echo 'Mal';
+        }
+        
     }
     
 }

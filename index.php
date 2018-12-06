@@ -520,6 +520,8 @@ $map = array(
     
     'supervisor_por_zona_listar'=>array('controller'=>'Controller', 'action'=>'supervisor_por_zona_listar'),
     'supervisor_por_zona_guardar'=>array('controller'=>'Controller', 'action'=>'supervisor_por_zona_guardar'),
+    'forzar_puesto_de_monitoreo'=>array('controller'=>'Controller', 'action'=>'forzar_puesto_de_monitoreo'),
+    'andru_cuestionario_copiar'=>array('controller'=>'Controller', 'action'=>'andru_cuestionario_copiar'),
   
     //Pruebas y nuevas implementaciones
     

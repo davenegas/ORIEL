@@ -8,6 +8,21 @@
         <script>
             var arrayChkPts = [];            
             //Funcion para ocultar ventana de mantenimiento
+            function check_empty(){
+                $.confirm({title: 'Confirmación!', content: "¿Desea copiar las respuestas a los sitios?",
+                    confirm: function () {
+                        vID_PtsBcr = document.getElementById('ID_PtsBcr').value;
+                        vID_FaseBcr = document.getElementById('ID_FaseBcr').value;
+                        vlstPts = document.getElementById('lstPts').value;
+                        $.post("index.php?ctl=andru_cuestionario_copiar", {ID_PtsBcr:vID_PtsBcr,ID_FaseBcr:vID_FaseBcr,lstPts:vlstPts}, function (data) {                            
+                            location.reload();                            
+                        });
+                    },
+                    cancel: function () {
+                        //$.alert('Canceled!')
+                    }
+                });
+            }
             
             function ocultar_elemento(){
                 document.getElementById('ventana_oculta_2').style.display = "none";
@@ -18,7 +33,7 @@
             }
             function checkPtsBcr(chkPtBcr){
                 var v_existe = false;
-                console.log(chkPtBcr.checked);
+                //console.log(chkPtBcr.checked);
                 for (var i = arrayChkPts.length; i--; ) {                    
                     if (arrayChkPts[i] == chkPtBcr.value) {
                         if (chkPtBcr.checked == false){
@@ -37,9 +52,9 @@
     <body>
         <?php require_once 'encabezado.php';?>
         <div class="container">
-            <h2>Listado General de andru_cuestionario del BCR</h2>            
+            <h2>Listado General de Cuestionarios de Andru del BCR</h2>
             <p>A continuación se detallan los registros del sistema:</p>
-            <table id="tabla" class="display" cellspacing="0">
+<table id="tabla" class="display" cellspacing="0">
                 <thead>
                     <tr>
                         <th hidden style="text-align:center">ID_Cuestionario</th>
@@ -60,8 +75,8 @@
                 </thead>
             <tbody>
                 <?php $tam=count($andru_cuestionario); for ($i = 0; $i <$tam; $i++) { ?>
-                <tr>
-                        <td  hidden style="text-align:center"><?php echo $andru_cuestionario[$i]['ID_Cuestionario'];?></td>
+                <tr <?php if($andru_cuestionario[$i]['Color'] == 1) echo 'style="background-color: #b7f2b5;"';?>>
+                        <td hidden style="text-align:center"><?php echo $andru_cuestionario[$i]['ID_Cuestionario'];?></td>
                         <td hidden ><?php echo $andru_cuestionario[$i]['ID_PuntoBCR'];?></td>
                         <td hidden ><?php echo $andru_cuestionario[$i]['ID_Fase'];?></td>
                         <td hidden ><?php echo $andru_cuestionario[$i]['Usuario_Crea'];?></td>
@@ -84,11 +99,14 @@
                     <?php } ?>
                 </tbody>
             </table>
+            <div class="row">&nbsp</div>
             <div class="col-sm-3">
             <a href="index.php?ctl=andru_cuestionario&idcues=0&idpunto=0&idfase=0" class="btn btn-default" role="button">Agregar Cuestionario</a>
             </div>
-            <div class="col-sm-3">
-            <a id="popup" onclick="mostrar_copiar_respuesta()" class="btn btn-default" role="button">Copiar Respuestas</a>
+            
+            <div class="col-sm-3 pull-right">
+                
+            <a id="popup" onclick="mostrar_copiar_respuesta()" class="btn btn-default " role="button">Copiar Respuestas</a>
             </div>
         </div>
         <?php require 'vistas/plantillas/pie_de_pagina.php' ?>
@@ -96,10 +114,10 @@
         <div id="ventana_oculta_2">
             <div id="popupventana2">
                 <!--Formulario para andru_categoria-->
-                <form id="ventana2" method="POST" name="ventana2" action="index.php?ctl=andru_cuestionario_copiar">                        
+                <form id="ventana2" method="POST" name="ventana2" >
                     <img id="close" src='vistas/Imagenes/cerrar.png' width="25" onclick ="ocultar_elemento()">
                     <h4>Copiar respuestas en otros Puntos BCR</h4><hr>
-                    <input hidden required disabled id="lstPts" name="lstPts" type="text" value="">                    
+                    <input  required disabled id="lstPts" name="lstPts" type="text" value="">                    
                     <div class="col-sm-6">
                         <label for="ID_PtsBcr">Seleccione el Punto BCR con las respuestas</label>
                         <select class="form-control" id="ID_PtsBcr" name="ID_PtsBcr">
@@ -142,7 +160,7 @@
                         </table>
                     </div>
                     <div class="row"></div>
-                    <button><a href="javascript:%20check_empty()" id="submit">Guardar Cambios</a></button>
+                    <button><a href="javascript:%20check_empty()" id="submit">Copiar Respuestas</a></button>
                 </form>
             </div>
         </div>

@@ -1209,4 +1209,14 @@ class cls_puestos_de_monitoreo{
         $this->arreglo=$this->obj_data_provider->getArreglo();
         $this->obj_data_provider->desconectar();
     } 
+    
+   //Este metodo realiza la modificación del usuario que posee el puesto de monitoreo
+    function edita_usuairo_puestomonitoreo(){
+        $this->obj_data_provider->conectar();
+        //Llama al metodo para editar los datos correspondientes
+        $this->obj_data_provider->edita_datos("T_Puestomonitoreo","ID_Usuario='".$this->id_usuario."'",$this->condicion);
+        //Metodo de la clase data provider que desconecta la sesión con la base de datos
+        $this->obj_data_provider->desconectar();
+        return true;
+    }
 }?>

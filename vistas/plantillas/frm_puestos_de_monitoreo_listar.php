@@ -157,12 +157,34 @@
                 }
 
             }
-            
+            function forzar_liberar_puesto(id_puesto,nom){
+                console.log(id_puesto);
+                $.confirm({
+                    title: 'Confirmación!',
+                    content: 'Desea asignar el : '+ nom +' a un usuario administrador para luego forzar la liberación ?',
+                    confirm: function(){
+                        $.post("index.php?ctl=forzar_puesto_de_monitoreo", {id_puesto: id_puesto},function(data){
+                            var srt = data;
+                            var n= srt.search("Listo");                           
+                            if(n>0){                                
+                                location.reload();
+                            }else{
+                                $.alert({
+                                    title: 'Información!',
+                                    content: 'No fue posible asignar el puesto a otro usuario!!!',                                    
+                                });
+                            }
+                            });
+                        },                            
+                        cancel: function(){
+                        }
+                    });
+            }
         </script>
         
     </head>
     <body>
-        <?php require_once 'encabezado.php';?>
+        <?php require_once 'encabezado.php'; echo $_SESSION['rol'];?>
         
         <div class="container animated fadeIn col-xs-10 quitar-float">
             <h2>Listado General de Puestos de Monitoreo (Control de Video)</h2>
@@ -174,6 +196,7 @@
             <table id="tabla" class="display" cellspacing="0">
                 <thead>
                     <tr>
+                        <th <?php if(($_SESSION['rol']==3)&& ($_SESSION['rol']==11)&&($_SESSION['rol']==1)){ echo 'hidden';} ?>  data-toggle="tooltip" title="Asigna el puesto a un usuario administrador para liberar el puesto cuando se bloquea" style="text-align:center"><span class="glyphicon glyphicon-edit"></th>
                         <th hidden="hidden">ID_Puesto_Monitoreo</th>
                         <th style="text-align:center">Nombre</th>
                         <th style="text-align:center">Descripción</th>
@@ -207,6 +230,8 @@
                         }
                         if ($bandera==1){ ?>
                             <tr>
+                                
+                                <td <?php if(($_SESSION['rol']!=3)&& ($_SESSION['rol']!=11)&&($_SESSION['rol']!=1)){ echo 'hidden';} ?>  style="text-align:center"><a href="#" onclick="forzar_liberar_puesto('<?php echo $params[$i]['ID_Puesto_Monitoreo'];?>','<?php echo $params[$i]['Nombre'];?>')"><span class="glyphicon glyphicon-edit"></a></td>
                                 <td hidden="hidden"><?php echo $params[$i]['ID_Puesto_Monitoreo'];?></td>
                                 <td style="text-align:center"><?php echo $params[$i]['Nombre'];?></td>
                                 <td style="text-align:center"><?php echo $params[$i]['Descripcion'];?></td>

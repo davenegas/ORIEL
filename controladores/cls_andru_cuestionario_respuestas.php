@@ -249,4 +249,16 @@ class cls_andru_cuestionario_respuestas {
         $this->obj_data_provider->desconectar();
         $this->resultado_operacion=true;
     }
+    /**
+     * Método que actualiza en base de datos,
+     * Marca todos los registros como borrados según el cuestionario 
+     */
+    public function borrar_andru_cuestionario_respuestas() {
+        $this->obj_data_provider->conectar();
+        if ($this->condicion!=""){
+            $this->obj_data_provider->eliminar_datos("t_andru_cuestionario_respuestas", $this->condicion);
+        }
+        $this->obj_data_provider->desconectar();
+        $this->resultado_operacion=true;
+    }
 }

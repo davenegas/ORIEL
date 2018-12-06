@@ -238,10 +238,18 @@ class cls_andru_cuestionario {
     public function obtener_andru_cuestionario() {
         if($this->condicion==""){
             $this->obj_data_provider->conectar();
-            $this->arreglo=$this->obj_data_provider->trae_datos("t_andru_cuestionario c INNER JOIN t_puntobcr p ON c.ID_PuntoBCR = p.ID_PuntoBCR"
-                    . " INNER JOIN t_andru_fases f ON f.ID_Fase = c.ID_Fase INNER JOIN t_usuario uc ON uc.ID_Usuario = c.Usuario_Crea"
-                    ." INNER JOIN t_usuario um ON um.ID_Usuario = c.Usuario_Modifica;", 
-                    " c.ID_Cuestionario,c.ID_PuntoBCR,c.ID_Fase,c.Usuario_Crea,c.Fecha_Crea,c.Usuario_Modifica,c.Fecha_Modifica,c.Estado,p.Nombre,f.Descripcion,CONCAT(uc.Nombre,' ',uc.Apellido) Crea,CONCAT(um.Nombre,' ',um.Apellido) Modifica ", $this->condicion);
+            $this->arreglo=$this->obj_data_provider->trae_datos("t_andru_cuestionario c INNER JOIN t_puntobcr p ON c.ID_PuntoBCR = p.ID_PuntoBCR "
+                    . " INNER JOIN t_andru_fases f ON f.ID_Fase = c.ID_Fase INNER JOIN t_usuario uc ON uc.ID_Usuario = c.Usuario_Crea "
+                    ." INNER JOIN t_usuario um ON um.ID_Usuario = c.Usuario_Modifica "
+                    ." LEFT JOIN ( "
+                    ." SELECT c2.id_cuestionario,  "
+                    ." IF(SUM(IF(r.ID_Pregunta IS NOT NULL,1,0)) <> SUM(IF(p.ID_Pregunta IS NOT NULL,1,0)) ,0,1) Color "
+                    ." FROM t_andru_preguntas p "
+                    ." INNER JOIN t_andru_cuestionario  c2 ON c2.ID_Fase = p.ID_Fase "
+                    ." LEFT JOIN t_andru_cuestionario_respuestas r ON r.ID_Pregunta = p.ID_Pregunta "
+                    ." AND c2.ID_Cuestionario = r.ID_Cuestionario WHERE p.estado =1 "
+                    ." GROUP BY c2.id_cuestionario ) t  ON t.id_cuestionario = c.id_cuestionario ",                    
+                    " c.ID_Cuestionario,c.ID_PuntoBCR,c.ID_Fase,c.Usuario_Crea,c.Fecha_Crea,c.Usuario_Modifica,c.Fecha_Modifica,c.Estado,p.Nombre,f.Descripcion,CONCAT(uc.Nombre,' ',uc.Apellido) Crea,CONCAT(um.Nombre,' ',um.Apellido) Modifica,T.Color ", $this->condicion);
             $this->arreglo=$this->obj_data_provider->getArreglo();
             $this->obj_data_provider->desconectar();
             $this->resultado_operacion=true;

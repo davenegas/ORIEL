@@ -15,7 +15,8 @@
                     echo json_encode($id_preguntasvec);
                 } else {
                     echo 'new Array();';
-                }?>;
+        }
+        ?>;
                 arrayRespuestas =<?php
         if (isset($id_respuestasvec)) {
             echo json_encode($id_respuestasvec);
@@ -94,7 +95,6 @@
             function check_empty() {
                 var v_cantpreguntas = document.getElementById('cantpreguntas').value;
                 var v_texto = "";
-                console.log("jc1");
                 if (arrayIdRespuestas.length <= v_cantpreguntas) {
                     if (arrayIdRespuestas.length < v_cantpreguntas) {
                         v_texto = 'Ha decidido contestar ' + arrayIdRespuestas.length + ' preguntas de ' + v_cantpreguntas + '. ¿Desea guardarlo?';
@@ -110,8 +110,8 @@
                             vid_preguntas = document.getElementById('UsuarioPreguntas').value;
                             vid_respuestas = document.getElementById('UsuarioRespuestas').value;
                             $.post("index.php?ctl=andru_cuestionario_guardar", {ID_Cuestionario: vid_cuestionario, ID_PuntoBCR: vid_punto, ID_Fase: vid_fase, id_preguntas: vid_preguntas, id_respuestas: vid_respuestas}, function (data) {
-                                console.log(data);
-                                //location.reload();
+                                //console.log(data);
+                                location.reload();
                                 //alert (data);
                             });
                         },
