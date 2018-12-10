@@ -1,11 +1,9 @@
-
 <?php function nota_obtener() {
     $obj_general = new cls_general();
     $obj_general->obtener_notas();
     $notas= $obj_general->getArreglo(); 
     return $notas;
 } ?>
-    
 <html lang="en"> 
     <head>
         <link rel="stylesheet" href="vistas/css/main.css">
@@ -62,15 +60,13 @@
                             <?php if ($_SESSION['modulos']['Seguridad-Módulos']==1){ ?>
                                 <li><a href="index.php?ctl=modulos_listar">Módulos</a></li>
                             <?php };  ?>
-
                             <?php   if ($_SESSION['modulos']['Seguridad-Roles']==1){ ?>
                                 <li><a href="index.php?ctl=listar_roles">Roles</a></li>
                             <?php }; ?>
 
                             <?php  if ($_SESSION['modulos']['Seguridad-Usuarios']==1){?>
                                 <li><a href="index.php?ctl=listar_usuarios">Usuarios</a></li>
-                            <?php }; ?> 
-
+                            <?php }; ?>
                         </ul>
                     </li>
                 <?php  };    ?>
@@ -95,7 +91,7 @@
                             <?php if ($_SESSION['modulos']['Catálogos-Botones']==1){?>  
                                 <li><a href="index.php?ctl=botones_listar">Botones RF</a></li> 
                             <?php  }; ?>     
-                            <?php if ($_SESSION['modulos']['Módulo-Áreas de Apoyo']==1){ ?>
+                            <?php if ($_SESSION['modulos']['Andru - Catálogos']==1){ ?>
                             <li class="dropdown-submenu">
                                 <a class="multilevel" tabindex="-1" href="#">Andru<span class="caret"></span></a>
                                 <ul class="dropdown-menu">
@@ -187,6 +183,10 @@
 
                             <?php  if ($_SESSION['modulos']['Catálogos-Unidades Ejecutoras']==1){?>
                                 <li><a href="index.php?ctl=unidad_ejecutora_listar">Unidades ejecutoras</a></li>
+                            <?php  }; ?>
+                                
+                            <?php  if ($_SESSION['modulos']['Catálogos-Claves Radiofrecuencia']==1){?>
+                                <li><a href="index.php?ctl=clave_tipo_listar">Claves Radiofrecuencia</a></li>
                             <?php  }; ?> 
                                 
                         </ul>
@@ -201,13 +201,13 @@
                         ($_SESSION['modulos']['Módulo-Personal']==1)||($_SESSION['modulos']['Módulo-Áreas de Apoyo']==1)||
                         ($_SESSION['modulos']['Módulo-Personal Externo']==1)||($_SESSION['modulos']['Módulo-Cencon']==1)||
                         ($_SESSION['modulos']['Módulo-Pruebas alarma']==1 || $_SESSION['modulos']['Módulo-Programaciones']==1|| 
-                         $_SESSION['modulos']['Módulo-Biblioteca']==1)){?>
+                         $_SESSION['modulos']['Módulo-Biblioteca']==1)||($_SESSION['Módulo-Claves Radiofrecuencia']==1)){?>
 
                     <li class="dropdown">
                         <a class="dropdown-toggle" data-toggle="dropdown" href="#">Módulos
                         <span class="caret"></span></a>
                         <ul class="dropdown-menu">
-                            <?php if ($_SESSION['modulos']['Módulo-Áreas de Apoyo']==1){ ?>
+                            <?php if ($_SESSION['modulos']['Andru - Cuestionario']==1){ ?>
                             <li class="dropdown-submenu">
                                 <a class="multilevel" tabindex="-1" href="#">Andru<span class="caret"></span></a>
                                 <ul class="dropdown-menu">
@@ -254,7 +254,13 @@
                             <?php if ($_SESSION['modulos']['Módulo-PuntosBCR']==1){ ?>
                                 <li><a href="index.php?ctl=puntos_bcr_listar">Puntos BCR</a></li>
                             <?php }; ?>
-
+                                
+							<?php if ($_SESSION['modulos']['Módulo-PuntosBCR Asignar Supervisor']==1){ ?>
+                                <li><a href="index.php?ctl=supervisor_por_zona_listar">Asignar Supervisor</a></li>
+                            <?php }; ?>
+                            <?php if ($_SESSION['modulos']['Módulo-Claves Radiofrecuencia']==1){ ?>
+                                <li><a href="index.php?ctl=clave_listar">Clave RadioFrecuencia</a></li>
+                            <?php }; ?>
                         </ul>
                     </li>
 
@@ -272,6 +278,8 @@
                         <a class="dropdown-toggle" data-toggle="dropdown" href="#">Reportes
                         <span class="caret"></span></a>
                         <ul class="dropdown-menu multi-level" role="menu">
+						
+                            <?php if ($_SESSION['modulos']['Reportes-Historico Alerta Video']==1){ ?>
                             <?php if ($_SESSION['modulos']['Reportes-Activaciones provincia']==1){ ?>
                                 <li><a href="index.php?ctl=reporte_general_detalle_listar">Historico Alerta Video</a></li> 
                             <?php }; ?>
@@ -449,6 +457,4 @@
             });
         });
     </script>
-
-    
 </html>

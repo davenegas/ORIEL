@@ -15786,10 +15786,10 @@ class Controller {
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }
     }
-
+    
     //Funcion para guardar zonas nuevas al panel ya seleccionado
-    public function botones_guardar() {
-        if (isset($_SESSION['nombre'])) {
+    public function botones_guardar(){
+        if(isset($_SESSION['nombre'])){
             if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 $obj_zona = new cls_botones();
                 $obj_zona->setID_Boton($_POST['id_boton']);
@@ -15805,22 +15805,23 @@ class Controller {
                 $obj_zona->botones_guardar();
 
                 header("location:/ORIEL/index.php?ctl=botones_listar");
-            } else {
-                $tipo_de_alerta = "alert alert-warning";
-                $validacion = "Es necesario volver a iniciar sesión para consultar el sistema";
-                require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
-            }
-        }
-    }
 
+            } else {
+                $tipo_de_alerta="alert alert-warning";
+                $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+                require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+            }  
+        } 
+    } 
+    
     //Funcion para editar la informacion del boton seleccionado
-    public function botones_selec_editar() {
-        if (isset($_SESSION['nombre'])) {
+    public function botones_selec_editar(){
+        if(isset($_SESSION['nombre'])){
             $obj_botones = new cls_botones();
-            $obj_personal = new cls_personal();
-            $obj_puntos = new cls_puntosBCR();
+            $obj_personal= new cls_personal();
+            $obj_puntos= new cls_puntosBCR();
             //Procede a ejecutar la consulta SQL para traer todas las notas contenidas en la bd.
-            $obj_botones->setCondicion("T_Botones.ID_Boton='" . $_GET['id_boton'] . "'");
+            $obj_botones->setCondicion("T_Botones.ID_Boton='".$_GET['id_boton']."'");
             $obj_botones->obtener_botones_listar();
             $botones_rf = $obj_botones->getArreglo();
             //Trae todos los datos del personal
@@ -15832,17 +15833,17 @@ class Controller {
             $obj_puntos->obtiene_todos_los_puntos_bcr();
             $puntos_bcr = $obj_puntos->getArreglo();
 
-            require __DIR__ . '/../vistas/plantillas/frm_botones_RF_editar.php';
+            require __DIR__ . '/../vistas/plantillas/frm_botones_RF_editar.php';	
         } else {
-            $tipo_de_alerta = "alert alert-warning";
-            $validacion = "Es necesario volver a iniciar sesión para consultar el sistema";
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
             //Llamada al formulario correspondiente de la vista
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }
     }
-
-    public function botones_editar() {
-        if (isset($_SESSION['nombre'])) {
+    
+    public function botones_editar(){
+        if(isset($_SESSION['nombre'])){
             if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 $obj_botones_rf = new cls_botones();
                 $obj_botones_rf->setID_Boton($_GET['ID_Boton']);
@@ -15882,39 +15883,40 @@ class Controller {
             if ($_SESSION['rol'] == 3) {
                 $obj_biblioteca->setCondicion("T_Biblioteca.Seguridad=4 or T_Biblioteca.Seguridad=3 or T_Biblioteca.ID_Usuario=" . $_SESSION['id'] . ") and T_Biblioteca.Estado=1");
             }
-            if ($_SESSION['rol'] == 11) {
-                $obj_biblioteca->setCondicion("T_Biblioteca.Seguridad in (4,3,2) or T_Biblioteca.ID_Usuario=" . $_SESSION['id'] . ") and T_Biblioteca.Estado=1");
+            if($_SESSION['rol']==11){
+                $obj_biblioteca->setCondicion("T_Biblioteca.Seguridad in (4,3,2) or T_Biblioteca.ID_Usuario=".$_SESSION['id'].") and T_Biblioteca.Estado=1");
             }
-            if ($_SESSION['rol'] = 1) {
+            if($_SESSION['rol']=1){
                 $obj_biblioteca->setCondicion("");
             } else {
-                $obj_biblioteca->setCondicion("T_Biblioteca.ID_Usuario=" . $_SESSION['id'] . ") and T_Biblioteca.Estado=1");
+                $obj_biblioteca->setCondicion("T_Biblioteca.ID_Usuario=".$_SESSION['id'].") and T_Biblioteca.Estado=1");
             }
             //Obtener el vector de la consulta
             $obj_biblioteca->obtener_estado_Biblioteca_Todos();
-            $biblioteca = $obj_biblioteca->getArreglo();
-
+            $biblioteca=$obj_biblioteca->getArreglo();
+            
             require __DIR__ . '/../vistas/plantillas/frm_biblioteca.php';
+			
         } else {
-            $tipo_de_alerta = "alert alert-warning";
-            $validacion = "Es necesario volver a iniciar sesión para consultar el sistema";
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
             //Llamada al formulario correspondiente de la vista
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }
     }
-
-    public function guardar_Biblioteca() {
-        if (isset($_SESSION['nombre'])) {
+    
+    public function guardar_Biblioteca(){
+        if(isset($_SESSION['nombre'])){
             if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
                 $obj_biblioteca_rf = new cls_biblioteca();
-
-                if (isset($_POST['ID_Biblioteca'])) {
+                
+                if (isset($_POST['ID_Biblioteca'])){                    
                     $obj_biblioteca_rf->setID_Biblioteca($_POST['ID_Biblioteca']);
-                    $obj_biblioteca_rf->setCondicion("ID_Biblioteca='" . $_POST['ID_Biblioteca'] . "'");
-                }
+                    $obj_biblioteca_rf->setCondicion("ID_Biblioteca='".$_POST['ID_Biblioteca']."'");
+                }                
                 $obj_biblioteca_rf->setNombre($_POST['Nombre']);
-                $obj_biblioteca_rf->setTipo_Documento($_POST['Tipo_Documento']);
+                $obj_biblioteca_rf->setTipo_Documento($_POST['Tipo_Documento']);                
                 $obj_biblioteca_rf->setLink($_POST['Link']);
                 $obj_biblioteca_rf->setFecha_Hora(date("Y-m-d"));
                 $obj_biblioteca_rf->setID_Usuario($_SESSION['id']);
@@ -15923,102 +15925,101 @@ class Controller {
                 $obj_biblioteca_rf->setEstado($_POST['Estado']);
                 $obj_biblioteca_rf->setArchivo($_POST['Archivo']);
                 echo $_POST['Archivo'];
-                $recepcion_archivo = $_FILES['archivo_adjunto']['error'];
+                $recepcion_archivo=$_FILES['archivo_adjunto']['error'];
 
-                $date = new DateTime(); //this returns the current date time
+                $date=new DateTime(); //this returns the current date time
                 $result = $date->format('Y-m-d-H-i-s');
+                
+                $krr = explode('-',$result);
+                $result = implode("",$krr);
+                
+                $raiz=$_SERVER['DOCUMENT_ROOT'];
 
-                $krr = explode('-', $result);
-                $result = implode("", $krr);
-
-                $raiz = $_SERVER['DOCUMENT_ROOT'];
-
-                if (substr($raiz, -1) != "/") {
-                    $raiz .= "/";
+                if (substr($raiz,-1)!="/"){
+                    $raiz.="/";
                 }
-
-                $ruta = $raiz . "Biblioteca_Archivos/" . Encrypter::quitar_tildes($result . $_FILES['archivo_adjunto']['name']);
-
-                if (isset($_POST['mod_file'])) {
+            
+                $ruta=  $raiz."Biblioteca_Archivos/".Encrypter::quitar_tildes($result.$_FILES['archivo_adjunto']['name']);
+                
+                if (isset($_POST['mod_file'])){
                     echo $_POST['mod_file'];
                     echo 'sdf';
-                    if ($_POST['mod_file'] == "1") {
-                        if (isset($_POST['ruta2'])) {
+                    if($_POST['mod_file']=="1"){
+                        if(isset($_POST['ruta2'])){
                             $rutaDel = $_SERVER['DOCUMENT_ROOT'];
-                            if (substr($rutaDel, -1) != "/") {
-                                $rutaDel .= "/";
+                            if (substr($rutaDel,-1)!="/"){
+                                $rutaDel.="/";                        
                             }
-                            $rutaDel = $rutaDel . "Biblioteca_Archivos/" . Encrypter::quitar_tildes($_POST['ruta2']);
+                            $rutaDel=  $rutaDel."Biblioteca_Archivos/".Encrypter::quitar_tildes($_POST['ruta2']); 
 
-                            if (file_exists($rutaDel)) {
-                                unlink($rutaDel);
+                            if(file_exists($rutaDel)){                    
+                                unlink($rutaDel);                        
                             }
                         }
                         switch ($recepcion_archivo) {
-                            case 0: {
-                                    if (move_uploaded_file($_FILES['archivo_adjunto']['tmp_name'], $ruta)) {
-                                        $obj_biblioteca_rf->setArchivo(Encrypter::quitar_tildes($result . $_FILES['archivo_adjunto']['name']));
+                            case 0:{
+                                if (move_uploaded_file($_FILES['archivo_adjunto']['tmp_name'], $ruta)){
+                                    $obj_biblioteca_rf->setArchivo(Encrypter::quitar_tildes($result.$_FILES['archivo_adjunto']['name']));
                                     } else {
                                         $obj_biblioteca_rf->setArchivo("N/A");
                                     }
-                                    break;
+                                break;                                
                                 }
-                            case 2: {
+                            case 2:{
                                     echo "<script type=\"text/javascript\">alert('El archivo consume mayor espacio del permitido (1 mb) !!!!');history.go(-1);</script>";
                                     break;
                                 }
-                            case 4: {
+                            case 4:{ 
                                     $obj_biblioteca_rf->setArchivo("N/A");
                                     //echo "<script type=\"text/javascript\">alert('No fue seleccionado ningun archivo!!!!');history.go(-1);</script>";
                                     break;
                                 }
-                            case 6: {
+                            case 6:{
                                     echo "<script type=\"text/javascript\">alert('El servidor no tiene acceso a la carpeta temporal de almacenamiento!!!!');history.go(-1);</script>";
                                     break;
-                                }
-                            case 7: {
+                            } 
+                            case 7:{
                                     echo "<script type=\"text/javascript\">alert('No es posible escribir en el disco duro del servidor!!!!');history.go(-1);</script>";
                                     break;
-                                }
-                            case 8: {
+                            }  
+                            case 8:{
                                     echo "<script type=\"text/javascript\">alert('Fue detenida la carga del archivo debido a una extension de PHP!!!!');history.go(-1);</script>";
                                     break;
                                 }
                         }
+                        
                     }
                 }
-
+                
                 $obj_biblioteca_rf->guardar_Biblioteca();
-                header("location:/ORIEL/index.php?ctl=biblioteca_listar");
+                header ("location:/ORIEL/index.php?ctl=biblioteca_listar");
             } else {
-                $tipo_de_alerta = "alert alert-warning";
-                $validacion = "Es necesario volver a iniciar sesión para consultar el sistema";
-                require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
-            }
-        }
+                $tipo_de_alerta="alert alert-warning";
+                $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+                require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';                    
+            }                
+        } 
     }
-
-    public function biblioteca_cambiar_estado() {
-        if (isset($_SESSION['nombre'])) {
+    public function biblioteca_cambiar_estado() {        
+        if(isset($_SESSION['nombre'])){
             $obj_biblioteca = new cls_biblioteca();
-            if ($_GET['Estado'] == 1) {
+            if ($_GET['Estado']==1){
                 $obj_biblioteca->setEstado("0");
-            } else {
+            }else {
                 $obj_biblioteca->setEstado("1");
             }
-            $obj_biblioteca->setCondicion("ID_Biblioteca='" . $_GET['ID_Biblioteca'] . "'");
+            $obj_biblioteca->setCondicion("ID_Biblioteca='".$_GET['ID_Biblioteca']."'");
             $obj_biblioteca->cambiar_estado_biblioteca();
             $obj_biblioteca->setCondicion("");
             $obj_biblioteca->obtener_biblioteca();
-            $biblioteca = $obj_biblioteca->getArreglo();
-            require __DIR__ . '/../vistas/plantillas/frm_biblioteca.php';
+            $biblioteca =$obj_biblioteca->getArreglo();
+            require __DIR__.'/../vistas/plantillas/frm_biblioteca.php';
         } else {
-            $tipo_de_alerta = "alert alert-warning";
-            $validacion = "Es necesario volver a iniciar sesión para consultar el sistema";
-            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
-        }
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';            
+        }            
     }
-
     ////////////////////////////////////////////////////////////////////////////
     //////////////////////////////andru_preguntas
     ////////////////////////////////////////////////////////////////////////////
@@ -16243,6 +16244,43 @@ class Controller {
         } else {
             $tipo_de_alerta = "alert alert-warning";
             $validacion = "Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }
+    }
+    
+    public function andru_preguntas_totales(){
+        if (isset($_SESSION['nombre'])) {
+            $obj_andru_cuestionario = new cls_andru_categoria();
+            $obj_andru_porcentajes = new cls_andru_tipos_porcentajes();
+                                
+            $array = array(
+                "MediaRobo" => "3.05",
+                "MediaRobo" => "2.96",
+                "RojoRobo" => "4.00",
+                "RojoRobo" => "3.89",);
+            
+            //Procede a ejecutar la consulta SQL para traer todo de t_andru_fases en la bd.
+            $obj_andru_cuestionario->setCondicion(" cr.Estado = 1 AND pr.Estado = 1 ");
+            //Obtener el vector de la consulta
+            $obj_andru_cuestionario->obtene_preguntas_totales();
+            $andru_cuestionario = $obj_andru_cuestionario->getArreglo();
+            
+            //Procede a ejecutar la consulta SQL para traer todo de t_andru_fases en la bd.
+            $obj_andru_porcentajes->setCondicion("Estado = 1");
+            //Obtener el vector de la consulta
+            $obj_andru_porcentajes->obtener_andru_tipos_porcentajes();
+            $andru_tipos = $obj_andru_porcentajes->getArreglo();
+            
+            $tipoporcentaje = $andru_cuestionario[0]["ID_Tipo_Porcentaje"];
+            
+            unset($obj_andru_cuestionario);
+            unset($obj_andru_porcentajes);
+            
+            require __DIR__ . '/../vistas/plantillas/frm_andru_totales.php';
+        } else {
+            $tipo_de_alerta = "alert alert-warning";
+            $validacion = "Es necesario volver a iniciar sesión para consultar el sistema";
+            //Llamada al formulario correspondiente de la vista
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }
     }
@@ -16522,49 +16560,53 @@ class Controller {
                 //Recorro el vector
                 $tam = count($lstPtsvec);                
                 for ($i = 0; $i < $tam; $i++) {
-                    //Busco el Id del cuestionario en donde voy a copiar las repuestas
-                    $obj_andru_cuestionario->setCondicion("ID_PuntoBCR='" . $lstPtsvec[$i] . "' AND ID_Fase='" . $_POST['ID_FaseBcr'] . "'");
-                    $obj_andru_cuestionario->obtener_andru_cuestionario(); 
-                    $CuestionarioFin = $obj_andru_cuestionario->getArreglo();
+                    if($_POST['ID_PtsBcr'] != $lstPtsvec[$i])
+                    {
+                        //Busco el Id del cuestionario en donde voy a copiar las repuestas                    
+                        $obj_andru_cuestionario->setCondicion("ID_PuntoBCR='" . $lstPtsvec[$i] . "' AND ID_Fase='" . $_POST['ID_FaseBcr'] . "'");
+                        $obj_andru_cuestionario->obtener_andru_cuestionario(); 
+                        $CuestionarioFin = $obj_andru_cuestionario->getArreglo();
                     
-                    //Evaluo si existe el cuestionario
-                    if(count($CuestionarioFin)> 0){
+                        //Evaluo si existe el cuestionario
+                        if(count($CuestionarioFin)> 0){
+                            $IdCuestionarioFin = $CuestionarioFin[0]["ID_Cuestionario"];
+                        }else{
+                            $obj_andru_cuestionario->setID_PuntoBCR($lstPtsvec[$i]);
+                            $obj_andru_cuestionario->setID_Fase($_POST['ID_FaseBcr']);
+                            $obj_andru_cuestionario->setUsuario_Crea($_SESSION['id']);
+                            $obj_andru_cuestionario->setFecha_Crea($fechaUpd);
+                            $obj_andru_cuestionario->setUsuario_Modifica($_SESSION['id']);
+                            $obj_andru_cuestionario->setFecha_Modifica($fechaUpd);
+                            $obj_andru_cuestionario->setEstado(1);
+                            $obj_andru_cuestionario->setCondicion("");
+                            $obj_andru_cuestionario->guardar_andru_cuestionario();
+                        }
+
+                        //Busco el Id del cuestionario en donde voy a copiar las repuestas
+                        $obj_andru_cuestionario->setCondicion("ID_PuntoBCR='" . $lstPtsvec[$i] . "' AND ID_Fase='" . $_POST['ID_FaseBcr'] . "'");
+                        $obj_andru_cuestionario->obtener_andru_cuestionario(); 
+                        $CuestionarioFin = $obj_andru_cuestionario->getArreglo();
+
                         $IdCuestionarioFin = $CuestionarioFin[0]["ID_Cuestionario"];
-                    }else{
-                        $obj_andru_cuestionario->setID_PuntoBCR($lstPtsvec[$i]);
-                        $obj_andru_cuestionario->setID_Fase($_POST['ID_FaseBcr']);
-                        $obj_andru_cuestionario->setUsuario_Crea($_SESSION['id']);
-                        $obj_andru_cuestionario->setFecha_Crea($fechaUpd);
-                        $obj_andru_cuestionario->setUsuario_Modifica($_SESSION['id']);
-                        $obj_andru_cuestionario->setFecha_Modifica($fechaUpd);
-                        $obj_andru_cuestionario->setEstado(1);
-                        $obj_andru_cuestionario->setCondicion("");
-                        $obj_andru_cuestionario->guardar_andru_cuestionario();
+
+                        //Borro las respuestas del cuestionario secundario
+                        $obj_andru_respuestas->setCondicion("ID_Cuestionario = '" . $IdCuestionarioFin ."'");
+                        $obj_andru_respuestas->borrar_andru_cuestionario_respuestas();
+
+                        $obj_andru_respuestas->setID_Cuestionario($IdCuestionarioFin);
+                        $obj_andru_respuestas->setCondicion("");                    
+
+                        $tam2 = count($CuestionarioIniRespuestas);
+                        
+                        for ($i2 = 0; $i2 < $tam2; $i2++) {
+                            $obj_andru_respuestas->setID_Pregunta($CuestionarioIniRespuestas[$i2]["ID_Pregunta"]);
+                            $obj_andru_respuestas->setID_Respuesta($CuestionarioIniRespuestas[$i2]["ID_Respuesta"]);
+                            $obj_andru_respuestas->setID_Usuario_Upd($_SESSION['id']);
+                            $obj_andru_respuestas->setFecha_Actualiza($fechaUpd);
+                            $obj_andru_respuestas->setEstado($CuestionarioIniRespuestas[$i2]["Estado"]);
+                            $obj_andru_respuestas->guardar_andru_cuestionario_respuestas();
+                        }                        
                     }
-                    
-                    //Busco el Id del cuestionario en donde voy a copiar las repuestas
-                    $obj_andru_cuestionario->setCondicion("ID_PuntoBCR='" . $lstPtsvec[$i] . "' AND ID_Fase='" . $_POST['ID_FaseBcr'] . "'");
-                    $obj_andru_cuestionario->obtener_andru_cuestionario(); 
-                    $CuestionarioFin = $obj_andru_cuestionario->getArreglo();
-                    
-                    $IdCuestionarioFin = $CuestionarioFin[0]["ID_Cuestionario"];
-                    
-                    //Borro las respuestas del cuestionario secundario
-                    $obj_andru_respuestas->setCondicion("ID_Cuestionario = '" . $IdCuestionarioFin ."'");
-                    $obj_andru_respuestas->borrar_andru_cuestionario_respuestas();
-                    
-                    $obj_andru_respuestas->setID_Cuestionario($IdCuestionarioFin);
-                    $obj_andru_respuestas->setCondicion("");                    
-                                        
-                    $tam2 = count($CuestionarioIniRespuestas);  
-                    for ($i2 = 0; $i2 < $tam2; $i2++) {
-                        $obj_andru_respuestas->setID_Pregunta($CuestionarioIniRespuestas[$i2]["ID_Pregunta"]);
-                        $obj_andru_respuestas->setID_Respuesta($CuestionarioIniRespuestas[$i2]["ID_Respuesta"]);
-                        $obj_andru_respuestas->setID_Usuario_Upd($_SESSION['id']);
-                        $obj_andru_respuestas->setFecha_Actualiza($fechaUpd);
-                        $obj_andru_respuestas->setEstado($CuestionarioIniRespuestas[$i2]["Estado"]);
-                        $obj_andru_respuestas->guardar_andru_cuestionario_respuestas();
-                    }                    
                 }
             }
             
@@ -16864,7 +16906,8 @@ class Controller {
     public function reporte_general_detalle_listar() {
         if (isset($_SESSION['nombre'])) {
             $obj_alerta_general_detalle = new cls_alerta_general_detalle();
-            $codincion="";
+			$Condicion="";
+
             //inicializa con la fecha del servidor
             $fecha_inicial = date("Y-m-d");            
             $fecha_final=$fecha_inicial;
@@ -16876,11 +16919,11 @@ class Controller {
             }
 
             for ($i = 1; $i < 7; $i++) {
-                $codincion = " ID_Alerta = '" . $i . "' ";
-                $codincion .=" AND DATE_FORMAT(Fecha, '%Y-%m-%d') >='".$fecha_inicial."' ";
-                $codincion .=" AND DATE_FORMAT(Fecha, '%Y-%m-%d') <='".$fecha_final."' ORDER BY ID_Alerta,fecha ASC";
                 //Procede a ejecutar la consulta SQL para traer todo según el filtro.
-                $obj_alerta_general_detalle->setCondicion($codincion);
+				$Condicion =" ID_Alerta = '" . $i . "' ";
+				$Condicion .=" AND DATE_FORMAT(Fecha,'%Y-%m-%d') >='".$fecha_inicial."' ";
+				$Condicion .=" AND DATE_FORMAT(Fecha,'%Y-%m-%d') <='".$fecha_final."' ORDER BY ID_Alerta,fecha ASC ";
+                $obj_alerta_general_detalle->setCondicion($Condicion);
                 //Obtener el vector de la consulta
                 $obj_alerta_general_detalle->obtener_alerta_general_grafico();
                 $alerta_general_detalle = $obj_alerta_general_detalle->getArreglo();
@@ -16917,7 +16960,6 @@ class Controller {
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }
     }
-    
     ////////////////////////////////////////////////////////////////////////////
     //////////////////////////////alerta_general_detalle
     ////////////////////////////////////////////////////////////////////////////
@@ -17342,16 +17384,14 @@ class Controller {
     /**
      * Método para exportar el Reporte de Enlaces Telecom
      */
-    public function enlace_exportar() {
-        if(isset($_SESSION['nombre'])){
+    public function enlace_exportar(){
+        if(isset($_SESSION['nombre'])){			
             $obj_enlace = new cls_enlace_telecom();
             $obj_enlace->enlaces_reporteCSV();
             $telecom = $obj_enlace->getArreglo();
             unset($obj_enlace);
-            
             $fecha = date('d') . "_".date('n')."_" . date('Y');
-
-            header('Content-Type: application/xls; charset=utf-8');
+            header('Content-Type: application/csv; charset=utf-8');
             header('Content-Disposition: attachment; filename=Enlaces Telecomunicaciones-Reporte Actualizado '.$fecha.'.xls');
             $output = fopen("php://output", "w");
             echo '<table hidden="" id="enlaces_telecom" class="display" cellspacing="0" width="100%" border="2px">';
@@ -17369,10 +17409,8 @@ class Controller {
             echo '<th style="text-align:center">Medio enlace</th>';
             echo '<th style="text-align:center">Observaciones</th>';
             echo '</tr></thead><tbody>';
-
             $tam2=count($telecom);
-
-            for ($i = 0; $i <$tam2; $i++) { 
+            for ($i = 0; $i <$tam2; $i++){
                 echo '<tr>';
                 echo '<td style="text-align:center">'. $this->limpiarStr($telecom[$i]["Nombre"]).'</td>';
                 if($telecom[$i]['Codigo']>=1000 or $telecom[$i]['Codigo']=="X41" or $telecom[$i]['Codigo']=="X45" or $telecom[$i]['Codigo']=="X56"){
@@ -17398,7 +17436,7 @@ class Controller {
                 echo '<td style="text-align:center">'.$this->limpiarStr($telecom[$i]["Bandwidth"]).'</td>';
                 echo '<td style="text-align:center">'.$this->limpiarStr($telecom[$i]["Medio_Enlace"]).'</td>';
                 echo '<td style="text-align:center">'.$this->limpiarStr($telecom[$i]["Observaciones"]).'</td>';
-                echo '</tr>';               
+                echo '</tr>';
             }
             fclose($output);            
         }
@@ -17439,6 +17477,155 @@ class Controller {
         }
         
     }
-    
-}
+    ////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////clave_tipo
+    ////////////////////////////////////////////////////////////////////////////
+    /**
+     * Método que retorna un arreglo de los registros que existen en base de datos
+     */
+    public function clave_tipo_listar() {
+        if(isset($_SESSION['nombre'])){
+            $obj_clave_tipo = new cls_clave_tipo();
+            //Procede a ejecutar la consulta SQL para traer todo de t_clave_tipo en la bd.
+            $obj_clave_tipo->setCondicion("");
+            //Obtener el vector de la consulta
+            $obj_clave_tipo->obtener_clave_tipo();
+            $clave_tipo=$obj_clave_tipo->getArreglo();
+            unset($obj_clave_tipo);
+            
+            require __DIR__.'/../vistas/plantillas/frm_clave_tipo.php';
+            
+        } else {
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            //Llamada al formulario correspondiente de la vista
+            require __DIR__.'/../vistas/plantillas/inicio_sesion.php';
+        }
+    }
 
+    /**
+     * Método que guarda en base datos cuando la propiedad ID_TipoClave esta en cero 
+     * Caso contrario actualiza en base datos el registros según el valor de ID_TipoClave 
+     */
+    public function clave_tipo_guardar() {
+        if(isset($_SESSION['nombre'])){
+            $obj_clave_tipo = new cls_clave_tipo();
+            $obj_clave_tipo->setDescripcion($_POST['Descripcion']); 
+
+            $obj_clave_tipo->setEstado($_POST['Estado']);
+            if ($_POST['ID_TipoClave']!=0){
+                $obj_clave_tipo->setID_TipoClave($_POST['ID_TipoClave']); 
+                $obj_clave_tipo->setCondicion("ID_TipoClave='".$_POST['ID_TipoClave']."'");
+            }
+            $obj_clave_tipo->guardar_clave_tipo();
+            unset($obj_clave_tipo);
+            header("location:/ORIEL/index.php?ctl=clave_tipo_listar");
+        } else {
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__.'/../vistas/plantillas/inicio_sesion.php';
+        }
+    }
+
+    /**
+     * Método que se utiliza para cambiar el estado del registro según el campo llave 
+     */
+    public function clave_tipo_cambiar_estado() {
+        if(isset($_SESSION['nombre'])){
+            $obj_clave_tipo = new cls_clave_tipo();
+            if ($_GET['Estado']==1){
+                $obj_clave_tipo->setEstado("0");
+            }else {
+                $obj_clave_tipo->setEstado("1");
+            }
+            $obj_clave_tipo->setCondicion("ID_TipoClave='".$_GET['ID_TipoClave']."'");
+            $obj_clave_tipo->cambiar_estado_clave_tipo();
+            unset($obj_clave_tipo);
+            header("location:/ORIEL/index.php?ctl=clave_tipo_listar");
+        } else {
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__. '/../vistas/plantillas/inicio_sesion.php';
+        }
+    }
+   ////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////clave
+    ////////////////////////////////////////////////////////////////////////////
+    /**
+     * Método que retorna un arreglo de los registros que existen en base de datos
+     */
+    public function clave_listar() {
+        if(isset($_SESSION['nombre'])){
+            $obj_clave = new cls_clave();
+            $obj_clave_tipo = new cls_clave_tipo();
+            //Procede a ejecutar la consulta SQL para traer todo de t_clave en la bd.
+            $obj_clave->setCondicion("");
+            $obj_clave_tipo->setCondicion("");
+            //Obtener el vector de la consulta
+            $obj_clave->obtener_clave();
+            $obj_clave_tipo->obtener_clave_tipo();
+            
+            $clave=$obj_clave->getArreglo();
+            $claveTipo=$obj_clave_tipo->getArreglo();
+            unset($obj_clave);
+            unset($obj_clave_tipo);
+            
+            require __DIR__.'/../vistas/plantillas/frm_clave.php';
+            
+        } else {
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            //Llamada al formulario correspondiente de la vista
+            require __DIR__.'/../vistas/plantillas/inicio_sesion.php';
+        }
+    }
+
+    /**
+     * Método que guarda en base datos cuando la propiedad ID_Clave esta en cero 
+     * Caso contrario actualiza en base datos el registros según el valor de ID_Clave 
+     */
+    public function clave_guardar() {
+        if(isset($_SESSION['nombre'])){
+            $obj_clave = new cls_clave();
+            $obj_clave->setID_TipoClave($_POST['TipoClave']); 
+            $obj_clave->setCodigo($_POST['Codigo']); 
+            $obj_clave->setDescripcion($_POST['Descripcion']); 
+            $obj_clave->setExtension($_POST['Extension']); 
+
+            $obj_clave->setEstado($_POST['Estado']);
+            if ($_POST['ID_Clave']!=0){
+                $obj_clave->setID_Clave($_POST['ID_Clave']); 
+                $obj_clave->setCondicion("ID_Clave='".$_POST['ID_Clave']."'");
+            }
+            $obj_clave->guardar_clave();
+            unset($obj_clave);
+            header("location:/ORIEL/index.php?ctl=clave_listar");
+        } else {
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__.'/../vistas/plantillas/inicio_sesion.php';
+        }
+    }
+
+    /**
+     * Método que se utiliza para cambiar el estado del registro según el campo llave 
+     */
+    public function clave_cambiar_estado() {
+        if(isset($_SESSION['nombre'])){
+            $obj_clave = new cls_clave();
+            if ($_GET['Estado']==1){
+                $obj_clave->setEstado("0");
+            }else {
+                $obj_clave->setEstado("1");
+            }
+            $obj_clave->setCondicion("ID_Clave='".$_GET['ID_Clave']."'");
+            $obj_clave->cambiar_estado_clave();
+            unset($obj_clave);
+            header("location:/ORIEL/index.php?ctl=clave_listar");
+        } else {
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__. '/../vistas/plantillas/inicio_sesion.php';
+        }
+    }
+}

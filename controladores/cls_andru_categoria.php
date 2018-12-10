@@ -178,4 +178,47 @@ class cls_andru_categoria {
     /*******************************************************************/
     /**Ingrese los nuevos metodos debajo de este comentario**/
     /*******************************************************************/
+        /**
+     * Método que almacena en la propiedad arreglo el resultado de la consulta, 
+     * utiliza la propiedad condicion para filtrar en el WHERE 
+     */
+    public function obtene_preguntas_totales() {
+        if($this->condicion==""){
+            $this->obj_data_provider->conectar();
+            $this->arreglo=$this->obj_data_provider->trae_datos("t_andru_categoria", "*", $this->condicion);
+            $this->arreglo=$this->obj_data_provider->getArreglo();
+            $this->obj_data_provider->desconectar();
+            $this->resultado_operacion=true;
+        }
+        else
+        {
+            $this->obj_data_provider->conectar();
+            $this->arreglo=$this->obj_data_provider->trae_datos(" t_andru_cuestionario c "
+                    . " INNER JOIN t_andru_cuestionario_respuestas cr ON c.ID_Cuestionario = cr.ID_Cuestionario "
+                    . " INNER JOIN t_puntobcr bcr ON c.ID_PuntoBCR = bcr.ID_PuntoBCR "
+                    . " INNER JOIN t_andru_preguntas_respuestas pr ON cr.ID_Pregunta = pr.ID_Pregunta AND cr.ID_Respuesta = pr.ID_Respuesta "
+                    . " INNER JOIN t_andru_preguntas_porcentajes pp ON cr.ID_Pregunta = pp.ID_Pregunta "
+                    . " INNER JOIN t_andru_tipos_porcentajes tp ON pp.ID_Tipo_Porcentaje = tp.ID_Tipo_Porcentaje "
+                    . " INNER JOIN ( "
+                    . " SELECT ID_Fase,COUNT(1) TotalPreguntas "
+                    . " FROM t_andru_preguntas "
+                    . " WHERE Estado = 1 "
+                    . " GROUP BY ID_Fase "
+                    . " ) t ON t.ID_Fase = c.ID_Fase "
+                    . " INNER JOIN ( "
+                    . " SELECT ID_Cuestionario,	count(ID_Respuesta) TotalRespuestas "
+                    . " FROM t_andru_cuestionario_respuestas "
+                    . " WHERE Estado = 1 "
+                    . " GROUP BY ID_Cuestionario "
+                    . " ) resp ON resp.ID_Cuestionario = c.ID_Cuestionario ",
+                    
+                    " cr.ID_Cuestionario,bcr.Nombre,pp.ID_Tipo_Porcentaje, "
+                    ." tp.Descripcion,CONVERT(SUM((pr.Nivel * pp.Valor)/100)/t.TotalPreguntas,DECIMAL(6,2)) Promedio, "
+                    ." t.TotalPreguntas,resp.TotalRespuestas ",
+                    $this->condicion . " GROUP BY cr.ID_Cuestionario,pp.ID_Tipo_Porcentaje ");
+            $this->arreglo=$this->obj_data_provider->getArreglo();
+            $this->obj_data_provider->desconectar();
+            $this->resultado_operacion=true;
+        }
+    }
 }

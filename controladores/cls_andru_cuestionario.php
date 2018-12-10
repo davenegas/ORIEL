@@ -248,7 +248,7 @@ class cls_andru_cuestionario {
                     ." INNER JOIN t_andru_cuestionario  c2 ON c2.ID_Fase = p.ID_Fase "
                     ." LEFT JOIN t_andru_cuestionario_respuestas r ON r.ID_Pregunta = p.ID_Pregunta "
                     ." AND c2.ID_Cuestionario = r.ID_Cuestionario WHERE p.estado =1 "
-                    ." GROUP BY c2.id_cuestionario ) t  ON t.id_cuestionario = c.id_cuestionario ",                    
+                    ." GROUP BY c2.id_cuestionario ) t  ON t.id_cuestionario = c.id_cuestionario Order by  p.Nombre ",                    
                     " c.ID_Cuestionario,c.ID_PuntoBCR,c.ID_Fase,c.Usuario_Crea,c.Fecha_Crea,c.Usuario_Modifica,c.Fecha_Modifica,c.Estado,p.Nombre,f.Descripcion,CONCAT(uc.Nombre,' ',uc.Apellido) Crea,CONCAT(um.Nombre,' ',um.Apellido) Modifica,T.Color ", $this->condicion);
             $this->arreglo=$this->obj_data_provider->getArreglo();
             $this->obj_data_provider->desconectar();

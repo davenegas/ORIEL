@@ -121,6 +121,11 @@ require_once __DIR__ . '/controladores/cls_alerta_general_detalle.php';
 //Libreria de clases --> Control para puntobcr_correo
 require_once __DIR__ . '/controladores/cls_puntobcr_correo.php';
 
+//Libreria de clases --> Control para clave_tipo
+require_once __DIR__ . '/controladores/cls_clave_tipo.php';
+
+//Libreria de clases --> Control para clave
+require_once __DIR__ . '/controladores/cls_clave.php';
 /*
 * El elemento controller, constituye la base y esencia de toda la lógica del negocio, en este
 * se almacenan cada una de las funcionales de ORIEl. El archivo en sí, se compone de "n" cantidad
@@ -497,6 +502,7 @@ $map = array(
     'andru_tipos_porcentajes_cambiar_estado'=>array('controller'=>'Controller','action'=> 'andru_tipos_porcentajes_cambiar_estado'),
     'andru_preguntas_porcentajes_trae'=>array('controller'=>'Controller','action'=> 'andru_preguntas_porcentajes_trae'),
     'andru_preguntas_respuestas_trae'=>array('controller'=>'Controller','action'=> 'andru_preguntas_respuestas_trae'),
+    'andru_preguntas_totales'=>array('controller'=>'Controller','action'=> 'andru_preguntas_totales'),
     
     //Agregar los action al controler de la clase cls_alerta_general_detalle
     'reporte_general_detalle_listar'=>array('controller'=>'Controller','action'=> 'reporte_general_detalle_listar'),
@@ -523,6 +529,15 @@ $map = array(
     'forzar_puesto_de_monitoreo'=>array('controller'=>'Controller', 'action'=>'forzar_puesto_de_monitoreo'),
     'andru_cuestionario_copiar'=>array('controller'=>'Controller', 'action'=>'andru_cuestionario_copiar'),
   
+    //Agregar los action al controler de la clase cls_clave_tipo
+    'clave_tipo_listar'=>array('controller'=>'Controller','action'=> 'clave_tipo_listar'),
+    'clave_tipo_guardar'=>array('controller'=>'Controller','action'=> 'clave_tipo_guardar'),
+    'clave_tipo_cambiar_estado'=>array('controller'=>'Controller','action'=> 'clave_tipo_cambiar_estado'),
+    
+    //Agregar los action al controler de la clase cls_clave
+    'clave_listar'=>array('controller'=>'Controller','action'=> 'clave_listar'),
+    'clave_guardar'=>array('controller'=>'Controller','action'=> 'clave_guardar'),
+    'clave_cambiar_estado'=>array('controller'=>'Controller','action'=> 'clave_cambiar_estado'),
     //Pruebas y nuevas implementaciones
     
     

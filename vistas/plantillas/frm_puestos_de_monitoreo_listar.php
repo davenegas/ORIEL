@@ -165,7 +165,8 @@
                     confirm: function(){
                         $.post("index.php?ctl=forzar_puesto_de_monitoreo", {id_puesto: id_puesto},function(data){
                             var srt = data;
-                            var n= srt.search("Listo");                           
+                            var n= srt.search("Listo");
+                           
                             if(n>0){                                
                                 location.reload();
                             }else{
@@ -184,7 +185,7 @@
         
     </head>
     <body>
-        <?php require_once 'encabezado.php'; echo $_SESSION['rol'];?>
+        <?php require_once 'encabezado.php';?>
         
         <div class="container animated fadeIn col-xs-10 quitar-float">
             <h2>Listado General de Puestos de Monitoreo (Control de Video)</h2>
@@ -196,7 +197,7 @@
             <table id="tabla" class="display" cellspacing="0">
                 <thead>
                     <tr>
-                        <th <?php if(($_SESSION['rol']==3)&& ($_SESSION['rol']==11)&&($_SESSION['rol']==1)){ echo 'hidden';} ?>  data-toggle="tooltip" title="Asigna el puesto a un usuario administrador para liberar el puesto cuando se bloquea" style="text-align:center"><span class="glyphicon glyphicon-edit"></th>
+                        <th <?php if(($_SESSION['rol']!=3)&& ($_SESSION['rol']!=11)&&($_SESSION['rol']!=1)){ echo 'hidden';} ?>  data-toggle="tooltip" title="Asigna el puesto a un usuario administrador para liberar el puesto cuando se bloquea" style="text-align:center"><span class="glyphicon glyphicon-edit"></th>
                         <th hidden="hidden">ID_Puesto_Monitoreo</th>
                         <th style="text-align:center">Nombre</th>
                         <th style="text-align:center">Descripción</th>

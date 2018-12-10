@@ -117,7 +117,7 @@
                 <form id="ventana2" method="POST" name="ventana2" >
                     <img id="close" src='vistas/Imagenes/cerrar.png' width="25" onclick ="ocultar_elemento()">
                     <h4>Copiar respuestas en otros Puntos BCR</h4><hr>
-                    <input  required disabled id="lstPts" name="lstPts" type="text" value="">                    
+                    <input hidden required disabled id="lstPts" name="lstPts" type="text" value="">                    
                     <div class="col-sm-6">
                         <label for="ID_PtsBcr">Seleccione el Punto BCR con las respuestas</label>
                         <select class="form-control" id="ID_PtsBcr" name="ID_PtsBcr">
