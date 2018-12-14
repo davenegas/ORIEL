@@ -13095,7 +13095,7 @@ $obj_externo->obtiene_personal_externo_cencon();
                                 . "Por favor, comunicarse al Centro de Control para la entrega del respectivo código de cierre, a las extensiones 79149, 79150, 79151 o al número directo 8002287905.<br><br><br>"
                                 . "Notas:<br>Si requiere ayuda, comuníquese con el Coordinador del Centro de Control, Ext: 79066.<br>"
                                 . "Este es un mensaje automático, por favor no responderlo.<br>"
-                                . "<a>http://Oriel</a>");
+                                . "<a>http://Oriel</a><br><br>Nota: En caso de haber realizado el cierre hacer caso omiso de este correo.");
                             //Procede a enviar el correo
                             $obj_correo->enviar_correo();
                             $cajero_naranja++;
@@ -13144,7 +13144,7 @@ $obj_externo->obtiene_personal_externo_cencon();
                             . "Por favor, comunicarse al Centro de Control para la entrega del respectivo código de cierre, a las extensiones 79149, 79150, 79151 o al número directo 8002287905.<br><br><br>"
                             . "Notas:<br>Si requiere ayuda, comuníquese con el Coordinador del Centro de Control, Ext: 79066.<br>"
                             . "Este es un mensaje automático, por favor no responderlo.<br>"
-                            . "<a>http://Oriel</a>");
+                            . "<a>http://Oriel</a><br><br>Nota: En caso de haber realizado el cierre hacer caso omiso de este correo.");
                         //Procede a enviar el correo
                         $obj_correo->enviar_correo();
                         $cajero_naranja++;
