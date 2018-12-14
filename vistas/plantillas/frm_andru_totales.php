@@ -2,7 +2,7 @@
 <html lang="es">
     <head>
         <meta charset="utf-8"/>
-        <title>Lista de Fases</title>
+        <title>Reporte Andru Revisión</title>
         <?php require_once 'frm_librerias_head.html';?>
         <link rel="stylesheet" href="vistas/css/ventanaoculta.css"> <script>
             //Funcion para ocultar ventana de mantenimiento
@@ -11,26 +11,51 @@
             }
             //Valida informacion completa de formulario
             function check_empty() {
-                if (document.getElementById('Descripcion').value =="") {
-                    alert("Digita el nombre del Proveedor !");
-                } else {
-                    //Envia el formulario y lo oculta
-                    document.getElementById('ventana2').submit();
-                    document.getElementById('ventana_oculta_2').style.display = "none";
-                }
+                document.getElementById('ventana_oculta_2').style.display = "none";
             }
-            //Funcion para agregar un nuevo punto- formulario en blanco
-            function mostrar_agregar_andru_fases() {
-                document.getElementById('ID_Fase').value="0";
-                document.getElementById('Descripcion').value=null;
-                document.getElementById('Estado').value=1;
-                document.getElementById('ventana_oculta_2').style.display = "block";
-            }
-        //Funcion para editar informacion de andru_fases
-            function Editar_andru_fases(pID_Fase,pDescripcion,pEstado){
-                document.getElementById('ID_Fase').value=pID_Fase;
-                document.getElementById('Descripcion').value=pDescripcion;
-                document.getElementById('Estado').value=pEstado;
+            //Funcion para editar informacion de andru_fases
+            function Ver_Detalle(pID_Cuestionario,pNombre){
+                
+                document.getElementById('titulo').textContent= pNombre ;
+                
+                $.post("index.php?ctl=andru_preguntas_totalesD", {ID_Cuestionario: pID_Cuestionario}, function (data) {
+                    //console.log(data);
+                    var res = data.substring(data.indexOf("{"), data.length);
+                    var datos =JSON.parse(res);
+                    var dataSet = new Array;
+                    var Columnas = datos[0].Columns.split("*");
+                    var ColumnasDinamicas = new Array;
+                    
+                    //Busco la columnas que estan en el campo cero del arreglo
+                    for(var i2=0;i2 < Object.keys(Columnas).length;i2++ ){
+                         ColumnasDinamicas.push({title: Columnas[i2]});
+                    }
+                    
+                    //Agrego dinamicamente los datos según las columnas
+                    for(var i2=1;i2 < Object.keys(datos).length;i2++ ){
+
+                        var tempArray = new Array;
+                        var tempArray3 = new Array;
+
+                        for(var i3=0;i3 < Object.keys(Columnas).length;i3++ ){
+                            
+                            var vtxtcolumna = ColumnasDinamicas[i3].title;
+                            var vtxtvalor = datos[i2][ColumnasDinamicas[i3].title];
+                            
+                            tempArray3.push(vtxtvalor);
+
+                            Object.assign(tempArray, tempArray3 );
+                        }                            
+                        dataSet.push(tempArray);
+                    }
+                    //Cargo la tabla js dinamicamente
+                    $('#example').DataTable({
+                        data: dataSet,
+                        destroy: true,
+                        columns: ColumnasDinamicas,
+                        "autoWidth": false
+                    });
+                });
                 document.getElementById('ventana_oculta_2').style.display = "block";
             };
         </script>
@@ -51,6 +76,7 @@
                         <?php } ?>                        
                         <th style="text-align:center">Cant. Preguntas</th>
                         <th style="text-align:center">Cant. Respuestas</th>
+                        <th style="text-align:center">Ver</th>
                     </tr>
                 </thead>
             <tbody>
@@ -70,6 +96,7 @@
                         <?php } } } ?>
                         <td style="text-align:center"><?php echo $andru_cuestionario[$i]['TotalPreguntas'];?></td>
                         <td style="text-align:center"><?php echo $andru_cuestionario[$i]['TotalRespuestas'];?></td>                        
+                        <td style="text-align:center"><a role="button" onclick="Ver_Detalle('<?php echo $andru_cuestionario[$i]['ID_Cuestionario'];?>','<?php echo $andru_cuestionario[$i]['Nombre'];?>')">Ver</a></td>
                     </tr>
                     <?php } ?>
                     <?php } ?>
@@ -112,23 +139,10 @@
             <!--Formulario para andru_fases-->
                     <form id="ventana2" method="POST" name="ventana2" action="index.php?ctl=andru_fases_guardar">
                         <img id="close" src='vistas/Imagenes/cerrar.png' width="25" onclick ="ocultar_elemento()">
-                        <h2>Matenimiento de Fases de Andru</h2> <hr>
-                        <input hidden id="ID_Fase" name="ID_Fase" type="text">
-
-                        <div class="form-group">
-                            <label for="Descripcion">Descripción</label>
-                            <input class="form-control espacio-abajo" required id="Descripcion" name="Descripcion" placeholder="Descripción" type="text">
-                        </div>
-
-                        <div class="form-group">
-                            <label for="sel1">Estado</label>
-                            <select class="form-control" id="Estado" name="Estado"> 
-                                <option value="1">Activo</option>
-                                <option value="0">Inactivo</option>
-                            </select>
-                        </div>
+                        <h3>Detalle del cuestionario: <span id="titulo"></span></h3> <hr>
+                        <table id="example" class="display" cellspacing="0"></table>
                         <div class="row"></div>
-                        <button><a href="javascript:%20check_empty()" id="submit">Guardar</a></button>
+                        <button><a href="javascript:%20check_empty()" id="submit">Cerrar</a></button>
                     </form>
                 </div>
             </div>

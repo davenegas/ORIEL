@@ -388,13 +388,13 @@ class cls_personal{
     
     public function agregar_nueva_persona(){
         $this->obj_data_provider->conectar();
-        $this->obj_data_provider->inserta_datos("T_personal", "Cedula,Apellido_Nombre,ID_Unidad_Ejecutora,ID_Puesto,Direccion,Link_Foto,ID_Empresa,Observaciones,Estado", "'".$this->cedula."','".$this->apellidonombre."',".$this->id_unidad_ejecutora.",".$this->id_puesto.",'".$this->direccion."','".$this->linkfoto."',".$this->id_empresa.",'".$this->observaciones."','".$this->estado."'");
+        $this->obj_data_provider->inserta_datos("t_personal", "Cedula,Apellido_Nombre,ID_Unidad_Ejecutora,ID_Puesto,Direccion,Link_Foto,ID_Empresa,Observaciones,Estado", "'".$this->cedula."','".$this->apellidonombre."',".$this->id_unidad_ejecutora.",".$this->id_puesto.",'".$this->direccion."','".$this->linkfoto."',".$this->id_empresa.",'".$this->observaciones."','".$this->estado."'");
         $this->obj_data_provider->desconectar();
     }
     
     public function agregar_nueva_persona_para_prontuario(){
         $this->obj_data_provider->conectar();
-        $this->obj_data_provider->inserta_datos_para_prontuario("T_personal", "Cedula,Apellido_Nombre,ID_Unidad_Ejecutora,ID_Puesto,Direccion,Link_Foto,ID_Empresa,Estado,Correo", "'".$this->cedula."','".$this->apellidonombre."',".$this->id_unidad_ejecutora.",".$this->id_puesto.",'".$this->direccion."','".$this->linkfoto."',".$this->id_empresa.",'".$this->estado."','".$this->correo."'");
+        $this->obj_data_provider->inserta_datos_para_prontuario("t_personal", "Cedula,Apellido_Nombre,ID_Unidad_Ejecutora,ID_Puesto,Direccion,Link_Foto,ID_Empresa,Estado,Correo", "'".$this->cedula."','".$this->apellidonombre."',".$this->id_unidad_ejecutora.",".$this->id_puesto.",'".$this->direccion."','".$this->linkfoto."',".$this->id_empresa.",'".$this->estado."','".$this->correo."'");
         $this->obj_data_provider->desconectar();
     }
     
@@ -430,6 +430,7 @@ class cls_personal{
     }
     
     function agregar_edicion_de_persona_a_transaccion(){
+
         $this->obj_data_provider->agregar_edicion_de_datos_a_la_transaccion("t_personal","Cedula='".$this->cedula."',Apellido_Nombre='".$this->apellidonombre."',ID_Unidad_Ejecutora=".$this->id_unidad_ejecutora.",ID_Puesto=".$this->id_puesto.",Direccion='".$this->direccion."',Link_Foto='".$this->linkfoto."',ID_Empresa=".$this->id_empresa.",Correo='".$this->correo."',Estado='".$this->estado."'",$this->condicion);
         //$this->obj_data_provider->agrega_edicion_de_datos_a_la_transaccion("t_personal","Apellido_Nombre='VENEGAS MONGE DIEGO ALBERTOs'","Cedula='01-1310-0038'");
     }
@@ -454,7 +455,7 @@ class cls_personal{
         $this->obj_data_provider->desconectar();
         if (count($this->arreglo2)>0){
             $this->setId_ultima_persona_ingresada($this->arreglo2[0]['ID_Persona']);
-        } else {
+        }else {
             $this->setId_ultima_persona_ingresada(0);
         }   
     }
@@ -684,4 +685,27 @@ class cls_personal{
         $this->resultado_operacion=true;
     }
     
+        public function obtiene_personal_para_cencon(){
+        $this->obj_data_provider->conectar();
+        if($this->condicion==""){
+            $this->arreglo=$this->obj_data_provider->trae_datos(
+           "   T_Personal p
+                    INNER JOIN T_UnidadEjecutora u ON p.ID_Unidad_Ejecutora = u.ID_Unidad_Ejecutora", 
+                " DISTINCT p.ID_Empresa,p.ID_Persona, p.Apellido_Nombre, u.Departamento ",
+                "");
+            $this->arreglo=$this->obj_data_provider->getArreglo();
+            $this->obj_data_provider->desconectar();
+            $this->resultado_operacion=true;
+        }
+        else{
+            $this->arreglo=$this->obj_data_provider->trae_datos(
+           "   T_Personal p
+                    INNER JOIN T_UnidadEjecutora u ON p.ID_Unidad_Ejecutora = u.ID_Unidad_Ejecutora", 
+                " DISTINCT p.ID_Empresa,p.ID_Persona, p.Apellido_Nombre, u.Departamento ",
+                $this->condicion);
+            $this->arreglo=$this->obj_data_provider->getArreglo();
+            $this->obj_data_provider->desconectar();
+            $this->resultado_operacion=true;
+        }
+    } 
 }?>

@@ -391,4 +391,28 @@ class cls_personal_externo{
         $this->arreglo=$this->obj_data_provider->getArreglo();
         $this->obj_data_provider->desconectar();
     }
+    
+        //Funcion para obtener personal externo 
+    public function obtiene_personal_externo_cencon(){
+        $this->obj_data_provider->conectar();
+        if($this->condicion==""){
+            $this->arreglo=$this->obj_data_provider->trae_datos(
+                " T_PersonalExterno p INNER JOIN T_Empresa E ON E.ID_Empresa = P.ID_Empresa ", 
+                "p.ID_Persona_Externa, p.Apellido,p.Nombre,e.ID_Empresa, e.Empresa",
+                "");
+            $this->arreglo=$this->obj_data_provider->getArreglo();
+            $this->obj_data_provider->desconectar();
+            $this->resultado_operacion=true;
+        }
+        else{
+            $this->arreglo=$this->obj_data_provider->trae_datos(
+                " T_PersonalExterno p INNER JOIN T_Empresa E ON E.ID_Empresa = P.ID_Empresa ", 
+                " p.ID_Persona_Externa, p.Apellido,p.Nombre,e.ID_Empresa, e.Empresa ",                    
+                $this->condicion);
+            $this->arreglo=$this->obj_data_provider->getArreglo();
+            $this->obj_data_provider->desconectar();
+            $this->resultado_operacion=true;
+        }
+    }
+    
 }?>

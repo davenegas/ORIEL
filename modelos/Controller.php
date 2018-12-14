@@ -1,48 +1,47 @@
 <?php
-
 //Definición de la clase Controller. Componente principal de la lógica del negocio. 
-class Controller {
-
+class Controller{
+     
     //Declaración de métodos que envuelven toda la funcionalidad del sistema
     //A través del componente index se llaman cada uno de los eventos de la clase 
     //controller para que sean ejecutados según sea necesario.
     //Inicio del sitio web, llamada a la pantalla principal para inicio de sesión
-    public function inicio() {
-        if (!isset($_SERVER['HTTPS']) || (gethostname() != 'BCR0209ORI01')) {
+    public function inicio(){
+        if(!isset($_SERVER['HTTPS'])||(gethostname()!='BCR0209ORI01')){
             //Variables que muestran tipos de advertencia en pantalla según sea necesario
-            $tipo_de_alerta = "alert alert-info";
-            $validacion = "Verificación de Identidad";
+            $tipo_de_alerta="alert alert-info";
+            $validacion="Verificación de Identidad";
             //Llamada al formulario correspondiente de la vista
             require __DIR__ . '/../vistas/plantillas/frm_principal_publica.php';
         } else {
             header("Location:http://bcr0209ori01/Oriel/index.php?ctl=inicio");
         }
     }
-
+                
     ////////////////////////////////////////////////////////////////////////////
     //////////////Metodos de Acceso publico/////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////
     //Lista el personal con nombre, extensión, teléfono BCR y departamento
-    public function personal_listar_publico() {
-        if (!isset($_SERVER['HTTPS']) || (gethostname() != 'BCR0209ORI01')) {
+    public function personal_listar_publico(){
+        if(!isset($_SERVER['HTTPS'])||(gethostname()!='BCR0209ORI01')){
             //Creación del objeto personal
-            $obj_personal = new cls_personal();
+            $obj_personal=new cls_personal();
             //Trae de la base de datos la lista de personas disponibles
             $obj_personal->obtiene_todo_el_personal_filtrado();
             //Inicializa un vector con el total de registros de la base de datos
-            $personas = $obj_personal->getArreglo();
+            $personas= $obj_personal->getArreglo();
             //Llamada al formulario correspondiente de la vista
             require __DIR__ . '/../vistas/plantillas/frm_personal_listar_publico.php';
         } else {
             header("Location: https://bcr0209ori01/Oriel/index.php?ctl=personal_listar_publico");
         }
     }
-
+    
     //Lista de puntos BCR con información general y pública para vista de todo el conglomerado BCR
-    public function puntobcr_listar_publico() {
-        if (!isset($_SERVER['HTTPS']) || (gethostname() != 'BCR0209ORI01')) {
+    public function puntobcr_listar_publico(){
+        if(!isset($_SERVER['HTTPS'])||(gethostname()!='BCR0209ORI01')){
             //Creación del objeto puntos BCR
-            $obj_puntobcr = new cls_puntosBCR();
+            $obj_puntobcr= new cls_puntosBCR();
             //Trae de la base de datos la lista de puntos BCR disponibles
             $obj_puntobcr->obtiene_todos_los_puntos_bcr_publico();
             //Inicializa un vector con el total de registros de la base de datos
@@ -53,256 +52,258 @@ class Controller {
             header("Location: http://bcr0209ori01/Oriel/index.php?ctl=puntobcr_listar_publico");
         }
     }
-
+    
     //Muestra formulario de los números de contacto de la Gerencia de Seguridad
-    public function frm_contacto_publico() {
-        if (!isset($_SERVER['HTTPS']) || (gethostname() != 'BCR0209ORI01')) {
+    public function frm_contacto_publico(){
+        if(!isset($_SERVER['HTTPS'])||(gethostname()!='BCR0209ORI01')){
             //Llamada al formulario correspondiente de la vista
             require __DIR__ . '/../vistas/plantillas/frm_contacto_publico.php';
         } else {
             header("Location: http://bcr0209ori01/Oriel/index.php?ctl=frm_contacto_publico");
         }
     }
-
-    public function personal_externo_listar_publico() {
-        if (!isset($_SERVER['HTTPS']) || (gethostname() != 'BCR0209ORI01')) {
+    
+    public function personal_externo_listar_publico(){
+        if(!isset($_SERVER['HTTPS'])||(gethostname()!='BCR0209ORI01')){
             //Creación del objeto personal
             $obj_externo = new cls_personal_externo();
             //Trae de la base de datos la lista de personas disponibles
             $obj_externo->obtiene_todo_personal_externo_filtrado();
             //Inicializa un vector con el total de registros de la base de datos
-            $externo = $obj_externo->getArreglo();
+            $externo= $obj_externo->getArreglo();
             //Llamada al formulario correspondiente de la vista
             require __DIR__ . '/../vistas/plantillas/frm_personal_externo_listar_publico.php';
         } else {
             header("Location: http://bcr0209ori01/Oriel/index.php?ctl=personal_externo_listar_publico");
         }
     }
-
+    
     ////////////////////////////////////////////////////////////////////////////
     //Metodos relacionados del area de Modulos de Seguridad del Sistema/////////
     ////////////////////////////////////////////////////////////////////////////
+
     //Metodo que llama al formulario correspondiente para validación de credenciales por parte del usuario
-    public function iniciar_sesion() {
+    public function iniciar_sesion(){
         //Variables que muestran tipos de adventencia en pantalla según sea necesario
-        $tipo_de_alerta = "alert alert-info";
-        $validacion = "Verificación de Identidad";
+        $tipo_de_alerta="alert alert-info";
+        $validacion="Verificación de Identidad";
         //Llamada al formulario correspondiente de la vista   
         //$this->ejecucion_automatico_proceso("Oficiales");     
-        require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        require __DIR__ . '/../vistas/plantillas/inicio_sesion.php'; 
     }
-
+    
     //Obtiene lista completa de roles del sistema
     //Metodo que muestra el listado general de roles de seguridad establecidos en el sistema. Pantalla principal del mantenimiento.
-    public function listar_roles() {
+    public function listar_roles(){
         //Validación para verificar si el usuario está logeado en el sistema
-        if (isset($_SESSION['nombre'])) {
+        if(isset($_SESSION['nombre'])){
             //Creación del objeto roles
-            $obj_roles = new cls_roles();
+            $obj_roles= new cls_roles();
             //Trae de la base de datos la lista de roles disponibles
             $obj_roles->obtiene_todos_los_roles();
             //Inicializa un vector con el total de registros de la base de datos
             $params = $obj_roles->getArreglo();
-            require __DIR__ . '/../vistas/plantillas/frm_roles_listar.php';
-        } else {
+            require __DIR__.'/../vistas/plantillas/frm_roles_listar.php';
+        }else{
             /*
-             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
-             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
-             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
-             * En la última línea llama a la pagina de inicio de sesión.
-             */
-            $tipo_de_alerta = "alert alert-warning";
-            $validacion = "Es necesario volver a iniciar sesión para consultar el sistema";
+            * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+            * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+            * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+            * En la última línea llama a la pagina de inicio de sesión.
+            */
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }
-    }
+    }    
 
     //Metodo que realiza la llamada al formulario principal del sistema ORIEL
-    public function principal() {
+    public function principal(){
         //Validación para verificar si el usuario está logeado en el sistema
-        if (isset($_SESSION['nombre'])) {
+        if(isset($_SESSION['nombre'])){
             require __DIR__ . '/../vistas/plantillas/frm_principal.php';
-        } else {
+        }else{
             /*
-             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
-             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
-             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
-             * En la última línea llama a la pagina de inicio de sesión.
-             */
-            $tipo_de_alerta = "alert alert-warning";
-            $validacion = "Es necesario volver a iniciar sesión para consultar el sistema";
+            * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+            * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+            * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+            * En la última línea llama a la pagina de inicio de sesión.
+            */
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
             //Llamada al formulario correspondiente de la vista
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }
-    }
+    }    
 
     ////////////////////////////////////////////////////////////////////////////
     ///Serie de metodos que permiten crear un utilitario de importación de personal BCR ////////
     ////////////////////////////////////////////////////////////////////////////
+    
     //Paso del utilitario, pantalla de bienvendida, desde esta pantalla es posible 
     //seleccionar el archivo csv correspondiente con el listado total de personas
     //que pertenecen al conglomerado BCR. Este archivo es enviado de manera semanal
     //por parte de personal de capital humano.
-    public function frm_importar_prontuario_paso_1() {
+    public function frm_importar_prontuario_paso_1(){
         //Validación para verificar si el usuario está logeado en el sistema
-        if (isset($_SESSION['nombre'])) {
+        if(isset($_SESSION['nombre'])){
             //Llamada al formulario correspondiente de la vista
             //echo $obj_personal->getObservaciones();
             require __DIR__ . '/../vistas/plantillas/frm_importar_prontuario_paso_1.php';
-        } else {
+        }else{
             /*
-             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
-             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
-             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
-             * En la última línea llama a la pagina de inicio de sesión.
-             */
-            $tipo_de_alerta = "alert alert-warning";
-            $validacion = "Es necesario volver a iniciar sesión para consultar el sistema";
+            * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+            * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+            * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+            * En la última línea llama a la pagina de inicio de sesión.
+            */
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }
-    }
-
+    }    
+    
     //Este metodo, el cual constituye el paso 2 de la importación del prontuario, permite
     //leer el contenido del archivo correspondiente (una vez sea validado) y pasarlo directamente a 
     //un vector como estructura propia de PHP. Una vez hecho esto será posible manipular la información
     //en los pasos siguientes del asistente.
-    public function frm_importar_prontuario_paso_2() {
+    public function frm_importar_prontuario_paso_2(){
         //Validación para verificar si el usuario está logeado en el sistema
-        if (isset($_SESSION['nombre'])) {
-
+        if(isset($_SESSION['nombre'])){
+               
             /*
-             * En la variable recepcion de archivo, recibe el estado en el que fue recibido el archivo desde el formulario anterior
-             */
-            $recepcion_archivo = $_FILES['seleccionar_archivo']['error'];
-
+            * En la variable recepcion de archivo, recibe el estado en el que fue recibido el archivo desde el formulario anterior
+            */
+            $recepcion_archivo=$_FILES['seleccionar_archivo']['error'];
+            
             //Valida que el tipo de archivo suministrado por el usuario sea del tipo CSV, delimitado por comas
-            if (!($_FILES['seleccionar_archivo']['type'] === "application/vnd.ms-excel")) {
+            if (!($_FILES['seleccionar_archivo']['type']==="application/vnd.ms-excel")){
                 //En caso de que sea diferente, muestra una advertencia en pantalla para el usario y se sale del paso
-                echo "<script type=\"text/javascript\">alert('Debe Importar un archivo tipo CSV!!!!');history.go(-1);</script>";
-                ;
+                echo "<script type=\"text/javascript\">alert('Debe Importar un archivo tipo CSV!!!!');history.go(-1);</script>";;
                 exit();
             }
 
             //Asigna a la variable el archivo abierto en modo lectura para recorrer la información contenida en el.
-            $handle = fopen($_FILES['seleccionar_archivo']['tmp_name'], "r");
-
+            $handle= fopen ($_FILES['seleccionar_archivo']['tmp_name'],"r");
+            
             //Contiene en las variables params y record, el total de regsitros del archivo mediante la funcion fgetcsv
-            $params = $record = fgetcsv($handle);
-
+            $params=$record = fgetcsv($handle);
+                
             //Declara un vector, el cual contendrá de manera oficial toda la información del documento.
-            $prontuario = array();
-
+            $prontuario =array();
+            
             //Variable contador del ciclo
-            $i = 0;
-
+            $i=0;
+            
             //Almacena en la variable record, cada registro mientras handle tenga lineas disponibles que recorrer
-            while ($record = fgetcsv($handle, 0, ";")) {
+            while ($record = fgetcsv($handle,0,";")){
                 // a prontuario le va asignando cada uno de los registros del documento
-                $prontuario[] = $record;
+                $prontuario[]=$record;
                 // Va incrementado el contador
                 $i++;
             }
-
+            
             //Define una variable de sesión, que contiene el vector completo con la información completa del personal
             //Esto permitirá usar el vector leido en cada una de las pantallas del asistente de importación para tenerlo disponible
-            $_SESSION['prontuario'] = $prontuario;
-
+            $_SESSION['prontuario']=$prontuario;    
+           
             //Mediante el contador definido en el ciclo anterior, se envia una variable a la capa de presentación
             // Que notifica cuantas personas fueron recibidas mediante el prontuario
-            $mensaje = "Fue recibida la información correspondiente a " . $i . " personas.";
+            $mensaje="Fue recibida la información correspondiente a ".$i." personas."; 
 
             //Llamada al formulario correspondiente de la vista
             require __DIR__ . '/../vistas/plantillas/frm_importar_prontuario_paso_2.php';
-        } else {
+                          
+        }else {
             /*
-             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
-             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
-             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
-             * En la última línea llama a la pagina de inicio de sesión.
-             */
-            $tipo_de_alerta = "alert alert-warning";
-            $validacion = "Es necesario volver a iniciar sesión para consultar el sistema";
+            * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+            * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+            * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+            * En la última línea llama a la pagina de inicio de sesión.
+            */
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
             //Llamada al formulario correspondiente de la vista
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
-        }
+        } 
     }
-
+    
     //Paso de importación del prontuario que permite actualizar la tabla de unidades ejecutoras en el sistema
-    public function frm_importar_prontuario_paso_3() {
+    public function frm_importar_prontuario_paso_3(){
         //Validación para verificar si el usuario está logeado en el sistema
-        if (isset($_SESSION['nombre'])) {
-
+        if(isset($_SESSION['nombre'])){
+            
             //Crea objeto de tipo unidad ejecutora para administración de la tabla
             $obj_unidades_ejecutoras = new cls_unidad_ejecutora();
-
+ 
             // Crea vector para almacenar las unidades ejecutoras que vienen en el prontuario pero en modo disctinct
-            $unidades_ejecutoras = array();
-
+            $unidades_ejecutoras=array();
+            
             /*
-             * Los siguientes vectores permiten definir un formato específico para la fecha que llevara en el nombre
-             * del archivo generado (xls) una vez se procese la información de las unidades ejecutoras. El reporte se
-             * descarga de manera automática en formato excel, una vez se complete el proceso.
-             * Se definen dos vectores, uno para los días de la semana y otro para los meses del año
-             */
-
-            $dias = array("Domingo", "Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sábado");
-            $meses = array("Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre");
-
+            * Los siguientes vectores permiten definir un formato específico para la fecha que llevara en el nombre
+            * del archivo generado (xls) una vez se procese la información de las unidades ejecutoras. El reporte se
+            * descarga de manera automática en formato excel, una vez se complete el proceso.
+            * Se definen dos vectores, uno para los días de la semana y otro para los meses del año
+            */
+            
+            $dias = array("Domingo","Lunes","Martes","Miercoles","Jueves","Viernes","Sábado");
+            $meses = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
+ 
             /*
-             * El vector de inconsistencias, por lo general dentro de los pasos del prontuario, almacenará cada
-             * uno de los registros o situaciones que valgan la pena recordar una vez se procese la información.
-             */
+            * El vector de inconsistencias, por lo general dentro de los pasos del prontuario, almacenará cada
+            * uno de los registros o situaciones que valgan la pena recordar una vez se procese la información.
+            */
             //Se agrega un título al vector de inconsistencias, el cual posteriormente se transformará en un documento de excel
-            $vector_inconsistencias = array(array("Resumen general de actualizacion de unidades ejecutoras", $dias[date('w')] . " " . date('d') . " de " . $meses[date('n') - 1] . " del " . date('Y') . ", " . date("H:i", time()) . " hrs"));
+            $vector_inconsistencias=array(array("Resumen general de actualizacion de unidades ejecutoras",$dias[date('w')]." ".date('d')." de ".$meses[date('n')-1]. " del ".date('Y').", ".date("H:i", time()) . " hrs"));
             //Agrega línea en blanco en el vector
-            $vector_inconsistencias[] = array("", "");
+            $vector_inconsistencias[]=array ("","");
             // Agrega nombres a las columnas principales del documento
-            $vector_inconsistencias[] = array("Valor Prontuario:", "Valor en Base de Datos:");
+            $vector_inconsistencias[]=array ("Valor Prontuario:","Valor en Base de Datos:");
             //Agrega línea en blanco en el vector
-            $vector_inconsistencias[] = array("", "");
-
+            $vector_inconsistencias[]=array ("","");
+            
             // Lee las unidades ejecutoras que se encuentran en el prontuario y las pasa a un vector separado en modo distinct
             /*
-             * Para este proceso se utiliza el vector original de la sesión de usuario y un nuevo vector qu almacena las unidades ejecutoras
-             * y la información relevante e indispensable para procesar y actualizar en base de datos.           */
-
+            * Para este proceso se utiliza el vector original de la sesión de usuario y un nuevo vector qu almacena las unidades ejecutoras
+            * y la información relevante e indispensable para procesar y actualizar en base de datos.           */
+            
             for ($i = 0; $i < count($_SESSION['prontuario']); $i++) {
-                if (count($unidades_ejecutoras) > 0) {
-                    $bandera = 0;
+                if (count($unidades_ejecutoras)>0){
+                    $bandera=0;
                     for ($x = 0; $x < count($unidades_ejecutoras); $x++) {
-                        if ($_SESSION['prontuario'][$i][7] == $unidades_ejecutoras[$x]) {
-                            $bandera = 1;
+                        if ($_SESSION['prontuario'][$i][7]==$unidades_ejecutoras[$x]){
+                            $bandera=1;
                         }
                     }
-                    if ($bandera == 0) {
-                        $unidades_ejecutoras[] = $_SESSION['prontuario'][$i][7];
-                    } else {
-                        $bandera = 0;
+                    if ($bandera==0){
+                        $unidades_ejecutoras[]=$_SESSION['prontuario'][$i][7];
+                    }else{
+                        $bandera=0;
                     }
-                } else {
-                    $unidades_ejecutoras[] = $_SESSION['prontuario'][$i][7];
+                }else{
+                    $unidades_ejecutoras[]=$_SESSION['prontuario'][$i][7];
                 }
             }
-
+            
             // Mediante este ciclo se edita la tabla de unidades ejecutoras completamente, nuevas, duplicadas, modificadas
-
-            $nuevas = 0;
-            $editadas = 0;
-
+            
+            $nuevas=0;
+            $editadas=0;
+            
             //Este proceso permite unificar las unidades ejecutoras, ya que en ocasiones se encuentran duplicadas, omisas o con un nombre erroneo
-
-            for ($i = 0; $i < count($unidades_ejecutoras); $i++) {
+            
+            for ($i = 0; $i < count($unidades_ejecutoras); $i++){
                 //Realiza una busqueda a nivel de base de datos, lo que permite traer registros de ue con nombre parecido al del vector de trabajo
-                $obj_unidades_ejecutoras->setCondicion("Departamento Like '" . substr($unidades_ejecutoras[$i], 0, strpos($unidades_ejecutoras[$i], "-") + 1) . "%'");
+                $obj_unidades_ejecutoras->setCondicion("Departamento Like '".substr($unidades_ejecutoras[$i],0,strpos($unidades_ejecutoras[$i],"-")+1)."%'");
                 //Ejecuta la sentencia SQL
                 $obj_unidades_ejecutoras->obtener_unidades_ejecutoras();
-
+            
                 //Verifica si la consulta ha traido resultados
-                if (count($obj_unidades_ejecutoras->getArreglo()) > 1) {
+                if (count($obj_unidades_ejecutoras->getArreglo())>1){
                     //Variable temporal que va almacenando información de unidades duplicadas
-                    $temporal_inconsistencias = "UNIDADES DUPLICADAS:";
+                    $temporal_inconsistencias="UNIDADES DUPLICADAS:";
                     //Establece el numero de la unidad ejecutora al objeto correspondiente
-                    $obj_unidades_ejecutoras->setNumero_ue(substr($unidades_ejecutoras[$i], 0, strpos($unidades_ejecutoras[$i], "-") - 1));
+                    $obj_unidades_ejecutoras->setNumero_ue(substr($unidades_ejecutoras[$i],0,strpos($unidades_ejecutoras[$i],"-")-1));
                     //Establece el nombre de la unidad ejecutora
                     $obj_unidades_ejecutoras->setDepartamento($unidades_ejecutoras[$i]);
                     //Establece las observaciones
@@ -313,49 +314,49 @@ class Controller {
                     $obj_unidades_ejecutoras->agregar_nueva_ue_para_prontuario();
                     //Obtiene el id de la unidad ejecutora recien ingresada
                     $obj_unidades_ejecutoras->obtiene_id_ultima_ue_ingresada();
-
+                    
                     /*
-                     * El siguiente ciclo edita la unidad ejecutora de las personas y sitios que 
-                     * corresponden.
-                     */
+                    * El siguiente ciclo edita la unidad ejecutora de las personas y sitios que 
+                    * corresponden.
+                    */
                     for ($x = 0; $x < count($obj_unidades_ejecutoras->getArreglo()); $x++) {
-                        $temp = $obj_unidades_ejecutoras->getArreglo();
-                        $obj_unidades_ejecutoras->setCondicion("ID_Unidad_Ejecutora=" . $temp[$x]['ID_Unidad_Ejecutora']);
+                        $temp=$obj_unidades_ejecutoras->getArreglo();
+                        $obj_unidades_ejecutoras->setCondicion("ID_Unidad_Ejecutora=".$temp[$x]['ID_Unidad_Ejecutora']);
                         $obj_unidades_ejecutoras->edita_ue_de_personas_para_prontuario();
                         $obj_unidades_ejecutoras->edita_ue_de_sitios_bcr_para_prontuario();
                         $obj_unidades_ejecutoras->eliminar_ue_sobrantes_para_prontuario();
-                        $unidades_ejecutoras_duplicadas = $temp[$x] . ",";
-                        $temporal_inconsistencias .= Encrypter::quitar_tildes($unidades_ejecutoras_duplicadas);
+                        $unidades_ejecutoras_duplicadas=$temp[$x].",";
+                        $temporal_inconsistencias.=Encrypter::quitar_tildes($unidades_ejecutoras_duplicadas);
                     }
                     //Variable que cuenta cuantas unidades ejecutoras son editadas.
                     $editadas++;
-                    $unidad_prontuario = $unidades_ejecutoras[$i];
+                    $unidad_prontuario=$unidades_ejecutoras[$i];
                     // Inserta una línea en el vector de inconsistencias con información de las unidades duplicadas
-                    $vector_inconsistencias[] = array("UE DUPLICADAS, Modificacion: " . Encrypter::quitar_tildes($unidad_prontuario), $temporal_inconsistencias);
+                    $vector_inconsistencias[]=array ("UE DUPLICADAS, Modificacion: ".Encrypter::quitar_tildes($unidad_prontuario),$temporal_inconsistencias);
                     //Inserta una línea en el vector
-                    $vector_inconsistencias[] = array("", "");
+                    $vector_inconsistencias[]=array ("","");
                 }
                 //En caso de que el resultado de la consulta arroje solo un registro, se procede a editar la información de la unidad en la base de datos
-                if (count($obj_unidades_ejecutoras->getArreglo()) == 1) {
-                    $temp = $obj_unidades_ejecutoras->getArreglo();
-                    if (!($temp[0]['Departamento'] == $unidades_ejecutoras[$i])) {
+                if (count($obj_unidades_ejecutoras->getArreglo())==1){
+                    $temp=$obj_unidades_ejecutoras->getArreglo();
+                    if (!($temp[0]['Departamento']==$unidades_ejecutoras[$i])){
                         /*
                          * Agrega la información respectiva a la unidad ejecutora en el objeto correspondiente
                          */
-                        $obj_unidades_ejecutoras->setNumero_ue(substr($unidades_ejecutoras[$i], 0, strpos($unidades_ejecutoras[$i], "-") - 1));
+                        $obj_unidades_ejecutoras->setNumero_ue(substr($unidades_ejecutoras[$i],0,strpos($unidades_ejecutoras[$i],"-")-1));
                         $obj_unidades_ejecutoras->setDepartamento($unidades_ejecutoras[$i]);
                         $obj_unidades_ejecutoras->setObservaciones("");
                         $obj_unidades_ejecutoras->setEstado("1");
-                        $temp = $obj_unidades_ejecutoras->getArreglo();
-                        $obj_unidades_ejecutoras->setCondicion("ID_Unidad_Ejecutora=" . $temp[0]['ID_Unidad_Ejecutora']);
+                        $temp=$obj_unidades_ejecutoras->getArreglo();
+                        $obj_unidades_ejecutoras->setCondicion("ID_Unidad_Ejecutora=".$temp[0]['ID_Unidad_Ejecutora']);
                         $obj_unidades_ejecutoras->edita_ue_para_prontuario();
-                        $unidad_prontuario = $unidades_ejecutoras[$i];
-                        $unidad_base_datos = $temp[0]['Departamento'];
+                        $unidad_prontuario=$unidades_ejecutoras[$i];
+                        $unidad_base_datos=$temp[0]['Departamento'];
                         /*
                          * Agrega el registro al arreglo que exportará en el archivo de excel la información correspondiente.
                          */
-                        $vector_inconsistencias[] = array("EDICION, se identifica informacion distinta de unidad ejecutora: " . Encrypter::quitar_tildes($unidad_prontuario), Encrypter::quitar_tildes($unidad_base_datos));
-                        $vector_inconsistencias[] = array("", "");
+                        $vector_inconsistencias[]=array ("EDICION, se identifica informacion distinta de unidad ejecutora: ".Encrypter::quitar_tildes($unidad_prontuario),Encrypter::quitar_tildes($unidad_base_datos));
+                        $vector_inconsistencias[]=array ("","");
                         //Variable que cuenta cuantas unidades ejecutoras son editadas.
                         $editadas++;
                     }
@@ -363,125 +364,126 @@ class Controller {
                 /*
                  * Si la consulta no arroja resultados, se procede a ingresar como una nueva unidad ejecutora.
                  */
-                if ($obj_unidades_ejecutoras->getArreglo() == null) {
+                if ($obj_unidades_ejecutoras->getArreglo()==null){
                     //Asigna la información respectiva a la nueva unidad ejecutora
-                    $obj_unidades_ejecutoras->setNumero_ue(substr($unidades_ejecutoras[$i], 0, strpos($unidades_ejecutoras[$i], "-") - 1));
+                    $obj_unidades_ejecutoras->setNumero_ue(substr($unidades_ejecutoras[$i],0,strpos($unidades_ejecutoras[$i],"-")-1));
                     $obj_unidades_ejecutoras->setDepartamento($unidades_ejecutoras[$i]);
                     $obj_unidades_ejecutoras->setObservaciones("");
                     $obj_unidades_ejecutoras->setEstado("1");
                     $obj_unidades_ejecutoras->agregar_nueva_ue_para_prontuario();
-                    $unidad_prontuario = $unidades_ejecutoras[$i];
-                    $temp = $obj_unidades_ejecutoras->getArreglo();
-                    $unidad_base_datos = $temp[0]['Departamento'];
+                    $unidad_prontuario=$unidades_ejecutoras[$i];
+                    $temp=$obj_unidades_ejecutoras->getArreglo();
+                    $unidad_base_datos=$temp[0]['Departamento'];
                     //Detalla la información de la inserción en el vector que exporta excel.
-                    $vector_inconsistencias[] = array("INSERCION, se identifica nueva unidad ejecutora: " . Encrypter::quitar_tildes($unidad_prontuario), "Se ingresa a la Base de Datos de Oriel");
+                    $vector_inconsistencias[]=array ("INSERCION, se identifica nueva unidad ejecutora: ".Encrypter::quitar_tildes($unidad_prontuario),"Se ingresa a la Base de Datos de Oriel");
                     //Nueva linea en el vector que exporta a excel
-                    $vector_inconsistencias[] = array("", "");
+                    $vector_inconsistencias[]=array ("","");
                     //Variable que cuenta cuantas unidades ejecutoras son agregadas.
                     $nuevas++;
-                }
+                }    
             }
             //Consulta para verificar cuantas unidades ejecutoras no son utilizadas ni en personal ni en sitios BCR.
             $obj_unidades_ejecutoras->setCondicion("Not ID_Unidad_Ejecutora In (Select ID_Unidad_Ejecutora From t_personal)and not ID_Unidad_Ejecutora In (Select ID_Unidad_Ejecutora From t_ue_puntobcr)");
             //Obtiene el resultado
             $obj_unidades_ejecutoras->obtener_unidades_ejecutoras();
             // Valida el resultado
-            if (count($obj_unidades_ejecutoras->getArreglo()) == null) {
-                $cuenta_ue_inactivas = 0;
-            } else {
-                $cuenta_ue_inactivas = count($obj_unidades_ejecutoras->getArreglo());
+            if (count($obj_unidades_ejecutoras->getArreglo())==null){
+                $cuenta_ue_inactivas=0;
+            }else{
+                $cuenta_ue_inactivas=count($obj_unidades_ejecutoras->getArreglo());
             }
-
+           
             // Variables para pintar resultados en pantalla al usuarios
             //Resumen de total de UE, nuevas UE, unidades inactivas y editadas.
-            $total_unidades_ejecutoras = "Se identificaron un total de " . count($unidades_ejecutoras) . " unidades ejecutoras en el prontuario adjunto.";
-            $nuevas_unidades_ejecutoras = "Se agregaron un total de " . $nuevas . " unidades ejecutoras nuevas al sistema.";
-            $unidades_inactivas = "Se identificaron un total de " . $cuenta_ue_inactivas . " unidades ejecutoras no ligadas a ninguna persona ni punto BCR (probablemente estan en desuso o inactivas).";
-            $unidades_editadas = "Se editaron un total de " . $editadas . " unidades ejecutoras";
-
+            $total_unidades_ejecutoras="Se identificaron un total de ".count($unidades_ejecutoras)." unidades ejecutoras en el prontuario adjunto.";
+            $nuevas_unidades_ejecutoras="Se agregaron un total de ".$nuevas." unidades ejecutoras nuevas al sistema.";
+            $unidades_inactivas="Se identificaron un total de ".$cuenta_ue_inactivas." unidades ejecutoras no ligadas a ninguna persona ni punto BCR (probablemente estan en desuso o inactivas).";
+            $unidades_editadas="Se editaron un total de ".$editadas." unidades ejecutoras";
+            
             /*
              * Termina de cerrar el vector con la información correspondiente.
              */
-            $vector_inconsistencias[] = array("", "");
-            $vector_inconsistencias[] = array(Encrypter::quitar_tildes($total_unidades_ejecutoras), "");
-            $vector_inconsistencias[] = array(Encrypter::quitar_tildes($nuevas_unidades_ejecutoras), "");
-            $vector_inconsistencias[] = array(Encrypter::quitar_tildes($unidades_inactivas), "");
-            $vector_inconsistencias[] = array(Encrypter::quitar_tildes($unidades_editadas), "");
-
+            $vector_inconsistencias[]=array ("","");
+            $vector_inconsistencias[]=array (Encrypter::quitar_tildes($total_unidades_ejecutoras),"");
+            $vector_inconsistencias[]=array (Encrypter::quitar_tildes($nuevas_unidades_ejecutoras),"");
+            $vector_inconsistencias[]=array (Encrypter::quitar_tildes($unidades_inactivas),"");
+            $vector_inconsistencias[]=array (Encrypter::quitar_tildes($unidades_editadas),"");
+                 
             //Llamada al formulario correspondiente para mostrar el resultado del paso.
-            require __DIR__ . '/../vistas/plantillas/frm_importar_prontuario_paso_3.php';
-        } else {
+           require __DIR__ . '/../vistas/plantillas/frm_importar_prontuario_paso_3.php';
+     
+        }else {
             /*
-             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
-             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitu0d
-             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
-             * En la última línea llama a la pagina de inicio de sesión.
-             */
-            $tipo_de_alerta = "alert alert-warning";
-            $validacion = "Es necesario volver a iniciar sesión para consultar el sistema";
+            * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+            * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+            * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+            * En la última línea llama a la pagina de inicio de sesión.
+            */
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
-        }
+        } 
     }
-
+         
     //Paso de importación del prontuario que permite actualizar la tabla de puestos en el sistema
-    public function frm_importar_prontuario_paso_4() {
+    public function frm_importar_prontuario_paso_4(){
         //Validación para verificar si el usuario está logeado en el sistema
-        if (isset($_SESSION['nombre'])) {
+        if(isset($_SESSION['nombre'])){
             //Crea objeto de tipo puestos para administración de la tabla
             $obj_puestos = new cls_puestos();
             // Crea vector para almacenar los puestos que vienen en el prontuario pero en modo disctinct
-            $arreglo_puestos = array();
-
+            $arreglo_puestos=array();
+            
             // Lee los puestos que se encuentran en el prontuario y los pasa a un vector separado en modo distinct
             for ($i = 0; $i < count($_SESSION['prontuario']); $i++) {
-                if (count($arreglo_puestos) > 0) {
-                    $bandera = 0;
+                if (count($arreglo_puestos)>0){
+                    $bandera=0;
                     for ($x = 0; $x < count($arreglo_puestos); $x++) {
-                        if ($_SESSION['prontuario'][$i][3] == $arreglo_puestos[$x]) {
-                            $bandera = 1;
+                        if ($_SESSION['prontuario'][$i][3]==$arreglo_puestos[$x]){
+                            $bandera=1;
                         }
                     }
-                    if ($bandera == 0) {
-                        $arreglo_puestos[] = $_SESSION['prontuario'][$i][3];
-                    } else {
-                        $bandera = 0;
+                    if ($bandera==0){
+                        $arreglo_puestos[]=$_SESSION['prontuario'][$i][3];
+                    }else{
+                        $bandera=0;
                     }
-                } else {
-                    $arreglo_puestos[] = $_SESSION['prontuario'][$i][3];
+                }else{
+                    $arreglo_puestos[]=$_SESSION['prontuario'][$i][3];
                 }
             }
-
+            
             // Mediante este ciclo se edita la tabla puestos completamente, nuevos, duplicados, modificados
-            $nuevos = 0;
-            $editados = 0;
-
+            $nuevos=0;
+            $editados=0;
+            
             //Vector que permite comparar los puestos del documento suministrado, con la información de la base de datos
-            for ($i = 0; $i < count($arreglo_puestos); $i++) {
+            for ($i = 0; $i < count($arreglo_puestos); $i++){
                 //Busca el puesto en específico en la base de datos
-                $obj_puestos->setCondicion("Puesto='" . $arreglo_puestos[$i] . "'");
+                $obj_puestos->setCondicion("Puesto='".$arreglo_puestos[$i]."'");
                 //Ejecuta la consulta
                 $obj_puestos->obtener_puestos();
-
+            
                 //Establece el valor del puesto en cuestion
                 $obj_puestos->setPuesto($arreglo_puestos[$i]);
                 //Establece las observaciones
                 $obj_puestos->setObservaciones("");
                 //Establece el estado, 1 como activo
                 $obj_puestos->setEstado("1");
-
+                    
                 // Verifica que la consulta haya devuelto algún resultado, en caso de haber varios 
                 //registros, se procede a agregar uno nuevo y borrar los duplicados, además reasigna personas al puesto nuevo
-                if (count($obj_puestos->getArreglo()) > 1) {
+                if (count($obj_puestos->getArreglo())>1){
                     //Agrega el puesto en cuestión
                     $obj_puestos->agregar_nuevo_puesto_para_prontuario();
                     //Obtiene el id del puesto agregado
                     $obj_puestos->obtiene_id_ultimo_puesto_ingresado();
-
+                    
                     //Recorre cada uno de los puestos duplicados para editar las personas asignadas al nuevo puesto ingresado
                     for ($x = 0; $x < count($obj_puestos->getArreglo()); $x++) {
-                        $temp = $obj_puestos->getArreglo();
+                        $temp=$obj_puestos->getArreglo();
                         //Realiza la busqueda del puesto respectivo
-                        $obj_puestos->setCondicion("ID_Puesto=" . $temp[$x]['ID_Puesto']);
+                        $obj_puestos->setCondicion("ID_Puesto=".$temp[$x]['ID_Puesto']);
                         // Edita las personas asignadas al puesto a eliminar
                         $obj_puestos->edita_puesto_de_personas_para_prontuario();
                         //Elimina los puestos duplicados
@@ -491,13 +493,13 @@ class Controller {
                     $editados++;
                 }
                 //Si el resultado de la consulta inicial = 1, procede a editar los datos del puesto
-                if (count($obj_puestos->getArreglo()) == 1) {
-                    $temp = $obj_puestos->getArreglo();
+                if (count($obj_puestos->getArreglo())==1){
+                    $temp=$obj_puestos->getArreglo();
                     //Si el nombre del puesto varia en el nombre, procede a editarlo
-                    if (!($temp[0]['Puesto'] == $arreglo_puestos[$i])) {
+                    if (!($temp[0]['Puesto']==$arreglo_puestos[$i])){
                         //Establece la condicion y edita el nombre con el que tiene el documento actual
-                        $obj_puestos->setCondicion("ID_Puesto=" . $temp[0]['ID_Puesto']);
-
+                        $obj_puestos->setCondicion("ID_Puesto=".$temp[0]['ID_Puesto']);
+                        
                         //Procede a editarlo
                         $obj_puestos->edita_puesto_para_prontuario();
                         //Contabiliza la variable de puestos editados
@@ -505,152 +507,154 @@ class Controller {
                     }
                 }
                 //En caso de que la consulta no retorne resultados, procede a agregar un puesto nuevo en la bd.
-                if ($obj_puestos->getArreglo() == null) {
+                if ($obj_puestos->getArreglo()==null){
                     //Inserción mediante el objeto de clase
                     $obj_puestos->agregar_nuevo_puesto_para_prontuario();
                     //Contabiliza los nuevos registros.
                     $nuevos++;
                 }
+                
             }
             //Verifica cuantos puestos quedaron sin relación de personas.
             $obj_puestos->setCondicion("Not ID_Puesto In (Select ID_Puesto From t_personal)");
             //Obtiene el resultado de la consulta
             $obj_puestos->obtener_puestos();
-
+            
             //Verifica si existen resultados.
-            if (count($obj_puestos->getArreglo()) == null) {
-                $cuenta_puestos_inactivos = 0;
-            } else {
-                $cuenta_puestos_inactivos = count($obj_puestos->getArreglo());
+            if (count($obj_puestos->getArreglo())==null){
+                $cuenta_puestos_inactivos=0;
+            }else{
+                $cuenta_puestos_inactivos=count($obj_puestos->getArreglo());
             }
-
+            
             // Variables para pintar resultados en pantalla al usuarios
             // Resumen de total de puestos, nuevos puestos, puestos inactivos y editados.
-
-            $total_puestos = "Se identificaron un total de " . count($arreglo_puestos) . " puestos en el prontuario adjunto.";
-            $nuevos_puestos = "Se agregaron un total de " . $nuevos . " puestos nuevos al sistema.";
-            $puestos_inactivos = "Se identificaron un total de " . $cuenta_puestos_inactivos . " puestos no ligados a ninguna persona.";
-            $puestos_editados = "Se editaron un total de " . $editados . " puestos.";
+            
+            $total_puestos="Se identificaron un total de ".count($arreglo_puestos)." puestos en el prontuario adjunto.";
+            $nuevos_puestos="Se agregaron un total de ".$nuevos." puestos nuevos al sistema.";
+            $puestos_inactivos="Se identificaron un total de ".$cuenta_puestos_inactivos." puestos no ligados a ninguna persona.";
+            $puestos_editados="Se editaron un total de ".$editados." puestos.";
             //Llamada al formulario correspondiente para mostrar el resultado del paso.
-            require __DIR__ . '/../vistas/plantillas/frm_importar_prontuario_paso_4.php';
-        } else {
+           require __DIR__ . '/../vistas/plantillas/frm_importar_prontuario_paso_4.php';
+     
+        }else {
             /*
-             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
-             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
-             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
-             * En la última línea llama a la pagina de inicio de sesión.
-             */
-            $tipo_de_alerta = "alert alert-warning";
-            $validacion = "Es necesario volver a iniciar sesión para consultar el sistema";
+            * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+            * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+            * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+            * En la última línea llama a la pagina de inicio de sesión.
+            */
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
             //Llamada al formulario correspondiente para mostrar el resultado del paso.
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
-        }
+        } 
     }
-
+        
     //Paso de importación del prontuario que permite actualizar la tabla de personas en el sistema
-    public function frm_importar_prontuario_paso_5() {
+    public function frm_importar_prontuario_paso_5(){
         //Validación para verificar si el usuario está logeado en el sistema
-        if (isset($_SESSION['nombre'])) {
+        if(isset($_SESSION['nombre'])){
             //Crea objeto de tipo personal para administración de la tabla
             $obj_personal = new cls_personal();
             //Crea objeto de tipo puesto para administración de la tabla
             $obj_puesto = new cls_puestos();
             //Crea objeto de tipo ue para administración de la tabla
             $obj_ue = new cls_unidad_ejecutora();
-
+            
             $obj_personal->iniciar_transaccion_sql();
-
+            
             /*
-             * Los siguientes vectores permiten definir un formato específico para la fecha que llevara en el nombre
-             * del archivo generado (xls) una vez se procese la información de inconsistencias en personal. El reporte se
-             * descarga de manera automática en formato excel, una vez se complete el proceso.
-             * Se definen dos vectores, uno para los días de la semana y otro para los meses del año
-             */
-            $dias = array("Domingo", "Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sábado");
-            $meses = array("Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre");
-
+            * Los siguientes vectores permiten definir un formato específico para la fecha que llevara en el nombre
+            * del archivo generado (xls) una vez se procese la información de inconsistencias en personal. El reporte se
+            * descarga de manera automática en formato excel, una vez se complete el proceso.
+            * Se definen dos vectores, uno para los días de la semana y otro para los meses del año
+            */
+            $dias = array("Domingo","Lunes","Martes","Miercoles","Jueves","Viernes","Sábado");
+            $meses = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
+ 
             // Arreglo que almacena las personas que cambian de puesto en el sistema
-            $vector_cambios_de_puesto = array();
+            $vector_cambios_de_puesto=array();
             //Variable contenedora de la fecha en el formato requerido
-            $fecha_completa = $dias[date('w')] . " " . date('d') . " de " . $meses[date('n') - 1] . " del " . date('Y') . ", " . date("H:i", time()) . " hrs";
-
+            $fecha_completa=$dias[date('w')]." ".date('d')." de ".$meses[date('n')-1]. " del ".date('Y').", ".date("H:i", time()) . " hrs";
+            
             /*
-             * vector que almacena el registro de inconsistencias a nivel de personal y permite
-             * exportarlo en un excel desde la interfaz de usuario correspondiente.
-             */
+            * vector que almacena el registro de inconsistencias a nivel de personal y permite
+            * exportarlo en un excel desde la interfaz de usuario correspondiente.
+            */
             //Título del documento
-            $vector_cambios_de_puesto[] = array("Resumen general de cambios de puesto en personal", $fecha_completa, "", "", "");
+            $vector_cambios_de_puesto[]=array("Resumen general de cambios de puesto en personal",$fecha_completa,"","","");
             //Línea  en blanco en el vector
-            $vector_cambios_de_puesto[] = array("", "", "", "", "");
+            $vector_cambios_de_puesto[]=array ("","","","","");
             //Titulos de las columnas del documento
-            $vector_cambios_de_puesto[] = array("Nombre Persona:", "Cedula:", "Puesto Anterior:", "Puesto Nuevo:", "Unidad Ejecutora:");
+            $vector_cambios_de_puesto[]=array ("Nombre Persona:","Cedula:","Puesto Anterior:","Puesto Nuevo:","Unidad Ejecutora:");
             //Línea  en blanco en el vector
-            $vector_cambios_de_puesto[] = array("", "", "", "", "");
-
+            $vector_cambios_de_puesto[]=array ("","","","","");
+            
             // Arreglo que almacena las personas que cambian de unidad ejecutora en el sistema
-            $vector_cambios_de_ue = array();
+            $vector_cambios_de_ue=array();
             //Titulos de las columnas del documento
-            $vector_cambios_de_ue[] = array("Resumen general de cambios de unidad ejecutora en personal", $fecha_completa, "", "", "");
+            $vector_cambios_de_ue[]=array("Resumen general de cambios de unidad ejecutora en personal",$fecha_completa,"","","");
             //Línea  en blanco en el vector
-            $vector_cambios_de_ue[] = array("", "", "", "", "");
+            $vector_cambios_de_ue[]=array ("","","","","");
             //Titulos de las columnas del documento
-            $vector_cambios_de_ue[] = array("Nombre Persona:", "Cedula:", "Unidad Ejecutora Anterior:", "Nueva Unidad Ejecutora", "");
+            $vector_cambios_de_ue[]=array ("Nombre Persona:","Cedula:","Unidad Ejecutora Anterior:","Nueva Unidad Ejecutora","");
             //Línea  en blanco en el vector
-            $vector_cambios_de_ue[] = array("", "", "", "", "");
-
+            $vector_cambios_de_ue[]=array ("","","","","");
+            
             // Crea vector para almacenar las personas que vienen en el prontuario pero en modo disctinct
-            $arreglo_personal = array();
-
+            $arreglo_personal=array();
+            
             // Lee las personas que se encuentran en el prontuario y los pasa a un vector separado en modo distinct
             for ($i = 0; $i < count($_SESSION['prontuario']); $i++) {
                 //Va agregando cada línea a la estructura correspondiente
-                $arreglo_personal[] = array($_SESSION['prontuario'][$i][0], $_SESSION['prontuario'][$i][1], $_SESSION['prontuario'][$i][3], $_SESSION['prontuario'][$i][4], $_SESSION['prontuario'][$i][7], $_SESSION['prontuario'][$i][8]);
+                $arreglo_personal[]=array($_SESSION['prontuario'][$i][0],$_SESSION['prontuario'][$i][1],$_SESSION['prontuario'][$i][3],$_SESSION['prontuario'][$i][4],$_SESSION['prontuario'][$i][7],$_SESSION['prontuario'][$i][8]);   
             }
-
+            
             // Variables de control para mostrar en pantalla un informe final de los resultados posterior al proceso en ejecución
-            $nuevos = 0;
-            $editados = 0;
-            $eliminadas = 0;
-            $cambios_de_puesto = 0;
-            $cambios_de_ue = 0;
-
+            $nuevos=0;
+            $editados=0;
+            $eliminadas=0;
+            $cambios_de_puesto=0;
+            $cambios_de_ue=0;
+            
             // Mediante este ciclo se edita la tabla personal, se revisa contra el documento de trabajo, si la persona existe 
             //no existe o si hubiera que editarla
-            for ($i = 0; $i < count($arreglo_personal); $i++) {
+            for ($i = 0; $i < count($arreglo_personal); $i++){
                 //Establece el criterio de busqueda por numero de cedula del empleado BCR
-                $obj_personal->setCondicion("Cedula='" . $arreglo_personal[$i][1] . "' and ID_Empresa=1");
+                $obj_personal->setCondicion("Cedula='".$arreglo_personal[$i][1]."' and ID_Empresa=1");
                 //Ejecuta la consulta
                 $obj_personal->obtener_personas_prontuario();
-
+            
                 //Establece el apellido de la persona en cuestión
                 $obj_personal->setApellidonombre($arreglo_personal[$i][0]);
-
+                    
                 //Estable el puesto
                 $obj_puesto->setPuesto($arreglo_personal[$i][2]);
                 //Busca el id del puesto asignado
                 $obj_puesto->obtiene_id_puesto_por_nombre();
                 //Establece la llave foranea del puesto
                 $obj_personal->setId_puesto($obj_puesto->getId());
-
+                
                 //Verifica si la consulta devolvió resultados, en este caso si es iguala uno, quiere decir que la persona si existe en la bd
-                if (count($obj_personal->getArreglo()) == 1) {
+                if (count($obj_personal->getArreglo())==1){
                     //Compara si tiene el mismo puesto asignado
-                    $temp = $obj_personal->getArreglo();
-                    if (!(strcmp($obj_puesto->getId(), $temp[0]['ID_Puesto'])) == 0) {
+                    $temp=$obj_personal->getArreglo();
+                    if (!(strcmp($obj_puesto->getId(), $temp[0]['ID_Puesto']))==0){
                         //En caso de que la comparación se de con puestos diferentes procede a buscar la información del puesto a actualizar
-                        $obj_puesto->setCondicion("ID_Puesto=" . $temp[0]['ID_Puesto']);
+                        $obj_puesto->setCondicion("ID_Puesto=".$temp[0]['ID_Puesto']);
                         //Obtiene los puestos por medio de la consulta sql
                         $obj_puesto->obtener_puestos();
-                        $temp2 = $obj_puesto->getArreglo();
+                        $temp2=$obj_puesto->getArreglo();
                         //Registra en el vector correspondiente, el cambio para respaldarlo posteriormente por medio de excel
-                        $vector_cambios_de_puesto[] = array($arreglo_personal[$i][0], $arreglo_personal[$i][1], $temp2[0]['Puesto'], $arreglo_personal[$i][2], $arreglo_personal[$i][4]);
+                        $vector_cambios_de_puesto[]=array ($arreglo_personal[$i][0],$arreglo_personal[$i][1],$temp2[0]['Puesto'],$arreglo_personal[$i][2],$arreglo_personal[$i][4]);
                         //Agrega un espacio en blanco en el vector
-                        $vector_cambios_de_puesto[] = array("", "", "", "", "");
+                        $vector_cambios_de_puesto[]=array ("","","","","");
                         //Incrementa la variable de control
                         $cambios_de_puesto++;
                     }
                 }
-
+                
                 //Establece el numero de cedula al objeto
                 $obj_personal->setCedula($arreglo_personal[$i][1]);
 
@@ -660,34 +664,34 @@ class Controller {
                 $obj_ue->obtiene_id_ue_por_nombre();
                 //Establece el id de la ue
                 $obj_personal->setId_unidad_ejecutora($obj_ue->getId());
-
+                
                 //Verifica si la consulta arrojó algun registro
-                if (count($obj_personal->getArreglo()) == 1) {
-                    $temp = $obj_personal->getArreglo();
+                if (count($obj_personal->getArreglo())==1){  
+                    $temp=$obj_personal->getArreglo();
                     //Compara las unidades ejecutoras (tanto la del documento de trabajo, como la que se encuentra en la bd)
-                    if (!(strcmp($obj_ue->getId(), $temp[0]['ID_Unidad_Ejecutora'])) == 0) {
+                    if (!(strcmp($obj_ue->getId(), $temp[0]['ID_Unidad_Ejecutora']))==0){
                         //define una condicion de busqueda en caso de que la ue del empleado sea diferente a la que trae el documento
-                        $obj_ue->setCondicion("ID_Unidad_Ejecutora=" . $temp[0]['ID_Unidad_Ejecutora']);
+                        $obj_ue->setCondicion("ID_Unidad_Ejecutora=".$temp[0]['ID_Unidad_Ejecutora']);
                         //Ejecuta la consulta SQL
                         $obj_ue->obtener_unidades_ejecutoras();
-                        $temp2 = $obj_ue->getArreglo();
+                        $temp2=$obj_ue->getArreglo();
                         //Registra el cambio en el vector correspondiente para exportación a excel
-                        $vector_cambios_de_ue[] = array($arreglo_personal[$i][0], $arreglo_personal[$i][1], $temp2[0]['Departamento'], $arreglo_personal[$i][4], "");
+                        $vector_cambios_de_ue[]=array ($arreglo_personal[$i][0],$arreglo_personal[$i][1],$temp2[0]['Departamento'],$arreglo_personal[$i][4],"");
                         //Agrega un espacio en blanco en el vector
-                        $vector_cambios_de_ue[] = array("", "", "", "", "");
+                        $vector_cambios_de_ue[]=array ("","","","","");
                         //Incrementa la variable de control 
                         $cambios_de_ue++;
                     }
                 }
-
+                
                 //Estable el correo electrónico en el objeto personal
                 $obj_personal->setCorreo($arreglo_personal[$i][3]);
                 //Establece la dirección suministrada por el documento
                 $obj_personal->setDireccion($arreglo_personal[$i][5]);
-
+                
                 //Establece el link de la foto
-                $obj_personal->setLinkfoto("https://bcrcapitalhumano:28000/UCO/foto/" . $arreglo_personal[$i][1] . ".jpg");
-
+                $obj_personal->setLinkfoto("https://bcrcapitalhumano:28000/UCO/foto/".$arreglo_personal[$i][1].".jpg");
+                
                 //Establece la empresa, que en este caso 1 es para BCR
                 $obj_personal->setId_empresa("1");
 
@@ -695,26 +699,26 @@ class Controller {
                 //$obj_personal->setObservaciones("");
                 //Estado activo
                 $obj_personal->setEstado("1");
-
+                
                 /*
-                 * En caso de que el arreglo arroje más de un resultado, lo cual es atípico, procede a eliminar los registros correspondientes
-                 * y a agregar nuevamente a la persona con la información que viene del documento.
-                 */
-                if (count($obj_personal->getArreglo()) > 1) {
+                * En caso de que el arreglo arroje más de un resultado, lo cual es atípico, procede a eliminar los registros correspondientes
+                * y a agregar nuevamente a la persona con la información que viene del documento.
+                */
+                if (count($obj_personal->getArreglo())>1){
                     //Agrega la persona con la información que ha venido incluyendo dentro de todo este metodo
                     $obj_personal->agregar_nueva_persona_para_prontuario();
                     //Obtiene el id de la ultima persona ingresada
                     $obj_personal->obtiene_id_ultima_persona_ingresada();
-
+                    
                     //Este ciclo procede a cambiar los telefonos asociados a las personas repetidas, con el nuevo y unico id de la persona ingresada
                     for ($x = 0; $x < count($obj_personal->getArreglo()); $x++) {
                         //Busca telefonos de cada persona repetida
-                        $temp = $obj_personal->getArreglo();
-                        $obj_personal->setCondicion("(ID=" . $temp[$x]['ID_Persona'] . ") AND (ID_Tipo_Telefono=2 or ID_Tipo_Telefono=3 or ID_Tipo_Telefono=4 or ID_Tipo_Telefono=27)");
+                        $temp=$obj_personal->getArreglo();
+                        $obj_personal->setCondicion("(ID=".$temp[$x]['ID_Persona'].") AND (ID_Tipo_Telefono=2 or ID_Tipo_Telefono=3 or ID_Tipo_Telefono=4 or ID_Tipo_Telefono=27)");
                         //Edita el id de estos telefonos
                         $obj_personal->edita_id_persona_en_tabla_telefonos_para_prontuario();
                         // Edita ID en la tabla de gerentes de zona
-                        $obj_personal->setCondicion("ID_Persona=" . $temp[$x]['ID_Persona']);
+                        $obj_personal->setCondicion("ID_Persona=".$temp[$x]['ID_Persona']);
                         //Procede editar la información
                         $obj_personal->edita_id_persona_en_tabla_gerente_zona_bcr_para_prontuario();
                         //Elimina las personas repetidas
@@ -724,244 +728,247 @@ class Controller {
                     $editados++;
                 }
                 //Si la consulta inicial arroja un solo resultado, edita la información de la persona
-                if (count($obj_personal->getArreglo()) == 1) {
+                if (count($obj_personal->getArreglo())==1){
                     //$obj_personal->edita_persona_para_prontuario();
                     $obj_personal->agregar_edicion_de_persona_a_transaccion();
                     //Incrementa la variable de control
                     $editados++;
                 }
-
+                
                 //En caso de que la consulta no tenga resultados, agrega una persona nueva a la bd
-                if ($obj_personal->getArreglo() == null) {
+                if ($obj_personal->getArreglo()==null){
                     //$obj_personal->agregar_nueva_persona_para_prontuario();
                     $obj_personal->agregar_inclusion_persona_a_transaccion();
                     $nuevos++;
-                }
+                } 
             }
-
+          
             $obj_personal->ejecutar_transaccion_sql();
-
+            
             //Agrega una linea nueva en el vector de registro de cambios
-            $vector_cambios_de_puesto[] = array("", "", "", "", "");
+            $vector_cambios_de_puesto[]=array ("","","","","");
             //Informe final en el vector
-            $vector_cambios_de_puesto[] = array("Se identificaron un total de " . $cambios_de_puesto . " personas que cambiaron de puesto en el sistema", "", "", "", "");
+            $vector_cambios_de_puesto[]=array ("Se identificaron un total de ".$cambios_de_puesto." personas que cambiaron de puesto en el sistema","","","","");
             //Agrega una linea nueva en el vector de registro de cambios
-            $vector_cambios_de_ue[] = array("", "", "", "", "");
+            $vector_cambios_de_ue[]=array ("","","","","");
             //Informe final en el vector
-            $vector_cambios_de_ue[] = array("Se identificaron un total de " . $cambios_de_ue . " personas que cambiaron de unidad ejecutora en el sistema", "", "", "", "");
-
+            $vector_cambios_de_ue[]=array ("Se identificaron un total de ".$cambios_de_ue." personas que cambiaron de unidad ejecutora en el sistema","","","","");
+            
             //Informe final en la variable de control
-            $total_personas = "Se identificaron un total de " . count($arreglo_personal) . " personas en el prontuario adjunto.";
+            $total_personas="Se identificaron un total de ".count($arreglo_personal)." personas en el prontuario adjunto.";
             //Informe final en la variable de control
-            $nuevas_personas = "Se agregaron un total de " . $nuevos . " personas nuevas al sistema.";
+            $nuevas_personas="Se agregaron un total de ".$nuevos." personas nuevas al sistema.";
             //Informe final en la variable de control
-            $personas_editadas = "Se revisó a nivel general la información de " . $editados . " personas. Fue actualizado solo lo pertinente.";
-
+            $personas_editadas="Se revisó a nivel general la información de ".$editados." personas. Fue actualizado solo lo pertinente.";
+            
             //Llamada al formulario correspondiente de la vista
             require __DIR__ . '/../vistas/plantillas/frm_importar_prontuario_paso_5.php';
-        } else {
+        }else {
             /*
-             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
-             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
-             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
-             * En la última línea llama a la pagina de inicio de sesión.
-             */
-            $tipo_de_alerta = "alert alert-warning";
-            $validacion = "Es necesario volver a iniciar sesión para consultar el sistema";
+            * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+            * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+            * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+            * En la última línea llama a la pagina de inicio de sesión.
+            */
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
             //Llamada al formulario correspondiente de la vista
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
-        }
+        } 
     }
-
+    
     // Paso de importación del prontuario que permite actualizar la tabla de personas en el sistema, elimina personas que no pertenecen ya al BCR
-    public function frm_importar_prontuario_paso_6() {
+    public function frm_importar_prontuario_paso_6(){
         //Validación para verificar si el usuario está logeado en el sistema
-        if (isset($_SESSION['nombre'])) {
-
+        if(isset($_SESSION['nombre'])){
+            
             //Define el vector que lleva el registro de personas eliminadas de la base de datos, como respaldo del proceso a realizar
-            $vector_personas_eliminadas = array();
-
+            $vector_personas_eliminadas=array();
+            
             //Crea objeto de tipo personal para administración de la tabla
             $obj_personal = new cls_personal();
-
+            
             /*
-             * Los siguientes vectores permiten definir un formato específico para la fecha que llevara en el nombre
-             * del archivo generado (xls) una vez se procese la información de inconsistencias en personal. El reporte se
-             * descarga de manera automática en formato excel, una vez se complete el proceso.
-             * Se definen dos vectores, uno para los días de la semana y otro para los meses del año
-             */
-            $dias = array("Domingo", "Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sábado");
-            $meses = array("Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre");
-
+            * Los siguientes vectores permiten definir un formato específico para la fecha que llevara en el nombre
+            * del archivo generado (xls) una vez se procese la información de inconsistencias en personal. El reporte se
+            * descarga de manera automática en formato excel, una vez se complete el proceso.
+            * Se definen dos vectores, uno para los días de la semana y otro para los meses del año
+            */
+            $dias = array("Domingo","Lunes","Martes","Miercoles","Jueves","Viernes","Sábado");
+            $meses = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
+ 
             // Arreglo que almacena las personas eliminadas del sistema
-            $vector_personas_eliminadas = array();
+            $vector_personas_eliminadas=array();
             //Variable que arma la fecha en el formato requerido
-            $fecha_completa = $dias[date('w')] . " " . date('d') . " de " . $meses[date('n') - 1] . " del " . date('Y') . ", " . date("H:i", time()) . " hrs";
-
+            $fecha_completa=$dias[date('w')]." ".date('d')." de ".$meses[date('n')-1]. " del ".date('Y').", ".date("H:i", time()) . " hrs";
+            
             //Agrega al vector los futuros titulos y columnas del documento
-            $vector_personas_eliminadas[][] = array("ID_Persona" => "Resumen general de funcionarios BCR eliminados de la Base de Datos", "Cedula" => $fecha_completa, "Apellido_Nombre" => "", "ID_Unidad_Ejecutora" => "", "ID_Puesto" => "", "Correo" => "", "Numero_Gafete" => "", "Direccion" => "", "Link_Foto" => "", "ID_Empresa" => "", "Observaciones" => "", "Estado" => "", "Departamento" => "", "Empresa" => "", "Tipo_Telefono" => "", "ID_Tipo_Telefono" => "", "Numero" => "", "ID_Telefono" => "", "Observaciones_Tel" => "", "Puesto" => "");
-            $vector_personas_eliminadas[][] = array("ID_Persona" => "", "Cedula" => "", "Apellido_Nombre" => "", "ID_Unidad_Ejecutora" => "", "ID_Puesto" => "", "Correo" => "", "Numero_Gafete" => "", "Direccion" => "", "Link_Foto" => "", "ID_Empresa" => "", "Observaciones" => "", "Estado" => "", "Departamento" => "", "Empresa" => "", "Tipo_Telefono" => "", "ID_Tipo_Telefono" => "", "Numero" => "", "ID_Telefono" => "", "Observaciones_Tel" => "", "Puesto" => "");
-            $vector_personas_eliminadas[][] = array("ID_Persona" => "ID Persona:", "Cedula" => "Cedula:", "Apellido_Nombre" => "Nombre:", "ID_Unidad_Ejecutora" => "ID_UE:", "ID_Puesto" => "ID_Puesto:", "Correo" => "Correo:", "Numero_Gafete" => "Gafete:", "Direccion" => "Direccion:", "Link_Foto" => "Link_Foto:", "ID_Empresa" => "ID_Empresa:", "Observaciones" => "Observaciones:", "Estado" => "Estado:", "Departamento" => "Departamento:", "Empresa" => "Empresa:", "Tipo_Telefono" => "Tipo Telefono:", "ID_Tipo_Telefono" => "ID Tipo Telefono:", "Numero" => "Numero:", "ID_Telefono" => "ID_Telefono:", "Observaciones_Tel" => "Observaciones_Tel:", "Puesto" => "Puesto:");
-            $vector_personas_eliminadas[][] = array("ID_Persona" => "", "Cedula" => "", "Apellido_Nombre" => "", "ID_Unidad_Ejecutora" => "", "ID_Puesto" => "", "Correo" => "", "Numero_Gafete" => "", "Direccion" => "", "Link_Foto" => "", "ID_Empresa" => "", "Observaciones" => "", "Estado" => "", "Departamento" => "", "Empresa" => "", "Tipo_Telefono" => "", "ID_Tipo_Telefono" => "", "Numero" => "", "ID_Telefono" => "", "Observaciones_Tel" => "", "Puesto" => "");
-
+            $vector_personas_eliminadas[][]=array("ID_Persona" => "Resumen general de funcionarios BCR eliminados de la Base de Datos","Cedula" => $fecha_completa,"Apellido_Nombre" => "","ID_Unidad_Ejecutora" => "","ID_Puesto" => "","Correo" => "","Numero_Gafete" => "","Direccion" => "","Link_Foto" => "","ID_Empresa" => "","Observaciones" => "","Estado" => "","Departamento" => "","Empresa" => "","Tipo_Telefono" => "","ID_Tipo_Telefono" => "","Numero" => "","ID_Telefono" => "","Observaciones_Tel" => "","Puesto" => "");
+            $vector_personas_eliminadas[][]=array("ID_Persona" => "","Cedula" => "","Apellido_Nombre" => "","ID_Unidad_Ejecutora" => "","ID_Puesto" => "","Correo" => "","Numero_Gafete" => "","Direccion" => "","Link_Foto" => "","ID_Empresa" => "","Observaciones" => "","Estado" => "","Departamento" => "","Empresa" => "","Tipo_Telefono" => "","ID_Tipo_Telefono" => "","Numero" => "","ID_Telefono" => "","Observaciones_Tel" => "","Puesto" => "");
+            $vector_personas_eliminadas[][]=array("ID_Persona" => "ID Persona:","Cedula" => "Cedula:","Apellido_Nombre" => "Nombre:","ID_Unidad_Ejecutora" => "ID_UE:","ID_Puesto" => "ID_Puesto:","Correo" => "Correo:","Numero_Gafete" => "Gafete:","Direccion" => "Direccion:","Link_Foto" => "Link_Foto:","ID_Empresa" => "ID_Empresa:","Observaciones" => "Observaciones:","Estado" => "Estado:","Departamento" => "Departamento:","Empresa" => "Empresa:","Tipo_Telefono" => "Tipo Telefono:","ID_Tipo_Telefono" => "ID Tipo Telefono:","Numero" => "Numero:","ID_Telefono" => "ID_Telefono:","Observaciones_Tel" => "Observaciones_Tel:","Puesto" => "Puesto:");
+            $vector_personas_eliminadas[][]=array("ID_Persona" => "","Cedula" => "","Apellido_Nombre" => "","ID_Unidad_Ejecutora" => "","ID_Puesto" => "","Correo" => "","Numero_Gafete" => "","Direccion" => "","Link_Foto" => "","ID_Empresa" => "","Observaciones" => "","Estado" => "","Departamento" => "","Empresa" => "","Tipo_Telefono" => "","ID_Tipo_Telefono" => "","Numero" => "","ID_Telefono" => "","Observaciones_Tel" => "","Puesto" => "");
+             
             // Crea vector para almacenar los puestos que vienen en el prontuario pero en modo disctinct
-            $arreglo_personal = array();
-
+            $arreglo_personal=array();
+            
             // Lee las personas que se encuentran en el prontuario y los pasa a un vector separado en modo distinct
             for ($i = 0; $i < count($_SESSION['prontuario']); $i++) {
-                $arreglo_personal[] = array($_SESSION['prontuario'][$i][0], $_SESSION['prontuario'][$i][1], $_SESSION['prontuario'][$i][3], $_SESSION['prontuario'][$i][7], $_SESSION['prontuario'][$i][8]);
+                $arreglo_personal[]=array($_SESSION['prontuario'][$i][0],$_SESSION['prontuario'][$i][1],$_SESSION['prontuario'][$i][3],$_SESSION['prontuario'][$i][7],$_SESSION['prontuario'][$i][8]);
             }
-
+            
             //Variables de control del proceso
-            $personas_eliminadas = 0;
-            $excepciones = "";
-
+            $personas_eliminadas=0;
+            $excepciones="";
+            
             //Trae de la base de datos, las personas que trabajan para el BCR
             $obj_personal->setCondicion("ID_Empresa=1");
             //Ejecuta la consulta SQL
             $obj_personal->obtener_personas_prontuario();
             //Obtiene el resultado de la consulta en un arreglo
-            $params = $obj_personal->getArreglo();
+            $params=$obj_personal->getArreglo();
 
             //Ciclo principal del proceso que permite encontrar las personas que salieron del BCR según la ultima actualización del prontuario.
-            for ($i = 0; $i < count($params); $i++) {
-
+            for ($i = 0; $i < count($params); $i++){
+                    
                 //Variable bandera que permite controlar si se encuentra la persona trabajando para el BCR o si no
-                $bandera = 0;
-
+                $bandera=0;
+                
                 //Si encuentra la persona y coincide en ambos vectores, asigna 1 a la variable bandera de control
                 for ($x = 0; $x < count($arreglo_personal); $x++) {
                     //Busca por numero de cedula
-                    if ($params[$i]['Cedula'] == $arreglo_personal[$x][1]) {
-                        $bandera = 1;
-                    }
+                    if ($params[$i]['Cedula']==$arreglo_personal[$x][1]){
+                       $bandera=1;
+                    }   
                 }
                 //Si la persona no es encontrada y no coincide en ambas fuentes, empieza el proceso de borrado correspondiente.
-                if ($bandera == 0) {
-                    $obj_personal->setCondicion("ID_Persona=" . $params[$i]['ID_Persona']);
+                if ($bandera==0){                   
+                    $obj_personal->setCondicion("ID_Persona=".$params[$i]['ID_Persona']);
                     //Antes de eliminar al funcionario es importante validar si tiene función de Gerente de Zona, de ser así no podria eliminarse de la base de datos
                     if ($obj_personal->verifica_si_la_persona_es_gerente_zona_bcr()) {
                         //Registra la excepción para notificar al usuario mediante el resultado del asistente
-                        $excepciones .= "La persona con nombre:" . $params[$i]['Apellido_Nombre'] . " y número de cédula: " . $params[$i]['Cedula'] . " no pudo ser borrada de la base de datos, ya que está asignada como Gerente de Zona BCR. Proceda antes a actualizar este cargo con otro miembro del personal. <br>";
-                    } else {
+                       $excepciones.="La persona con nombre:". $params[$i]['Apellido_Nombre']." y número de cédula: ".$params[$i]['Cedula']." no pudo ser borrada de la base de datos, ya que está asignada como Gerente de Zona BCR. Proceda antes a actualizar este cargo con otro miembro del personal. <br>";
+                    }else{
                         //Incrementa la variable de control
                         $personas_eliminadas++;
                         //Establece la condición de borrado
-                        $obj_personal->setCondicion("T_Personal.ID_Persona=" . $params[$i]['ID_Persona']);
+                        $obj_personal->setCondicion("T_Personal.ID_Persona=".$params[$i]['ID_Persona']);
                         //Crea una consulta con los datos completo de la persona, para registrarlo antes de eliminarlo
                         $obj_personal->obtiene_todo_el_personal_modulo_personas();
                         //Agrega la información de la persona en el vector de personas que se exportará a excel antes de ser eliminada de la base de datos, así queda respaldada.
-                        $vector_personas_eliminadas[] = $obj_personal->getArreglo();
+                        $vector_personas_eliminadas[]=$obj_personal->getArreglo();
                         //Agrega un espacio en blanco en el vector de datos
-                        $vector_personas_eliminadas[][] = array("ID_Persona" => "", "Cedula" => "", "Apellido_Nombre" => "", "ID_Unidad_Ejecutora" => "", "ID_Puesto" => "", "Correo" => "", "Numero_Gafete" => "", "Direccion" => "", "Link_Foto" => "", "ID_Empresa" => "", "Observaciones" => "", "Estado" => "", "Departamento" => "", "Empresa" => "", "Tipo_Telefono" => "", "ID_Tipo_Telefono" => "", "Numero" => "", "ID_Telefono" => "", "Observaciones_Tel" => "", "Puesto" => "");
+                        $vector_personas_eliminadas[][]=array("ID_Persona" => "","Cedula" => "","Apellido_Nombre" => "","ID_Unidad_Ejecutora" => "","ID_Puesto" => "","Correo" => "","Numero_Gafete" => "","Direccion" => "","Link_Foto" => "","ID_Empresa" => "","Observaciones" => "","Estado" => "","Departamento" => "","Empresa" => "","Tipo_Telefono" => "","ID_Tipo_Telefono" => "","Numero" => "","ID_Telefono" => "","Observaciones_Tel" => "","Puesto" => "");
                         //Establece una condicion para proceder a eliminar telefonos de la persona
-                        $obj_personal->setCondicion("ID=" . $params[$i]['ID_Persona']);
+                        $obj_personal->setCondicion("ID=".$params[$i]['ID_Persona']);
                         //Llama al procedimiento que elimina la persona
                         //$obj_personal->eliminar_telefonos_personas_bcr_fuera_de_prontuario_para_prontuario();
-                        $obj_personal->setCondicion("ID_Persona=" . $params[$i]['ID_Persona']);
+                        $obj_personal->setCondicion("ID_Persona=".$params[$i]['ID_Persona']);
                         //Diego Venegas Monge, 2017-06-21 15:45 //Cambio en prontuario de eliminar personas a inactivarlas...
                         //$obj_personal->eliminar_personas_bcr_fuera_de_prontuario_para_prontuario();
                         $obj_personal->setEstado(0);
                         $obj_personal->actualizar_estado_persona();
                     }
                 }
-            }
+                
+            }                
             //Construye las variables para mostrar el resultado del paso en pantalla
-            $personas_fuera = "Se eliminaron un total de " . $personas_eliminadas . " personas de la base de datos.";
+            $personas_fuera="Se eliminaron un total de ".$personas_eliminadas." personas de la base de datos.";
             //Agrega espacios en blanco en el vector
-            $vector_personas_eliminadas[][] = array("ID_Persona" => "", "Cedula" => "", "Apellido_Nombre" => "", "ID_Unidad_Ejecutora" => "", "ID_Puesto" => "", "Correo" => "", "Numero_Gafete" => "", "Direccion" => "", "Link_Foto" => "", "ID_Empresa" => "", "Observaciones" => "", "Estado" => "", "Departamento" => "", "Empresa" => "", "Tipo_Telefono" => "", "ID_Tipo_Telefono" => "", "Numero" => "", "ID_Telefono" => "", "Observaciones_Tel" => "", "Puesto" => "");
-            $vector_personas_eliminadas[][] = array("ID_Persona" => $personas_fuera, "Cedula" => "", "Apellido_Nombre" => "", "ID_Unidad_Ejecutora" => "", "ID_Puesto" => "", "Correo" => "", "Numero_Gafete" => "", "Direccion" => "", "Link_Foto" => "", "ID_Empresa" => "", "Observaciones" => "", "Estado" => "", "Departamento" => "", "Empresa" => "", "Tipo_Telefono" => "", "ID_Tipo_Telefono" => "", "Numero" => "", "ID_Telefono" => "", "Observaciones_Tel" => "", "Puesto" => "");
-
+            $vector_personas_eliminadas[][]=array("ID_Persona" => "","Cedula" => "","Apellido_Nombre" => "","ID_Unidad_Ejecutora" => "","ID_Puesto" => "","Correo" => "","Numero_Gafete" => "","Direccion" => "","Link_Foto" => "","ID_Empresa" => "","Observaciones" => "","Estado" => "","Departamento" => "","Empresa" => "","Tipo_Telefono" => "","ID_Tipo_Telefono" => "","Numero" => "","ID_Telefono" => "","Observaciones_Tel" => "","Puesto" => "");
+            $vector_personas_eliminadas[][]=array("ID_Persona" => $personas_fuera,"Cedula" => "","Apellido_Nombre" => "","ID_Unidad_Ejecutora" => "","ID_Puesto" => "","Correo" => "","Numero_Gafete" => "","Direccion" => "","Link_Foto" => "","ID_Empresa" => "","Observaciones" => "","Estado" => "","Departamento" => "","Empresa" => "","Tipo_Telefono" => "","ID_Tipo_Telefono" => "","Numero" => "","ID_Telefono" => "","Observaciones_Tel" => "","Puesto" => "");
+           
             //Llamada al formulario correspondiente de la vista
             require __DIR__ . '/../vistas/plantillas/frm_importar_prontuario_paso_6.php';
-        } else {
+     
+        }else {
             /*
-             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
-             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
-             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
-             * En la última línea llama a la pagina de inicio de sesión.
-             */
-            $tipo_de_alerta = "alert alert-warning";
-            $validacion = "Es necesario volver a iniciar sesión para consultar el sistema";
+            * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+            * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+            * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+            * En la última línea llama a la pagina de inicio de sesión.
+            */
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
-        }
+        } 
     }
 
     //Paso de importación del prontuario que permite actualizar la tabla de celulares en el sistema
-    public function frm_importar_prontuario_paso_7() {
-        if (isset($_SESSION['nombre'])) {
-
+    public function frm_importar_prontuario_paso_7(){
+        if(isset($_SESSION['nombre'])){
+            
             //Crea objeto de tipo puestos para administración de la tabla
             $obj_personal = new cls_personal();
-            $obj_telefono = new cls_telefono();
-
+            $obj_telefono= new cls_telefono();
+             
             // Crea vector para almacenar los puestos que vienen en el prontuario pero en modo disctinct
-            $arreglo_telefonos_celulares = array();
-
-            $numeros_actualizados = 0;
-
+            $arreglo_telefonos_celulares=array();
+            
+            $numeros_actualizados=0;
+            
             /*
-             * Los siguientes vectores permiten definir un formato específico para la fecha que llevara en el nombre
-             * del archivo generado (xls) una vez se procese la información de inconsistencias en personal. El reporte se
-             * descarga de manera automática en formato excel, una vez se complete el proceso.
-             * Se definen dos vectores, uno para los días de la semana y otro para los meses del año
-             */
-
-            $dias = array("Domingo", "Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sábado");
-            $meses = array("Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre");
-
+            * Los siguientes vectores permiten definir un formato específico para la fecha que llevara en el nombre
+            * del archivo generado (xls) una vez se procese la información de inconsistencias en personal. El reporte se
+            * descarga de manera automática en formato excel, una vez se complete el proceso.
+            * Se definen dos vectores, uno para los días de la semana y otro para los meses del año
+            */
+            
+            $dias = array("Domingo","Lunes","Martes","Miercoles","Jueves","Viernes","Sábado");
+            $meses = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
+            
             // Vector que registra las inconsistencias y diferencias entre numeros de celulares encontrados en el prontuario contra la bd.
-            $vector_inconsistencias = array(array("Resumen general de inconsistencias al actualizar numeros de celular de personas en el sistema:", $dias[date('w')] . " " . date('d') . " de " . $meses[date('n') - 1] . " del " . date('Y') . ", " . date("H:i", time()) . " hrs"));
+            $vector_inconsistencias=array(array("Resumen general de inconsistencias al actualizar numeros de celular de personas en el sistema:",$dias[date('w')]." ".date('d')." de ".$meses[date('n')-1]. " del ".date('Y').", ".date("H:i", time()) . " hrs"));
             // Agrega linea en blanco en el vector
-            $vector_inconsistencias[] = array("", "");
+            $vector_inconsistencias[]=array ("","");
             //Agrega columnas al documento
-            $vector_inconsistencias[] = array("Valor Prontuario:", "Valor en Base de Datos:");
+            $vector_inconsistencias[]=array ("Valor Prontuario:","Valor en Base de Datos:");
             // Agrega linea en blanco en el vector
-            $vector_inconsistencias[] = array("", "");
-
+            $vector_inconsistencias[]=array ("","");
+            
             //$obj_telefono->iniciar_transaccion_sql();
+            
             // Lee el registro total de personas que se encuentran en el prontuario
             for ($i = 0; $i < count($_SESSION['prontuario']); $i++) {
-                $arreglo_telefonos_celulares[] = array($_SESSION['prontuario'][$i][1], str_replace(" ", "", str_replace("-", "", $_SESSION['prontuario'][$i][10])));
-                $obj_personal->setCondicion("Cedula='" . $arreglo_telefonos_celulares[$i][0] . "'");
+                $arreglo_telefonos_celulares[]=array($_SESSION['prontuario'][$i][1],str_replace (" ","",str_replace ("-","",$_SESSION['prontuario'][$i][10])));
+                $obj_personal->setCondicion("Cedula='".$arreglo_telefonos_celulares[$i][0]."'");
                 $obj_personal->obtiene_id_de_persona_para_prontuario();
                 //$obj_telefono->setCondicion("(ID=".$obj_personal->getId().") AND (ID_Tipo_Telefono=3) AND (Numero='0')");
                 //$obj_telefono->eliminar_telefonos_para_prontuario();
-                $obj_telefono->setCondicion("(ID=" . $obj_personal->getId() . ") AND (ID_Tipo_Telefono=2 or ID_Tipo_Telefono=3 or ID_Tipo_Telefono=4 or ID_Tipo_Telefono=27 or ID_Tipo_Telefono=28) AND (Numero='0')");
+                $obj_telefono->setCondicion("(ID=".$obj_personal->getId().") AND (ID_Tipo_Telefono=2 or ID_Tipo_Telefono=3 or ID_Tipo_Telefono=4 or ID_Tipo_Telefono=27 or ID_Tipo_Telefono=28) AND (Numero='0')");
                 $obj_telefono->eliminar_telefonos_para_prontuario();
 
                 ///////////////////////////Generar inconsistencias del sistema
                 //Esta validación permite comprobar que el numero de telefono a analizar cumpla los estandares minimos para celulares
                 //Por ejemplo 8 digitos, que sean numeros, etc.
 
-                if ((strlen($arreglo_telefonos_celulares[$i][1]) == 8) && (is_numeric($arreglo_telefonos_celulares[$i][1]))) {
+                if ((strlen($arreglo_telefonos_celulares[$i][1])==8)&&(is_numeric($arreglo_telefonos_celulares[$i][1]))){
                     //Verifica si tiene numeros de telefono diferentes en bd al celular que viene en prontuario
-                    $obj_telefono->setCondicion("(ID=" . $obj_personal->getId() . ") AND (ID_Tipo_Telefono=3 or ID_Tipo_Telefono=27) AND (Numero<>'" . $arreglo_telefonos_celulares[$i][1] . "')");
+                    $obj_telefono->setCondicion("(ID=".$obj_personal->getId().") AND (ID_Tipo_Telefono=3 or ID_Tipo_Telefono=27) AND (Numero<>'".$arreglo_telefonos_celulares[$i][1]."')");
                     //Ejecuta la consulta SQL
                     $obj_telefono->obtiene_telefonos_por_criterio_para_prontuario();
                     //Esta validación permite verificar si el funcionario tiene un numero de celular distinto al que viene en el prontuario y lo registra para el reporte de excel.
-                    if (count($obj_telefono->getArreglo()) > 0) {
-                        $valor_prontuario = "El funcionario (a) con cedula: " . $arreglo_telefonos_celulares[$i][0] . " tiene el el numero de celular: " . $arreglo_telefonos_celulares[$i][1] . " a nivel de prontuario.";
+                    if (count($obj_telefono->getArreglo())>0){
+                        $valor_prontuario="El funcionario (a) con cedula: ".$arreglo_telefonos_celulares[$i][0]." tiene el el numero de celular: ".$arreglo_telefonos_celulares[$i][1]." a nivel de prontuario.";
                         //Variable que va armando la cadena de telefonos registrados en base de datos para crear el comparativo
-                        $valor_base_datos = "Numeros de telefono celular registrados en la base de datos de Oriel: ";
+                        $valor_base_datos="Numeros de telefono celular registrados en la base de datos de Oriel: ";
                         for ($x = 0; $x < count($obj_telefono->getArreglo()); $x++) {
                             //Acumula cada registro en la variable correspondiente para armar una sola sentencia
-                            $temp = $obj_telefono->getArreglo();
-                            $valor_base_datos .= $temp[$x]['Numero'] . ", ";
+                            $temp=$obj_telefono->getArreglo();
+                            $valor_base_datos.=$temp[$x]['Numero'].", ";
                         }
                         //Agrega el registro de inconsistencias generado para este funcionario al vector general para el reporte de excel
-                        $vector_inconsistencias[] = array($valor_prontuario, $valor_base_datos);
+                        $vector_inconsistencias[]=array ($valor_prontuario,$valor_base_datos);
                         //Agrega espacio en blanco en el vector
-                        $vector_inconsistencias[] = array("", "");
-                    }
+                        $vector_inconsistencias[]=array ("","");
+                    }  
                 }
 
                 ///////////////////////////////////////////////////////////////
 
                 /*
-                 * Consulta y criterio que permite traer los numeros de telefonos asignados a un funcionario BCR
-                 */
-                $obj_telefono->setCondicion("(ID=" . $obj_personal->getId() . ") AND (ID_Tipo_Telefono=2 or ID_Tipo_Telefono=3 or ID_Tipo_Telefono=4 or ID_Tipo_Telefono=27 or ID_Tipo_Telefono=28) ");
+                * Consulta y criterio que permite traer los numeros de telefonos asignados a un funcionario BCR
+                */
+                $obj_telefono->setCondicion("(ID=".$obj_personal->getId().") AND (ID_Tipo_Telefono=2 or ID_Tipo_Telefono=3 or ID_Tipo_Telefono=4 or ID_Tipo_Telefono=27 or ID_Tipo_Telefono=28) ");
                 //ejecuta la sentencia SQL correspondiente según el criterio establecido en la linea anterior
                 $obj_telefono->obtiene_telefonos_por_criterio_para_prontuario();
 
@@ -975,15 +982,15 @@ class Controller {
                 $obj_telefono->setEstado("1");
 
                 //Verifica si la persona tiene numeros de telefono asociados
-                if (count($obj_telefono->getArreglo()) > 0) {
+                if (count($obj_telefono->getArreglo())>0){
                     //Valida si tiene el mismo numero de telefono registrado en el prontuario
-                    $obj_telefono->setCondicion("(ID=" . $obj_personal->getId() . ") AND (ID_Tipo_Telefono=2 or ID_Tipo_Telefono=3 or ID_Tipo_Telefono=4 or ID_Tipo_Telefono=27 or ID_Tipo_Telefono=28) AND Numero='" . $arreglo_telefonos_celulares[$i][1] . "'");
+                    $obj_telefono->setCondicion("(ID=".$obj_personal->getId().") AND (ID_Tipo_Telefono=2 or ID_Tipo_Telefono=3 or ID_Tipo_Telefono=4 or ID_Tipo_Telefono=27 or ID_Tipo_Telefono=28) AND Numero='".$arreglo_telefonos_celulares[$i][1]."'");
                     //Ejecuta la consulta SQL segun el criterio establecido 
                     $obj_telefono->obtiene_telefonos_por_criterio_para_prontuario();
                     // En caso de que el resultado de la consulta sea cero, procede a ingresarlo inmediatamente
-                    if (count($obj_telefono->getArreglo()) == 0) {
+                    if (count($obj_telefono->getArreglo())==0){
                         //Valida que el telefono celular a ingresar sea valido 
-                        if ((strlen($arreglo_telefonos_celulares[$i][1]) == 8) && (is_numeric($arreglo_telefonos_celulares[$i][1]))) {
+                        if ((strlen($arreglo_telefonos_celulares[$i][1])==8)&&(is_numeric($arreglo_telefonos_celulares[$i][1]))){
                             //Establece el numero en el atributo del objeto correspondiente
                             $obj_telefono->setNumero($arreglo_telefonos_celulares[$i][1]);
                             //Guarda el numero
@@ -993,183 +1000,190 @@ class Controller {
                             $numeros_actualizados++;
                         }
                     }
-                } else {
+                }else{
                     //En caso de que la consulta general no haya devuelto numeros de telefonos asociados al funcionario, procede a guardarlo verificando los estandares minimos
-                    if ((strlen($arreglo_telefonos_celulares[$i][1]) == 8) && (is_numeric($arreglo_telefonos_celulares[$i][1]))) {
-                        //Establece el valor de numero al atributo correspondiente
-                        $obj_telefono->setNumero($arreglo_telefonos_celulares[$i][1]);
-                        //Guardar el registro en la bd
-                        $obj_telefono->guardar_telefono_para_prontuario();
-                        //$obj_telefono->agregar_guardado_telefono_a_transaccion();
-                        //Incrementa la variable de control
-                        $numeros_actualizados++;
-                    } else {
-                        //En caso de que el numero no cumpla con los estandares de tamaño y tipo de dato, se procede a guardar un numero cero, para que permita relacionar al menos un registro al funcionario
-                        $obj_telefono->setNumero("0");
-                        //Tipo de telefono asignado es 3 = celular
-                        $obj_telefono->setTipo_telefono("3");
-                        //Guarda el telefono en base de datos
-                        $obj_telefono->guardar_telefono_para_prontuario();
-                        //$obj_telefono->agregar_guardado_telefono_a_transaccion();
-                        //$numeros_actualizados++;
-                    }
+                   if ((strlen($arreglo_telefonos_celulares[$i][1])==8)&&(is_numeric($arreglo_telefonos_celulares[$i][1]))){
+                       //Establece el valor de numero al atributo correspondiente
+                       $obj_telefono->setNumero($arreglo_telefonos_celulares[$i][1]);
+                       //Guardar el registro en la bd
+                       $obj_telefono->guardar_telefono_para_prontuario();
+                       //$obj_telefono->agregar_guardado_telefono_a_transaccion();
+                       //Incrementa la variable de control
+                       $numeros_actualizados++;
+                   }else{
+                       //En caso de que el numero no cumpla con los estandares de tamaño y tipo de dato, se procede a guardar un numero cero, para que permita relacionar al menos un registro al funcionario
+                       $obj_telefono->setNumero("0");
+                       //Tipo de telefono asignado es 3 = celular
+                       $obj_telefono->setTipo_telefono("3");
+                       //Guarda el telefono en base de datos
+                       $obj_telefono->guardar_telefono_para_prontuario();
+                       //$obj_telefono->agregar_guardado_telefono_a_transaccion();
+                       //$numeros_actualizados++;
+                   }
                 }
             }
-
+            
             //$obj_telefono->ejecutar_transaccion_sql();
+            
             //Define las variables de resultados para mostrar el summary en pantalla
-            $resultados = "Fueron actualizados un total de: " . $numeros_actualizados . " números de celular.";
+            $resultados= "Fueron actualizados un total de: ".$numeros_actualizados." números de celular.";
             //Agrega espacios en blanco al vector general de cambios
-            $vector_inconsistencias[] = array("", "");
-            $vector_inconsistencias[] = array("", "");
+            $vector_inconsistencias[]=array ("","");
+            $vector_inconsistencias[]=array ("","");
             //Resumen final agregado al vector
-            $vector_inconsistencias[] = array(Encrypter::quitar_tildes($resultados), "");
-
+            $vector_inconsistencias[]=array (Encrypter::quitar_tildes($resultados),"");  
+            
             //Llamada al formulario correspondiente de la vista
             require __DIR__ . '/../vistas/plantillas/frm_importar_prontuario_paso_7.php';
-        } else {
+     
+        }else {
             /*
-             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
-             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
-             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
-             * En la última línea llama a la pagina de inicio de sesión.
-             */
-            $tipo_de_alerta = "alert alert-warning";
-            $validacion = "Es necesario volver a iniciar sesión para consultar el sistema";
+            * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+            * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+            * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+            * En la última línea llama a la pagina de inicio de sesión.
+            */
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
             //Llamada al formulario correspondiente de la vista
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
-        }
+        } 
     }
-
+    
     //Paso de importación del prontuario que permite actualizar la tabla de personas y telefonos de extensiones en el sistema
-    public function frm_importar_prontuario_paso_8() {
+    public function frm_importar_prontuario_paso_8(){
         //Validación para verificar si el usuario está logeado en el sistema
-        if (isset($_SESSION['nombre'])) {
-
+        if(isset($_SESSION['nombre'])){
+            
             //Crea objeto de tipo personal para administración de la tabla
             $obj_personal = new cls_personal();
             //Crea objeto de tipo telefono para administración de la tabla
-            $obj_telefono = new cls_telefono();
-
+            $obj_telefono= new cls_telefono();
+             
             // Crea vector para almacenar las extensiones telefonicas que vienen en el prontuario pero en modo disctinct
-            $arreglo_telefonos_extensiones = array();
-
+            $arreglo_telefonos_extensiones=array();
+            
             /*
-             * Los siguientes vectores permiten definir un formato específico para la fecha que llevara en el nombre
-             * del archivo generado (xls) una vez se procese la información de inconsistencias en personal. El reporte se
-             * descarga de manera automática en formato excel, una vez se complete el proceso.
-             * Se definen dos vectores, uno para los días de la semana y otro para los meses del año
-             */
-            $dias = array("Domingo", "Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sábado");
-            $meses = array("Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre");
-
+            * Los siguientes vectores permiten definir un formato específico para la fecha que llevara en el nombre
+            * del archivo generado (xls) una vez se procese la información de inconsistencias en personal. El reporte se
+            * descarga de manera automática en formato excel, una vez se complete el proceso.
+            * Se definen dos vectores, uno para los días de la semana y otro para los meses del año
+            */
+            $dias = array("Domingo","Lunes","Martes","Miercoles","Jueves","Viernes","Sábado");
+            $meses = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
+            
             //Empieza a armar el vector general de inconsistencias que se  presentarán en este paso, con el fin de que sea exportada la información mediante excel
-            $vector_inconsistencias = array(array("Resumen general de inconsistencias al actualizar numeros de extensiones de personas en el sistema:", $dias[date('w')] . " " . date('d') . " de " . $meses[date('n') - 1] . " del " . date('Y') . ", " . date("H:i", time()) . " hrs"));
+            $vector_inconsistencias=array(array("Resumen general de inconsistencias al actualizar numeros de extensiones de personas en el sistema:",$dias[date('w')]." ".date('d')." de ".$meses[date('n')-1]. " del ".date('Y').", ".date("H:i", time()) . " hrs"));
             //Agrega espacio en blanco en el vector
-            $vector_inconsistencias[] = array("", "");
+            $vector_inconsistencias[]=array ("","");
             //Agrega nombres para las columnas principales del documento
-            $vector_inconsistencias[] = array("Valor Prontuario:", "Valor en Base de Datos:");
+            $vector_inconsistencias[]=array ("Valor Prontuario:","Valor en Base de Datos:");
             //Agrega espacio en blanco en el vector
-            $vector_inconsistencias[] = array("", "");
-
+            $vector_inconsistencias[]=array ("","");
+            
             //Variables de control de la actualización
-            $numeros_actualizados = 0;
-            $nuevos_guardados = 0;
-
+            $numeros_actualizados=0;
+            $nuevos_guardados=0;
+                        
             // Lee las personas y numeros de extension en el prontuario y los pasa a un vector separado en modo distinct
             for ($i = 0; $i < count($_SESSION['prontuario']); $i++) {
                 // Arma registro por registro el vector de analisis con base en la información que viene en el prontuario
-                $arreglo_telefonos_extensiones[] = array($_SESSION['prontuario'][$i][1], str_replace(" ", "", str_replace("-", "", $_SESSION['prontuario'][$i][5])), str_replace(".", "", $_SESSION['prontuario'][$i][6]));
-
+                $arreglo_telefonos_extensiones[]=array($_SESSION['prontuario'][$i][1],str_replace (" ","",str_replace ("-","",$_SESSION['prontuario'][$i][5])),str_replace (".","",$_SESSION['prontuario'][$i][6]));
+                    
                 //Criterio y consulta que permiten obtener el id de la persona con base en la cedula 
-                $obj_personal->setCondicion("Cedula='" . $arreglo_telefonos_extensiones[$i][0] . "'");
+                $obj_personal->setCondicion("Cedula='".$arreglo_telefonos_extensiones[$i][0]."'");
                 $obj_personal->obtiene_id_de_persona_para_prontuario();
-
+                   
                 ///////////////////////////Generar inconsistencias del sistema
+                    
                 //variable bandera que permite determinar inconsistencias en los datos
-                $bandera = 0;
-                $contador = 0;
+                $bandera=0;
+                $contador=0;
 
                 //Valida el formato y tamaño de la extensión telefónica
-                if ((strlen($arreglo_telefonos_extensiones[$i][1]) == 8) && (is_numeric($arreglo_telefonos_extensiones[$i][1]))) {
+                if ((strlen($arreglo_telefonos_extensiones[$i][1])==8)&&(is_numeric($arreglo_telefonos_extensiones[$i][1]))){
                     //Verifica si la extensión esta asociada a los numeros de las centrales del BCR
-                    if (($arreglo_telefonos_extensiones[$i][1] == "22111111") || ($arreglo_telefonos_extensiones[$i][1] == "22879000")) {
+                    if (($arreglo_telefonos_extensiones[$i][1]=="22111111")||($arreglo_telefonos_extensiones[$i][1]=="22879000")){
                         //Verifica que la extensión sea valida, es decir, con un numero mayor a 4 digitos de acuerdo al estandar del banco
-                        if (strlen($arreglo_telefonos_extensiones[$i][2]) > 4) {
+                        if (strlen($arreglo_telefonos_extensiones[$i][2])>4){
 
-                            //Variable bandera asignada a 1, para verificar mas adelante que entró en esta parte
-                            //En caso de entrar en esta parte se sobre entiende que la extensión es IP de 5 digitos
-                            $bandera = 1;
-                        }
-                    } else {
+                                    //Variable bandera asignada a 1, para verificar mas adelante que entró en esta parte
+                                    //En caso de entrar en esta parte se sobre entiende que la extensión es IP de 5 digitos
+                                    $bandera=1;
+
+                                }
+                    }else{
                         //En caso de entrar en esta parte, se entiende que esta extensión no es IP y que requiere tambien de un numero
                         // fijo de 8 digitos
-                        if (strlen($arreglo_telefonos_extensiones[$i][2]) > 0) {
+                        if (strlen($arreglo_telefonos_extensiones[$i][2])>0){
 
                             //Asigna a la variable bandera el valor de 2
-                            $bandera = 2;
-                        } else {
+                            $bandera=2;
+
+
+                        }else{
                             //De lo contrario asigna valor de 3, indicando que la extensión que viene en el documento no es valida
-                            $bandera = 3;
+                            $bandera=3;
                         }
                     }
                     //Si el numero fijo de contacto al funcionario que trae el prontuario no es valido de acuerdo a los estandares   
                     //será necesario verificar solo la extensión sin contemplar numero fijo.
-                } else {
+                }else{
                     //verifica si la extensión tiene 5 digitos, de lo contrario no la contempla para ingresarla en la bd
-                    if (strlen($arreglo_telefonos_extensiones[$i][2]) == 5) {
-                        //asigna valor 4 a la bandera
-                        $bandera = 4;
-                    }
+                    if (strlen($arreglo_telefonos_extensiones[$i][2])==5){
+                                //asigna valor 4 a la bandera
+                                $bandera=4;
+                            }
                 }
 
                 //De acuerdo a la verificacion anterior, se trabaja con el valor asignado a la bandera
                 //Si el valor de la bandera es igual al de la inicialización, no hace nada
-                if ((!($bandera == 0))) {
+                if ((!($bandera==0))){
 
                     //En caso de que la bandera tenga un valor diferente a cero, verifica que la persona ya no tenga registrado el numero del prontuario en la base de datos.
-                    $obj_telefono->setCondicion("(ID=" . $obj_personal->getId() . ") AND (ID_Tipo_Telefono=4) AND (Numero<>'" . $arreglo_telefonos_extensiones[$i][2] . "' AND Numero<>'" . $arreglo_telefonos_extensiones[$i][1] . "' AND Numero<>'" . $arreglo_telefonos_extensiones[$i][1] . " ext " . $arreglo_telefonos_extensiones[$i][2] . "')");
+                    $obj_telefono->setCondicion("(ID=".$obj_personal->getId().") AND (ID_Tipo_Telefono=4) AND (Numero<>'".$arreglo_telefonos_extensiones[$i][2]."' AND Numero<>'".$arreglo_telefonos_extensiones[$i][1]."' AND Numero<>'".$arreglo_telefonos_extensiones[$i][1]." ext ".$arreglo_telefonos_extensiones[$i][2]."')");
                     //Ejecuta la consulta SQL
                     $obj_telefono->obtiene_telefonos_por_criterio_para_prontuario();
 
                     //Si la persona tiene 2 o más numeros de extensión, se procede a insertar en el reporte de inconsistencias, para su revisión  y correción
-                    if (count($obj_telefono->getArreglo()) > 0) {
+                    if (count($obj_telefono->getArreglo())>0){
                         //En caso de ser 1, contempla solamente la extension telefonica
-                        if ($bandera == 1) {
-                            $valor_prontuario = "El funcionario (a) con cedula: " . $arreglo_telefonos_extensiones[$i][0] . " tiene el numero de oficina o extension: " . $arreglo_telefonos_extensiones[$i][2] . " a nivel de prontuario.";
+                        if ($bandera==1){
+                            $valor_prontuario="El funcionario (a) con cedula: ".$arreglo_telefonos_extensiones[$i][0]." tiene el numero de oficina o extension: ".$arreglo_telefonos_extensiones[$i][2]." a nivel de prontuario.";
                         }
                         //En caso de ser 2, contempla el numero directo mas la extension telefonica
-                        if ($bandera == 2) {
-                            $valor_prontuario = "El funcionario (a) con cedula: " . $arreglo_telefonos_extensiones[$i][0] . " tiene el numero de oficina o extension: " . $arreglo_telefonos_extensiones[$i][1] . " ext " . $arreglo_telefonos_extensiones[$i][2] . " a nivel de prontuario.";
+                        if ($bandera==2){
+                            $valor_prontuario="El funcionario (a) con cedula: ".$arreglo_telefonos_extensiones[$i][0]." tiene el numero de oficina o extension: ".$arreglo_telefonos_extensiones[$i][1]." ext ".$arreglo_telefonos_extensiones[$i][2]." a nivel de prontuario.";
                         }
                         //En caso de ser 3, contempla solamente la extension telefonica
-                        if ($bandera == 3) {
-                            $valor_prontuario = "El funcionario (a) con cedula: " . $arreglo_telefonos_extensiones[$i][0] . " tiene el numero de oficina o extension: " . $arreglo_telefonos_extensiones[$i][1] . " a nivel de prontuario.";
+                         if ($bandera==3){
+                            $valor_prontuario="El funcionario (a) con cedula: ".$arreglo_telefonos_extensiones[$i][0]." tiene el numero de oficina o extension: ".$arreglo_telefonos_extensiones[$i][1]." a nivel de prontuario.";
                         }
                         //En caso de ser 4, contempla solamente la extension telefonica
-                        if ($bandera == 4) {
-                            $valor_prontuario = "El funcionario (a) con cedula: " . $arreglo_telefonos_extensiones[$i][0] . " tiene el numero de oficina o extension: " . $arreglo_telefonos_extensiones[$i][1] . " a nivel de prontuario.";
+                         if ($bandera==4){
+                            $valor_prontuario="El funcionario (a) con cedula: ".$arreglo_telefonos_extensiones[$i][0]." tiene el numero de oficina o extension: ".$arreglo_telefonos_extensiones[$i][1]." a nivel de prontuario.";
                         }
                         // Aqui agrega en una variable cadena cada una de las extensiones que tiene asignada la persona en bd
-                        $valor_base_datos = "Numeros de extension registrados en la base de datos de Oriel: ";
+                        $valor_base_datos="Numeros de extension registrados en la base de datos de Oriel: ";
                         for ($x = 0; $x < count($obj_telefono->getArreglo()); $x++) {
-                            $temp = $obj_telefono->getArreglo();
+                            $temp=$obj_telefono->getArreglo();
                             //variable temporal que va almacenando cada uno de los registros de la bd
-                            $valor_base_datos .= $temp[$x]['Numero'] . ", ";
+                            $valor_base_datos.=$temp[$x]['Numero'].", ";
                         }
                         //Agrega un nuevo registro en el vector de inconsistencias, para que sea exportado a excel.
-                        $vector_inconsistencias[] = array($valor_prontuario, $valor_base_datos);
+                        $vector_inconsistencias[]=array ($valor_prontuario,$valor_base_datos);
                         //Agrega un espacio en blanco en el vector
-                        $vector_inconsistencias[] = array("", "");
-                    }
+                        $vector_inconsistencias[]=array ("","");
+                    }  
+
                 }
 
                 ///////////////////////////////////////////////////////////////
 
                 /*
-                 * Consulta que trae los numeros de telefono de la persona en cuestión
-                 */
-                $obj_telefono->setCondicion("(ID=" . $obj_personal->getId() . ") AND (ID_Tipo_Telefono=2 or ID_Tipo_Telefono=3 or ID_Tipo_Telefono=4 or ID_Tipo_Telefono=27 or ID_Tipo_Telefono=28) ");
+                * Consulta que trae los numeros de telefono de la persona en cuestión
+                */
+                $obj_telefono->setCondicion("(ID=".$obj_personal->getId().") AND (ID_Tipo_Telefono=2 or ID_Tipo_Telefono=3 or ID_Tipo_Telefono=4 or ID_Tipo_Telefono=27 or ID_Tipo_Telefono=28) ");
                 //Ejecuta la consulta SQL
                 $obj_telefono->obtiene_telefonos_por_criterio_para_prontuario();
 
@@ -1183,21 +1197,21 @@ class Controller {
                 $obj_telefono->setEstado("1");
 
                 /*
-                 * Si la persona ya tiene telefonos procede con la revisión
-                 */
-                if (count($obj_telefono->getArreglo()) > 0) {
+                * Si la persona ya tiene telefonos procede con la revisión
+                */
+                if (count($obj_telefono->getArreglo())>0){
                     // Vuelve a verificar si alguno de los telefonos que hay en base de datos, coincide con el del prontuario
-                    $obj_telefono->setCondicion("(ID=" . $obj_personal->getId() . ") AND (ID_Tipo_Telefono=2 or ID_Tipo_Telefono=3 or ID_Tipo_Telefono=4 or ID_Tipo_Telefono=27 or ID_Tipo_Telefono=28) AND (Numero='" . $arreglo_telefonos_extensiones[$i][2] . "' or Numero='" . $arreglo_telefonos_extensiones[$i][1] . "' or Numero='" . $arreglo_telefonos_extensiones[$i][1] . " ext " . $arreglo_telefonos_extensiones[$i][2] . "')");
+                    $obj_telefono->setCondicion("(ID=".$obj_personal->getId().") AND (ID_Tipo_Telefono=2 or ID_Tipo_Telefono=3 or ID_Tipo_Telefono=4 or ID_Tipo_Telefono=27 or ID_Tipo_Telefono=28) AND (Numero='".$arreglo_telefonos_extensiones[$i][2]."' or Numero='".$arreglo_telefonos_extensiones[$i][1]."' or Numero='".$arreglo_telefonos_extensiones[$i][1]." ext ".$arreglo_telefonos_extensiones[$i][2]."')");
                     //ejecuta la consulta SQL
                     $obj_telefono->obtiene_telefonos_por_criterio_para_prontuario();
                     //Si el resultado de la consulta =0, entonces el prontuario trae un numero diferente al de la base de datos, por lo que es necesario validar los estándares y en caso positvo se guarda en bd
-                    if (count($obj_telefono->getArreglo()) == 0) {
+                    if (count($obj_telefono->getArreglo())==0){
                         //Valida que el telefono cumpla los estandaresde  tamaño y formato
-                        if ((strlen($arreglo_telefonos_extensiones[$i][1]) == 8) && (is_numeric($arreglo_telefonos_extensiones[$i][1]))) {
+                        if ((strlen($arreglo_telefonos_extensiones[$i][1])==8)&&(is_numeric($arreglo_telefonos_extensiones[$i][1]))){
                             //En caso de tener de numero fijo la central del BCR, no será tomada en cuenta
-                            if (($arreglo_telefonos_extensiones[$i][1] == "22111111") || ($arreglo_telefonos_extensiones[$i][1] == "22879000")) {
+                            if (($arreglo_telefonos_extensiones[$i][1]=="22111111")||($arreglo_telefonos_extensiones[$i][1]=="22879000")){
                                 //Valida que la extensión sea mayor a 4 caracteres
-                                if (strlen($arreglo_telefonos_extensiones[$i][2]) > 4) {
+                                if (strlen($arreglo_telefonos_extensiones[$i][2])>4){
                                     //Inicializa el atributo del objeto telefono
                                     $obj_telefono->setNumero($arreglo_telefonos_extensiones[$i][2]);
                                     //Guarda la información en base de datos
@@ -1205,16 +1219,16 @@ class Controller {
                                     // Incrementa variable de control 
                                     $nuevos_guardados++;
                                 }
-                            } else {
+                            }else{
                                 //En caso de que el numero fijo no sea la central del  banco, procede a valorar tanto la extensión como el numero fijo.
-                                if (strlen($arreglo_telefonos_extensiones[$i][2]) > 0) {
+                                if (strlen($arreglo_telefonos_extensiones[$i][2])>0){
                                     //Establece el numero de extension al objeto de la clase
-                                    $obj_telefono->setNumero($arreglo_telefonos_extensiones[$i][1] . " ext " . $arreglo_telefonos_extensiones[$i][2]);
+                                    $obj_telefono->setNumero($arreglo_telefonos_extensiones[$i][1]." ext ".$arreglo_telefonos_extensiones[$i][2]);
                                     // Almacena la información en base de datos
                                     $obj_telefono->guardar_telefono_para_prontuario();
                                     //Incrementa la variable de control
                                     $nuevos_guardados++;
-                                } else {
+                                }else{
                                     //Procede a valorar solamente la extensión del prontuario
                                     $obj_telefono->setNumero($arreglo_telefonos_extensiones[$i][1]);
                                     //Almacena en base de datos
@@ -1223,9 +1237,9 @@ class Controller {
                                     $nuevos_guardados++;
                                 }
                             }
-                        } else {
+                        }else{
                             //Verifica que la extensión esté compuesta por 5 digitos
-                            if (strlen($arreglo_telefonos_extensiones[$i][2]) == 5) {
+                            if (strlen($arreglo_telefonos_extensiones[$i][2])==5){
                                 // Establece el numero al atributo del objeto
                                 $obj_telefono->setNumero($arreglo_telefonos_extensiones[$i][2]);
                                 // Almacena en base de datos
@@ -1239,157 +1253,162 @@ class Controller {
                     }
                 }
             }
-
+  
             //Variable que realiza el summary correspondiente para mostrarlo al usuario final que está corriendo el proceso
-            $resultados = 'Se actualizaron un total de ' . $nuevos_guardados . ' extensiones telefónicas en la bd.';
+            $resultados='Se actualizaron un total de '.$nuevos_guardados.' extensiones telefónicas en la bd.';
             //Asigna espacios en blanco al vector de reporte de inconsistencias
-            $vector_inconsistencias[] = array("", "");
-            $vector_inconsistencias[] = array("", "");
+            $vector_inconsistencias[]=array ("","");
+            $vector_inconsistencias[]=array ("","");
             //Agrega el summary al vector como una linea nueva
-            $vector_inconsistencias[] = array(Encrypter::quitar_tildes($resultados), "");
+            $vector_inconsistencias[]=array (Encrypter::quitar_tildes($resultados),"");  
             //Llamada al formulario correspondiente de la vista
             require __DIR__ . '/../vistas/plantillas/frm_importar_prontuario_paso_8.php';
-        } else {
+     
+        }else {
             /*
-             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
-             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
-             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
-             * En la última línea llama a la pagina de inicio de sesión.
-             */
-            $tipo_de_alerta = "alert alert-warning";
-            $validacion = "Es necesario volver a iniciar sesión para consultar el sistema";
+            * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+            * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+            * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+            * En la última línea llama a la pagina de inicio de sesión.
+            */
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
             //Llamada al formulario correspondiente de la vista
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
-        }
+        } 
     }
-
+    
     //Paso de importación del prontuario que permite actualizar ls tabla de puestos y unidades ejecutoras
     //Eliminando las que se encuentran solas sin relación con personas o puntos bcr
-    public function frm_importar_prontuario_paso_9() {
+    public function frm_importar_prontuario_paso_9(){
         //Validación para verificar si el usuario está logeado en el sistema
-        if (isset($_SESSION['nombre'])) {
-
+        if(isset($_SESSION['nombre'])){
+            
             //Crea objeto de tipo puestos y unidades ejecutoras para administración de la tabla
             $obj_unidades_ejecutoras = new cls_unidad_ejecutora();
-            $obj_puestos = new cls_puestos();
-
+            $obj_puestos= new cls_puestos();
+                  
             //Variables de control del proceso inicializadas
-            $unidades_eliminadas = 0;
-            $puestos_eliminados = 0;
-
+            $unidades_eliminadas=0;
+            $puestos_eliminados=0;
+            
             //Establece condicion para determinar cuantas unidades ejecutoras están sin relaciones
             $obj_unidades_ejecutoras->setCondicion("Not ID_Unidad_Ejecutora In (Select ID_Unidad_Ejecutora From t_personal) and not ID_Unidad_Ejecutora In (Select ID_Unidad_Ejecutora From t_ue_puntobcr)");
             //Ejecuta la sentencia SQL
             $obj_unidades_ejecutoras->obtener_unidades_ejecutoras();
             //Cuenta cuantas unidades ejecutoras serán eliminadas, y las registra en la variable respectiva.
-            $unidades_eliminadas = count($obj_unidades_ejecutoras->getArreglo());
+            $unidades_eliminadas= count($obj_unidades_ejecutoras->getArreglo());
             //Procede a eliminar las unidades ejecutoras en cuestión.
             $obj_unidades_ejecutoras->eliminar_ue_sobrantes_para_prontuario();
-
+            
             //Procede a buscar los puestos sin relación en la bd
             $obj_puestos->setCondicion("Not ID_Puesto In (Select ID_Puesto From t_personal)");
             //Ejecuta la sentecia SQL
             $obj_puestos->obtener_puestos();
             //Cuenta cuantos puestos se van a eliminar
-            $puestos_eliminados = count($obj_puestos->getArreglo());
+            $puestos_eliminados= count($obj_puestos->getArreglo());
             //Procede a eliminar los puestos en cuestión.
             $obj_puestos->eliminar_puestos_sobrantes_para_prontuario();
-
+            
             //Arma el summary para mostrar al usuario el resultado del proceso
-            $ue_eliminadas = "Fueron eliminadas un total de " . $unidades_eliminadas . " unidades ejecutoras sin uso de la base de datos.";
-
-            $puestos = "Fueron eliminados un total de " . $puestos_eliminados . " puestos sin uso de la base de datos.";
-
+            $ue_eliminadas="Fueron eliminadas un total de ".$unidades_eliminadas." unidades ejecutoras sin uso de la base de datos.";
+            
+            $puestos="Fueron eliminados un total de ".$puestos_eliminados." puestos sin uso de la base de datos.";
+                                     
             //Llamada al formulario correspondiente de la vista
-            require __DIR__ . '/../vistas/plantillas/frm_importar_prontuario_paso_9.php';
-        } else {
+           require __DIR__ . '/../vistas/plantillas/frm_importar_prontuario_paso_9.php';
+     
+        }else {
             /*
-             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
-             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
-             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
-             * En la última línea llama a la pagina de inicio de sesión.
-             */
-            $tipo_de_alerta = "alert alert-warning";
-            $validacion = "Es necesario volver a iniciar sesión para consultar el sistema";
+            * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+            * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+            * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+            * En la última línea llama a la pagina de inicio de sesión.
+            */
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
             //Llamada al formulario correspondiente de la vista
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
-        }
+        } 
     }
-
+    
     // Paso de importación del prontuario que permite actualizar la tabla de telefonos, con los telefonos de residencia de cada funcionario
     //Información que proviene desde el prontuario de capital humano.
-    public function frm_importar_prontuario_paso_10() {
+    public function frm_importar_prontuario_paso_10(){
         //Validación para verificar si el usuario está logeado en el sistema
-        if (isset($_SESSION['nombre'])) {
+        if(isset($_SESSION['nombre'])){
             //Crea objeto de tipo personal y telefono para administración de la tabla
             $obj_personal = new cls_personal();
-            $obj_telefono = new cls_telefono();
-
+            $obj_telefono= new cls_telefono();
+             
             // Crea vector para almacenar los telefonos de residencia que vienen en el prontuario pero en modo disctinct
-            $arreglo_telefonos_casa = array();
-
+            $arreglo_telefonos_casa=array();
+            
             //Variable de control de lo que se realiza en el proceso.
-            $numeros_actualizados = 0;
-
+            $numeros_actualizados=0;
+            
             /*
-             * Los siguientes vectores permiten definir un formato específico para la fecha que llevara en el nombre
-             * del archivo generado (xls) una vez se procese la información de inconsistencias en personal. El reporte se
-             * descarga de manera automática en formato excel, una vez se complete el proceso.
-             * Se definen dos vectores, uno para los días de la semana y otro para los meses del año
-             */
+            * Los siguientes vectores permiten definir un formato específico para la fecha que llevara en el nombre
+            * del archivo generado (xls) una vez se procese la información de inconsistencias en personal. El reporte se
+            * descarga de manera automática en formato excel, una vez se complete el proceso.
+            * Se definen dos vectores, uno para los días de la semana y otro para los meses del año
+            */
 
-            $dias = array("Domingo", "Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sábado");
-            $meses = array("Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre");
-
+            $dias = array("Domingo","Lunes","Martes","Miercoles","Jueves","Viernes","Sábado");
+            $meses = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
+            
             //Declaración del vector de inconsistencias presentadas durante el proceso, esto con el fin de poder exportarlo en modo excel
             // y darle seguimiento por parte de los encargados.
-            $vector_inconsistencias = array(array("Resumen general de inconsistencias al actualizar numeros de casa de habitacion de personas en el sistema:", $dias[date('w')] . " " . date('d') . " de " . $meses[date('n') - 1] . " del " . date('Y') . ", " . date("H:i", time()) . " hrs"));
+            $vector_inconsistencias=array(array("Resumen general de inconsistencias al actualizar numeros de casa de habitacion de personas en el sistema:",$dias[date('w')]." ".date('d')." de ".$meses[date('n')-1]. " del ".date('Y').", ".date("H:i", time()) . " hrs"));
             //Inserta linea en blanco en el vector
-            $vector_inconsistencias[] = array("", "");
+            $vector_inconsistencias[]=array ("","");
             //Indica los títulos de las columnas en el vector
-            $vector_inconsistencias[] = array("Valor Prontuario:", "Valor en Base de Datos:");
+            $vector_inconsistencias[]=array ("Valor Prontuario:","Valor en Base de Datos:");
             //Inserta linea en blanco en el vector
-            $vector_inconsistencias[] = array("", "");
-
+            $vector_inconsistencias[]=array ("","");
+            
             // Lee los telefonos que se encuentran en el prontuario y los pasa a un vector separado en modo distinct
             for ($i = 0; $i < count($_SESSION['prontuario']); $i++) {
                 //Va sasando del prontuario la información que se requiere y la pasa al vector de trabajo.
-                $arreglo_telefonos_casa[] = array($_SESSION['prontuario'][$i][1], str_replace(" ", "", str_replace("-", "", $_SESSION['prontuario'][$i][9])));
+                $arreglo_telefonos_casa[]=array($_SESSION['prontuario'][$i][1],str_replace (" ","",str_replace ("-","",$_SESSION['prontuario'][$i][9])));
 
                 //Establece condicion para obtener el id de la persona que se está trabajando actualmente.
-                $obj_personal->setCondicion("Cedula='" . $arreglo_telefonos_casa[$i][0] . "'");
+                $obj_personal->setCondicion("Cedula='".$arreglo_telefonos_casa[$i][0]."'");
                 //Ejecuta la sentencia SQL
                 $obj_personal->obtiene_id_de_persona_para_prontuario();
 
                 ///////////////////////////Generar inconsistencias del sistema
+
                 // Valida que el telefono que trae el prontuario cumpla con los estandares de tamaño y formatos correspondientes.
-                if ((strlen($arreglo_telefonos_casa[$i][1]) == 8) && (is_numeric($arreglo_telefonos_casa[$i][1]))) {
+                if ((strlen($arreglo_telefonos_casa[$i][1])==8)&&(is_numeric($arreglo_telefonos_casa[$i][1]))){
                     //Busca los telefonos de la persona en bd, que sean diferentes al que trae el prontuario.
-                    $obj_telefono->setCondicion("(ID=" . $obj_personal->getId() . ") AND (ID_Tipo_Telefono=2) AND (Numero<>'" . $arreglo_telefonos_casa[$i][1] . "')");
+                    $obj_telefono->setCondicion("(ID=".$obj_personal->getId().") AND (ID_Tipo_Telefono=2) AND (Numero<>'".$arreglo_telefonos_casa[$i][1]."')");
                     //Ejecuta la sentencia SQL.
                     $obj_telefono->obtiene_telefonos_por_criterio_para_prontuario();
 
                     //Verifica si la consulta trae algun resultado
-                    if (count($obj_telefono->getArreglo()) > 0) {
+                    if (count($obj_telefono->getArreglo())>0){
                         //En caso de que el funcionario tenga telefonos de casa diferentes al que viene en el prontuario, procede a registrarlo como una linea en el vector de inconsistencias.
-                        $valor_prontuario = "El funcionario (a) con cedula: " . $arreglo_telefonos_casa[$i][0] . " tiene el numero de casa de habitacion: " . $arreglo_telefonos_casa[$i][1] . " a nivel de prontuario.";
-                        $valor_base_datos = "Numeros de telefono casa de habitacion registrados en la base de datos de Oriel: ";
+                        $valor_prontuario="El funcionario (a) con cedula: ".$arreglo_telefonos_casa[$i][0]." tiene el numero de casa de habitacion: ".$arreglo_telefonos_casa[$i][1]." a nivel de prontuario.";
+                        $valor_base_datos="Numeros de telefono casa de habitacion registrados en la base de datos de Oriel: ";
                         //Mediante este ciclo recorre todos los telefonos registrados en bd como casa de habitación de este funcionario. 
                         for ($x = 0; $x < count($obj_telefono->getArreglo()); $x++) {
-                            $temp = $obj_telefono->getArreglo();
-                            //Variable cadena que se va incrementando paso a paso al recorrer cada registro que devolvió la consulta SQL.
-                            $valor_base_datos .= $temp[$x]['Numero'] . ", ";
-                        }
+                            $temp=$obj_telefono->getArreglo();
+                             //Variable cadena que se va incrementando paso a paso al recorrer cada registro que devolvió la consulta SQL.
+                            $valor_base_datos.=$temp[$x]['Numero'].", ";
+
+                         }
                         //Agrega la linea completa al vector de inconsistencias.
-                        $vector_inconsistencias[] = array($valor_prontuario, $valor_base_datos);
+                        $vector_inconsistencias[]=array ($valor_prontuario,$valor_base_datos);
                         //Agrega una línea en blanco al vector de inconsistencias.
-                        $vector_inconsistencias[] = array("", "");
-                    }
+                        $vector_inconsistencias[]=array ("","");
+                    }  
                 }
 
                 ///////////////////////////////////////////////////////////////
+
                 //Estable condición para correr una consulta SQL, en este caso trae todos los telefonos asociados a una persona en específico.
-                $obj_telefono->setCondicion("(ID=" . $obj_personal->getId() . ") AND (ID_Tipo_Telefono=2 or ID_Tipo_Telefono=3 or ID_Tipo_Telefono=4 or ID_Tipo_Telefono=27 or ID_Tipo_Telefono=28) ");
+                $obj_telefono->setCondicion("(ID=".$obj_personal->getId().") AND (ID_Tipo_Telefono=2 or ID_Tipo_Telefono=3 or ID_Tipo_Telefono=4 or ID_Tipo_Telefono=27 or ID_Tipo_Telefono=28) ");
                 //Ejecuta la sentencia SQL
                 $obj_telefono->obtiene_telefonos_por_criterio_para_prontuario();
 
@@ -1404,14 +1423,14 @@ class Controller {
 
 
                 //En caso de que la consulta traiga resultados, es decir si la persona tiene telefonos asignados procede a entrar al proceso.
-                if (count($obj_telefono->getArreglo()) > 0) {
+                if (count($obj_telefono->getArreglo())>0){
                     //Busca si la persona ya cuenta en bd con el numero de residencia que viene en el prontuario de capital humano.
-                    $obj_telefono->setCondicion("(ID=" . $obj_personal->getId() . ") AND (ID_Tipo_Telefono=2 or ID_Tipo_Telefono=3 or ID_Tipo_Telefono=4 or ID_Tipo_Telefono=27 or ID_Tipo_Telefono=28) AND Numero='" . $arreglo_telefonos_casa[$i][1] . "'");
+                    $obj_telefono->setCondicion("(ID=".$obj_personal->getId().") AND (ID_Tipo_Telefono=2 or ID_Tipo_Telefono=3 or ID_Tipo_Telefono=4 or ID_Tipo_Telefono=27 or ID_Tipo_Telefono=28) AND Numero='".$arreglo_telefonos_casa[$i][1]."'");
                     //Ejecuta la sentecia SQL.
                     $obj_telefono->obtiene_telefonos_por_criterio_para_prontuario();
                     //Si la consulta no tiene resultados, procede a verificar el numero de prontuario de acuerdo a los estandares de formato y tamaño.
-                    if (count($obj_telefono->getArreglo()) == 0) {
-                        if ((strlen($arreglo_telefonos_casa[$i][1]) == 8) && (is_numeric($arreglo_telefonos_casa[$i][1]))) {
+                    if (count($obj_telefono->getArreglo())==0){
+                        if ((strlen($arreglo_telefonos_casa[$i][1])==8)&&(is_numeric($arreglo_telefonos_casa[$i][1]))){
                             //Agrega el numero de telefono al atributo del objeto respectivo
                             $obj_telefono->setNumero($arreglo_telefonos_casa[$i][1]);
                             //Procede a almacenar en base de datos el numero de telefono
@@ -1420,159 +1439,160 @@ class Controller {
                             $numeros_actualizados++;
                         }
                     }
-                } else {
+                }else{
                     //Verifica que el numero sea correcto.
-                    if ((strlen($arreglo_telefonos_casa[$i][1]) == 8) && (is_numeric($arreglo_telefonos_casa[$i][1]))) {
-                        //Establece el numero al atributo del objeto.
-                        $obj_telefono->setNumero($arreglo_telefonos_casa[$i][1]);
-                        //Almacena en base de datos la información correspondiente
-                        $obj_telefono->guardar_telefono_para_prontuario();
-                        //Incrementa la variable de control.
-                        $numeros_actualizados++;
-                    } else {
-                        //En caso de que el numero no cumpla con los estandares, es decir que no sea correcto, procede  a agregar un cero en el numero a guardar
-                        $obj_telefono->setNumero("0");
-                        //Tipo de telefono cero, es decir de residencia o casa de habitación.
-                        $obj_telefono->setTipo_telefono("2");
-                        //Almacena en bd
-                        $obj_telefono->guardar_telefono_para_prontuario();
-                        //Incrementa la variable de control.
-                        $numeros_actualizados++;
-                    }
+                    if ((strlen($arreglo_telefonos_casa[$i][1])==8)&&(is_numeric($arreglo_telefonos_casa[$i][1]))){
+                       //Establece el numero al atributo del objeto.
+                       $obj_telefono->setNumero($arreglo_telefonos_casa[$i][1]);
+                       //Almacena en base de datos la información correspondiente
+                       $obj_telefono->guardar_telefono_para_prontuario();
+                       //Incrementa la variable de control.
+                       $numeros_actualizados++;
+                   }else{
+                       //En caso de que el numero no cumpla con los estandares, es decir que no sea correcto, procede  a agregar un cero en el numero a guardar
+                       $obj_telefono->setNumero("0");
+                       //Tipo de telefono cero, es decir de residencia o casa de habitación.
+                       $obj_telefono->setTipo_telefono("2");
+                       //Almacena en bd
+                       $obj_telefono->guardar_telefono_para_prontuario();
+                       //Incrementa la variable de control.
+                       $numeros_actualizados++;
+                   }
                 }
             }
-
+            
             //Arma las variables del summary para mostrar al usuario en pantalla.
-            $resultados = "Fueron actualizados un total de: " . $numeros_actualizados . " números de residencia.";
+            $resultados= "Fueron actualizados un total de: ".$numeros_actualizados." números de residencia.";
             //Agrega lineas en blanco al vector de inconsistencias.
-            $vector_inconsistencias[] = array("", "");
-            $vector_inconsistencias[] = array("", "");
+            $vector_inconsistencias[]=array ("","");
+            $vector_inconsistencias[]=array ("","");
             //Agrega el summary al vector de inconsistencias.
-            $vector_inconsistencias[] = array(Encrypter::quitar_tildes($resultados), "");
-
+            $vector_inconsistencias[]=array (Encrypter::quitar_tildes($resultados),"");
+            
             //Este proceso agrega extensiones en cero, a todos aquellos funcionarios que no tengan ningun telefono asociado, esto
             //con el fin de que las consultas de personal puedan mostrar el total de personas que se encuentran en la bd.
             $obj_telefono->agrega_extension_cero_en_personas_sin_telefonos_asociados_para_prontuario();
-
+            
             //Consulta que permite saber cuantas personas quedaron con numero de telefono en cero dentro de la bd.
             $obj_personal->setCondicion("ID_Persona In (Select ID From t_telefono where ID_Tipo_Telefono in(2,3,4,27,28) and Numero='0') and ID_Empresa=1");
             //Ejecuta la consulta SQL.
             $obj_personal->obtener_personas_con_numeros_en_cero_para_prontuario();
-
+            
             //Crea un vector para registrar el listado de personas con extensiones en cero.
-            $vector_personas_con_numeros_en_cero = array();
+            $vector_personas_con_numeros_en_cero=array();
             //Formatea la fecha actual en una variable.
-            $fecha_completa = $dias[date('w')] . " " . date('d') . " de " . $meses[date('n') - 1] . " del " . date('Y') . ", " . date("H:i", time()) . " hrs";
+            $fecha_completa=$dias[date('w')]." ".date('d')." de ".$meses[date('n')-1]. " del ".date('Y').", ".date("H:i", time()) . " hrs";
             //Agrega título al documento de inconsistencias
-            $vector_personas_con_numeros_en_cero[][] = array("Apellido_Nombre" => "Resumen general de funcionarios BCR con numeros de telefono en cero en la BD", "Cedula" => $fecha_completa, "ID_Persona" => "");
+            $vector_personas_con_numeros_en_cero[][]=array("Apellido_Nombre" => "Resumen general de funcionarios BCR con numeros de telefono en cero en la BD","Cedula" => $fecha_completa,"ID_Persona" => "");
             //Agrega nombres a las columnas principales del documento.
-            $vector_personas_con_numeros_en_cero[][] = array("Apellido_Nombre" => "", "Cedula" => "", "ID_Persona" => "");
-
+            $vector_personas_con_numeros_en_cero[][]=array("Apellido_Nombre" => "","Cedula" => "","ID_Persona" => "");
+            
             //Obtiene el vector completo de inconsistencias generado por la consult a y lo anexa al vector actual.
-            $vector_personas_con_numeros_en_cero[] = $obj_personal->getArreglo();
-
+            $vector_personas_con_numeros_en_cero[]=$obj_personal->getArreglo();
+            
             //Agrega nombres a las columnas del vector de personas con numero en cero.
-            $vector_personas_con_numeros_en_cero[][] = array("Apellido_Nombre" => "", "Cedula" => "", "ID_Persona" => "");
-
+            $vector_personas_con_numeros_en_cero[][]=array("Apellido_Nombre" => "","Cedula" => "","ID_Persona" => "");
+            
             //Obtiene el total de registros que trajo la consulta.
-            $numero_personas_cero = count($obj_personal->getArreglo());
+            $numero_personas_cero=count($obj_personal->getArreglo());
             //Agrega summary al vector de personas con numero en cero.
-            $vector_personas_con_numeros_en_cero[][] = array("Apellido_Nombre" => "Se encontraron un toal de " . $numero_personas_cero . " personas que tienen numeros de telefono en cero.", "Cedula" => "", "ID_Persona" => "");
-
+            $vector_personas_con_numeros_en_cero[][]=array("Apellido_Nombre" => "Se encontraron un toal de ".$numero_personas_cero. " personas que tienen numeros de telefono en cero.","Cedula" => "","ID_Persona" => "");
+              
             //Llamada al formulario correspondiente de la vista
             require __DIR__ . '/../vistas/plantillas/frm_importar_prontuario_paso_10.php';
         } else {
             /*
-             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
-             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
-             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
-             * En la última línea llama a la pagina de inicio de sesión.
-             */
-            $tipo_de_alerta = "alert alert-warning";
-            $validacion = "Es necesario volver a iniciar sesión para consultar el sistema";
+            * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+            * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+            * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+            * En la última línea llama a la pagina de inicio de sesión.
+            */
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
             //Llamada al formulario correspondiente de la vista
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
-        }
+        } 
+        
     }
-
+    
     // Ultimo paso de importación del prontuario que confirma que el proceso se realizó correctamente.
-    public function frm_importar_prontuario_paso_11() {
+    public function frm_importar_prontuario_paso_11(){
         //Validación para verificar si el usuario está logeado en el sistema
-        if (isset($_SESSION['nombre'])) {
-            //Llamada al formulario correspondiente de la vista                    
-            require __DIR__ . '/../vistas/plantillas/frm_importar_prontuario_paso_11.php';
-        } else {
+        if(isset($_SESSION['nombre'])){
+           //Llamada al formulario correspondiente de la vista                    
+           require __DIR__ . '/../vistas/plantillas/frm_importar_prontuario_paso_11.php';
+        }else {
             /*
-             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
-             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
-             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
-             * En la última línea llama a la pagina de inicio de sesión.
-             */
-            $tipo_de_alerta = "alert alert-warning";
-            $validacion = "Es necesario volver a iniciar sesión para consultar el sistema";
+            * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+            * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+            * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+            * En la última línea llama a la pagina de inicio de sesión.
+            */
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
             //Llamada al formulario correspondiente de la vista
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
-        }
+        } 
     }
-
+    
     //Prepara las variables y el formulario respectivo para cambio de clave
-    public function cambiar_password() {
-        $usuario = "";
-        $clave = "";
+    public function cambiar_password(){   
+        $usuario = "";       
+        $clave = "";  
         //Variables que muestran un tipo de alerta específico en el formulario, dependiendo de la condición y solicitud del usuario
-        $tipo_de_alerta = "alert alert-info";
-        $validacion = "En proceso de cambio de clave";
+        $tipo_de_alerta="alert alert-info";
+        $validacion="En proceso de cambio de clave";
         //Llamada al formulario correspondiente de la vista
         require __DIR__ . '/../vistas/plantillas/frm_Cambio_Clave.php';
     }
-
+ 
     //Metodo que permite realizar el cambio de clave a un usuario registrado en el sistema.
-    public function cambia_clave_usuario_post() {
+    public function cambia_clave_usuario_post(){
         //Inicializa las variables de utilizacion en el metodo.
-        $usuario = "";
-        $clave = "";
+        $usuario = "";       
+        $clave = "";  
         //Variables que muestran un tipo de alerta específico en el formulario, dependiendo de la condición y solicitud del usuario
-        $tipo_de_alerta = "alert alert-info";
-        $validacion = "En proceso de cambio de clave";
+        $tipo_de_alerta="alert alert-info";
+        $validacion="En proceso de cambio de clave";
 
         //Crea un objeto de tipo usuarios del sistema, para el manejo en la tabla de la bd.
-        $obj_usuarios = new cls_usuarios();
+        $obj_usuarios= new cls_usuarios();       
         //Verifica el envío de información mediante el evento post del formulario.
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             //obtiene el usuario del formulario anterior.
             $usuario = $_POST['usu'];
             // obtiene el password anterior
-            $clave = $_POST['password_antiguo'];
+            $clave= $_POST['password_antiguo'];
             //obtiene el nuevo password.
-            $clave_nueva = $_POST['password_nuevo'];
+            $clave_nueva=$_POST['password_nuevo'];
             //Recibe la confirmación de la nueva clave.
-            $confirmacion_clave = $_POST['confirmacion_password'];
+            $confirmacion_clave=$_POST['confirmacion_password'];
             // Crea un objeto de tipo modulo de seguridad. 
             $obj_modulos = new cls_modulos();
-
+            
             //verifica que la variable usuario traiga datos
-            if (strlen($usuario) > 0) {
+            if (strlen($usuario)>0){
                 //Valida que el usuario que requiere cambiar la clave, exista en la base de datos.
-                if ($obj_usuarios->existe_usuario($usuario)) {
+                if ($obj_usuarios->existe_usuario($usuario)){
                     //Verifica que el password sea correcto de acuerdo a la base de datos
-                    if ($obj_usuarios->valida_password_de_usuario($usuario, $clave)) {
+                    if ($obj_usuarios->valida_password_de_usuario($usuario, $clave)){
                         //verifica si el usuario realizando el tramite está activo
-                        if ($obj_usuarios->el_usuario_esta_activo($usuario, $clave)) {
+                        if ($obj_usuarios->el_usuario_esta_activo($usuario, $clave)){
                             //Verifica que las nuevas claves tengan informacion
-                            if ((strlen($clave_nueva) > 0) && (strlen($confirmacion_clave) > 0)) {
+                            if ((strlen($clave_nueva)>0) && (strlen($confirmacion_clave)>0)){
                                 //Verifica que la nueva clave y la confirmación sean iguales.
-                                if ($clave_nueva === $confirmacion_clave) {
+                                if ($clave_nueva===$confirmacion_clave){
                                     //Verifica que la clave vieja sea diferente sea de la nueva.
-                                    if ($clave_nueva != $clave) {
+                                    if ($clave_nueva!=$clave){
                                         //Define variables de sesión, por ejemplo: nombre, rol, name, apellido, id y modulos.
-                                        $_SESSION['nombre'] = $usuario;
+                                        $_SESSION['nombre']=$usuario;
                                         //Metodo que permite obtener el rol del usuario en cuestión.
                                         $obj_usuarios->obtiene_rol_nombre_apellido_de_usuario($usuario);
                                         //Variables de sesión que funcionan durante todo el recorrido del usuario en el sitio web.
-                                        $_SESSION['rol'] = $obj_usuarios->getRol();
-                                        $_SESSION['name'] = $obj_usuarios->getNombre();
-                                        $_SESSION['apellido'] = $obj_usuarios->getApellido();
-                                        $_SESSION['id'] = $obj_usuarios->getId();
+                                        $_SESSION['rol']=$obj_usuarios->getRol();
+                                        $_SESSION['name']=$obj_usuarios->getNombre();
+                                        $_SESSION['apellido']=$obj_usuarios->getApellido();
+                                        $_SESSION['id']=$obj_usuarios->getId();
                                         //Establece el atributo nombre del objeto
                                         $obj_usuarios->setNombre($usuario);
                                         //Establece la nueva clave  en el objeto respectivo. 
@@ -1580,11 +1600,11 @@ class Controller {
                                         //Procede a editar el password  del usuario.
                                         $obj_usuarios->edita_passsword();
                                         //Define un vector de sesión, para almacenar todos los modulos o funcionalidades del sitio asignadas al usuario.
-                                        $_SESSION['modulos'] = array();
+                                        $_SESSION['modulos']=array();
                                         //Obtiene todos los modulos del sistema
                                         $obj_modulos->obtiene_todos_los_modulos();
                                         //Define un vector para asignar el resultado de la consulta SQL.
-                                        $modulos = $obj_modulos->getArreglo();
+                                        $modulos= $obj_modulos->getArreglo();
                                         //Ejecuta la función para ver que módulos tiene asignado el rol del usuario.
                                         $obj_modulos->obtiene_lista_de_modulos_por_rol($obj_usuarios->getRol());
                                         //asigna a la variable roles, el vector de resultados de la consulta desde la bd.
@@ -1594,137 +1614,137 @@ class Controller {
                                         //asigna a la variable la cantidad de roles que trajo la consulta SQL.
                                         $tam2 = count($roles);
                                         //Asigna inactivo a la variable estado.
-                                        $estado = 0;
+                                        $estado=0;
                                         //Este ciclo permite agregar el vector de modulos o funcionalidades que tiene el usuario en la sesión.
-                                        for ($i = 0; $i < $tam; $i++) {
-                                            for ($c = 0; $c < $tam2; $c++) {
+                                        for($i=0; $i<$tam;$i++){
+                                            for($c=0;$c<$tam2;$c++){
                                                 //Agrega un nuevo elemento al vector de modulos, con la descripcion del modulo desde base  de datos,
                                                 //Utilizado para efectos de seguridad.
                                                 //Si el rol tiene el módulo del sistema, procede a definir la variable estado a 1 y sale del bucle.
-                                                if ($modulos[$i]['Descripcion'] == $roles[$c]['Descripcion']) {
+                                                if($modulos[$i]['Descripcion']==$roles[$c]['Descripcion']){
                                                     $estado = 1;
                                                     break;
                                                 }
                                             }
                                             //Va agregando al vector de modulos en la sesión de usuario, las funcionalidades que tiene asignadas de acuerdo al rol correspondiente.
-                                            $_SESSION['modulos'] = array_merge($_SESSION['modulos'], array($modulos[$i]['Descripcion'] => $estado));
+                                            $_SESSION['modulos']= array_merge($_SESSION['modulos'],array($modulos[$i]['Descripcion']=>$estado));
                                             //Inicializa la variable en cero.
-                                            $estado = 0;
+                                            $estado= 0;
                                         }
                                         //Llamada al formulario correspondiente de la vista
                                         //require __DIR__ . '/../vistas/plantillas/frm_principal.php';
-                                        header("location:/ORIEL/index.php?ctl=principal");
-                                    } else {
+                                        header ("location:/ORIEL/index.php?ctl=principal");
+                                    }else{
                                         //Muestra un mensaje de error, de que la contraseña nueva y la vieja son iguales.
                                         //Inicializa las variables de trabajo del metodo.
-                                        $validacion = "La nueva contraseña debe ser diferente a la contraseña actual. Proceda a revisar.";
-                                        $tipo_de_alerta = "alert alert-danger";
+                                        $validacion="La nueva contraseña debe ser diferente a la contraseña actual. Proceda a revisar.";
+                                        $tipo_de_alerta="alert alert-danger";
                                         //Llamada al formulario correspondiente de la vista
-                                        require __DIR__ . '/../vistas/plantillas/frm_Cambio_Clave.php';
+                                        require __DIR__ . '/../vistas/plantillas/frm_Cambio_Clave.php'; 
                                     }
-                                } else {
+                                }else{
                                     //Le muestra un mensaje de error que al usuario de que las contraseñas no coinciden.
                                     //Inicializa las variables de trabajo del metodo.
-                                    $validacion = "La nueva contraseña y confirmación no coinciden. Proceda a revisar.";
-                                    $tipo_de_alerta = "alert alert-danger";
+                                    $validacion="La nueva contraseña y confirmación no coinciden. Proceda a revisar.";
+                                    $tipo_de_alerta="alert alert-danger";
                                     //Llamada al formulario correspondiente de la vista
-                                    require __DIR__ . '/../vistas/plantillas/frm_Cambio_Clave.php';
-                                }
-                            } else {
+                                    require __DIR__ . '/../vistas/plantillas/frm_Cambio_Clave.php'; 
+                                } 
+                            }else{
                                 //Le muestra un mensaje de error al usuario de que el largo de la contraseña y de la confirmación no coincide.
                                 //Inicializa las variables de trabajo del metodo.
-                                $validacion = "Recuerde que los espacios para nueva clave y confirmación, no pueden quedar vacíos";
-                                $tipo_de_alerta = "alert alert-danger";
+                                $validacion="Recuerde que los espacios para nueva clave y confirmación, no pueden quedar vacíos";
+                                $tipo_de_alerta="alert alert-danger";
                                 //Llamada al formulario correspondiente de la vista
-                                require __DIR__ . '/../vistas/plantillas/frm_Cambio_Clave.php';
+                                require __DIR__ . '/../vistas/plantillas/frm_Cambio_Clave.php'; 
                             }
-                        } else {
+                        }else{
                             //Informa que el usuario no esta activo, por lo que no podrá realizarse el cambio de contraseña.
                             //Inicializa las variables de trabajo del metodo.
-                            $validacion = "Usuario Inactivo, contacte al administrador del sistema!!!";
-                            $tipo_de_alerta = "alert alert-danger";
+                            $validacion="Usuario Inactivo, contacte al administrador del sistema!!!";
+                            $tipo_de_alerta="alert alert-danger";
                             //Llamada al formulario correspondiente de la vista
-                            require __DIR__ . '/../vistas/plantillas/frm_Cambio_Clave.php';
+                            require __DIR__ . '/../vistas/plantillas/frm_Cambio_Clave.php'; 
                         }
-                    } else {
+                    }else{
                         //De lo contrario notifica que la contraseña actual suministrada no es correcta de acuerdo a la bd.
                         //Inicializa las variables de trabajo del metodo.
-                        $validacion = "La Contraseña actual del usuario no es correcta";
-                        $tipo_de_alerta = "alert alert-danger";
-                        $clave = "";
+                        $validacion="La Contraseña actual del usuario no es correcta";
+                        $tipo_de_alerta="alert alert-danger";
+                        $clave="";
                         //Llamada al formulario correspondiente de la vista
-                        require __DIR__ . '/../vistas/plantillas/frm_Cambio_Clave.php';
+                        require __DIR__ . '/../vistas/plantillas/frm_Cambio_Clave.php'; 
                     }
-                } else {
+                }else{
                     // De lo contrario notifica que este usuario no existe en la base de datos y define las variables de error correspondientes.
-                    $validacion = "El usuario no se encuentra registrado en la base de datos";
-                    $tipo_de_alerta = "alert alert-danger";
+                    $validacion="El usuario no se encuentra registrado en la base de datos";
+                    $tipo_de_alerta="alert alert-danger";
                     //Inicializa las variables de trabajo del metodo.
-                    $usuario = "";
-                    $clave = "";
+                    $usuario="";
+                    $clave="";
                     //Llamada al formulario correspondiente de la vista
                     require __DIR__ . '/../vistas/plantillas/frm_Cambio_Clave.php';
                 }
-            } else {
+            }else {
                 // De lo contrario notifica al usuario que es necesario ingresar el numero de cedula y define las variables de error correspondientes.
-                $tipo_de_alerta = "alert alert-danger";
-                $validacion = "Debe completar el espacio de usuario para poder continuar con el proceso";
+                $tipo_de_alerta="alert alert-danger";
+                $validacion="Debe completar el espacio de usuario para poder continuar con el proceso";
                 //Inicializa las variables de trabajo del metodo.
-                $usuario = "";
-                $clave = "";
+                $usuario="";
+                $clave="";
                 //Llamada al formulario correspondiente de la vista
                 require __DIR__ . '/../vistas/plantillas/frm_Cambio_Clave.php';
             }
-        } else {
+        }else {
             /*
-             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
-             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
-             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
-             * En la última línea llama a la pagina de inicio de sesión.
-             */
-            $tipo_de_alerta = "alert alert-danger";
-            $validacion = "Es necesario completar la infornación requerida para cambiar la contraseña";
+            * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+            * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+            * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+            * En la última línea llama a la pagina de inicio de sesión.
+            */
+            $tipo_de_alerta="alert alert-danger";
+            $validacion="Es necesario completar la infornación requerida para cambiar la contraseña";
             //Llamada al formulario correspondiente de la vista
             require __DIR__ . '/../vistas/plantillas/frm_Cambio_Clave.php';
         }
-    }
+    }  
 
     //Cambia estado del rol (activo/inactivo)
-    public function cambiar_estado_rol() {
+    public function cambiar_estado_rol(){
         //Validación para verificar si el usuario está logeado en el sistema
-        if (isset($_SESSION['nombre'])) {
+        if(isset($_SESSION['nombre'])){
             //Verifica si la variable id fue enviada por el url de la solicitud.
             if (isset($_GET['id'])) {
                 //Verifica si la variable estado fue enviada por el url de la solicitud.
                 if (isset($_GET['estado'])) {
                     //Crea un objeto de tipo roles.
-                    $obj_roles = new cls_roles();
+                    $obj_roles=new cls_roles();
                     // Estable el id del rol, enviado via get por el url.
                     $obj_roles->setId($_GET['id']);
                     // Estable el estado del rol, enviado via get por el url.
                     $obj_roles->setEstado($_GET['estado']);
                     //Procede a cambiar el estado del rol mediante el metodo.
                     $obj_roles->edita_estado_rol();
-
+                    
                     //Redefine nuevamente el objeto de tipo rol
-                    $obj_roles = new cls_roles();
+                    $obj_roles=new cls_roles();
                     //Obtiene el listado completado de roles del sistema.
                     $obj_roles->obtiene_todos_los_roles();
                     // asigna el resultado de la consulta sql, al vector de parametros.
-                    $params = $obj_roles->getArreglo();
+                    $params= $obj_roles->getArreglo();
                     //Llamada al formulario correspondiente de la vista
                     require __DIR__ . '/../vistas/plantillas/frm_roles_listar.php';
                 }
             }
-        } else {
+        }else{
             /*
-             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
-             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
-             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
-             * En la última línea llama a la pagina de inicio de sesión.
-             */
-            $tipo_de_alerta = "alert alert-warning";
-            $validacion = "Es necesario volver a iniciar sesión para consultar el sistema";
+            * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+            * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+            * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+            * En la última línea llama a la pagina de inicio de sesión.
+            */
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
             //Llamada al formulario correspondiente de la vista
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }
@@ -1732,44 +1752,44 @@ class Controller {
 
     //Metodo que permite cerrar o destruir la sesión actual de usuario, para poder 
     //validar nuevamente el ingreso y validacion de usuario
-    public function cerrar_sesion() {
+    public function cerrar_sesion(){
         //Envia un tipo de alerta de información, indicando que el sistema cerró la sesion actual
-        $tipo_de_alerta = "alert alert-info";
-        $validacion = "Verificación de Identidad";
+        $tipo_de_alerta="alert alert-info";
+        $validacion="Verificación de Identidad";
         //Llamada al formulario correspondiente de la vista
         require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         //Función de PHP que permite destruir la sesión actual del usuario.
         session_destroy();
     }
-
+    
     //Metodo que permite obtener las notas del sistema, a nivel del rol de coordinacion de Z1.
     public function nota_obtener() {
         //Validación para verificar si el usuario está logeado en el sistema
-        if (isset($_SESSION['nombre'])) {
+        if(isset($_SESSION['nombre'])){
             //Crea un objeto de la clase general.
             $obj_general = new cls_general();
             //Procede a ejecutar la consulta SQL para traer todas las notas contenidas en la bd.
             $obj_general->obtener_notas();
             //Obtener el vector de la consulta
-            $notas = $obj_general->getArreglo();
-        } else {
+            $notas= $obj_general->getArreglo(); 
+        }else{
             /*
-             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
-             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
-             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
-             * En la última línea llama a la pagina de inicio de sesión.
-             */
-            $tipo_de_alerta = "alert alert-warning";
-            $validacion = "Es necesario volver a iniciar sesión para consultar el sistema";
+            * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+            * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+            * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+            * En la última línea llama a la pagina de inicio de sesión.
+            */
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
             //Llamada al formulario correspondiente de la vista
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
-        }
+        }  
     }
-
+    
     //Evento que guarda en caliente las notas que se  agregan en la ventana dinamica. 
     public function nota_guardar() {
         //Validación para verificar si el usuario está logeado en el sistema
-        if (isset($_SESSION['nombre'])) {
+        if(isset($_SESSION['nombre'])){
             //Creación de objeto de tipo general para gestionar las notas.
             $obj_general = new cls_general();
             // Establece el id de la nota, para editarla 
@@ -1777,69 +1797,69 @@ class Controller {
             //Establecer el contenido de la noa.
             $obj_general->setNota($_POST['nota']);
             //Guarda la nota en bd
-            $obj_general->guardar_nota();
-        } else {
+            $obj_general->guardar_nota();            
+        }else{
             /*
-             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
-             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
-             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
-             * En la última línea llama a la pagina de inicio de sesión.
-             */
-            $tipo_de_alerta = "alert alert-warning";
-            $validacion = "Es necesario volver a iniciar sesión para consultar el sistema";
+            * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+            * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+            * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+            * En la última línea llama a la pagina de inicio de sesión.
+            */
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
             //Llamada al formulario correspondiente de la vista
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
-        }
+        }    
     }
-
+    
     //Metodo que permite almacenar un nuevo modulo (funcionalidad) a nivel de seguridad en el sistema
-    public function guardar_modulo_rol($id_Rol) {
+    public function guardar_modulo_rol($id_Rol){
         //Validación para verificar si el usuario está logeado en el sistema
-        if (isset($_SESSION['nombre'])) {
+        if(isset($_SESSION['nombre'])){
             //Verifica si la variable lista esta definida por medio del evento post del formulario html
-            if (isset($_POST["lista"])) {
+            if (isset($_POST["lista"])){
                 //Obtiene el listado de modulos que viene desde el formulario html
                 $listaModulos = $_POST["lista"];
                 // Crea un objeto de la clase roles
                 $obj_roles = new cls_roles();
                 //verifica que se haya recibido un id valido por parametro en el metodo.
-                if ($id_Rol != 0) {
+                if($id_Rol!=0){
                     //Llama al metodo que permite insertar una cantidad x de modulos asignado a un rol.
-                    $obj_roles->insertar_rolesModulo($id_Rol, $listaModulos);
+                    $obj_roles->insertar_rolesModulo($id_Rol,$listaModulos);
                 } else {
                     //De lo contrario muestra un mensaje en pantalla.
-                    echo ($id_Rol) . 'No se ingresaron los modulos';
+                    echo ($id_Rol).'No se ingresaron los modulos';
                 }
             }
-        } else {
+        }else{
             /*
-             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
-             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
-             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
-             * En la última línea llama a la pagina de inicio de sesión.
-             */
-            $tipo_de_alerta = "alert alert-warning";
-            $validacion = "Es necesario volver a iniciar sesión para consultar el sistema";
+            * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+            * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+            * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+            * En la última línea llama a la pagina de inicio de sesión.
+            */
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
             //Llamada al formulario correspondiente de la vista
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }
     }
-
+    
     // Guarda un nuevo Rol del sistema
-    public function guardar_rol() {
+    public function guardar_rol(){       
         //Validación para verificar si el usuario está logeado en el sistema
-        if (isset($_SESSION['nombre'])) {
+        if(isset($_SESSION['nombre'])){
             //Verificar si la solicitud trae información por el metodo post del formulario HTML
             if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-                //Crea un objeto de tipo roles
-                $obj_roles = new cls_roles();
+               //Crea un objeto de tipo roles
+                $obj_roles=new cls_roles();
                 //agrega descripcion al rol, la cual viene del formulario html
                 $obj_roles->setDescripcion($_POST['descripcion']);
                 //Establece el estado 
                 $obj_roles->setEstado($_POST['estado']);
-
+              
                 //En caso de que el id enviado sea cero, procede a incluir un nuevo rol
-                if ($_GET['id'] == 0) {
+                if ($_GET['id']==0){
                     //Ejecuta la sentencia SQL para traer todos lo roles establecidos por bd
                     $obj_roles->obtiene_todos_los_roles();
                     //Inicializa un vector con la consulta y el listado de roles
@@ -1847,33 +1867,33 @@ class Controller {
                     //Extrae la cantidad de registros de la consulta
                     $tam = count($validacion);
                     //Variable bandera para verificar si la descrupción del módulo ya existe en la bd
-                    $correcto = 0;
+                    $correcto=0;
                     //Recorre el listado general de roles del sistema
-                    for ($i = 0; $i < $tam; $i++) {
+                    for($i=0; $i<$tam;$i++){
                         //Valida si la descripcion del rol en bd es igual a la que trae el formulario html.
-                        if ($_POST['descripcion'] == $validacion[$i]['Descripcion']) {
+                        if($_POST['descripcion']==$validacion[$i]['Descripcion']){
                             //en caso de que sea correcto, asigna a la variable bandera el valor de 1
-                            $correcto = 1;
+                            $correcto=1;
                             //Envía una alerta indicando que este rol ya se encuentra en la base de datos con la misma descripción.
                             echo '<script>alert("Este Rol ya se encuentra registrado en el sistema");</script>';
                         }
                     }
                     //Si la variable bandera se mantiene en el valor inicial, procede a guardar la información del nuevo rol.
-                    if ($correcto == 0) {
+                    if($correcto==0){
                         //Ingresa el rol en bd
                         $obj_roles->inserta_rol();
                         //Obtiene el id del rol recien ingresado
                         $obj_roles->obtiene_id_ultimo_rol_ingresado();
                         //Asigna el id a una var iable
-                        $id_ult_rol = $obj_roles->getId_ultimo_rol_ingresado();
+                        $id_ult_rol=$obj_roles->getId_ultimo_rol_ingresado();
                         //Procede a guardar los modulos relacionados al rol, enviando por parametro el id del rol
                         $this->guardar_modulo_rol($id_ult_rol);
-                    } else {
+                    }   else    {
                         //Caso contrario vuelve a la pantalla de gestion del rol
-                        header("location:/ORIEL/index.php?ctl=gestion_roles");
+                        header ("location:/ORIEL/index.php?ctl=gestion_roles");
                     }
                     //En caso de que el id enviado sea diferente a cero, procede a modificar un rol
-                } else {
+                }   else    {
                     //Establece el atributo del objeto con la información enviada desde el formulario html.
                     $obj_roles->setId($_GET['id']);
                     //Guarda el rol modificado en base de datos
@@ -1888,143 +1908,145 @@ class Controller {
             }
             //Llamada al formulario correspondiente de la vista
             require __DIR__ . '/../vistas/plantillas/frm_roles_listar.php';
-        } else {
+               
+        }else{
             /*
-             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
-             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
-             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
-             * En la última línea llama a la pagina de inicio de sesión.
-             */
-            $tipo_de_alerta = "alert alert-warning";
-            $validacion = "Es necesario volver a iniciar sesión para consultar el sistema";
+            * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+            * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+            * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+            * En la última línea llama a la pagina de inicio de sesión.
+            */
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
             //Llamada al formulario correspondiente de la vista
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }
     }
-
+    
     //Metodo que permite guardar nuevos o modificar roles en el modulo de seguridad del sistema
-    public function gestion_roles() {
+    public function gestion_roles(){
         //Validación para verificar si el usuario está logeado en el sistema
-        if (isset($_SESSION['nombre'])) {
+        if(isset($_SESSION['nombre'])){
             //Si el id enviado por parámetro es cero, procede a ingresar un nuevo rol.
-            if ($_GET['id'] == 0) {
+            if ($_GET['id']==0){
                 //Inicializa variables para presentarlas en pantalla
-                $desc = "";
-                $esta = 1;
-                $ide = $_GET['id'];
+                $desc="";
+                $esta=1;
+                $ide=$_GET['id'];
                 //Inicializa un vector de lista de roles
-                $lista = array();
+                $lista= array();
                 //Modifica un rol existente
-            } else {
+            }  else  {
                 //Inicializa las variables para presentarlas en pantalla
-                $ide = $_GET['id'];
-                $desc = $_GET['descripcion'];
-                $esta = $_GET['estado'];
-
+                $ide=$_GET['id'];
+                $desc=$_GET['descripcion'];
+                $esta=$_GET['estado']; 
+            
                 //Crea un objeto de tipo roles del sistema
-                $obj_roles = new cls_roles();
+                $obj_roles= new cls_roles();
                 //Ejecuta la sentencia SQL para traer todos los modulos por rol de seguridad
                 $obj_roles->obtiene_todos_los_modulos_por_rol($ide);
                 //Inicializa los valores  a un vector 
-                $lista = $obj_roles->getArreglo();
+                $lista= $obj_roles->getArreglo();
             }
             //Crea un objeto de tipo modulos
-            $obj_modulos = new cls_modulos();
+            $obj_modulos=new cls_modulos();
             //Establece una condicion para traer solamente modulos activos en el sistema
             $obj_modulos->setCondicion("Estado=1");
             //Ejecuta la sentencia SQL
             $obj_modulos->obtiene_todos_los_modulos();
             // Asigna el resultado a un vector
-            $params = $obj_modulos->getArreglo();
+            $params= $obj_modulos->getArreglo();
             //Llamada al formulario correspondiente de la vista
             require __DIR__ . '/../vistas/plantillas/frm_roles_gestion.php';
-        } else {
+               
+        } else  {
             /*
-             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
-             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
-             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
-             * En la última línea llama a la pagina de inicio de sesión.
-             */
-            $tipo_de_alerta = "alert alert-warning";
-            $validacion = "Es necesario volver a iniciar sesión para consultar el sistema";
+            * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+            * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+            * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+            * En la última línea llama a la pagina de inicio de sesión.
+            */
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
             //Llamada al formulario correspondiente de la vista
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }
-    }
-
+    }     
+    
     //Trae la lista completa de modulos del sistema
-    public function modulos_listar() {
+    public function modulos_listar(){     
         //Validación para verificar si el usuario está logeado en el sistema
-        if (isset($_SESSION['nombre'])) {
+        if(isset($_SESSION['nombre'])){
             //Crea un objeto de tipo modulos
-            $obj_modulos = new cls_modulos();
+            $obj_modulos=new cls_modulos();
             //Ejecuta la sentencia SQL
             $obj_modulos->obtiene_todos_los_modulos();
             //Inicializa el vector correspondiente 
-            $params = $obj_modulos->getArreglo();
+            $params= $obj_modulos->getArreglo();
             //Llamada al formulario correspondiente de la vista
             require __DIR__ . '/../vistas/plantillas/frm_modulos_listar.php';
-        } else {
+        }else{
             /*
-             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
-             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
-             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
-             * En la última línea llama a la pagina de inicio de sesión.
-             */
-            $tipo_de_alerta = "alert alert-warning";
-            $validacion = "Es necesario volver a iniciar sesión para consultar el sistema";
+            * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+            * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+            * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+            * En la última línea llama a la pagina de inicio de sesión.
+            */
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
             //Llamada al formulario correspondiente de la vista
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
-        }
+        } 
     }
-
+     
     //Ingresa un nuevo módulo de seguridad en la base de datos
-    public function modulos_guardar() {
+    public function modulos_guardar(){
         //Validación para verificar si el usuario está logeado en el sistema
-        if (isset($_SESSION['nombre'])) {
+        if(isset($_SESSION['nombre'])){   
             //Verifica si trae variables de formulario HTML vía metodo POST
             if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 //Crea un objeto de tipo modulos para manipular la tabla de bd
-                $obj_modulos = new cls_modulos();
+                $obj_modulos=new cls_modulos();
                 //Inicializa la descripcion como atributo del objeto
                 $obj_modulos->setDescripcion($_POST['descripcion']);
                 //Inicializa el estado como atributo del objeto
                 $obj_modulos->setEstado($_POST['estado']);
-
+              
                 //Si el id recibido por la url es cero, procede a ingresar un nuevo modulo
-                if ($_GET['id'] == 0) {
+                if ($_GET['id']==0){
                     //Ejecuta la sentencia SQL para traer la lista de modulos
                     $obj_modulos->obtiene_todos_los_modulos();
                     //Inicializa una variable con el listado de modulos
-                    $validacion = $obj_modulos->getArreglo();
+                    $validacion= $obj_modulos->getArreglo();
                     //Tamaño de registros del vector
                     $tam = count($validacion);
                     //Variable bandera para verificar que el nuevo modulo no exista en bd
-                    $correcto = 0;
+                    $correcto=0;
                     //Este bucle compara el lista de todos los modulos con el nuevo por ingresar para descartar que este repetido
-                    for ($i = 0; $i < $tam; $i++) {
+                    for($i=0; $i<$tam;$i++){
                         //Valida si ya existe la descripcion del nuevo modulo en alguno de los ya existentes.
-                        if ($_POST['descripcion'] == $validacion[$i]['Descripcion']) {
+                        if($_POST['descripcion']==$validacion[$i]['Descripcion']){
                             //En caso de ser así, cambia el valor de la bandera
-                            $correcto = 1;
+                            $correcto=1;
                             //Notifica al usuario final que ya este modulo se encuentra en bd
                             echo '<script>alert("Este Modulo ya se encuentra registrado en el sistema");</script>';
                         }
                     }
                     //En caso de no encontra  repetidos, procede a ingresarlo
-                    if ($correcto == 0) {
+                    if($correcto==0){
                         //Guarda en bd
                         $obj_modulos->inserta_modulo();
                         //Obtiene el id del modulo ingresado
                         $ultimo_modulo = $obj_modulos->getArreglo();
                         //Procede a ingresar los modulos del rol correspondiente
                         $obj_modulos->insertar_rolesModulo("1", $ultimo_modulo[0]['ID_Modulo']);
-                    } else {
+                    }   else    {
                         //Llamada al formulario correspondiente de la vista
-                        header("location:/ORIEL/index.php?ctl=modulos_gestion");
-                    }
-                    //En caso de que el id sea diferente de cero, procede a editar un modulo
-                } else {
+                        header ("location:/ORIEL/index.php?ctl=modulos_gestion");
+                                            }
+                //En caso de que el id sea diferente de cero, procede a editar un modulo
+                }   else   {
                     //Inicializa los atributos del objeto correspondiente
                     $obj_modulos->setId($_GET['id']);
                     //Guarda la nueva información en bd
@@ -2033,34 +2055,34 @@ class Controller {
                 //Procede a generar nuevamente la consulta de todos los modulos de seguridad que se encuentran en bd
                 $obj_modulos->obtiene_todos_los_modulos();
                 //Inicializa una variable con el total de registros traidos en la consulta desde la bd
-                $params = $obj_modulos->getArreglo();
+                $params= $obj_modulos->getArreglo();
             }
             //Llamada al formulario correspondiente de la vista
             require __DIR__ . '/../vistas/plantillas/frm_modulos_listar.php';
         } else {
             /*
-             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
-             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
-             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
-             * En la última línea llama a la pagina de inicio de sesión.
-             */
-            $tipo_de_alerta = "alert alert-warning";
-            $validacion = "Es necesario volver a iniciar sesión para consultar el sistema";
+            * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+            * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+            * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+            * En la última línea llama a la pagina de inicio de sesión.
+            */
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
             //Llamada al formulario correspondiente de la vista
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }
     }
-
+    
     //Metodo que permite cambiar el estado de un modulo (activo/inactivo)
-    public function modulos_cambiar_estado() {
+    public function modulos_cambiar_estado(){
         //Validación para verificar si el usuario está logeado en el sistema
-        if (isset($_SESSION['nombre'])) {
+        if(isset($_SESSION['nombre'])){
             //Valida que se haya enviado por url el id del modulo a gestionar
             if (isset($_GET['id'])) {
                 //Verifica que se haya enviado por url el estado nuevo del modulo
-                if (isset($_GET['estado'])) {
+                if (isset($_GET['estado'])) { 
                     //Crea un objeto de clase correspondiente
-                    $obj_modulos = new cls_modulos();
+                    $obj_modulos=new cls_modulos();
                     //Establece el atributo id del modulo
                     $obj_modulos->setId($_GET['id']);
                     // Establece el atributo estado del modulo
@@ -2068,139 +2090,140 @@ class Controller {
                     //Procede a ejecutar el cambio de estado en el modulo correspondiente
                     $obj_modulos->edita_estado_modulo();
                     //Reinicia la instancia del objeto de la clase modulos
-                    $obj_modulos = new cls_modulos();
+                    $obj_modulos=new cls_modulos();
                     //Obtiene la lista completa de modulos de segurida del sistema
                     $obj_modulos->obtiene_todos_los_modulos();
                     //Asigna el resultado a una variable de tipo vector
-                    $params = $obj_modulos->getArreglo();
+                    $params= $obj_modulos->getArreglo();
                     // Procede a eliminar los modulos asignados a un rol en especifico
                     $obj_modulos->eliminar_modulos_roles($_GET['id']);
                     //Llamada al formulario correspondiente de la vista
                     require __DIR__ . '/../vistas/plantillas/frm_modulos_listar.php';
                 }
             }
-        } else {
+        }else{
             /*
-             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
-             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
-             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
-             * En la última línea llama a la pagina de inicio de sesión.
-             */
-            $tipo_de_alerta = "alert alert-warning";
-            $validacion = "Es necesario volver a iniciar sesión para consultar el sistema";
+            * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+            * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+            * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+            * En la última línea llama a la pagina de inicio de sesión.
+            */
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
             //Llamada al formulario correspondiente de la vista
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }
     }
 
     //Permite agregar o modificar modulos de seguridad del sistema
-    public function modulos_gestion() {
+    public function modulos_gestion(){
         //Validación para verificar si el usuario está logeado en el sistema
-        if (isset($_SESSION['nombre'])) {
+        if(isset($_SESSION['nombre'])){
             // Verifica si el id enviado por la url, esta en cero o no
-            if ($_GET['id'] == 0) {
+            if ($_GET['id']==0){
                 //Establece la variable de control a vacio
-                $desc = "";
+                $desc="";
                 //Asigna activo a la variable estado
-                $esta = 1;
+                $esta=1;
                 //Obtiene el valor de id enviado por url
-                $ide = $_GET['id'];
-            } else {
+                $ide=$_GET['id'];
+                
+            }   else   {
                 //Obtiene el valor de id enviado por url
-                $ide = $_GET['id'];
+                $ide=$_GET['id'];
                 //Establece la variable de control a vacio
-                $desc = $_GET['descripcion'];
+                $desc=$_GET['descripcion'];
                 //Asigna el estado a la variable de control
-                $esta = $_GET['estado'];
+                $esta=$_GET['estado'];
             }
             //Llamada al formulario correspondiente de la vista
             require __DIR__ . '/../vistas/plantillas/frm_modulos_gestion.php';
-        } else {
+        }   else    {
             /*
-             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
-             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
-             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
-             * En la última línea llama a la pagina de inicio de sesión.
-             */
-            $tipo_de_alerta = "alert alert-warning";
-            $validacion = "Es necesario volver a iniciar sesión para consultar el sistema";
+            * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+            * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+            * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+            * En la última línea llama a la pagina de inicio de sesión.
+            */
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
             //Llamada al formulario correspondiente de la vista
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }
     }
-
+    
     //Metodo que permite traer de bd el listado total de usuarios del sistema 
-    public function listar_usuarios() {
+    public function listar_usuarios(){
         //Validación para verificar si el usuario está logeado en el sistema
-        if (isset($_SESSION['nombre'])) {
+        if(isset($_SESSION['nombre'])){
             //Crea una instancia de la clase usuarios
-            $obj_usuarios = new cls_usuarios();
+            $obj_usuarios= new cls_usuarios();
             //Metodo que ejecuta la sentecia SQL para traer todos los usuarios
-            $obj_usuarios->obtiene_todos_los_usuarios();
+            $obj_usuarios ->obtiene_todos_los_usuarios();
             //Inicializa una variable con el vector total de registros de la bd
-            $params = $obj_usuarios->getArreglo();
+            $params= $obj_usuarios->getArreglo();
             //Llamada al formulario correspondiente de la vista
-            require __DIR__ . '/../vistas/plantillas/frm_usuarios_listar.php';
+            require __DIR__.'/../vistas/plantillas/frm_usuarios_listar.php';
         } else {
             /*
-             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
-             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
-             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
-             * En la última línea llama a la pagina de inicio de sesión.
-             */
-            $tipo_de_alerta = "alert alert-warning";
-            $validacion = "Es necesario volver a iniciar sesión para consultar el sistema";
+            * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+            * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+            * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+            * En la última línea llama a la pagina de inicio de sesión.
+            */
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
             //Llamada al formulario correspondiente de la vista
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }
     }
-
+     
     //Metodo que permite el mantenimiento de usuarios de seguridad del sistema
-    public function gestion_usuarios() {
+    public function gestion_usuarios(){
         //Validación para verificar si el usuario está logeado en el sistema
-        if (isset($_SESSION['nombre'])) {
+        if(isset($_SESSION['nombre'])){
             //Inicializa la variable params
-            $params = "";
+            $params="";
             //Crea una instancia de la clase roles
-            $obj_roles = new cls_roles();
+            $obj_roles= new cls_roles();
             //Establece una condicion de consulta, que permita traer los roles activos del sistema
             $obj_roles->setCondicion("Estado=1");
             //Procede a ejecutar la consulta correspondiente, bajo el criterio especificado
             $obj_roles->obtiene_todos_los_roles();
             //Obtiene el arreglo de registros del sistema
             $roles = $obj_roles->getArreglo();
-
+            
             //Si el id que viene via url es cero, procde a inicializar las posiciones del vector de control a vacio 
-            if ($_GET['id'] == 0) {
+            if ($_GET['id']==0){
                 //Inicializa a cero el id de la gestion
-                $ide = 0;
-
+                $ide=0;
+               
                 //Inicializacion de los elementos del vector a vacio, ya que se ingresará un nuevo usuario del sistema
-                $params[0]['Nombre'] = "";
-                $params[0]['Apellido'] = "";
-                $params[0]['Cedula'] = "";
-                $params[0]['Correo'] = "";
-                $params[0]['Rol'] = "";
-                $params[0]['Observaciones'] = "";
-                $params[0]['Estado'] = "1";
+                $params[0]['Nombre']="";
+                $params[0]['Apellido']="";
+                $params[0]['Cedula']="";
+                $params[0]['Correo']="";
+                $params[0]['Rol']="";
+                $params[0]['Observaciones']="";
+                $params[0]['Estado']="1";
             }
             //En caso de que el id venga inicializado a -1, procede a inicializar los elementos del vector con los parametros enviados desde el formulario HTML
-            if ($_GET['id'] == -1) {
+            if($_GET['id']==-1){
                 //inicializa la variable ide en cero
-                $ide = 0;
+                $ide=0;
                 //Inicializa los elementos del vector con los parametros enviados por post desde el formulario HTML
-                $params[0]['Nombre'] = $_POST['Nombre'];
-                $params[0]['Apellido'] = $_POST['Apellido'];
-                $params[0]['Cedula'] = $_POST['Cedula'];
-                $params[0]['Correo'] = $_POST['Correo'];
-                $params[0]['Rol'] = "";
-                $params[0]['Observaciones'] = $_POST['Observaciones'];
-                $params[0]['Estado'] = "1";
+                $params[0]['Nombre']=$_POST['Nombre'];
+                $params[0]['Apellido']=$_POST['Apellido'];
+                $params[0]['Cedula']=$_POST['Cedula'];
+                $params[0]['Correo']=$_POST['Correo'];
+                $params[0]['Rol']="";
+                $params[0]['Observaciones']=$_POST['Observaciones'];
+                $params[0]['Estado']="1";
             }
             //En caso de que el id sea diferente a -1 y 0, procede a buscar el usuario en bd y enviar el vector correspondiente a la capa de presentacion del sistema
-            else {
+            else    {
                 //Inicializa la variable ide con el parametro enviado por url desde el formulario html
-                $ide = $_GET['id'];
+                $ide=$_GET['id'];
                 //Crea una instancia de la clase usuarios
                 $obj_usuario = new cls_usuarios();
                 //Establece condicion de busqueda en la bd
@@ -2208,34 +2231,34 @@ class Controller {
                 //Ejecuta el metodo que trae la lista de usuarios de acuerdo a la condicion
                 $obj_usuario->obtiene_todos_los_usuarios();
                 //Inicializa el vector con el resultado de la busqueda
-                $params = $obj_usuario->getArreglo();
+                $params= $obj_usuario->getArreglo();
             }
             //Llamada al formulario correspondiente de la vista
             require __DIR__ . '/../vistas/plantillas/frm_usuarios_gestion.php';
-        } else {
+        }   else   {
             /*
-             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
-             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
-             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
-             * En la última línea llama a la pagina de inicio de sesión.
-             */
-            $tipo_de_alerta = "alert alert-warning";
-            $validacion = "Es necesario volver a iniciar sesión para consultar el sistema";
+            * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+            * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+            * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+            * En la última línea llama a la pagina de inicio de sesión.
+            */
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
             //Llamada al formulario correspondiente de la vista
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }
     }
 
     //Metodo que permite realizar el mantenimiento general de la tabla de usuarios del sistema
-    public function guardar_usuario() {
+    public function guardar_usuario(){
         //Validación para verificar si el usuario está logeado en el sistema
-        if (isset($_SESSION['nombre'])) {
+        if(isset($_SESSION['nombre'])){
             // Crea una instancia de la clase usuarios
-            $obj_usuarios = new cls_usuarios();
+            $obj_usuarios= new cls_usuarios();
             //Verifica si vienen datos por medio del metodo post, es decir usando un formulario html
             if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 //Validar información para ver si el usuario en cuestion existe en la bd
-                $obj_usuarios->setCondicion("ID_Usuario<>" . $_GET['id']);
+                $obj_usuarios->setCondicion("ID_Usuario<>".$_GET['id']);
                 //Ejecuta el metodo para correr la sentencia SQL segun criterio
                 $obj_usuarios->obtiene_todos_los_usuarios();
                 //Inicializa una variable con el vector de resultados
@@ -2243,43 +2266,43 @@ class Controller {
                 //Inicializa una variable con la cantidad de registros recibidos
                 $tam = count($validacion);
                 //Variable bandera para validar la no repetición de usuarios en el sistema
-                $correcto = 0;
+                $correcto=0;
                 //Recorre el vector de registros que trae la consulta
-                for ($i = 0; $i < $tam; $i++) {
+                for($i=0; $i<$tam;$i++){
                     //Valida si la cedula del registro actual es igual que está en gestión
-                    if ($_POST['Cedula'] == $validacion[$i]['Cedula']) {
+                    if($_POST['Cedula']==$validacion[$i]['Cedula']){
                         //Cambia el estado de la variable bandera
-                        $correcto = 1;
+                        $correcto=1;
                         //Envia notificacion de la validacion al usuario en cuestion
                         echo '<script>alert("Esta Cedula ya se encuentra registrada en el sistema");</script>';
                         //Inicializa la variable post del formulario a vacio para que se vuelva a ingresar
-                        $_POST['Cedula'] = "";
+                        $_POST['Cedula']="";
                         //Inicializa la variable post del formulario a -1 para el control correspondiente
-                        $_GET['id'] = -1;
+                        $_GET['id']=-1;
                     }
                     //Valida la información del correo suministrada por el usuario que está utilizando el modulo
                     //Tanto en contenido como que sea diferente de los que se encuentran en bd
-                    if ($_POST['Correo'] != "" && $_POST['Correo'] == $validacion[$i]['Correo']) {
+                    if($_POST['Correo']!="" && $_POST['Correo']==$validacion[$i]['Correo']){
                         //Cambia el valor de la varuable bandera
-                        $correcto = 1;
+                        $correcto=1;
                         //Notifica al usuario del error.
                         echo '<script>alert("Este correo ya se encuentra registrado en el sistema");</script>';
                         //Inicializa la variable del formulario a vacio para su nuevo ingreso
-                        $_POST['Correo'] = "";
+                        $_POST['Correo']="";
                         //Inicializa la variable post del formulario a -1 para el control correspondiente
-                        $_GET['id'] = -1;
+                        $_GET['id']=-1;
                     }
                     //Validacion del correo cuando sea vacio
-                    if ($_POST['Correo'] == "") {
-                        $correcto = 0;
+                    if($_POST['Correo']==""){
+                        $correcto=0;
                     }
                 }
                 //Si la variable bandera es igual a cero, procede a gestionar la actualizacion en base de datos
-                if ($correcto == 0) {
+                if($correcto==0){
                     /*
-                     * Establece los diferentes atributos del objeto de la clase, con la información proveniente 
-                     * desde el formulario html via post
-                     */
+                    * Establece los diferentes atributos del objeto de la clase, con la información proveniente 
+                    * desde el formulario html via post
+                    */
                     $obj_usuarios->setId($_GET['id']);
                     $obj_usuarios->setNombre($_POST['Nombre']);
                     $obj_usuarios->setApellido($_POST['Apellido']);
@@ -2295,49 +2318,50 @@ class Controller {
                     // Inicializa el vector con los resultados de la consulta a la bd
                     $params = $obj_usuarios->getArreglo();
                     //Llamada al formulario correspondiente de la vista
-                    header("location:/ORIEL/index.php?ctl=listar_usuarios");
-                } else {
+                    header ("location:/ORIEL/index.php?ctl=listar_usuarios");
+                   
+                 } else {
                     //Llama al metodo de la clase controller. 
                     //Se cambió por el header, en caso de error, volver a colocar la llamada directa al metodo de la clase
                     //$this->gestion_usuarios();***
                     //Llamada al formulario correspondiente de la vista
-                    header("location:/ORIEL/index.php?ctl=gestion_usuarios");
+                    header ("location:/ORIEL/index.php?ctl=gestion_usuarios");                    
                 }
             }
-        } else {
+        } else  {
             /*
-             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
-             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
-             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
-             * En la última línea llama a la pagina de inicio de sesión.
-             */
-            $tipo_de_alerta = "alert alert-warning";
-            $validacion = "Es necesario volver a iniciar sesión para consultar el sistema";
+            * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+            * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+            * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+            * En la última línea llama a la pagina de inicio de sesión.
+            */
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
             //Llamada al formulario correspondiente de la vista
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }
     }
-
+    
     //Metodo que permite cambiar de estado un usuario en la bd (activo/inactivo)
-    public function cambiar_estado_usuario() {
+    public function cambiar_estado_usuario(){
         //Creacion de una instancia de la clase roles
-        $obj_roles = new cls_roles();
+        $obj_roles= new cls_roles();
         //Creacion de una instancia de la clase usuario
-        $obj_usuario = new cls_usuarios();
+        $obj_usuario= new cls_usuarios(); 
         //Validación para verificar si el usuario está logeado en el sistema
-        if (isset($_SESSION['nombre'])) {
+        if(isset($_SESSION['nombre'])){
             //Valida que el id haya sido enviado via url por el metodo get
             if (isset($_GET['id'])) {
                 //Valida que el estado haya sido enviado via url por el metodo get
-                if (isset($_GET['estado'])) {
+                if (isset($_GET['estado'])){
                     //Establece condicion para verificar antes cual es el estado del rol al que pertenece el usuario en cuestion
-                    $obj_roles->setCondicion("ID_Rol=" . $_GET['rol']);
+                    $obj_roles->setCondicion("ID_Rol=".$_GET['rol']);
                     //Ejecuta la sentecia sql 
                     $obj_roles->obtiene_todos_los_roles();
                     //Asigna a la variable el arreglo con la consulta correspondiente
-                    $rolusuario = ($obj_roles->getArreglo());
+                    $rolusuario=($obj_roles->getArreglo());
                     //Si el estado del rol de usuario está activo, procede a realizar la actualización en la información del estado del usuario
-                    if ($rolusuario[0]['Estado'] == 1) {
+                    if($rolusuario[0]['Estado']==1){
                         //Establece el atributo id del objeto de clase
                         $obj_usuario->setId($_GET['id']);
                         //Establece el atributo estado del objeto de la clase
@@ -2347,42 +2371,42 @@ class Controller {
                         //Genera la consulta con el listado completo de usuarios del sistema
                         $obj_usuario->obtiene_todos_los_usuarios();
                         // Obtiene el listado de usuarios en la variable corrrespondiente
-                        $params = $obj_usuario->getArreglo();
+                        $params= $obj_usuario->getArreglo();
                     } else {
                         //Muestra un warning al usuario, indicando que el rol está desactivado
                         echo '<script>alert("Rol Desactivado");</script>';
                         //Procede a ejecutar la consulta para traer todos los usuarios
                         $obj_usuario->obtiene_todos_los_usuarios();
                         // Inicializa la variable con el vector correspondiente.
-                        $params = $obj_usuario->getArreglo();
+                        $params= $obj_usuario->getArreglo();
                     }
                     //Llamada al formulario correspondiente de la vista
                     require __DIR__ . '/../vistas/plantillas/frm_usuarios_listar.php';
                 }
-            }
-        } else {
+            }    
+        }else  {
             /*
-             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
-             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
-             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
-             * En la última línea llama a la pagina de inicio de sesión.
-             */
-            $tipo_de_alerta = "alert alert-danger";
-            $validacion = "Es necesario iniciar sesión para ingresar al sistema";
+            * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+            * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+            * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+            * En la última línea llama a la pagina de inicio de sesión.
+            */
+            $tipo_de_alerta="alert alert-danger";
+            $validacion="Es necesario iniciar sesión para ingresar al sistema";
             //Llamada al formulario correspondiente de la vista
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }
     }
-
+     
     //Metodo que permite resetear la clave de un usuario en especifico, por parte de un usuario administrador.
     //El nuevo password queda de manera momentánea, con la cedula o SSN para ingresar nuevamente.
-    public function reset_password() {
+    public function reset_password(){ 
         //Validación para verificar si el usuario está logeado en el sistema
-        if (isset($_SESSION['nombre'])) {
+        if(isset($_SESSION['nombre'])){
             //Validación para verificar si el usuario está logeado en el sistema
             if (isset($_GET['id'])) {
                 //Creación de una instancia del objto usuario
-                $obj_usuario = new cls_usuarios();
+                $obj_usuario= new cls_usuarios();
                 //Establece los atributos del objeto desde los parametros 
                 //Id del usuario=cedula
                 $obj_usuario->setId($_GET['id']);
@@ -2393,51 +2417,52 @@ class Controller {
                 //Procede a traer la lista actualizada de usuarios del sistema
                 $obj_usuario->obtiene_todos_los_usuarios();
                 //Asigna el resultado de la consulta a una variable de tipo arreglo
-                $params = $obj_usuario->getArreglo();
+                $params= $obj_usuario->getArreglo();
                 //Llamada al formulario correspondiente de la vista
                 require __DIR__ . '/../vistas/plantillas/frm_usuarios_listar.php';
             }
-        } else {
+        }
+        else{
             /*
-             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
-             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
-             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
-             * En la última línea llama a la pagina de inicio de sesión.
-             */
-            $tipo_de_alerta = "alert alert-danger";
-            $validacion = "Es necesario iniciar sesión para ingresar al sistema";
+            * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+            * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+            * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+            * En la última línea llama a la pagina de inicio de sesión.
+            */
+            $tipo_de_alerta="alert alert-danger";
+            $validacion="Es necesario iniciar sesión para ingresar al sistema";
             //Llamada al formulario correspondiente de la vista
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }
     }
 
     //Metodo que permite recordar el password de un usuario mediante el envio de la información por correo 
-    public function recordar_password() {
+    public function recordar_password(){
         //Inicializa la variable para notificar al usuario del resultado de la operacion
-        $validacion = "";
+        $validacion="";
         //Creacion de una instancia de la clase usuarios
-        $obj_usuarios = new cls_usuarios();
+        $obj_usuarios= new cls_usuarios();
         //Creacion de una instancia del clase mail provider, para envio de correos
-        $obj_correo = new Mail_Provider();
-
+        $obj_correo=new Mail_Provider();
+         
         //Verifica que la llamada de este metodo haya sido por invocando el metodo GET=URL
         if ($_SERVER['REQUEST_METHOD'] == 'GET') {
             //Obtiene la cedula del usuario enviada por parametro
             $usuario = $_GET['nom'];
-
+                   
             //Verifica que el usuario exista.
-            if ($obj_usuarios->existe_usuario($usuario)) {
+            if ($obj_usuarios->existe_usuario($usuario)){
                 //Metodo que va a la bd con el nombre de usuario para traer el correo electrónico y la clave del mismo
-                $obj_usuarios->obtiene_correo_y_password_de_usuario($usuario);
+                $obj_usuarios->obtiene_correo_y_password_de_usuario($usuario);   
                 //Asigna correo a una variable
-                $correo = $obj_usuarios->getCorreo();
+                $correo=$obj_usuarios->getCorreo();
                 //Asigna la clave a una variable de este metodo
-                $pass = $obj_usuarios->getClave();
+                $pass=$obj_usuarios->getClave();
                 //Agrega el asunto del correo para envio al usuario realizando la solicitud
                 $obj_correo->agregar_asunto_de_correo("Recordatorio Clave Sistema Oriel");
                 //Agrega detalle de correo
                 $obj_correo->agregar_detalle_de_correo("Gracias por utilizar Oriel</br></br> "
-                        . "En respuesta a su solicitud, le reenviamos su clave: <strong>" . $pass . "</strong><br></br>"
+                        . "En respuesta a su solicitud, le reenviamos su clave: <strong>".$pass."</strong><br></br>"
                         . "Le recordamos que su clave en Oriel no vence y es usted quien decide cuando cambiarla.<br><br>"
                         . "Este es un mensaje automático, por favor no responderlo. Si requiere ayuda, comuníquese con el Centro de Control Ext: 79066.</br></br>"
                         . "<a>http://oriel</a>");
@@ -2446,33 +2471,33 @@ class Controller {
                 //Procede a enviar el correo
                 $obj_correo->enviar_correo();
                 //Inicializa variables para notificar al usuario en pantalla del resultado
-                $tipo_de_alerta = "alert alert-info";
-                $validacion = "Se ha enviado un recordatorio de password a su correo electrónico";
+                $tipo_de_alerta="alert alert-info";
+                $validacion="Se ha enviado un recordatorio de password a su correo electrónico";  
                 //Llamada al formulario correspondiente de la vista
                 require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
             } else {
                 /*
-                 * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
-                 * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
-                 * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
-                 * En la última línea llama a la pagina de inicio de sesión.
-                 */
-                $tipo_de_alerta = "alert alert-danger";
-                $validacion = "Debe digitar un nombre de usuario válido para recordar el password";
+                * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+                * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+                * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+                * En la última línea llama a la pagina de inicio de sesión.
+                */
+                $tipo_de_alerta="alert alert-danger";
+                $validacion="Debe digitar un nombre de usuario válido para recordar el password";  
                 //Llamada al formulario correspondiente de la vista
                 require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
             }
         }
     }
-
+    
     //Este es uno de los metodos principales del sistema, permite hacer la validacion inicial de credenciales del usuario a nivel de seguridad
     //para hacer ingreso a la parte privada del sistema. En este metodo se inicializan las variables de sesión del usuario, las cuales permiten
     //navegar dentro de todas las funcionalidades de ORIEL.
-    public function listar() {
+    public function listar(){
         //Inicializa las variables de control para notificar al usuario del resultado del proceso
-        $validacion = "";
+        $validacion="";
         //Creacion de una instancia de la clase usuario
-        $obj_usuarios = new cls_usuarios();
+        $obj_usuarios= new cls_usuarios();
         //Creacion de una instancia de la clase modulos
         $obj_modulos = new cls_modulos();
 
@@ -2481,38 +2506,38 @@ class Controller {
             //Obtiene la información del usuario
             $usuario = $_POST['nombre'];
             //Obtiene la información de la contraseña del usuario
-            $clave = $_POST['password'];
-
+            $clave= $_POST['password'];
+        
             //Verifica si el usuario existe
-            if ($obj_usuarios->existe_usuario($usuario)) {
+            if ($obj_usuarios->existe_usuario($usuario)){
                 //Valida el password del usuario que sea correcto
-                if ($obj_usuarios->valida_password_de_usuario($usuario, $clave)) {
+                if ($obj_usuarios->valida_password_de_usuario($usuario, $clave)){
                     //Verifica si el usuario está activo en el sistema
-                    if ($obj_usuarios->el_usuario_esta_activo($usuario, $clave)) {
+                    if ($obj_usuarios->el_usuario_esta_activo($usuario, $clave)){        
                         //Valida si es la primera vez que ingresa al sistema o si tiene clave por defecto para dirigirlo al formulario de cambio correspondiente.
-                        if (!$obj_usuarios->tiene_clave_por_defecto($usuario, $clave)) {
+                        if (!$obj_usuarios->tiene_clave_por_defecto($usuario,$clave)){
                             //Ejecuta el metodo que trae todos los usuarios del sistema. 
                             $obj_usuarios->obtiene_todos_los_usuarios();
                             //Obtiene el resultado de la consulta en una variable
-                            $params = $obj_usuarios->getArreglo();
+                            $params=$obj_usuarios->getArreglo();
                             //Asigna el numero de cedula a la variable de sesion
-                            $_SESSION['nombre'] = $usuario;
+                            $_SESSION['nombre']=$usuario;
                             //Metodo que permite obtener el rol, nombre, y apellido del usuario
                             $obj_usuarios->obtiene_rol_nombre_apellido_de_usuario($usuario);
                             //Asigna a la variable de sesion, el rol del usuario
-                            $_SESSION['rol'] = $obj_usuarios->getRol();
+                            $_SESSION['rol']=$obj_usuarios->getRol();
                             //Asigna a la variable de sesion, el nombre del usuario
-                            $_SESSION['name'] = $obj_usuarios->getNombre();
+                            $_SESSION['name']=$obj_usuarios->getNombre();
                             //Asigna a la variable de sesion, el apellido del usuario
-                            $_SESSION['apellido'] = $obj_usuarios->getApellido();
+                            $_SESSION['apellido']=$obj_usuarios->getApellido();
                             //Asigna a la variable de sesion, el id del usuario
-                            $_SESSION['id'] = $obj_usuarios->getId();
+                            $_SESSION['id']=$obj_usuarios->getId();    
                             //Crea una variable de sesion de tipo vector para acumular el total de modulos del sistema
-                            $_SESSION['modulos'] = array();
+                            $_SESSION['modulos']=array();
                             //Obtiene todos los modulos de seguridad registrados en la bd
                             $obj_modulos->obtiene_todos_los_modulos();
                             //Asigna a la variable modulos, el total de registros de modulos del sistema
-                            $modulos = $obj_modulos->getArreglo();
+                            $modulos= $obj_modulos->getArreglo();
                             //Obtiene los modulos de seguridad asignados al rol del usuario en especifico
                             $obj_modulos->obtiene_lista_de_modulos_por_rol($obj_usuarios->getRol());
                             //Obtiene los modulos asignados al rol del usuario
@@ -2522,12 +2547,12 @@ class Controller {
                             // Tamaño del arreglo de modulos de seguridad asignados al usuario
                             $tam2 = count($roles);
                             //Variable bandera para controlar cuales modulos tiene asignado un usuario especifico
-                            $estado = 0;
+                            $estado=0;
                             //Recorre el total de registros contenidos en el vector de modulos de seguridad del sistema
-                            for ($i = 0; $i < $tam; $i++) {
-                                for ($c = 0; $c < $tam2; $c++) {
+                            for($i=0; $i<$tam;$i++){
+                                for($c=0;$c<$tam2;$c++){
                                     //Valida los modulos del sistema contra los modulos de seguridad asignados al usuario
-                                    if ($modulos[$i]['Descripcion'] == $roles[$c]['Descripcion']) {
+                                    if($modulos[$i]['Descripcion']==$roles[$c]['Descripcion']){
                                         //En caso de que el usuario tenga asignado un modulo de seguridad, procede a cambiar el estado de la variable bandera
                                         $estado = 1;
                                         //Detiene el recorrido.
@@ -2535,103 +2560,105 @@ class Controller {
                                     }
                                 }
                                 //Al vector instanciado como variable de sesión, le empieza aagregar cada uno de los modulos de seguridad con el estado correspondiente para validar si el usuario tiene privilegios.
-                                $_SESSION['modulos'] = array_merge($_SESSION['modulos'], array($modulos[$i]['Descripcion'] => $estado));
+                                $_SESSION['modulos']= array_merge($_SESSION['modulos'],array($modulos[$i]['Descripcion']=>$estado));
                                 //Inicializa la variable bandera para continuar con el recorrido del vector de modulos de seguridad.
-                                $estado = 0;
+                                $estado= 0;
                             }
                             //Llamada al formulario correspondiente de la vista
                             //require __DIR__ . '/../vistas/plantillas/frm_principal.php';
-                            if ($_SESSION['rol'] == 25) {
+                            if($_SESSION['rol']==25){
                                 //echo "Control y Seguimiento de cajeros";
                                 header("Location: http://bcr0209ori01/ORIEL-Cajeros/index.php?ctl=inicio");
-                            } else {
+                            }else {
                                 //Llamada al formulario correspondiente de la vista
-                                header("location:/ORIEL/index.php?ctl=principal");
+                                header ("location:/ORIEL/index.php?ctl=principal");
                             }
-                        } else {
+                            
+                        }else{
                             //Define las variables de notificacion en pantalla para el usuario, en caso de que la clave y el usuario sean el mismo.
-                            $tipo_de_alerta = "alert alert-info";
-                            $validacion = "Es necesario cambiar su clave para poder ingresar al sistema";
+                            $tipo_de_alerta="alert alert-info";
+                            $validacion="Es necesario cambiar su clave para poder ingresar al sistema";   
                             //Llamada al formulario correspondiente de la vista
                             require __DIR__ . '/../vistas/plantillas/frm_Cambio_Clave.php';
                         }
-                    } else {
+                    }else{
                         //Define las variables de notificacion en pantalla para el usuario, en caso de que el usuario esté inactivo.
-                        $validacion = "Usuario Inactivo, contacte al administrador del sistema!!!";
-                        $tipo_de_alerta = "alert alert-danger";
+                        $validacion="Usuario Inactivo, contacte al administrador del sistema!!!";
+                        $tipo_de_alerta="alert alert-danger";
                         //Llamada al formulario correspondiente de la vista
-                        require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
-                    }
-                } else {
+                        require __DIR__ . '/../vistas/plantillas/inicio_sesion.php'; 
+                    }    
+                }else {
                     //Define las variables de notificacion en pantalla para el usuario, en caso de que la clave sea incorrecta.
-                    $validacion = "Contraseña Incorrecta, vuelva a intentarlo";
-                    $tipo_de_alerta = "alert alert-danger";
+                    $validacion="Contraseña Incorrecta, vuelva a intentarlo";
+                    $tipo_de_alerta="alert alert-danger";
                     //Llamada al formulario correspondiente de la vista
-                    require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+                    require __DIR__ . '/../vistas/plantillas/inicio_sesion.php'; 
                 }
-            } else {
+            }    
+            else{
                 //Define las variables de notificacion en pantalla para el usuario, en caso de que el usuario no exista en la bd.
-                $validacion = "El usuario no se encuentra registrado en la base de datos";
-                $tipo_de_alerta = "alert alert-danger";
+                $validacion="El usuario no se encuentra registrado en la base de datos";
+                $tipo_de_alerta="alert alert-danger";
                 //Llamada al formulario correspondiente de la vista
                 require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
             }
         } else {
             /*
-             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
-             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
-             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
-             * En la última línea llama a la pagina de inicio de sesión.
-             */
-            $tipo_de_alerta = "alert alert-danger";
-            $validacion = "Es necesario iniciar sesión para ingresar al sistema";
+            * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+            * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+            * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+            * En la última línea llama a la pagina de inicio de sesión.
+            */
+            $tipo_de_alerta="alert alert-danger";
+            $validacion="Es necesario iniciar sesión para ingresar al sistema";
             //Llamada al formulario correspondiente de la vista
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }
     }
-
+     
     //Metodo que permite iniciar el ingreso a la parte privada del sistema, cambiando la clave.
-    public function iniciar_sistema_cambiando_clave() {
+    public function iniciar_sistema_cambiando_clave(){
         //Inicializa la variable de control para informar al usuario del resultado del proceso.
-        $validacion = "";
+        $validacion="";
         //Creación de una instancia de la clase usuarios.
-        $obj_usuarios = new cls_usuarios();
+        $obj_usuarios= new cls_usuarios();
         //Verifica que los parametros hayan sido enviados mediante el evento post.
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             //Asigna a una variable la cedula del usuario.
             $usuario = $_POST['nombre'];
             //Asigna a una variable la clave del usuario.
-            $clave = $_POST['password'];
+            $clave= $_POST['password'];
             //Creacion de una instancia de la clase modulos.
-            $obj_modulos = new cls_modulos();
+            $obj_modulos =  new cls_modulos();
             //Verifica si el usuario existe mediante el numero de cedula.
-            if ($obj_usuarios->existe_usuario($usuario)) {
+            if ($obj_usuarios->existe_usuario($usuario)){
                 //Verifica que el password del usuario sea correcto
-                if ($obj_usuarios->valida_password_de_usuario($usuario, $clave)) {
+                if ($obj_usuarios->valida_password_de_usuario($usuario, $clave)){
                     //Verifica que el usuario este activo en el sistema.
-                    if ($obj_usuarios->el_usuario_esta_activo($usuario, $clave)) {
+                    if ($obj_usuarios->el_usuario_esta_activo($usuario, $clave)){
                         //obtiene el listado completo de usuarios 
                         $obj_usuarios->obtiene_todos_los_usuarios();
                         //Asigna a una variable el arreglo de usuarios del sistema
-                        $params = $obj_usuarios->getArreglo();
+                        $params=$obj_usuarios->getArreglo();
                         //asigna a la variable de sesion correspondiente, la cedula del usuario.
-                        $_SESSION['nombre'] = $usuario;
+                        $_SESSION['nombre']=$usuario;
                         //Obtiene la información de seguridad especifica del usuario
                         $obj_usuarios->obtiene_rol_nombre_apellido_de_usuario($usuario);
                         //Asigna el rol del usuario a la variable de sesion 
-                        $_SESSION['rol'] = $obj_usuarios->getRol();
+                        $_SESSION['rol']=$obj_usuarios->getRol();
                         //Asigna el nombre del usuario a la variable de sesion 
-                        $_SESSION['name'] = $obj_usuarios->getNombre();
+                        $_SESSION['name']=$obj_usuarios->getNombre();
                         //Asigna el apellido del usuario a la variable de sesion 
-                        $_SESSION['apellido'] = $obj_usuarios->getApellido();
+                        $_SESSION['apellido']=$obj_usuarios->getApellido();
                         //Asigna el id del usuario a la variable de sesion 
-                        $_SESSION['id'] = $obj_usuarios->getId();
+                        $_SESSION['id']=$obj_usuarios->getId();
                         //Crea un vector de sesion con la cantidad de modulos de seguridad del sistema.
-                        $_SESSION['modulos'] = array();
+                        $_SESSION['modulos']=array();
                         // Obtiene todos los modulos de seguridad del sistema.
                         $obj_modulos->obtiene_todos_los_modulos();
                         //Obtiene el arreglo completo de modulos de seguridad del sistema
-                        $modulos = $obj_modulos->getArreglo();
+                        $modulos= $obj_modulos->getArreglo();
                         //Obtiene la lista de modulos de seguridad que tiene un usuario por medio del rol correspondiente.
                         $obj_modulos->obtiene_lista_de_modulos_por_rol($obj_usuarios->getRol());
                         //Obtiene en una variable, el listado de roles que tiene asignado el usuario.
@@ -2641,12 +2668,12 @@ class Controller {
                         //Obtiene el tamaño total de modulos de seguridad asignados a un usuario.
                         $tam2 = count($roles);
                         //Variable bandera para verificar que modulos de seguridad del total, tiene asignado el usuario en cuestión.
-                        $estado = 0;
+                        $estado=0;
                         //Bucle que permite recorrer y comparar cuales modulos de seguridad tiene el usuario
-                        for ($i = 0; $i < $tam; $i++) {
-                            for ($c = 0; $c < $tam2; $c++) {
+                        for($i=0; $i<$tam;$i++){
+                            for($c=0;$c<$tam2;$c++){
                                 //En caso de que el usuario cuente con el modulo, procede a cambiar el estado de la variable bandera.
-                                if ($modulos[$i]['Descripcion'] == $roles[$c]['Descripcion']) {
+                                if($modulos[$i]['Descripcion']==$roles[$c]['Descripcion']){
                                     //Cambia el estado del bucle
                                     $estado = 1;
                                     //Sale del ciclo
@@ -2654,286 +2681,291 @@ class Controller {
                                 }
                             }
                             //Construye el vector de sesion que almacena el total de modulos de seguridad que se encuentran en bd
-                            $_SESSION['modulos'] = array_merge($_SESSION['modulos'], array($modulos[$i]['Descripcion'] => $estado));
+                            $_SESSION['modulos']= array_merge($_SESSION['modulos'],array($modulos[$i]['Descripcion']=>$estado));
                             //Inicializa el estado de la variable bandera
-                            $estado = 0;
-                        }
+                            $estado= 0;
+                        }    
                         //Llamada al formulario correspondiente de la vista
                         //require __DIR__ . '/../vistas/plantillas/frm_principal.php';
-                        header("location:/ORIEL/index.php?ctl=principal");
-                    } else {
+                        header ("location:/ORIEL/index.php?ctl=principal");
+                    }   else{
                         //Notifica al usuario que se encuentra inactivo
-                        $validacion = "Usuario Inactivo, contacte al administrador del sistema!!!";
+                        $validacion="Usuario Inactivo, contacte al administrador del sistema!!!";
                         //Cambia el estado de las variables de notificacion al usuario
-                        $tipo_de_alerta = "alert alert-danger";
+                        $tipo_de_alerta="alert alert-danger";
                         //Llamada al formulario correspondiente de la vista
-                        require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+                        require __DIR__ . '/../vistas/plantillas/inicio_sesion.php'; 
                     }
-                } else {
+                }   else   {
                     //Notifica al usuario que la contraseña es incorrecta
-                    $validacion = "Contraseña Incorrecta, vuelva a intentarlo";
+                    $validacion="Contraseña Incorrecta, vuelva a intentarlo";
                     //Cambia el estado de las variables de notificacion al usuario
-                    $tipo_de_alerta = "alert alert-danger";
+                    $tipo_de_alerta="alert alert-danger";
                     //Llamada al formulario correspondiente de la vista
-                    require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+                    require __DIR__ . '/../vistas/plantillas/inicio_sesion.php'; 
                 }
-            } else {
+            }    else   {
                 //Notifica al usuario que el usuario no se encuentra en la base de datos
-                $validacion = "El usuario no se encuentra registrado en la base de datos";
+                $validacion="El usuario no se encuentra registrado en la base de datos";
                 //Cambia el estado de las variables de notificacion al usuario
-                $tipo_de_alerta = "alert alert-danger";
-                //Llamada al formulario correspondiente de la vista
+                $tipo_de_alerta="alert alert-danger";
+                 //Llamada al formulario correspondiente de la vista
                 require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
             }
-        } else {
+        }   else   {
             /*
-             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
-             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
-             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
-             * En la última línea llama a la pagina de inicio de sesión.
-             */
-            $tipo_de_alerta = "alert alert-danger";
+            * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+            * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+            * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+            * En la última línea llama a la pagina de inicio de sesión.
+            */
+            $tipo_de_alerta="alert alert-danger";
             //Cambia el estado de las variables de notificacion al usuario
-            $validacion = "Es necesario iniciar sesión para ingresar al sistema";
+            $validacion="Es necesario iniciar sesión para ingresar al sistema";
             //Llamada al formulario correspondiente de la vista
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }
-    }
 
+    }
+    
     ////////////////////////////////////////////////////////////////////////////
     ///////////////////////FUNCIONES PARA EVENTOS///////////////////////////////
     ////////////////////////////////////////////////////////////////////////////
     //Metodo que permite listar los eventos de bitácora que están activos o en atención.
-    public function frm_eventos_listar() {
+    public function frm_eventos_listar(){
         //Validación para verificar si el usuario está logeado en el sistema
-        if (isset($_SESSION['nombre'])) {
-
+        if(isset($_SESSION['nombre'])){
+            
             $this->ejecucion_automatico_proceso("Pruebas");
             $this->ejecucion_automatico_proceso("Respaldo_Bitacora_Revisiones");
             $this->ejecucion_automatico_proceso("Se_solicito_prueba");
             //Creacion de objeto de clase eventos
             $obj_eventos = new cls_eventos();
-
+            
             //Vector que almacena un si o uno dependiendo si el evento en cuestion pertenece a alguna mezcla
-            $eventos_con_mezcla = array();
-
+            $eventos_con_mezcla=array();
+            
             //Establece el criterio de filtrado correspondiente para buscar los eventos.
             $obj_eventos->setCondicion("T_Evento.ID_EstadoEvento<>3 AND T_Evento.ID_EstadoEvento<>5 AND T_Evento.ID_Tipo_Evento<>39");
             //Ejecuta la sentencia SQL
-            $obj_eventos->obtiene_todos_los_eventos();
+            $obj_eventos ->obtiene_todos_los_eventos(); 
             //Obtiene el vector de registros correspondientes
-            $params = $obj_eventos->getArreglo();
-            $puesto_enviado = 0;
-            $check_continuidad = 0;
+            $params= $obj_eventos->getArreglo();
+            $puesto_enviado=0;
+            $check_continuidad=0;
             //Implementación para obtener el último seguimiento de cada evento, además del último usuario que lo agregó
+            
             //Saca el tamaño del vector de registros 
-            $tam = count($params);
+            $tam=count($params);
             //verifica que hayan eventos devueltos en la consulta.
-            if (count($params) > 0) {
+            if (count($params)>0){
                 //Empieza a recorrer registro por registro
-                for ($i = 0; $i < $tam; $i++) {
+                for ($i = 0; $i <$tam; $i++) {
                     $obj_eventos->setId($params[$i]['ID_Evento']);
-                    if ($obj_eventos->existe_este_evento_en_otra_mezcla()) {
+                    if ($obj_eventos->existe_este_evento_en_otra_mezcla()){
                         array_push($eventos_con_mezcla, "SI");
-                    } else {
+                    }else{
                         array_push($eventos_con_mezcla, "NO");
                     }
 
                     //Criterio de busqueda que permite traer todos los seguimientos del evento en cuestion
-                    $obj_eventos->setCondicion("T_DetalleEvento.ID_Evento=" . $params[$i]['ID_Evento'] . " order by T_DetalleEvento.Fecha desc,T_DetalleEvento.Hora desc");
+                    $obj_eventos->setCondicion("T_DetalleEvento.ID_Evento=".$params[$i]['ID_Evento']." order by T_DetalleEvento.Fecha desc,T_DetalleEvento.Hora desc");
                     //Obtiene los seguimientos del evento seleccionado, si los hubiere
                     $obj_eventos->obtiene_detalle_evento();
 
                     //Verifica que hayan seguimientos
-                    if (count($obj_eventos->getArreglo()) > 0) {
+                    if(count($obj_eventos->getArreglo())>0){
                         //Construye el vector de seguimientos asociados al evento que se está analizando.
-                        if ($i == 0) {
-                            $todos_los_seguimientos_juntos = $obj_eventos->getArreglo();
-                        } else {
-                            $todos_los_seguimientos_juntos = array_merge($todos_los_seguimientos_juntos, $obj_eventos->getArreglo());
+                        if ($i==0){
+                            $todos_los_seguimientos_juntos=$obj_eventos->getArreglo();
+                        }else{
+                            $todos_los_seguimientos_juntos = array_merge($todos_los_seguimientos_juntos,$obj_eventos->getArreglo());                 
                         }
                     }
 
                     //Trae el seguimiento asociado a un evento en especifico, solo el mas viejo, lo cual permite determinar quien hizo el ultimo seguimiento en el evento.
-                    $obj_eventos->setCondicion("T_DetalleEvento.ID_Evento=" . $params[$i]['ID_Evento'] . " order by T_DetalleEvento.Fecha desc,T_DetalleEvento.Hora desc limit 0,1");
+                    $obj_eventos->setCondicion("T_DetalleEvento.ID_Evento=".$params[$i]['ID_Evento']." order by T_DetalleEvento.Fecha desc,T_DetalleEvento.Hora desc limit 0,1");
                     //Obtiene los seguimientos del evento seleccionado, si los hubiere
                     $obj_eventos->obtiene_detalle_evento();
                     //asigna el resultado de la consulta aun objeto de tipo arreglo
-                    $ultimo_seguimiento_asociado = $obj_eventos->getArreglo();
+                    $ultimo_seguimiento_asociado= $obj_eventos->getArreglo();
 
                     //Verifica si existen seguimientos asociados al evento actual
-                    if (count($ultimo_seguimiento_asociado) > 0) {
+                    if(count($ultimo_seguimiento_asociado)>0){
                         //Arma el vector de seguimientos asociados a un evento en específico
-                        if ($i == 0) {
+                        if ($i==0){
                             //Arma el vector con el detalle y el ultimo usuario que registro un seguimiento en el evento de bitacora
-                            $detalle_y_ultimo_usuario = array(array('Detalle' => "Último seguimiento ingresado-->Fecha: " . date_format(date_create($ultimo_seguimiento_asociado[0]['Fecha']), 'd/m/Y') . ".Hora: " . $ultimo_seguimiento_asociado[0]['Hora'] . ". " . $ultimo_seguimiento_asociado[0]['Detalle'], 'Usuario' => $ultimo_seguimiento_asociado[0]['Nombre_Usuario'] . " " . $ultimo_seguimiento_asociado[0]['Apellido']));
-                        } else {
+                            $detalle_y_ultimo_usuario= array(array('Detalle'=>"Último seguimiento ingresado-->Fecha: ".date_format(date_create($ultimo_seguimiento_asociado[0]['Fecha']), 'd/m/Y').".Hora: ".$ultimo_seguimiento_asociado[0]['Hora'].". ".$ultimo_seguimiento_asociado[0]['Detalle'],'Usuario'=>$ultimo_seguimiento_asociado[0]['Nombre_Usuario']." ".$ultimo_seguimiento_asociado[0]['Apellido']));
+                        }else{
                             //Concatena al vector la nueva linea de información del seguimiento.
-                            $detalle_y_ultimo_usuario = array_merge($detalle_y_ultimo_usuario, array(array('Detalle' => "Último seguimiento ingresado-->Fecha: " . date_format(date_create($ultimo_seguimiento_asociado[0]['Fecha']), 'd/m/Y') . ".Hora: " . $ultimo_seguimiento_asociado[0]['Hora'] . ". " . $ultimo_seguimiento_asociado[0]['Detalle'], 'Usuario' => $ultimo_seguimiento_asociado[0]['Nombre_Usuario'] . " " . $ultimo_seguimiento_asociado[0]['Apellido'])));
+                            $detalle_y_ultimo_usuario = array_merge($detalle_y_ultimo_usuario,array(array('Detalle'=>"Último seguimiento ingresado-->Fecha: ".date_format(date_create($ultimo_seguimiento_asociado[0]['Fecha']), 'd/m/Y').".Hora: ".$ultimo_seguimiento_asociado[0]['Hora'].". ".$ultimo_seguimiento_asociado[0]['Detalle'],'Usuario'=>$ultimo_seguimiento_asociado[0]['Nombre_Usuario']." ".$ultimo_seguimiento_asociado[0]['Apellido'])));  
                         }
-                    } else {
+                    }else{
                         //En caso de que no hayan seguimientos asociados, procede a registrar las validación correspondiente.
-                        if ($i == 0) {
+                        if ($i==0){
                             //Con el primer elemento del vector, utiliza esta linea de codigo
-                            $detalle_y_ultimo_usuario = array(array('Detalle' => "No hay seguimientos asociados a este evento. Para agregar uno oprima el link:'Gestionar Seguimiento de la fila respectiva.'", 'Usuario' => $params[$i]['Nombre_Usuario'] . " " . $params[$i]['Apellido']));
-                        } else {
+                            $detalle_y_ultimo_usuario= array(array('Detalle'=>"No hay seguimientos asociados a este evento. Para agregar uno oprima el link:'Gestionar Seguimiento de la fila respectiva.'",'Usuario'=>$params[$i]['Nombre_Usuario']." ".$params[$i]['Apellido']));
+                        }else{
                             //Con el resto de lineas del vector, usa esta otra programación.
-                            $detalle_y_ultimo_usuario = array_merge($detalle_y_ultimo_usuario, array(array('Detalle' => "No hay seguimientos asociados a este evento. Para agregar uno oprima el link:'Gestionar Seguimiento de la fila respectiva.'", 'Usuario' => $params[$i]['Nombre_Usuario'] . " " . $params[$i]['Apellido'])));
+                            $detalle_y_ultimo_usuario = array_merge($detalle_y_ultimo_usuario,array(array('Detalle'=>"No hay seguimientos asociados a este evento. Para agregar uno oprima el link:'Gestionar Seguimiento de la fila respectiva.'",'Usuario'=>$params[$i]['Nombre_Usuario']." ".$params[$i]['Apellido'])));
                         }
                     }
                 }
-            }
+            } 
             //print_r($eventos_con_mezcla);
             //Llamada al formulario correspondiente de la vista
-            require __DIR__ . '/../vistas/plantillas/frm_eventos_listar.php';
-        } else {
+            require __DIR__.'/../vistas/plantillas/frm_eventos_listar.php';
+        }
+        else {
             /*
-             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
-             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
-             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
-             * En la última línea llama a la pagina de inicio de sesión.
-             */
-            $tipo_de_alerta = "alert alert-warning";
-            $validacion = "Es necesario volver a iniciar sesión para consultar el sistema";
+            * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+            * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+            * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+            * En la última línea llama a la pagina de inicio de sesión.
+            */
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
             //Llamada al formulario correspondiente de la vista
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }
     }
-
+    
     //Este metodo es llamado desde codigo javascript, especificamente en la pantalla que lista los eventos abiertos de bitácora. Tiene como proposito
     //ordenar o visualizar en pantalla los eventos por puesto de monitoreo del centro de control Z1. Esto permite facilidad a la hora de realizar
     //auditorías por puesto por parte del coordinador a cargo, así como enfocar el trabajo de cada operador de monitoreo.
-    public function eventos_listar_filtrado() {
+    public function eventos_listar_filtrado(){
         //Validación para verificar si el usuario está logeado en el sistema
-        if (isset($_SESSION['nombre'])) {
+        if(isset($_SESSION['nombre'])){
             $this->ejecucion_automatico_proceso("Pruebas");
             //Vector que almacena un si o uno dependiendo si el evento en cuestion pertenece a alguna mezcla
-            $eventos_con_mezcla = array();
+            $eventos_con_mezcla=array();
             //Creación de una instancia de un objeto de la clase eventos.
-            if (!isset($_POST['puesto'])) {
-                $_POST['puesto'] = 0;
+            if(!isset($_POST['puesto'])){
+                $_POST['puesto']=0;
             }
             $obj_eventos = new cls_eventos();
             //Verifica para cual puesto de monitoreo fue realizada la solicitud, esto mediante el metodo post 
-            if ($_POST['puesto'] == 1) {
+            if($_POST['puesto']==1){
                 //Variable de control del puesto a visualizar
-                $puesto_enviado = 1;
+                $puesto_enviado=1;
                 //Establecer la condición de filtrado por puesto para la consulta SQL a la base de datos
                 $obj_eventos->setCondicion("T_Evento.ID_EstadoEvento<>3 AND T_Evento.ID_EstadoEvento<>5 AND (T_Evento.ID_Provincia=4 OR T_Evento.ID_Provincia=5 OR T_Evento.ID_Provincia=6) AND (T_Evento.ID_Tipo_Punto<>3 AND T_Evento.ID_Tipo_Punto<>4)");
             }
             //Verifica para cual puesto de monitoreo fue realizada la solicitud, esto mediante el metodo post 
-            if ($_POST['puesto'] == 2) {
+            if($_POST['puesto']==2){
                 //Variable de control del puesto a visualizar
-                $puesto_enviado = 2;
+                $puesto_enviado=2;
                 //Establecer la condición de filtrado por puesto para la consulta SQL a la base de datos
                 $obj_eventos->setCondicion("T_Evento.ID_EstadoEvento<>3 AND T_Evento.ID_EstadoEvento<>5 AND T_Evento.ID_Provincia=1 AND (T_Evento.ID_Tipo_Punto<>3 AND T_Evento.ID_Tipo_Punto<>4)");
             }
             //Verifica para cual puesto de monitoreo fue realizada la solicitud, esto mediante el metodo post 
-            if ($_POST['puesto'] == 3) {
+            if($_POST['puesto']==3){
                 //Variable de control del puesto a visualizar
-                $puesto_enviado = 3;
+                $puesto_enviado=3;
                 //Establecer la condición de filtrado por puesto para la consulta SQL a la base de datos
                 $obj_eventos->setCondicion("T_Evento.ID_EstadoEvento<>3 AND T_Evento.ID_EstadoEvento<>5 AND (T_Evento.ID_Tipo_Punto=3 OR T_Evento.ID_Tipo_Punto=4)");
             }
             //Verifica para cual puesto de monitoreo fue realizada la solicitud, esto mediante el metodo post 
-            if ($_POST['puesto'] == 4) {
+            if($_POST['puesto']==4){
                 //Variable de control del puesto a visualizar
-                $puesto_enviado = 4;
+                $puesto_enviado=4;
                 //Establecer la condición de filtrado por puesto para la consulta SQL a la base de datos
                 $obj_eventos->setCondicion("T_Evento.ID_EstadoEvento<>3 AND T_Evento.ID_EstadoEvento<>5 AND (T_Evento.ID_Provincia=2 OR T_Evento.ID_Provincia=3 OR T_Evento.ID_Provincia=7) AND (T_Evento.ID_Tipo_Punto<>3 AND T_Evento.ID_Tipo_Punto<>4)");
             }
             //Verifica para cual puesto de monitoreo fue realizada la solicitud, esto mediante el metodo post 
-            if ($_POST['puesto'] == 5) {
+            if($_POST['puesto']==5){
                 //Variable de control del puesto a visualizar
-                $puesto_enviado = 5;
+                $puesto_enviado=5;
                 //Establecer la condición de filtrado por puesto para la consulta SQL a la base de datos
                 $obj_eventos->setCondicion("(T_Evento.ID_EstadoEvento<>3 AND T_Evento.ID_EstadoEvento<>5) AND (T_Evento.ID_Tipo_Evento=17 OR T_Evento.ID_Tipo_Evento=38)");
             }
             //Verifica para cual puesto de monitoreo fue realizada la solicitud, esto mediante el metodo post 
-            if ($_POST['puesto'] == 0) {
+            if($_POST['puesto']==0){
                 //Variable de control del puesto a visualizar
-                $puesto_enviado = 0;
+                $puesto_enviado=0;
                 //Establecer la condición de filtrado por puesto para la consulta SQL a la base de datos
                 $obj_eventos->setCondicion("T_Evento.ID_EstadoEvento<>3 AND T_Evento.ID_EstadoEvento<>5");
             }
-
-            if (isset($_POST['continuidad'])) {
-                $check_continuidad = 1;
-            } else {
-                $check_continuidad = 0;
-                $obj_eventos->setCondicion($obj_eventos->getCondicion() . " AND T_Evento.ID_Tipo_Evento<>39");
+            
+            if(isset($_POST['continuidad'])){
+                $check_continuidad=1;
+            } else{
+                $check_continuidad=0;
+                $obj_eventos->setCondicion($obj_eventos->getCondicion()." AND T_Evento.ID_Tipo_Evento<>39");
             }
             //Ejecuta la consulta SQL con el filtro correspondiente
-            $obj_eventos->obtiene_todos_los_eventos();
+            $obj_eventos ->obtiene_todos_los_eventos(); 
             //Asigna el resultado a una variable tipo vector.
-            $params = $obj_eventos->getArreglo();
-
+            $params= $obj_eventos->getArreglo();
+            
             //Implementación para obtener el último seguimiento de cada evento, además del último usuario que lo agregó
+        
             //Saca el tamaño del vector de registros 
-            $tam = count($params);
+            $tam=count($params);
             //verifica que hayan eventos devueltos en la consulta.
-            if (count($params) > 0) {
+            if (count($params)>0){
                 //Empieza a recorrer registro por registro
-                for ($i = 0; $i < $tam; $i++) {
+                for ($i = 0; $i <$tam; $i++) {
                     $obj_eventos->setId($params[$i]['ID_Evento']);
-                    if ($obj_eventos->existe_este_evento_en_otra_mezcla()) {
+                    if ($obj_eventos->existe_este_evento_en_otra_mezcla()){
                         array_push($eventos_con_mezcla, "SI");
-                    } else {
+                    }else{
                         array_push($eventos_con_mezcla, "NO");
                     }
                     //Criterio de busqueda que permite traer todos los seguimientos del evento en cuestion
-                    $obj_eventos->setCondicion("T_DetalleEvento.ID_Evento=" . $params[$i]['ID_Evento'] . " order by T_DetalleEvento.Fecha desc,T_DetalleEvento.Hora desc");
+                    $obj_eventos->setCondicion("T_DetalleEvento.ID_Evento=".$params[$i]['ID_Evento']." order by T_DetalleEvento.Fecha desc,T_DetalleEvento.Hora desc");
                     //Obtiene los seguimientos del evento seleccionado, si los hubiere
                     $obj_eventos->obtiene_detalle_evento();
                     //Verifica que hayan seguimientos
-                    if (count($obj_eventos->getArreglo()) > 0) {
+                    if(count($obj_eventos->getArreglo())>0){
                         //Construye el vector de seguimientos asociados al evento que se está analizando.
-                        if ($i == 0) {
-                            $todos_los_seguimientos_juntos = $obj_eventos->getArreglo();
-                        } else {
-                            $todos_los_seguimientos_juntos = array_merge($todos_los_seguimientos_juntos, $obj_eventos->getArreglo());
+                        if ($i==0){                      
+                            $todos_los_seguimientos_juntos=$obj_eventos->getArreglo();
+                        }else {
+                            $todos_los_seguimientos_juntos = array_merge($todos_los_seguimientos_juntos,$obj_eventos->getArreglo());                 
                         }
                     }
                     //Trae el seguimiento asociado a un evento en especifico, solo el mas viejo, lo cual permite determinar quien hizo el ultimo seguimiento en el evento.
-                    $obj_eventos->setCondicion("T_DetalleEvento.ID_Evento=" . $params[$i]['ID_Evento'] . " order by T_DetalleEvento.Fecha desc,T_DetalleEvento.Hora desc limit 0,1");
+                    $obj_eventos->setCondicion("T_DetalleEvento.ID_Evento=".$params[$i]['ID_Evento']." order by T_DetalleEvento.Fecha desc,T_DetalleEvento.Hora desc limit 0,1");
                     //Obtiene los seguimientos del evento seleccionado, si los hubiere
                     $obj_eventos->obtiene_detalle_evento();
                     //asigna el resultado de la consulta aun objeto de tipo arreglo
-                    $ultimo_seguimiento_asociado = $obj_eventos->getArreglo();
+                    $ultimo_seguimiento_asociado= $obj_eventos->getArreglo();
 
                     //Verifica si existen seguimientos asociados al evento actual
-                    if (count($ultimo_seguimiento_asociado) > 0) {
+                    if(count($ultimo_seguimiento_asociado)>0){
                         //Arma el vector de seguimientos asociados a un evento en específico
-                        if ($i == 0) {
+                        if ($i==0){
                             //Arma el vector con el detalle y el ultimo usuario que registro un seguimiento en el evento de bitacora
-                            $detalle_y_ultimo_usuario = array(array('Detalle' => "Fecha: " . date_format(date_create($ultimo_seguimiento_asociado[0]['Fecha']), 'd/m/Y') . ".Hora: " . $ultimo_seguimiento_asociado[0]['Hora'] . ". " . $ultimo_seguimiento_asociado[0]['Detalle'], 'Usuario' => $ultimo_seguimiento_asociado[0]['Nombre_Usuario'] . " " . $ultimo_seguimiento_asociado[0]['Apellido']));
-                        } else {
+                            $detalle_y_ultimo_usuario= array(array('Detalle'=>"Fecha: ".date_format(date_create($ultimo_seguimiento_asociado[0]['Fecha']), 'd/m/Y').".Hora: ".$ultimo_seguimiento_asociado[0]['Hora'].". ".$ultimo_seguimiento_asociado[0]['Detalle'],'Usuario'=>$ultimo_seguimiento_asociado[0]['Nombre_Usuario']." ".$ultimo_seguimiento_asociado[0]['Apellido']));
+                        }else{
                             //Concatena al vector la nueva linea de información del seguimiento.
-                            $detalle_y_ultimo_usuario = array_merge($detalle_y_ultimo_usuario, array(array('Detalle' => "Fecha: " . date_format(date_create($ultimo_seguimiento_asociado[0]['Fecha']), 'd/m/Y') . ".Hora: " . $ultimo_seguimiento_asociado[0]['Hora'] . ". " . $ultimo_seguimiento_asociado[0]['Detalle'], 'Usuario' => $ultimo_seguimiento_asociado[0]['Nombre_Usuario'] . " " . $ultimo_seguimiento_asociado[0]['Apellido'])));
+                            $detalle_y_ultimo_usuario = array_merge($detalle_y_ultimo_usuario,array(array('Detalle'=>"Fecha: ".date_format(date_create($ultimo_seguimiento_asociado[0]['Fecha']), 'd/m/Y').".Hora: ".$ultimo_seguimiento_asociado[0]['Hora'].". ".$ultimo_seguimiento_asociado[0]['Detalle'],'Usuario'=>$ultimo_seguimiento_asociado[0]['Nombre_Usuario']." ".$ultimo_seguimiento_asociado[0]['Apellido'])));  
                         }
-                    } else {
+                    }else{
                         //En caso de que no hayan seguimientos asociados, procede a registrar las validación correspondiente.
-                        if ($i == 0) {
+                        if ($i==0){
                             //Con el primer elemento del vector, utiliza esta linea de codigo
-                            $detalle_y_ultimo_usuario = array(array('Detalle' => "No hay seguimientos asociados a este evento. Para agregar uno oprima el link:'Gestionar Seguimiento de la fila respectiva.'", 'Usuario' => $params[$i]['Nombre_Usuario'] . " " . $params[$i]['Apellido']));
-                        } else {
+                            $detalle_y_ultimo_usuario= array(array('Detalle'=>"No hay seguimientos asociados a este evento. Para agregar uno oprima el link:'Gestionar Seguimiento de la fila respectiva.'",'Usuario'=>$params[$i]['Nombre_Usuario']." ".$params[$i]['Apellido']));
+                        }else{
                             //Con el resto de lineas del vector, usa esta otra programación.
-                            $detalle_y_ultimo_usuario = array_merge($detalle_y_ultimo_usuario, array(array('Detalle' => "No hay seguimientos asociados a este evento. Para agregar uno oprima el link:'Gestionar Seguimiento de la fila respectiva.'", 'Usuario' => $params[$i]['Nombre_Usuario'] . " " . $params[$i]['Apellido'])));
+                            $detalle_y_ultimo_usuario = array_merge($detalle_y_ultimo_usuario,array(array('Detalle'=>"No hay seguimientos asociados a este evento. Para agregar uno oprima el link:'Gestionar Seguimiento de la fila respectiva.'",'Usuario'=>$params[$i]['Nombre_Usuario']." ".$params[$i]['Apellido'])));
                         }
                     }
                 }
-            }
+         
+            } 
             //Llamada al formulario correspondiente de la vista
-            require __DIR__ . '/../vistas/plantillas/frm_eventos_listar.php';
-        } else {
+            require __DIR__.'/../vistas/plantillas/frm_eventos_listar.php';
+        }  else {
             /*
-             * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
-             * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
-             * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
-             * En la última línea llama a la pagina de inicio de sesión.
-             */
-            $tipo_de_alerta = "alert alert-warning";
-            $validacion = "Es necesario volver a iniciar sesión para consultar el sistema";
+            * Esta es la validación contraria a que la sesión de usuario esté definida y abierta.
+            * Lo cual quiere decir, que si la sesión está cerrada, procede  a enviar la solicitud
+            * a la pantalla de inicio de sesión con el mensaje de warning correspondiente.
+            * En la última línea llama a la pagina de inicio de sesión.
+            */
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
             //Llamada al formulario correspondiente de la vista
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }
@@ -8837,8 +8869,10 @@ class Controller {
             $obj_cencon = new cls_cencon();
             $obj_punto = new cls_puntosBCR();
             //Buscar la información de un PuntoBCR basado en el código del cajero
-            $obj_punto->setCondicion("T_PuntoBCR.Codigo=" . $_POST['id'] . " AND T_PuntoBCR.Estado=1");
-            $obj_punto->obtiene_todos_los_puntos_bcr();
+            //$obj_punto->setCondicion("T_PuntoBCR.Codigo=" . $_POST['id'] . " AND T_PuntoBCR.Estado=1");
+            //$obj_punto->obtiene_todos_los_puntos_bcr();
+            $obj_punto->setCondicion("p.Codigo=" . $_POST['id'] . " AND p.Estado=1");
+            $obj_punto->obtiene_punto_cencon();
             $cajero = $obj_punto->getArreglo();
 
             //Convierte la información en un json para enviarlo a JavaScript
@@ -8873,12 +8907,16 @@ class Controller {
             //Obtiene la información completa de la persona según la empresa (externa o Banco==1)
             if ($funcionario[0]['ID_Empresa'] == 1) {
                 //Obtiene la información si la persona es BCR
-                $obj_persona->setCondicion("T_Personal.ID_Persona='" . $funcionario[0]['ID_Persona'] . "' and T_Personal.Estado=1");
-                $obj_persona->obtiene_todo_el_personal();
+                //$obj_persona->setCondicion("T_Personal.ID_Persona='" . $funcionario[0]['ID_Persona'] . "' and T_Personal.Estado=1");
+                //$obj_persona->obtiene_todo_el_personal();
+                $obj_persona->setCondicion("p.ID_Persona='" . $funcionario[0]['ID_Persona'] . "' and p.Estado=1");
+                $obj_persona->obtiene_personal_para_cencon();
                 $funcionario = $obj_persona->getArreglo();
             } else {
                 //Obtiene la información en caso de ser otra empresa
-                $obj_externo->setCondicion("T_PersonalExterno.ID_Persona_Externa='" . $funcionario[0]['ID_Persona'] . "' and T_PersonalExterno.ID_Estado_Persona=1");
+                //$obj_externo->setCondicion("T_PersonalExterno.ID_Persona_Externa='" . $funcionario[0]['ID_Persona'] . "' and T_PersonalExterno.ID_Estado_Persona=1");
+                //$obj_externo->obtiene_todo_el_personal_externo();
+                $obj_externo->setCondicion("p.ID_Persona_Externa='" . $funcionario[0]['ID_Persona'] . "' and p.ID_Estado_Persona=1");
                 $obj_externo->obtiene_todo_el_personal_externo();
                 $funcionario = $obj_externo->getArreglo();
             }
@@ -16252,12 +16290,6 @@ class Controller {
         if (isset($_SESSION['nombre'])) {
             $obj_andru_cuestionario = new cls_andru_categoria();
             $obj_andru_porcentajes = new cls_andru_tipos_porcentajes();
-                                
-            $array = array(
-                "MediaRobo" => "3.05",
-                "MediaRobo" => "2.96",
-                "RojoRobo" => "4.00",
-                "RojoRobo" => "3.89",);
             
             //Procede a ejecutar la consulta SQL para traer todo de t_andru_fases en la bd.
             $obj_andru_cuestionario->setCondicion(" cr.Estado = 1 AND pr.Estado = 1 ");
@@ -16281,6 +16313,83 @@ class Controller {
             $tipo_de_alerta = "alert alert-warning";
             $validacion = "Es necesario volver a iniciar sesión para consultar el sistema";
             //Llamada al formulario correspondiente de la vista
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }
+    }
+
+    public function andru_preguntas_totalesD(){
+        if (isset($_SESSION['nombre'])) {
+            $obj_andru_reporte = new cls_andru_cuestionario();
+            $obj_andru_porcentaje = new cls_andru_tipos_porcentajes();
+
+            $obj_andru_reporte->setCondicion(" c.ID_Cuestionario = ". $_POST['ID_Cuestionario'] );
+            $obj_andru_reporte->obtener_andru_cuestionario_Detalle();
+            $DatosProcentajes = $obj_andru_reporte->getArreglo();
+
+            $obj_andru_porcentaje->setCondicion(" Estado = 1 ");
+            $obj_andru_porcentaje->obtener_andru_tipos_porcentajes();
+            $Porcentajes = $obj_andru_porcentaje->getArreglo();
+            
+            //Convierte la información en un json para enviarlo a JavaScript
+            unset($obj_andru_reporte);
+            unset($obj_andru_porcentaje);
+
+            $vector_datos = array();
+            
+            //Se crea un arreglo que muestre los tipos de porcentaje de forma horizontal
+            $tam = count($DatosProcentajes);
+            if($tam > 0){
+                $tipoPorcentaje = $DatosProcentajes[0]["ID_Tipo_Porcentaje"];
+                
+                $columnas = "Categoria*Pregunta*Respuesta*Nivel*Valor";
+                
+                $tam2 = count($Porcentajes);
+                
+                for ($i = 0; $i <$tam2; $i++) {
+                    $columnas .= "*". $Porcentajes[$i]["Descripcion"];
+                }
+
+                $vector_inconsistencias[]= array("Columns"=> $columnas);
+
+                for ($i = 0; $i <$tam; $i++) { 
+                    if($tipoPorcentaje == $DatosProcentajes[$i]["ID_Tipo_Porcentaje"]){
+                        
+                        $idpregunta = $DatosProcentajes[$i]['ID_Pregunta'];
+                        
+                        $vector_datos= array("ID_Cuestionario"=> $DatosProcentajes[$i]['ID_Cuestionario'], 
+                           "ID_Puntobcr"=>  $DatosProcentajes[$i]['ID_Puntobcr'], 
+                           "ID_Tipo_Porcentaje"=>  $DatosProcentajes[$i]['ID_Tipo_Porcentaje'],
+                           "Pregunta"=>  $DatosProcentajes[$i]['Pregunta'],
+                           "Respuesta"=>  $DatosProcentajes[$i]['Respuesta'],
+                           "Categoria"=>  $DatosProcentajes[$i]['Categoria']);
+                       
+                       for ($i2 = 0; $i2 <$tam2; $i2++) {
+                           for ($i3 = 0; $i3 <$tam; $i3++) {
+                               if(($idpregunta ==$DatosProcentajes[$i3]['ID_Pregunta'])&&($Porcentajes[$i2]["ID_Tipo_Porcentaje"]==$DatosProcentajes[$i3]['ID_Tipo_Porcentaje'])){
+                                   //$vector_datos += [$Porcentajes[$i2]["Nivel"]=> round($DatosProcentajes[$i3]['Nivel'],2)];
+                                   //$vector_datos += [$Porcentajes[$i2]["Valor"]=> round($DatosProcentajes[$i3]['Valor'],2)];
+                                   //$vector_datos += [$Porcentajes[$i2]["Descripcion"]=> round($DatosProcentajes[$i3]['Calculo'],2)];
+                                   $vector_datos += ["Nivel"=> round($DatosProcentajes[$i3]['Nivel'],2),
+                                                     "Valor"=> round($DatosProcentajes[$i3]['Valor'],2),
+                                                     $Porcentajes[$i2]["Descripcion"]=> round($DatosProcentajes[$i3]['Calculo'],2)];
+                               }
+                           }
+                       }
+                       
+                       $vector_inconsistencias[] = $vector_datos;
+                    }
+                    
+                }
+            }
+            
+             if ($vector_inconsistencias[0] != null) {
+                echo json_encode($vector_inconsistencias, JSON_FORCE_OBJECT);
+            } else {
+                echo "No se encontró";
+            }
+        } else {
+            $tipo_de_alerta = "alert alert-warning";
+            $validacion = "Es necesario volver a iniciar sesión para consultar el sistema";
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
         }
     }

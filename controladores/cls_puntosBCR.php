@@ -435,6 +435,7 @@ class cls_puntosBCR{
             $this->resultado_operacion=true;
         }
     }
+    
     public function obtiene_solo_los_puntos_bcr(){
         $this->obj_data_provider->conectar();
         if($this->condicion==""){
@@ -456,7 +457,6 @@ class cls_puntosBCR{
             $this->resultado_operacion=true;
         }
     }
-
     public function obtiene_puntos_bcr_supervisor(){
         $this->obj_data_provider->conectar();
         if($this->condicion==""){
@@ -479,5 +479,26 @@ class cls_puntosBCR{
             $this->obj_data_provider->desconectar();
             $this->resultado_operacion=true;
         }
+    }
+    public function obtiene_punto_cencon(){
+        $this->obj_data_provider->conectar();
+        if($this->condicion==""){
+            $this->arreglo=$this->obj_data_provider->trae_datos(
+                "T_PuntoBCR p INNER JOIN T_TipoPuntoBCR t ON t.ID_Tipo_Punto = p.ID_Tipo_Punto", 
+                "p.ID_PuntoBCR, p.Nombre,t.Tipo_Punto, p.Codigo",
+                "");
+            $this->arreglo=$this->obj_data_provider->getArreglo();
+            $this->obj_data_provider->desconectar();
+            $this->resultado_operacion=true;
+        }
+        else{
+            $this->arreglo=$this->obj_data_provider->trae_datos(
+                "T_PuntoBCR p INNER JOIN T_TipoPuntoBCR t ON t.ID_Tipo_Punto = p.ID_Tipo_Punto", 
+                "p.ID_PuntoBCR, p.Nombre,t.Tipo_Punto, p.Codigo",
+                $this->condicion);
+            $this->arreglo=$this->obj_data_provider->getArreglo();
+            $this->obj_data_provider->desconectar();
+            $this->resultado_operacion=true;
+        } 
     }
 }?>

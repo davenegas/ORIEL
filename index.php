@@ -14,7 +14,6 @@ session_start();
  * del proyecto ORIEL. La instrucción require_once importa la clase o el componente dentro del proyecto
  * para su futura utilización.
  */
-
 require_once __DIR__ . '/modelos/Data_Provider.php';
 require_once __DIR__ . '/modelos/Access_Provider.php';
 //Libreria de clases --> Control de BD RapidEye
@@ -99,7 +98,6 @@ require_once __DIR__ . '/controladores/cls_biblioteca.php';
 require_once __DIR__ . '/controladores/cls_botones.php';
 //Libreria de clases --> Control para correos
 require_once __DIR__ . '/controladores/cls_correos.php';
-
 //Libreria de clases --> Control para andru_preguntas
 require_once __DIR__ . '/controladores/cls_andru_preguntas.php';
 //Libreria de clases --> Control para andru_fases
@@ -131,7 +129,6 @@ require_once __DIR__ . '/controladores/cls_clave.php';
 * se almacenan cada una de las funcionales de ORIEl. El archivo en sí, se compone de "n" cantidad
 * de eventos de clase que son llamados según las necesidades del usuario y el sistema en si.
 */
-
 require_once __DIR__ . '/modelos/Controller.php';
 /*
 * Componente que permite realizar funciones especiales dentro del sistema, dentro de las cuales
@@ -155,7 +152,6 @@ require_once __DIR__ . '/modelos/class.smtp.php';
 * ORIEL. Integra las tres librerías OPEN SOURCE anteriormente citadas.
 */
 require_once __DIR__ . '/modelos/Mail_Provider.php';
-
 /*
 * Dentro del concepto de modelo vista controlador, se maneja el siguiente vector de nombres  de eventos de la clase controlador.
 * Permite declarar cada funcionalidad definida en el controlador para su correcta utilización. Si no se declara el nombre del evento
@@ -503,9 +499,14 @@ $map = array(
     'andru_preguntas_porcentajes_trae'=>array('controller'=>'Controller','action'=> 'andru_preguntas_porcentajes_trae'),
     'andru_preguntas_respuestas_trae'=>array('controller'=>'Controller','action'=> 'andru_preguntas_respuestas_trae'),
     'andru_preguntas_totales'=>array('controller'=>'Controller','action'=> 'andru_preguntas_totales'),
+    'andru_preguntas_totalesD'=>array('controller'=>'Controller','action'=> 'andru_preguntas_totalesD'),
+	//Asignar supervisor a zonas según puntos bcr
+	'supervisor_por_zona_listar'=>array('controller'=>'Controller', 'action'=>'supervisor_por_zona_listar'),
+    'supervisor_por_zona_guardar'=>array('controller'=>'Controller', 'action'=>'supervisor_por_zona_guardar'),
     
     //Agregar los action al controler de la clase cls_alerta_general_detalle
     'reporte_general_detalle_listar'=>array('controller'=>'Controller','action'=> 'reporte_general_detalle_listar'),
+	
     //Botones RF
     'botones_listar'=> array('controller'=>'Controller','action'=>'botones_listar'),
     'botones_selec_guardar'=> array('controller'=>'Controller','action'=>'botones_selec_guardar'),
@@ -522,13 +523,9 @@ $map = array(
     'cambiar_password'=>array('controller'=>'Controller', 'action'=>'cambiar_password'),
     'recordar_password'=>array('controller'=>'Controller', 'action'=>'recordar_password'),
     'iniciar_sistema_cambiando_clave'=>array('controller'=>'Controller', 'action'=>'iniciar_sistema_cambiando_clave'),
-    'cambia_clave_usuario_post'=>array('controller'=>'Controller', 'action'=>'cambia_clave_usuario_post'),
-    
-    'supervisor_por_zona_listar'=>array('controller'=>'Controller', 'action'=>'supervisor_por_zona_listar'),
-    'supervisor_por_zona_guardar'=>array('controller'=>'Controller', 'action'=>'supervisor_por_zona_guardar'),
-    'forzar_puesto_de_monitoreo'=>array('controller'=>'Controller', 'action'=>'forzar_puesto_de_monitoreo'),
+    'cambia_clave_usuario_post'=>array('controller'=>'Controller', 'action'=>'cambia_clave_usuario_post') ,
+    'forzar_puesto_de_monitoreo'=>array('controller'=>'Controller', 'action'=>'forzar_puesto_de_monitoreo') ,
     'andru_cuestionario_copiar'=>array('controller'=>'Controller', 'action'=>'andru_cuestionario_copiar'),
-  
     //Agregar los action al controler de la clase cls_clave_tipo
     'clave_tipo_listar'=>array('controller'=>'Controller','action'=> 'clave_tipo_listar'),
     'clave_tipo_guardar'=>array('controller'=>'Controller','action'=> 'clave_tipo_guardar'),
@@ -538,12 +535,7 @@ $map = array(
     'clave_listar'=>array('controller'=>'Controller','action'=> 'clave_listar'),
     'clave_guardar'=>array('controller'=>'Controller','action'=> 'clave_guardar'),
     'clave_cambiar_estado'=>array('controller'=>'Controller','action'=> 'clave_cambiar_estado'),
-    //Pruebas y nuevas implementaciones
-    
-    
     );
- 
-
  // Parseo de la ruta
 /*
  * Todo el manejo de llamada y uso de funcionalidades del sistema, se usa por medio de una variable que se utiliza dentro del 

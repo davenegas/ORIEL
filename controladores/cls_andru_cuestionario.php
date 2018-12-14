@@ -359,4 +359,22 @@ class cls_andru_cuestionario {
         $this->obj_data_provider->desconectar();
         $this->resultado_operacion=true;
     }
+   /**
+     * Método trae todas las preguntas con su respuesta
+     */
+    public function obtener_andru_cuestionario_Detalle() {
+        $this->obj_data_provider->conectar();
+        $this->arreglo=$this->obj_data_provider->trae_datos("t_andru_cuestionario c INNER JOIN t_andru_cuestionario_respuestas cr ON cr.ID_Cuestionario = c.ID_Cuestionario "
+                . " INNER JOIN t_andru_preguntas p ON p.ID_Pregunta = cr.ID_Pregunta AND p.ID_Fase = c.ID_Fase "
+                . " INNER JOIN t_andru_preguntas_respuestas r ON r.ID_Pregunta = p.ID_Pregunta AND r.ID_Respuesta = cr.ID_Respuesta  "
+                . " INNER JOIN t_andru_preguntas_porcentajes pp ON cr.ID_Pregunta = pp.ID_Pregunta "
+                . " INNER JOIN t_andru_categoria cat ON cat.ID_Categoria = p.ID_Categoria ",
+                " c.ID_Cuestionario, cr.ID_Pregunta, c.ID_Puntobcr, pp.ID_Tipo_Porcentaje, "
+                ." p.Descripcion Pregunta, r.Descripcion Respuesta, cat.Descripcion Categoria,"
+                ." r.Nivel, pp.Valor, ((pp.Valor/100) * r.Nivel) Calculo ",
+                " c.Estado = 1 AND cr.Estado = 1 AND p.Estado = 1 AND r.Estado = 1 AND cat.Estado = 1  AND " . $this->condicion . " ORDER BY pp.ID_Tipo_Porcentaje");
+        $this->arreglo=$this->obj_data_provider->getArreglo();
+        $this->obj_data_provider->desconectar();
+        $this->resultado_operacion=true;      
+    }
 }

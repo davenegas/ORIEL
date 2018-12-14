@@ -81,7 +81,8 @@
                        $_SESSION['modulos']['Catálogos-Proveedor enlaces']==1||$_SESSION['modulos']['Catálogos-Tipo enlaces']==1||
                        $_SESSION['modulos']['Catálogos-Medio enlaces']==1|| $_SESSION['modulos']['Catálogos-Unidades de Video']==1||
                        $_SESSION['modulos']['Catálogos-Cencon']==1 || $_SESSION['modulos']['Catálogos-Puestos de Monitoreo']==1
-                        || $_SESSION['modulos']['Catálogos-Inconsistencias de Video']==1 ||$_SESSION['modulos']['Catálogos-Botones']==1)){  ?>
+                        || $_SESSION['modulos']['Catálogos-Inconsistencias de Video']==1 ||$_SESSION['modulos']['Catálogos-Botones']==1
+						||$_SESSION['modulos']['Catálogos-Claves Radiofrecuencia'])){  ?>
 
                     <li class="dropdown">
                         <a class="dropdown-toggle" data-toggle="dropdown" href="#">Catálogos
@@ -211,7 +212,7 @@
                             <li class="dropdown-submenu">
                                 <a class="multilevel" tabindex="-1" href="#">Andru<span class="caret"></span></a>
                                 <ul class="dropdown-menu">
-                                    <li><a tabindex="-1" href="index.php?ctl=andru_cuestionario_listar">Cuestionario</a></li>                                    
+                                    <li><a tabindex="-1" href="index.php?ctl=andru_cuestionario_listar">Cuestionario</a></li>
                                 </ul>
                                 </li>
                             <?php }; ?>
@@ -273,14 +274,20 @@
                         ($_SESSION['modulos']['Reportes-Enlaces Telecom']==1)||($_SESSION['modulos']['Reportes-Líneas teléfonicas']==1)||
                         ($_SESSION['modulos']['Reportes-Trazabilidad']==1)||($_SESSION['modulos']['Reportes-Historico seguimientos']==1)||
                         ($_SESSION['modulos']['Reportes-Activaciones provincia']==1)||($_SESSION['modulos']['Reportes-Cencon']==1)||
-                        ($_SESSION['modulos']['Reportes-Pruebas alarma']==1)){ ?>
+                        ($_SESSION['modulos']['Reportes-Pruebas alarma']==1)||$_SESSION['modulos']['Andru - Reportes']){ ?>
                     <li class="dropdown">
                         <a class="dropdown-toggle" data-toggle="dropdown" href="#">Reportes
                         <span class="caret"></span></a>
                         <ul class="dropdown-menu multi-level" role="menu">
-						
+						    <?php if ($_SESSION['modulos']['Andru - Reportes']==1){ ?>
+                            <li class="dropdown-submenu">
+                                <a class="multilevel" tabindex="-1" href="#">Andru<span class="caret"></span></a>
+                                <ul class="dropdown-menu">
+                                    <li><a tabindex="-1" href="index.php?ctl=andru_preguntas_totales">Revisión</a></li>
+                                </ul>
+                                </li>
+                            <?php }; ?>
                             <?php if ($_SESSION['modulos']['Reportes-Historico Alerta Video']==1){ ?>
-                            <?php if ($_SESSION['modulos']['Reportes-Activaciones provincia']==1){ ?>
                                 <li><a href="index.php?ctl=reporte_general_detalle_listar">Historico Alerta Video</a></li> 
                             <?php }; ?>
                             <?php if ($_SESSION['modulos']['Reportes-Activaciones provincia']==1){ ?>
@@ -360,9 +367,8 @@
                             <span class="caret"></span></a>
                         <ul class="dropdown-menu">
                             <?php if ($_SESSION['rol']==25||$_SESSION['modulos']['Seguridad-Trazabilidad']==1){?>
-                                <li><a href="https://bcr0209ori01/ORIEL-Cajeros/index.php?ctl=inicio">Control y Seguimiento ATM's</a></li> 
+                               <!-- <li><a href="http://bcr0209ori01/ORIEL-Cajeros/index.php?ctl=inicio">Control y Seguimiento ATM's</a></li> -->
                             <?php }; ?>
-                                
                             <?php if ($_SESSION['modulos']['Seguridad-Trazabilidad']==1){?>
                                 <li><a href="index.php?ctl=comite_crisis">Comité de Crisis</a></li> 
                             <?php }; ?>
@@ -409,6 +415,9 @@
                         <ul class="dropdown-menu">
                             <li><a href="index.php?ctl=manual_ayuda_privado&manual=Usuario_Inicial">Manual Usuario Inicial</a></li>
                             
+							<?php if ($_SESSION['modulos']['Módulo-Telefonía AVAYA']==1){ ?>
+                                <li><a href="index.php?ctl=manual_ayuda_privado&manual=Telefonia_Avaya">Manual Telefonía AVAYA</a></li>
+                            <?php }; ?> 							
                             <?php if ($_SESSION['modulos']['Módulo-Bitácora Digital']==1){ ?>
                                 <li><a href="index.php?ctl=manual_ayuda_privado&manual=Bitacora_Digital">Manual Bitácora Digital</a></li>
                             <?php }; ?>    
