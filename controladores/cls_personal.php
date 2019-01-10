@@ -231,7 +231,7 @@ class cls_personal{
                 "T_Personal
                     LEFT OUTER JOIN T_UnidadEjecutora ON T_Personal.ID_Unidad_Ejecutora = T_UnidadEjecutora.ID_Unidad_Ejecutora
                     LEFT OUTER JOIN T_Empresa ON T_Personal.ID_Empresa = T_Empresa.ID_Empresa
-                    LEFT OUTER JOIN T_Telefono on T_Personal.ID_Persona = T_Telefono.ID
+                    LEFT OUTER JOIN T_Telefono on T_Personal.ID_Persona = T_Telefono.ID AND T_Telefono.Estado = 1
                     LEFT OUTER JOIN T_TipoTelefono ON T_Telefono.ID_Tipo_Telefono = T_TipoTelefono.ID_Tipo_Telefono
                     LEFT OUTER JOIN T_Puesto ON T_Personal.ID_Puesto = T_Puesto.ID_Puesto", 
                 " T_Personal.*,
@@ -254,7 +254,7 @@ class cls_personal{
                 "T_Personal
                     LEFT OUTER JOIN	T_UnidadEjecutora ON T_Personal.ID_Unidad_Ejecutora = T_UnidadEjecutora.ID_Unidad_Ejecutora
                     LEFT OUTER JOIN T_Empresa ON T_Personal.ID_Empresa = T_Empresa.ID_Empresa
-                    LEFT OUTER JOIN T_Telefono on T_Personal.ID_Persona = T_Telefono.ID
+                    LEFT OUTER JOIN T_Telefono on T_Personal.ID_Persona = T_Telefono.ID AND T_Telefono.Estado = 1
                     LEFT OUTER JOIN T_TipoTelefono ON T_Telefono.ID_Tipo_Telefono = T_TipoTelefono.ID_Tipo_Telefono
                     LEFT OUTER JOIN T_Puesto ON T_Personal.ID_Puesto = T_Puesto.ID_Puesto", 
                 "T_Personal.*,

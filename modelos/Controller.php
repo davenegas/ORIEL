@@ -9095,13 +9095,23 @@ $obj_externo->obtiene_personal_externo_cencon();
             /*Se procede a enviar correo */
             if($_POST['id_empresa']==1){
                 $obj_personal->setCondicion("T_Personal.ID_Persona=".$_POST['id_persona']);
-                $obj_personal->obtiene_todo_el_personal_filtrado();
+                $obj_personal->obtener_personas_prontuario();
                 $persona= $obj_personal->getArreglo();
 
                 $correo=$persona[0]['Correo'];
                 $usuario="";
+                
+                if(($persona[0]['ID_Unidad_Ejecutora']==93)||($persona[0]['ID_Unidad_Ejecutora']==104)||($persona[0]['ID_Unidad_Ejecutora']==105))
+                {
+                    $MailGen->setCCopia("Coordinacion Transporte Valores|CoordinacionTransporteValores@bancobcr.com");
+                }
+                
                 //$obj_correo->agregar_direccion_de_correo($correo, $usuario);
                 $MailGen->setPara($correo);
+            }
+            else
+            {
+                $MailGen->setPara("Coordinacion Transporte Valores|CoordinacionTransporteValores@bancobcr.com");
             }
             
             $dblc = "\"";
@@ -9220,7 +9230,17 @@ $obj_externo->obtiene_personal_externo_cencon();
 
                     $correo=$persona[0]['Correo'];
                     $usuario="";
+                    
+                    if(($persona[0]['ID_Unidad_Ejecutora']==93)||($persona[0]['ID_Unidad_Ejecutora']==104)||($persona[0]['ID_Unidad_Ejecutora']==105))
+                    {
+                        $MailGen->setCCopia("Coordinacion Transporte Valores|CoordinacionTransporteValores@bancobcr.com");
+                    }
+                    
                     $MailGen->setPara($correo);
+                }
+                else
+                {
+                    $MailGen->setPara("Coordinacion Transporte Valores|CoordinacionTransporteValores@bancobcr.com");                   
                 }
             }
             
@@ -9347,8 +9367,18 @@ $obj_externo->obtiene_personal_externo_cencon();
 
                     $correo=$persona[0]['Correo'];
                     $usuario="";
+                    
+                    if(($persona[0]['ID_Unidad_Ejecutora']==93)||($persona[0]['ID_Unidad_Ejecutora']==104)||($persona[0]['ID_Unidad_Ejecutora']==105))
+                    {
+                        $MailGen->setCCopia("Coordinacion Transporte Valores|CoordinacionTransporteValores@bancobcr.com");
+                    }
+                    
                     //$obj_correo->agregar_direccion_de_correo($correo, $usuario);                
                     $MailGen->setPara($correo);
+                }
+                else
+                {
+                    $MailGen->setPara("Coordinacion Transporte Valores|CoordinacionTransporteValores@bancobcr.com");                   
                 }
                 
                 $dblc = "\"";
@@ -11668,16 +11698,97 @@ $obj_externo->obtiene_personal_externo_cencon();
                     $obj_puesto_monitoreo->setCondicion("i.Estado not in (1,8,9,10) and b.ID_Unidad_Video=".$vector_informacion_unidad_video[0]['ID_Unidad_Video']);
                     $obj_puesto_monitoreo->obtiene_inconsistencias_para_control_de_video();
                     $inconsistencias_reportadas =$obj_puesto_monitoreo->getArreglo();
-
-					$obj_reporteria->obtener_sitio_color();
+                    
+                    $obj_reporteria->obtener_sitio_color();
                     $dat_progressbar= $obj_reporteria->getArreglo();
-					
-                    $progressbar["Negro"] = $dat_progressbar[0]["Normal"];
-                    $progressbar["NegroP"] = Round((($dat_progressbar[0]["Normal"]/$dat_progressbar[0]["Total"])*100),1);
-                    $progressbar["Naranja"] = $dat_progressbar[0]["Naranja"];
-                    $progressbar["NaranjaP"] = Round((($dat_progressbar[0]["Naranja"]/$dat_progressbar[0]["Total"])*100),1);
-                    $progressbar["Rojo"] = $dat_progressbar[0]["Rojo"];
-                    $progressbar["RojoP"] = Round((($dat_progressbar[0]["Rojo"]/$dat_progressbar[0]["Total"])*100),1);
+
+                    $progressbar["Negro"] = 0;
+                    $progressbar["NegroP"] = 0;
+                    $progressbar["Naranja"] = 0;
+                    $progressbar["NaranjaP"] = 0;
+                    $progressbar["Rojo"] = 0;
+                    $progressbar["RojoP"] = 0;
+                    $dat_progressbar[0]["Total"]= 300;
+                    $dat_progressbar[0]["Normal"] = 150;
+                    $dat_progressbar[0]["Naranja"] = 140;
+                    $dat_progressbar[0]["Rojo"]= 10;
+                     
+
+               $progressbar["Negro"] = $dat_progressbar[0]["Normal"];
+               
+               
+                        
+                        if(($dat_progressbar[0]["Naranja"] !=0 )||($dat_progressbar[0]["Rojo"] <=10 ))
+                        {
+                            if($dat_progressbar[0]["Rojo"] ==0 )
+                            {
+                                $progressbar["NegroP"] = Round((($dat_progressbar[0]["Normal"]/$dat_progressbar[0]["Total"])*75),1);
+                            }
+                            else
+                            {
+                                $progressbar["NegroP"] = Round((($dat_progressbar[0]["Normal"]/$dat_progressbar[0]["Total"])*50),1);
+                            }
+                            
+                        }
+                        else
+                        {
+                            $progressbar["NegroP"] = Round((($dat_progressbar[0]["Normal"]/$dat_progressbar[0]["Total"])*100),1);
+                        }
+                            
+                      
+                       
+                     
+                        
+                        $progressbar["Naranja"] = $dat_progressbar[0]["Naranja"];
+//                        if($dat_progressbar[0]["Naranja"] >10)
+//                        {
+                  
+                        
+                            $porcentaje = $dat_progressbar[0]["Total"]+$dat_progressbar[0]["Naranja"];
+             
+                       
+                                $porcentaje = Round((($dat_progressbar[0]["Naranja"]/$porcentaje)*50),1)+25;
+                            $progressbar["NaranjaP"] = Round((($dat_progressbar[0]["Naranja"]/$dat_progressbar[0]["Naranja"])*$porcentaje),1);
+                   
+                            
+//                        }
+//                        else
+//                        {
+//                            $progressbar["NaranjaP"] = Round((($dat_progressbar[0]["Naranja"]/10)*25),1);
+//                        }
+                        $progressbar["Rojo"] = $dat_progressbar[0]["Rojo"];
+                        
+//                        if($dat_progressbar[0]["Rojo"] > 10)
+//                        {
+                         $progressbar["RojoP"] = 0;
+                            if($progressbar["Rojo"] != 0)
+                            {
+                                
+                                    $progressbar["RojoP"] = 100 -$progressbar["NegroP"] -$progressbar["NaranjaP"];
+                                
+                                
+                            }
+                            
+                             
+                            
+//                        }
+//                        else
+//                        {
+//                            $progressbar["RojoP"] = Round((($dat_progressbar[0]["Rojo"]/10)*25),1); 
+//                        }
+                        
+
+                            
+//                    if (($dat_progressbar[0]["Normal"] > 10)||($dat_progressbar[0]["Rojo"]>10))
+//                    {
+//                        $progressbar["Negro"] = $dat_progressbar[0]["Normal"];
+//                        $progressbar["NegroP"] = Round((($dat_progressbar[0]["Normal"]/$dat_progressbar[0]["Total"])*100),1);
+//                        $progressbar["Naranja"] = $dat_progressbar[0]["Naranja"];
+//                        $progressbar["NaranjaP"] = Round((($dat_progressbar[0]["Naranja"]/$dat_progressbar[0]["Total"])*100),1);
+//                        $progressbar["Rojo"] = $dat_progressbar[0]["Rojo"];
+//                        $progressbar["RojoP"] = Round((($dat_progressbar[0]["Rojo"]/$dat_progressbar[0]["Total"])*100),1); 
+//                    }
+                   
 
                     unset($obj_reporteria);
                                        
@@ -17428,4 +17539,145 @@ public function andru_preguntas_totalesD(){
             require __DIR__. '/../vistas/plantillas/inicio_sesion.php';
         }
     }
+    
+    ////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////tipoip
+    ////////////////////////////////////////////////////////////////////////////
+    /**
+     * Método que retorna un arreglo de los registros que existen en base de datos
+     */
+    public function tipoip_listar() {
+        if(isset($_SESSION['nombre'])){
+            $obj_tipoip = new cls_tipoip();
+            //Procede a ejecutar la consulta SQL para traer todo de t_tipoip en la bd.
+            $obj_tipoip->setCondicion("");
+            //Obtener el vector de la consulta
+            $obj_tipoip->obtener_tipoip();
+            $tipoip=$obj_tipoip->getArreglo();
+            unset($obj_tipoip);
+            
+            require __DIR__.'/../vistas/plantillas/frm_tipoip.php';
+            
+        } else {
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            //Llamada al formulario correspondiente de la vista
+            require __DIR__.'/../vistas/plantillas/inicio_sesion.php';
+        }
+    }
+
+    /**
+     * Método que guarda en base datos cuando la propiedad ID_Tipo_IP esta en cero 
+     * Caso contrario actualiza en base datos el registros según el valor de ID_Tipo_IP 
+     */
+    public function tipoip_guardar() {
+        if(isset($_SESSION['nombre'])){
+            $obj_tipoip = new cls_tipoip();
+            $obj_tipoip->setTipo_IP($_POST['Tipo_IP']); 
+            $obj_tipoip->setObservaciones($_POST['Observaciones']); 
+
+            $obj_tipoip->setEstado($_POST['Estado']);
+            if ($_POST['ID_Tipo_IP']!=0){
+                $obj_tipoip->setID_Tipo_IP($_POST['ID_Tipo_IP']); 
+                $obj_tipoip->setCondicion("ID_Tipo_IP='".$_POST['ID_Tipo_IP']."'");
+            }
+            $obj_tipoip->guardar_tipoip();
+            unset($obj_tipoip);
+            header("location:/ORIEL/index.php?ctl=tipoip_listar");
+        } else {
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__.'/../vistas/plantillas/inicio_sesion.php';
+        }
+    }
+
+    /**
+     * Método que se utiliza para cambiar el estado del registro según el campo llave 
+     */
+    public function tipoip_cambiar_estado() {
+        if(isset($_SESSION['nombre'])){
+            $obj_tipoip = new cls_tipoip();
+            if ($_GET['Estado']==1){
+                $obj_tipoip->setEstado("0");
+            }else {
+                $obj_tipoip->setEstado("1");
+            }
+            $obj_tipoip->setCondicion("ID_Tipo_IP='".$_GET['ID_Tipo_IP']."'");
+            $obj_tipoip->cambiar_estado_tipoip();
+            unset($obj_tipoip);
+            header("location:/ORIEL/index.php?ctl=tipoip_listar");
+        } else {
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__. '/../vistas/plantillas/inicio_sesion.php';
+        }
+    }
+    
+    ////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////net_test
+    ////////////////////////////////////////////////////////////////////////////
+    /**
+     * Método que retorna un arreglo de los registros que existen en base de datos
+     */
+    public function net_test_Buscar() {
+        if(isset($_SESSION['nombre'])){
+            $obj_net_test = new cls_net_test();
+            $obj_tipo_ip = new cls_tipoip();
+
+            if(isset($_POST['fecha_inicial']))
+            {
+                $fecha_inicio =$_POST['fecha_inicial'];
+                $fecha_fin= $_POST['fecha_final'];
+                $hora_inicio = $_POST['hora_inicial'];
+                $hora_fin = $_POST['hora_final'];
+                $tipoippost = $_POST['Tipo_IP'];                
+            }
+            else
+            {
+                $fecha_inicio = date("Y-m-d");
+                $fecha_fin= date("Y-m-d");                
+                $hora_inicio = date("H:i", time() - 3600);
+                $hora_fin = date("H:i", time());
+                $tipoippost= 0;                
+            }
+            
+            $puntobcr = "";
+            
+            if(isset($_POST['codigo']))
+            {
+                $puntobcr = $_POST['codigo'];                
+            }
+            else
+            {
+                $puntobcr = "0";
+            }
+            
+            if($tipoippost==0)
+            {
+                $obj_net_test->setCondicion("p.Codigo = '" .$puntobcr ."' AND STR_TO_DATE(nt.Fecha,'%Y-%m-%d %H:%i') between '". $fecha_inicio ." ".$hora_inicio. "' and '". $fecha_fin ." ".$hora_fin. "' ORDER BY nt.Fecha DESC" );
+            }
+            else
+            {
+                $obj_net_test->setCondicion("p.Codigo = '" .$puntobcr ."' AND t.ID_Tipo_IP = '".$tipoippost ."'  AND STR_TO_DATE(nt.Fecha,'%Y-%m-%d %H:%i') between '". $fecha_inicio ." ".$hora_inicio. "' and '". $fecha_fin ." ".$hora_fin. "' ORDER BY nt.Fecha DESC" );
+            }
+
+            $obj_net_test->obtener_net_buscar();
+            $net_test=$obj_net_test->getArreglo();
+            
+            $obj_tipo_ip->setCondicion("");
+            $obj_tipo_ip->obtener_tipoip();
+            $tipo_ip=$obj_tipo_ip->getArreglo();            
+            unset($obj_net_test);
+            unset($obj_tipo_ip);
+            
+            require __DIR__.'/../vistas/plantillas/frm_net_test.php';
+
+        } else {
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            //Llamada al formulario correspondiente de la vista
+            require __DIR__.'/../vistas/plantillas/inicio_sesion.php';
+        }
+    }
+    
 }

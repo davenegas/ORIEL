@@ -124,6 +124,12 @@ require_once __DIR__ . '/controladores/cls_clave_tipo.php';
 
 //Libreria de clases --> Control para clave
 require_once __DIR__ . '/controladores/cls_clave.php';
+
+//Libreria de clases --> Control para tipoip
+require_once __DIR__ . '/controladores/cls_tipoip.php';
+//Libreria de clases --> Control para net_test
+require_once __DIR__ . '/controladores/cls_net_test.php';
+
 /*
 * El elemento controller, constituye la base y esencia de toda la lógica del negocio, en este
 * se almacenan cada una de las funcionales de ORIEl. El archivo en sí, se compone de "n" cantidad
@@ -535,6 +541,12 @@ $map = array(
     'clave_listar'=>array('controller'=>'Controller','action'=> 'clave_listar'),
     'clave_guardar'=>array('controller'=>'Controller','action'=> 'clave_guardar'),
     'clave_cambiar_estado'=>array('controller'=>'Controller','action'=> 'clave_cambiar_estado'),
+    
+     //Agregar los action al controler de la clase cls_tipoip
+    'tipoip_listar'=>array('controller'=>'Controller','action'=> 'tipoip_listar'),
+    'tipoip_guardar'=>array('controller'=>'Controller','action'=> 'tipoip_guardar'),
+    'tipoip_cambiar_estado'=>array('controller'=>'Controller','action'=> 'tipoip_cambiar_estado'),
+    'net_test_Buscar'=>array('controller'=>'Controller','action'=> 'net_test_Buscar')
     );
  // Parseo de la ruta
 /*
