@@ -190,7 +190,7 @@
                         <?php }}  ?>
                     </select>
                     <label for="numero">Número de Teléfono</label>
-                    <input class="form-control espacio-abajo" maxlength="8" required id="numero" name="numero" placeholder="Número de teléfono - 8 digitos" type="text">
+                    <input class="form-control espacio-abajo" maxlength="18" required id="numero" name="numero" placeholder="Número de teléfono - 8 digitos" type="text">
                     <label for="observaciones">Observaciones</label>
                     <textarea class="form-control espacio-abajo" id="observaciones" name="observaciones" placeholder="Observaciones del número"></textarea>
                     <button><a href="javascript:%20check_empty()" id="submit">Guardar</a></button>

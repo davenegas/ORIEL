@@ -1219,4 +1219,25 @@ class cls_puestos_de_monitoreo{
         $this->obj_data_provider->desconectar();
         return true;
     }
+     /**
+     * Método que almacena en la propiedad arreglo el resultado de la consulta, 
+     * utiliza la propiedad condicion para filtrar en el WHERE 
+     */
+    public function obtener_PuestoMonitoreo() {
+        if($this->condicion==""){
+            $this->obj_data_provider->conectar();
+            $this->arreglo=$this->obj_data_provider->trae_datos("T_PuestoMonitoreo", "*", $this->condicion);
+            $this->arreglo=$this->obj_data_provider->getArreglo();
+            $this->obj_data_provider->desconectar();
+            $this->resultado_operacion=true;
+        }
+        else
+        {
+            $this->obj_data_provider->conectar();
+            $this->arreglo=$this->obj_data_provider->trae_datos("T_PuestoMonitoreo", "*", $this->condicion);
+            $this->arreglo=$this->obj_data_provider->getArreglo();
+            $this->obj_data_provider->desconectar();
+            $this->resultado_operacion=true;
+        }
+    }
 }?>

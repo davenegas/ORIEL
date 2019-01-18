@@ -137,7 +137,7 @@ function buscar_pruebas_alarma(id_puntobcr){
             $("#seguimiento option[value='"+datos['Seguimiento']+"']").attr("selected",true);
 
             //Agrega titulos a las ventanas con Usuarios que ingresan la información
-            document.getElementById('nombre_persona_prueba').title="Usuario: "+datos['Nombre_Usuario_Reporte'];
+            document.getElementById('nombre_persona_prueba').title="Usuario: "+datos['Nombre_Usuario_Reporte']+" F: "+datos['Fecha']+" H: "+datos['Hora_Apertura_Alarma'];
             document.getElementById('hora_apertura').title="Usuario: "+datos['Nombre_Usuario_Prueba'];
             document.getElementById('nombre_persona_cierre').title="Usuario: "+datos['Nombre_Usuario_Reporte_Cierre'];
             document.getElementById('hora_cierre').title="Usuario: "+datos['Nombre_Usuario_Cierra'];

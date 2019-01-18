@@ -278,6 +278,30 @@ class cls_net_test {
     /*******************************************************************/
     /**Ingrese los nuevos metodos debajo de este comentario**/
     /*******************************************************************/
+     ////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////net_test
+    ////////////////////////////////////////////////////////////////////////////
+    /**
+     * Método que retorna un arreglo de los registros que existen en base de datos
+     */
+    public function net_test_listar() {
+        if(isset($_SESSION['nombre'])){
+            $obj_net_test = new cls_net_test();
+            //Procede a ejecutar la consulta SQL para traer todo de t_net_test en la bd.
+            $obj_net_test->setCondicion("");
+            //Obtener el vector de la consulta
+            $obj_net_test->obtener_net_test();
+            $net_test=$obj_net_test->getArreglo();
+            unset($obj_net_test);
+            
+            require __DIR__.'/../vistas/plantillas/frm_net_mant.php';            
+        } else {
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            //Llamada al formulario correspondiente de la vista
+            require __DIR__.'/../vistas/plantillas/inicio_sesion.php';
+        }
+    }
     /**
      * Método que almacena en la propiedad arreglo el resultado de la consulta, 
      * utiliza la propiedad condicion para filtrar en el WHERE 
@@ -285,7 +309,7 @@ class cls_net_test {
     public function obtener_net_buscar() {
         if($this->condicion==""){
             $this->obj_data_provider->conectar();
-            $this->arreglo=$this->obj_data_provider->trae_datos(" t_net_test nt "
+            $this->arreglo=$this->obj_data_provider->trae_datos(" bd_net_test.t_net_test nt "
                     ." inner join t_puntobcr p on nt.ID_PuntoBCR = p.ID_PuntoBCR "
                     ." inner join t_tipoip t on nt.ID_Tipo_IP = t.ID_Tipo_IP limit 10   ", 
                     " p.ID_PuntoBCR, p.Nombre, p.Codigo, "
@@ -297,7 +321,7 @@ class cls_net_test {
         else
         {
             $this->obj_data_provider->conectar();
-            $this->arreglo=$this->obj_data_provider->trae_datos(" t_net_test nt "
+            $this->arreglo=$this->obj_data_provider->trae_datos(" bd_net_test.t_net_test nt "
                     ." inner join t_puntobcr p on nt.ID_PuntoBCR = p.ID_PuntoBCR "
                     ." inner join t_tipoip t on nt.ID_Tipo_IP = t.ID_Tipo_IP ", 
                     " p.ID_PuntoBCR, p.Nombre, p.Codigo, "

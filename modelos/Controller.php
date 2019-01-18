@@ -6622,6 +6622,7 @@ class Controller{
             $obj_medio_enlace = new cls_medio_enlace();
             $obj_proveedor_enlace = new cls_proveedor_enlace();
             $obj_tipo_enlace = new cls_tipo_enlace();
+            $obj_PuntobcrCorreo = new cls_puntobcr_correo();
             
             if ($_GET['id']==0){
                 $ide=0;
@@ -6795,7 +6796,20 @@ class Controller{
                 //Obtiene la informacion de proveedor de enlaces
                 $obj_proveedor_enlace->obtener_proveedores();
                 $proveedor_enlace= $obj_proveedor_enlace->getArreglo();
-
+                
+                //Obtiene la información del correo de Oficina
+                $obj_PuntobcrCorreo->setCondicion("ID_PuntoBCR='".$_GET['id']."'");
+                $obj_PuntobcrCorreo->obtener_puntobcr_correo();
+                $correoOficina = $obj_PuntobcrCorreo->getArreglo();
+                $tam2=count($correoOficina);
+                if($tam2 <= 0)
+                {
+                    $obj_PuntobcrCorreo->setCondicion("");
+                    $obj_PuntobcrCorreo->setID_PuntoBCR($_GET['id']);
+                    $obj_PuntobcrCorreo->setCorreo("");
+                    $obj_PuntobcrCorreo->setEstado(1);
+                    $obj_PuntobcrCorreo->guardar_puntobcr_correo();
+                }
                 require __DIR__ . '/../vistas/plantillas/frm_puntos_bcr_editar.php';
             }
         } else {
@@ -7225,7 +7239,7 @@ class Controller{
             $obj_puntobcr->setSupervisor($_POST['id_supervisor']);
             $obj_puntobcr->actualizar_informacion_adicional_puntobcr();
             
-            $obj_correo->setCondicion("ID_PuntoBCR='" . $_POST['id_puntobcr'] . "'");
+            $obj_correo->setCondicion("ID_PuntoBCR='" . $_POST['id_puntobcr'] . "'");            
             $obj_correo->setCorreo($_POST['correoOfi']);
             $obj_correo->guardar_puntobcr_correo();
             
@@ -17679,5 +17693,140 @@ public function andru_preguntas_totalesD(){
             require __DIR__.'/../vistas/plantillas/inicio_sesion.php';
         }
     }
-    
+    ////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////net_puesto
+    ////////////////////////////////////////////////////////////////////////////
+    /**
+     * Método que retorna un arreglo de los registros que existen en base de datos
+     */
+    public function net_puesto_listar() {
+        if(isset($_SESSION['nombre'])){
+            $obj_net_puesto = new cls_net_puesto();
+            $obj_puestomonitoreo = new cls_puestos_de_monitoreo();
+            $obj_tipoip = new cls_tipoip();
+            
+            $id_puestoMonitoreo = 0;
+            $puestoMonitoreoNombre = "General";
+            if(isset($_GET['ID']))
+            {
+                $id_puestoMonitoreo = $_GET['ID'];
+                $puestoMonitoreoNombre = "General";
+            }
+            
+            //Procede a ejecutar la consulta SQL para traer todo de t_net_puesto en la bd.
+            $obj_net_puesto->setCondicion("p.ID_Puesto_Monitoreo = ".$id_puestoMonitoreo);
+            //Obtener el vector de la consulta
+            $obj_net_puesto->obtener_net_puesto();
+            $net_puesto=$obj_net_puesto->getArreglo();
+
+            //Procede a ejecutar la consulta SQL para traer todo de t_puesto_monitoreo en la bd.
+            $obj_puestomonitoreo->setCondicion("Estado = 1");
+            //Obtener el vector de la consulta
+            $obj_puestomonitoreo->obtener_PuestoMonitoreo();
+            $puestomonitoreo=$obj_puestomonitoreo->getArreglo();
+            
+            //Procede a ejecutar la consulta SQL para traer todo de t_tipoip en la bd.
+            $obj_tipoip->setCondicion("Estado = 1");
+            //Obtener el vector de la consulta
+            $obj_tipoip->obtener_tipoip();
+            $tipoip=$obj_tipoip->getArreglo();
+            
+            if($id_puestoMonitoreo != 0)
+            {
+               $puestoMonitoreoNombre =  $puestomonitoreo[0]["Nombre"];
+            }
+
+            unset($obj_net_puesto);
+            unset($obj_puestomonitoreo);
+            unset($obj_tipoip);
+            
+            require __DIR__.'/../vistas/plantillas/frm_net_puesto.php';
+            
+        } else {
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            //Llamada al formulario correspondiente de la vista
+            require __DIR__.'/../vistas/plantillas/inicio_sesion.php';
+        }
+    }
+
+    /**
+     * Método que guarda en base datos cuando la propiedad ID_Puesto_Monitoreo esta en cero 
+     * Caso contrario actualiza en base datos el registros según el valor de ID_Puesto_Monitoreo 
+     */
+    public function net_puesto_guardar() {
+        if(isset($_SESSION['nombre'])){
+            $obj_net_puesto = new cls_net_puesto();            
+            $obj_net_puesto->setID_PuntoBCR($_POST['ID_PuntoBCR']); 
+            $obj_net_puesto->setID_Tipo_IP($_POST['ID_Tipo_IP']); 
+            $obj_net_puesto->setID_Puesto_Monitoreo($_POST['ID_Puesto_Monitoreo2']);
+            $obj_net_puesto->setEstado($_POST['Estado']);
+            
+            $obj_net_puesto->setCondicion("p.ID_Puesto_Monitoreo='".$_POST['ID_Puesto_Monitoreo2']."' AND p.ID_PuntoBCR='".$_POST['ID_PuntoBCR']."' AND p.ID_Tipo_IP='".$_POST['ID_Tipo_IP']."'");
+            
+            $obj_net_puesto->obtener_net_puesto();
+            $existeRow = $obj_net_puesto->getArreglo();
+            $conteo = count($existeRow);
+            
+            if($conteo <= 0)
+            {
+                $obj_net_puesto->setCondicion("");
+            }
+            $obj_net_puesto->guardar_net_puesto();
+            unset($obj_net_puesto);
+            header("location:/ORIEL/index.php?ctl=net_puesto_listar&ID=".$_POST['ID_Puesto_Monitoreo2']);            
+        } else {
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__.'/../vistas/plantillas/inicio_sesion.php';
+        }
+    }
+
+    /**
+     * Método que se utiliza para cambiar el estado del registro según el campo llave 
+     */
+    public function net_puesto_cambiar_estado() {
+        if(isset($_SESSION['nombre'])){
+            $obj_net_puesto = new cls_net_puesto();
+            if ($_GET['Estado']==1){
+                $obj_net_puesto->setEstado("0");
+            }else {
+                $obj_net_puesto->setEstado("1");
+            }
+            $obj_net_puesto->setCondicion("ID_Puesto_Monitoreo='".$_GET['ID_Puesto_Monitoreo']."'");
+            $obj_net_puesto->cambiar_estado_net_puesto();
+            unset($obj_net_puesto);
+            header("location:/ORIEL/index.php?ctl=net_puesto_listar");
+        } else {
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__. '/../vistas/plantillas/inicio_sesion.php';
+        }
+    }
+    /**
+     * Método que se utiliza para cambiar el estado del registro según el campo llave 
+     */
+    public function buscar_NetTest_PuntoBCR() {
+        if(isset($_SESSION['nombre'])){            
+            $obj_punto = new cls_puntosBCR();
+
+            $obj_punto->setCondicion("p.Codigo='" . $_POST['id'] . "' ");
+            $obj_punto->obtiene_punto_cencon();
+            $cajero = $obj_punto->getArreglo();
+
+            //Convierte la información en un json para enviarlo a JavaScript            
+            unset($obj_punto);
+
+            if($cajero[0]!=null){
+                echo json_encode($cajero[0], JSON_FORCE_OBJECT);
+            } else {
+                echo "No se encontró la persona";
+            }
+        }
+        else {
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }
+    }
 }

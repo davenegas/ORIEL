@@ -129,6 +129,8 @@ require_once __DIR__ . '/controladores/cls_clave.php';
 require_once __DIR__ . '/controladores/cls_tipoip.php';
 //Libreria de clases --> Control para net_test
 require_once __DIR__ . '/controladores/cls_net_test.php';
+//Libreria de clases --> Control para net_puesto
+require_once __DIR__ . '/controladores/cls_net_puesto.php';
 
 /*
 * El elemento controller, constituye la base y esencia de toda la lógica del negocio, en este
@@ -546,7 +548,12 @@ $map = array(
     'tipoip_listar'=>array('controller'=>'Controller','action'=> 'tipoip_listar'),
     'tipoip_guardar'=>array('controller'=>'Controller','action'=> 'tipoip_guardar'),
     'tipoip_cambiar_estado'=>array('controller'=>'Controller','action'=> 'tipoip_cambiar_estado'),
-    'net_test_Buscar'=>array('controller'=>'Controller','action'=> 'net_test_Buscar')
+    'net_test_Buscar'=>array('controller'=>'Controller','action'=> 'net_test_Buscar'),
+    //Agregar los action al controler de la clase cls_net_puesto
+    'net_puesto_listar'=>array('controller'=>'Controller','action'=> 'net_puesto_listar'),
+    'net_puesto_guardar'=>array('controller'=>'Controller','action'=> 'net_puesto_guardar'),
+    'net_puesto_cambiar_estado'=>array('controller'=>'Controller','action'=> 'net_puesto_cambiar_estado'),
+    'buscar_NetTest_PuntoBCR'=>array('controller'=>'Controller','action'=> 'buscar_NetTest_PuntoBCR')
     );
  // Parseo de la ruta
 /*
