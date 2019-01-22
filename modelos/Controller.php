@@ -14711,14 +14711,15 @@ $obj_externo->obtiene_personal_externo_cencon();
     public function prueba_alarma_guardar(){
         if(isset($_SESSION['nombre'])){
             $obj_prueba = new cls_prueba_alarma();
+            $obj_pruebaDetalle = new cls_pruebaalarmad();
             //Busca nuevamente la prueba de alarma
             $obj_prueba->setCondicion("T_PruebaAlarma.ID_PuntoBCR='".$_POST['punto_bcr']."' AND T_PruebaAlarma.Fecha='".date("Y-m-d")."'");
             $obj_prueba->obtener_prueba_alarma();
             $prueba= $obj_prueba->getArreglo();
-            
+            echo $_POST['tipo'];
             if($prueba!=null || $prueba==""){
-                $_POST['id_prueba']=$prueba[0]['ID_Prueba_Alarma'];
-            }
+                $_POST['id_prueba']=$prueba[0]['ID_Prueba_Alarma'];                
+            }            
             switch ($_POST['tipo']) {
                 case 'Persona_Prueba':
                     $obj_prueba->setId_punto($_POST['punto_bcr']);
@@ -14729,10 +14730,17 @@ $obj_externo->obtiene_personal_externo_cencon();
                     $obj_prueba->setRevision($_POST['revision_atm']);
                     $obj_prueba->setId_usuario($_SESSION['id']);
                     $obj_prueba->guardar_reporte_prueba();
+                    
                     if($_POST['id_prueba']=="0"){
                         $ultimo = $obj_prueba->getArreglo();
-                        echo $ultimo[0]['ID_Prueba_Alarma'];
+                        echo $ultimo[0]['ID_Prueba_Alarma'];                        
                     }
+                    $obj_pruebaDetalle->setTipo_Hora(1);
+                    $obj_pruebaDetalle->setEstado(1);
+                    $obj_pruebaDetalle->setID_PuntoBCR($_POST['punto_bcr']);
+                    $obj_pruebaDetalle->setFecha(date('Y-m-d'));
+                    $obj_pruebaDetalle->setHora_Prueba(date("H:i:s", time()));
+                    $obj_pruebaDetalle->guardar_pruebaalarmad();
                     break;
                 case 'Tipo_Prueba':
                     $obj_prueba->setId_punto($_POST['punto_bcr']);
@@ -14776,6 +14784,12 @@ $obj_externo->obtiene_personal_externo_cencon();
                         $ultimo = $obj_prueba->getArreglo();
                         echo $ultimo[0]['ID_Prueba_Alarma'];
                     }
+                    $obj_pruebaDetalle->setTipo_Hora(2);
+                    $obj_pruebaDetalle->setEstado(1);
+                    $obj_pruebaDetalle->setID_PuntoBCR($_POST['punto_bcr']);
+                    $obj_pruebaDetalle->setFecha(date('Y-m-d'));
+                    $obj_pruebaDetalle->setHora_Cierre(date("H:i:s", time()));
+                    $obj_pruebaDetalle->guardar_pruebaalarmad();
                     break;
                 case 'Reporte_Informacion_Cierre':
                     $obj_prueba->setId_punto($_POST['punto_bcr']);
@@ -17756,25 +17770,34 @@ public function andru_preguntas_totalesD(){
      */
     public function net_puesto_guardar() {
         if(isset($_SESSION['nombre'])){
-            $obj_net_puesto = new cls_net_puesto();            
-            $obj_net_puesto->setID_PuntoBCR($_POST['ID_PuntoBCR']); 
-            $obj_net_puesto->setID_Tipo_IP($_POST['ID_Tipo_IP']); 
-            $obj_net_puesto->setID_Puesto_Monitoreo($_POST['ID_Puesto_Monitoreo2']);
-            $obj_net_puesto->setEstado($_POST['Estado']);
-            
-            $obj_net_puesto->setCondicion("p.ID_Puesto_Monitoreo='".$_POST['ID_Puesto_Monitoreo2']."' AND p.ID_PuntoBCR='".$_POST['ID_PuntoBCR']."' AND p.ID_Tipo_IP='".$_POST['ID_Tipo_IP']."'");
-            
-            $obj_net_puesto->obtener_net_puesto();
-            $existeRow = $obj_net_puesto->getArreglo();
-            $conteo = count($existeRow);
-            
-            if($conteo <= 0)
+            if($_POST['ID_PuntoBCR'] > -1)
             {
-                $obj_net_puesto->setCondicion("");
+                $obj_net_puesto = new cls_net_puesto();            
+                $obj_net_puesto->setID_PuntoBCR($_POST['ID_PuntoBCR']); 
+                $obj_net_puesto->setID_Tipo_IP($_POST['ID_Tipo_IP']); 
+                $obj_net_puesto->setID_Puesto_Monitoreo($_POST['ID_Puesto_Monitoreo2']);
+                $obj_net_puesto->setEstado($_POST['Estado']);
+
+                $obj_net_puesto->setCondicion("p.ID_Puesto_Monitoreo='".$_POST['ID_Puesto_Monitoreo2']."' AND p.ID_PuntoBCR='".$_POST['ID_PuntoBCR']."' AND p.ID_Tipo_IP='".$_POST['ID_Tipo_IP']."'");
+
+                $obj_net_puesto->obtener_net_puesto();
+                $existeRow = $obj_net_puesto->getArreglo();
+                $conteo = count($existeRow);
+
+                if($conteo <= 0)
+                {
+                    $obj_net_puesto->setCondicion("");
+                }
+                else
+                {
+                    $obj_net_puesto->setCondicion("ID_Puesto_Monitoreo='".$_POST['ID_Puesto_Monitoreo2']."' AND ID_PuntoBCR='".$_POST['ID_PuntoBCR']."' AND ID_Tipo_IP='".$_POST['ID_Tipo_IP']."'");
+                }
+                $obj_net_puesto->guardar_net_puesto();
+                unset($obj_net_puesto);
+            
             }
-            $obj_net_puesto->guardar_net_puesto();
-            unset($obj_net_puesto);
             header("location:/ORIEL/index.php?ctl=net_puesto_listar&ID=".$_POST['ID_Puesto_Monitoreo2']);            
+            
         } else {
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
@@ -17787,13 +17810,13 @@ public function andru_preguntas_totalesD(){
      */
     public function net_puesto_cambiar_estado() {
         if(isset($_SESSION['nombre'])){
-            $obj_net_puesto = new cls_net_puesto();
+            $obj_net_puesto = new cls_net_puesto();            
             if ($_GET['Estado']==1){
                 $obj_net_puesto->setEstado("0");
             }else {
                 $obj_net_puesto->setEstado("1");
             }
-            $obj_net_puesto->setCondicion("ID_Puesto_Monitoreo='".$_GET['ID_Puesto_Monitoreo']."'");
+            $obj_net_puesto->setCondicion("ID_Puesto_Monitoreo='".$_GET['ID_Puesto_Monitoreo']."' AND ID_PuntoBCR = '".$_GET['ID_PuntoBCR']."' AND ID_Tipo_IP = '".$_GET['ID_Tipo_IP']."'");
             $obj_net_puesto->cambiar_estado_net_puesto();
             unset($obj_net_puesto);
             header("location:/ORIEL/index.php?ctl=net_puesto_listar");

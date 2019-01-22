@@ -131,7 +131,8 @@ require_once __DIR__ . '/controladores/cls_tipoip.php';
 require_once __DIR__ . '/controladores/cls_net_test.php';
 //Libreria de clases --> Control para net_puesto
 require_once __DIR__ . '/controladores/cls_net_puesto.php';
-
+//Libreria de clases --> Control para pruebaalarmad
+require_once __DIR__ . '/controladores/cls_pruebaalarmad.php';
 /*
 * El elemento controller, constituye la base y esencia de toda la lógica del negocio, en este
 * se almacenan cada una de las funcionales de ORIEl. El archivo en sí, se compone de "n" cantidad

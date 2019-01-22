@@ -221,15 +221,17 @@ class cls_prueba_alarma{
             $this->arreglo=$this->obj_data_provider->trae_datos("T_PruebaAlarma 
                 LEFT OUTER JOIN T_PuntoBCR ON T_PuntoBCR.ID_PuntoBCR = T_PruebaAlarma.ID_PuntoBCR 
                 LEFT OUTER JOIN T_Empresa ON T_Empresa.ID_Empresa = T_PruebaAlarma.ID_Empresa_Persona_Apertura
-                LEFT OUTER JOIN T_Personal ON T_Personal.ID_Persona = T_PruebaAlarma.ID_Persona_Reporta_Apertura", 
-                "T_PruebaAlarma.*, T_PuntoBCR.Nombre, T_PuntoBCR.Codigo,T_Empresa.Empresa, T_Personal.Apellido_Nombre as Nombre_Persona_Apertura", 
+                LEFT OUTER JOIN T_Personal ON T_Personal.ID_Persona = T_PruebaAlarma.ID_Persona_Reporta_Apertura
+                LEFT JOIN T_PruebaAlarmaD ON T_PruebaAlarmaD.ID_Prueba_Alarma = T_PruebaAlarma.ID_Prueba_Alarma ", 
+                "T_PruebaAlarma.*,T_PruebaAlarmaD.Hora_Prueba,T_PruebaAlarmaD.Hora_Cierre, T_PuntoBCR.Nombre, T_PuntoBCR.Codigo,T_Empresa.Empresa, T_Personal.Apellido_Nombre as Nombre_Persona_Apertura", 
                 "");
         }else{
             $this->arreglo=$this->obj_data_provider->trae_datos("T_PruebaAlarma 
                 LEFT OUTER JOIN T_PuntoBCR ON T_PuntoBCR.ID_PuntoBCR = T_PruebaAlarma.ID_PuntoBCR 
                 LEFT OUTER JOIN T_Empresa ON T_Empresa.ID_Empresa = T_PruebaAlarma.ID_Empresa_Persona_Apertura
-                LEFT OUTER JOIN T_Personal ON T_Personal.ID_Persona = T_PruebaAlarma.ID_Persona_Reporta_Apertura", 
-                "T_PruebaAlarma.*, T_PuntoBCR.Nombre, T_PuntoBCR.Codigo,T_Empresa.Empresa, T_Personal.Apellido_Nombre as Nombre_Persona_Apertura",
+                LEFT OUTER JOIN T_Personal ON T_Personal.ID_Persona = T_PruebaAlarma.ID_Persona_Reporta_Apertura
+                LEFT JOIN T_PruebaAlarmaD ON T_PruebaAlarmaD.ID_Prueba_Alarma = T_PruebaAlarma.ID_Prueba_Alarma ", 
+                "T_PruebaAlarma.*,T_PruebaAlarmaD.Hora_Prueba,T_PruebaAlarmaD.Hora_Cierre, T_PuntoBCR.Nombre, T_PuntoBCR.Codigo,T_Empresa.Empresa, T_Personal.Apellido_Nombre as Nombre_Persona_Apertura",
                 $this->condicion);
         }
         $this->arreglo=$this->obj_data_provider->getArreglo();

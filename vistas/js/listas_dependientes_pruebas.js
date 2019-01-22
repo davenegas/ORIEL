@@ -137,9 +137,9 @@ function buscar_pruebas_alarma(id_puntobcr){
             $("#seguimiento option[value='"+datos['Seguimiento']+"']").attr("selected",true);
 
             //Agrega titulos a las ventanas con Usuarios que ingresan la información
-            document.getElementById('nombre_persona_prueba').title="Usuario: "+datos['Nombre_Usuario_Reporte']+" F: "+datos['Fecha']+" H: "+datos['Hora_Apertura_Alarma'];
+            document.getElementById('nombre_persona_prueba').title="Usuario: "+datos['Nombre_Usuario_Reporte']+" F: "+datos['Fecha']+" H: "+datos['Hora_Prueba'];
             document.getElementById('hora_apertura').title="Usuario: "+datos['Nombre_Usuario_Prueba'];
-            document.getElementById('nombre_persona_cierre').title="Usuario: "+datos['Nombre_Usuario_Reporte_Cierre'];
+            document.getElementById('nombre_persona_cierre').title="Usuario: "+datos['Nombre_Usuario_Reporte_Cierre']+" F: "+datos['Fecha']+" H: "+datos['Hora_Cierre'];
             document.getElementById('hora_cierre').title="Usuario: "+datos['Nombre_Usuario_Cierra'];
             //Se aplica la seguridad a la ventana, bloquea los datos ingresados --> frm_pruebas_alarma.php
             aplicar_seguridad(datos);
@@ -175,7 +175,7 @@ function buscar_pruebas_alarma(id_puntobcr){
         
         //Busca información de pruebas realizadas en días anteriores
         $.post("index.php?ctl=pruebas_alarma_anteriores", { id_puntobcr: id_puntobcr}, function(data){
-            console.log(data);
+            //console.log(data);
             $("#personas_anteriores").html(data);
         });
     });
@@ -185,7 +185,7 @@ function buscar_persona_prueba(){
    document.getElementById('ventana_oculta_1').style.display = "block";
 }
 
-function guardar_registro_prueba(tipo){
+function guardar_registro_prueba(tipo){    
     if(document.getElementById('ID_PuntoBCR').value=="0"){
         alert("Por favor seleccione una agencia para guardar la información");
     } else{
@@ -195,7 +195,7 @@ function guardar_registro_prueba(tipo){
         revision_atm = document.getElementById('revision_atm').value;
         punto_bcr = document.getElementById('ID_PuntoBCR').value;
         $.post("index.php?ctl=prueba_alarma_guardar", { id_prueba: id_prueba, tipo:tipo, tipo_prueba:tipo_prueba,revision_atm:revision_atm, punto_bcr:punto_bcr}, function(data){
-            //alert(data);
+            
             numero= data.replace(/\D/g,'');
             if(numero>0){
                 numero= parseInt(numero);

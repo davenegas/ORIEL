@@ -61,7 +61,7 @@
                         punto_bcr = document.getElementById('ID_PuntoBCR').value;
                         tipo = "Persona_Prueba";
                         $.post("index.php?ctl=prueba_alarma_guardar", { id_prueba: id_prueba, tipo:tipo, id_persona: id, id_empresa:id_empresa, punto_bcr:punto_bcr,tipo_prueba:tipo_prueba,revision_atm:revision_atm}, function(data){
-                            //alert(data);
+                            console.log(data);
                             numero= data.replace(/\D/g,'');
                             if(numero>0){
                                 numero= parseInt(numero);
@@ -74,7 +74,7 @@
         </script>
     </head>
     <body>
-        <?php require_once 'encabezado.php';echo var_dump( getdate()['weekday']);?>
+        <?php require_once 'encabezado.php';?>
         <div class="container-fluid text-center">
             <h2>Pruebas de Alarma</h2> 
             <div class="row content">

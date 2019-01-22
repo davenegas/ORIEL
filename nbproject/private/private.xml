@@ -15,19 +15,6 @@
             </bookmark>
         </file>
         <file>
-            <url>vistas/plantillas/frm_andru_preguntas.php</url>
-            <bookmark id="26">
-                <name/>
-                <line>88</line>
-                <key/>
-            </bookmark>
-            <bookmark id="25">
-                <name/>
-                <line>210</line>
-                <key/>
-            </bookmark>
-        </file>
-        <file>
             <url>modelos/Controller.php</url>
             <bookmark id="68">
                 <name/>
@@ -41,7 +28,7 @@
             </bookmark>
             <bookmark id="69">
                 <name/>
-                <line>17640</line>
+                <line>17654</line>
                 <key/>
             </bookmark>
         </file>
@@ -59,6 +46,19 @@
             </bookmark>
         </file>
         <file>
+            <url>vistas/plantillas/frm_andru_preguntas.php</url>
+            <bookmark id="26">
+                <name/>
+                <line>88</line>
+                <key/>
+            </bookmark>
+            <bookmark id="25">
+                <name/>
+                <line>210</line>
+                <key/>
+            </bookmark>
+        </file>
+        <file>
             <url>vistas/plantillas/frm_niveles_as.php</url>
             <bookmark id="46">
                 <name/>
@@ -69,10 +69,12 @@
     </editor-bookmarks>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+            <file>file:/C:/xampp/htdocs/ORIEL/controladores/cls_prueba_alarma.php</file>
+            <file>file:/C:/xampp/htdocs/ORIEL/controladores/cls_pruebaalarmad.php</file>
+            <file>file:/C:/xampp/htdocs/ORIEL/vistas/js/listas_dependientes_pruebas.js</file>
             <file>file:/C:/xampp/htdocs/ORIEL/modelos/Controller.php</file>
-            <file>file:/C:/xampp/htdocs/ORIEL/vistas/js/listas_dependientes_puntobcr.js</file>
-            <file>file:/C:/xampp/htdocs/ORIEL/controladores/cls_direccionIP.php</file>
-            <file>file:/C:/xampp/htdocs/ORIEL/vistas/plantillas/frm_puntos_bcr_editar.php</file>
+            <file>file:/C:/xampp/htdocs/ORIEL/index.php</file>
+            <file>file:/C:/xampp/htdocs/ORIEL/vistas/plantillas/frm_pruebas_alarma.php</file>
         </group>
     </open-files>
 </project-private>

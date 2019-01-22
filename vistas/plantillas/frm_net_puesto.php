@@ -11,8 +11,8 @@
             }
             //Valida informacion completa de formulario
             function check_empty() {
-                if (document.getElementById('ID_PuntoBCR').value =="") {
-                    alert("Digita el nombre del Proveedor !");
+                if (document.getElementById('ID_PuntoBCR').value <=0) {
+                    alert("Ingrese un Punto BCR !");
                 } else {
                     //Envia el formulario y lo oculta
                     document.getElementById('ventana2').submit();
@@ -121,7 +121,7 @@
                             <td style="text-align:center">Inactivo</td>
                         <?php }?>
 
-                        <td style="text-align:center"><a href="index.php?ctl=net_puesto_cambiar_estado&ID_Puesto_Monitoreo=<?php echo $net_puesto[$i]['ID_Puesto_Monitoreo']?>&Estado=<?php echo $net_puesto[$i]['Estado']?>">Activar/Desactivar</a></td>
+                        <td style="text-align:center"><a href="index.php?ctl=net_puesto_cambiar_estado&ID_Puesto_Monitoreo=<?php echo $net_puesto[$i]['ID_Puesto_Monitoreo']?>&Estado=<?php echo $net_puesto[$i]['Estado']?>&ID_PuntoBCR=<?php echo $net_puesto[$i]['ID_PuntoBCR']?>&ID_Tipo_IP=<?php echo $net_puesto[$i]['ID_Tipo_IP']?>">Activar/Desactivar</a></td>
                         <td style="text-align:center"><a role="button" onclick="Editar_net_puesto('<?php echo $net_puesto[$i]['ID_Puesto_Monitoreo'];?>','<?php echo $net_puesto[$i]['ID_PuntoBCR'];?>','<?php echo $net_puesto[$i]['ID_Tipo_IP'];?>','<?php echo $net_puesto[$i]['Estado'];?>','<?php echo $net_puesto[$i]['Codigo'];?>','<?php echo $net_puesto[$i]['Nombre'];?>')">Editar</a></td>
                     </tr>
                     <?php } ?>
