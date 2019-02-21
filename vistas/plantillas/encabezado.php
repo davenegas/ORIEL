@@ -216,6 +216,14 @@
                                 </ul>
                                 </li>
                             <?php }; ?>
+                            <?php if ($_SESSION['modulos']['Andru - Cuestionario']==1){ ?>
+                            <li class="dropdown-submenu">
+                                <a class="multilevel" tabindex="-1" href="#">Control de Visita<span class="caret"></span></a>
+                                <ul class="dropdown-menu">
+                                    <li><a tabindex="-1" href="index.php?ctl=recepcion_puesto_tomar">Puestos</a></li>
+                                </ul>
+                                </li>
+                            <?php }; ?>
                             <?php if ($_SESSION['modulos']['Módulo-Áreas de Apoyo']==1){ ?>
                                 <li><a href="index.php?ctl=areas_apoyo_listar">Áreas de Apoyo</a></li>
                             <?php }; ?>

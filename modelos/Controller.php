@@ -11352,7 +11352,10 @@ $obj_externo->obtiene_personal_externo_cencon();
                 "Naranja"=>"0",
                 "NaranjaP"=>"0",
                 "Rojo"=>"0",
-                "RojoP"=>"0"
+                "RojoP"=>"0",
+                "NegroV"=>"0",
+                "NaranjaV"=>"0",
+                "RojoV"=>"0",
             );
 
             //echo $_SESSION['vector_temp_revision_video_dinamico'][0]['Contador']."<br>";
@@ -11715,95 +11718,78 @@ $obj_externo->obtiene_personal_externo_cencon();
                     
                     $obj_reporteria->obtener_sitio_color();
                     $dat_progressbar= $obj_reporteria->getArreglo();
-
+                    
+                    
                     $progressbar["Negro"] = 0;
                     $progressbar["NegroP"] = 0;
                     $progressbar["Naranja"] = 0;
                     $progressbar["NaranjaP"] = 0;
                     $progressbar["Rojo"] = 0;
                     $progressbar["RojoP"] = 0;
-                    $dat_progressbar[0]["Total"]= 300;
-                    $dat_progressbar[0]["Normal"] = 150;
-                    $dat_progressbar[0]["Naranja"] = 140;
-                    $dat_progressbar[0]["Rojo"]= 10;
-                     
-
-               $progressbar["Negro"] = $dat_progressbar[0]["Normal"];
-               
-               
-                        
-                        if(($dat_progressbar[0]["Naranja"] !=0 )||($dat_progressbar[0]["Rojo"] <=10 ))
+                    
+                    /*
+                    $dat_progressbar[0]["Total"]= 626;
+                    $dat_progressbar[0]["Normal"] = 625;
+                    $dat_progressbar[0]["Naranja"] = 34;
+                    $dat_progressbar[0]["Rojo"]= 0;*/
+                    //$progressbar["Negro"] = $dat_progressbar[0]["Normal"];
+                    
+                    
+                    $progressbar["Negro"] = $dat_progressbar[0]["Normal"];
+                    $progressbar["Naranja"] = $dat_progressbar[0]["Naranja"];
+                    $progressbar["Rojo"] = $dat_progressbar[0]["Rojo"];
+                    if($progressbar["Negro"]>0)
+                    {
+                        $progressbar["NegroV"] = Round((($dat_progressbar[0]["Normal"]/$dat_progressbar[0]["Total"])*100),1);
+                    } 
+                    if($progressbar["Naranja"]>0)
+                    {
+                        $progressbar["NaranjaV"] = Round((($dat_progressbar[0]["Naranja"]/$dat_progressbar[0]["Total"])*100),1);
+                    }
+                    if($progressbar["Rojo"]>0)
+                    {
+                        $progressbar["RojoV"] = Round((($dat_progressbar[0]["Rojo"]/$dat_progressbar[0]["Total"])*100),1);
+                    }
+                    
+                    if(($dat_progressbar[0]["Naranja"] !=0 )||($dat_progressbar[0]["Rojo"] <=10 ))
+                    {
+                        if($dat_progressbar[0]["Rojo"] ==0 )
                         {
-                            if($dat_progressbar[0]["Rojo"] ==0 )
-                            {
-                                $progressbar["NegroP"] = Round((($dat_progressbar[0]["Normal"]/$dat_progressbar[0]["Total"])*75),1);
-                            }
-                            else
-                            {
-                                $progressbar["NegroP"] = Round((($dat_progressbar[0]["Normal"]/$dat_progressbar[0]["Total"])*50),1);
-                            }
-                            
+                            $progressbar["NegroP"] = Round((($dat_progressbar[0]["Normal"]/$dat_progressbar[0]["Total"])*75),1);                            
                         }
                         else
                         {
-                            $progressbar["NegroP"] = Round((($dat_progressbar[0]["Normal"]/$dat_progressbar[0]["Total"])*100),1);
+                            $progressbar["NegroP"] = Round((($dat_progressbar[0]["Normal"]/$dat_progressbar[0]["Total"])*50),1);                            
                         }
-                            
-                      
-                       
-                     
-                        
+                    }
+                    else
+                    {
+                        $progressbar["NegroP"] = Round((($dat_progressbar[0]["Normal"]/$dat_progressbar[0]["Total"])*100),1);                        
+                    }
+                    
+                    
+                    if($progressbar["Negro"]>0)
+                    {
+                        $progressbar["NegroV"] = Round((($dat_progressbar[0]["Normal"]/$dat_progressbar[0]["Total"])*100),1);
+                    } 
+                    if($progressbar["Naranja"]>0)
+                    {
                         $progressbar["Naranja"] = $dat_progressbar[0]["Naranja"];
-//                        if($dat_progressbar[0]["Naranja"] >10)
-//                        {
-                  
-                        
-                            $porcentaje = $dat_progressbar[0]["Total"]+$dat_progressbar[0]["Naranja"];
-             
-                       
-                                $porcentaje = Round((($dat_progressbar[0]["Naranja"]/$porcentaje)*50),1)+25;
-                            $progressbar["NaranjaP"] = Round((($dat_progressbar[0]["Naranja"]/$dat_progressbar[0]["Naranja"])*$porcentaje),1);
-                   
-                            
-//                        }
-//                        else
-//                        {
-//                            $progressbar["NaranjaP"] = Round((($dat_progressbar[0]["Naranja"]/10)*25),1);
-//                        }
+                        $porcentaje = $dat_progressbar[0]["Total"]+$dat_progressbar[0]["Naranja"];
+                        $porcentaje = Round((($dat_progressbar[0]["Naranja"]/$porcentaje)*50),1)+25;
+                        $progressbar["NaranjaP"] = Round((($dat_progressbar[0]["Naranja"]/$dat_progressbar[0]["Naranja"])*$porcentaje),1);
+                    }
+                    if($progressbar["Rojo"]>0)
+                    {
                         $progressbar["Rojo"] = $dat_progressbar[0]["Rojo"];
-                        
-//                        if($dat_progressbar[0]["Rojo"] > 10)
-//                        {
-                         $progressbar["RojoP"] = 0;
-                            if($progressbar["Rojo"] != 0)
-                            {
-                                
-                                    $progressbar["RojoP"] = 100 -$progressbar["NegroP"] -$progressbar["NaranjaP"];
-                                
-                                
-                            }
-                            
-                             
-                            
-//                        }
-//                        else
-//                        {
-//                            $progressbar["RojoP"] = Round((($dat_progressbar[0]["Rojo"]/10)*25),1); 
-//                        }
-                        
-
-                            
-//                    if (($dat_progressbar[0]["Normal"] > 10)||($dat_progressbar[0]["Rojo"]>10))
-//                    {
-//                        $progressbar["Negro"] = $dat_progressbar[0]["Normal"];
-//                        $progressbar["NegroP"] = Round((($dat_progressbar[0]["Normal"]/$dat_progressbar[0]["Total"])*100),1);
-//                        $progressbar["Naranja"] = $dat_progressbar[0]["Naranja"];
-//                        $progressbar["NaranjaP"] = Round((($dat_progressbar[0]["Naranja"]/$dat_progressbar[0]["Total"])*100),1);
-//                        $progressbar["Rojo"] = $dat_progressbar[0]["Rojo"];
-//                        $progressbar["RojoP"] = Round((($dat_progressbar[0]["Rojo"]/$dat_progressbar[0]["Total"])*100),1); 
-//                    }
-                   
-
+                        $progressbar["RojoP"] = 0;
+                    }
+                    
+                    if($progressbar["Rojo"] != 0)
+                    {
+                        $progressbar["RojoP"] = 100 -$progressbar["NegroP"] -$progressbar["NaranjaP"];                        
+                    }
+                    
                     unset($obj_reporteria);
                                        
                     require __DIR__.'/../vistas/plantillas/frm_controles_de_video_listar.php';
@@ -14285,8 +14271,8 @@ $obj_externo->obtiene_personal_externo_cencon();
             $params = $personas;
             
             //Obtiene información del Punto BCR
-            $obj_Puntosbcr->setCondicion("(T_PuntoBCR.ID_Tipo_Punto IN (1,5,9,10,11)) AND T_PuntoBCR.Estado=1");
-            $obj_Puntosbcr->obtiene_todos_los_puntos_bcr();
+            $obj_Puntosbcr->setCondicion("(p.ID_Tipo_Punto IN (1,5,9,10,11)) AND p.Estado=1");
+            $obj_Puntosbcr->obtiene_punto_pruebasAlarma();
             $Oficinas = $obj_Puntosbcr->getArreglo();
 
             //Vectores nuevo para almacer toda la información del horario
@@ -14423,11 +14409,12 @@ $obj_externo->obtiene_personal_externo_cencon();
     public function buscar_punto_prueba_alarma() {
         if(isset($_SESSION['nombre'])){
             $obj_punto = new cls_puntosBCR();
-            $obj_horario = new cls_horario();
+            $obj_horario = new cls_horario(); 
             $obj_eventos = new cls_eventos();
             //Buscar la información de un PuntoBCR basado en el código del cajero
-            $obj_punto->setCondicion("T_PuntoBCR.Codigo='".strtoupper($_POST['id'])."' AND T_PuntoBCR.Estado=1");
-            $obj_punto->obtiene_todos_los_puntos_bcr();
+            //$obj_punto->setCondicion("T_PuntoBCR.Codigo='".strtoupper($_POST['id'])."' AND T_PuntoBCR.Estado=1");
+            $obj_punto->setCondicion("p.Codigo='".strtoupper($_POST['id'])."' AND p.Estado=1");
+            $obj_punto->obtiene_punto_pruebasAlarma();
             $puntobcr = $obj_punto->getArreglo();
             
             //Obtiene horario de oficina
@@ -14481,8 +14468,8 @@ $obj_externo->obtiene_personal_externo_cencon();
                     break;
             }
             
-            $obj_eventos->setCondicion("T_Evento.ID_PuntoBCR=".$puntobcr[0]['ID_PuntoBCR']." AND T_Evento.ID_Tipo_Evento IN (22,40) AND T_Evento.ID_EstadoEvento='1' AND T_Evento.Fecha='".date('Y-m-j')."'");
-            $obj_eventos->obtiene_todos_los_eventos();
+            $obj_eventos->setCondicion("T_Evento.ID_PuntoBCR=".$puntobcr[0]['ID_PuntoBCR']." AND T_Evento.ID_Tipo_Evento IN (22,40) AND T_Evento.ID_EstadoEvento='1' AND T_Evento.Fecha='".date('Y-m-j')."' LIMIT 1");
+            $obj_eventos->obtiene_t_eventos();
             $evento_pendiente= $obj_eventos->getArreglo();
             if(isset($evento_pendiente[0]['ID_Evento'])){
                 $puntobcr[0] = array_merge(array('Evento_Pendiente' =>("1")),$puntobcr[0]);
@@ -14491,6 +14478,7 @@ $obj_externo->obtiene_personal_externo_cencon();
             }
             //Convierte la información en un json para enviarlo a JavaScript
             echo json_encode($puntobcr[0], JSON_FORCE_OBJECT);
+            
         }
         else {
             $tipo_de_alerta="alert alert-warning";
@@ -16853,7 +16841,7 @@ public function andru_preguntas_totalesD(){
                 $obj_andru_respuestas->obtener_andru_cuestionario_respuestas();
                 $CuestionarioIniRespuestas= $obj_andru_respuestas->getArreglo();
             
-                $fechaUpd = date('Y/m/d H:i');                
+                $fechaUpd = date('Y/m/d H:i');
                 
                 //Creo el vector del listado del html
                 $lstPts = $_POST['lstPts'];
@@ -17850,6 +17838,476 @@ public function andru_preguntas_totalesD(){
             $tipo_de_alerta="alert alert-warning";
             $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
             require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }
+    }
+    
+ ////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////recepcion_puesto
+    ////////////////////////////////////////////////////////////////////////////
+    /**
+     * Método que retorna un arreglo de los registros que existen en base de datos
+     */
+    public function recepcion_puesto_listar() {
+        if(isset($_SESSION['nombre'])){
+            $obj_recepcion_puesto = new cls_recepcion_puesto();
+            //Procede a ejecutar la consulta SQL para traer todo de t_recepcion_puesto en la bd.
+            $obj_recepcion_puesto->setCondicion("");
+            //Obtener el vector de la consulta
+            $obj_recepcion_puesto->obtener_recepcion_puesto();
+            $recepcion_puesto=$obj_recepcion_puesto->getArreglo();
+            unset($obj_recepcion_puesto);
+
+            require __DIR__.'/../vistas/plantillas/frm_recepcion_puesto.php';
+            
+        } else {
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            //Llamada al formulario correspondiente de la vista
+            require __DIR__.'/../vistas/plantillas/inicio_sesion.php';
+        }
+    }
+
+    /**
+     * Método que guarda en base datos cuando la propiedad ID_RecepcionPuesto esta en cero 
+     * Caso contrario actualiza en base datos el registros según el valor de ID_RecepcionPuesto 
+     */
+    public function recepcion_puesto_guardar() {
+        if(isset($_SESSION['nombre'])){
+            $obj_recepcion_puesto = new cls_recepcion_puesto();
+            $obj_recepcion_puesto->setNombre($_POST['Nombre']); 
+            $obj_recepcion_puesto->setDescripcion($_POST['Descripcion']); 
+
+            $obj_recepcion_puesto->setEstado($_POST['Estado']);
+            if ($_POST['ID_RecepcionPuesto']!=0){
+                $obj_recepcion_puesto->setID_RecepcionPuesto($_POST['ID_RecepcionPuesto']); 
+                $obj_recepcion_puesto->setCondicion("ID_RecepcionPuesto='".$_POST['ID_RecepcionPuesto']."'");
+            }
+            $obj_recepcion_puesto->guardar_recepcion_puesto();
+            unset($obj_recepcion_puesto);
+            header("location:/ORIEL/index.php?ctl=recepcion_puesto_listar");
+        } else {
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__.'/../vistas/plantillas/inicio_sesion.php';
+        }
+    }
+    /**
+     * Método que se utiliza para cambiar el estado del registro según el campo llave 
+     */
+    public function recepcion_puesto_cambiar_estado() {
+        if(isset($_SESSION['nombre'])){
+            $obj_recepcion_puesto = new cls_recepcion_puesto();
+            if ($_GET['Estado']==1){
+                $obj_recepcion_puesto->setEstado("0");
+            }else {
+                $obj_recepcion_puesto->setEstado("1");
+            }
+            $obj_recepcion_puesto->setCondicion("ID_RecepcionPuesto='".$_GET['ID_RecepcionPuesto']."'");
+            $obj_recepcion_puesto->cambiar_estado_recepcion_puesto();
+            unset($obj_recepcion_puesto);
+            header("location:/ORIEL/index.php?ctl=recepcion_puesto_listar");
+        } else {
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__. '/../vistas/plantillas/inicio_sesion.php';
+        }
+    }
+    /**
+     * Método que retorna un arreglo de los registros que existen en base de datos
+     */
+    public function recepcion_puesto_tomar() {
+        if(isset($_SESSION['nombre'])){
+            $obj_recepcion_puesto = new cls_recepcion_puesto();
+            //Procede a ejecutar la consulta SQL para traer todo de t_recepcion_puesto en la bd.
+            $obj_recepcion_puesto->setCondicion("");
+            //Obtener el vector de la consulta
+            $obj_recepcion_puesto->obtener_recepcion_puesto();
+            $recepcion_puesto=$obj_recepcion_puesto->getArreglo();
+            unset($obj_recepcion_puesto);
+            
+            require __DIR__.'/../vistas/plantillas/frm_recepcion_tomar.php';
+            
+        } else {
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            //Llamada al formulario correspondiente de la vista
+            require __DIR__.'/../vistas/plantillas/inicio_sesion.php';
+        }
+    }
+    
+    public function recepcion_puesto_revision() {
+        if(isset($_SESSION['nombre'])){
+            $obj_recepcion_puesto = new cls_recepcion_puesto();
+            $obj_recepcionPuestoTipos = new cls_recepcion_puesto_tipos();
+            $obj_recepcionPuestoApertura = new cls_recepcion_apertura();
+            
+            //Procede a ejecutar la consulta SQL para traer todo de t_recepcion_puesto en la bd.
+            $obj_recepcion_puesto->setCondicion("ID_RecepcionPuesto = " .$_POST['ID_RecepcionPuesto']);
+            //Obtener el vector de la consulta
+            $obj_recepcion_puesto->obtener_recepcion_puesto();
+            $recepcion_puesto=$obj_recepcion_puesto->getArreglo();
+            
+            //Revisar sí el usuario se encuentra en otro puesto
+            $obj_recepcion_puesto->setCondicion("ID_Usuario = " .$_SESSION['id']." AND ID_RecepcionPuesto <> " .$_POST['ID_RecepcionPuesto']);
+            
+            //Obtener el vector de la consulta
+            $obj_recepcion_puesto->obtener_recepcion_puesto();
+            $UsuarioPuestos=$obj_recepcion_puesto->getArreglo();
+            $cantPuestosUsuados = count($UsuarioPuestos);
+ 
+            if($recepcion_puesto[0]["ID_Usuario"]==$_SESSION['id'])
+            {
+               if($recepcion_puesto[0]["Estado"]==0) 
+               {
+                   echo "Inactivo";
+               }else{
+                   if($cantPuestosUsuados>0)
+                   {
+                       echo "En otro puesto";
+                   }else{
+                       echo "Tomar";
+                   }
+               }
+            }
+            else
+            {
+                if($recepcion_puesto[0]["ID_Usuario"]==0){
+                    $fechaUpd = date('Y/m/d H:i');
+                    //Registrar al usuario que abre
+                    $obj_recepcion_puesto->setID_Usuario($_SESSION['id']);
+                    $obj_recepcion_puesto->setCondicion("ID_RecepcionPuesto = ".$_POST['ID_RecepcionPuesto']);
+                    $obj_recepcion_puesto->actualizar_recepcion_puesto();
+
+                    //Registrar la apertura
+                    $obj_recepcionPuestoApertura->setID_RecepcionPuesto($_POST['ID_RecepcionPuesto']);
+                    $obj_recepcionPuestoApertura->setID_Usuario_Apertura($_SESSION['id']);
+                    $obj_recepcionPuestoApertura->setID_Usuario_Cierre(0);
+                    $obj_recepcionPuestoApertura->setFecha_Apertura($fechaUpd);
+                    $obj_recepcionPuestoApertura->setFecha_Cierre("1900-01-01 00:00:00");
+                    $obj_recepcionPuestoApertura->setDescripcion("");
+                    $obj_recepcionPuestoApertura->setCant_Horas(0);
+                    $obj_recepcionPuestoApertura->setEstado_Apertura("A");
+                    $obj_recepcionPuestoApertura->setEstado(1);
+                    $obj_recepcionPuestoApertura->guardar_recepcion_apertura();
+                    echo "Tomar";
+                }else{
+                    echo "Ocupado";
+                }
+            }
+            
+            unset($obj_recepcion_puesto);
+            unset($obj_recepcionPuestoTipos);
+            unset($obj_recepcionPuestoApertura);
+        } else {
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            //Llamada al formulario correspondiente de la vista
+            require __DIR__.'/../vistas/plantillas/inicio_sesion.php';
+        }
+    }
+    
+        public function recepcion_apertura_liberar() {
+        if(isset($_SESSION['nombre'])){
+            $obj_recepcion_puesto = new cls_recepcion_puesto();
+            $obj_recepcion_apertura = new cls_recepcion_apertura();
+            
+            $obj_recepcion_apertura->setCondicion("Estado_Apertura = 'A' AND ID_RecepcionPuesto=".$_POST['ID_RecepcionPuesto']);
+            $obj_recepcion_apertura->obtener_recepcion_max_apertura();
+            
+            if($obj_recepcion_apertura->getID_Recepcion_Apertura()>0)
+            {
+                $obj_recepcion_apertura->setCondicion("ID_Recepcion_Apertura=".$obj_recepcion_apertura->getID_Recepcion_Apertura());                
+                $fechaUpd = date('Y/m/d H:i');
+                $obj_recepcion_apertura->setID_Usuario_Cierre($_SESSION['id']);
+                $obj_recepcion_apertura->setFecha_Cierre($fechaUpd);
+                $obj_recepcion_apertura->setEstado_Apertura("C");                
+                $obj_recepcion_apertura->editar_recepcion_liberar();            
+            }
+                        
+            $obj_recepcion_puesto->setID_Usuario(0);
+            $obj_recepcion_puesto->setCondicion("ID_RecepcionPuesto = ".$_POST['ID_RecepcionPuesto']);
+            $obj_recepcion_puesto->actualizar_recepcion_puesto();
+
+            unset($obj_recepcion_puesto);
+            unset($obj_recepcion_apertura);
+            echo "guardado";
+        } else {
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__.'/../vistas/plantillas/inicio_sesion.php';
+        }
+    }
+    
+    public function recepcion_puesto_apertura() {
+        if(isset($_SESSION['nombre'])){
+            $obj_recepcion_puestotipo = new cls_recepcion_puesto_tipos();
+            $obj_recepcion_puestoApertura = new cls_recepcion_apertura();
+            $obj_recepcion_puestoInvatario = new cls_recepcion_inventario();
+
+            //Procede a ejecutar la consulta SQL para traer todo de t_recepcion_puesto_tipos en la bd.
+            $obj_recepcion_puestotipo->setCondicion("pt.ID_RecepcionPuesto=".$_POST['ID_RecepcionPuesto']);
+            //Obtener el vector de la consulta
+            $obj_recepcion_puestotipo->obtener_recepcion_puesto_tipos();
+            $recepcion_puestotipos=$obj_recepcion_puestotipo->getArreglo();
+
+            //Procede a ejecutar la consulta SQL para traer todo de t_recepcion_puesto_Apertura en la bd.
+            $obj_recepcion_puestoApertura->setCondicion("ID_RecepcionPuesto=".$_POST['ID_RecepcionPuesto']." AND Estado_Apertura = 'A' AND Estado=1");
+            //Obtener el vector de la consulta
+            $obj_recepcion_puestoApertura->obtener_recepcion_max_apertura();
+            
+            //Procede a ejecutar la consulta SQL para traer todo de t_recepcion_puesto_Apertura en la bd.
+            $obj_recepcion_puestoApertura->setCondicion("ID_Recepcion_Apertura=".$obj_recepcion_puestoApertura->getID_Recepcion_Apertura());
+            //Obtener el vector de la consulta
+            $obj_recepcion_puestoApertura->obtener_recepcion_apertura();
+            $recep_puestoApertura= $obj_recepcion_puestoApertura->getArreglo();
+            
+            $recep_puestoInventario =null;
+            $UsuarioSIS = $_SESSION['id'];
+            //Obtenemos el inventario
+            if(count($recep_puestoApertura)>0)
+            {
+                $obj_recepcion_puestoInvatario->setCondicion("ID_Recepcion_Apertura=".$recep_puestoApertura[0]["ID_Recepcion_Apertura"]." AND Estado = 1");
+                $obj_recepcion_puestoInvatario->obtener_recepcion_inventario();
+                $recep_puestoInventario= $obj_recepcion_puestoInvatario->getArreglo();
+            }
+
+            unset($obj_recepcion_puestotipo);
+            unset($obj_recepcion_puestoApertura);
+            unset($obj_recepcion_puestoInvatario);
+
+            require __DIR__.'/../vistas/plantillas/frm_recepcion_apertura.php';
+            
+        } else {
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            //Llamada al formulario correspondiente de la vista
+            require __DIR__.'/../vistas/plantillas/inicio_sesion.php';
+        }
+    }
+    /**
+     * Método que guarda en base datos cuando la propiedad ID_RecepcionPuesto esta en cero 
+     * Caso contrario actualiza en base datos el registros según el valor de ID_RecepcionPuesto 
+     */
+    public function recepcion_apertura_guardar() {
+        if(isset($_SESSION['nombre'])){
+            $obj_recepcion_apertura = new cls_recepcion_apertura();
+            $obj_recepcion_apertura->setDescripcion($_POST['Descripcion']);
+            $obj_recepcion_apertura->setEstado(1);
+            $obj_recepcion_apertura->setCondicion("ID_Recepcion_Apertura = ".$_POST['ID_Recepcion_Apertura']);
+
+            $obj_recepcion_apertura->editar_recepcion_Descripcion();            
+            unset($obj_recepcion_puesto);
+            echo "guardado";
+        } else {
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__.'/../vistas/plantillas/inicio_sesion.php';
+        }
+    }
+        /**
+     * Método que guarda en base datos cuando la propiedad ID_RecepcionInventario esta en cero 
+     * Caso contrario actualiza en base datos el registros según el valor de ID_RecepcionInventario 
+     */
+    public function recepcion_inventario_guardar() {
+        if(isset($_SESSION['nombre'])){
+            $obj_recepcion_inventario = new cls_recepcion_inventario();
+            $obj_recepcion_inventario->setID_Recepcion_Apertura($_POST['ID_Recepcion_Apertura']); 
+            $obj_recepcion_inventario->setDescripcion($_POST['Descripcion']); 
+            $obj_recepcion_inventario->setEstado(1);
+            
+            $obj_recepcion_inventario->guardar_recepcion_inventario();
+            unset($obj_recepcion_inventario);
+            echo "guardadoinventario";
+        } else {
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__.'/../vistas/plantillas/inicio_sesion.php';
+        }
+    }
+   /**
+     * Método que guarda en base datos cuando la propiedad ID_RecepcionInventario esta en cero 
+     * Caso contrario actualiza en base datos el registros según el valor de ID_RecepcionInventario 
+     */
+    public function recepcion_inventario_borrar() {
+        if(isset($_SESSION['nombre'])){
+            $obj_recepcion_inventario = new cls_recepcion_inventario();
+           
+            $obj_recepcion_inventario->setEstado(0);
+            $obj_recepcion_inventario->setCondicion("ID_RecepcionInventario = ".$_POST['ID_RecepcionInventario']);
+          
+            $obj_recepcion_inventario->cambiar_estado_recepcion_inventario();
+            unset($obj_recepcion_inventario);
+            echo "borradoinventario";
+        } else {
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__.'/../vistas/plantillas/inicio_sesion.php';
+        }
+    }
+    
+    public function recepcion_inventario_lugares()
+    {
+        if(isset($_SESSION['nombre'])){
+            $obj_recepcion_parqueo = new cls_recepcion_parqueo();
+            $ID_Recepcion_Apertura = $_POST['ID_Recepcion_Apertura'];
+            //Procede a ejecutar la consulta SQL para traer todo de t_recepcion_parqueo en la bd.
+            $obj_recepcion_parqueo->setCondicion("");
+            //Obtener el vector de la consulta
+            $obj_recepcion_parqueo->obtener_recepcion_parqueo();
+            $recepcion_parqueo=$obj_recepcion_parqueo->getArreglo();
+            
+            $UsuarioSIS = $_SESSION['id'];
+            $ID_Usuario_Apertura = $_POST['ID_Usuario_Apertura'];
+            
+            unset($obj_recepcion_parqueo);
+            
+            require __DIR__.'/../vistas/plantillas/frm_recepcion_lugar.php';            
+        } else {
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            //Llamada al formulario correspondiente de la vista
+            require __DIR__.'/../vistas/plantillas/inicio_sesion.php';
+        }
+    }
+    
+    public function recepcion_lugar_numcampo() {
+        if(isset($_SESSION['nombre'])){
+            $obj_parqueo = new cls_recepcion_parqueo();
+            $obj_parqueo->setCondicion("p.Num_Lugar=" . $_POST['Num_Lugar'] . " AND p.Estado=1");
+            $obj_parqueo->obtener_recepcion_parqueo();
+            $parqueo = $obj_parqueo->getArreglo();
+            
+            unset($obj_parqueo);
+            
+            if($parqueo[0]!=null){
+                echo json_encode($parqueo[0], JSON_FORCE_OBJECT);
+            } else {
+                echo "No se encontró la persona";
+            }
+        }else{
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__ . '/../vistas/plantillas/inicio_sesion.php';
+        }
+    }
+    
+    public function recepcion_lugar_reservar()
+    {
+        if(isset($_SESSION['nombre'])){
+            $obj_recepcion_parqueo = new cls_recepcion_parqueo();
+            $obj_recepcion_bitacora = new cls_recepcion_parqueobitacora();
+            
+            if($_POST['Estado_Uso']=="D")
+            {
+                $obj_recepcion_parqueo->setCondicion("ID_RecepcionParqueo = ".$_POST['ID_RecepcionParqueo']);
+                $obj_recepcion_parqueo->obtener_recepcion_parqueo();
+                $Infoparqueo = $obj_recepcion_parqueo->getArreglo();
+                
+                $obj_recepcion_bitacora->setID_RecepcionParqueo($Infoparqueo[0]["ID_RecepcionParqueo"]);
+                $obj_recepcion_bitacora->setID_Recepcion_Apertura($Infoparqueo[0]["ID_Recepcion_Apertura"]);
+                $obj_recepcion_bitacora->setID_Persona($Infoparqueo[0]["ID_Persona"]);
+                $obj_recepcion_bitacora->setID_Ubicacion($Infoparqueo[0]["ID_Ubicacion"]);
+                $obj_recepcion_bitacora->setID_Tipo_Vehiculo($Infoparqueo[0]["ID_Tipo_Vehiculo"]);
+                $obj_recepcion_bitacora->setNombre($Infoparqueo[0]["Nombre"]);
+                $obj_recepcion_bitacora->setEs_Prestamo($Infoparqueo[0]["Es_Prestamo"]);
+                $obj_recepcion_bitacora->setPrestamo($Infoparqueo[0]["Prestamo"]);
+                $obj_recepcion_bitacora->setNum_Lugar($Infoparqueo[0]["Num_Lugar"]);
+                $obj_recepcion_bitacora->setEs_Externo($Infoparqueo[0]["Es_Externo"]);
+                $obj_recepcion_bitacora->setCedula($Infoparqueo[0]["Cedula"]);
+                $obj_recepcion_bitacora->setPlaca($Infoparqueo[0]["Placa"]);
+                $obj_recepcion_bitacora->setFecha_Entrada($Infoparqueo[0]["Fecha_Entrada"]);
+                $obj_recepcion_bitacora->setHora_Entrada($Infoparqueo[0]["Hora_Entrada"]);
+                $obj_recepcion_bitacora->setFecha_Salida(date("Y-m-d"));
+                $obj_recepcion_bitacora->setHora_Salida(date("H:i:s", time()));
+                $obj_recepcion_bitacora->setEstado_Uso($Infoparqueo[0]["Estado_Uso"]);
+                $obj_recepcion_bitacora->setEstado($Infoparqueo[0]["Estado"]);
+                $obj_recepcion_bitacora->setCondicion("");
+
+                $obj_recepcion_bitacora->setID_RecepcionParqueoBitacora(0);
+                $obj_recepcion_bitacora->guardar_recepcion_parqueobitacora();                
+            }
+            
+            $obj_recepcion_parqueo->setID_RecepcionParqueo($_POST['ID_RecepcionParqueo']);
+            $obj_recepcion_parqueo->setID_Recepcion_Apertura($_POST['ID_Recepcion_Apertura']);
+            if($_POST['Es_Prestamo']==true)
+            {
+                $obj_recepcion_parqueo->setEs_Prestamo(1);
+            }else{
+                $obj_recepcion_parqueo->setEs_Prestamo(0);
+            }
+            
+            $obj_recepcion_parqueo->setPrestamo($_POST['Prestamo']);            
+            $obj_recepcion_parqueo->setCedula($_POST['Cedula']);
+            $obj_recepcion_parqueo->setPlaca($_POST['Placa']);
+            
+            if($_POST['Estado_Uso']=="O")
+            {
+                $obj_recepcion_parqueo->setFecha_Entrada(date("Y-m-d"));
+                $obj_recepcion_parqueo->setHora_Entrada(date("H:i:s", time()));
+            }else{
+                $obj_recepcion_parqueo->setFecha_Entrada("1900-01-01");
+                $obj_recepcion_parqueo->setHora_Entrada("00:00:00");
+            }
+            
+            $obj_recepcion_parqueo->setEstado_Uso($_POST['Estado_Uso']);
+            $obj_recepcion_parqueo->setCondicion("ID_RecepcionParqueo = ".$_POST['ID_RecepcionParqueo']);
+
+            $obj_recepcion_parqueo->guardar_parqueo_reservar();
+            unset($obj_recepcion_parqueo);
+            unset($obj_recepcion_bitacora);
+            
+        } else {
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            require __DIR__.'/../vistas/plantillas/inicio_sesion.php';
+        }
+    }
+    
+    /**
+     * Método que retorna un arreglo de los registros que existen en base de datos
+     */
+    public function recepcion_parqueo_consulta() {
+        if(isset($_SESSION['nombre'])){
+            $obj_recepcion_parqueo = new cls_recepcion_parqueobitacora();
+            //Procede a ejecutar la consulta SQL para traer todo de t_recepcion_parqueo en la bd.
+            $obj_recepcion_parqueo->setCondicion("");
+            //Obtener el vector de la consulta
+            $obj_recepcion_parqueo->obtener_recepcion_reporte();
+            $recepcion_parqueo=$obj_recepcion_parqueo->getArreglo();
+            unset($obj_recepcion_parqueo);
+            
+            require __DIR__.'/../vistas/plantillas/frm_recepcion_consulta.php';
+            
+        } else {
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            //Llamada al formulario correspondiente de la vista
+            require __DIR__.'/../vistas/plantillas/inicio_sesion.php';
+        }
+    }
+    ////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////recepcion_visita
+    ////////////////////////////////////////////////////////////////////////////
+    /**
+     * Método que retorna un arreglo de los registros que existen en base de datos
+     */
+    public function recepcion_visita_lugares() {
+        if(isset($_SESSION['nombre'])){
+            $obj_recepcion_visita = new cls_recepcion_visita();
+            //Procede a ejecutar la consulta SQL para traer todo de t_recepcion_visita en la bd.
+            $obj_recepcion_visita->setCondicion("");
+            //Obtener el vector de la consulta
+            $obj_recepcion_visita->obtener_recepcion_visita();
+            $recepcion_visita=$obj_recepcion_visita->getArreglo();
+            unset($obj_recepcion_visita);
+            
+            require __DIR__.'/../vistas/plantillas/frm_recepcion_visitalugar.php';
+            
+        } else {
+            $tipo_de_alerta="alert alert-warning";
+            $validacion="Es necesario volver a iniciar sesión para consultar el sistema";
+            //Llamada al formulario correspondiente de la vista
+            require __DIR__.'/../vistas/plantillas/inicio_sesion.php';
         }
     }
 }

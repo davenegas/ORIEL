@@ -362,6 +362,7 @@ class Data_Provider{
     //Metodo de la clase que permite editar datos en la bd, administrado también por trazabilidad
     // Recibe información de la tabla, los campos y la condición para encontrar el registro
     public function edita_datos($table,$campos_valores,$condicion){
+        //echo("update ".$table." set ".$campos_valores." where ".$condicion.";");
         //Primero trae los datos actuales del registro a modificar para guardarlos en la tabla traza como valor antiguo o anterior
         $this->trae_datos($table, "*", $condicion);
         //Define una variable que se llama valores iniciales para armar el campo de la tabla traza

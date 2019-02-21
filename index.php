@@ -133,6 +133,20 @@ require_once __DIR__ . '/controladores/cls_net_test.php';
 require_once __DIR__ . '/controladores/cls_net_puesto.php';
 //Libreria de clases --> Control para pruebaalarmad
 require_once __DIR__ . '/controladores/cls_pruebaalarmad.php';
+//Libreria de clases --> Control para recepcion_puesto
+require_once __DIR__ . '/controladores/cls_recepcion_puesto.php';
+//Libreria de clases --> Control para recepcion_puesto_tipos
+require_once __DIR__ . '/controladores/cls_recepcion_puesto_tipos.php';
+//Libreria de clases --> Control para recepcion_apertura
+require_once __DIR__ . '/controladores/cls_recepcion_apertura.php';
+//Libreria de clases --> Control para recepcion_inventario
+require_once __DIR__ . '/controladores/cls_recepcion_inventario.php';
+//Libreria de clases --> Control para recepcion_parqueo
+require_once __DIR__ . '/controladores/cls_recepcion_parqueo.php';
+//Libreria de clases --> Control para recepcion_parqueobitacora
+require_once __DIR__ . '/controladores/cls_recepcion_parqueobitacora.php';
+//Libreria de clases --> Control para recepcion_visita
+require_once __DIR__ . '/controladores/cls_recepcion_visita.php';
 /*
 * El elemento controller, constituye la base y esencia de toda la lógica del negocio, en este
 * se almacenan cada una de las funcionales de ORIEl. El archivo en sí, se compone de "n" cantidad
@@ -554,7 +568,23 @@ $map = array(
     'net_puesto_listar'=>array('controller'=>'Controller','action'=> 'net_puesto_listar'),
     'net_puesto_guardar'=>array('controller'=>'Controller','action'=> 'net_puesto_guardar'),
     'net_puesto_cambiar_estado'=>array('controller'=>'Controller','action'=> 'net_puesto_cambiar_estado'),
-    'buscar_NetTest_PuntoBCR'=>array('controller'=>'Controller','action'=> 'buscar_NetTest_PuntoBCR')
+    'buscar_NetTest_PuntoBCR'=>array('controller'=>'Controller','action'=> 'buscar_NetTest_PuntoBCR'),
+     //Agregar los action al controler de la clase cls_recepcion_puesto
+    'recepcion_puesto_listar'=>array('controller'=>'Controller','action'=> 'recepcion_puesto_listar'),
+    'recepcion_puesto_guardar'=>array('controller'=>'Controller','action'=> 'recepcion_puesto_guardar'),
+    'recepcion_puesto_cambiar_estado'=>array('controller'=>'Controller','action'=> 'recepcion_puesto_cambiar_estado'),
+    'recepcion_puesto_tomar'=>array('controller'=>'Controller','action'=> 'recepcion_puesto_tomar'),
+    'recepcion_puesto_revision'=>array('controller'=>'Controller','action'=> 'recepcion_puesto_revision'),
+    'recepcion_puesto_apertura'=>array('controller'=>'Controller','action'=> 'recepcion_puesto_apertura'),
+    'recepcion_apertura_guardar'=>array('controller'=>'Controller','action'=> 'recepcion_apertura_guardar'),
+    'recepcion_inventario_guardar'=>array('controller'=>'Controller','action'=> 'recepcion_inventario_guardar'),
+    'recepcion_inventario_borrar'=>array('controller'=>'Controller','action'=> 'recepcion_inventario_borrar'),
+    'recepcion_inventario_lugares'=>array('controller'=>'Controller','action'=> 'recepcion_inventario_lugares'),
+    'recepcion_lugar_numcampo'=>array('controller'=>'Controller','action'=> 'recepcion_lugar_numcampo'),
+    'recepcion_lugar_reservar'=>array('controller'=>'Controller','action'=> 'recepcion_lugar_reservar'),
+    'recepcion_apertura_liberar'=>array('controller'=>'Controller','action'=> 'recepcion_apertura_liberar'),
+    'recepcion_parqueo_consulta'=>array('controller'=>'Controller','action'=> 'recepcion_parqueo_consulta'),
+    'recepcion_visita_lugares'=>array('controller'=>'Controller','action'=> 'recepcion_visita_lugares')
     );
  // Parseo de la ruta
 /*

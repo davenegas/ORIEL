@@ -346,7 +346,7 @@
     </head>
     <!--<body onfocus='javascript:location.reload()'>-->
     <body onfocus="actualiza_segundero_en_pantalla();">
-        <?php require_once 'encabezado.php';echo var_dump($progressbar); ?> 
+        <?php require_once 'encabezado.php'; ?> 
         
         <div class="container animated fadeIn col-xs-10 quitar-float" style="text-align:center">
             <h2 style="text-align:center">Control de Video <?php echo $vector_puesto_de_monitoreo_actual[0]['Nombre'];?></h2>
@@ -429,19 +429,19 @@
             <div align="center">
                 <div class="progress">
                     <div class="progress-bar progress-bar-success" role="progressbar" style="width:<?php echo $progressbar["NegroP"]?>%">
-               <?php echo $progressbar["Negro"] ." Sitios";?>
+               <?php echo $progressbar["NegroV"]."% (".$progressbar["Negro"] ." Sitios)";?>
                     </div>
                     <div class="progress-bar progress-bar-warning" role="progressbar" style="width:<?php echo $progressbar["NaranjaP"]?>%">
-                <?php echo $progressbar["Naranja"] ." Sitios";?>
+                <?php echo $progressbar["NaranjaV"]."% (".$progressbar["Naranja"] ." Sitios)";?>
                     </div>
                     <div class="progress-bar progress-bar-danger" role="progressbar" style="width:<?php echo $progressbar["RojoP"]?>%">
-                <?php echo $progressbar["Rojo"] ." Sitios";?>
+                <?php echo $progressbar["RojoV"]."% (".$progressbar["Rojo"]." Sitios)";?>
                     </div>                
                 </div>
                 <img align="center" src="../../../Padron_Fotografico_Unidades_Video/<?php echo $vector_padron_fotografico[0]['Nombre_Ruta'];?>" alt="" width="1000px" class="img-responsive" alt="Cinque Terre"> 
             </div>
             <br> 
-            <!--<h4 style="float:right;"><b><?php echo $vector_informacion_unidad_video_siguiente[0]['Descripcion'];?> (<?php echo $vector_punto_bcr_siguiente[0]['Codigo'];?>)>></b></h4>-->
+            
             <br><br><br>
             <table id="tabla" class="display" cellspacing="0" width="100%">
                 <thead>

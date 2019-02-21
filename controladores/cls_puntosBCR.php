@@ -501,4 +501,35 @@ class cls_puntosBCR{
             $this->resultado_operacion=true;
         } 
     }
+        public function obtiene_punto_pruebasAlarma(){
+        $this->obj_data_provider->conectar();
+        if($this->condicion==""){
+            $this->arreglo=$this->obj_data_provider->trae_datos(
+                "T_PuntoBCR p INNER JOIN T_TipoPuntoBCR t ON t.ID_Tipo_Punto = p.ID_Tipo_Punto ".
+                "LEFT JOIN T_Horario h ON p.ID_Horario= h.ID_Horario ", 
+                "p.ID_PuntoBCR, p.Nombre,t.Tipo_Punto, p.Codigo, p.ID_Horario_Apertura, p.ID_Tipo_Punto, ".
+                "h.Hora_Apertura_Domingo,h.Hora_Cierre_Domingo, h.Hora_Apertura_Lunes, h.Hora_Cierre_Lunes, ".
+                "h.Hora_Apertura_Martes, h.Hora_Cierre_Martes, h.Hora_Apertura_Miercoles, h.Hora_Cierre_Miercoles, ".
+                "h.Hora_Apertura_Jueves, h.Hora_Cierre_Jueves, h.Hora_Apertura_Viernes, h.Hora_Cierre_Viernes, ".
+                "h.Hora_Apertura_Sabado, h.Hora_Cierre_Sabado ",
+                "");
+            $this->arreglo=$this->obj_data_provider->getArreglo();
+            $this->obj_data_provider->desconectar();
+            $this->resultado_operacion=true;
+        }
+        else{
+            $this->arreglo=$this->obj_data_provider->trae_datos(
+                "T_PuntoBCR p INNER JOIN T_TipoPuntoBCR t ON t.ID_Tipo_Punto = p.ID_Tipo_Punto ".
+                "LEFT JOIN T_Horario h ON p.ID_Horario= h.ID_Horario ", 
+                "p.ID_PuntoBCR, p.Nombre,t.Tipo_Punto, p.Codigo, p.ID_Horario_Apertura, p.ID_Tipo_Punto, ".
+                "h.Hora_Apertura_Domingo,h.Hora_Cierre_Domingo, h.Hora_Apertura_Lunes, h.Hora_Cierre_Lunes, ".
+                "h.Hora_Apertura_Martes, h.Hora_Cierre_Martes, h.Hora_Apertura_Miercoles, h.Hora_Cierre_Miercoles, ".
+                "h.Hora_Apertura_Jueves, h.Hora_Cierre_Jueves, h.Hora_Apertura_Viernes, h.Hora_Cierre_Viernes, ".
+                "h.Hora_Apertura_Sabado, h.Hora_Cierre_Sabado ",
+                $this->condicion);
+            $this->arreglo=$this->obj_data_provider->getArreglo();
+            $this->obj_data_provider->desconectar();
+            $this->resultado_operacion=true;
+        } 
+    }
 }?>

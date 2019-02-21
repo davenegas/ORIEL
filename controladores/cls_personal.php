@@ -675,8 +675,8 @@ class cls_personal{
         $this->obj_data_provider->conectar();
         $this->arreglo=$this->obj_data_provider->trae_datos(
                 "T_Personal
-                    LEFT OUTER JOIN T_UnidadEjecutora ON T_Personal.ID_Unidad_Ejecutora = T_UnidadEjecutora.ID_Unidad_Ejecutora
-                    LEFT OUTER JOIN T_Empresa ON T_Empresa.ID_Empresa = T_Personal.ID_Empresa", 
+                    INNER JOIN T_UnidadEjecutora ON T_Personal.ID_Unidad_Ejecutora = T_UnidadEjecutora.ID_Unidad_Ejecutora
+                    INNER JOIN T_Empresa ON T_Empresa.ID_Empresa = T_Personal.ID_Empresa", 
                 " T_Personal.ID_Persona, T_Personal.Cedula, T_Personal.ID_Empresa, T_Personal.Apellido_Nombre,T_Personal.ID_Unidad_Ejecutora,
                     T_UnidadEjecutora.Departamento, T_Empresa.Empresa",
                 "T_Personal.Estado='1'");

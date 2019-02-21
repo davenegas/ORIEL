@@ -108,7 +108,7 @@
                 <!--<td style="text-align:center" id="<?php echo $params[$i]['ID_Unidad_Video'].'-ID_PuntoBCR';?>" onclick="edita_dato('<?php echo $params[$i]['ID_Unidad_Video'];?>','<?php echo $params[$i]['ID_PuntoBCR'];?>','ID_PuntoBCR','Punto BCR')"><?php echo $params[$i]['Nombre'];?></td>-->
                 
                
-                <!--<td style="text-align:center" data-toggle="tooltip" title="<?php echo $params[$i]['Observaciones_Evento'];?>"><a href="javascript:void(null)" style="color:#FFFFFF">3<img src="vistas/Imagenes/Agregar Nota.jpg" class="img-rounded" alt="Cinque Terre" width="25" height="25" onClick="editar_notas_supervision('<?php echo $params[$i]['ID_Evento'];?>','<?php echo $params[$i]['Observaciones_Evento'];?>')"></a></td>-->
+                
                 <?php if ($params[$i]['Estado_Traducido']=="Pendiente"){?> 
                 <td hidden="hidden" style="text-align:center"><a style="color:#FFFFFF">1</a></td>
                 <td style="text-align:center" data-toggle="tooltip" title="Inconsistencia Pendiente de Validar por Parte de Z2"><a style="color:#FFFFFF"><img src="vistas/Imagenes/airflow_arrows.gif" class="img-rounded" alt="Cinque Terre" width="25" height="25"></a></td>
