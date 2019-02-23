@@ -41,9 +41,9 @@
                 pNum_Lugar= document.getElementById('Num_Lugar').value;
                 $.post("index.php?ctl=recepcion_lugar_numcampo", { Num_Lugar: pNum_Lugar}, function(data){
                     var n= data.search("No se encontró");
-                    if(n==-1){                        
+                    if(n==-1){
                         var res = data.substring(data.indexOf("{"), data.length);
-                        var datos =JSON.parse(res);                        
+                        var datos =JSON.parse(res);
                         document.getElementById('ID_RecepcionParqueo').value=datos['ID_RecepcionParqueo'];
                         document.getElementById('ID_Persona').value=datos['ID_Persona'];
                         document.getElementById('Num_Lugar').value=datos['Num_Lugar'];
@@ -157,7 +157,7 @@
                 if(esError==false)
                 {
                     $.post("index.php?ctl=recepcion_lugar_reservar",{ID_RecepcionParqueo:pID_RecepcionParqueo,ID_Recepcion_Apertura:pID_Recepcion_Apertura, Es_Prestamo:pEs_Prestamo, Prestamo:pPrestamo, Cedula:pCedula, Placa:pPlaca,Estado_Uso:"O"}, function(data){
-                        console.log(data);
+                        //console.log(data);
                         location.reload();
                     });
                 }

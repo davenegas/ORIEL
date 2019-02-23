@@ -115,6 +115,7 @@ function todos_cajero(funcion){
 function evento_buscar_cajero(){
     id= document.getElementById('numero_atm').value;
     $.post("index.php?ctl=evento_buscar_cajero", { id: id}, function(data){
+        console.log(data);
         var n= data.search("No se encontró");
         if(n==-1){
             var res = data.substring(data.indexOf("{"), data.length);
@@ -151,6 +152,7 @@ function evento_buscar_persona(){
     var n=-1;
     $.post("index.php?ctl=evento_buscar_persona", { id: id}, function(data){
         //alert(data);
+        console.log('Jean1');
         n= data.search("No se encontró");
         if(n==-1){
             var res = data.substring(data.indexOf("{"), data.length);

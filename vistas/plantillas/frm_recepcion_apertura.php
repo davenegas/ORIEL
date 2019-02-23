@@ -7,6 +7,19 @@
         <link rel="stylesheet" href="vistas/css/ventanaoculta.css"> <script>
             function ver_lugar(pID_RecepcionTipo)
             {
+                 if(pID_RecepcionTipo==1)
+                {                    
+                    var idpuesto = document.getElementById('ID_Recepcion_Puesto').value;
+                    var idapertura = document.getElementById('ID_Recepcion_Apertura').value;
+                    var idUsuarioApertura = document.getElementById('ID_Usuario_Apertura').value;
+                    var $form = $("<form />");
+                    $form.attr("action","index.php?ctl=recepcion_visita_lugares");
+                    $form.attr("method","POST");
+                    $form.append('<input type="hidden" name="ID_Recepcion_Apertura" value="'+idapertura+'" />');
+                    $form.append('<input type="hidden" name="ID_Usuario_Apertura" value="'+idUsuarioApertura+'" />');
+                    $("body").append($form);
+                    $form.submit();
+                }
                 if(pID_RecepcionTipo==2)
                 {                    
                     var idpuesto = document.getElementById('ID_Recepcion_Puesto').value;
@@ -15,7 +28,7 @@
                     var $form = $("<form />");
                     $form.attr("action","index.php?ctl=recepcion_inventario_lugares");
                     $form.attr("method","POST");
-                    $form.append('<input type="hidden" name="ID_Recepcion_Apertura" value="'+idpuesto+'" />');
+                    $form.append('<input type="hidden" name="ID_Recepcion_Apertura" value="'+idapertura+'" />');
                     $form.append('<input type="hidden" name="ID_RecepcionPuesto" value="'+idpuesto+'" />');
                     $form.append('<input type="hidden" name="ID_RecepcionTipo" value="'+pID_RecepcionTipo+'" />');
                     $form.append('<input type="hidden" name="ID_Usuario_Apertura" value="'+idUsuarioApertura+'" />');

@@ -2,9 +2,9 @@
 
 /** 
  * Esta clase maneja todos los métodos relacionados con t_recepcion_visita
- * Clase generada automáticamente el 2019-02-20 14:28
+ * Clase generada automáticamente el 2019-02-22 13:53
  * Base de datos: bd_gerencia_seguridad
- * Generada por: Jean Carlo Benavides Pérez
+ * Generada por:  
  */ 
 class cls_recepcion_visita {
     /**
@@ -17,6 +17,16 @@ class cls_recepcion_visita {
      * Llave foranea a tabla T_Recepcion_Apertura 
      */
     public $ID_Recepcion_Apertura;
+    /**
+     * Columna [ID_UsuarioIngreso] de la tabla [t_recepcion_visita] en la clase [cls_recepcion_visita] 
+     * Usuario que registra el ingreso 
+     */
+    public $ID_UsuarioIngreso;
+    /**
+     * Columna [ID_UsuarioSalida] de la tabla [t_recepcion_visita] en la clase [cls_recepcion_visita] 
+     * Usuario que registra la salida 
+     */
+    public $ID_UsuarioSalida;
     /**
      * Columna [ID_Persona] de la tabla [t_recepcion_visita] en la clase [cls_recepcion_visita] 
      * Llave foranea a tabla T_Personal 
@@ -48,6 +58,11 @@ class cls_recepcion_visita {
      */
     public $Empresa;
     /**
+     * Columna [Departamento] de la tabla [t_recepcion_visita] en la clase [cls_recepcion_visita] 
+     * Departamento que se desea visitar 
+     */
+    public $Departamento;
+    /**
      * Columna [Motivo] de la tabla [t_recepcion_visita] en la clase [cls_recepcion_visita] 
      * Motivo de la visita 
      */
@@ -72,6 +87,11 @@ class cls_recepcion_visita {
      * Hora en que se retiro 
      */
     public $Hora_Salida;
+    /**
+     * Columna [Estado_Uso] de la tabla [t_recepcion_visita] en la clase [cls_recepcion_visita] 
+     * Muestra el estado de la persona I = registro ingreso ingreso, S = Registro Salida 
+     */
+    public $Estado_Uso;
     /**
      * Columna [Estado] de la tabla [t_recepcion_visita] en la clase [cls_recepcion_visita] 
      * Estado de la columna 1= Activo 0= Negativo 
@@ -102,6 +122,20 @@ class cls_recepcion_visita {
      */
     function getID_Recepcion_Apertura() {
         return $this->ID_Recepcion_Apertura;
+    }
+
+    /**
+     *Retorna el valor de la propiedad ID_UsuarioIngreso
+     */
+    function getID_UsuarioIngreso() {
+        return $this->ID_UsuarioIngreso;
+    }
+
+    /**
+     *Retorna el valor de la propiedad ID_UsuarioSalida
+     */
+    function getID_UsuarioSalida() {
+        return $this->ID_UsuarioSalida;
     }
 
     /**
@@ -147,6 +181,13 @@ class cls_recepcion_visita {
     }
 
     /**
+     *Retorna el valor de la propiedad Departamento
+     */
+    function getDepartamento() {
+        return $this->Departamento;
+    }
+
+    /**
      *Retorna el valor de la propiedad Motivo
      */
     function getMotivo() {
@@ -179,6 +220,13 @@ class cls_recepcion_visita {
      */
     function getHora_Salida() {
         return $this->Hora_Salida;
+    }
+
+    /**
+     *Retorna el valor de la propiedad Estado_Uso
+     */
+    function getEstado_Uso() {
+        return $this->Estado_Uso;
     }
 
     /**
@@ -224,6 +272,20 @@ class cls_recepcion_visita {
     }
 
     /**
+     * Retorna el valor de la propiedad ID_UsuarioIngreso
+     */
+    function setID_UsuarioIngreso($ID_UsuarioIngreso) {
+        $this->ID_UsuarioIngreso = $ID_UsuarioIngreso;
+    }
+
+    /**
+     * Retorna el valor de la propiedad ID_UsuarioSalida
+     */
+    function setID_UsuarioSalida($ID_UsuarioSalida) {
+        $this->ID_UsuarioSalida = $ID_UsuarioSalida;
+    }
+
+    /**
      * Retorna el valor de la propiedad ID_Persona
      */
     function setID_Persona($ID_Persona) {
@@ -266,6 +328,13 @@ class cls_recepcion_visita {
     }
 
     /**
+     * Retorna el valor de la propiedad Departamento
+     */
+    function setDepartamento($Departamento) {
+        $this->Departamento = $Departamento;
+    }
+
+    /**
      * Retorna el valor de la propiedad Motivo
      */
     function setMotivo($Motivo) {
@@ -298,6 +367,13 @@ class cls_recepcion_visita {
      */
     function setHora_Salida($Hora_Salida) {
         $this->Hora_Salida = $Hora_Salida;
+    }
+
+    /**
+     * Retorna el valor de la propiedad Estado_Uso
+     */
+    function setEstado_Uso($Estado_Uso) {
+        $this->Estado_Uso = $Estado_Uso;
     }
 
     /**
@@ -334,17 +410,21 @@ class cls_recepcion_visita {
     public function __construct() {
         $this->ID_RecepcionVisita="";
         $this->ID_Recepcion_Apertura="";
+        $this->ID_UsuarioIngreso="";
+        $this->ID_UsuarioSalida="";
         $this->ID_Persona="";
         $this->ID_Ubicacion="";
         $this->Nombre="";
         $this->Cedula="";
         $this->Carnet="";
         $this->Empresa="";
+        $this->Departamento="";
         $this->Motivo="";
         $this->Fecha_Entrada="";
         $this->Hora_Entrada="";
         $this->Fecha_Salida="";
         $this->Hora_Salida="";
+        $this->Estado_Uso="";
         $this->Estado="";
         $this->arreglo="";
         $this->condicion="";
@@ -380,9 +460,9 @@ class cls_recepcion_visita {
     public function guardar_recepcion_visita() {
         $this->obj_data_provider->conectar();
         if ($this->ID_RecepcionVisita==0){
-            $this->obj_data_provider->inserta_datos("t_recepcion_visita","ID_Recepcion_Apertura, ID_Persona, ID_Ubicacion, Nombre, Cedula, Carnet, Empresa, Motivo, Fecha_Entrada, Hora_Entrada, Fecha_Salida, Hora_Salida, Estado","'".$this->ID_Recepcion_Apertura."','".$this->ID_Persona."','".$this->ID_Ubicacion."','".$this->Nombre."','".$this->Cedula."','".$this->Carnet."','".$this->Empresa."','".$this->Motivo."','".$this->Fecha_Entrada."','".$this->Hora_Entrada."','".$this->Fecha_Salida."','".$this->Hora_Salida."','".$this->Estado."'");
+            $this->obj_data_provider->inserta_datos("t_recepcion_visita","ID_Recepcion_Apertura, ID_UsuarioIngreso, ID_UsuarioSalida, ID_Persona, ID_Ubicacion, Nombre, Cedula, Carnet, Empresa, Departamento, Motivo, Fecha_Entrada, Hora_Entrada, Fecha_Salida, Hora_Salida, Estado_Uso, Estado","'".$this->ID_Recepcion_Apertura."','".$this->ID_UsuarioIngreso."','".$this->ID_UsuarioSalida."','".$this->ID_Persona."','".$this->ID_Ubicacion."','".$this->Nombre."','".$this->Cedula."','".$this->Carnet."','".$this->Empresa."','".$this->Departamento."','".$this->Motivo."','".$this->Fecha_Entrada."','".$this->Hora_Entrada."','".$this->Fecha_Salida."','".$this->Hora_Salida."','".$this->Estado_Uso."','".$this->Estado."'");
         }else{
-            $this->obj_data_provider->edita_datos("t_recepcion_visita","ID_Recepcion_Apertura='".$this->ID_Recepcion_Apertura."',ID_Persona='".$this->ID_Persona."',ID_Ubicacion='".$this->ID_Ubicacion."',Nombre='".$this->Nombre."',Cedula='".$this->Cedula."',Carnet='".$this->Carnet."',Empresa='".$this->Empresa."',Motivo='".$this->Motivo."',Fecha_Entrada='".$this->Fecha_Entrada."',Hora_Entrada='".$this->Hora_Entrada."',Fecha_Salida='".$this->Fecha_Salida."',Hora_Salida='".$this->Hora_Salida."',Estado='".$this->Estado."'",$this->condicion);
+            $this->obj_data_provider->edita_datos("t_recepcion_visita","ID_Recepcion_Apertura='".$this->ID_Recepcion_Apertura."',ID_UsuarioIngreso='".$this->ID_UsuarioIngreso."',ID_UsuarioSalida='".$this->ID_UsuarioSalida."',ID_Persona='".$this->ID_Persona."',ID_Ubicacion='".$this->ID_Ubicacion."',Nombre='".$this->Nombre."',Cedula='".$this->Cedula."',Carnet='".$this->Carnet."',Empresa='".$this->Empresa."',Departamento='".$this->Departamento."',Motivo='".$this->Motivo."',Fecha_Entrada='".$this->Fecha_Entrada."',Hora_Entrada='".$this->Hora_Entrada."',Fecha_Salida='".$this->Fecha_Salida."',Hora_Salida='".$this->Hora_Salida."',Estado_Uso='".$this->Estado_Uso."',Estado='".$this->Estado."'",$this->condicion);
         }
         $this->obj_data_provider->desconectar();
         $this->resultado_operacion=true;
@@ -398,4 +478,16 @@ class cls_recepcion_visita {
     /*******************************************************************/
     /**Ingrese los nuevos metodos debajo de este comentario**/
     /*******************************************************************/
+        /**
+     * Método que Inserta o actualiza en base de datos,
+     * Cuando el campo llave es cero inserta caso contrario actualiza
+     */
+    public function registrar_recepcion_salida() {
+        $this->obj_data_provider->conectar();
+        if ($this->ID_RecepcionVisita!=0){  
+            $this->obj_data_provider->edita_datos("t_recepcion_visita","ID_UsuarioSalida='".$this->ID_UsuarioSalida."',Fecha_Salida='".$this->Fecha_Salida."',Hora_Salida='".$this->Hora_Salida."',Estado_Uso='".$this->Estado_Uso."'",$this->condicion);
+        }
+        $this->obj_data_provider->desconectar();
+        $this->resultado_operacion=true;
+    }
 }

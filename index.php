@@ -584,7 +584,10 @@ $map = array(
     'recepcion_lugar_reservar'=>array('controller'=>'Controller','action'=> 'recepcion_lugar_reservar'),
     'recepcion_apertura_liberar'=>array('controller'=>'Controller','action'=> 'recepcion_apertura_liberar'),
     'recepcion_parqueo_consulta'=>array('controller'=>'Controller','action'=> 'recepcion_parqueo_consulta'),
-    'recepcion_visita_lugares'=>array('controller'=>'Controller','action'=> 'recepcion_visita_lugares')
+    'recepcion_visita_lugares'=>array('controller'=>'Controller','action'=> 'recepcion_visita_lugares'),
+    'recepcion_visita_guardar'=>array('controller'=>'Controller','action'=> 'recepcion_visita_guardar'),
+    'recepcion_visita_salir'=>array('controller'=>'Controller','action'=> 'recepcion_visita_salir'),
+    'recepcion_buscar_visita'=>array('controller'=>'Controller','action'=> 'recepcion_buscar_visita')
     );
  // Parseo de la ruta
 /*
